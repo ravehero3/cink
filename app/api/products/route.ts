@@ -1,0 +1,107 @@
+import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
+
+export async function GET(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    
+    const category = searchParams.get('category');
+    const colors = searchParams.getAll('color');
+    const sizes = searchParams.getAll('size');
+    const search = searchParams.get('search');
+    const sort = searchParams.get('sort') || 'newest';
+    const page = parseInt(searchParams.get('page') || '1');
+    const limit = parseInt(searchParams.get('limit') || '20');
+
+    const where: Prisma.ProductWhereInput = {
+      isVisible: true,
+    };
+
+    if (category) {
+      where.category = category;
+    }
+
+    if (colors.length > 0) {
+      where.color = { in: colors };
+    }
+
+    if (sizes.length > 0) {
+      where.AND = sizes.map(size => ({
+        sizes: {
+          path: [size],
+          not: Prisma.DbNull,
+        },
+      }));
+    }
+
+    if (search) {
+      const searchLower = search.toLowerCase();
+      where.OR = [
+        { name: { contains: searchLower, mode: 'insensitive' } },
+        { description: { contains: searchLower, mode: 'insensitive' } },
+        { category: { contains: searchLower, mode: 'insensitive' } },
+      ];
+    }
+
+    let orderBy: Prisma.ProductOrderByWithRelationInput = { createdAt: 'desc' };
+    
+    switch (sort) {
+      case 'oldest':
+        orderBy = { createdAt: 'asc' };
+        break;
+      case 'price-low':
+        orderBy = { price: 'asc' };
+        break;
+      case 'price-high':
+        orderBy = { price: 'desc' };
+        break;
+      case 'name-az':
+        orderBy = { name: 'asc' };
+        break;
+      case 'name-za':
+        orderBy = { name: 'desc' };
+        break;
+      default:
+        orderBy = { createdAt: 'desc' };
+    }
+
+    const skip = (page - 1) * limit;
+
+    const [products, total] = await Promise.all([
+      prisma.product.findMany({
+        where,
+        orderBy,
+        skip,
+        take: limit,
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          description: true,
+          price: true,
+          category: true,
+          color: true,
+          images: true,
+          sizes: true,
+          totalStock: true,
+        },
+      }),
+      prisma.product.count({ where }),
+    ]);
+
+    return NextResponse.json({
+      products,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    });
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch products' },
+      { status: 500 }
+    );
+  }
+}

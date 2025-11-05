@@ -1,0 +1,228 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
+
+interface Product {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  price: number;
+  category: string;
+  color: string;
+  images: string[];
+  sizes: Record<string, number>;
+  totalStock: number;
+}
+
+export default function ProductDetailPage() {
+  const params = useParams();
+  const slug = params.slug as string;
+
+  const [product, setProduct] = useState<Product | null>(null);
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const [quantity, setQuantity] = useState(1);
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
+  useEffect(() => {
+    fetchProduct();
+  }, [slug]);
+
+  const fetchProduct = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`/api/products/${slug}`);
+      if (response.ok) {
+        const data = await response.json();
+        setProduct(data);
+      } else {
+        setProduct(null);
+      }
+    } catch (error) {
+      console.error('Error fetching product:', error);
+      setProduct(null);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleAddToCart = () => {
+    if (!selectedSize) {
+      alert('Vyberte prosím velikost');
+      return;
+    }
+
+    setShowConfirmation(true);
+    setTimeout(() => {
+      setShowConfirmation(false);
+    }, 3000);
+  };
+
+  const incrementQuantity = () => {
+    if (selectedSize && product?.sizes[selectedSize]) {
+      const maxStock = product.sizes[selectedSize];
+      if (quantity < maxStock) {
+        setQuantity(quantity + 1);
+      }
+    }
+  };
+
+  const decrementQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <p className="text-product-name">Načítání...</p>
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <p className="text-product-name">Produkt nenalezen</p>
+      </div>
+    );
+  }
+
+  const sizes = Object.entries(product.sizes || {});
+
+  return (
+    <div>
+      {showConfirmation && (
+        <div className="fixed top-24 right-8 bg-black text-white px-6 py-4 z-50 border border-white">
+          <p className="text-body">Produkt přidán do košíku</p>
+        </div>
+      )}
+
+      <div className="container mx-auto px-8 py-8">
+        <div className="flex flex-col lg:flex-row gap-8">
+          <div className="lg:w-[60%]">
+            <div className="mb-4">
+              <img
+                src={product.images[selectedImage]}
+                alt={product.name}
+                className="w-full aspect-square object-cover border border-black"
+                style={{ filter: 'grayscale(1) contrast(1.2)' }}
+              />
+            </div>
+
+            {product.images.length > 1 && (
+              <div className="flex gap-2">
+                {product.images.map((image, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedImage(index)}
+                    className={`flex-1 aspect-square border ${
+                      selectedImage === index ? 'border-black border-2' : 'border-black'
+                    }`}
+                  >
+                    <img
+                      src={image}
+                      alt={`${product.name} ${index + 1}`}
+                      className="w-full h-full object-cover"
+                      style={{ filter: 'grayscale(1) contrast(1.2)' }}
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="lg:w-[40%]">
+            <h1 className="text-title font-bold mb-4">{product.name}</h1>
+            
+            <p className="text-header font-bold mb-6">{product.price} Kč</p>
+
+            <div className="mb-6">
+              <p className="text-body mb-2">{product.description}</p>
+            </div>
+
+            <div className="mb-6">
+              <p className="text-body font-bold mb-3 uppercase">Barva: {product.color}</p>
+            </div>
+
+            <div className="mb-6">
+              <p className="text-body font-bold mb-3 uppercase">Velikost:</p>
+              <div className="flex flex-wrap gap-2">
+                {sizes.map(([size, stock]) => {
+                  const isAvailable = stock > 0;
+                  const isSelected = selectedSize === size;
+
+                  return (
+                    <button
+                      key={size}
+                      onClick={() => {
+                        if (isAvailable) {
+                          setSelectedSize(size);
+                          setQuantity(1);
+                        }
+                      }}
+                      disabled={!isAvailable}
+                      className={`w-12 h-12 rounded-full border flex items-center justify-center text-body transition-colors ${
+                        isSelected
+                          ? 'bg-black text-white border-black'
+                          : isAvailable
+                          ? 'border-black hover:bg-black hover:text-white'
+                          : 'border-black opacity-50 cursor-not-allowed'
+                      }`}
+                    >
+                      <span className={!isAvailable ? 'line-through' : ''}>{size}</span>
+                    </button>
+                  );
+                })}
+              </div>
+              {selectedSize && !product.sizes[selectedSize] && (
+                <p className="text-[12px] mt-2">(Vyprodáno)</p>
+              )}
+            </div>
+
+            <div className="mb-6">
+              <p className="text-body font-bold mb-3 uppercase">Množství:</p>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={decrementQuantity}
+                  className="w-10 h-10 border border-black flex items-center justify-center hover:bg-black hover:text-white transition-colors"
+                >
+                  −
+                </button>
+                <span className="w-12 text-center text-body">{quantity}</span>
+                <button
+                  onClick={incrementQuantity}
+                  className="w-10 h-10 border border-black flex items-center justify-center hover:bg-black hover:text-white transition-colors"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            <button
+              onClick={handleAddToCart}
+              className="w-full h-12 bg-black text-white text-body uppercase font-bold hover:opacity-80 transition-opacity"
+            >
+              DO KOŠÍKU
+            </button>
+
+            <div className="mt-8 pt-8 border-t border-black">
+              <div className="text-body space-y-2">
+                <p>
+                  <span className="font-bold">Kategorie:</span> {product.category}
+                </p>
+                <p>
+                  <span className="font-bold">Skladem:</span> {product.totalStock} ks
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
