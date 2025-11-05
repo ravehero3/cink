@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
+import { useCartStore } from '@/lib/cart-store';
+import { useSavedProductsStore } from '@/lib/saved-products-store';
 
 interface Product {
   id: string;
@@ -27,6 +29,9 @@ export default function ProductDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [showConfirmation, setShowConfirmation] = useState(false);
 
+  const { addItem } = useCartStore();
+  const { isSaved, addProduct, removeProduct } = useSavedProductsStore();
+
   useEffect(() => {
     fetchProduct();
   }, [slug]);
@@ -50,15 +55,35 @@ export default function ProductDetailPage() {
   };
 
   const handleAddToCart = () => {
-    if (!selectedSize) {
+    if (!selectedSize || !product) {
       alert('Vyberte prosím velikost');
       return;
     }
+
+    addItem({
+      productId: product.id,
+      name: product.name,
+      slug: product.slug,
+      size: selectedSize,
+      quantity,
+      price: Number(product.price),
+      image: product.images[0],
+      color: product.color,
+    });
 
     setShowConfirmation(true);
     setTimeout(() => {
       setShowConfirmation(false);
     }, 3000);
+  };
+
+  const toggleSaved = () => {
+    if (!product) return;
+    if (isSaved(product.id)) {
+      removeProduct(product.id);
+    } else {
+      addProduct(product.id);
+    }
   };
 
   const incrementQuantity = () => {
@@ -137,7 +162,28 @@ export default function ProductDetailPage() {
           </div>
 
           <div className="lg:w-[40%]">
-            <h1 className="text-title font-bold mb-4">{product.name}</h1>
+            <div className="flex justify-between items-start mb-4">
+              <h1 className="text-title font-bold">{product.name}</h1>
+              <button
+                onClick={toggleSaved}
+                className="flex-shrink-0 ml-4"
+                aria-label={isSaved(product.id) ? 'Odebrat z uložených' : 'Uložit produkt'}
+              >
+                <svg
+                  className="w-6 h-6"
+                  fill={isSaved(product.id) ? 'black' : 'none'}
+                  stroke="black"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1}
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                  />
+                </svg>
+              </button>
+            </div>
             
             <p className="text-header font-bold mb-6">{product.price} Kč</p>
 

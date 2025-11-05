@@ -1,0 +1,256 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+
+interface OrderItem {
+  productId: string;
+  productName: string;
+  size: string;
+  quantity: number;
+  price: number;
+}
+
+interface Order {
+  id: string;
+  orderNumber: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  items: OrderItem[];
+  totalPrice: number;
+  status: string;
+  paymentStatus: string;
+  paymentId: string | null;
+  shippingMethod: string;
+  zasilkovnaId: string | null;
+  zasilkovnaName: string | null;
+  trackingNumber: string | null;
+  invoiceUrl: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+const STATUS_OPTIONS = ['PENDING', 'PAID', 'PROCESSING', 'SHIPPED', 'COMPLETED', 'CANCELLED'];
+
+export default function OrderDetailPage({ params }: { params: { id: string } }) {
+  const router = useRouter();
+  const [order, setOrder] = useState<Order | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [trackingNumber, setTrackingNumber] = useState('');
+
+  useEffect(() => {
+    fetchOrder();
+  }, [params.id]);
+
+  const fetchOrder = async () => {
+    try {
+      const response = await fetch(`/api/admin/orders/${params.id}`);
+      if (response.ok) {
+        const data = await response.json();
+        setOrder(data);
+        setTrackingNumber(data.trackingNumber || '');
+      } else {
+        alert('Objednávka nenalezena');
+        router.push('/admin/objednavky');
+      }
+    } catch (error) {
+      console.error('Failed to fetch order:', error);
+      alert('Došlo k chybě při načítání objednávky');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateStatus = async (newStatus: string) => {
+    if (!confirm(`Změnit status objednávky na ${newStatus}?`)) return;
+
+    try {
+      const response = await fetch(`/api/admin/orders/${params.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      if (response.ok) {
+        alert('Status byl úspěšně změněn');
+        fetchOrder();
+      } else {
+        alert('Nepodařilo se změnit status');
+      }
+    } catch (error) {
+      console.error('Failed to update status:', error);
+      alert('Došlo k chybě při změně statusu');
+    }
+  };
+
+  const updateTrackingNumber = async () => {
+    try {
+      const response = await fetch(`/api/admin/orders/${params.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ trackingNumber }),
+      });
+
+      if (response.ok) {
+        alert('Číslo zásilky bylo úspěšně uloženo');
+        fetchOrder();
+      } else {
+        alert('Nepodařilo se uložit číslo zásilky');
+      }
+    } catch (error) {
+      console.error('Failed to update tracking number:', error);
+      alert('Došlo k chybě při ukládání');
+    }
+  };
+
+  if (loading) {
+    return <div className="text-body">Načítání objednávky...</div>;
+  }
+
+  if (!order) {
+    return <div className="text-body">Objednávka nenalezena</div>;
+  }
+
+  return (
+    <div>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-title font-bold">OBJEDNÁVKA #{order.orderNumber}</h1>
+        <button
+          onClick={() => router.back()}
+          className="px-6 py-2 text-body uppercase border border-black hover:bg-black hover:text-white"
+        >
+          ← Zpět
+        </button>
+      </div>
+
+      <div className="grid grid-cols-2 gap-8">
+        {/* Left Column */}
+        <div className="space-y-6">
+          {/* Customer Info */}
+          <div className="border border-black p-6">
+            <h2 className="text-header font-bold mb-4">INFORMACE O ZÁKAZNÍKOVI</h2>
+            <div className="space-y-2 text-body">
+              <div><strong>Jméno:</strong> {order.customerName}</div>
+              <div><strong>Email:</strong> {order.customerEmail}</div>
+              <div><strong>Telefon:</strong> {order.customerPhone}</div>
+            </div>
+          </div>
+
+          {/* Shipping Info */}
+          <div className="border border-black p-6">
+            <h2 className="text-header font-bold mb-4">DOPRAVA</h2>
+            <div className="space-y-2 text-body">
+              <div><strong>Metoda:</strong> {order.shippingMethod.toUpperCase()}</div>
+              {order.zasilkovnaId && (
+                <>
+                  <div><strong>Pobočka ID:</strong> {order.zasilkovnaId}</div>
+                  <div><strong>Název pobočky:</strong> {order.zasilkovnaName}</div>
+                </>
+              )}
+              <div className="mt-4">
+                <label className="block mb-2"><strong>Číslo zásilky:</strong></label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={trackingNumber}
+                    onChange={(e) => setTrackingNumber(e.target.value)}
+                    className="flex-1 border border-black p-2 text-body"
+                    placeholder="Zadejte číslo zásilky"
+                  />
+                  <button
+                    onClick={updateTrackingNumber}
+                    className="px-4 py-2 bg-black text-white text-body uppercase hover:bg-white hover:text-black border border-black"
+                  >
+                    Uložit
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Payment Info */}
+          <div className="border border-black p-6">
+            <h2 className="text-header font-bold mb-4">PLATBA</h2>
+            <div className="space-y-2 text-body">
+              <div><strong>Status platby:</strong> {order.paymentStatus}</div>
+              {order.paymentId && (
+                <div><strong>ID platby:</strong> {order.paymentId}</div>
+              )}
+              <div className="mt-4">
+                <strong>Celková cena:</strong> {Number(order.totalPrice).toFixed(2)} Kč
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column */}
+        <div className="space-y-6">
+          {/* Order Status */}
+          <div className="border border-black p-6">
+            <h2 className="text-header font-bold mb-4">STATUS OBJEDNÁVKY</h2>
+            <div className="mb-4">
+              <div className="text-body mb-2">Aktuální status:</div>
+              <div className="text-header font-bold">{order.status}</div>
+            </div>
+            <div>
+              <div className="text-body mb-2">Změnit status na:</div>
+              <div className="grid grid-cols-2 gap-2">
+                {STATUS_OPTIONS.map((status) => (
+                  <button
+                    key={status}
+                    onClick={() => updateStatus(status)}
+                    disabled={status === order.status}
+                    className={`px-4 py-2 text-body uppercase border border-black ${
+                      status === order.status
+                        ? 'bg-black text-white cursor-not-allowed'
+                        : 'bg-white text-black hover:bg-black hover:text-white'
+                    }`}
+                  >
+                    {status}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Order Items */}
+          <div className="border border-black p-6">
+            <h2 className="text-header font-bold mb-4">POLOŽKY OBJEDNÁVKY</h2>
+            <div className="space-y-4">
+              {order.items.map((item, index) => (
+                <div key={index} className="border-b border-black last:border-b-0 pb-4 last:pb-0">
+                  <div className="text-body font-bold">{item.productName}</div>
+                  <div className="text-body">
+                    Velikost: {item.size} | Množství: {item.quantity}x
+                  </div>
+                  <div className="text-body">
+                    Cena: {Number(item.price).toFixed(2)} Kč / ks
+                  </div>
+                  <div className="text-body font-bold mt-1">
+                    Celkem: {(Number(item.price) * item.quantity).toFixed(2)} Kč
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Timestamps */}
+          <div className="border border-black p-6">
+            <h2 className="text-header font-bold mb-4">ČASOVÉ ÚDAJE</h2>
+            <div className="space-y-2 text-body">
+              <div>
+                <strong>Vytvořeno:</strong>{' '}
+                {new Date(order.createdAt).toLocaleString('cs-CZ')}
+              </div>
+              <div>
+                <strong>Poslední aktualizace:</strong>{' '}
+                {new Date(order.updatedAt).toLocaleString('cs-CZ')}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

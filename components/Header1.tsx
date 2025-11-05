@@ -1,7 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useCartStore } from '@/lib/cart-store';
+import { useSavedProductsStore } from '@/lib/saved-products-store';
+import { useSession } from 'next-auth/react';
 
 const categories = [
   { name: 'VOODOO808', slug: 'voodoo808' },
@@ -11,9 +13,11 @@ const categories = [
 ];
 
 export default function Header1() {
-  const [savedCount, setSavedCount] = useState(0);
-  const [cartCount, setCartCount] = useState(0);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { data: session } = useSession();
+  const cartCount = useCartStore((state) => state.getItemCount());
+  const savedCount = useSavedProductsStore((state) => state.getCount());
+  const isLoggedIn = !!session;
+  const isAdmin = session?.user?.role === 'ADMIN';
 
   return (
     <header className="h-header border-b border-black bg-white">
@@ -35,7 +39,12 @@ export default function Header1() {
         </Link>
 
         <div className="flex items-center gap-6">
-          <Link href={isLoggedIn ? "/ucet" : "/prihlaseni"} className="text-body uppercase">
+          {isAdmin && (
+            <Link href="/admin" className="text-body uppercase hover:underline">
+              ADMIN
+            </Link>
+          )}
+          <Link href={isLoggedIn ? "/ucet" : "/prihlaseni"} className="text-body uppercase hover:underline">
             {isLoggedIn ? "MŮJ ÚČET" : "PŘIHLÁSIT SE"}
           </Link>
 
