@@ -53,8 +53,10 @@ export default function CategoryPage() {
     try {
       const response = await fetch('/api/categories');
       const categories = await response.json();
-      const found = categories.find((cat: Category) => cat.slug === slug);
-      setCategory(found || null);
+      if (Array.isArray(categories)) {
+        const found = categories.find((cat: Category) => cat.slug === slug);
+        setCategory(found || null);
+      }
     } catch (error) {
       console.error('Error fetching category:', error);
     }

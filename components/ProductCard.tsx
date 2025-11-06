@@ -34,7 +34,7 @@ export default function ProductCard({
   return (
     <Link
       href={`/produkty/${slug}`}
-      className="block border border-black bg-white hover:shadow-none transition-opacity"
+      className="block bg-white hover:shadow-none transition-opacity"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -50,7 +50,7 @@ export default function ProductCard({
         />
         <button
           onClick={handleSaveClick}
-          className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center bg-white border border-black"
+          className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center"
           aria-label={isSaved ? 'Odebrat z uložených' : 'Uložit produkt'}
         >
           {isSaved ? (
