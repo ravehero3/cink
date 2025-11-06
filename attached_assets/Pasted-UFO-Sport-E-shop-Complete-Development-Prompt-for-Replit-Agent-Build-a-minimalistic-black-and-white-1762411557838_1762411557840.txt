@@ -1,0 +1,1992 @@
+UFO Sport E-shop - Complete Development Prompt for Replit Agent
+Build a minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz) with the following exact specifications:
+Tech Stack
+* Framework: Next.js 14 with App Router and TypeScript
+* Styling: Tailwind CSS (customized for strict black/white palette)
+* Database: PostgreSQL with Prisma ORM
+* Authentication: NextAuth.js (for both users and admin)
+* Payment: GoPay integration (Czech payment gateway)
+* Email: Resend API for transactional emails
+* Shipping: Zásilkovna (Packeta) API integration
+* File Storage: Cloudinary for product images
+
+CRITICAL DESIGN SYSTEM
+Color Palette (STRICT - NO OTHER COLORS)
+* Background: Pure white (#FFFFFF)
+* Text/Lines/Borders: Pure black (#000000)
+* No grays, no shadows, no gradients
+Typography
+* Font: System font stack (Arial, Helvetica, sans-serif) for speed
+* Sizes: Keep all text quite small for minimalistic look
+    * Body text: 14px
+    * Product names: 16px
+    * Headers: 18px
+    * Main titles: 24px
+* Weight: Regular (400) for most text, Bold (700) for emphasis only
+* Line height: 1.4 for readability
+Layout System
+* Lines: All separating lines are exactly 1px thick, pure black
+* Spacing: Consistent padding/margins (use 16px, 24px, 32px increments)
+* Grid: 4 products per row on desktop (responsive: 2 on tablet, 1 on mobile)
+* All rectangles: 1px black border
+* Buttons: Only black or white with opposite text color
+Header Height Reference
+* Header1 height = 60px (base unit)
+* Header2 height = 60px
+* Titlebar height = 240px (4x header)
+* Videopromo height = 360px (6x header)
+* Infobar height = 60px (same as header1)
+* Footer2 height = 60px (same as header1)
+
+DATABASE SCHEMA
+Users Table
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  password      String    // Hashed with bcrypt
+  name          String?
+  phone         String?
+  role          Role      @default(USER) // USER or ADMIN
+  civility      String?   // Mr, Miss, Mrs, Ms, Mx
+  newsletterSubscribed Boolean @default(false)
+  savedProducts String[]  // Array of product IDs
+  orders        Order[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+Products Table
+model Product {
+  id          String    @id @default(uuid())
+  name        String
+  slug        String    @unique
+  description String    @db.Text
+  price       Decimal   @db.Decimal(10, 2)
+  category    String    // VOODOO808, SPACE LOVE, RECREATION WELLNESS, T SHIRT GALLERY
+  color       String    // "black" or "white" (for filtering)
+  images      String[]  // Array of Cloudinary URLs
+  videoUrl    String?   // Optional promo video URL
+  sizes       Json      // {S: 5, M: 10, L: 8, XL: 3, XXL: 2} - size and stock count
+  isVisible   Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+Categories Table
+model Category {
+  id          String    @id @default(uuid())
+  name        String    @unique // VOODOO808, SPACE LOVE, etc.
+  slug        String    @unique
+  videoUrl    String?   // For videopromo section
+  isVisible   Boolean   @default(true)
+  sortOrder   Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+Orders Table
+model Order {
+  id              String    @id @default(uuid())
+  orderNumber     String    @unique // Format: UFO241205001
+  userId          String?
+  user            User?     @relation(fields: [userId], references: [id])
+  
+  // Customer info (stored even if not registered)
+  customerEmail   String
+  customerName    String
+  customerPhone   String
+  
+  // Order items
+  items           Json      // [{productId, name, size, quantity, price, image}]
+  totalPrice      Decimal   @db.Decimal(10, 2)
+  
+  // Payment info
+  paymentId       String?   // GoPay payment ID
+  paymentStatus   PaymentStatus @default(PENDING)
+  gopayData       Json?     // Store full GoPay response
+  
+  // Shipping info
+  shippingMethod  String    @default("zasilkovna") // Always Zásilkovna for now
+  zasilkovnaId    String?   // Selected pickup point ID
+  zasilkovnaName  String?   // Pickup point name and address
+  trackingNumber  String?
+  
+  // Order status
+  status          OrderStatus @default(PENDING)
+  
+  // Invoice
+  invoiceUrl      String?   // Generated PDF invoice URL
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum OrderStatus {
+  PENDING           // Čeká na platbu
+  PAID              // Zaplaceno
+  PROCESSING        // Pracujeme na tom
+  SHIPPED           // Odeslali jsme zásilku
+  COMPLETED         // Doručeno
+  CANCELLED         // Zrušeno
+}
+PromoCodes Table
+model PromoCode {
+  id              String    @id @default(uuid())
+  code            String    @unique // e.g., "LETO2025"
+  discountType    String    // "percentage" or "fixed"
+  discountValue   Decimal   @db.Decimal(10, 2) // 20 for 20% or 500 for 500 Kč
+  minOrderAmount  Decimal?  @db.Decimal(10, 2) // Minimum order amount
+  maxUses         Int?      // Maximum number of uses (null = unlimited)
+  currentUses     Int       @default(0)
+  validFrom       DateTime
+  validUntil      DateTime
+  isActive        Boolean   @default(true)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+Newsletter Subscribers Table
+model NewsletterSubscriber {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  civility  String   // Mr, Miss, Mrs, Ms, Mx, I'd rather not say
+  createdAt DateTime @default(now())
+}
+
+FRONTEND PAGES & COMPONENTS
+HEADER 1 (Fixed at top, 60px height)
+Layout (3 columns):
+Left side:
+* Main category links (horizontal):
+    * VOODOO808
+    * SPACE LOVE
+    * RECREATION WELLNESS
+    * T SHIRT GALLERY
+* Text: 14px, black, uppercase
+* Hover: underline (1px black)
+* Active category: bold
+Center:
+* Logo: "ufosport.cz" (18px, bold, black)
+* Clickable → goes to homepage
+Right side (in order from left to right):
+* "PŘIHLÁSIT SE" (14px, black, clickable)
+    * If logged in: show "MŮJ ÚČET" instead
+    * If admin logged in: show "ADMIN" link
+* "ULOŽENO" icon (minimalistic heart outline, black, 20px)
+    * Shows count badge if items saved
+* Shopping cart icon (minimalistic, black, 20px)
+    * Shows count badge if items in cart
+Bottom border: 1px black line
+
+HEADER 2 (Fixed below Header1, 60px height)
+Content:
+* Search bar aligned to left
+* Magnifying glass icon (left side, 18px, black, minimalistic)
+* Input field: "Co právě hledáte?" (placeholder, 14px, light gray when empty, black when typing)
+* Input field: full width minus padding, no border except bottom 1px black on focus
+* Search supports Czech characters (ě, š, č, ř, ž, ý, á, í, é, ú, ů, ň, ď, ť)
+* Real-time search results dropdown (white bg, black text, 1px border)
+Bottom border: 1px black line
+
+TITLEBAR (240px height = 4x header)
+* White background
+* Centered black text showing current page name (24px, uppercase, bold)
+* Examples: "VOODOO808", "SPACE LOVE", "RECREATION WELLNESS", "T SHIRT GALLERY"
+* On homepage: "UFO SPORT"
+
+VIDEOPROMO (360px height = 6x header)
+* Embedded video player
+* Autoplays when user scrolls to view
+* Muted by default, controls appear on hover
+* Video fills entire width
+* Black 1px border top and bottom
+* Video is category-specific (each category can have its own video)
+* If no video: show black placeholder with "Video není k dispozici" text
+
+INFOBAR (60px height = same as header1)
+Layout:
+Left side:
+* Text: "47 produktů" (14px, black)
+* Updates dynamically based on filters
+Right side:
+* "FILTROVAT" button (14px, black, uppercase, clickable)
+    * Hover: underline
+* Vertical separator: thin 1px black line (20px height, centered vertically)
+* "SEŘADIT PODLE" dropdown (14px, black, uppercase)
+    * Options:
+        * Nejnovější
+        * Nejstarší
+        * Cena: Nejnižší
+        * Cena: Nejvyšší
+        * Název: A-Z
+        * Název: Z-A
+Bottom border: 1px black line
+
+PRODUCTS GRID
+Layout:
+* 4 products per row (desktop)
+* 2 products per row (tablet, max-width: 1024px)
+* 1 product per row (mobile, max-width: 640px)
+* Each product in rectangle with 1px black border
+* Gap between products: 1px (creates grid effect)
+Product Card:
+┌─────────────────────────┐
+│ [Save icon - top right] │
+│                         │
+│     [Product Image]     │
+│                         │
+│  Product Name (16px)    │
+│  999 Kč (14px)          │
+│                         │
+└─────────────────────────┘
+Save Icon:
+* Heart outline (minimalistic, 18px, black)
+* Position: absolute, top-right corner, 12px padding
+* Filled heart if product is saved
+* Click to save/unsave (requires login)
+Product Image:
+* Square aspect ratio (1:1)
+* Black and white filter if possible
+* Hover: slight opacity change (0.8)
+* Clickable → goes to product detail page
+Product Name:
+* 16px, black, centered
+* Max 2 lines, ellipsis if longer
+Price:
+* 14px, black, centered
+* Format: "999 Kč" (space before Kč)
+Loading State:
+* When scrolling and loading more products
+* Show text: "Načítá se..." (14px, black, centered)
+* Appears below last product
+* Disappears when products load
+
+FILTROVATWINDOW (Slide-in from right)
+Animation:
+* Slides in from right edge when "FILTROVAT" clicked
+* Slides out when "X", "OBNOVIT", or "ULOŽIT" clicked
+* Overlay: white with 50% opacity over main content
+* Window width: 400px (desktop), full screen (mobile)
+Structure:
+┌─────────────────────────────┐
+│ FILTROVAT              [X]  │ ← Header (60px, 1px bottom border)
+├─────────────────────────────┤
+│                             │
+│ BARVY                       │
+│ ☐ Černá                     │
+│ ☐ Bílá                      │
+│                             │
+├─────────────────────────────┤ ← 1px line
+│                             │
+│ VELIKOST                    │
+│ ☐ S                         │
+│ ☐ M                         │
+│ ☐ L                         │
+│ ☐ XL                        │
+│ ☐ 2XL                       │
+│                             │
+├─────────────────────────────┤ ← 1px line
+│ [OBNOVIT]     [ULOŽIT]      │ ← Footer (60px)
+└─────────────────────────────┘
+Header:
+* "FILTROVAT" (18px, black, centered, bold)
+* X button (top-right, 24px, black, clickable)
+Checkboxes:
+* Minimalistic: white square with 1px black border
+* Checked: filled black square with white checkmark
+* Text: 14px, black
+Buttons:
+* OBNOVIT: white background, black text, 1px black border
+    * Clears all filters
+* ULOŽIT: black background, white text, no border
+    * Applies filters and closes window
+* Both buttons: 40px height, centered text, uppercase
+
+ULOŽENO (Saved Products) - Slide-in from right
+Trigger: Click "ULOŽENO" icon in Header1
+Same structure as FILTROVATWINDOW but shows:
+* Header: "ULOŽENÉ PRODUKTY"
+* List of saved products (small thumbnails + name + price)
+* Click product → go to product detail
+* Remove icon next to each product
+* If empty: "Nemáte žádné uložené produkty"
+
+NEWSLETTERWINDOW (Slide-in from right)
+Trigger: Click "Přihlašte se k odběru newsletteru" in footer
+Structure:
+┌─────────────────────────────┐
+│ [X]                         │
+│                             │
+│ Subscribe to our newsletter │
+│                             │
+│ Sign up for email updates   │
+│ on the latest UFO Sport     │
+│ collections, campaigns and  │
+│ videos.                     │
+│                             │
+│ Civility*                   │
+│ ☐ Mr                        │
+│ ☐ Miss, Mrs, Ms             │
+│ ☐ Mx                        │
+│ ☐ I'd rather not say        │
+│                             │
+│ Email*                      │
+│ [___________________]       │
+│                             │
+│ By signing up below, you    │
+│ agree to stay in touch with │
+│ UFO Sport. We will use your │
+│ personal information to     │
+│ provide you with tailored   │
+│ updates about our           │
+│ activities, products and    │
+│ services. For more          │
+│ information about our       │
+│ privacy practices and your  │
+│ rights, please consult our  │
+│ privacy policy.             │
+│                             │
+│        [SUBSCRIBE]          │
+└─────────────────────────────┘
+Details:
+* Width: 400px (desktop), full screen (mobile)
+* Text: 14px, black
+* Required fields marked with *
+* Subscribe button: black bg, white text, full width, 40px height
+* Privacy policy: underlined link
+* X button: top-right corner
+After subscription:
+* Show success message: "Děkujeme za přihlášení!"
+* Auto-close after 2 seconds
+
+FOOTER1 (Newsletter section)
+Content:
+* White background
+* Centered text: "Přihlašte se k odběru newsletteru" (16px, black, underlined)
+* Clickable → opens NEWSLETTERWINDOW
+* Padding: 40px top and bottom
+* Top border: 1px black line
+
+FOOTER2 (60px height = same as header1)
+Content:
+* White background
+* Centered text: "©2026 ufosport.cz" (12px, black)
+* Top border: 1px black line
+
+PRODUCT DETAIL PAGE
+URL: /produkty/[slug]
+Layout:
+[Header1]
+[Header2]
+─────────────────────────────────────
+[Titlebar with product name]
+─────────────────────────────────────
+
+LEFT SIDE (60%)              RIGHT SIDE (40%)
+┌─────────────────┐         ┌────────────────┐
+│                 │         │ Product Name   │
+│  Main Image     │         │ 999 Kč         │
+│                 │         │                │
+│  [Thumbnails]   │         │ Velikost:      │
+│  [  ][  ][  ]   │         │ ○ S  ○ M  ○ L │
+│                 │         │ ○ XL ○ 2XL     │
+└─────────────────┘         │                │
+                            │ Množství: [+]1[-]│
+                            │                │
+                            │ [DO KOŠÍKU]    │
+                            │                │
+                            │ Popis:         │
+                            │ Lorem ipsum... │
+                            └────────────────┘
+Main Image:
+* Large square (1:1 aspect ratio)
+* Click to zoom (open modal with larger image)
+* 1px black border
+Thumbnails:
+* Small squares below main image
+* Click to change main image
+* 1px black border
+* Active thumbnail: 2px black border
+Product Info:
+* Name: 24px, black, bold
+* Price: 18px, black
+* Velikost (Size selector):
+    * Radio buttons styled as minimalistic circles
+    * White with 1px black border
+    * Selected: filled black circle
+    * Disabled sizes: line-through + lighter opacity
+    * Show "(Vyprodáno)" next to sold-out sizes
+* Množství (Quantity):
+    * Number input with +/- buttons
+    * 1px black border
+    * Min: 1, Max: available stock
+* DO KOŠÍKU button:
+    * Black background, white text
+    * Full width, 48px height
+    * Uppercase, 16px
+    * Hover: white background, black text with 1px border
+    * Click: Add to cart + show confirmation
+* Popis (Description):
+    * 14px, black
+    * Formatted text (line breaks preserved)
+Add to Cart Confirmation:
+* Small popup at top-right: "Produkt přidán do košíku"
+* White bg, black text, 1px border
+* Auto-dismiss after 3 seconds
+* Link to "Zobrazit košík"
+
+SHOPPING CART PAGE
+URL: /kosik
+Layout:
+[Header1]
+[Header2]
+─────────────────────────────────────
+[Titlebar: "NÁKUPNÍ KOŠÍK"]
+─────────────────────────────────────
+
+LEFT SIDE (70%)              RIGHT SIDE (30%)
+┌─────────────────────┐     ┌──────────────┐
+│ Product 1           │     │ SOUHRN       │
+│ [img] Name          │     │              │
+│ Size: M             │     │ Produkty:    │
+│ 999 Kč  [+]2[-] [X] │     │ 1 998 Kč     │
+├─────────────────────┤     │              │
+│ Product 2           │     │ Doprava:     │
+│ [img] Name          │     │ 79 Kč        │
+│ Size: L             │     │              │
+│ 1 499 Kč [+]1[-] [X]│     │ Celkem:      │
+└─────────────────────┘     │ 2 077 Kč     │
+                            │              │
+                            │ [K POKLADNĚ] │
+                            └──────────────┘
+Cart Items:
+* Each item in white rectangle with 1px black border
+* Small product image (80x80px, square)
+* Product name (16px, black)
+* Size (14px, black)
+* Price per unit (14px, black)
+* Quantity controls: +/- buttons (same as product detail)
+* Remove button: X icon (black, 20px)
+* Empty cart message: "Váš košík je prázdný" (centered, 16px)
+Summary (Right side):
+* White box with 1px black border
+* "SOUHRN" title (16px, bold, black)
+* Products subtotal
+* Shipping cost: 79 Kč (Zásilkovna standard)
+* Total (bold, 18px)
+* K POKLADNĚ button:
+    * Black bg, white text
+    * Full width, 48px height
+    * Uppercase, 16px
+
+CHECKOUT PAGE (Multi-step)
+URL: /pokladna
+Layout:
+[Header1]
+[Header2]
+─────────────────────────────────────
+[Titlebar: "POKLADNA"]
+─────────────────────────────────────
+
+LEFT SIDE (70%)              RIGHT SIDE (30%)
+┌─────────────────────┐     ┌──────────────┐
+│ KROK 1 / 3          │     │ VÁŠ NÁKUP    │
+│ KONTAKTNÍ ÚDAJE     │     │              │
+│                     │     │ 2x Products  │
+│ Email*              │     │ 2 077 Kč     │
+│ [_____________]     │     │              │
+│                     │     └──────────────┘
+│ Jméno a příjmení*   │
+│ [_____________]     │
+│                     │
+│ Telefon*            │
+│ [_____________]     │
+│                     │
+│ [POKRAČOVAT →]      │
+└─────────────────────┘
+STEP 1: Contact Information
+Fields:
+* Email* (required, validation)
+* Jméno a příjmení* (Full name, required)
+* Telefon* (Phone, required, Czech format +420)
+Validation:
+* Real-time validation on blur
+* Red 1px border if invalid
+* Error message below field (12px, red text)
+Button:
+* POKRAČOVAT → (black bg, white text, right-aligned)
+STEP 2: Shipping Address
+Content:
+* Title: "KROK 2 / 3 - DODACÍ ADRESA"
+* Integration with Zásilkovna widget
+* Button to open Zásilkovna selector: "VYBRAT VÝDEJNÍ MÍSTO"
+* Selected pickup point displayed:
+    * Name of pickup point
+    * Full address
+    * Change button
+* POKRAČOVAT → button
+Zásilkovna Widget:
+* Opens modal with Zásilkovna map
+* User selects pickup point
+* Returns: point ID, name, address
+STEP 3: Order Summary & Payment
+Content:
+* Title: "KROK 3 / 3 - SHRNUTÍ A PLATBA"
+* Review all information:
+    * Contact details (editable link)
+    * Shipping address (editable link)
+    * Order items with images
+    * Total price
+* Checkbox: "Souhlasím s obchodními podmínkami*" (required)
+    * Link to terms & conditions
+* Checkbox: "Chci se přihlásit k odběru newsletteru"
+* ZAPLATIT button:
+    * Black bg, white text
+    * Full width, 56px height
+    * Click → create GoPay payment → redirect
+Right Side Summary (all steps):
+* VÁŠ NÁKUP header
+* List of products (name + quantity)
+* Subtotal
+* Shipping
+* Total (bold)
+* Sticky position (follows scroll)
+
+PAYMENT FLOW (GoPay Integration)
+Creating Payment:
+1. User clicks ZAPLATIT
+2. Backend creates order in database (status: PENDING)
+3. Backend calls GoPay API to create payment:
+    * Amount: total price in haléře (multiply by 100)
+    * Currency: CZK
+    * Order number
+    * Return URL: https://ufosport.cz/potvrzeni/[orderNumber]
+    * Notification URL: https://ufosport.cz/api/gopay/webhook
+    * Items: list of products
+4. Backend receives GoPay payment ID and gateway URL
+5. Backend updates order with payment ID
+6. Frontend redirects user to GoPay gateway URL
+After Payment:
+* User completes payment on GoPay
+* GoPay redirects to return URL
+* Show order confirmation page
+* GoPay sends webhook notification to backend
+* Backend verifies payment status
+* Backend updates order status to PAID
+* Backend sends confirmation email
+GoPay Webhook Endpoint:
+URL: /api/gopay/webhook Method: POST Action:
+* Verify webhook signature
+* Get payment status from GoPay
+* Update order payment status
+* If PAID → trigger confirmation email
+* Return 200 OK
+
+ORDER CONFIRMATION PAGE
+URL: /potvrzeni/[orderNumber]
+Layout:
+[Header1]
+[Header2]
+─────────────────────────────────────
+
+         DĚKUJEME ZA OBJEDNÁVKU!
+         
+         Vaše objednávka #UFO241205001
+         byla úspěšně přijata.
+         
+         ✓ Platba: Zaplaceno
+         
+         Na email jsme vám zaslali
+         potvrzení objednávky.
+         
+         Co se stane dál?
+         1. Připravíme vaši zásilku
+         2. Odešleme na Zásilkovnu
+         3. Obdržíte SMS s kódem pro vyzvednutí
+         
+         [SLEDOVAT OBJEDNÁVKU]
+         
+─────────────────────────────────────
+Content:
+* Centered layout
+* Success message (24px, bold, black)
+* Order number (18px, black)
+* Payment status (16px, green ✓ icon)
+* Next steps (14px, black, numbered list)
+* Button to track order (if logged in) or view order details
+
+USER ACCOUNT PAGES
+Login Page (/prihlaseni)
+Layout:
+─────────────────────────────────────
+         PŘIHLÁŠENÍ
+         
+         Email
+         [____________________]
+         
+         Heslo
+         [____________________]
+         
+         ☐ Zapamatovat si mě
+         
+         [PŘIHLÁSIT SE]
+         
+         Zapomněli jste heslo?
+         
+         ─── nebo ───
+         
+         Ještě nemáte účet?
+         [ZAREGISTROVAT SE]
+─────────────────────────────────────
+Features:
+* Remember me checkbox
+* Forgot password link → password reset flow
+* Register button → goes to registration page
+* After login: redirect to previous page or account page
+Registration Page (/registrace)
+Fields:
+* Email*
+* Heslo* (minimum 8 characters)
+* Potvrdit heslo*
+* Jméno a příjmení*
+* Telefon*
+* Checkbox: "Souhlasím s obchodními podmínkami*"
+* Checkbox: "Chci dostávat newsletter"
+* ZAREGISTROVAT SE button
+User Account Dashboard (/ucet)
+Tabs:
+1. Moje objednávky (default)
+    * List of all orders
+    * Order number, date, status, total
+    * Click to view details
+2. Osobní údaje
+    * Edit name, email, phone
+    * Change password
+    * Newsletter subscription toggle
+3. Uložené produkty
+    * Grid of saved products
+    * Same as ULOŽENO window
+Order Detail Page (/ucet/objednavky/[orderNumber])
+Content:
+* Order number
+* Order date
+* Current status with timeline:
+    * ✓ Přijato
+    * ✓ Zaplaceno
+    * ⏳ Pracujeme na tom
+    * ⏳ Odesláno
+    * ⏳ Doručeno
+* Products list
+* Shipping address
+* Total price
+* Invoice download button (PDF)
+* Cancel order button (if status = PENDING or PAID)
+
+ADMIN PAGES (Protected - require admin login)
+Admin Login (/admin/login)
+Same as user login but:
+* Only accepts admin role accounts
+* Redirects to /admin dashboard after login
+Admin Dashboard (/admin)
+Layout:
+┌──────────┬────────────────────────┐
+│  MENU    │  DASHBOARD             │
+│          │                        │
+│ Dashboard│  ┌──────┐ ┌──────┐    │
+│ Objednávky│  │TODAY │ │MONTH │   │
+│ Produkty │  │15    │ │234   │    │
+│ Kategorie│  │orders│ │orders│    │
+│ Promocodes│  └──────┘ └──────┘    │
+│ Newsletter│                       │
+│ Nastavení│  NEDÁVNÉ OBJEDNÁVKY    │
+│          │  ┌────────────────┐   │
+│ [ODHLÁSIT│  │#UFO241205001   │   │
+│  SE]     │  │Jan Novák       │   │
+│          │  │1 999 Kč  PAID  │   │
+│          │  └────────────────┘   │
+│          │  [ZOBRAZIT VŠE]       │
+└──────────┴────────────────────────┘
+Statistics Cards:
+* Objednávky dnes (count + revenue)
+* Objednávky tento týden
+* Objednávky tento měsíc
+* Produktů v katalogu
+* Zákazníků celkem
+Recent Orders:
+* Last 10 orders
+* Order number, customer name, total, status
+* Click to view/edit
+Admin Orders Page (/admin/objednavky)
+Features:
+* Sortable table with all orders
+* Columns:
+    * Číslo objednávky
+    * Datum
+    * Zákazník (name + email)
+    * Produkty (count)
+    * Celková cena
+    * Status platby
+    * Status objednávky
+    * Akce (buttons)
+* Filters:
+    * Status dropdown (Všechny, Čeká na platbu, Zaplaceno, Pracujeme na tom, Odesláno, Doručeno, Zrušeno)
+    * Date range picker
+    * Search by order number or customer email
+* Pagination (20 orders per page)
+* Export to CSV button
+* Click row → go to order detail
+Admin Order Detail (/admin/objednavky/[id])
+Layout:
+┌─────────────────────────────────────────────┐
+│ ← Zpět na objednávky                        │
+│                                             │
+│ OBJEDNÁVKA #UFO241205001                    │
+│ Vytvořeno: 5.12.2024 14:32                 │
+├─────────────────────────────────────────────┤
+│                                             │
+│ ZÁKAZNÍK                                    │
+│ Jan Novák                                   │
+│ jan.novak@email.cz                          │
+│ +420 777 888 999                            │
+│                                             │
+│ DODACÍ ADRESA (ZÁSILKOVNA)                  │
+│ Zásilkovna - Tesco Ostrava                  │
+│ Nádražní 123, 702 00 Ostrava               │
+│                                             │
+│ PRODUKTY                                    │
+│ ┌──────────────────────────────────┐       │
+│ │ [img] Product Name               │       │
+│ │ Velikost: M                       │       │
+│ │ Množství: 2x                      │       │
+│ │ Cena: 999 Kč                      │       │
+│ └──────────────────────────────────┘       │
+│                                             │
+│ CELKOVÁ CENA: 1 998 Kč                      │
+│                                             │
+│ STATUS PLATBY:  [ZAPLACENO ✓]               │
+│ GoPay ID: 3001234567                        │
+│                                             │
+│ STATUS OBJEDNÁVKY:                          │
+│ ┌─────────────────────────────┐            │
+│ │ ○ Čeká na platbu            │            │
+│ │ ● Zaplaceno                 │            │
+│ │ ○ Pracujeme na tom          │            │
+│ │ ○ Odesláno                  │            │
+│ │ ○ Doručeno                  │            │
+│ │ ○ Zrušeno                   │            │
+│ └─────────────────────────────┘            │
+│                                             │
+│ [ULOŽIT ZMĚNY]                              │
+│                                             │
+│ FAKTURA                                     │
+│ [STÁHNOUT FAKTURU (PDF)]                   │
+│                                             │
+└─────────────────────────────────────────────┘
+Features:
+* Status radio buttons:
+    * Click to change order status
+    * Current status is selected (filled circle)
+* When status changes to "Pracujeme na tom":
+    * Automatic email sent: "Pracujeme na vaší objednávce"
+* When status changes to "Odesláno":
+    * Show tracking number input field
+    * Automatic email sent: "Zásilka byla odeslána"
+* ULOŽIT ZMĚNY button:
+    * Saves status
+    * Triggers email if status changed
+    * Shows success message
+* Download invoice button:
+    * Generates PDF invoice
+    * Czech invoice format with all legal requirements
+Admin Products Page (/admin/produkty)
+Layout:
+┌─────────────────────────────────────────────┐
+│ PRODUKTY                    [+ NOVÝ PRODUKT]│
+├─────────────────────────────────────────────┤
+│ [Hledat...] [Kategorie ▼] [Viditelnost ▼]  │
+├─────────────────────────────────────────────┤
+│                                             │
+│ Obrázek│Název      │Cena  │Sklad│Viditelné│
+│ [img]  │Product 1  │999 Kč│ 15  │ ☑       │[✎][🗑]
+│ [img]  │Product 2  │1499 Kč│ 0  │ ☐       │[✎][🗑]
+│ [img]  │Product 3  │799 Kč│ 23  │ ☑       │[✎][🗑]
+│                                             │
+│ [← 1 2 3 4 5 →]                            │
+└─────────────────────────────────────────────┘
+Features:
+* Search bar (searches name and description)
+* Filter by category dropdown
+* Filter by visibility (Všechny, Viditelné, Skryté)
+* Sortable columns (click header to sort)
+* Viditelné toggle:
+    * Click to show/hide product on frontend
+    * Updates immediately
+* Edit button (pencil icon) → goes to edit page
+* Delete button (trash icon):
+    * Confirmation dialog: "Opravdu smazat tento produkt?"
+    * Soft delete (keeps in database but isDeleted = true)
+    * NOVÝ PRODUKT button → goes to create page
+* Pagination (20 products per page)
+* Total stock shows sum of all sizes
+Admin Product Create/Edit (/admin/produkty/novy or /admin/produkty/[id]/upravit)
+Layout:
+┌─────────────────────────────────────────────┐
+│ ← Zpět na produkty                          │
+│                                             │
+│ NOVÝ PRODUKT                                │
+├─────────────────────────────────────────────┤
+│                                             │
+│ Název produktu*                             │
+│ [_______________________________]           │
+│                                             │
+│ Slug (URL)                                  │
+│ [_______________________________]           │
+│ (Auto-generuje se z názvu)                  │
+│                                             │
+│ Kategorie*                                  │
+│ ┌─────────────────────┐                    │
+│ │ ○ VOODOO808         │                    │
+│ │ ○ SPACE LOVE        │                    │
+│ │ ○ RECREATION WELLNESS│                   │
+│ │ ○ T SHIRT GALLERY   │                    │
+│ └─────────────────────┘                    │
+│                                             │
+│ Barva produktu* (pro filtrování)           │
+│ ○ Černá  ○ Bílá                            │
+│                                             │
+│ Cena (Kč)*                                  │
+│ [_______]                                   │
+│                                             │
+│ Popis produktu*                             │
+│ ┌─────────────────────────────┐            │
+│ │ [Rich text editor]          │            │
+│ │                             │            │
+│ │                             │            │
+│ └─────────────────────────────┘            │
+│                                             │
+│ Obrázky produktu*                           │
+│ [Upload]  [img] [img] [img]                │
+│ Přetáhněte sem nebo klikněte pro výběr     │
+│ (Min. 1 obrázek, max. 5 obrázků)           │
+│                                             │
+│ Video URL (volitelné)                       │
+│ [_______________________________]           │
+│ (YouTube nebo Vimeo odkaz)                  │
+│                                             │
+│ Dostupné velikosti a skladové zásoby*       │
+│ ┌─────────────────────────────┐            │
+│ │ ☑ S   Počet kusů: [___]     │            │
+│ │ ☑ M   Počet kusů: [___]     │            │
+│ │ ☑ L   Počet kusů: [___]     │            │
+│ │ ☐ XL  Počet kusů: [___]     │            │
+│ │ ☐ 2XL Počet kusů: [___]     │            │
+│ └─────────────────────────────┘            │
+│ (Odškrtněte velikosti, které nejsou        │
+│  dostupné)                                  │
+│                                             │
+│ ☑ Produkt je viditelný na webu             │
+│                                             │
+│ [ULOŽIT PRODUKT]  [ZRUŠIT]                 │
+│                                             │
+└─────────────────────────────────────────────┘
+Features:
+* Název: text input, required
+* Slug: auto-generates from name (removes Czech characters, spaces → hyphens)
+    * Can be manually edited
+    * Must be unique
+* Kategorie: radio buttons, required
+* Barva: radio buttons (černá/bílá), required for filtering
+* Cena: number input, required, min 0
+* Popis: rich text editor (bold, italic, lists, line breaks)
+* Obrázky upload:
+    * Drag & drop or click to select
+    * Upload to Cloudinary
+    * Image optimization (resize, compress)
+    * Min 1 image, max 5 images
+    * Reorder by drag & drop
+    * Delete uploaded images
+* Video URL: optional, validates YouTube/Vimeo format
+* Velikosti:
+    * Checkboxes for each size
+    * Number input for stock count (disabled if unchecked)
+    * Min 0 stock
+* Viditelnost checkbox
+* ULOŽIT button:
+    * Validates all required fields
+    * Shows errors inline (red text below fields)
+    * Success → redirect to products list
+* ZRUŠIT button → redirect to products list (confirm if changes made)
+Admin Categories Page (/admin/kategorie)
+Layout:
+┌─────────────────────────────────────────────┐
+│ HLAVNÍ KATEGORIE            [+ NOVÁ KATEGORIE]│
+├─────────────────────────────────────────────┤
+│                                             │
+│ Pořadí│Název              │Viditelná│Akce   │
+│   1   │VOODOO808          │   ☑    │[✎][🗑]│
+│   2   │SPACE LOVE         │   ☑    │[✎][🗑]│
+│   3   │RECREATION WELLNESS│   ☑    │[✎][🗑]│
+│   4   │T SHIRT GALLERY    │   ☑    │[✎][🗑]│
+│                                             │
+└─────────────────────────────────────────────┘
+Features:
+* Drag & drop to reorder (changes sortOrder)
+* Viditelná toggle:
+    * Hides category from Header1
+    * Category page still accessible via URL
+* Edit button → edit category modal
+* Delete button:
+    * Warning if category has products
+    * "Přesunout produkty do jiné kategorie nebo smazat?"
+    * NOVÁ KATEGORIE button → create modal
+Create/Edit Category Modal:
+┌─────────────────────────────┐
+│ NOVÁ KATEGORIE         [X]  │
+├─────────────────────────────┤
+│                             │
+│ Název kategorie*            │
+│ [_____________________]     │
+│                             │
+│ Slug (URL)                  │
+│ [_____________________]     │
+│                             │
+│ Video URL pro videopromo    │
+│ [_____________________]     │
+│ (volitelné)                 │
+│                             │
+│ ☑ Kategorie je viditelná    │
+│                             │
+│ [ULOŽIT]  [ZRUŠIT]          │
+└─────────────────────────────┘
+Admin Promo Codes Page (/admin/promocodes)
+Layout:
+┌─────────────────────────────────────────────┐
+│ SLEVOVÉ KÓDY                [+ NOVÝ KÓD]    │
+├─────────────────────────────────────────────┤
+│                                             │
+│ Kód    │Sleva  │Min.│Max.│Platnost │Aktivní│
+│ LETO25 │20%    │500│100 │do 31.8. │  ☑   │[✎][🗑]
+│ NOVA500│500 Kč │1000│50 │do 15.12.│  ☑   │[✎][🗑]
+│ BLACK  │30%    │-  │200 │vypršela │  ☐   │[✎][🗑]
+│                                             │
+│ Použito: 45/100                             │
+│ (45x použito, limit 100 použití)           │
+└─────────────────────────────────────────────┘
+Features:
+* List of all promo codes
+* Columns:
+    * Kód (code)
+    * Sleva (discount: % or fixed Kč amount)
+    * Min. objednávka (minimum order amount)
+    * Max. použití (maximum uses, "-" = unlimited)
+    * Platnost (validity period)
+    * Aktivní (toggle on/off)
+* Usage counter: shows X/Y (used/max)
+* Edit button → edit promo code modal
+* Delete button → confirmation
+    * NOVÝ KÓD button → create modal
+Create/Edit Promo Code Modal:
+┌─────────────────────────────────┐
+│ NOVÝ SLEVOVÝ KÓD           [X]  │
+├─────────────────────────────────┤
+│                                 │
+│ Kód*                            │
+│ [___________]                   │
+│ (např. LETO2025, velkými písm.) │
+│                                 │
+│ Typ slevy*                      │
+│ ○ Procenta (%)                  │
+│ ○ Pevná částka (Kč)             │
+│                                 │
+│ Hodnota slevy*                  │
+│ [_____]                         │
+│                                 │
+│ Minimální částka objednávky     │
+│ [_____] Kč                      │
+│ (volitelné, prázdné = bez limitu)│
+│                                 │
+│ Maximální počet použití         │
+│ [_____]                         │
+│ (volitelné, prázdné = neomezeno)│
+│                                 │
+│ Platnost od*                    │
+│ [DD.MM.YYYY] 📅                │
+│                                 │
+│ Platnost do*                    │
+│ [DD.MM.YYYY] 📅                │
+│                                 │
+│ ☑ Kód je aktivní                │
+│                                 │
+│ [VYTVOŘIT KÓD]  [ZRUŠIT]        │
+└─────────────────────────────────┘
+Validation:
+* Kód: uppercase, no spaces, alphanumeric only
+* Must be unique
+* Hodnota slevy: number, min 1
+    * If % type: max 100
+    * If Kč type: no max
+* Dates: validFrom must be before validUntil
+Promo Code Application (Frontend):
+* On checkout page, below cart summary:
+┌────────────────────────┐
+│ Slevový kód            │
+│ [_________] [POUŽÍT]   │
+│                        │
+│ ✓ Kód LETO25 použit    │
+│   -20% sleva: -400 Kč  │
+│   [ODEBRAT]            │
+└────────────────────────┘
+* Validate code on backend
+* Check: isActive, validFrom/validUntil, maxUses, minOrderAmount
+* Apply discount to total
+* Show discount amount separately
+Admin Newsletter Page (/admin/newsletter)
+Layout:
+┌─────────────────────────────────────────────┐
+│ NEWSLETTER SUBSCRIBERS                       │
+├─────────────────────────────────────────────┤
+│ [Hledat email...]              [EXPORT CSV] │
+├─────────────────────────────────────────────┤
+│                                             │
+│ Email                  │Oslovení│Datum     │
+│ jan@email.cz          │ Mr     │5.12.2024 │
+│ petra@email.cz        │ Miss   │4.12.2024 │
+│ info@firma.cz         │ Mx     │3.12.2024 │
+│                                             │
+│ Celkem: 234 odběratelů                      │
+│                                             │
+│ [← 1 2 3 4 5 →]                            │
+└─────────────────────────────────────────────┘
+Features:
+* List of all newsletter subscribers
+* Search by email
+* Export to CSV (all subscribers)
+* Pagination (50 per page)
+* Shows: email, civility, subscription date
+* No edit/delete (GDPR: users unsubscribe via email link)
+Admin Settings Page (/admin/nastaveni)
+Layout:
+┌─────────────────────────────────────────────┐
+│ NASTAVENÍ                                   │
+├─────────────────────────────────────────────┤
+│                                             │
+│ GOPAY NASTAVENÍ                             │
+│ Go ID                                       │
+│ [_______________________________]           │
+│                                             │
+│ Client ID                                   │
+│ [_______________________________]           │
+│                                             │
+│ Client Secret                               │
+│ [_______________________________]           │
+│                                             │
+│ Prostředí                                   │
+│ ○ Test  ○ Produkce                         │
+│                                             │
+│ ─────────────────────────────────────────  │
+│                                             │
+│ ZÁSILKOVNA NASTAVENÍ                        │
+│ API Key                                     │
+│ [_______________________________]           │
+│                                             │
+│ ─────────────────────────────────────────  │
+│                                             │
+│ EMAIL NASTAVENÍ                             │
+│ Resend API Key                              │
+│ [_______________________________]           │
+│                                             │
+│ Email odesílatele                           │
+│ [objednavky@ufosport.cz]                   │
+│                                             │
+│ ─────────────────────────────────────────  │
+│                                             │
+│ DOPRAVA                                     │
+│ Cena dopravy Zásilkovna                     │
+│ [79] Kč                                     │
+│                                             │
+│ ─────────────────────────────────────────  │
+│                                             │
+│ OBCHODNÍ PODMÍNKY                           │
+│ ┌─────────────────────────────┐            │
+│ │ [Rich text editor]          │            │
+│ │                             │            │
+│ └─────────────────────────────┘            │
+│                                             │
+│ [ULOŽIT ZMĚNY]                              │
+│                                             │
+└─────────────────────────────────────────────┘
+Features:
+* All settings stored in database (Settings table)
+* Sensitive data (API keys) encrypted
+* ULOŽIT ZMĚNY saves all settings
+* Changes take effect immediately
+
+EMAIL TEMPLATES
+1. Order Confirmation Email (After order created)
+Subject: Potvrzení objednávky #UFO241205001
+Content:
+Dobrý den [Jméno],
+
+Děkujeme za vaši objednávku na UFO Sport!
+
+ČÍSLO OBJEDNÁVKY: #UFO241205001
+DATUM: 5.12.2024 14:32
+
+OBJEDNANÉ PRODUKTY:
+─────────────────────────────
+• Product Name (M, 2x) - 1 998 Kč
+• Product Name 2 (L, 1x) - 799 Kč
+
+Mezisoučet: 2 797 Kč
+Doprava (Zásilkovna): 79 Kč
+─────────────────────────────
+CELKEM: 2 876 Kč
+
+DODACÍ ADRESA:
+Zásilkovna - Tesco Ostrava
+Nádražní 123, 702 00 Ostrava
+
+[ZAPLATIT OBJEDNÁVKU] ← Black button
+
+Status platby: Čeká na platbu
+Po dokončení platby vám zašleme další informace.
+
+Co se stane dál?
+1. Dokončíte platbu přes GoPay
+2. Připravíme vaši zásilku
+3. Odešleme na Zásilkovnu
+4. Obdržíte SMS s kódem pro vyzvednutí
+
+Máte otázky? Odpovězte na tento email.
+
+S pozdravem,
+Tým UFO Sport
+
+────────────────────────────────
+UFO Sport | www.ufosport.cz
+©2026 UFO Sport
+2. Payment Confirmation Email (After payment received)
+Subject: Platba přijata - Objednávka #UFO241205001
+Content:
+Dobrý den [Jméno],
+
+✓ Vaše platba byla úspěšně přijata!
+
+ČÍSLO OBJEDNÁVKY: #UFO241205001
+ZAPLACENO: 2 876 Kč
+
+Děkujeme za vaši platbu. Nyní začneme připravovat vaši zásilku.
+
+[STÁHNOUT FAKTURU (PDF)]
+
+[SLEDOVAT OBJEDNÁVKU]
+
+S pozdravem,
+Tým UFO Sport
+Attach: PDF invoice (faktura) with Czech legal requirements:
+* Seller info (IČO, DIČ, address)
+* Buyer info
+* Invoice number
+* Order date
+* Payment date
+* Products list with VAT
+* Total with 21% VAT breakdown
+3. Order Processing Email (Admin changes status to "Pracujeme na tom")
+Subject: Pracujeme na vaší objednávce #UFO241205001
+Content:
+Dobrý den [Jméno],
+
+Máme skvělé zprávy! Pracujeme na vaší objednávce.
+
+ČÍSLO OBJEDNÁVKY: #UFO241205001
+
+Vaši zásilku právě balíme a během 1-2 pracovních dnů ji odešleme na Zásilkovnu.
+
+Jakmile bude zásilka odeslána, obdržíte další email s informacemi o sledování.
+
+[SLEDOVAT OBJEDNÁVKU]
+
+S pozdravem,
+Tým UFO Sport
+4. Order Shipped Email (Admin changes status to "Odesláno")
+Subject: Zásilka byla odeslána - #UFO241205001
+Content:
+Dobrý den [Jméno],
+
+✓ Vaše zásilka byla odeslána!
+
+ČÍSLO OBJEDNÁVKY: #UFO241205001
+ČÍSLO ZÁSILKY: [Tracking number if available]
+
+Zásilka byla předána na Zásilkovnu a již brzy dorazí na vámi vybrané výdejní místo:
+
+Zásilkovna - Tesco Ostrava
+Nádražní 123, 702 00 Ostrava
+
+Jakmile bude zásilka připravena k vyzvednutí, obdržíte SMS od Zásilkovny s unikátním kódem.
+
+DŮLEŽITÉ:
+• Zásilku můžete vyzvednout do 7 dnů
+• K vyzvednutí potřebujete SMS kód a občanský průkaz
+• Výdejní místo je otevřeno dle provozní doby
+
+[SLEDOVAT ZÁSILKU NA ZÁSILKOVNA.CZ]
+
+Děkujeme za nákup!
+
+S pozdravem,
+Tým UFO Sport
+5. Newsletter Welcome Email
+Subject: Vítejte v UFO Sport komunitě!
+Content:
+Dobrý den,
+
+Děkujeme, že jste se přihlásili k odběru novinek od UFO Sport!
+
+Budeme vás informovat o:
+• Nových kolekcích
+• Exkluzivních slevách
+• Speciálních akcích
+
+Jako dík vám posíláme slevový kód:
+
+WELCOME10
+10% sleva na první nákup
+Platnost do 31.12.2024
+
+[NAKUPOVAT NYNÍ]
+
+Nechtěli jste se přihlásit? [Odhlásit se]
+
+S pozdravem,
+Tým UFO Sport
+
+API ENDPOINTS SUMMARY
+Public APIs:
+* GET /api/products - List products (with filters, search, pagination)
+* GET /api/products/[slug] - Get product detail
+* GET /api/categories - List categories
+* POST /api/newsletter/subscribe - Subscribe to newsletter
+* POST /api/cart/validate - Validate cart items and stock
+* POST /api/promo/validate - Validate promo code
+* POST /api/orders - Create new order
+* GET /api/orders/[orderNumber] - Get order by number (requires email)
+* POST /api/gopay/create-payment - Create GoPay payment
+* POST /api/gopay/webhook - GoPay payment notification
+* GET /api/zasilkovna/points - Get Zásilkovna pickup points
+User APIs (require authentication):
+* POST /api/auth/register - Register user
+* POST /api/auth/login - Login user
+* POST /api/auth/logout - Logout user
+* POST /api/auth/forgot-password - Request password reset
+* POST /api/auth/reset-password - Reset password with token
+* GET /api/user/profile - Get user profile
+* PUT /api/user/profile - Update user profile
+* GET /api/user/orders - Get user orders
+* GET /api/user/saved - Get saved products
+* POST /api/user/saved/[productId] - Save product
+* DELETE /api/user/saved/[productId] - Unsave product
+Admin APIs (require admin authentication):
+* GET /api/admin/stats - Dashboard statistics
+* GET /api/admin/orders - List all orders (with filters)
+* GET /api/admin/orders/[id] - Get order detail
+* PUT /api/admin/orders/[id] - Update order status
+* GET /api/admin/orders/export - Export orders to CSV
+* GET /api/admin/products - List all products (including hidden)
+* POST /api/admin/products - Create product
+* PUT /api/admin/products/[id] - Update product
+* DELETE /api/admin/products/[id] - Delete product
+* GET /api/admin/categories - List categories
+* POST /api/admin/categories - Create category
+* PUT /api/admin/categories/[id] - Update category
+* DELETE /api/admin/categories/[id] - Delete category
+* PUT /api/admin/categories/reorder - Reorder categories
+* GET /api/admin/promocodes - List promo codes
+* POST /api/admin/promocodes - Create promo code
+* PUT /api/admin/promocodes/[id] - Update promo code
+* DELETE /api/admin/promocodes/[id] - Delete promo code
+* GET /api/admin/newsletter - List newsletter subscribers
+* GET /api/admin/newsletter/export - Export to CSV
+* GET /api/admin/settings - Get settings
+* PUT /api/admin/settings - Update settings
+
+INVOICE GENERATION (Czech "Faktura")
+Czech Legal Requirements for Invoice:
+Must include:
+1. Seller (Dodavatel) Information:
+    * Company name or name: "UFO Sport"
+    * Address: [Your address]
+    * IČO (Company ID): [Your IČO]
+    * DIČ (VAT ID): CZ[Your DIČ]
+2. Buyer (Odběratel) Information:
+    * Name: [Customer name]
+    * Address: [Delivery address]
+    * (IČO/DIČ if customer provides it - optional for consumers)
+3. Invoice Details:
+    * Invoice number: Format "2024001" (year + sequence)
+    * Order number: #UFO241205001
+    * Issue date (Datum vystavení)
+    * Due date (Datum splatnosti) - typically same as payment date for prepaid
+    * Payment method (Způsob úhrady): "Platební brána GoPay"
+4. Items Table:
+    * Product name
+    * Quantity
+    * Unit price without VAT
+    * VAT rate (21%)
+    * Total price with VAT
+5. Summary:
+    * Subtotal without VAT (Základ daně)
+    * VAT amount 21% (DPH 21%)
+    * Total with VAT (Celkem k úhradě)
+6. Footer:
+    * Bank details (if accepting bank transfers)
+    * Contact information
+Implementation:
+* Use library: pdfkit or @react-pdf/renderer in Node.js
+* Generate PDF when order is paid
+* Store PDF URL in order.invoiceUrl
+* Include in payment confirmation email
+* Available for download in user account
+Example Invoice Template:
+─────────────────────────────────────────
+                FAKTURA
+─────────────────────────────────────────
+
+Číslo faktury: 2024001
+Variabilní symbol: UFO241205001
+Datum vystavení: 5.12.2024
+Datum splatnosti: 5.12.2024
+Způsob úhrady: Platební brána GoPay
+
+DODAVATEL:
+UFO Sport
+[Adresa]
+IČO: [IČO]
+DIČ: CZ[DIČ]
+
+ODBĚRATEL:
+Jan Novák
+jan.novak@email.cz
++420 777 888 999
+
+Dodací adresa:
+Zásilkovna - Tesco Ostrava
+Nádražní 123, 702 00 Ostrava
+
+─────────────────────────────────────────
+Položka          Mn. Cena/ks  Sazba  Celkem
+─────────────────────────────────────────
+Product Name (M)  2x  826 Kč  21%  1 652 Kč
+Product Name 2 (L) 1x  660 Kč  21%   660 Kč
+Doprava Zásilkovna 1x   65 Kč  21%    65 Kč
+─────────────────────────────────────────
+
+Základ daně 21%:                  2 377 Kč
+DPH 21%:                            499 Kč
+─────────────────────────────────────────
+CELKEM K ÚHRADĚ:                  2 876 Kč
+─────────────────────────────────────────
+
+Faktura byla uhrazena dne 5.12.2024
+
+Vystavil: Systém UFO Sport
+
+UFO Sport | www.ufosport.cz
+Email: info@ufosport.cz
+Telefon: +420 XXX XXX XXX
+
+ZÁSILKOVNA (PACKETA) INTEGRATION
+Zásilkovna API Integration
+Step 1: Widget Integration (Pickup Point Selection)
+* Use Zásilkovna's official widget: https://widget.packeta.com/v6/
+* Embed in checkout page Step 2
+* Button: "VYBRAT VÝDEJNÍ MÍSTO"
+* Widget opens in modal/iframe
+* User selects pickup point on map
+* Widget returns:
+    * id - Pickup point ID
+    * name - Name of pickup point
+    * place - City
+    * street - Street address
+    * zip - Postal code
+JavaScript Integration:
+// Load widget script
+<script src="https://widget.packeta.com/v6/www/js/library.js"></script>
+
+// Open widget
+Packeta.Widget.pick('YOUR_API_KEY', function(point) {
+  // Store selected point
+  setPickupPoint({
+    id: point.id,
+    name: point.name,
+    address: `${point.street}, ${point.zip} ${point.place}`
+  });
+});
+Step 2: Creating Shipment (After Order Shipped)
+* Use Zásilkovna API to create packet
+* Endpoint: https://www.zasilkovna.cz/api/rest
+* Method: POST /packet
+* Authentication: API key in header
+Create Packet Request:
+{
+  "apiPassword": "YOUR_API_KEY",
+  "packetAttributes": {
+    "number": "UFO241205001",
+    "name": "Jan",
+    "surname": "Novák",
+    "email": "jan.novak@email.cz",
+    "phone": "+420777888999",
+    "addressId": 12345,
+    "value": 2876,
+    "weight": 1.5,
+    "eshop": "ufosport.cz"
+  }
+}
+Response:
+* Returns packet ID and barcode
+* Store in order.trackingNumber
+* Zásilkovna automatically sends SMS to customer
+Step 3: Track Shipment
+* Tracking URL: https://tracking.packeta.com/cs/?id={trackingNumber}
+* Include link in "Order Shipped" email
+Cost:
+* Standard Zásilkovna: 79 Kč per shipment
+* Charged monthly based on usage
+
+GOPAY INTEGRATION DETAILS
+Setup:
+1. Register at https://gopay.com
+2. Get credentials:
+    * Go ID
+    * Client ID
+    * Client Secret
+3. Choose environment:
+    * Test: https://gw.sandbox.gopay.com
+    * Production: https://gate.gopay.cz
+Creating Payment:
+API Request:
+const gopay = require('gopay-nodejs-sdk');
+
+const client = gopay.default({
+  goId: process.env.GOPAY_GO_ID,
+  clientId: process.env.GOPAY_CLIENT_ID,
+  clientSecret: process.env.GOPAY_CLIENT_SECRET,
+  isProductionMode: process.env.GOPAY_ENVIRONMENT === 'production'
+});
+
+const payment = await client.createPayment({
+  payer: {
+    contact: {
+      first_name: order.customerName.split(' ')[0],
+      last_name: order.customerName.split(' ')[1],
+      email: order.customerEmail,
+      phone_number: order.customerPhone
+    }
+  },
+  amount: Math.round(order.totalPrice * 100), // Convert to haléře
+  currency: 'CZK',
+  order_number: order.orderNumber,
+  order_description: `Objednávka ${order.orderNumber}`,
+  items: order.items.map(item => ({
+    type: 'ITEM',
+    name: item.name,
+    amount: Math.round(item.price * 100),
+    count: item.quantity
+  })),
+  callback: {
+    return_url: `https://ufosport.cz/potvrzeni/${order.orderNumber}`,
+    notification_url: 'https://ufosport.cz/api/gopay/webhook'
+  },
+  lang: 'CS'
+});
+
+// Redirect user to payment gateway
+return payment.gw_url;
+Payment Methods Supported:
+* Card payment (Visa, Mastercard)
+* Bank transfer
+* Apple Pay
+* Google Pay
+* Payment buttons (multiple banks)
+Webhook Handler:
+Endpoint: /api/gopay/webhook
+export async function POST(request: Request) {
+  const signature = request.headers.get('X-GoPay-Signature');
+  const body = await request.json();
+  
+  // Verify signature
+  if (!verifySignature(body, signature)) {
+    return new Response('Invalid signature', { status: 401 });
+  }
+  
+  const { id, state, order_number } = body;
+  
+  // Get order from database
+  const order = await prisma.order.findUnique({
+    where: { orderNumber: order_number }
+  });
+  
+  // Update payment status
+  if (state === 'PAID') {
+    await prisma.order.update({
+      where: { id: order.id },
+      data: { 
+        paymentStatus: 'PAID',
+        status: 'PAID'
+      }
+    });
+    
+    // Send payment confirmation email
+    await sendPaymentConfirmationEmail(order);
+    
+    // Generate invoice
+    await generateInvoice(order);
+  }
+  
+  return new Response('OK', { status: 200 });
+}
+
+ADDITIONAL FEATURES TO IMPLEMENT
+1. Stock Management
+* Automatic stock updates:
+    * When order is created: reserve stock (status: PENDING)
+    * When payment confirmed: deduct stock (status: PAID)
+    * When order cancelled: restore stock
+    * When order refunded: restore stock
+* Low stock alerts:
+    * Admin notification when product stock < 5
+    * Email to admin
+    * Show warning badge in admin products list
+* Out of stock:
+    * Product automatically hidden when total stock = 0
+    * Show "VYPRODÁNO" badge on product card
+    * Disable "DO KOŠÍKU" button on product detail
+2. Search Functionality
+* Real-time search in Header2
+* Search in:
+    * Product names
+    * Product descriptions
+    * Category names
+* Support Czech characters (ě, š, č, ř, ž, ý, á, í, é, ú, ů, ň, ď, ť)
+* Show dropdown with results (max 5 products)
+* Click result → go to product detail
+* "Zobrazit všechny výsledky" link → search results page
+Search Results Page (/hledat?q=tričko):
+* Shows all matching products
+* Same layout as category page
+* Title: "Výsledky hledání: 'tričko'" (23 produktů)
+* If no results: "Nenalezli jsme žádné produkty"
+3. Product Sorting
+* In SEŘADIT PODLE dropdown:
+    * Nejnovější (createdAt DESC)
+    * Nejstarší (createdAt ASC)
+    * Cena: Nejnižší (price ASC)
+    * Cena: Nejvyšší (price DESC)
+    * Název: A-Z (name ASC)
+    * Název: Z-A (name DESC)
+4. Pagination
+* Load 20 products per page
+* Infinite scroll OR pagination buttons
+* Show "Načítá se..." when loading
+* Smooth scroll to top when page changes
+5. Responsive Design
+Mobile (max-width: 640px):
+* Header1: Hamburger menu (☰)
+    * Categories in slide-out menu
+    * Logo centered
+    * Cart icon top-right
+* Header2: Search bar full width
+* Products: 1 per row
+* FILTROVATWINDOW: Full screen
+* Footer: Stacked layout
+Tablet (max-width: 1024px):
+* Products: 2 per row
+* Rest similar to desktop
+6. Loading States
+* Skeleton loaders for:
+    * Products grid (gray rectangles with pulsing animation)
+    * Product detail
+    * Cart items
+* Loading spinner: Simple black circle rotating
+* "Načítá se..." text
+7. Error Handling
+* Network errors:
+    * Show error message: "Něco se pokazilo. Zkuste to prosím znovu."
+    * Retry button
+* 404 pages:
+    * Product not found: "Tento produkt nebyl nalezen"
+    * Page not found: "Stránka nebyla nalezena"
+    * Link to homepage
+* Form errors:
+    * Inline validation (red border + text)
+    * Required field: "Toto pole je povinné"
+    * Invalid email: "Neplatný email"
+    * Invalid phone: "Neplatné telefonní číslo"
+8. Success Messages
+* Toast notifications (top-right corner):
+    * Product added to cart: "Produkt přidán do košíku"
+    * Product saved: "Produkt uložen"
+    * Settings saved: "Změny uloženy"
+    * Order created: "Objednávka vytvořena"
+* Auto-dismiss after 3 seconds
+* Close button (X)
+9. Security Features
+* Password requirements:
+    * Minimum 8 characters
+    * At least 1 uppercase letter
+    * At least 1 number
+* Rate limiting:
+    * Login attempts: Max 5 per 15 minutes
+    * API requests: Max 100 per minute per IP
+* CSRF protection: Use NextAuth.js built-in
+* SQL injection prevention: Use Prisma (parameterized queries)
+* XSS protection: Sanitize user input
+* Environment variables: Never expose API keys in frontend
+10. Analytics & Tracking
+* Track events:
+    * Product views
+    * Add to cart
+    * Checkout started
+    * Order completed
+    * Search queries
+* Admin dashboard stats:
+    * Total revenue by period
+    * Best-selling products
+    * Average order value
+    * Conversion rate
+    * Top search queries
+11. SEO Optimization
+* Meta tags on every page:
+    * Title (unique per page)
+    * Description
+    * Open Graph tags (for social sharing)
+    * Canonical URL
+* Structured data (JSON-LD):
+    * Product schema
+    * Organization schema
+    * Breadcrumbs
+* Image optimization:
+    * Alt text for all images
+    * Lazy loading
+    * WebP format
+    * Responsive images (srcset)
+* Sitemap.xml: Auto-generated
+* Robots.txt: Allow all except /admin
+12. Performance Optimization
+* Image optimization:
+    * Cloudinary automatic optimization
+    * Responsive images
+    * Lazy loading (below fold)
+* Code splitting:
+    * Dynamic imports for heavy components
+    * Route-based code splitting (Next.js default)
+* Caching:
+    * Static pages cached at CDN (Vercel Edge)
+    * API responses cached (short TTL)
+    * Browser caching for images
+* Database optimization:
+    * Indexes on frequently queried fields (slug, email, orderNumber)
+    * Database connection pooling
+* Target performance:
+    * Lighthouse score: 90+ (Performance)
+    * First Contentful Paint: < 1.5s
+    * Time to Interactive: < 3.5s
+13. Accessibility (A11y)
+* Keyboard navigation:
+    * Tab order logical
+    * Focus indicators visible (2px black outline)
+    * Escape key closes modals
+* Screen reader support:
+    * ARIA labels on interactive elements
+    * Alt text on images
+    * Form labels properly associated
+* Color contrast:
+    * Black on white: ✓ Excellent contrast
+    * All text readable
+* Forms:
+    * Error messages announced to screen readers
+    * Required fields marked visually and semantically
+14. Legal Pages
+Create these pages (admin can edit in Settings):
+Obchodní podmínky (/obchodni-podminky)
+* Terms and conditions
+* Return policy (14 days Czech law)
+* Warranty information
+* Delivery terms
+Ochrana osobních údajů (/ochrana-osobnich-udaju)
+* GDPR compliance
+* What data is collected
+* How data is used
+* User rights (access, deletion, portability)
+* Cookie policy
+Kontakt (/kontakt)
+* Email: info@ufosport.cz
+* Phone: [Your phone]
+* Address: [Your address]
+* IČO: [Your IČO]
+* DIČ: [Your DIČ]
+* Contact form (sends email)
+15. Admin Notifications
+* Email notifications to admin:
+    * New order received
+    * Payment received
+    * Low stock alert
+    * Order cancelled by customer
+* Admin email: Set in Settings page
+
+TESTING CHECKLIST
+Before deployment, test all these flows:
+User Flows:
+* [ ] Browse products by category
+* [ ] Search for products
+* [ ] Filter products (color, size)
+* [ ] Sort products
+* [ ] View product detail
+* [ ] Add product to cart
+* [ ] Update cart quantities
+* [ ] Remove from cart
+* [ ] Apply promo code
+* [ ] Complete checkout (all 3 steps)
+* [ ] Select Zásilkovna pickup point
+* [ ] Complete GoPay payment (test mode)
+* [ ] Receive order confirmation email
+* [ ] View order confirmation page
+* [ ] Register user account
+* [ ] Login to account
+* [ ] View order history
+* [ ] Save products
+* [ ] View saved products
+* [ ] Subscribe to newsletter
+* [ ] Unsubscribe from newsletter
+Admin Flows:
+* [ ] Login as admin
+* [ ] View dashboard statistics
+* [ ] View all orders
+* [ ] Filter and search orders
+* [ ] Change order status
+* [ ] Verify status change emails sent
+* [ ] Export orders to CSV
+* [ ] View all products
+* [ ] Create new product
+* [ ] Edit product
+* [ ] Delete product
+* [ ] Toggle product visibility
+* [ ] Create category
+* [ ] Edit category
+* [ ] Reorder categories
+* [ ] Create promo code
+* [ ] Edit promo code
+* [ ] View newsletter subscribers
+* [ ] Export subscribers to CSV
+* [ ] Update settings (GoPay, Zásilkovna, etc.)
+Edge Cases:
+* [ ] Out of stock product
+* [ ] Invalid promo code
+* [ ] Expired promo code
+* [ ] Payment failure
+* [ ] Order cancellation
+* [ ] Duplicate order number handling
+* [ ] Empty cart checkout
+* [ ] Invalid email format
+* [ ] SQL injection attempts (should be blocked)
+* [ ] XSS attempts (should be sanitized)
+Performance Tests:
+* [ ] Page load time < 3s
+* [ ] Lighthouse score 90+
+* [ ] Mobile responsive on all pages
+* [ ] Images load properly
+* [ ] Videos load and play
+* [ ] No console errors
+* [ ] All links work
+* [ ] Forms validate properly
+Browser Compatibility:
+* [ ] Chrome (latest)
+* [ ] Firefox (latest)
+* [ ] Safari (latest)
+* [ ] Edge (latest)
+* [ ] Mobile Safari (iOS)
+* [ ] Mobile Chrome (Android)
+
+DEPLOYMENT STEPS
+1. Prepare for Production
+Environment Variables (.env.production):
+# Database
+DATABASE_URL=postgresql://...
+
+# NextAuth
+NEXTAUTH_SECRET=generate-random-32-char-secret
+NEXTAUTH_URL=https://ufosport.cz
+
+# GoPay (Production)
+GOPAY_GO_ID=your-production-go-id
+GOPAY_CLIENT_ID=your-production-client-id
+GOPAY_CLIENT_SECRET=your-production-client-secret
+GOPAY_ENVIRONMENT=production
+
+# Zásilkovna
+ZASILKOVNA_API_KEY=your-production-api-key
+
+# Email (Resend)
+RESEND_API_KEY=your-resend-api-key
+EMAIL_FROM=objednavky@ufosport.cz
+
+# Cloudinary
+CLOUDINARY_CLOUD_NAME=your-cloud-name
+CLOUDINARY_API_KEY=your-api-key
+CLOUDINARY_API_SECRET=your-api-secret
+
+# App URL
+NEXT_PUBLIC_APP_URL=https://ufosport.cz
+2. Database Migration
+# Run Prisma migrations
+npx prisma migrate deploy
+
+# Seed initial data (categories, admin user)
+npm run seed
+3. Vercel Deployment
+Connect to Vercel:
+# Install Vercel CLI
+npm i -g vercel
+
+# Login
+vercel login
+
+# Deploy
+vercel --prod
+Or via GitHub:
+1. Push code to GitHub
+2. Import project in Vercel dashboard
+3. Add environment variables
+4. Deploy automatically on push
+4. Domain Setup (ufosport.cz)
+In Vercel:
+1. Go to project settings → Domains
+2. Add domain: ufosport.cz
+3. Add www.ufosport.cz (redirect to main)
+In your domain registrar (e.g., Wedos, Active24):
+1. Add A record: @ → 76.76.21.21 (Vercel IP)
+2. Add CNAME record: www → cname.vercel-dns.com
+3. Wait for DNS propagation (5-30 minutes)
+Verify:
+* https://ufosport.cz (should work)
+* https://www.ufosport.cz (should redirect)
+* HTTPS enabled automatically (Vercel SSL)
+5. Email Domain Verification (Resend)
+Add DNS records for objednavky@ufosport.cz:
+1. Login to Resend
+2. Go to Domains → Add Domain
+3. Add ufosport.cz
+4. Copy DNS records (SPF, DKIM, DMARC)
+5. Add to your domain's DNS settings
+6. Verify in Resend dashboard
+DNS Records to add:
+TXT @ v=spf1 include:resend.com ~all
+TXT resend._domainkey [DKIM value from Resend]
+TXT _dmarc v=DMARC1; p=none; pct=100; rua=mailto:objednavky@ufosport.cz
+6. GoPay Production Setup
+1. Switch from test to production environment
+2. Update credentials in environment variables
+3. Test with real payment (small amount)
+4. Verify webhook receives notifications
+7. Zásilkovna Production Setup
+1. Get production API key
+2. Update in environment variables
+3. Test creating real shipment
+4. Verify SMS notifications work
+8. Create Admin Account
+# In production database, run:
+npx prisma studio
+
+# Or via seed script:
+npm run seed:admin
+Create admin user:
+* Email: admin@ufosport.cz
+* Password: (strong password)
+* Role: ADMIN
+9. Add Initial Products
+1. Login as admin
+2. Create categories (if not seeded)
+3. Add products with images
+4. Set stock levels
+5. Make products visible
+10. Test Production Site
+* [ ] Complete full checkout flow
+* [ ] Test real GoPay payment (small amount)
+* [ ] Verify emails are sent
+* [ ] Check order appears in admin
+* [ ] Test all admin functions
+* [ ] Check mobile responsiveness
+* [ ] Test on different browsers
+11. Analytics Setup (Optional)
+* Google Analytics 4
+* Google Search Console
+* Facebook Pixel (if using FB ads)
+12. Go Live! 🚀
+* Announce on social media
+* Email newsletter subscribers
+* Monitor for errors (Vercel logs)
+* Watch for orders
+
+MAINTENANCE & MONITORING
+Daily Tasks:
+* Check new orders in admin
+* Process "Pracujeme na tom" orders
+* Mark shipped orders as "Odesláno"
+* Respond to customer emails
+Weekly Tasks:
+* Review stock levels
+* Add new products
+* Check analytics
+* Review and respond to feedback
+Monthly Tasks:
+* Export orders for accounting
+* Review promo code performance
+* Check email deliverability
+* Update content if needed
+* Backup database
+Monitoring:
+* Set up Vercel monitoring (free)
+* Error tracking: Sentry (optional)
+* Uptime monitoring: UptimeRobot (free)
+* Email alerts for:
+    * Site down
+    * Payment errors
+    * Low stock
+    * High error rate
+
+COST BREAKDOWN (Monthly Estimates)
+Free Tier Services:
+* Vercel Hosting: FREE (hobby plan sufficient)
+* Resend Emails: FREE (up to 3,000 emails)
+* Database: Vercel Postgres FREE tier or Supabase FREE tier
+* Domain: ~200 Kč/year (already owned)
+Paid Services:
+* GoPay:
+    * No monthly fee
+    * ~1-2% transaction fee per payment
+    * Example: 50 orders × 1,000 Kč × 1.5% = 750 Kč
+* Zásilkovna:
+    * 79 Kč per shipment
+    * Example: 50 orders × 79 Kč = 3,950 Kč
+* Cloudinary: FREE tier (25 GB, 25k transformations)
+Total Monthly Cost (50 orders):
+* Fixed: ~0 Kč (all free tiers)
+* Variable: ~4,700 Kč (GoPay fees + Zásilkovna)
+* Total: ~4,700 Kč/month
+Compare to Shoptet:
+* Shoptet: ~1,500-3,000 Kč/month + transaction fees
+* Your savings: ~1,000-1,500 Kč/month
+* Plus: Full control, no limits, custom features!
+
+FINAL NOTES
+This e-shop includes EVERYTHING you need: ✅ Minimalistic black/white design (exactly as described) ✅ Full product management ✅ Shopping cart & checkout ✅ GoPay payment integration ✅ Zásilkovna shipping integration ✅ Automatic emails (order, payment, shipping) ✅ Invoice generation (Czech legal format) ✅ User accounts ✅ Admin panel (orders, products, categories, promo codes) ✅ Newsletter subscription ✅ Promo codes system ✅ Stock management ✅ Search & filtering ✅ Mobile responsive ✅ SEO optimized ✅ Fast & secure ✅ Ready for production
+Start building on Replit with this prompt, then deploy to Vercel for production!
+Good luck, bro! 🚀 Your e-shop is going to be awesome!
