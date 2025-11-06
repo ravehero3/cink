@@ -4,14 +4,14 @@
 A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz) built with Next.js 14, TypeScript, and Tailwind CSS.
 
 ## Tech Stack
-- **Framework**: Next.js 14 with App Router and TypeScript
-- **Styling**: Tailwind CSS (strict black/white palette)
-- **Database**: PostgreSQL with Prisma ORM ✓ configured
-- **Authentication**: NextAuth.js (to be configured)
-- **Payment**: GoPay integration (Czech payment gateway)
-- **Email**: Resend API for transactional emails
-- **Shipping**: Zásilkovna (Packeta) API integration
-- **File Storage**: Cloudinary for product images
+- **Framework**: Next.js 14 with App Router and TypeScript ✓
+- **Styling**: Tailwind CSS (strict black/white palette) ✓
+- **Database**: PostgreSQL with Prisma ORM ✓ configured and seeded
+- **Authentication**: NextAuth.js ✓ configured (credentials-based)
+- **Payment**: GoPay integration (Czech payment gateway) - needs API keys
+- **Email**: Resend API for transactional emails - needs API key
+- **Shipping**: Zásilkovna (Packeta) API integration - needs API key
+- **File Storage**: Cloudinary for product images - needs API keys
 
 ## Design System
 ### Color Palette (STRICT)
@@ -103,6 +103,11 @@ The PostgreSQL database is configured with the following models:
   - Created comprehensive database seed with 40 products across 4 categories (VOODOO808, SPACE LOVE, RECREATION WELLNESS, T SHIRT GALLERY)
   - Implemented complete checkout flow with order creation API endpoint
   - Created order confirmation page (/potvrzeni/[orderNumber]) showing order details and payment status
+  - Set up PostgreSQL database with full schema migration
+  - Configured NextAuth with secure secret and URL
+  - Created admin user for testing: admin@ufosport.cz / admin123
+  - Refactored NextAuth to use shared Prisma client for better connection management
+  - Verified all core functionality: homepage, headers, categories, product listings, APIs
   - Built saved products page (/ulozeno) with grid layout matching design system
   - Implemented search results page (/hledat) with product filtering
   - Created SavedProductsWindow component with slide-in animation
