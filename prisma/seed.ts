@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
@@ -56,6 +57,21 @@ function normalizeSlug(text: string): string {
 
 async function main() {
   console.log('🌱 Starting seed...');
+
+  console.log('👤 Creating admin user...');
+  const hashedPassword = await bcrypt.hash('admin123', 10);
+  await prisma.user.upsert({
+    where: { email: 'admin@ufosport.cz' },
+    update: {},
+    create: {
+      email: 'admin@ufosport.cz',
+      password: hashedPassword,
+      name: 'Admin User',
+      role: 'ADMIN',
+      newsletterSubscribed: false,
+    },
+  });
+  console.log('✅ Admin user created: admin@ufosport.cz / admin123');
 
   console.log('📁 Creating categories...');
   for (const category of categories) {
