@@ -104,7 +104,7 @@ export default function CheckoutPage() {
         if (data.paymentUrl) {
           window.location.href = data.paymentUrl;
         } else {
-          router.push(`/objednavka/${data.orderId}`);
+          router.push(`/potvrzeni/${data.orderNumber}`);
         }
       } else {
         alert(data.error || 'Chyba při vytváření objednávky');
@@ -117,7 +117,27 @@ export default function CheckoutPage() {
   };
 
   const openZasilkovnaWidget = () => {
-    alert('Zásilkovna widget bude integrován v dalším kroku');
+    if (typeof window !== 'undefined' && (window as any).Packeta) {
+      (window as any).Packeta.Widget.pick(process.env.NEXT_PUBLIC_ZASILKOVNA_API_KEY || 'demo', (point: any) => {
+        if (point) {
+          setFormData({
+            ...formData,
+            zasilkovnaId: point.id,
+            zasilkovnaName: `${point.name}, ${point.street}, ${point.zip} ${point.place}`,
+          });
+        }
+      }, {
+        country: 'cz',
+        language: 'cs',
+      });
+    } else {
+      alert('Zásilkovna widget není k dispozici. Použijte placeholder výdejní místo pro testování.');
+      setFormData({
+        ...formData,
+        zasilkovnaId: 'TEST123',
+        zasilkovnaName: 'Test Výdejní Místo - Praha 1, 110 00 Praha',
+      });
+    }
   };
 
   if (items.length === 0) {

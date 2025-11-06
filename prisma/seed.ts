@@ -43,7 +43,7 @@ const productTemplates = [
 ];
 
 const sizes = ['S', 'M', 'L', 'XL', '2XL'];
-const colors = ['Černá', 'Bílá'];
+const colors = ['black', 'white'];
 
 function normalizeSlug(text: string): string {
   return text
@@ -84,15 +84,16 @@ async function main() {
 
       const slug = normalizeSlug(`${category.slug}-${template.name}-${color}`);
       
+      const colorDisplay = color === 'black' ? 'Černá' : 'Bílá';
       const imageText = `${template.name.replace(/\s+/g, '+')}`;
-      const bgColor = color === 'Černá' ? '000000' : 'FFFFFF';
-      const textColor = color === 'Černá' ? 'FFFFFF' : '000000';
+      const bgColor = color === 'black' ? '000000' : 'FFFFFF';
+      const textColor = color === 'black' ? 'FFFFFF' : '000000';
 
       await prisma.product.upsert({
         where: { slug },
         update: {},
         create: {
-          name: `${template.name} - ${color}`,
+          name: `${template.name} - ${colorDisplay}`,
           slug,
           description: template.description,
           price: template.price,

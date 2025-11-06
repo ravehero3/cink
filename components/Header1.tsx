@@ -1,9 +1,11 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { useCartStore } from '@/lib/cart-store';
 import { useSavedProductsStore } from '@/lib/saved-products-store';
 import { useSession } from 'next-auth/react';
+import SavedProductsWindow from './SavedProductsWindow';
 
 const categories = [
   { name: 'VOODOO808', slug: 'voodoo808' },
@@ -18,6 +20,7 @@ export default function Header1() {
   const savedCount = useSavedProductsStore((state) => state.getCount());
   const isLoggedIn = !!session;
   const isAdmin = session?.user?.role === 'ADMIN';
+  const [showSavedWindow, setShowSavedWindow] = useState(false);
 
   return (
     <header className="h-header border-b border-black bg-white">
@@ -48,7 +51,10 @@ export default function Header1() {
             {isLoggedIn ? "MŮJ ÚČET" : "PŘIHLÁSIT SE"}
           </Link>
 
-          <Link href="/ulozeno" className="relative">
+          <button 
+            onClick={() => setShowSavedWindow(true)}
+            className="relative"
+          >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>
@@ -57,7 +63,7 @@ export default function Header1() {
                 {savedCount}
               </span>
             )}
-          </Link>
+          </button>
 
           <Link href="/kosik" className="relative">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -71,6 +77,11 @@ export default function Header1() {
           </Link>
         </div>
       </div>
+      
+      <SavedProductsWindow 
+        isOpen={showSavedWindow}
+        onClose={() => setShowSavedWindow(false)}
+      />
     </header>
   );
 }
