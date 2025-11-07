@@ -217,7 +217,7 @@ export default function ProductDetailPage() {
                           ? 'bg-black text-white border-black'
                           : isAvailable
                           ? 'border-black hover:bg-black hover:text-white'
-                          : 'border-black opacity-50 cursor-not-allowed'
+                          : 'border-black bg-white text-black cursor-not-allowed'
                       }`}
                     >
                       <span className={!isAvailable ? 'line-through' : ''}>{size}</span>
@@ -251,7 +251,7 @@ export default function ProductDetailPage() {
 
             <button
               onClick={handleAddToCart}
-              className="w-full h-12 bg-black text-white text-body uppercase font-bold hover:opacity-80 transition-opacity"
+              className="w-full h-12 bg-black text-white text-body uppercase font-bold border border-black hover:bg-white hover:text-black transition-colors"
             >
               DO KOŠÍKU
             </button>

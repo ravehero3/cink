@@ -56,7 +56,7 @@ export default function SavedProductsWindow({ isOpen, onClose }: SavedProductsWi
     <>
       {isOpen && (
         <div
-          className="fixed inset-0 bg-white bg-opacity-50 z-40"
+          className="fixed inset-0 bg-white z-40"
           onClick={onClose}
         />
       )}

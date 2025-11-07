@@ -74,7 +74,7 @@ export default function SearchPage() {
             <div className="min-h-[400px] flex items-center justify-center">
               <div className="text-center">
                 <p className="text-body mb-2">Nenalezli jsme žádné produkty</p>
-                <p className="text-body opacity-70">Zkuste použít jiná klíčová slova</p>
+                <p className="text-[12px]">Zkuste použít jiná klíčová slova</p>
               </div>
             </div>
           ) : (

@@ -34,7 +34,7 @@ export default function ProductCard({
   return (
     <Link
       href={`/produkty/${slug}`}
-      className="block bg-white hover:shadow-none transition-opacity"
+      className="block bg-white border border-white hover:border-black transition-colors"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -42,9 +42,8 @@ export default function ProductCard({
         <img
           src={image}
           alt={name}
-          className="w-full h-full object-cover transition-opacity"
+          className="w-full h-full object-cover"
           style={{ 
-            opacity: isHovered ? 0.8 : 1,
             filter: 'grayscale(1) contrast(1.2)',
           }}
         />

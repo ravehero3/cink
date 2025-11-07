@@ -222,7 +222,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
               + Přidat obrázek
             </button>
           </div>
-          <p className="text-body mt-2 opacity-60">
+          <p className="text-body mt-2 border-t border-black pt-2">
             Tip: Nahrajte obrázky na Cloudinary a vložte zde URL
           </p>
         </div>
@@ -268,7 +268,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
           <button
             type="submit"
             disabled={saving}
-            className="bg-black text-white px-8 py-3 text-body uppercase hover:bg-white hover:text-black border border-black transition-colors disabled:opacity-50"
+            className="bg-black text-white px-8 py-3 text-body uppercase hover:bg-white hover:text-black border border-black transition-colors disabled:bg-white disabled:text-black"
           >
             {saving ? 'Ukládání...' : 'Uložit změny'}
           </button>

@@ -117,7 +117,7 @@ export default function FilterWindow() {
           </button>
           <button
             onClick={apply}
-            className="flex-1 px-6 py-3 text-body uppercase bg-black text-white hover:opacity-80 transition-opacity"
+            className="flex-1 px-6 py-3 text-body uppercase bg-black text-white border border-black hover:bg-white hover:text-black transition-colors"
           >
             ULOŽIT
           </button>

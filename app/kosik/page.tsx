@@ -22,7 +22,7 @@ export default function CartPage() {
           <p className="text-body mb-8">Váš košík je prázdný</p>
           <Link
             href="/"
-            className="inline-block bg-black text-white px-8 py-3 text-body uppercase hover:bg-opacity-90 transition-opacity"
+            className="inline-block bg-black text-white px-8 py-3 text-body uppercase border border-black hover:bg-white hover:text-black transition-colors"
           >
             POKRAČOVAT V NÁKUPU
           </Link>
@@ -132,7 +132,7 @@ export default function CartPage() {
 
               <Link
                 href="/pokladna"
-                className="block w-full bg-black text-white text-center py-3 text-body uppercase hover:bg-opacity-90 transition-opacity"
+                className="block w-full bg-black text-white text-center py-3 text-body uppercase border border-black hover:bg-white hover:text-black transition-colors"
               >
                 POKRAČOVAT K POKLADNĚ
               </Link>

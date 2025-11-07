@@ -115,3 +115,17 @@ model NewsletterSubscriber {
   civility  String
   createdAt DateTime @default(now())
 }
+
+model Settings {
+  id                  String   @id @default(uuid())
+  gopayGoId           String?
+  gopayClientId       String?
+  gopayClientSecret   String?
+  gopayEnvironment    String   @default("test")
+  zasilkovnaApiKey    String?
+  resendApiKey        String?
+  senderEmail         String   @default("objednavky@ufosport.cz")
+  shippingCost        Decimal  @db.Decimal(10, 2) @default(79)
+  termsAndConditions  String?  @db.Text
+  updatedAt           DateTime @updatedAt
+}

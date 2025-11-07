@@ -86,7 +86,7 @@ export default function Header2() {
             placeholder="Co právě hledáte?"
             value={searchQuery}
             onChange={(e) => handleSearch(e.target.value)}
-            className="flex-1 text-body bg-transparent border-none outline-none focus:border-b focus:border-black placeholder:text-black placeholder:opacity-50"
+            className="flex-1 text-body bg-transparent border-none outline-none focus:border-b focus:border-black placeholder:text-black"
           />
 
           {showResults && (
@@ -105,7 +105,7 @@ export default function Header2() {
                       <div className="flex justify-between items-start">
                         <div className="flex-1">
                           <div className="text-body font-bold">{result.name}</div>
-                          <div className="text-[12px] opacity-70">{result.category}</div>
+                          <div className="text-[12px]">{result.category}</div>
                         </div>
                         <div className="text-body">{result.price} Kč</div>
                       </div>

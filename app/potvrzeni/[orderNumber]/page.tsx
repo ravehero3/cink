@@ -135,7 +135,7 @@ export default function OrderConfirmationPage() {
             </Link>
           </div>
 
-          <div className="mt-8 text-center text-body opacity-70">
+          <div className="mt-8 text-center border-t border-black pt-4">
             <p className="text-[12px]">Máte otázky?</p>
             <p className="text-[12px]">Kontaktujte nás na info@ufosport.cz</p>
           </div>

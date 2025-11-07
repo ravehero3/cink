@@ -55,12 +55,12 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
   return (
     <>
       <div 
-        className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity"
+        className="fixed inset-0 bg-white z-40"
         onClick={onClose}
       />
       
       <div 
-        className={`fixed top-0 right-0 h-full bg-white z-50 shadow-lg transition-transform duration-300 w-full md:w-[400px] ${
+        className={`fixed top-0 right-0 h-full bg-white border-l border-black z-50 transition-transform duration-300 w-full md:w-[400px] ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
@@ -69,7 +69,7 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
             <h2 className="text-product-name font-bold uppercase">NEWSLETTER</h2>
             <button
               onClick={onClose}
-              className="text-body hover:opacity-70 transition-opacity"
+              className="text-body"
               aria-label="Zavřít"
             >
               ✕
@@ -159,7 +159,7 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-black text-white py-3 text-body uppercase font-bold hover:bg-opacity-90 transition-opacity disabled:opacity-50"
+                className="w-full bg-black text-white py-3 text-body uppercase font-bold disabled:bg-white disabled:text-black disabled:border disabled:border-black"
               >
                 {loading ? 'ODESÍLÁNÍ...' : 'PŘIHLÁSIT SE'}
               </button>

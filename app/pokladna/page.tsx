@@ -224,7 +224,7 @@ export default function CheckoutPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-black text-white py-4 text-body uppercase font-bold hover:bg-opacity-90 transition-opacity disabled:opacity-50 mt-8"
+                className="w-full bg-black text-white py-4 text-body uppercase font-bold border border-black hover:bg-white hover:text-black transition-colors disabled:bg-white disabled:text-black mt-8"
               >
                 {loading ? 'ZPRACOVÁNÍ...' : 'PŘEJÍT K PLATBĚ'}
               </button>

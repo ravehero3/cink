@@ -323,7 +323,7 @@ export default function AdminPromoCodesPage() {
                     ? `${promoCode.discountValue}%`
                     : `${promoCode.discountValue} Kč`}
                   {promoCode.minOrderAmount && (
-                    <div className="text-body opacity-60">
+                    <div className="text-[12px]">
                       Min: {promoCode.minOrderAmount} Kč
                     </div>
                   )}

@@ -97,7 +97,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-black text-white py-3 text-body uppercase hover:bg-opacity-90 transition-opacity disabled:opacity-50"
+            className="w-full bg-black text-white py-3 text-body uppercase border border-black hover:bg-white hover:text-black transition-colors disabled:bg-white disabled:text-black"
           >
             {loading ? 'NAČÍTÁNÍ...' : 'PŘIHLÁSIT SE'}
           </button>

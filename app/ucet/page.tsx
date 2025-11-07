@@ -193,7 +193,7 @@ export default function AccountPage() {
                   <Link
                     key={product.id}
                     href={`/produkty/${product.slug}`}
-                    className="bg-white p-6 hover:bg-opacity-95 transition-opacity"
+                    className="bg-white p-6 border border-white hover:border-black transition-colors"
                   >
                     <div className="aspect-square border border-black relative mb-4">
                       <Image
