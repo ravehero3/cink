@@ -104,7 +104,7 @@ export default function ProductDetailPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-96">
-        <p className="text-product-name">Načítání...</p>
+        <p className="text-sm">Načítání...</p>
       </div>
     );
   }
@@ -112,7 +112,7 @@ export default function ProductDetailPage() {
   if (!product) {
     return (
       <div className="flex items-center justify-center h-96">
-        <p className="text-product-name">Produkt nenalezen</p>
+        <p className="text-sm">Produkt nenalezen</p>
       </div>
     );
   }
@@ -123,18 +123,18 @@ export default function ProductDetailPage() {
     <div>
       {showConfirmation && (
         <div className="fixed top-24 right-8 bg-black text-white px-6 py-4 z-50 border border-white">
-          <p className="text-body">Produkt přidán do košíku</p>
+          <p className="text-xs">Produkt přidán do košíku</p>
         </div>
       )}
 
-      <div className="container mx-auto px-8 py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
-          <div className="lg:w-[60%]">
-            <div className="mb-4">
+      <div className="container mx-auto px-6 py-6">
+        <div className="flex flex-col lg:flex-row gap-6">
+          <div className="lg:w-[65%]">
+            <div className="mb-3">
               <img
                 src={product.images[selectedImage]}
                 alt={product.name}
-                className="w-full aspect-square object-cover border border-black"
+                className="w-full aspect-square object-cover"
                 style={{ filter: 'grayscale(1) contrast(1.2)' }}
               />
             </div>
@@ -145,7 +145,7 @@ export default function ProductDetailPage() {
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
-                    className={`flex-1 aspect-square border ${
+                    className={`w-16 h-16 border ${
                       selectedImage === index ? 'border-black border-2' : 'border-black'
                     }`}
                   >
@@ -161,16 +161,16 @@ export default function ProductDetailPage() {
             )}
           </div>
 
-          <div className="lg:w-[40%]">
-            <div className="flex justify-between items-start mb-4">
-              <h1 className="text-title font-bold">{product.name}</h1>
+          <div className="lg:w-[35%] lg:pl-6">
+            <div className="flex justify-between items-start mb-2">
+              <h1 className="text-sm font-normal lowercase">{product.name}</h1>
               <button
                 onClick={toggleSaved}
                 className="flex-shrink-0 ml-4"
                 aria-label={isSaved(product.id) ? 'Odebrat z uložených' : 'Uložit produkt'}
               >
                 <svg
-                  className="w-6 h-6"
+                  className="w-5 h-5"
                   fill={isSaved(product.id) ? 'black' : 'none'}
                   stroke="black"
                   viewBox="0 0 24 24"
@@ -185,18 +185,15 @@ export default function ProductDetailPage() {
               </button>
             </div>
             
-            <p className="text-header font-bold mb-6">{product.price} Kč</p>
+            <p className="text-xs mb-6">{product.price} Kč</p>
 
-            <div className="mb-6">
-              <p className="text-body mb-2">{product.description}</p>
+            <div className="mb-6 pb-6 border-b border-black">
+              <p className="text-xs mb-3">{product.description}</p>
+              <p className="text-xs">Barva: {product.color}</p>
             </div>
 
             <div className="mb-6">
-              <p className="text-body font-bold mb-3 uppercase">Barva: {product.color}</p>
-            </div>
-
-            <div className="mb-6">
-              <p className="text-body font-bold mb-3 uppercase">Velikost:</p>
+              <p className="text-xs mb-3 uppercase">Size:</p>
               <div className="flex flex-wrap gap-2">
                 {sizes.map(([size, stock]) => {
                   const isAvailable = stock > 0;
@@ -212,12 +209,12 @@ export default function ProductDetailPage() {
                         }
                       }}
                       disabled={!isAvailable}
-                      className={`w-12 h-12 rounded-full border flex items-center justify-center text-body transition-colors ${
+                      className={`px-4 py-2 border text-xs transition-colors ${
                         isSelected
                           ? 'bg-black text-white border-black'
                           : isAvailable
                           ? 'border-black hover:bg-black hover:text-white'
-                          : 'border-black bg-white text-black cursor-not-allowed'
+                          : 'border-black bg-white text-black cursor-not-allowed opacity-40'
                       }`}
                     >
                       <span className={!isAvailable ? 'line-through' : ''}>{size}</span>
@@ -225,45 +222,24 @@ export default function ProductDetailPage() {
                   );
                 })}
               </div>
-              {selectedSize && !product.sizes[selectedSize] && (
-                <p className="text-[12px] mt-2">(Vyprodáno)</p>
-              )}
-            </div>
-
-            <div className="mb-6">
-              <p className="text-body font-bold mb-3 uppercase">Množství:</p>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={decrementQuantity}
-                  className="w-10 h-10 border border-black flex items-center justify-center hover:bg-black hover:text-white transition-colors"
-                >
-                  −
-                </button>
-                <span className="w-12 text-center text-body">{quantity}</span>
-                <button
-                  onClick={incrementQuantity}
-                  className="w-10 h-10 border border-black flex items-center justify-center hover:bg-black hover:text-white transition-colors"
-                >
-                  +
-                </button>
-              </div>
             </div>
 
             <button
               onClick={handleAddToCart}
-              className="w-full h-12 bg-black text-white text-body uppercase font-bold border border-black hover:bg-white hover:text-black transition-colors"
+              className="w-full py-3 bg-black text-white text-xs uppercase border border-black hover:bg-white hover:text-black transition-colors mb-4"
             >
-              DO KOŠÍKU
+              Add to cart
             </button>
 
-            <div className="mt-8 pt-8 border-t border-black">
-              <div className="text-body space-y-2">
-                <p>
-                  <span className="font-bold">Kategorie:</span> {product.category}
-                </p>
-                <p>
-                  <span className="font-bold">Skladem:</span> {product.totalStock} ks
-                </p>
+            <div className="border-t border-black pt-6">
+              <div className="text-xs space-y-3">
+                <details className="cursor-pointer">
+                  <summary className="font-normal uppercase">Product details</summary>
+                  <div className="mt-3 text-xs leading-relaxed">
+                    <p>Kategorie: {product.category}</p>
+                    <p>Skladem: {product.totalStock} ks</p>
+                  </div>
+                </details>
               </div>
             </div>
           </div>

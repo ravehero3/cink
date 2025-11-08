@@ -166,7 +166,7 @@ export default function Header1() {
             href={isLoggedIn ? "/ucet" : "/prihlaseni"} 
             className="text-small uppercase tracking-wider hover:opacity-70 transition-opacity"
           >
-            {isLoggedIn ? "ACCOUNT" : "LOGIN"}
+            {isLoggedIn ? "ÚČET" : "PŘIHLÁSIT SE"}
           </Link>
 
           <button 

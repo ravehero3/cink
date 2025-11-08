@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Titlebar from "@/components/Titlebar";
+import Header2 from "@/components/Header2";
 
 const categories = [
   { name: 'VOODOO808', slug: 'voodoo808' },
@@ -12,6 +13,7 @@ export default function Home() {
   return (
     <>
       <Titlebar title="UFO SPORT" />
+      <Header2 />
       
       <div className="max-w-container mx-auto px-lg py-3xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2xl">
