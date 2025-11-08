@@ -13,28 +13,34 @@ A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz) bu
 - **Shipping**: Zásilkovna (Packeta) API integration - needs API key
 - **File Storage**: Cloudinary for product images - needs API keys
 
-## Design System
-### Color Palette (STRICT)
+## Design System (Balenciaga-Inspired Minimalism)
+### Color Palette
 - **Background**: Pure white (#FFFFFF)
 - **Text/Lines/Borders**: Pure black (#000000)
-- **NO grays, shadows, or gradients**
+- **Accent**: Neon green (#00FF00) for primary CTAs
+- **Monochromatic aesthetic** - no grays, shadows, or gradients
 
-### Typography
-- **Font**: System font stack (Arial, Helvetica, sans-serif)
+### Typography (Enlarged, Clean)
+- **Font**: "Helvetica Neue", Helvetica, Arial (sans-serif)
 - **Sizes**:
-  - Body text: 14px
-  - Product names: 16px
-  - Headers: 18px
-  - Main titles: 24px
-- **Weight**: Regular (400) for most text, Bold (700) for emphasis only
-- **Line height**: 1.4
+  - Body text: 16px (line-height: 1.5)
+  - Small text: 14px (line-height: 1.5)
+  - Product names: 18px (line-height: 1.3)
+  - Section headers: 24px (line-height: 1.2)
+  - Page titles: 48px (line-height: 1.1)
+- **Weight**: Regular (400), Bold (700)
+- **Letter spacing**: -0.02em for headlines, normal for body
 
-### Layout System
-- **Lines**: All separating lines are exactly 1px thick, pure black
-- **Spacing**: Consistent padding/margins (16px, 24px, 32px increments)
-- **Grid**: 4 products per row on desktop (2 on tablet, 1 on mobile)
-- **All rectangles**: 1px black border
-- **Buttons**: Only black or white with opposite text color
+### Layout System (Generous Spacing)
+- **Container**: Max-width 1600px, centered
+- **Spacing System** (8px base): 8px, 16px, 24px, 32px, 48px, 64px, 96px
+- **Product Grid**: 
+  - Desktop: 3 columns (generous 32px gap)
+  - Tablet: 2 columns
+  - Mobile: 1 column
+- **Section padding**: 64px vertical minimum
+- **Buttons**: Sharp corners, minimal hover effects
+- **Header**: Fixed 80px height with integrated search
 
 ## Project Structure
 ```
@@ -103,6 +109,17 @@ The PostgreSQL database is configured with the following models:
   - Created comprehensive database seed with 40 products across 4 categories (VOODOO808, SPACE LOVE, RECREATION WELLNESS, T SHIRT GALLERY)
   - Implemented complete checkout flow with order creation API endpoint
   - Created order confirmation page (/potvrzeni/[orderNumber]) showing order details and payment status
+  
+- **2025-11-08**:
+  - **COMPLETE REDESIGN** to match Balenciaga's minimalist aesthetic
+  - Updated Tailwind config with new design tokens (Helvetica Neue, larger typography, 8px spacing system, neon green accent)
+  - Merged Header2 into Header1 for cleaner navigation with integrated search
+  - Enlarged all typography: 16px body (was 14px), 18px products (was 16px), 48px titles (was 24px)
+  - Changed product grid from 4 to 3 columns with generous 32px spacing
+  - Simplified all components: removed decorative borders, increased white space throughout
+  - Updated homepage with large category link boxes
+  - Redesigned all forms, buttons, and interactive elements for minimal aesthetic
+  - All functionality preserved while achieving clean, catalogue-like design
   - Set up PostgreSQL database with full schema migration
   - Configured NextAuth with secure secret and URL
   - Created admin user for testing: admin@ufosport.cz / admin123
