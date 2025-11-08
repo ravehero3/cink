@@ -55,6 +55,7 @@ const config: Config = {
       '20': '160px',
       '24': '192px',
       'header': '44px',
+      'videopromo': '500px',
       'container': '1600px',
     },
     letterSpacing: {

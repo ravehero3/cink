@@ -96,25 +96,25 @@ export default function Header1() {
             <Link
               key={category.slug}
               href={`/kategorie/${category.slug}`}
-              className="text-sm font-medium uppercase tracking-wider px-3 py-1.5 rounded-md hover:bg-gray-100 transition-colors"
+              className="text-sm font-normal uppercase tracking-wider px-3 py-1.5 rounded-md hover:bg-gray-100 transition-colors whitespace-nowrap"
             >
               {category.name}
             </Link>
           ))}
         </nav>
 
-        <Link href="/" className="text-sm font-bold uppercase tracking-wider text-center">
+        <Link href="/" className="text-sm font-bold uppercase tracking-wider text-center whitespace-nowrap">
           UFO SPORT
         </Link>
 
-        <div className="flex items-center gap-4 justify-end">
+        <div className="flex items-center justify-end pr-[18px]" style={{ gap: '18px' }}>
           <div ref={searchDropdownRef} className="relative">
             <button
               onClick={() => setShowSearchResults(!showSearchResults)}
               className="hover:opacity-70 transition-opacity"
               aria-label="Search"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-[13px] h-[13px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </button>
@@ -166,7 +166,7 @@ export default function Header1() {
 
           <Link 
             href={isLoggedIn ? "/ucet" : "/prihlaseni"} 
-            className="text-sm font-medium uppercase tracking-wider hover:opacity-70 transition-opacity"
+            className="text-sm font-normal uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"
           >
             {isLoggedIn ? "ÚČET" : "PŘIHLÁSIT SE"}
           </Link>
@@ -176,7 +176,7 @@ export default function Header1() {
             className="relative hover:opacity-70 transition-opacity"
             aria-label="Saved"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-[13px] h-[13px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>
             {savedCount > 0 && (
@@ -191,7 +191,7 @@ export default function Header1() {
             className="relative hover:opacity-70 transition-opacity"
             aria-label="Cart"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-[13px] h-[13px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
             </svg>
             {cartCount > 0 && (
