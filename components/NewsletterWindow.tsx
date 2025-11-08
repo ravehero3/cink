@@ -65,45 +65,45 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
         }`}
       >
         <div className="h-full flex flex-col">
-          <div className="h-header border-b border-black flex items-center justify-between px-4">
-            <h2 className="text-product-name font-bold uppercase">NEWSLETTER</h2>
+          <div className="h-header border-b border-black flex items-center justify-between px-xl">
+            <h2 className="text-section-header font-bold uppercase tracking-tighter">Newsletter</h2>
             <button
               onClick={onClose}
-              className="text-body"
-              aria-label="Zavřít"
+              className="w-10 h-10 flex items-center justify-center border border-black hover:opacity-70 transition-opacity"
+              aria-label="Close"
             >
               ✕
             </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-6">
-            <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="flex-1 overflow-y-auto p-xl">
+            <form onSubmit={handleSubmit} className="space-y-xl">
               <div>
-                <label className="block text-body font-bold mb-3 uppercase text-[12px]">
-                  Oslovení *
+                <label className="block text-small font-bold mb-md uppercase tracking-wider">
+                  Title *
                 </label>
-                <div className="space-y-2">
+                <div className="space-y-sm">
                   <label className="flex items-center cursor-pointer">
                     <input
                       type="radio"
                       name="civility"
-                      value="Pán"
-                      checked={civility === 'Pán'}
+                      value="Mr"
+                      checked={civility === 'Mr'}
                       onChange={(e) => setCivility(e.target.value)}
-                      className="mr-3"
+                      className="mr-sm w-5 h-5"
                     />
-                    <span className="text-body">Pán</span>
+                    <span className="text-base uppercase tracking-wider">Mr</span>
                   </label>
                   <label className="flex items-center cursor-pointer">
                     <input
                       type="radio"
                       name="civility"
-                      value="Paní/Slečna"
-                      checked={civility === 'Paní/Slečna'}
+                      value="Ms"
+                      checked={civility === 'Ms'}
                       onChange={(e) => setCivility(e.target.value)}
-                      className="mr-3"
+                      className="mr-sm w-5 h-5"
                     />
-                    <span className="text-body">Paní/Slečna</span>
+                    <span className="text-base uppercase tracking-wider">Ms</span>
                   </label>
                   <label className="flex items-center cursor-pointer">
                     <input
@@ -112,61 +112,54 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
                       value="Mx"
                       checked={civility === 'Mx'}
                       onChange={(e) => setCivility(e.target.value)}
-                      className="mr-3"
+                      className="mr-sm w-5 h-5"
                     />
-                    <span className="text-body">Mx</span>
+                    <span className="text-base uppercase tracking-wider">Mx</span>
                   </label>
                   <label className="flex items-center cursor-pointer">
                     <input
                       type="radio"
                       name="civility"
-                      value="Raději neuvedu"
-                      checked={civility === 'Raději neuvedu'}
+                      value="Prefer not to say"
+                      checked={civility === 'Prefer not to say'}
                       onChange={(e) => setCivility(e.target.value)}
-                      className="mr-3"
+                      className="mr-sm w-5 h-5"
                     />
-                    <span className="text-body">Raději neuvedu</span>
+                    <span className="text-base uppercase tracking-wider">Prefer not to say</span>
                   </label>
                 </div>
               </div>
 
               <div>
-                <label className="block text-body font-bold mb-2 uppercase text-[12px]">
-                  E-mail *
+                <label className="block text-small font-bold mb-md uppercase tracking-wider">
+                  Email *
                 </label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full border border-black px-4 py-2 text-body focus:outline-none focus:ring-1 focus:ring-black"
-                  placeholder="vas@email.cz"
+                  className="w-full border border-black px-sm py-sm text-base"
+                  placeholder="your@email.com"
                 />
               </div>
 
               {message && (
-                <div
-                  className={`p-4 border ${
-                    message.type === 'success'
-                      ? 'border-black bg-white'
-                      : 'border-black bg-white'
-                  }`}
-                >
-                  <p className="text-body">{message.text}</p>
+                <div className="p-sm border border-black">
+                  <p className="text-base">{message.text}</p>
                 </div>
               )}
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-black text-white py-3 text-body uppercase font-bold disabled:bg-white disabled:text-black disabled:border disabled:border-black"
+                className="w-full bg-black text-white py-sm text-small uppercase tracking-wider font-bold hover:opacity-90 transition-opacity disabled:opacity-50"
               >
-                {loading ? 'ODESÍLÁNÍ...' : 'PŘIHLÁSIT SE'}
+                {loading ? 'Submitting...' : 'Subscribe'}
               </button>
 
-              <p className="text-[12px] text-black">
-                Odesláním souhlasíte se zpracováním osobních údajů pro účely zasílání newsletteru.
-                Odhlásit se můžete kdykoli kliknutím na odkaz v e-mailu.
+              <p className="text-xs">
+                By submitting, you agree to receive newsletter emails. You can unsubscribe at any time.
               </p>
             </form>
           </div>

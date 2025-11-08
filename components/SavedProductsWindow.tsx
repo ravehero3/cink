@@ -67,12 +67,12 @@ export default function SavedProductsWindow({ isOpen, onClose }: SavedProductsWi
         }`}
       >
         <div className="h-full flex flex-col">
-          <div className="h-header border-b border-black flex items-center justify-center relative">
-            <h2 className="text-header font-bold">ULOŽENÉ PRODUKTY</h2>
+          <div className="h-header border-b border-black flex items-center justify-between px-xl">
+            <h2 className="text-section-header font-bold uppercase tracking-tighter">Saved</h2>
             <button
               onClick={onClose}
-              className="absolute right-4 w-6 h-6 flex items-center justify-center text-black hover:bg-black hover:text-white border border-black"
-              aria-label="Zavřít"
+              className="w-10 h-10 flex items-center justify-center border border-black hover:opacity-70 transition-opacity"
+              aria-label="Close"
             >
               ✕
             </button>
@@ -81,22 +81,22 @@ export default function SavedProductsWindow({ isOpen, onClose }: SavedProductsWi
           <div className="flex-1 overflow-y-auto">
             {loading ? (
               <div className="flex items-center justify-center h-full">
-                <p className="text-body">Načítám...</p>
+                <p className="text-base uppercase tracking-wider">Loading...</p>
               </div>
             ) : products.length === 0 ? (
-              <div className="flex items-center justify-center h-full px-8">
-                <p className="text-body text-center">Nemáte žádné uložené produkty</p>
+              <div className="flex items-center justify-center h-full px-xl">
+                <p className="text-base uppercase tracking-wider text-center">No saved products</p>
               </div>
             ) : (
-              <div className="p-4 space-y-4">
+              <div className="p-xl space-y-lg">
                 {products.map((product) => (
-                  <div key={product.id} className="border border-black p-3 bg-white relative">
+                  <div key={product.id} className="border border-black p-sm bg-white relative">
                     <Link
                       href={`/produkty/${product.slug}`}
                       onClick={onClose}
-                      className="flex gap-3"
+                      className="flex gap-sm"
                     >
-                      <div className="w-20 h-20 flex-shrink-0 border border-black">
+                      <div className="w-24 h-32 flex-shrink-0">
                         <img
                           src={product.images[0] || '/placeholder.png'}
                           alt={product.name}
@@ -105,16 +105,16 @@ export default function SavedProductsWindow({ isOpen, onClose }: SavedProductsWi
                         />
                       </div>
                       <div className="flex-1">
-                        <h3 className="text-body font-bold mb-1 line-clamp-2">
+                        <h3 className="text-base font-bold mb-xs uppercase tracking-normal line-clamp-2">
                           {product.name}
                         </h3>
-                        <p className="text-body">{product.price} Kč</p>
+                        <p className="text-small">{product.price} Kč</p>
                       </div>
                     </Link>
                     <button
                       onClick={(e) => handleRemove(product.id, e)}
-                      className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center bg-white border border-black hover:bg-black hover:text-white"
-                      aria-label="Odebrat"
+                      className="absolute top-sm right-sm w-8 h-8 flex items-center justify-center bg-white border border-black hover:opacity-70 transition-opacity"
+                      aria-label="Remove"
                     >
                       ✕
                     </button>
@@ -125,13 +125,13 @@ export default function SavedProductsWindow({ isOpen, onClose }: SavedProductsWi
           </div>
 
           {products.length > 0 && (
-            <div className="border-t border-black p-4">
+            <div className="border-t border-black p-xl">
               <Link
                 href="/ulozeno"
                 onClick={onClose}
-                className="block w-full bg-black text-white text-center text-body uppercase py-3 border border-black hover:bg-white hover:text-black transition-colors"
+                className="block w-full bg-black text-white text-center text-small uppercase tracking-wider py-sm hover:opacity-90 transition-opacity"
               >
-                ZOBRAZIT VŠECHNY ({products.length})
+                View All ({products.length})
               </Link>
             </div>
           )}

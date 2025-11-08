@@ -36,30 +36,30 @@ export default function FilterWindow() {
           animation: 'slideIn 0.3s ease-out',
         }}
       >
-        <div className="p-8 flex-1 overflow-y-auto">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-header font-bold uppercase">FILTRY</h2>
+        <div className="p-xl flex-1 overflow-y-auto">
+          <div className="flex justify-between items-center mb-xl">
+            <h2 className="text-section-header font-bold uppercase tracking-tighter">Filters</h2>
             <button
               onClick={close}
-              className="w-8 h-8 flex items-center justify-center border border-black hover:bg-black hover:text-white transition-colors"
+              className="w-10 h-10 flex items-center justify-center border border-black hover:opacity-70 transition-opacity"
             >
               ✕
             </button>
           </div>
 
-          <div className="mb-8">
-            <h3 className="text-product-name font-bold uppercase mb-4">BARVY</h3>
-            <div className="space-y-3">
+          <div className="mb-xl">
+            <h3 className="text-product-name font-bold uppercase mb-md tracking-wider">Colors</h3>
+            <div className="space-y-sm">
               {availableColors.map((color) => (
-                <label key={color} className="flex items-center gap-3 cursor-pointer">
+                <label key={color} className="flex items-center gap-sm cursor-pointer">
                   <div
-                    className="w-5 h-5 border border-black flex items-center justify-center transition-colors"
+                    className="w-6 h-6 border border-black flex items-center justify-center"
                     style={{
                       backgroundColor: colors.includes(color) ? '#000000' : '#FFFFFF',
                     }}
                   >
                     {colors.includes(color) && (
-                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 16 16">
+                      <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 16 16">
                         <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
                       </svg>
                     )}
@@ -70,25 +70,25 @@ export default function FilterWindow() {
                     onChange={() => toggleColor(color)}
                     className="hidden"
                   />
-                  <span className="text-body">{color}</span>
+                  <span className="text-base uppercase tracking-wider">{color}</span>
                 </label>
               ))}
             </div>
           </div>
 
-          <div className="mb-8">
-            <h3 className="text-product-name font-bold uppercase mb-4">VELIKOST</h3>
-            <div className="space-y-3">
+          <div className="mb-xl">
+            <h3 className="text-product-name font-bold uppercase mb-md tracking-wider">Size</h3>
+            <div className="space-y-sm">
               {availableSizes.map((size) => (
-                <label key={size} className="flex items-center gap-3 cursor-pointer">
+                <label key={size} className="flex items-center gap-sm cursor-pointer">
                   <div
-                    className="w-5 h-5 border border-black flex items-center justify-center transition-colors"
+                    className="w-6 h-6 border border-black flex items-center justify-center"
                     style={{
                       backgroundColor: sizes.includes(size) ? '#000000' : '#FFFFFF',
                     }}
                   >
                     {sizes.includes(size) && (
-                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 16 16">
+                      <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 16 16">
                         <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
                       </svg>
                     )}
@@ -99,27 +99,27 @@ export default function FilterWindow() {
                     onChange={() => toggleSize(size)}
                     className="hidden"
                   />
-                  <span className="text-body">{size}</span>
+                  <span className="text-base uppercase tracking-wider">{size}</span>
                 </label>
               ))}
             </div>
           </div>
         </div>
 
-        <div className="p-8 border-t border-black flex gap-4">
+        <div className="p-xl border-t border-black flex gap-sm">
           <button
             onClick={() => {
               reset();
             }}
-            className="flex-1 px-6 py-3 text-body uppercase border border-black bg-white text-black hover:bg-black hover:text-white transition-colors"
+            className="flex-1 px-lg py-sm text-small uppercase tracking-wider border border-black bg-white text-black hover:opacity-70 transition-opacity"
           >
-            OBNOVIT
+            Reset
           </button>
           <button
             onClick={apply}
-            className="flex-1 px-6 py-3 text-body uppercase bg-black text-white border border-black hover:bg-white hover:text-black transition-colors"
+            className="flex-1 px-lg py-sm text-small uppercase tracking-wider bg-black text-white border border-black hover:opacity-90 transition-opacity"
           >
-            ULOŽIT
+            Apply
           </button>
         </div>
       </div>

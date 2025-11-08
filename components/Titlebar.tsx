@@ -1,7 +1,9 @@
 export default function Titlebar({ title }: { title: string }) {
   return (
-    <div className="h-titlebar bg-white flex items-center justify-center">
-      <h1 className="text-title font-bold uppercase text-black">{title}</h1>
+    <div className="bg-white py-2xl">
+      <div className="max-w-container mx-auto px-lg">
+        <h1 className="text-page-title font-bold text-center uppercase tracking-tighter">{title}</h1>
+      </div>
     </div>
   );
 }
