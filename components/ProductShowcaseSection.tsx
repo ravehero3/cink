@@ -40,9 +40,11 @@ export default function ProductShowcaseSection({
         </div>
       )}
 
-      <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-4 px-4">
-        <AnimatedButton text={button1Text} link={button1Link} />
-        <AnimatedButton text={button2Text} link={button2Link} />
+      <div className="absolute bottom-8 left-0 right-0 flex justify-center px-4">
+        <div className="flex gap-2 px-6 py-4" style={{ backgroundColor: 'rgba(128, 128, 128, 0.15)' }}>
+          <AnimatedButton text={button1Text} link={button1Link} />
+          <AnimatedButton text={button2Text} link={button2Link} />
+        </div>
       </div>
 
       {isAdmin && (
@@ -65,8 +67,8 @@ function AnimatedButton({ text, link }: { text: string; link: string }) {
   return (
     <a
       href={link}
-      className="relative overflow-hidden bg-black text-white font-bold uppercase tracking-tight transition-all border-2 border-black text-sm"
-      style={{ borderRadius: '8px', padding: '12.8px 25.6px' }}
+      className="relative overflow-hidden bg-white text-black font-bold uppercase tracking-tight transition-all border-2 border-black text-sm"
+      style={{ borderRadius: '4px', padding: '12.8px 25.6px' }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

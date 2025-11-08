@@ -112,14 +112,6 @@ export default function HomePageContent() {
         sectionId="section1"
       />
 
-      {/* Section 2: Video Section */}
-      <VideoSection 
-        videoUrl={section2.videoUrl}
-        isAdmin={isAdmin}
-        onEdit={() => handleEditSection('section2')}
-        sectionId="section2"
-      />
-
       {/* Section 3: Product Showcase */}
       <ProductShowcaseSection
         imageUrl={section3.imageUrl}
@@ -129,6 +121,14 @@ export default function HomePageContent() {
         button2Link={section3.button2Link}
         isAdmin={isAdmin}
         onEdit={() => handleEditSection('section3')}
+      />
+
+      {/* Section 2: Video Section */}
+      <VideoSection 
+        videoUrl={section2.videoUrl}
+        isAdmin={isAdmin}
+        onEdit={() => handleEditSection('section2')}
+        sectionId="section2"
       />
 
       {categories.map((category) => {
