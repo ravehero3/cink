@@ -1,0 +1,99 @@
+As we worked on the app many times, we are now in a situation where some elements changed. here is the original plan we had.  if i want to tell replit to build an eshop that has a login feature where i can login as admin and then be able to access tools for managing the eshop (please think of all that should be included in this such as adding new products, main categories, custom promo codes and everything else that you think should be included for this eshop to be perfect
+
+this eshop will serve people in czech republic and we want it to be ready to be linked with gopay
+
+this eshop has white background and the texts are always quite small to show minimalistic look.
+
+the whole eshop is only in these 2 colors
+
+there are 2 headers. header 1 shows the main categories that are:
+
+VOODOO808
+SPACE LOVE
+RECREATION WELLNESS
+T SHIRT GALLERY
+
+these are aligned to the left
+
+in the centre/middle of the header there is the logo (for now just let it say "ufosport.cz"
+
+to the right side of the header 1 there is the shopping cart symbol and left to it, there is a "přihlásit se"
+
+the header 2 only shows a search bar that lets the user search throughout the shop and supports czech language. the search bar is alligned to the left, shows a magnifing glass (very minimalistic icon and says "co právě hledáte?"
+
+the headers are separated by line that is 1px thick
+
+under the 2 headers, there is the "titlebar" which shows the main title of the current page. its a white bar with a centered black text that says "VOODOO808" (or SPACE LOVE or any other main page name, depending on which page is currently viewed). the titlebar has 4x of the height of the header
+
+under the titlebar, there is a bar with short promotional video that shows when the user is currently viewing the page. it fills the whole page and its height is 6x the height of the header. this bar is called "videopromo"
+
+under the videopromo, there is a bar called "infobar" that has the same height as the header1 and it shows number of products currently displayed on the page. this information is alligned to the left of the bar and it says for example "47 produktů". To the right edge of the infobar there is the option to "FILTROVAT" and "SEŘADIT PODLE"
+
+under this titlebar there is a very minimalistic grid section where each product is within a rectangle. 4 rectangles fit into 1 line and each rectangle has thickness of 1px
+
+when the user clicks on "filtrovat" a new window called "FILTROVATWINDOW" slides in from the right edge of the website and it shows a long strip across the page alligned to the right edge.
+
+the title of this pop up window says "FILTROVAT" centered to the header of this window. the header of this window has 1px border and below the user can select black or white color in the "BARVY" and then 1px line separates the color (barvy) from the VELIKOST where the user can select either S, M, L, XL, 2XL
+
+all of these are very minimalistic and remember, that the page only uses white background,simple 1px lines that separate important elements in a grid like pattern that is very minimalistic and only a few lines are used, only on important places.
+
+the FILTROVATWINDOW has 2 buttons in the bottom of the window and there is 1px line to separate them from the rest of the window.
+
+these 2 buttons say "OBNOVIT" (white button, black text) and ULOŽIT (black button, white text)
+
+when the user clicks on uložit, the window slides back to the right side
+
+there is also a X button in the top right corner of the FILTROVATWINDOW to cancel and slide the window to the right
+
+when the user slides down in the page and views more products, they load while a text appears saying "načítá se"
+
+this text dissappears as soon as the products load
+
+each product has their own rectangle and each rectangle/product has a save symbol in the top right corner.
+
+these saved products can be viewed when the user clicks on a "uloženo" (saved products) button that is located in the header to the left side of the shopping cart symbol
+
+when the user loads all products on the page, there is the footer menu where the user can "přihlašte se k odběru newsletteru" which slides in a "newsletterwindow" from the right edge.
+
+it says:
+
+Subscribe to our newsletter
+Exit pop-in
+Sign up for email updates on the latest Balenciaga collections, campaigns and videos.
+Civility* Mr. Miss, Mrs, Ms Mx I'd rather not say
+*required
+Email*
+*required
+By signing up below, you agree to stay in touch with Ufo Sport. We will use your personal information to provide you with tailored updates about our activities, products and services. For more information about our privacy practices and your rights, please consult our privacy policy.
+
+this window can be canceled by clicking X in the top right corner of the window or the details can be filled and the user can then click on "SUBSCRIBE" button in the bottom of this window
+
+there is also a footer2 which has the same height as header1 and it has a simple text saying ©2026 ufosport.cz
+
+i want to be able to log in as a user or admin
+
+user should have everything he or she might need
+
+admin should be able to add or hide or delete products
+
+admin should be able to add new main categories, change visibility of main categories or products,
+
+when adding new product, the admin can select sizes available as well as the number of pieces available
+
+there is an internal information that is to be selected when creating or editing a product that will let the admin select if the product is either black or white (so the filter (filtrovat) can then now which products are black or white)
+
+the admin should be able to save the changes or change information
+
+the admin has access to admin only main page where the admin sees which products have been sold and to whom.
+
+the users should be able to buy product using gopay (czech way of buying online)
+
+the users should be able to select shipping (zásilkovna) and to select the address of the zasilkovna place where the user wants the product to be delivered to
+
+when the user buys a product, an automatic email should be sent to the users email with the propper information and legal details of the item being sold (please figure this out somehow) i think in czech its called "faktura" or something like that
+
+the admin should be able to see that user bought a product and the admin can change this particular order to "pracujeme na tom" or "odeslali jsme zásilku"
+
+when "pracujeme na tom" is selected and saved, the user should receive an email where he is profesionally informed that his order is being worked on (in czech language)
+
+when "odeslali jsme zásilku" is selected and saved, the user should receive "úspěšně jsme odeslali vaši zásilku" email
