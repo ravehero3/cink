@@ -63,14 +63,17 @@ A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz) bu
   layout.tsx                # Root layout with headers/footer
   page.tsx                  # Homepage
 /components                 # Reusable components
-  CartWindow.tsx            # Shopping cart slide-in drawer
+  CartDrawer.tsx            # Shopping cart slide-in drawer (Balenciaga-inspired)
   Footer.tsx                # Site footer
-  Header1.tsx               # Main navigation header
+  Header1.tsx               # Main navigation header with cart drawer integration
   Header2.tsx               # Search and user actions header
   ProductCard.tsx           # Product grid item component
   SavedProductsWindow.tsx   # Saved products slide-in drawer
 /lib                        # Utility functions
+  cart-store.ts             # Shopping cart state management (Zustand)
   prisma.ts                 # Prisma client instance
+  recently-viewed-store.ts  # Recently viewed products tracking (Zustand)
+  saved-products-store.ts   # Saved products state management (Zustand)
   zasilkovna-widget.ts      # Zásilkovna pickup point selector
 /prisma                     # Database schema
   schema.prisma             # Complete database schema
@@ -133,6 +136,12 @@ The PostgreSQL database is configured with the following models:
   - Implemented promo code functionality in checkout with automatic validation and discount calculation
   - Fixed all TypeScript errors and code quality issues
   - All components strictly follow black/white design system with no grays or shadows
+  - **Enhanced Balenciaga-inspired UX features**:
+    - Implemented cart slide-in drawer with 50% opacity dimmed overlay effect
+    - Added recently viewed products tracking and display in cart drawer
+    - Navigation links now have rounded rectangle hover effects (subtle gray background)
+    - Cart drawer includes payment icons, shipping benefits, and recently viewed items section
+    - Product detail pages automatically track viewed items for personalized recommendations
 
 ## Completed Features
 1. ✅ Database schema and Prisma ORM setup
