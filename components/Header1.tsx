@@ -91,12 +91,12 @@ export default function Header1() {
   return (
     <header className="h-header border-b border-black bg-white fixed top-0 left-0 right-0 z-30">
       <div className="h-full max-w-container mx-auto grid grid-cols-3 items-center">
-        <nav className="flex gap-5 justify-start">
+        <nav className="flex justify-start pl-5" style={{ gap: '20px' }}>
           {categories.map((category) => (
             <Link
               key={category.slug}
               href={`/kategorie/${category.slug}`}
-              className="text-sm font-normal uppercase tracking-wider px-3 py-1.5 rounded-md hover:bg-gray-100 transition-colors whitespace-nowrap"
+              className="text-sm font-normal uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"
             >
               {category.name}
             </Link>
@@ -107,8 +107,40 @@ export default function Header1() {
           UFO SPORT
         </Link>
 
-        <div className="flex items-center justify-end pr-[18px]" style={{ gap: '18px' }}>
+        <div className="flex items-center justify-end pr-5" style={{ gap: '20px' }}>
+          <button
+            onClick={() => setShowSearchResults(!showSearchResults)}
+            className="text-sm font-normal uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"
+          >
+            {isLoggedIn ? "ÚČET" : "PŘIHLÁSIT SE"}
+          </button>
+
+          <button 
+            onClick={() => setShowSavedWindow(true)}
+            className="relative hover:opacity-70 transition-opacity"
+            aria-label="Saved"
+          >
+            <svg className="w-[13px] h-[13px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+            {savedCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-black text-white text-[9px] w-3.5 h-3.5 flex items-center justify-center rounded-full">
+                {savedCount}
+              </span>
+            )}
+          </button>
+
           <div ref={searchDropdownRef} className="relative">
+            <button 
+              onClick={() => setShowSearchResults(!showSearchResults)}
+              className="relative hover:opacity-70 transition-opacity"
+              aria-label="Search"
+            >
+              <svg className="w-[13px] h-[13px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </button>
+
             {showSearchResults && (
               <div className="absolute top-full right-0 mt-4 w-96 bg-white border border-black z-50">
                 <div className="p-sm border-b border-black flex items-center gap-2 pl-[calc(16px-10px)]">
@@ -157,31 +189,9 @@ export default function Header1() {
             )}
           </div>
 
-          <button
-            onClick={() => setShowSearchResults(!showSearchResults)}
-            className="text-sm font-normal uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"
-          >
-            {isLoggedIn ? "ÚČET" : "PŘIHLÁSIT SE"}
-          </button>
-
-          <button 
-            onClick={() => setShowSavedWindow(true)}
-            className="relative hover:opacity-70 transition-opacity mr-5"
-            aria-label="Saved"
-          >
-            <svg className="w-[13px] h-[13px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-            </svg>
-            {savedCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-black text-white text-[9px] w-3.5 h-3.5 flex items-center justify-center rounded-full">
-                {savedCount}
-              </span>
-            )}
-          </button>
-
           <button 
             onClick={() => setShowCartDrawer(true)}
-            className="relative hover:opacity-70 transition-opacity mr-5"
+            className="relative hover:opacity-70 transition-opacity"
             aria-label="Cart"
           >
             <svg className="w-[13px] h-[13px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
