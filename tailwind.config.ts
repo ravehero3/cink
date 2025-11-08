@@ -44,6 +44,7 @@ const config: Config = {
       '1': '8px',
       '2': '16px',
       '3': '24px',
+      '3.5': '14px',
       '4': '32px',
       '5': '40px',
       '6': '48px',
@@ -53,7 +54,7 @@ const config: Config = {
       '16': '128px',
       '20': '160px',
       '24': '192px',
-      'header': '56px',
+      'header': '44px',
       'container': '1600px',
     },
     letterSpacing: {
