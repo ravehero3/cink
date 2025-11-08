@@ -13,6 +13,13 @@ const nextConfig = {
       allowedOrigins: ['*'],
     },
   },
+  devIndicators: {
+    buildActivity: false,
+  },
+  allowedDevOrigins: [
+    '127.0.0.1',
+    /\.replit\.dev$/,
+  ],
 };
 
 module.exports = nextConfig;
