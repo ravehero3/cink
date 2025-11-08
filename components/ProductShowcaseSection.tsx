@@ -65,8 +65,8 @@ function AnimatedButton({ text, link }: { text: string; link: string }) {
   return (
     <a
       href={link}
-      className="relative overflow-hidden px-8 py-4 bg-black text-white font-bold uppercase tracking-tight transition-all border-2 border-black"
-      style={{ borderRadius: '8px' }}
+      className="relative overflow-hidden bg-black text-white font-bold uppercase tracking-tight transition-all border-2 border-black text-sm"
+      style={{ borderRadius: '8px', padding: '12.8px 25.6px' }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
