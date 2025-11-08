@@ -51,15 +51,15 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
         }`}
       >
         <div className="h-full flex flex-col">
-          <div className="border-b border-black px-6 py-5">
+          <div className="border-b border-black px-6 py-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-sm font-medium uppercase tracking-wide">Cart</h2>
+              <h2 className="text-lg font-bold uppercase tracking-tight">CART</h2>
               <button
                 onClick={onClose}
-                className="p-1 hover:opacity-60 transition-opacity"
+                className="text-xs uppercase hover:opacity-60 transition-opacity"
                 aria-label="Close cart"
               >
-                <X className="w-5 h-5" />
+                Close
               </button>
             </div>
           </div>
@@ -67,21 +67,21 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
           <div className="flex-1 overflow-y-auto">
             {items.length === 0 ? (
               <div className="px-6 py-8">
-                <p className="text-sm mb-8">Your cart is empty.</p>
+                <p className="text-sm">Your cart is empty.</p>
               </div>
             ) : (
               <div className="px-6 py-6">
                 {items.map((item) => (
                   <div
                     key={`${item.productId}-${item.size}`}
-                    className="flex gap-4 mb-6 pb-6 border-b border-gray-200 last:border-0"
+                    className="flex gap-4 mb-6 pb-6 border-b border-black last:border-0"
                   >
                     <Link
                       href={`/produkty/${item.slug}`}
                       onClick={onClose}
                       className="flex-shrink-0"
                     >
-                      <div className="w-24 h-32 relative bg-gray-100">
+                      <div className="w-24 h-32 relative bg-white border border-black">
                         <Image
                           src={item.image}
                           alt={item.name}
@@ -97,22 +97,22 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         onClick={onClose}
                         className="hover:opacity-60 transition-opacity"
                       >
-                        <h3 className="font-medium uppercase tracking-wide mb-1">
+                        <h3 className="font-bold uppercase tracking-tight mb-2 text-base">
                           {item.name}
                         </h3>
                       </Link>
                       
-                      <p className="text-xs mb-2 text-gray-600">
+                      <p className="text-xs mb-2">
                         Size: {item.size} | Color: {item.color}
                       </p>
                       
-                      <p className="mb-3">{item.price} €</p>
+                      <p className="mb-3 font-medium">{item.price} €</p>
 
                       <div className="mt-auto flex items-center gap-3">
                         <div className="flex items-center border border-black">
                           <button
                             onClick={() => updateQuantity(item.productId, item.size, item.quantity - 1)}
-                            className="px-3 py-1 hover:bg-gray-100 transition-colors text-xs"
+                            className="px-3 py-1 hover:bg-black hover:text-white transition-colors text-xs"
                           >
                             −
                           </button>
@@ -121,7 +121,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                           </span>
                           <button
                             onClick={() => updateQuantity(item.productId, item.size, item.quantity + 1)}
-                            className="px-3 py-1 hover:bg-gray-100 transition-colors text-xs"
+                            className="px-3 py-1 hover:bg-black hover:text-white transition-colors text-xs"
                           >
                             +
                           </button>
@@ -129,7 +129,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         
                         <button
                           onClick={() => removeItem(item.productId, item.size)}
-                          className="text-xs hover:opacity-60 transition-opacity underline"
+                          className="text-xs hover:opacity-60 transition-opacity underline uppercase"
                         >
                           Remove
                         </button>
@@ -142,18 +142,18 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
             {recentlyViewed.length > 0 && (
               <div className="border-t border-black px-6 py-6">
-                <h3 className="text-xs font-medium uppercase tracking-wide mb-4">
-                  Recently Viewed
+                <h3 className="text-sm font-bold uppercase tracking-tight mb-6">
+                  RECENTLY VIEWED
                 </h3>
-                <div className="space-y-4">
+                <div className="space-y-5">
                   {recentlyViewed.map((product) => (
                     <Link
                       key={product.id}
                       href={`/produkty/${product.slug}`}
                       onClick={onClose}
-                      className="flex gap-3 hover:opacity-60 transition-opacity"
+                      className="flex gap-4 hover:opacity-60 transition-opacity"
                     >
-                      <div className="w-20 h-24 relative bg-gray-100 flex-shrink-0">
+                      <div className="w-20 h-24 relative bg-white border border-black flex-shrink-0">
                         <Image
                           src={product.image}
                           alt={product.name}
@@ -162,10 +162,10 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         />
                       </div>
                       <div className="flex-1">
-                        <h4 className="text-xs font-medium uppercase tracking-wide mb-1 line-clamp-2">
+                        <h4 className="text-xs font-bold uppercase tracking-tight mb-1 line-clamp-2">
                           {product.name}
                         </h4>
-                        <p className="text-xs">{product.price} €</p>
+                        <p className="text-xs font-medium">{product.price} €</p>
                       </div>
                     </Link>
                   ))}
@@ -176,27 +176,27 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
           {items.length > 0 && (
             <div className="border-t border-black px-6 py-6">
-              <div className="mb-4 space-y-2 text-xs">
+              <div className="mb-6 space-y-1.5 text-xs">
                 <p>• Complimentary 2-4 days shipping</p>
                 <p>• 30 days free return</p>
                 <p>• 30 days free online exchange</p>
                 <p>• UFO SPORT signature packaging</p>
               </div>
 
-              <div className="flex items-center gap-2 mb-6">
-                <svg className="h-4" viewBox="0 0 38 24" fill="none">
+              <div className="flex items-center gap-1.5 mb-6">
+                <svg className="h-2.5" viewBox="0 0 38 24" fill="none">
                   <rect width="38" height="24" rx="2" fill="#1A1F71"/>
                   <path d="M15.258 18.126h2.484l1.554-9.588h-2.484l-1.554 9.588z" fill="#fff"/>
                 </svg>
-                <svg className="h-4" viewBox="0 0 38 24" fill="none">
+                <svg className="h-2.5" viewBox="0 0 38 24" fill="none">
                   <rect width="38" height="24" rx="2" fill="#EB001B"/>
                   <circle cx="14.5" cy="12" r="7" fill="#FF5F00"/>
                   <circle cx="23.5" cy="12" r="7" fill="#F79E1B"/>
                 </svg>
-                <svg className="h-4" viewBox="0 0 38 24" fill="none">
+                <svg className="h-2.5" viewBox="0 0 38 24" fill="none">
                   <rect width="38" height="24" rx="2" fill="#0066B2"/>
                 </svg>
-                <svg className="h-4" viewBox="0 0 38 24" fill="none">
+                <svg className="h-2.5" viewBox="0 0 38 24" fill="none">
                   <rect width="38" height="24" rx="2" fill="#00457C"/>
                 </svg>
               </div>
@@ -204,7 +204,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               <Link
                 href="/pokladna"
                 onClick={onClose}
-                className="block w-full bg-black text-white text-center text-xs uppercase tracking-wide py-4 hover:opacity-90 transition-opacity"
+                className="block w-full bg-black text-white text-center text-xs uppercase tracking-tight py-4 hover:opacity-90 transition-opacity font-bold"
               >
                 Checkout · {total.toFixed(2)} €
               </Link>
