@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useCartStore } from '@/lib/cart-store';
 import { useSavedProductsStore } from '@/lib/saved-products-store';
+import { useRecentlyViewedStore } from '@/lib/recently-viewed-store';
 
 interface Product {
   id: string;
@@ -31,6 +32,7 @@ export default function ProductDetailPage() {
 
   const { addItem } = useCartStore();
   const { isSaved, addProduct, removeProduct } = useSavedProductsStore();
+  const { addProduct: addRecentlyViewed } = useRecentlyViewedStore();
 
   useEffect(() => {
     fetchProduct();
@@ -43,6 +45,13 @@ export default function ProductDetailPage() {
       if (response.ok) {
         const data = await response.json();
         setProduct(data);
+        addRecentlyViewed({
+          id: data.id,
+          name: data.name,
+          slug: data.slug,
+          price: Number(data.price),
+          image: data.images[0],
+        });
       } else {
         setProduct(null);
       }

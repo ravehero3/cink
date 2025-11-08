@@ -6,6 +6,7 @@ import { useCartStore } from '@/lib/cart-store';
 import { useSavedProductsStore } from '@/lib/saved-products-store';
 import { useSession } from 'next-auth/react';
 import SavedProductsWindow from './SavedProductsWindow';
+import CartDrawer from './CartDrawer';
 
 const categories = [
   { name: 'VOODOO808', slug: 'voodoo808' },
@@ -29,6 +30,7 @@ export default function Header1() {
   const isLoggedIn = !!session;
   const isAdmin = session?.user?.role === 'ADMIN';
   const [showSavedWindow, setShowSavedWindow] = useState(false);
+  const [showCartDrawer, setShowCartDrawer] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [showSearchResults, setShowSearchResults] = useState(false);
@@ -98,7 +100,7 @@ export default function Header1() {
             <Link
               key={category.slug}
               href={`/kategorie/${category.slug}`}
-              className="text-xs uppercase tracking-wider hover:opacity-70 transition-opacity"
+              className="text-xs uppercase tracking-wider px-3 py-1.5 rounded-md hover:bg-gray-100 transition-colors"
             >
               {category.name}
             </Link>
@@ -184,8 +186,8 @@ export default function Header1() {
             )}
           </button>
 
-          <Link 
-            href="/kosik" 
+          <button 
+            onClick={() => setShowCartDrawer(true)}
             className="relative hover:opacity-70 transition-opacity"
             aria-label="Cart"
           >
@@ -197,13 +199,17 @@ export default function Header1() {
                 {cartCount}
               </span>
             )}
-          </Link>
+          </button>
         </div>
       </div>
       
       <SavedProductsWindow 
         isOpen={showSavedWindow}
         onClose={() => setShowSavedWindow(false)}
+      />
+      <CartDrawer 
+        isOpen={showCartDrawer}
+        onClose={() => setShowCartDrawer(false)}
       />
     </header>
   );
