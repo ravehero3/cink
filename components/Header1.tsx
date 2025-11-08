@@ -90,7 +90,7 @@ export default function Header1() {
 
   return (
     <header className="h-header border-b border-black bg-white fixed top-0 left-0 right-0 z-30">
-      <div className="h-full max-w-container mx-auto grid grid-cols-3 items-center px-5">
+      <div className="h-full max-w-container mx-auto grid grid-cols-3 items-center">
         <nav className="flex gap-5 justify-start">
           {categories.map((category) => (
             <Link
@@ -109,26 +109,19 @@ export default function Header1() {
 
         <div className="flex items-center justify-end pr-[18px]" style={{ gap: '18px' }}>
           <div ref={searchDropdownRef} className="relative">
-            <button
-              onClick={() => setShowSearchResults(!showSearchResults)}
-              className="hover:opacity-70 transition-opacity"
-              aria-label="Search"
-            >
-              <svg className="w-[13px] h-[13px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </button>
-
             {showSearchResults && (
               <div className="absolute top-full right-0 mt-4 w-96 bg-white border border-black z-50">
-                <div className="p-sm border-b border-black">
+                <div className="p-sm border-b border-black flex items-center gap-2 pl-[calc(16px-10px)]">
+                  <svg className="w-[11px] h-[11px] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
                   <input
                     type="text"
-                    placeholder="SEARCH"
+                    placeholder="Co právě hledáte"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     autoFocus
-                    className="w-full text-base bg-transparent border-none outline-none placeholder:text-black"
+                    className="flex-1 text-[15px] font-bold bg-transparent border-none outline-none placeholder:text-black placeholder:font-bold"
                   />
                 </div>
 
@@ -164,16 +157,16 @@ export default function Header1() {
             )}
           </div>
 
-          <Link 
-            href={isLoggedIn ? "/ucet" : "/prihlaseni"} 
+          <button
+            onClick={() => setShowSearchResults(!showSearchResults)}
             className="text-sm font-normal uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"
           >
             {isLoggedIn ? "ÚČET" : "PŘIHLÁSIT SE"}
-          </Link>
+          </button>
 
           <button 
             onClick={() => setShowSavedWindow(true)}
-            className="relative hover:opacity-70 transition-opacity"
+            className="relative hover:opacity-70 transition-opacity mr-5"
             aria-label="Saved"
           >
             <svg className="w-[13px] h-[13px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -188,7 +181,7 @@ export default function Header1() {
 
           <button 
             onClick={() => setShowCartDrawer(true)}
-            className="relative hover:opacity-70 transition-opacity"
+            className="relative hover:opacity-70 transition-opacity mr-5"
             aria-label="Cart"
           >
             <svg className="w-[13px] h-[13px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">

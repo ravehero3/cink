@@ -74,7 +74,7 @@ export default function HomePageContent() {
         const products = categoryProducts[category.slug] || [];
         
         return (
-          <section key={category.slug} className="w-full border-b border-black">
+          <section key={category.slug} className="w-full border-b border-black" style={{ minHeight: '80vh' }}>
             <div className="w-full bg-white border-b border-black py-md px-5">
               <div className="max-w-container mx-auto flex items-center justify-between">
                 <h2 className="text-section-header font-bold uppercase tracking-tighter">
@@ -89,8 +89,8 @@ export default function HomePageContent() {
               </div>
             </div>
 
-            <div className="w-full overflow-x-auto bg-white scrollbar-hide">
-              <div className="flex gap-0 min-w-full">
+            <div className="w-full overflow-x-auto bg-white scrollbar-hide" style={{ height: 'calc(80vh - 66px)' }}>
+              <div className="flex gap-0 h-full">
                 {isLoading ? (
                   <div className="w-full py-2xl text-center text-sm">Loading...</div>
                 ) : products.length === 0 ? (
@@ -100,9 +100,9 @@ export default function HomePageContent() {
                     <Link
                       key={product.id}
                       href={`/produkty/${product.slug}`}
-                      className="flex-shrink-0 w-[300px] border-r border-black hover:bg-gray-50 transition-colors group"
+                      className="flex-shrink-0 w-[300px] border-r border-black hover:bg-gray-50 transition-colors group h-full flex flex-col"
                     >
-                      <div className="aspect-[3/4] relative bg-gray-100 border-b border-black overflow-hidden">
+                      <div className="flex-1 relative bg-gray-100 border-b border-black overflow-hidden">
                         {product.images && product.images.length > 0 ? (
                           <Image
                             src={product.images[0]}
@@ -117,7 +117,7 @@ export default function HomePageContent() {
                           </div>
                         )}
                       </div>
-                      <div className="p-sm">
+                      <div className="p-sm flex-shrink-0">
                         <h3 className="text-product-name font-bold uppercase tracking-tighter mb-1">
                           {product.name}
                         </h3>
