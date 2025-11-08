@@ -90,20 +90,20 @@ export default function Header1() {
 
   return (
     <header className="h-header border-b border-black bg-white fixed top-0 left-0 right-0 z-30">
-      <div className="h-full max-w-container mx-auto grid grid-cols-3 items-center px-lg">
-        <nav className="flex gap-4 justify-start">
+      <div className="h-full max-w-container mx-auto grid grid-cols-3 items-center px-5">
+        <nav className="flex gap-5 justify-start">
           {categories.map((category) => (
             <Link
               key={category.slug}
               href={`/kategorie/${category.slug}`}
-              className="text-xs uppercase tracking-wider px-3 py-1.5 rounded-md hover:bg-gray-100 transition-colors"
+              className="text-sm font-medium uppercase tracking-wider px-3 py-1.5 rounded-md hover:bg-gray-100 transition-colors"
             >
               {category.name}
             </Link>
           ))}
         </nav>
 
-        <Link href="/" className="text-xs font-bold uppercase tracking-wider text-center">
+        <Link href="/" className="text-sm font-bold uppercase tracking-wider text-center">
           UFO SPORT
         </Link>
 
@@ -166,7 +166,7 @@ export default function Header1() {
 
           <Link 
             href={isLoggedIn ? "/ucet" : "/prihlaseni"} 
-            className="text-xs uppercase tracking-wider hover:opacity-70 transition-opacity"
+            className="text-sm font-medium uppercase tracking-wider hover:opacity-70 transition-opacity"
           >
             {isLoggedIn ? "ÚČET" : "PŘIHLÁSIT SE"}
           </Link>
