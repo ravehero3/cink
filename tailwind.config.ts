@@ -77,6 +77,9 @@ const config: Config = {
       aspectRatio: {
         'product': '3/4',
       },
+      inset: {
+        'header': '44px',
+      },
     },
   },
   plugins: [],
