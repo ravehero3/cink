@@ -53,7 +53,7 @@ const config: Config = {
       '16': '128px',
       '20': '160px',
       '24': '192px',
-      'header': '80px',
+      'header': '56px',
       'container': '1600px',
     },
     letterSpacing: {

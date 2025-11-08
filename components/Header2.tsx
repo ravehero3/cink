@@ -75,9 +75,9 @@ export default function Header2() {
 
   return (
     <header className="h-header border-b border-black bg-white relative">
-      <div className="h-full flex items-center px-8">
+      <div className="h-full flex items-center px-lg max-w-container mx-auto">
         <div ref={dropdownRef} className="flex items-center gap-3 flex-1 relative">
-          <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
           
@@ -86,7 +86,7 @@ export default function Header2() {
             placeholder="Co právě hledáte?"
             value={searchQuery}
             onChange={(e) => handleSearch(e.target.value)}
-            className="flex-1 text-body bg-transparent border-none outline-none focus:border-b focus:border-black placeholder:text-black"
+            className="flex-1 text-xs bg-transparent border-none outline-none focus:border-b focus:border-black placeholder:text-black"
           />
 
           {showResults && (
