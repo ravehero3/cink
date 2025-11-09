@@ -45,9 +45,36 @@ select:focus {
   border-width: 2px;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h5, h6 {
   font-weight: 400;
   letter-spacing: -0.01em;
+}
+
+h2 {
+  font-family: 'BB-CondBold', "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 16.1px;
+  letter-spacing: 0.42px;
+  word-spacing: 0px;
+  font-variant-ligatures: normal;
+}
+
+h3 {
+  font-family: 'BB-CondBold', "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 16.1px;
+  letter-spacing: 0.42px;
+  word-spacing: 0px;
+  font-variant-ligatures: normal;
+}
+
+h4 {
+  font-family: 'BB-CondBold', "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 22px;
+  line-height: 24.2px;
+  letter-spacing: 1.1px;
+  word-spacing: 0px;
+  font-variant-ligatures: normal;
 }
 
 .uppercase {
