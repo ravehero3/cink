@@ -136,8 +136,9 @@ export default function Header1() {
             style={{ 
               width: '22px', 
               height: '22px',
-              top: '11px',
-              right: '32px'
+              top: '0',
+              right: '0',
+              padding: '11px'
             }}
           >
             <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">

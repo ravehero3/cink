@@ -103,8 +103,8 @@ export default function Header2({ isOpen, onClose }: Header2Props) {
           className="w-full bg-white"
           style={{
             opacity: isOpen ? 1 : 0,
-            transition: 'opacity 0.3s ease-in-out',
-            transitionDelay: isOpen ? '0.5s' : '0s'
+            transition: 'opacity 1s ease-in-out',
+            transitionDelay: isOpen ? '0.4s' : '0s'
           }}
         >
           {searchQuery.trim().length > 0 ? (
