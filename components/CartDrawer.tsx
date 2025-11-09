@@ -15,8 +15,8 @@ function SavedItemsButton({ onClose }: { onClose: () => void }) {
     <Link
       href="/ulozene"
       onClick={onClose}
-      className="relative overflow-hidden bg-white text-black font-normal uppercase tracking-tight transition-all border border-black text-sm"
-      style={{ borderRadius: '4px', padding: '12.8px 25.6px' }}
+      className="relative overflow-hidden bg-white text-black font-normal uppercase tracking-tight transition-all border border-black"
+      style={{ borderRadius: '4px', padding: '10px 20px', fontSize: '12px' }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -85,7 +85,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
         }`}
       >
         <div className="h-full flex flex-col">
-          <div className="border-b border-black relative" style={{ height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div className="border-b border-black relative" style={{ height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#6bdc66' }}>
             <h2 
               style={{
                 fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -105,7 +105,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 width: '22px',
                 height: '22px',
                 top: '50%',
-                right: '20px',
+                right: '28px',
                 transform: 'translateY(-50%)',
                 padding: '0'
               }}
@@ -119,20 +119,34 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
           <div className="flex-1 overflow-y-auto">
             {items.length === 0 ? (
               <>
-                <div style={{ height: '100px' }} className="flex items-center justify-center px-6">
+                <div className="flex flex-col items-center px-6" style={{ paddingTop: '100px' }}>
                   <p 
                     style={{
                       fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                       fontSize: '14px',
-                      textAlign: 'center'
+                      textAlign: 'center',
+                      marginBottom: '16px'
                     }}
                   >
                     Váš košík je prázdný
                   </p>
-                </div>
-                <div className="border-b border-black" />
-                <div className="pt-8 flex justify-center px-6">
                   <SavedItemsButton onClose={onClose} />
+                </div>
+                <div className="border-b border-black" style={{ marginTop: '24px' }} />
+                <div className="border-b border-black" style={{ marginTop: '240px' }} />
+                <div className="px-6" style={{ marginTop: '16px' }}>
+                  <h3 
+                    style={{
+                      fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontSize: '15px',
+                      fontWeight: 700,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.03em',
+                      fontStretch: 'condensed'
+                    }}
+                  >
+                    PROHLÍŽELI JSTE
+                  </h3>
                 </div>
               </>
             ) : (
