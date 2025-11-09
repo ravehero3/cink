@@ -80,7 +80,7 @@ export default function Header2({ isOpen, onClose }: Header2Props) {
       >
         <div className="h-header flex items-center max-w-container mx-auto">
           <div className="flex items-center gap-3 flex-1 pl-5">
-            <svg style={{ width: '14.8px', height: '14.8px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg style={{ width: '17px', height: '17px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
             <input
@@ -129,7 +129,7 @@ export default function Header2({ isOpen, onClose }: Header2Props) {
                   style={{
                     fontSize: '12px',
                     fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontWeight: 400,
+                    fontWeight: 600,
                     lineHeight: '16px',
                     textTransform: 'uppercase',
                     color: 'rgb(0, 0, 0)',
@@ -150,7 +150,7 @@ export default function Header2({ isOpen, onClose }: Header2Props) {
                   </button>
                 )}
               </div>
-              <div className="flex gap-4 justify-center">
+              <div className="flex flex-col gap-4 items-center">
                 {shortcuts.map((shortcut, index) => (
                   <Link
                     key={index}
