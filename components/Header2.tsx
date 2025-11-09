@@ -84,17 +84,17 @@ export default function Header2({ isOpen, onClose }: Header2Props) {
             transition: 'transform 0.4s ease-in-out'
           }}
         >
-          <div className="flex items-center gap-3 flex-1 pl-5">
+          <div className="flex items-center gap-3 flex-1" style={{ paddingLeft: '20px' }}>
             <svg style={{ width: '17px', height: '17px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
             <input
               type="text"
-              placeholder="Co právě hledáte?"
+              placeholder="CO PRÁVĚ HLEDÁTE?"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               autoFocus
-              className="flex-1 text-body bg-transparent border-none outline-none placeholder:text-black"
+              className="flex-1 text-body bg-transparent border-none outline-none placeholder:text-black placeholder:uppercase"
             />
           </div>
         </div>
@@ -148,7 +148,8 @@ export default function Header2({ isOpen, onClose }: Header2Props) {
                     letterSpacing: 'normal',
                     wordSpacing: '0px',
                     padding: '0px 16px 0px 44px',
-                    margin: '0px'
+                    margin: '0px',
+                    fontStretch: 'condensed'
                   }}
                 >
                   NEJČASTĚJI VYHLEDÁVANÉ

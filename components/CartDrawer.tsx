@@ -51,26 +51,66 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
         }`}
       >
         <div className="h-full flex flex-col">
-          <div className="border-b border-black px-6 py-6">
-            <div className="flex items-center justify-center">
-              <h2 
-                style={{
-                  fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '15px',
-                  fontWeight: 700,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.03em'
-                }}
-              >
-                NÁKUPNÍ KOŠÍK
-              </h2>
-            </div>
+          <div className="border-b border-black relative" style={{ height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <h2 
+              style={{
+                fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '15px',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.03em',
+                fontStretch: 'condensed'
+              }}
+            >
+              NÁKUPNÍ KOŠÍK
+            </h2>
+            <button
+              onClick={onClose}
+              className="absolute hover:opacity-70 transition-opacity"
+              style={{
+                width: '22px',
+                height: '22px',
+                top: '50%',
+                right: '20px',
+                transform: 'translateY(-50%)',
+                padding: '0'
+              }}
+            >
+              <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
 
           <div className="flex-1 overflow-y-auto">
             {items.length === 0 ? (
-              <div className="px-6 py-8">
-                <p className="text-sm">Your cart is empty.</p>
+              <div className="px-6 pt-8">
+                <div style={{ height: '140px' }} className="border-b border-black flex items-center justify-center">
+                  <p 
+                    style={{
+                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontSize: '18px',
+                      textAlign: 'center'
+                    }}
+                  >
+                    Váš košík je prázdný
+                  </p>
+                </div>
+                <div className="pt-8 flex justify-center">
+                  <Link
+                    href="/ulozene"
+                    onClick={onClose}
+                    className="bg-white text-black border-2 border-black px-8 py-3 hover:bg-gray-50 transition-colors"
+                    style={{
+                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontSize: '14px',
+                      textTransform: 'uppercase',
+                      fontWeight: 500
+                    }}
+                  >
+                    Uložené položky
+                  </Link>
+                </div>
               </div>
             ) : (
               <div className="px-6 py-6">
