@@ -13,7 +13,7 @@ export default function Footer() {
         <div className="w-full grid grid-cols-6 divide-x divide-black">
           <div className="px-4 py-6">
             <h3 className="text-xs uppercase mb-3 text-gray-500">O nás</h3>
-            <ul className="space-y-1">
+            <ul className="space-y-0">
               <li><Link href="/o-nas" className="text-xs text-gray-500 hover:text-black transition-colors">O společnosti</Link></li>
               <li><Link href="/kontakt" className="text-xs text-gray-500 hover:text-black transition-colors">Kontakt</Link></li>
               <li><Link href="/kariera" className="text-xs text-gray-500 hover:text-black transition-colors">Kariéra</Link></li>
@@ -23,7 +23,7 @@ export default function Footer() {
 
           <div className="px-4 py-6">
             <h3 className="text-xs uppercase mb-3 text-gray-500">Zákaznický servis</h3>
-            <ul className="space-y-1">
+            <ul className="space-y-0">
               <li><Link href="/obchodni-podminky" className="text-xs text-gray-500 hover:text-black transition-colors">Obchodní podmínky</Link></li>
               <li><Link href="/reklamacni-rad" className="text-xs text-gray-500 hover:text-black transition-colors">Reklamační řád</Link></li>
               <li><Link href="/ochrana-osobnich-udaju" className="text-xs text-gray-500 hover:text-black transition-colors">Ochrana osobních údajů</Link></li>
@@ -33,7 +33,7 @@ export default function Footer() {
 
           <div className="px-4 py-6">
             <h3 className="text-xs uppercase mb-3 text-gray-500">Nákup</h3>
-            <ul className="space-y-1">
+            <ul className="space-y-0">
               <li><Link href="/jak-nakupovat" className="text-xs text-gray-500 hover:text-black transition-colors">Jak nakupovat</Link></li>
               <li><Link href="/platba" className="text-xs text-gray-500 hover:text-black transition-colors">Platba</Link></li>
               <li><Link href="/doprava" className="text-xs text-gray-500 hover:text-black transition-colors">Doprava</Link></li>
@@ -43,7 +43,7 @@ export default function Footer() {
 
           <div className="px-4 py-6">
             <h3 className="text-xs uppercase mb-3 text-gray-500">Kontakt</h3>
-            <ul className="space-y-1">
+            <ul className="space-y-0">
               <li className="text-xs text-gray-500">Běloves 378</li>
               <li className="text-xs text-gray-500">547 01 Náchod</li>
               <li className="text-xs text-gray-500">+420 774 292 158</li>
@@ -54,7 +54,7 @@ export default function Footer() {
 
           <div className="px-4 py-6">
             <h3 className="text-xs uppercase mb-3 text-gray-500">Můj účet</h3>
-            <ul className="space-y-1">
+            <ul className="space-y-0">
               <li><Link href="/prihlaseni" className="text-xs text-gray-500 hover:text-black transition-colors">Přihlášení</Link></li>
               <li><Link href="/registrace" className="text-xs text-gray-500 hover:text-black transition-colors">Registrace</Link></li>
               <li><Link href="/ucet" className="text-xs text-gray-500 hover:text-black transition-colors">Můj účet</Link></li>
@@ -64,7 +64,7 @@ export default function Footer() {
 
           <div className="px-4 py-6">
             <h3 className="text-xs uppercase mb-3 text-gray-500">Newsletter</h3>
-            <ul className="space-y-1">
+            <ul className="space-y-0">
               <li><button onClick={() => setIsNewsletterOpen(true)} className="text-xs text-gray-500 hover:text-black transition-colors text-left">Přihlásit k odběru</button></li>
               <li className="text-xs text-gray-500 mt-3">Sledujte nás</li>
               <li><a href="https://www.instagram.com/ufosport" target="_blank" rel="noopener noreferrer" className="text-xs text-gray-500 hover:text-black transition-colors">Instagram</a></li>

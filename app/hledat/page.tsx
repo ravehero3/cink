@@ -60,7 +60,7 @@ export default function SearchPage() {
       
       {loading ? (
         <div className="min-h-screen flex items-center justify-center">
-          <p className="text-body">Hledám...</p>
+          <p className="text-body animate-pulse-color">načítá se</p>
         </div>
       ) : (
         <>

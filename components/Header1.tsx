@@ -29,7 +29,7 @@ export default function Header1() {
     <>
       <header className="h-header border-b border-black bg-white fixed top-0 left-0 right-0 z-30">
         <div className="h-full max-w-container mx-auto grid grid-cols-3 items-center">
-          <nav className="flex justify-start pl-5" style={{ gap: '20px' }}>
+          <nav className={`flex justify-start pl-5 transition-opacity duration-300 ${showSearch ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ gap: '20px' }}>
             {categories.map((category) => (
               <Link
                 key={category.slug}
@@ -45,7 +45,7 @@ export default function Header1() {
             UFO SPORT
           </Link>
 
-          <div className="flex items-center justify-end pr-5" style={{ gap: '20px' }}>
+          <div className={`flex items-center justify-end pr-5 transition-opacity duration-300 ${showSearch ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ gap: '20px' }}>
             <Link
               href={isLoggedIn ? "/ucet" : "/prihlaseni"}
               className="text-sm font-normal uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"

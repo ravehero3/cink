@@ -123,7 +123,7 @@ export default function CategoryPage() {
       <div className="container mx-auto px-8 py-8">
         {isLoading ? (
           <div className="text-center py-16">
-            <p className="text-product-name">Načítání produktů...</p>
+            <p className="text-product-name animate-pulse-color">načítá se</p>
           </div>
         ) : (
           <ProductsGrid
