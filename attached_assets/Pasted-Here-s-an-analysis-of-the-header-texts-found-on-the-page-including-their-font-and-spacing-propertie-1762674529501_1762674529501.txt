@@ -1,0 +1,64 @@
+Here's an analysis of the header texts found on the page, including their font and spacing properties. You can use this information to apply similar styles in Replit.
+
+H2 Header (h2):
+
+Font Family: BB-CondBold, "Helvetica Neue", Helvetica, Arial, sans-serif
+Font Size: 14px
+Line Height: 16.1px
+Letter Spacing: 0.42px
+Word Spacing: 0px
+Font Variant Ligatures: normal
+H3 Header (h3):
+
+Font Family: BB-CondBold, "Helvetica Neue", Helvetica, Arial, sans-serif
+Font Size: 14px
+Line Height: 16.1px
+Letter Spacing: 0.42px
+Word Spacing: 0px
+Font Variant Ligatures: normal
+H4 Header (h4):
+
+Font Family: BB-CondBold, "Helvetica Neue", Helvetica, Arial, sans-serif
+Font Size: 22px
+Line Height: 24.2px
+Letter Spacing: 1.1px
+Word Spacing: 0px
+Font Variant Ligatures: normal
+***
+Here's how you might translate these into CSS for Replit:
+
+css
+
+h2 {
+  font-family: 'BB-CondBold', "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 16.1px; /* Or 1.15 (16.1 / 14) if you prefer unitless line-height */
+  letter-spacing: 0.42px;
+  word-spacing: 0px; /* Usually default, can omit if not needed */
+  font-variant-ligatures: normal; /* Usually default, can omit if not needed */
+}
+
+h3 {
+  font-family: 'BB-CondBold', "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 16.1px;
+  letter-spacing: 0.42px;
+  word-spacing: 0px;
+  font-variant-ligatures: normal;
+}
+
+h4 {
+  font-family: 'BB-CondBold', "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 22px;
+  line-height: 24.2px;
+  letter-spacing: 1.1px;
+  word-spacing: 0px;
+  font-variant-ligatures: normal;
+}
+Use code snippets with caution
+
+Important Notes for Replit:
+
+Font Availability: For BB-CondBold, you'll need to make sure this font is available in your Replit project. This usually means importing it via @font-face rules in your CSS or linking a font service (like Google Fonts) if it's a web font. If not, the browser will fall back to "Helvetica Neue" or the next available font.
+Unitless line-height: It's often a best practice to use unitless line-height values (e.g., 1.15 instead of 16.1px) as they scale better with different font sizes. You can calculate this by dividing the line-height by the font-size.
+Default Values: word-spacing: 0px and font-variant-ligatures: normal are often default browser styles, so you might not need to explicitly declare them unless you're overriding a different style.
