@@ -1,12 +1,46 @@
 'use client';
 
 import type { MouseEvent } from 'react';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCartStore } from '@/lib/cart-store';
 import { useRecentlyViewedStore } from '@/lib/recently-viewed-store';
 import { X } from 'lucide-react';
+
+function SavedItemsButton({ onClose }: { onClose: () => void }) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <Link
+      href="/ulozene"
+      onClick={onClose}
+      className="relative overflow-hidden bg-white text-black font-normal uppercase tracking-tight transition-all border border-black text-sm"
+      style={{ borderRadius: '4px', padding: '12.8px 25.6px' }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <span
+        className="block transition-all duration-300"
+        style={{
+          transform: isHovered ? 'translateY(-150%)' : 'translateY(0)',
+          opacity: isHovered ? 0 : 1,
+        }}
+      >
+        Uložené položky
+      </span>
+      <span
+        className="absolute inset-0 flex items-center justify-center transition-all duration-300"
+        style={{
+          transform: isHovered ? 'translateY(0)' : 'translateY(150%)',
+          opacity: isHovered ? 1 : 0,
+        }}
+      >
+        Uložené položky
+      </span>
+    </Link>
+  );
+}
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -84,34 +118,23 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
           <div className="flex-1 overflow-y-auto">
             {items.length === 0 ? (
-              <div className="px-6 pt-8">
-                <div style={{ height: '140px' }} className="border-b border-black flex items-center justify-center">
+              <>
+                <div style={{ height: '100px' }} className="flex items-center justify-center px-6">
                   <p 
                     style={{
                       fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '18px',
+                      fontSize: '14px',
                       textAlign: 'center'
                     }}
                   >
                     Váš košík je prázdný
                   </p>
                 </div>
-                <div className="pt-8 flex justify-center">
-                  <Link
-                    href="/ulozene"
-                    onClick={onClose}
-                    className="bg-white text-black border-2 border-black px-8 py-3 hover:bg-gray-50 transition-colors"
-                    style={{
-                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '14px',
-                      textTransform: 'uppercase',
-                      fontWeight: 500
-                    }}
-                  >
-                    Uložené položky
-                  </Link>
+                <div className="border-b border-black" />
+                <div className="pt-8 flex justify-center px-6">
+                  <SavedItemsButton onClose={onClose} />
                 </div>
-              </div>
+              </>
             ) : (
               <div className="px-6 py-6">
                 {items.map((item) => (
