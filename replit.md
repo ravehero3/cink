@@ -173,6 +173,25 @@ The PostgreSQL database is configured with the following models:
     - Admin users see edit buttons on hover to customize section content
     - Button hover animations with text slide-up/slide-down effect
     - Note: Current implementation uses localStorage; may need API backing for multi-user persistence
+  - **Header & UI Refinements (November 9, 2025)**:
+    - Updated search close (X) button to absolute positioning with equal spacing from right and top edges (11px top, 32px right)
+    - Added border line below search bar to visually separate it from "nejčastěji vyhledávané" section
+    - Implemented split animations for search functionality:
+      - Search bar strip slides down smoothly from below header
+      - "Nejčastěji vyhledávané" section fades in independently with 0.5s delay
+    - Applied distinct fonts to category navigation links:
+      - VOODOO808: BB-CondBold for bold, condensed look
+      - SPACE LOVE: Helvetica Neue regular for clean, modern feel
+      - RECREATION WELLNESS: Helvetica Neue normal for balanced appearance
+      - T SHIRT GALLERY: Helvetica Neue condensed Bold for strong presence
+    - Resized all header icons to exactly 22px (half of 44px header height) for perfect alignment
+    - Adjusted right margin of header icons container to 32px for consistent spacing
+    - Changed login text from "Přihlásit se" to "PŘIHLÁSIT SE" (uppercase) for design consistency
+    - Updated cart drawer title to "NÁKUPNÍ KOŠÍK" with:
+      - Font: Helvetica Neue condensed Bold
+      - Size: 15px (approximately 1/3 of header height)
+      - Alignment: Centered in cart window
+      - Removed close button to maintain clean, minimal appearance
 
 ## Completed Features
 1. ✅ Database schema and Prisma ORM setup
