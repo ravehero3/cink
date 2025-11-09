@@ -58,7 +58,8 @@ export default function Header1() {
             fontSize: '22px',
             fontWeight: 700,
             lineHeight: '22px',
-            letterSpacing: '0.03em'
+            letterSpacing: '0.03em',
+            fontStretch: 'condensed'
           }}>
             UFO SPORT
           </Link>
@@ -105,7 +106,7 @@ export default function Header1() {
                 onClick={() => setShowSearch(!showSearch)}
                 className="relative hover:opacity-70 transition-opacity"
                 aria-label="Search"
-                style={{ width: '22px', height: '22px', marginRight: '20px' }}
+                style={{ width: '22px', height: '22px', marginRight: '220px' }}
               >
                 <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -116,7 +117,7 @@ export default function Header1() {
                 onClick={() => setShowCartDrawer(true)}
                 className="relative hover:opacity-70 transition-opacity"
                 aria-label="Cart"
-                style={{ width: '22px', height: '22px', marginRight: '15px' }}
+                style={{ width: '22px', height: '22px', marginRight: '200px' }}
               >
                 <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
