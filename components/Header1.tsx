@@ -10,10 +10,10 @@ import CartDrawer from './CartDrawer';
 import Header2 from './Header2';
 
 const categories = [
-  { name: 'VOODOO808', slug: 'voodoo808' },
-  { name: 'SPACE LOVE', slug: 'space-love' },
-  { name: 'RECREATION WELLNESS', slug: 'recreation-wellness' },
-  { name: 'T SHIRT GALLERY', slug: 't-shirt-gallery' },
+  { name: 'VOODOO808', slug: 'voodoo808', font: 'BB-CondBold, "Helvetica Neue", Helvetica, Arial, sans-serif' },
+  { name: 'SPACE LOVE', slug: 'space-love', font: '"Helvetica Neue", Helvetica, Arial, sans-serif' },
+  { name: 'RECREATION WELLNESS', slug: 'recreation-wellness', font: '"Helvetica Neue", Helvetica, Arial, sans-serif' },
+  { name: 'T SHIRT GALLERY', slug: 't-shirt-gallery', font: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif' },
 ];
 
 export default function Header1() {
@@ -36,7 +36,7 @@ export default function Header1() {
                 href={`/kategorie/${category.slug}`}
                 className="hover:opacity-70 transition-opacity whitespace-nowrap"
                 style={{
-                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontFamily: category.font,
                   fontSize: '12px',
                   lineHeight: '15.6px',
                   color: 'rgb(0, 0, 0)',
@@ -63,7 +63,7 @@ export default function Header1() {
             UFO SPORT
           </Link>
 
-          <div className="flex items-center justify-end pr-5" style={{ gap: '20px' }}>
+          <div className="flex items-center justify-end" style={{ gap: '20px', paddingRight: '32px' }}>
             <div className={`flex items-center transition-opacity duration-300 ${showSearch ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ gap: '20px' }}>
               <Link
                 href={isLoggedIn ? "/ucet" : "/prihlaseni"}
@@ -81,15 +81,16 @@ export default function Header1() {
                   wordSpacing: '0px'
                 }}
               >
-                {isLoggedIn ? "Účet" : "Přihlásit se"}
+                {isLoggedIn ? "Účet" : "PŘIHLÁSIT SE"}
               </Link>
 
               <button 
                 onClick={() => setShowSavedWindow(true)}
                 className="relative hover:opacity-70 transition-opacity"
                 aria-label="Saved"
+                style={{ width: '22px', height: '22px' }}
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
                 {savedCount > 0 && (
@@ -103,8 +104,9 @@ export default function Header1() {
                 onClick={() => setShowSearch(!showSearch)}
                 className="relative hover:opacity-70 transition-opacity"
                 aria-label="Search"
+                style={{ width: '22px', height: '22px' }}
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </button>
@@ -113,8 +115,9 @@ export default function Header1() {
                 onClick={() => setShowCartDrawer(true)}
                 className="relative hover:opacity-70 transition-opacity"
                 aria-label="Cart"
+                style={{ width: '22px', height: '22px' }}
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
                 {cartCount > 0 && (
@@ -129,8 +132,9 @@ export default function Header1() {
               onClick={() => setShowSearch(false)}
               className={`relative hover:opacity-70 transition-opacity ${showSearch ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
               aria-label="Close Search"
+              style={{ width: '22px', height: '22px' }}
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
