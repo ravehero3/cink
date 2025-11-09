@@ -136,9 +136,10 @@ export default function Header1() {
             style={{ 
               width: '22px', 
               height: '22px',
-              top: '0',
-              right: '0',
-              padding: '11px'
+              top: '50%',
+              right: '32px',
+              transform: 'translateY(-50%)',
+              padding: '0'
             }}
           >
             <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">

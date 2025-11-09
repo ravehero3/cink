@@ -104,7 +104,7 @@ export default function Header2({ isOpen, onClose }: Header2Props) {
           style={{
             opacity: isOpen ? 1 : 0,
             transition: 'opacity 1s ease-in-out',
-            transitionDelay: isOpen ? '0.4s' : '0s'
+            transitionDelay: isOpen ? '1.4s' : '0s'
           }}
         >
           {searchQuery.trim().length > 0 ? (
