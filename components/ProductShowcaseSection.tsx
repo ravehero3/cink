@@ -42,11 +42,11 @@ export default function ProductShowcaseSection({
         </div>
       )}
 
-      <div className="absolute bottom-4 left-0 right-0 flex flex-col items-center gap-4 px-4">
+      <div className="absolute bottom-2 left-0 right-0 flex flex-col items-center gap-4 px-4">
         <h2 className="text-3xl font-bold uppercase tracking-tighter text-black">
           {headerText}
         </h2>
-        <div className="flex gap-2">
+        <div className="flex gap-1">
           <AnimatedButton text={button1Text} link={button1Link} />
           <AnimatedButton text={button2Text} link={button2Link} />
         </div>
