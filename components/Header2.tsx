@@ -70,11 +70,13 @@ export default function Header2({ isOpen, onClose }: Header2Props) {
   return (
     <>
       <div 
-        className="fixed top-header left-0 right-0 z-20 bg-white transition-all duration-300 ease-in-out overflow-hidden border-b"
+        className="fixed top-header left-0 right-0 z-20 bg-white overflow-hidden border-b"
         style={{ 
           maxHeight: isOpen ? '500px' : '0',
-          opacity: isOpen ? 1 : 0,
-          borderBottomWidth: isOpen ? '1px' : '0',
+          transform: isOpen ? 'translateY(0)' : 'translateY(-100%)',
+          transition: 'all 0.4s ease-in-out',
+          transitionDelay: isOpen ? '0.3s' : '0s',
+          borderBottomWidth: '1px',
           borderBottomColor: '#000000'
         }}
       >
@@ -128,8 +130,8 @@ export default function Header2({ isOpen, onClose }: Header2Props) {
                 <h3 
                   style={{
                     fontSize: '12px',
-                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontWeight: 600,
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontWeight: 700,
                     lineHeight: '16px',
                     textTransform: 'uppercase',
                     color: 'rgb(0, 0, 0)',
@@ -139,7 +141,7 @@ export default function Header2({ isOpen, onClose }: Header2Props) {
                     margin: '0px'
                   }}
                 >
-                  MOST SEARCHED
+                  NEJČASTĚJI VYHLEDÁVANÉ
                 </h3>
                 {isAdmin && (
                   <button

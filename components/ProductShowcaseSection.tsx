@@ -43,7 +43,12 @@ export default function ProductShowcaseSection({
       )}
 
       <div className="absolute bottom-2 left-0 right-0 flex flex-col items-center px-4">
-        <h2 className="text-3xl font-bold uppercase tracking-tighter text-black mb-2">
+        <h2 className="uppercase tracking-tighter text-black mb-2" style={{
+          fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+          fontSize: '31px',
+          fontWeight: 700,
+          lineHeight: '1.1'
+        }}>
           {headerText}
         </h2>
         <div className="flex gap-1">

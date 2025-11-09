@@ -34,7 +34,7 @@ export const useHeroSectionsStore = create<HeroSectionsState>()(
       },
       section3: {
         imageUrl: '',
-        headerText: 'NOVÝ MERCH',
+        headerText: 'VÍME ŽE JSI ALIEN',
         button1Text: 'Shop Now',
         button2Text: 'View Collection',
         button1Link: '/kategorie/voodoo808',

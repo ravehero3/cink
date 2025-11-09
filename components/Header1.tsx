@@ -41,7 +41,13 @@ export default function Header1() {
             ))}
           </nav>
 
-          <Link href="/" className="text-sm font-bold uppercase tracking-wider text-center whitespace-nowrap">
+          <Link href="/" className="uppercase text-center whitespace-nowrap" style={{ 
+            fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+            fontSize: '22px',
+            fontWeight: 700,
+            lineHeight: '22px',
+            letterSpacing: '0.03em'
+          }}>
             UFO SPORT
           </Link>
 
@@ -118,6 +124,16 @@ export default function Header1() {
       </header>
 
       <Header2 isOpen={showSearch} onClose={() => setShowSearch(false)} />
+      
+      {/* Dark overlay when search is open */}
+      <div 
+        className={`fixed inset-0 bg-black transition-opacity duration-300 pointer-events-none`}
+        style={{ 
+          top: '88px',
+          opacity: showSearch ? 0.5 : 0,
+          zIndex: 10
+        }}
+      />
     </>
   );
 }
