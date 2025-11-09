@@ -7,6 +7,7 @@ interface VideoSectionData {
 
 interface ProductSectionData {
   imageUrl: string;
+  headerText: string;
   button1Text: string;
   button2Text: string;
   button1Link: string;
@@ -33,6 +34,7 @@ export const useHeroSectionsStore = create<HeroSectionsState>()(
       },
       section3: {
         imageUrl: '',
+        headerText: 'NOVÝ MERCH',
         button1Text: 'Shop Now',
         button2Text: 'View Collection',
         button1Link: '/kategorie/voodoo808',

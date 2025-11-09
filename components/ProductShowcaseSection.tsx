@@ -5,6 +5,7 @@ import Image from 'next/image';
 
 interface ProductShowcaseSectionProps {
   imageUrl: string;
+  headerText: string;
   button1Text: string;
   button2Text: string;
   button1Link: string;
@@ -15,6 +16,7 @@ interface ProductShowcaseSectionProps {
 
 export default function ProductShowcaseSection({
   imageUrl,
+  headerText,
   button1Text,
   button2Text,
   button1Link,
@@ -40,8 +42,11 @@ export default function ProductShowcaseSection({
         </div>
       )}
 
-      <div className="absolute bottom-8 left-0 right-0 flex justify-center px-4">
-        <div className="flex gap-2 px-6 py-4" style={{ backgroundColor: 'rgba(128, 128, 128, 0.15)' }}>
+      <div className="absolute bottom-4 left-0 right-0 flex flex-col items-center gap-4 px-4">
+        <h2 className="text-3xl font-bold uppercase tracking-tighter text-white" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
+          {headerText}
+        </h2>
+        <div className="flex gap-2">
           <AnimatedButton text={button1Text} link={button1Link} />
           <AnimatedButton text={button2Text} link={button2Link} />
         </div>

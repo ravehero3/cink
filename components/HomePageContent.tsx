@@ -115,6 +115,7 @@ export default function HomePageContent() {
       {/* Section 3: Product Showcase */}
       <ProductShowcaseSection
         imageUrl={section3.imageUrl}
+        headerText={section3.headerText}
         button1Text={section3.button1Text}
         button2Text={section3.button2Text}
         button1Link={section3.button1Link}

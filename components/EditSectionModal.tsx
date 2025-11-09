@@ -68,6 +68,17 @@ export default function EditSectionModal({
                 />
               </div>
 
+              <div>
+                <label className="block text-sm font-bold mb-2">Header Text</label>
+                <input
+                  type="text"
+                  value={formData.headerText || ''}
+                  onChange={(e) => setFormData({ ...formData, headerText: e.target.value })}
+                  className="w-full px-4 py-2 border-2 border-black"
+                  placeholder="NOVÝ MERCH"
+                />
+              </div>
+
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-bold mb-2">Button 1 Text</label>
