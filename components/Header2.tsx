@@ -70,18 +70,15 @@ export default function Header2({ isOpen, onClose }: Header2Props) {
   return (
     <>
       <div 
-        className="fixed top-header left-0 right-0 z-20 bg-white overflow-hidden border-b"
+        className="fixed top-header left-0 right-0 z-20 bg-white overflow-hidden"
         style={{ 
           maxHeight: isOpen ? '500px' : '0',
           transform: isOpen ? 'translateY(0)' : 'translateY(-20px)',
-          transition: 'all 0.4s ease-in-out',
-          transitionDelay: isOpen ? '0.3s' : '0s',
-          borderBottomWidth: '1px',
-          borderBottomColor: '#000000',
-          opacity: isOpen ? 1 : 0
+          transition: 'max-height 0.4s ease-in-out, transform 0.4s ease-in-out',
+          borderBottom: '1px solid #000000'
         }}
       >
-        <div className="h-header flex items-center max-w-container mx-auto">
+        <div className="h-header flex items-center max-w-container mx-auto border-b border-black">
           <div className="flex items-center gap-3 flex-1 pl-5">
             <svg style={{ width: '17px', height: '17px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -97,7 +94,14 @@ export default function Header2({ isOpen, onClose }: Header2Props) {
           </div>
         </div>
 
-        <div className="w-full border-b border-black">
+        <div 
+          className="w-full"
+          style={{
+            opacity: isOpen ? 1 : 0,
+            transition: 'opacity 0.3s ease-in-out',
+            transitionDelay: isOpen ? '0.5s' : '0s'
+          }}
+        >
           {searchQuery.trim().length > 0 ? (
             <div className="max-h-96 overflow-y-auto">
               {isLoading ? (

@@ -52,15 +52,18 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
       >
         <div className="h-full flex flex-col">
           <div className="border-b border-black px-6 py-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-bold uppercase tracking-tight">CART</h2>
-              <button
-                onClick={onClose}
-                className="text-xs uppercase hover:opacity-60 transition-opacity"
-                aria-label="Close cart"
+            <div className="flex items-center justify-center">
+              <h2 
+                style={{
+                  fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '15px',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.03em'
+                }}
               >
-                Close
-              </button>
+                NÁKUPNÍ KOŠÍK
+              </h2>
             </div>
           </div>
 
