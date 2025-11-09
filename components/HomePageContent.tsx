@@ -7,14 +7,16 @@ import VideoPromo from './VideoPromo';
 import VideoSection from './VideoSection';
 import ProductShowcaseSection from './ProductShowcaseSection';
 import EditSectionModal from './EditSectionModal';
+import EditCategorySectionModal from './EditCategorySectionModal';
 import { useSession } from 'next-auth/react';
 import { useHeroSectionsStore } from '@/store/heroSectionsStore';
+import { useCategorySectionsStore } from '@/store/categorySectionsStore';
 
 const categories = [
-  { name: 'VOODOO808', slug: 'voodoo808' },
-  { name: 'SPACE LOVE', slug: 'space-love' },
-  { name: 'RECREATION WELLNESS', slug: 'recreation-wellness' },
-  { name: 'T SHIRT GALLERY', slug: 't-shirt-gallery' },
+  { name: 'VOODOO808', slug: 'voodoo808', storeKey: 'voodoo808' as const },
+  { name: 'SPACE LOVE', slug: 'space-love', storeKey: 'spaceLove' as const },
+  { name: 'RECREATION WELLNESS', slug: 'recreation-wellness', storeKey: 'recreationWellness' as const },
+  { name: 'T SHIRT GALLERY', slug: 't-shirt-gallery', storeKey: 'tShirtGallery' as const },
 ];
 
 interface Product {
@@ -30,6 +32,39 @@ interface CategoryProducts {
   [key: string]: Product[];
 }
 
+function AnimatedButton({ text, link }: { text: string; link: string }) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <a
+      href={link}
+      className="relative overflow-hidden bg-white text-black font-normal uppercase tracking-tight transition-all border border-black text-sm"
+      style={{ borderRadius: '4px', padding: '12.8px 25.6px' }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <span
+        className="block transition-all duration-300"
+        style={{
+          transform: isHovered ? 'translateY(-150%)' : 'translateY(0)',
+          opacity: isHovered ? 0 : 1,
+        }}
+      >
+        {text}
+      </span>
+      <span
+        className="absolute inset-0 flex items-center justify-center transition-all duration-300"
+        style={{
+          transform: isHovered ? 'translateY(0)' : 'translateY(150%)',
+          opacity: isHovered ? 1 : 0,
+        }}
+      >
+        {text}
+      </span>
+    </a>
+  );
+}
+
 export default function HomePageContent() {
   const { data: session } = useSession();
   const isAdmin = session?.user?.role === 'ADMIN';
@@ -38,8 +73,11 @@ export default function HomePageContent() {
   const [isLoading, setIsLoading] = useState(true);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editingSection, setEditingSection] = useState<'section1' | 'section2' | 'section3' | null>(null);
+  const [categoryEditModalOpen, setCategoryEditModalOpen] = useState(false);
+  const [editingCategory, setEditingCategory] = useState<'voodoo808' | 'spaceLove' | 'recreationWellness' | 'tShirtGallery' | null>(null);
   
   const { section1, section2, section3, updateSection1, updateSection2, updateSection3 } = useHeroSectionsStore();
+  const categorySections = useCategorySectionsStore();
 
   useEffect(() => {
     async function fetchData() {
@@ -92,6 +130,37 @@ export default function HomePageContent() {
     return editingSection === 'section3' ? 'product' : 'video';
   };
 
+  const handleEditCategorySection = (storeKey: 'voodoo808' | 'spaceLove' | 'recreationWellness' | 'tShirtGallery') => {
+    setEditingCategory(storeKey);
+    setCategoryEditModalOpen(true);
+  };
+
+  const handleSaveCategorySection = (data: any) => {
+    if (editingCategory === 'voodoo808') {
+      categorySections.updateVoodoo808(data);
+    } else if (editingCategory === 'spaceLove') {
+      categorySections.updateSpaceLove(data);
+    } else if (editingCategory === 'recreationWellness') {
+      categorySections.updateRecreationWellness(data);
+    } else if (editingCategory === 'tShirtGallery') {
+      categorySections.updateTShirtGallery(data);
+    }
+  };
+
+  const getCurrentCategoryEditData = () => {
+    if (editingCategory === 'voodoo808') return categorySections.voodoo808;
+    if (editingCategory === 'spaceLove') return categorySections.spaceLove;
+    if (editingCategory === 'recreationWellness') return categorySections.recreationWellness;
+    if (editingCategory === 'tShirtGallery') return categorySections.tShirtGallery;
+    return {
+      title: '',
+      button1Text: '',
+      button2Text: '',
+      button1Link: '',
+      button2Link: '',
+    };
+  };
+
   return (
     <div className="w-full">
       <VideoPromo videoUrl={videoUrl} />
@@ -134,21 +203,36 @@ export default function HomePageContent() {
 
       {categories.map((category) => {
         const products = categoryProducts[category.slug] || [];
+        const sectionData = categorySections[category.storeKey];
         
         return (
           <section key={category.slug} className="w-full border-b border-black" style={{ minHeight: '80vh' }}>
-            <div className="w-full bg-white border-b border-black py-md px-5">
-              <div className="max-w-container mx-auto flex items-center justify-between">
-                <h2 className="text-section-header font-bold uppercase tracking-tighter">
-                  {category.name}
+            <div className="w-full bg-white border-b border-black py-md px-5 relative">
+              <div className="max-w-container mx-auto flex flex-col items-center">
+                <h2 className="uppercase tracking-tighter mb-2" style={{
+                  fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '31px',
+                  fontWeight: 700,
+                  lineHeight: '1.1'
+                }}>
+                  {sectionData.title}
                 </h2>
-                <Link 
-                  href={`/kategorie/${category.slug}`}
-                  className="text-xs uppercase hover:underline"
-                >
-                  View All
-                </Link>
+                <div className="flex gap-1">
+                  <AnimatedButton text={sectionData.button1Text} link={sectionData.button1Link} />
+                  <AnimatedButton text={sectionData.button2Text} link={sectionData.button2Link} />
+                </div>
               </div>
+              
+              {isAdmin && (
+                <div className="absolute top-4 right-4">
+                  <button
+                    onClick={() => handleEditCategorySection(category.storeKey)}
+                    className="px-4 py-2 bg-white text-black text-xs uppercase hover:bg-black hover:text-white transition-colors border border-black"
+                  >
+                    Edit Section
+                  </button>
+                </div>
+              )}
             </div>
 
             <div className="w-full overflow-x-auto bg-white scrollbar-hide" style={{ height: 'calc(80vh - 66px)' }}>
@@ -205,6 +289,19 @@ export default function HomePageContent() {
           sectionType={getEditSectionType()}
           currentData={getCurrentEditData()}
           onSave={handleSaveSection}
+        />
+      )}
+
+      {/* Category Edit Modal */}
+      {editingCategory && (
+        <EditCategorySectionModal
+          isOpen={categoryEditModalOpen}
+          onClose={() => {
+            setCategoryEditModalOpen(false);
+            setEditingCategory(null);
+          }}
+          currentData={getCurrentCategoryEditData()}
+          onSave={handleSaveCategorySection}
         />
       )}
     </div>
