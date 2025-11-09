@@ -29,8 +29,8 @@ export default function Header1() {
     <>
       <header className="h-header border-b border-black bg-white fixed top-0 left-0 right-0 z-30">
         <div className="h-full max-w-container mx-auto flex items-center justify-between relative">
-          {/* Left Group: Category Navigation - 20px from left, 32px gap between items */}
-          <nav className={`flex items-center transition-opacity duration-300 ${showSearch ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ gap: '32px', paddingLeft: '20px' }}>
+          {/* Left Group: Category Navigation - 20px from left, 20px gap between items */}
+          <nav className={`flex items-center transition-opacity duration-300 ${showSearch ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ gap: '20px', paddingLeft: '20px' }}>
             {categories.map((category) => (
               <Link
                 key={category.slug}
@@ -68,9 +68,9 @@ export default function Header1() {
             UFO SPORT
           </Link>
 
-          {/* Right Group: Login and Icons - 32px from right, 32px gap between items */}
-          <div className="flex items-center" style={{ gap: '32px', paddingRight: '32px' }}>
-            <div className={`flex items-center transition-opacity duration-300 ${showSearch ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ gap: '32px' }}>
+          {/* Right Group: Login and Icons - 20px from right, 20px gap between items */}
+          <div className="flex items-center" style={{ gap: '20px', paddingRight: '20px' }}>
+            <div className={`flex items-center transition-opacity duration-300 ${showSearch ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ gap: '20px' }}>
               <Link
                 href={isLoggedIn ? "/ucet" : "/prihlaseni"}
                 className="hover:opacity-70 transition-opacity whitespace-nowrap"
