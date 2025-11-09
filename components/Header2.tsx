@@ -136,7 +136,7 @@ export default function Header2({ isOpen, onClose }: Header2Props) {
             </div>
           ) : (
             <div className="py-6">
-              <div className="flex items-center justify-center mb-4">
+              <div className="flex items-center justify-center" style={{ marginBottom: '32px' }}>
                 <h3 
                   style={{
                     fontSize: '12px',
@@ -163,7 +163,7 @@ export default function Header2({ isOpen, onClose }: Header2Props) {
                   </button>
                 )}
               </div>
-              <div className="flex flex-col gap-4 items-center">
+              <div className="flex flex-col items-center" style={{ gap: '32px' }}>
                 {shortcuts.map((shortcut, index) => (
                   <Link
                     key={index}
