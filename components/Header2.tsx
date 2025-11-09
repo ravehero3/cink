@@ -70,13 +70,15 @@ export default function Header2({ isOpen, onClose }: Header2Props) {
   return (
     <>
       <div 
-        className="fixed top-header left-0 right-0 z-20 bg-white transition-all duration-300 ease-in-out overflow-hidden"
+        className="fixed top-header left-0 right-0 z-20 bg-white transition-all duration-300 ease-in-out overflow-hidden border-b"
         style={{ 
           maxHeight: isOpen ? '500px' : '0',
-          opacity: isOpen ? 1 : 0
+          opacity: isOpen ? 1 : 0,
+          borderBottomWidth: isOpen ? '1px' : '0',
+          borderBottomColor: '#000000'
         }}
       >
-        <div className="h-header flex items-center max-w-container mx-auto border-b border-black">
+        <div className="h-header flex items-center max-w-container mx-auto">
           <div className="flex items-center gap-3 flex-1 pl-5">
             <svg style={{ width: '14.8px', height: '14.8px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -121,25 +123,53 @@ export default function Header2({ isOpen, onClose }: Header2Props) {
               )}
             </div>
           ) : (
-            <div className="px-5 py-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-bold uppercase">MOST SEARCHED</h3>
+            <div className="py-6">
+              <div className="flex items-center justify-center mb-4">
+                <h3 
+                  style={{
+                    fontSize: '12px',
+                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontWeight: 400,
+                    lineHeight: '16px',
+                    textTransform: 'uppercase',
+                    color: 'rgb(0, 0, 0)',
+                    letterSpacing: 'normal',
+                    wordSpacing: '0px',
+                    padding: '0px 16px 0px 44px',
+                    margin: '0px'
+                  }}
+                >
+                  MOST SEARCHED
+                </h3>
                 {isAdmin && (
                   <button
                     onClick={() => setShowEditModal(true)}
-                    className="text-xs uppercase hover:underline"
+                    className="text-xs uppercase hover:underline ml-4"
                   >
                     Edit
                   </button>
                 )}
               </div>
-              <div className="flex gap-4">
+              <div className="flex gap-4 justify-center">
                 {shortcuts.map((shortcut, index) => (
                   <Link
                     key={index}
                     href={shortcut.link}
                     onClick={handleResultClick}
-                    className="text-sm hover:underline"
+                    style={{
+                      fontSize: '12px',
+                      fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontWeight: 400,
+                      lineHeight: '16px',
+                      textTransform: 'uppercase',
+                      color: 'rgb(0, 0, 0)',
+                      letterSpacing: 'normal',
+                      wordSpacing: '0px',
+                      padding: '0px 16px 0px 44px',
+                      margin: '0px',
+                      textDecoration: 'none'
+                    }}
+                    className="hover:underline"
                   >
                     {shortcut.text}
                   </Link>
