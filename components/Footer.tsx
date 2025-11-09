@@ -10,7 +10,15 @@ export default function Footer() {
   return (
     <>
       <footer style={{ backgroundColor: '#aaaaad' }} className="w-full">
-        <div className="w-full grid grid-cols-6 divide-x divide-black">
+        <div 
+          className="w-full grid grid-cols-6 divide-x divide-black"
+          style={{
+            letterSpacing: '0.12px',
+            wordSpacing: '0px',
+            lineHeight: '15.6px',
+            fontVariantLigatures: 'normal'
+          }}
+        >
           <div className="px-4 py-6">
             <h3 className="text-xs uppercase mb-3 text-gray-500">O nás</h3>
             <ul className="space-y-0">
