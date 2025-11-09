@@ -192,6 +192,10 @@ The PostgreSQL database is configured with the following models:
       - Size: 15px (approximately 1/3 of header height)
       - Alignment: Centered in cart window
       - Removed close button to maintain clean, minimal appearance
+  - **Additional UI Polish (November 9, 2025 - Second Pass)**:
+    - Adjusted cart drawer width to exactly 1/3 of viewport width for more elegant proportions
+    - Repositioned search close (X) button to exact top-right corner (0px from both edges) with padding for adequate click target
+    - Enhanced "nejčastěji vyhledávané" animation: now fades in smoothly over 1 second AFTER search bar finishes rolling in (0.4s delay ensures sequential timing)
 
 ## Completed Features
 1. ✅ Database schema and Prisma ORM setup
