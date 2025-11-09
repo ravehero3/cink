@@ -73,11 +73,12 @@ export default function Header2({ isOpen, onClose }: Header2Props) {
         className="fixed top-header left-0 right-0 z-20 bg-white overflow-hidden border-b"
         style={{ 
           maxHeight: isOpen ? '500px' : '0',
-          transform: isOpen ? 'translateY(0)' : 'translateY(-100%)',
+          transform: isOpen ? 'translateY(0)' : 'translateY(-20px)',
           transition: 'all 0.4s ease-in-out',
           transitionDelay: isOpen ? '0.3s' : '0s',
           borderBottomWidth: '1px',
-          borderBottomColor: '#000000'
+          borderBottomColor: '#000000',
+          opacity: isOpen ? 1 : 0
         }}
       >
         <div className="h-header flex items-center max-w-container mx-auto">

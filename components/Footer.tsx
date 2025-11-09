@@ -13,70 +13,74 @@ export default function Footer() {
         <div 
           className="w-full grid grid-cols-6 divide-x divide-black"
           style={{
+            fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+            fontSize: '12px',
             letterSpacing: '0.12px',
             wordSpacing: '0px',
             lineHeight: '15.6px',
-            fontVariantLigatures: 'normal'
+            fontVariantLigatures: 'normal',
+            margin: '0px',
+            padding: '0px'
           }}
         >
           <div className="px-4 py-6">
-            <h3 className="text-xs uppercase mb-3 text-gray-500">O nás</h3>
-            <ul className="space-y-0">
-              <li><Link href="/o-nas" className="text-xs text-gray-500 hover:text-black transition-colors">O společnosti</Link></li>
-              <li><Link href="/kontakt" className="text-xs text-gray-500 hover:text-black transition-colors">Kontakt</Link></li>
-              <li><Link href="/kariera" className="text-xs text-gray-500 hover:text-black transition-colors">Kariéra</Link></li>
-              <li><Link href="/pobocky" className="text-xs text-gray-500 hover:text-black transition-colors">Pobočky</Link></li>
+            <h3 className="uppercase mb-3 text-gray-500" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px', margin: '0px 0px 12px 0px', padding: '0px' }}>O nás</h3>
+            <ul className="space-y-0" style={{ margin: '0px', padding: '0px' }}>
+              <li style={{ margin: '0px', padding: '0px' }}><Link href="/o-nas" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px' }}>O společnosti</Link></li>
+              <li style={{ margin: '0px', padding: '0px' }}><Link href="/kontakt" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px' }}>Kontakt</Link></li>
+              <li style={{ margin: '0px', padding: '0px' }}><Link href="/kariera" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px' }}>Kariéra</Link></li>
+              <li style={{ margin: '0px', padding: '0px' }}><Link href="/pobocky" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px' }}>Pobočky</Link></li>
             </ul>
           </div>
 
           <div className="px-4 py-6">
-            <h3 className="text-xs uppercase mb-3 text-gray-500">Zákaznický servis</h3>
-            <ul className="space-y-0">
-              <li><Link href="/obchodni-podminky" className="text-xs text-gray-500 hover:text-black transition-colors">Obchodní podmínky</Link></li>
-              <li><Link href="/reklamacni-rad" className="text-xs text-gray-500 hover:text-black transition-colors">Reklamační řád</Link></li>
-              <li><Link href="/ochrana-osobnich-udaju" className="text-xs text-gray-500 hover:text-black transition-colors">Ochrana osobních údajů</Link></li>
-              <li><Link href="/cookies" className="text-xs text-gray-500 hover:text-black transition-colors">Cookies</Link></li>
+            <h3 className="uppercase mb-3 text-gray-500" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px', margin: '0px 0px 12px 0px', padding: '0px' }}>Zákaznický servis</h3>
+            <ul className="space-y-0" style={{ margin: '0px', padding: '0px' }}>
+              <li style={{ margin: '0px', padding: '0px' }}><Link href="/obchodni-podminky" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px' }}>Obchodní podmínky</Link></li>
+              <li style={{ margin: '0px', padding: '0px' }}><Link href="/reklamacni-rad" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px' }}>Reklamační řád</Link></li>
+              <li style={{ margin: '0px', padding: '0px' }}><Link href="/ochrana-osobnich-udaju" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px' }}>Ochrana osobních údajů</Link></li>
+              <li style={{ margin: '0px', padding: '0px' }}><Link href="/cookies" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px' }}>Cookies</Link></li>
             </ul>
           </div>
 
           <div className="px-4 py-6">
-            <h3 className="text-xs uppercase mb-3 text-gray-500">Nákup</h3>
-            <ul className="space-y-0">
-              <li><Link href="/jak-nakupovat" className="text-xs text-gray-500 hover:text-black transition-colors">Jak nakupovat</Link></li>
-              <li><Link href="/platba" className="text-xs text-gray-500 hover:text-black transition-colors">Platba</Link></li>
-              <li><Link href="/doprava" className="text-xs text-gray-500 hover:text-black transition-colors">Doprava</Link></li>
-              <li><Link href="/vraceni-zbozi" className="text-xs text-gray-500 hover:text-black transition-colors">Vrácení zboží</Link></li>
+            <h3 className="uppercase mb-3 text-gray-500" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px', margin: '0px 0px 12px 0px', padding: '0px' }}>Nákup</h3>
+            <ul className="space-y-0" style={{ margin: '0px', padding: '0px' }}>
+              <li style={{ margin: '0px', padding: '0px' }}><Link href="/jak-nakupovat" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px' }}>Jak nakupovat</Link></li>
+              <li style={{ margin: '0px', padding: '0px' }}><Link href="/platba" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px' }}>Platba</Link></li>
+              <li style={{ margin: '0px', padding: '0px' }}><Link href="/doprava" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px' }}>Doprava</Link></li>
+              <li style={{ margin: '0px', padding: '0px' }}><Link href="/vraceni-zbozi" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px' }}>Vrácení zboží</Link></li>
             </ul>
           </div>
 
           <div className="px-4 py-6">
-            <h3 className="text-xs uppercase mb-3 text-gray-500">Kontakt</h3>
-            <ul className="space-y-0">
-              <li className="text-xs text-gray-500">Běloves 378</li>
-              <li className="text-xs text-gray-500">547 01 Náchod</li>
-              <li className="text-xs text-gray-500">+420 774 292 158</li>
-              <li className="text-xs text-gray-500">+420 608 111 827</li>
-              <li><a href="mailto:info@ufosport.cz" className="text-xs text-gray-500 hover:text-black transition-colors">info@ufosport.cz</a></li>
+            <h3 className="uppercase mb-3 text-gray-500" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px', margin: '0px 0px 12px 0px', padding: '0px' }}>Kontakt</h3>
+            <ul className="space-y-0" style={{ margin: '0px', padding: '0px' }}>
+              <li className="text-gray-500" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px', margin: '0px', padding: '0px' }}>Běloves 378</li>
+              <li className="text-gray-500" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px', margin: '0px', padding: '0px' }}>547 01 Náchod</li>
+              <li className="text-gray-500" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px', margin: '0px', padding: '0px' }}>+420 774 292 158</li>
+              <li className="text-gray-500" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px', margin: '0px', padding: '0px' }}>+420 608 111 827</li>
+              <li style={{ margin: '0px', padding: '0px' }}><a href="mailto:info@ufosport.cz" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px' }}>info@ufosport.cz</a></li>
             </ul>
           </div>
 
           <div className="px-4 py-6">
-            <h3 className="text-xs uppercase mb-3 text-gray-500">Můj účet</h3>
-            <ul className="space-y-0">
-              <li><Link href="/prihlaseni" className="text-xs text-gray-500 hover:text-black transition-colors">Přihlášení</Link></li>
-              <li><Link href="/registrace" className="text-xs text-gray-500 hover:text-black transition-colors">Registrace</Link></li>
-              <li><Link href="/ucet" className="text-xs text-gray-500 hover:text-black transition-colors">Můj účet</Link></li>
-              <li><Link href="/ucet" className="text-xs text-gray-500 hover:text-black transition-colors">Moje objednávky</Link></li>
+            <h3 className="uppercase mb-3 text-gray-500" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px', margin: '0px 0px 12px 0px', padding: '0px' }}>Můj účet</h3>
+            <ul className="space-y-0" style={{ margin: '0px', padding: '0px' }}>
+              <li style={{ margin: '0px', padding: '0px' }}><Link href="/prihlaseni" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px' }}>Přihlášení</Link></li>
+              <li style={{ margin: '0px', padding: '0px' }}><Link href="/registrace" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px' }}>Registrace</Link></li>
+              <li style={{ margin: '0px', padding: '0px' }}><Link href="/ucet" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px' }}>Můj účet</Link></li>
+              <li style={{ margin: '0px', padding: '0px' }}><Link href="/ucet" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px' }}>Moje objednávky</Link></li>
             </ul>
           </div>
 
           <div className="px-4 py-6">
-            <h3 className="text-xs uppercase mb-3 text-gray-500">Newsletter</h3>
-            <ul className="space-y-0">
-              <li><button onClick={() => setIsNewsletterOpen(true)} className="text-xs text-gray-500 hover:text-black transition-colors text-left">Přihlásit k odběru</button></li>
-              <li className="text-xs text-gray-500 mt-3">Sledujte nás</li>
-              <li><a href="https://www.instagram.com/ufosport" target="_blank" rel="noopener noreferrer" className="text-xs text-gray-500 hover:text-black transition-colors">Instagram</a></li>
-              <li><a href="https://www.facebook.com/ufosport" target="_blank" rel="noopener noreferrer" className="text-xs text-gray-500 hover:text-black transition-colors">Facebook</a></li>
+            <h3 className="uppercase mb-3 text-gray-500" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px', margin: '0px 0px 12px 0px', padding: '0px' }}>Newsletter</h3>
+            <ul className="space-y-0" style={{ margin: '0px', padding: '0px' }}>
+              <li style={{ margin: '0px', padding: '0px' }}><button onClick={() => setIsNewsletterOpen(true)} className="text-gray-500 hover:text-black transition-colors text-left" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px' }}>Přihlásit k odběru</button></li>
+              <li className="text-gray-500 mt-3" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px', margin: '12px 0px 0px 0px', padding: '0px' }}>Sledujte nás</li>
+              <li style={{ margin: '0px', padding: '0px' }}><a href="https://www.instagram.com/ufosport" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px' }}>Instagram</a></li>
+              <li style={{ margin: '0px', padding: '0px' }}><a href="https://www.facebook.com/ufosport" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px' }}>Facebook</a></li>
             </ul>
           </div>
         </div>
