@@ -89,7 +89,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             <h2 
               style={{
                 fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '15px',
+                fontSize: '13px',
                 fontWeight: 700,
                 textTransform: 'uppercase',
                 letterSpacing: '0.03em',
@@ -119,7 +119,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
           <div className="flex-1 overflow-y-auto">
             {items.length === 0 ? (
               <>
-                <div className="flex flex-col items-center px-6" style={{ paddingTop: '100px' }}>
+                <div className="flex flex-col items-center px-6" style={{ paddingTop: '24px' }}>
                   <p 
                     style={{
                       fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -132,13 +132,13 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   </p>
                   <SavedItemsButton onClose={onClose} />
                 </div>
-                <div className="border-b border-black" style={{ marginTop: '24px' }} />
+                <div className="border-b border-black" style={{ marginTop: '48px' }} />
                 <div className="border-b border-black" style={{ marginTop: '240px' }} />
-                <div className="px-6" style={{ marginTop: '16px' }}>
+                <div className="text-center" style={{ marginTop: '24px' }}>
                   <h3 
                     style={{
                       fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '15px',
+                      fontSize: '13px',
                       fontWeight: 700,
                       textTransform: 'uppercase',
                       letterSpacing: '0.03em',
