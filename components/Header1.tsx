@@ -27,14 +27,26 @@ export default function Header1() {
 
   return (
     <>
-      <header className="h-header border-b border-black bg-white fixed top-0 left-0 right-0 z-30" style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif' }}>
+      <header className="h-header border-b border-black bg-white fixed top-0 left-0 right-0 z-30">
         <div className="h-full max-w-container mx-auto grid grid-cols-3 items-center">
           <nav className={`flex justify-start transition-opacity duration-300 ${showSearch ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ gap: '20px', paddingLeft: '20px' }}>
             {categories.map((category) => (
               <Link
                 key={category.slug}
                 href={`/kategorie/${category.slug}`}
-                className="text-sm font-normal uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"
+                className="hover:opacity-70 transition-opacity whitespace-nowrap"
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '12px',
+                  lineHeight: '15.6px',
+                  color: 'rgb(0, 0, 0)',
+                  padding: '0px 8px',
+                  margin: '0px',
+                  textDecoration: 'none',
+                  textTransform: 'none',
+                  letterSpacing: '0.36px',
+                  wordSpacing: '0px'
+                }}
               >
                 {category.name}
               </Link>
@@ -55,9 +67,21 @@ export default function Header1() {
             <div className={`flex items-center transition-opacity duration-300 ${showSearch ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ gap: '20px' }}>
               <Link
                 href={isLoggedIn ? "/ucet" : "/prihlaseni"}
-                className="text-sm font-normal uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"
+                className="hover:opacity-70 transition-opacity whitespace-nowrap"
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '12px',
+                  lineHeight: '15.6px',
+                  color: 'rgb(0, 0, 0)',
+                  padding: '0px 8px',
+                  margin: '0px',
+                  textDecoration: 'none',
+                  textTransform: 'none',
+                  letterSpacing: '0.36px',
+                  wordSpacing: '0px'
+                }}
               >
-                {isLoggedIn ? "ÚČET" : "PŘIHLÁSIT SE"}
+                {isLoggedIn ? "Účet" : "Přihlásit se"}
               </Link>
 
               <button 
@@ -65,7 +89,7 @@ export default function Header1() {
                 className="relative hover:opacity-70 transition-opacity"
                 aria-label="Saved"
               >
-                <svg className="w-[15px] h-[15px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
                 {savedCount > 0 && (
@@ -80,7 +104,7 @@ export default function Header1() {
                 className="relative hover:opacity-70 transition-opacity"
                 aria-label="Search"
               >
-                <svg className="w-[15px] h-[15px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </button>
@@ -90,7 +114,7 @@ export default function Header1() {
                 className="relative hover:opacity-70 transition-opacity"
                 aria-label="Cart"
               >
-                <svg className="w-[15px] h-[15px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
                 {cartCount > 0 && (
@@ -106,7 +130,7 @@ export default function Header1() {
               className={`relative hover:opacity-70 transition-opacity ${showSearch ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
               aria-label="Close Search"
             >
-              <svg className="w-[15px] h-[15px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
