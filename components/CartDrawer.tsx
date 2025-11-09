@@ -133,8 +133,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   <SavedItemsButton onClose={onClose} />
                 </div>
                 <div className="border-b border-black" style={{ marginTop: '48px' }} />
-                <div className="border-b border-black" style={{ marginTop: '240px' }} />
-                <div className="text-center" style={{ marginTop: '24px' }}>
+                <div className="text-center" style={{ marginTop: '184px' }}>
                   <h3 
                     style={{
                       fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -148,6 +147,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     PROHLÍŽELI JSTE
                   </h3>
                 </div>
+                <div className="border-b border-black" style={{ marginTop: '256px' }} />
               </>
             ) : (
               <div className="px-6 py-6">
