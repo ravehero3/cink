@@ -152,6 +152,28 @@ The PostgreSQL database is configured with the following models:
     - Added 88px body padding to prevent content overlap
     - Proper z-index layering (Header1 z-30, Header2 z-20)
 
+- **2025-11-09**:
+  - **Design System Refinements**:
+    - Verified logo uses HELVETICA NEUE CONDENSED BOLD font at 22px (exactly half of 44px header height)
+    - Improved search bar animation: now slides from below header with smooth opacity transitions
+    - Header elements fade when search is active for cleaner user experience
+    - Fixed white strip below header by correcting body paddingTop to 44px and removing duplicate Header2 component from layout
+  - **Footer Typography Update**:
+    - Applied BB-Regular font across all footer elements
+    - Set font-size to 12px, letter-spacing to 0.12px, line-height to 15.6px
+    - Zeroed all margins and padding for precise typography control
+  - **SavedProductsWindow Enhancement**:
+    - Changed overlay from solid white to semi-transparent dark (bg-black bg-opacity-50)
+    - Maintains page visibility while showing saved products panel
+  - **Two-Button Category Sections** (Admin-Editable):
+    - Created `categorySectionsStore.ts` - Zustand store for category section content (persisted to localStorage)
+    - Built `EditCategorySectionModal.tsx` - Modal component for admin editing of section titles and button labels/links
+    - Modified `HomePageContent.tsx` to implement two-button pattern across all category sections
+    - All category section titles use HELVETICA NEUE CONDENSED BOLD font
+    - Admin users see edit buttons on hover to customize section content
+    - Button hover animations with text slide-up/slide-down effect
+    - Note: Current implementation uses localStorage; may need API backing for multi-user persistence
+
 ## Completed Features
 1. ✅ Database schema and Prisma ORM setup
 2. ✅ Core layout components (Header1, Header2, Footer)
