@@ -70,15 +70,20 @@ export default function Header2({ isOpen, onClose }: Header2Props) {
   return (
     <>
       <div 
-        className="fixed top-header left-0 right-0 z-20 bg-white overflow-hidden"
+        className="fixed top-header left-0 right-0 z-20 bg-white"
         style={{ 
           maxHeight: isOpen ? '500px' : '0',
-          transform: isOpen ? 'translateY(0)' : 'translateY(-20px)',
-          transition: 'max-height 0.4s ease-in-out, transform 0.4s ease-in-out',
-          borderBottom: '1px solid #000000'
+          overflow: 'hidden',
+          transition: 'max-height 0.4s ease-in-out'
         }}
       >
-        <div className="h-header flex items-center max-w-container mx-auto border-b border-black">
+        <div 
+          className="h-header flex items-center max-w-container mx-auto border-b border-black bg-white"
+          style={{
+            transform: isOpen ? 'translateY(0)' : 'translateY(-44px)',
+            transition: 'transform 0.4s ease-in-out'
+          }}
+        >
           <div className="flex items-center gap-3 flex-1 pl-5">
             <svg style={{ width: '17px', height: '17px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -95,7 +100,7 @@ export default function Header2({ isOpen, onClose }: Header2Props) {
         </div>
 
         <div 
-          className="w-full"
+          className="w-full bg-white"
           style={{
             opacity: isOpen ? 1 : 0,
             transition: 'opacity 0.3s ease-in-out',

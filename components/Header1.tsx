@@ -28,7 +28,7 @@ export default function Header1() {
   return (
     <>
       <header className="h-header border-b border-black bg-white fixed top-0 left-0 right-0 z-30">
-        <div className="h-full max-w-container mx-auto grid grid-cols-3 items-center">
+        <div className="h-full max-w-container mx-auto grid grid-cols-3 items-center relative">
           <nav className={`flex justify-start transition-opacity duration-300 ${showSearch ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ gap: '20px', paddingLeft: '20px' }}>
             {categories.map((category) => (
               <Link
@@ -127,18 +127,23 @@ export default function Header1() {
                 )}
               </button>
             </div>
-
-            <button 
-              onClick={() => setShowSearch(false)}
-              className={`relative hover:opacity-70 transition-opacity ${showSearch ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
-              aria-label="Close Search"
-              style={{ width: '22px', height: '22px' }}
-            >
-              <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
           </div>
+
+          <button 
+            onClick={() => setShowSearch(false)}
+            className={`absolute hover:opacity-70 transition-opacity ${showSearch ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+            aria-label="Close Search"
+            style={{ 
+              width: '22px', 
+              height: '22px',
+              top: '11px',
+              right: '32px'
+            }}
+          >
+            <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
         
         <SavedProductsWindow 
