@@ -43,7 +43,7 @@ export default function ProductShowcaseSection({
       )}
 
       <div className="absolute bottom-4 left-0 right-0 flex flex-col items-center gap-4 px-4">
-        <h2 className="text-3xl font-bold uppercase tracking-tighter text-white" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
+        <h2 className="text-3xl font-bold uppercase tracking-tighter text-black">
           {headerText}
         </h2>
         <div className="flex gap-2">
@@ -72,7 +72,7 @@ function AnimatedButton({ text, link }: { text: string; link: string }) {
   return (
     <a
       href={link}
-      className="relative overflow-hidden bg-white text-black font-bold uppercase tracking-tight transition-all border-2 border-black text-sm"
+      className="relative overflow-hidden bg-white text-black font-normal uppercase tracking-tight transition-all border border-black text-sm"
       style={{ borderRadius: '4px', padding: '12.8px 25.6px' }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
