@@ -185,9 +185,7 @@ export default function HomePageContent() {
         onEdit={() => handleEditSection('section1')}
         onEditCategory={() => handleEditCategorySection('voodoo808')}
         sectionId="section1"
-        showProducts={true}
-        products={categoryProducts['voodoo808'] || []}
-        isLoading={isLoading}
+        showProducts={false}
       />
 
       {/* Section 3: Product Showcase */}
@@ -214,9 +212,7 @@ export default function HomePageContent() {
         onEdit={() => handleEditSection('section2')}
         onEditCategory={() => handleEditCategorySection('spaceLove')}
         sectionId="section2"
-        showProducts={true}
-        products={categoryProducts['space-love'] || []}
-        isLoading={isLoading}
+        showProducts={false}
       />
 
       {categories.filter(cat => cat.slug !== 'voodoo808' && cat.slug !== 'space-love').map((category) => {

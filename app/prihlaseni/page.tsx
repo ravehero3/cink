@@ -75,9 +75,9 @@ export default function LoginPage() {
       <div className="absolute right-1/4 w-px bg-black z-0" style={{ top: '44px', bottom: '50%' }} />
 
       {/* Main content above the line */}
-      <div className="relative z-10 flex flex-col items-center pt-32">
+      <div className="relative z-10 flex flex-col items-center pt-20">
         <h1 
-          className="uppercase text-center mb-[200px]" 
+          className="uppercase text-center mb-16" 
           style={{ 
             fontFamily: '"Roboto Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
             fontSize: '20px',
@@ -88,7 +88,7 @@ export default function LoginPage() {
           Login
         </h1>
 
-        <div className="w-full max-w-[600px] px-4 flex flex-col items-center">
+        <div className="w-full max-w-[400px] px-4 flex flex-col items-center">
           {showRegisteredMessage && (
             <div className="w-full mb-6 p-3 bg-green-50 text-green-800 text-sm border border-green-200 text-center">
               Registrace byla úspěšná! Nyní se můžete přihlásit.
@@ -122,7 +122,7 @@ export default function LoginPage() {
                 style={{
                   fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                   padding: '13.8px 25.6px',
-                  borderRadius: '50px',
+                  borderRadius: '2px',
                   color: '#000000'
                 }}
               />
@@ -148,7 +148,7 @@ export default function LoginPage() {
                 style={{
                   fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                   padding: '13.8px 25.6px',
-                  borderRadius: '50px',
+                  borderRadius: '2px',
                   color: '#000000'
                 }}
               />
@@ -162,7 +162,7 @@ export default function LoginPage() {
                 fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                 fontSize: '13px',
                 padding: '13.8px 25.6px',
-                borderRadius: '50px',
+                borderRadius: '2px',
                 letterSpacing: '0.05em'
               }}
             >
@@ -190,7 +190,7 @@ export default function LoginPage() {
               fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
               fontSize: '13px',
               padding: '13.8px 25.6px',
-              borderRadius: '50px',
+              borderRadius: '2px',
               letterSpacing: '0.05em'
             }}
           >
