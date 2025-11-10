@@ -3,6 +3,23 @@
 ## Overview
 A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz). The project aims to deliver a high-fashion, Balenciaga-inspired user experience with a focus on clean design, enlarged typography, and generous spacing. It supports a full e-commerce workflow from product browsing to secure payment and shipping.
 
+## Recent Changes (November 10, 2025)
+- **Database Setup**: PostgreSQL database provisioned and schema migrated using Prisma
+- **Test Users Created**: 
+  - Admin: admin@ufosport.cz / admin123
+  - Regular User: user@ufosport.cz / user123
+- **Login Page Redesign**: Complete redesign to match Balenciaga's minimal aesthetic with:
+  - Clean centered layout with minimal borders
+  - "Remember me" checkbox
+  - Expandable "Need help signing in?" section
+  - Password reset modal dialog
+  - "Create My Profile" CTA for registration
+- **Footer Updates**:
+  - Added 1px top border to main footer section (footer1)
+  - Changed copyright text (footer2) to use Helvetica Neue Condensed Regular font
+- **VideoSection Improvements**: Updated to always render overlay container for text and buttons, allowing admin to add/edit content
+- **Homepage Content**: Changed section3 default header text from "VÍME ŽE JSI ALIEN" to "TRIKA"
+
 ## User Preferences
 I prefer clear, concise explanations.
 I value a systematic and organized approach to development.
