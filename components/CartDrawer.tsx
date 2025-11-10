@@ -148,7 +148,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     PROHLÍŽELI JSTE
                   </h3>
                 </div>
-                <div className="border-b border-black" style={{ marginTop: '256px' }} />
+                <div className="border-b border-black" style={{ marginTop: '336px' }} />
                 <div style={{ marginTop: '24px', paddingLeft: '12px' }}>
                   <div className="space-y-2 mb-6" style={{ 
                     fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
