@@ -24,12 +24,9 @@ export default function Footer() {
           }}
         >
           <div style={{ paddingTop: '4px', paddingLeft: '4px', paddingRight: '16px', paddingBottom: '24px' }}>
-            <h3 className="uppercase mb-3 text-gray-500" style={{ fontSize: '12px', lineHeight: '17.6px', letterSpacing: '0.12px', margin: '0px 0px 12px 0px', padding: '0px' }}>O nás</h3>
+            <h3 className="uppercase mb-3 text-gray-500" style={{ fontSize: '12px', lineHeight: '17.6px', letterSpacing: '0.12px', margin: '0px 0px 12px 0px', padding: '0px' }}>NEWSLETTER</h3>
             <ul className="space-y-0" style={{ margin: '0px', padding: '0px' }}>
-              <li style={{ margin: '0px', padding: '0px' }}><Link href="/o-nas" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '17.6px', letterSpacing: '0.12px' }}>O společnosti</Link></li>
-              <li style={{ margin: '0px', padding: '0px' }}><Link href="/kontakt" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '17.6px', letterSpacing: '0.12px' }}>Kontakt</Link></li>
-              <li style={{ margin: '0px', padding: '0px' }}><Link href="/kariera" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '17.6px', letterSpacing: '0.12px' }}>Kariéra</Link></li>
-              <li style={{ margin: '0px', padding: '0px' }}><Link href="/pobocky" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '17.6px', letterSpacing: '0.12px' }}>Pobočky</Link></li>
+              <li className="text-gray-500" style={{ fontSize: '12px', lineHeight: '17.6px', letterSpacing: '0.12px', margin: '0px', padding: '0px', whiteSpace: 'nowrap' }}>Přihlašte se k odběru novinek</li>
             </ul>
           </div>
 
@@ -75,10 +72,8 @@ export default function Footer() {
           </div>
 
           <div style={{ paddingTop: '4px', paddingLeft: '4px', paddingRight: '16px', paddingBottom: '24px' }}>
-            <h3 className="uppercase mb-3 text-gray-500" style={{ fontSize: '12px', lineHeight: '17.6px', letterSpacing: '0.12px', margin: '0px 0px 12px 0px', padding: '0px' }}>Newsletter</h3>
+            <h3 className="uppercase mb-3 text-gray-500" style={{ fontSize: '12px', lineHeight: '17.6px', letterSpacing: '0.12px', margin: '0px 0px 12px 0px', padding: '0px' }}>Sledujte nás</h3>
             <ul className="space-y-0" style={{ margin: '0px', padding: '0px' }}>
-              <li style={{ margin: '0px', padding: '0px' }}><button onClick={() => setIsNewsletterOpen(true)} className="text-gray-500 hover:text-black transition-colors text-left" style={{ fontSize: '12px', lineHeight: '17.6px', letterSpacing: '0.12px' }}>Přihlásit k odběru</button></li>
-              <li className="text-gray-500 mt-3" style={{ fontSize: '12px', lineHeight: '17.6px', letterSpacing: '0.12px', margin: '12px 0px 0px 0px', padding: '0px' }}>Sledujte nás</li>
               <li style={{ margin: '0px', padding: '0px' }}><a href="https://www.instagram.com/ufosport" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '17.6px', letterSpacing: '0.12px' }}>Instagram</a></li>
               <li style={{ margin: '0px', padding: '0px' }}><a href="https://www.facebook.com/ufosport" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '17.6px', letterSpacing: '0.12px' }}>Facebook</a></li>
             </ul>
@@ -86,7 +81,7 @@ export default function Footer() {
         </div>
 
         <div className="w-full border-t border-black px-4 py-2" style={{ backgroundColor: '#aaaaad' }}>
-          <p className="text-xs font-semibold text-gray-500 text-center" style={{ fontFamily: '"Helvetica Neue Condensed Regular", "Helvetica Neue", Helvetica, Arial, sans-serif' }}>© 2026 UFO SPORT</p>
+          <p className="text-xs text-gray-500 text-center" style={{ fontFamily: '"Helvetica Neue Condensed Regular", "Helvetica Neue", Helvetica, Arial, sans-serif' }}>© 2026 UFO SPORT</p>
         </div>
       </footer>
 

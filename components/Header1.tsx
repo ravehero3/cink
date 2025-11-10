@@ -10,10 +10,10 @@ import CartDrawer from './CartDrawer';
 import Header2 from './Header2';
 
 const categories = [
-  { name: 'VOODOO808', slug: 'voodoo808', font: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif' },
-  { name: 'SPACE LOVE', slug: 'space-love', font: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif' },
-  { name: 'RECREATION WELLNESS', slug: 'recreation-wellness', font: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif' },
-  { name: 'T SHIRT GALLERY', slug: 't-shirt-gallery', font: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif' },
+  { name: 'VOODOO808', slug: 'voodoo808', font: '"Helvetica Neue Condensed Regular", "Helvetica Neue", Helvetica, Arial, sans-serif' },
+  { name: 'SPACE LOVE', slug: 'space-love', font: '"Helvetica Neue Condensed Regular", "Helvetica Neue", Helvetica, Arial, sans-serif' },
+  { name: 'RECREATION WELLNESS', slug: 'recreation-wellness', font: '"Helvetica Neue Condensed Regular", "Helvetica Neue", Helvetica, Arial, sans-serif' },
+  { name: 'T SHIRT GALLERY', slug: 't-shirt-gallery', font: '"Helvetica Neue Condensed Regular", "Helvetica Neue", Helvetica, Arial, sans-serif' },
 ];
 
 export default function Header1() {
@@ -43,7 +43,7 @@ export default function Header1() {
                   color: 'rgb(0, 0, 0)',
                   textDecoration: 'none',
                   textTransform: 'none',
-                  letterSpacing: '2.36px',
+                  letterSpacing: '1.36px',
                   wordSpacing: '0px'
                 }}
               >
@@ -75,13 +75,13 @@ export default function Header1() {
                 href={isLoggedIn ? "/ucet" : "/prihlaseni"}
                 className="hover:opacity-70 transition-opacity whitespace-nowrap"
                 style={{
-                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontFamily: '"Helvetica Neue Condensed Regular", "Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontSize: '12px',
                   lineHeight: '15.6px',
                   color: 'rgb(0, 0, 0)',
                   textDecoration: 'none',
                   textTransform: 'none',
-                  letterSpacing: '0.36px',
+                  letterSpacing: '1.36px',
                   wordSpacing: '0px'
                 }}
               >
