@@ -118,8 +118,8 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
           <div className="flex-1 overflow-y-auto">
             {items.length === 0 ? (
-              <>
-                <div className="flex flex-col items-center px-6" style={{ paddingTop: '98px' }}>
+              <div className="h-full flex flex-col relative">
+                <div style={{ height: 'calc(25% - 0.5px)' }} className="flex flex-col items-center justify-end px-6 pb-8">
                   <p 
                     style={{
                       fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -133,28 +133,35 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   </p>
                   <SavedItemsButton onClose={onClose} />
                 </div>
-                <div className="border-b border-black" style={{ marginTop: '72px' }} />
-                <div className="text-center" style={{ marginTop: '72px' }}>
-                  <h3 
-                    style={{
-                      fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '15px',
-                      fontWeight: 700,
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.03em',
-                      fontStretch: 'condensed'
-                    }}
-                  >
-                    PROHLÍŽELI JSTE
-                  </h3>
+                
+                <div className="border-b border-black" />
+                
+                <div style={{ height: 'calc(50% - 1px)' }} className="flex flex-col">
+                  <div className="text-center" style={{ marginTop: '72px' }}>
+                    <h3 
+                      style={{
+                        fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                        fontSize: '15px',
+                        fontWeight: 700,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.03em',
+                        fontStretch: 'condensed'
+                      }}
+                    >
+                      PROHLÍŽELI JSTE
+                    </h3>
+                  </div>
                 </div>
-                <div className="border-b border-black" style={{ marginTop: '336px' }} />
-                <div style={{ marginTop: '24px', paddingLeft: '12px' }}>
+                
+                <div className="border-b border-black" />
+                
+                <div style={{ height: 'calc(25% - 0.5px)' }} className="flex flex-col pt-6 px-3">
                   <div className="space-y-2 mb-6" style={{ 
                     fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '14px',
                     fontWeight: 400,
-                    lineHeight: '6px'
+                    lineHeight: '6px',
+                    paddingLeft: '9px'
                   }}>
                     <p>• 30 dní free vrácení</p>
                     <p>• 30 dní free online výměna</p>
@@ -185,7 +192,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     </svg>
                   </div>
                 </div>
-              </>
+              </div>
             ) : (
               <div className="px-6 py-6">
                 {items.map((item) => (
