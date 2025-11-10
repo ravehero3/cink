@@ -75,14 +75,15 @@ export default function LoginPage() {
       <div className="absolute right-1/4 w-px bg-black z-0" style={{ top: '44px', bottom: '50%' }} />
 
       {/* Main content above the line */}
-      <div className="relative z-10 flex flex-col items-center pt-20">
+      <div className="relative z-10 flex flex-col items-center pt-12">
         <h1 
-          className="uppercase text-center mb-16" 
+          className="uppercase text-center" 
           style={{ 
             fontFamily: '"Roboto Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
             fontSize: '20px',
             fontWeight: 700,
-            letterSpacing: '0.05em'
+            letterSpacing: '0.05em',
+            marginBottom: '8px'
           }}
         >
           Login
@@ -102,7 +103,7 @@ export default function LoginPage() {
           )}
 
           <form onSubmit={handleSubmit} className="w-full flex flex-col items-center">
-            <div className="w-full mb-6 relative">
+            <div className="w-full relative" style={{ marginBottom: '8px' }}>
               <label 
                 className="block text-xs mb-2"
                 style={{
@@ -128,7 +129,7 @@ export default function LoginPage() {
               />
             </div>
 
-            <div className="w-full mb-8 relative">
+            <div className="w-full relative" style={{ marginBottom: '8px' }}>
               <label 
                 className="block text-xs mb-2"
                 style={{
@@ -157,20 +158,21 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-black text-white uppercase hover:bg-gray-800 transition-colors disabled:bg-gray-400 mb-8"
+              className="w-full bg-black text-white uppercase hover:bg-gray-800 transition-colors disabled:bg-gray-400"
               style={{
                 fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                 fontSize: '13px',
                 padding: '13.8px 25.6px',
                 borderRadius: '2px',
-                letterSpacing: '0.05em'
+                letterSpacing: '0.05em',
+                marginBottom: '8px'
               }}
             >
               {loading ? 'NAČÍTÁNÍ...' : 'POKRAČOVAT'}
             </button>
           </form>
 
-          <div className="w-full flex items-center mb-8">
+          <div className="w-full flex items-center" style={{ marginBottom: '8px' }}>
             <div className="flex-1 h-px bg-black" />
             <span 
               className="mx-4 text-xs"
@@ -185,13 +187,14 @@ export default function LoginPage() {
 
           <button
             onClick={handleGoogleLogin}
-            className="w-full border border-black bg-white text-black hover:bg-black hover:text-white transition-colors flex items-center justify-center gap-3 mb-6"
+            className="w-full border border-black bg-white text-black hover:bg-black hover:text-white transition-colors flex items-center justify-center gap-3"
             style={{
               fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
               fontSize: '13px',
               padding: '13.8px 25.6px',
               borderRadius: '2px',
-              letterSpacing: '0.05em'
+              letterSpacing: '0.05em',
+              marginBottom: '8px'
             }}
           >
             <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor">

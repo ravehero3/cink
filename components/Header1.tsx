@@ -43,7 +43,7 @@ export default function Header1() {
                   color: 'rgb(0, 0, 0)',
                   textDecoration: 'none',
                   textTransform: 'none',
-                  letterSpacing: '0.36px',
+                  letterSpacing: '2.36px',
                   wordSpacing: '0px'
                 }}
               >

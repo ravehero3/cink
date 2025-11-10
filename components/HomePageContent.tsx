@@ -72,11 +72,11 @@ export default function HomePageContent() {
   const [videoUrl, setVideoUrl] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [editingSection, setEditingSection] = useState<'section1' | 'section2' | 'section3' | null>(null);
+  const [editingSection, setEditingSection] = useState<'section1' | 'section2' | 'section3' | 'section4' | 'section5' | null>(null);
   const [categoryEditModalOpen, setCategoryEditModalOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<'voodoo808' | 'spaceLove' | 'recreationWellness' | 'tShirtGallery' | null>(null);
   
-  const { section1, section2, section3, updateSection1, updateSection2, updateSection3 } = useHeroSectionsStore();
+  const { section1, section2, section3, section4, section5, updateSection1, updateSection2, updateSection3, updateSection4, updateSection5 } = useHeroSectionsStore();
   const categorySections = useCategorySectionsStore();
 
   useEffect(() => {
@@ -104,7 +104,7 @@ export default function HomePageContent() {
     fetchData();
   }, []);
 
-  const handleEditSection = (section: 'section1' | 'section2' | 'section3') => {
+  const handleEditSection = (section: 'section1' | 'section2' | 'section3' | 'section4' | 'section5') => {
     setEditingSection(section);
     setEditModalOpen(true);
   };
@@ -116,6 +116,10 @@ export default function HomePageContent() {
       updateSection2(data);
     } else if (editingSection === 'section3') {
       updateSection3(data);
+    } else if (editingSection === 'section4') {
+      updateSection4(data);
+    } else if (editingSection === 'section5') {
+      updateSection5(data);
     }
   };
 
@@ -123,11 +127,13 @@ export default function HomePageContent() {
     if (editingSection === 'section1') return section1;
     if (editingSection === 'section2') return section2;
     if (editingSection === 'section3') return section3;
+    if (editingSection === 'section4') return section4;
+    if (editingSection === 'section5') return section5;
     return {};
   };
 
   const getEditSectionType = (): 'video' | 'product' => {
-    return editingSection === 'section3' ? 'product' : 'video';
+    return (editingSection === 'section3' || editingSection === 'section5') ? 'product' : 'video';
   };
 
   const handleEditCategorySection = (storeKey: 'voodoo808' | 'spaceLove' | 'recreationWellness' | 'tShirtGallery') => {
@@ -215,83 +221,32 @@ export default function HomePageContent() {
         showProducts={false}
       />
 
-      {categories.filter(cat => cat.slug !== 'voodoo808' && cat.slug !== 'space-love').map((category) => {
-        const products = categoryProducts[category.slug] || [];
-        const sectionData = categorySections[category.storeKey];
-        
-        return (
-          <section key={category.slug} className="w-full border-b border-black" style={{ minHeight: '80vh' }}>
-            <div className="w-full bg-white border-b border-black py-md px-5 relative">
-              <div className="max-w-container mx-auto flex flex-col items-center">
-                <h2 className="uppercase mb-[8px]" style={{
-                  fontFamily: '"Helvetica Neue Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '22px',
-                  fontWeight: 400,
-                  lineHeight: '1.1',
-                  letterSpacing: '1px'
-                }}>
-                  {sectionData.title}
-                </h2>
-                <div className="flex gap-1">
-                  <AnimatedButton text={sectionData.button1Text} link={sectionData.button1Link} />
-                  <AnimatedButton text={sectionData.button2Text} link={sectionData.button2Link} />
-                </div>
-              </div>
-              
-              {isAdmin && (
-                <div className="absolute top-4 right-4">
-                  <button
-                    onClick={() => handleEditCategorySection(category.storeKey)}
-                    className="px-4 py-2 bg-white text-black text-xs uppercase hover:bg-black hover:text-white transition-colors border border-black"
-                  >
-                    Edit Section
-                  </button>
-                </div>
-              )}
-            </div>
+      {/* Section 4: Video Section with RECREATION WELLNESS */}
+      <VideoSection 
+        videoUrl={section4.videoUrl}
+        headerText={categorySections.recreationWellness.title}
+        button1Text={categorySections.recreationWellness.button1Text}
+        button2Text={categorySections.recreationWellness.button2Text}
+        button1Link={categorySections.recreationWellness.button1Link}
+        button2Link={categorySections.recreationWellness.button2Link}
+        isAdmin={isAdmin}
+        onEdit={() => handleEditSection('section4')}
+        onEditCategory={() => handleEditCategorySection('recreationWellness')}
+        sectionId="section4"
+        showProducts={false}
+      />
 
-            <div className="w-full overflow-x-auto bg-white scrollbar-hide" style={{ height: 'calc(80vh - 66px)' }}>
-              <div className="flex gap-0 h-full">
-                {isLoading ? (
-                  <div className="w-full py-2xl text-center text-sm">Loading...</div>
-                ) : products.length === 0 ? (
-                  <div className="w-full py-2xl text-center text-sm">No products in this category</div>
-                ) : (
-                  products.map((product) => (
-                    <Link
-                      key={product.id}
-                      href={`/produkty/${product.slug}`}
-                      className="flex-shrink-0 w-[300px] border-r border-black hover:bg-gray-50 transition-colors group h-full flex flex-col"
-                    >
-                      <div className="flex-1 relative bg-gray-100 border-b border-black overflow-hidden">
-                        {product.images && product.images.length > 0 ? (
-                          <Image
-                            src={product.images[0]}
-                            alt={product.name}
-                            fill
-                            sizes="300px"
-                            className="object-cover group-hover:scale-105 transition-transform duration-300"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-xs text-gray-400">
-                            No image
-                          </div>
-                        )}
-                      </div>
-                      <div className="p-sm flex-shrink-0">
-                        <h3 className="text-product-name font-bold uppercase tracking-tighter mb-1">
-                          {product.name}
-                        </h3>
-                        <p className="text-sm">{product.price} Kč</p>
-                      </div>
-                    </Link>
-                  ))
-                )}
-              </div>
-            </div>
-          </section>
-        );
-      })}
+      {/* Section 5: Product Showcase with T SHIRT GALLERY */}
+      <ProductShowcaseSection
+        imageUrl={section5.imageUrl}
+        headerText={categorySections.tShirtGallery.title}
+        button1Text={categorySections.tShirtGallery.button1Text}
+        button2Text={categorySections.tShirtGallery.button2Text}
+        button1Link={categorySections.tShirtGallery.button1Link}
+        button2Link={categorySections.tShirtGallery.button2Link}
+        isAdmin={isAdmin}
+        onEdit={() => handleEditSection('section5')}
+      />
 
       {/* Edit Modal */}
       {editingSection && (
