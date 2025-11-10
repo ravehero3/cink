@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Titlebar from '@/components/Titlebar';
-import ProductCard from '@/components/ProductCard';
+import Image from 'next/image';
 import { useSavedProductsStore } from '@/lib/saved-products-store';
+import { useCartStore } from '@/lib/cart-store';
 
 interface Product {
   id: string;
@@ -15,34 +15,36 @@ interface Product {
   price: number;
   images: string[];
   category: string;
+  color: string;
 }
 
 export default function SavedProductsPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const savedProductIds = useSavedProductsStore((state) => state.savedIds);
+  const removeProduct = useSavedProductsStore((state) => state.removeProduct);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const { addItem } = useCartStore();
 
   useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/prihlaseni?redirect=/ulozeno');
-      return;
-    }
-
     if (status === 'authenticated' && savedProductIds.length > 0) {
       fetchSavedProducts();
+    } else if (status === 'authenticated') {
+      setLoading(false);
+    } else if (status === 'unauthenticated' && savedProductIds.length > 0) {
+      fetchSavedProductsLocal();
     } else {
       setLoading(false);
     }
-  }, [status, savedProductIds, router]);
+  }, [status, savedProductIds]);
 
   const fetchSavedProducts = async () => {
     try {
       const response = await fetch('/api/saved-products');
       if (response.ok) {
         const data = await response.json();
-        setProducts(data.products || []);
+        setProducts(data || []);
       }
     } catch (error) {
       console.error('Error fetching saved products:', error);
@@ -51,65 +53,281 @@ export default function SavedProductsPage() {
     }
   };
 
-  if (status === 'loading' || loading) {
-    return (
-      <>
-        <Titlebar title="ULOŽENÉ PRODUKTY" />
-        <div className="min-h-screen flex items-center justify-center">
-          <p className="text-body">Načítám uložené produkty...</p>
-        </div>
-      </>
-    );
-  }
+  const fetchSavedProductsLocal = async () => {
+    try {
+      const response = await fetch('/api/products');
+      if (response.ok) {
+        const data = await response.json();
+        const savedProducts = data.products?.filter((p: Product) => savedProductIds.includes(p.id)) || [];
+        setProducts(savedProducts);
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  if (status === 'unauthenticated') {
-    return null;
-  }
+  const handleRemove = (productId: string) => {
+    removeProduct(productId);
+    setProducts(products.filter(p => p.id !== productId));
+  };
 
-  if (products.length === 0) {
+  const handleMoveToCart = (product: Product) => {
+    router.push(`/produkty/${product.slug}`);
+  };
+
+  if (loading) {
     return (
-      <>
-        <Titlebar title="ULOŽENÉ PRODUKTY" />
-        <div className="min-h-screen flex items-center justify-center px-8">
-          <div className="text-center">
-            <p className="text-body mb-6">Nemáte žádné uložené produkty</p>
-            <Link
-              href="/"
-              className="inline-block bg-black text-white text-body uppercase px-8 py-3 border border-black hover:bg-white hover:text-black transition-colors"
+      <div className="min-h-screen bg-white">
+        <header className="border-b border-black" style={{ height: '44px' }}>
+          <div className="max-w-7xl mx-auto px-4 h-full flex items-center justify-center">
+            <h1 
+              className="uppercase text-center" 
+              style={{ 
+                fontFamily: '"Helvetica Neue Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '14px',
+                fontWeight: 400,
+                letterSpacing: '1px'
+              }}
             >
-              POKRAČOVAT V NÁKUPU
-            </Link>
+              UFO SPORT
+            </h1>
           </div>
+        </header>
+        <div className="flex items-center justify-center py-20">
+          <p className="text-sm">Načítám...</p>
         </div>
-      </>
+      </div>
     );
   }
 
   return (
-    <>
-      <Titlebar title="ULOŽENÉ PRODUKTY" />
-      
-      <div className="max-w-7xl mx-auto px-8 py-8">
-        <div className="mb-6">
-          <p className="text-body">
-            {products.length} {products.length === 1 ? 'produkt' : products.length < 5 ? 'produkty' : 'produktů'}
-          </p>
+    <div className="min-h-screen bg-white">
+      <header className="border-b border-black" style={{ height: '44px' }}>
+        <div className="max-w-7xl mx-auto px-4 h-full flex items-center justify-between">
+          <Link href="/" className="hover:opacity-70">
+            <span 
+              className="uppercase" 
+              style={{ 
+                fontFamily: '"Helvetica Neue Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '14px',
+                fontWeight: 400,
+                letterSpacing: '1px'
+              }}
+            >
+              UFO SPORT
+            </span>
+          </Link>
         </div>
+      </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-black border border-black">
-          {products.map((product) => (
-            <ProductCard 
-              key={product.id}
-              id={product.id}
-              name={product.name}
-              slug={product.slug}
-              price={product.price}
-              image={product.images[0] || '/placeholder.png'}
-              isSaved={true}
-            />
-          ))}
+      <div className="flex justify-center py-8">
+        <div 
+          className="border-l border-r border-black relative" 
+          style={{ width: '33.333%', minWidth: '400px' }}
+        >
+          <div 
+            className="border-b border-black flex items-center justify-center"
+            style={{ height: '80px' }}
+          >
+            <h1 
+              className="uppercase text-center"
+              style={{
+                fontFamily: '"Helvetica Neue Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '16px',
+                fontWeight: 400,
+                letterSpacing: '1px'
+              }}
+            >
+              ULOŽENÉ PRODUKTY
+            </h1>
+          </div>
+
+          <div 
+            className="border-b border-black flex items-center px-6 gap-4"
+            style={{ height: '60px' }}
+          >
+            <button
+              className="bg-white text-black border border-black text-xs uppercase px-4 py-2 hover:bg-black hover:text-white transition-colors"
+              style={{
+                fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                borderRadius: '2px'
+              }}
+            >
+              ULOŽENÉ PRODUKTY ({products.length})
+            </button>
+            <Link 
+              href="/kosik"
+              className="text-xs uppercase hover:underline"
+              style={{
+                fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif'
+              }}
+            >
+              NÁKUPNÍ KOŠÍK
+            </Link>
+          </div>
+
+          {status !== 'authenticated' && (
+            <div 
+              className="border-b border-black flex flex-col items-center justify-center px-8 text-center"
+              style={{ minHeight: '200px', paddingTop: '40px', paddingBottom: '40px' }}
+            >
+              <h2 
+                className="mb-4"
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '16px',
+                  fontWeight: 700
+                }}
+              >
+                NEZTRAŤTE SVŮJ LIST
+              </h2>
+              <p 
+                className="mb-6"
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '12px',
+                  lineHeight: '1.6'
+                }}
+              >
+                Přihlaste se nebo si vytvořte účet a uložte si svůj wish list do budoucna
+              </p>
+              <Link
+                href="/prihlaseni?redirect=/ulozeno"
+                className="bg-black text-white uppercase px-8 py-3 hover:bg-gray-800 transition-colors"
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '12px',
+                  borderRadius: '2px',
+                  letterSpacing: '0.5px'
+                }}
+              >
+                PŘIHLÁSIT SE
+              </Link>
+            </div>
+          )}
+
+          {products.length === 0 ? (
+            <div 
+              className="flex flex-col items-center justify-center px-8 text-center"
+              style={{ minHeight: '300px' }}
+            >
+              <p 
+                className="mb-6"
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '14px'
+                }}
+              >
+                Nemáte žádné uložené produkty
+              </p>
+              <Link
+                href="/"
+                className="bg-black text-white uppercase px-8 py-3 hover:bg-gray-800 transition-colors"
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '12px',
+                  borderRadius: '2px',
+                  letterSpacing: '0.5px'
+                }}
+              >
+                POKRAČOVAT V NÁKUPU
+              </Link>
+            </div>
+          ) : (
+            products.map((product, index) => (
+              <div 
+                key={product.id}
+                className={`relative ${index !== 0 ? 'border-t border-black' : ''}`}
+                style={{ minHeight: '200px' }}
+              >
+                <div className="flex h-full">
+                  <div className="w-1/2 border-r border-black relative">
+                    <Link href={`/produkty/${product.slug}`}>
+                      <div className="relative w-full h-full" style={{ minHeight: '200px' }}>
+                        <Image
+                          src={product.images[0] || '/placeholder.png'}
+                          alt={product.name}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                    </Link>
+                  </div>
+
+                  <div className="w-1/2 p-4 flex flex-col justify-between">
+                    <div>
+                      <Link href={`/produkty/${product.slug}`}>
+                        <h3 
+                          className="mb-2 hover:underline"
+                          style={{
+                            fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                            fontSize: '13px',
+                            fontWeight: 700
+                          }}
+                        >
+                          {product.name}
+                        </h3>
+                      </Link>
+                      <p 
+                        className="mb-2"
+                        style={{
+                          fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                          fontSize: '13px'
+                        }}
+                      >
+                        {product.price} Kč
+                      </p>
+                      <div style={{ marginBottom: '4px' }}>
+                        <p 
+                          style={{
+                            fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                            fontSize: '11px'
+                          }}
+                        >
+                          Barva: {product.color || 'Černá'}
+                        </p>
+                      </div>
+                      <p 
+                        style={{
+                          fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                          fontSize: '11px'
+                        }}
+                      >
+                        Velikost: XL
+                      </p>
+                    </div>
+
+                    <div className="flex justify-between items-end pt-4">
+                      <button
+                        onClick={() => handleMoveToCart(product)}
+                        className="underline hover:no-underline text-left"
+                        style={{
+                          fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                          fontSize: '11px'
+                        }}
+                      >
+                        Přesunout do košíku
+                      </button>
+                      <button
+                        onClick={() => handleRemove(product.id)}
+                        className="underline hover:no-underline text-right"
+                        style={{
+                          fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                          fontSize: '11px'
+                        }}
+                      >
+                        Odstranit
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
-    </>
+    </div>
   );
 }

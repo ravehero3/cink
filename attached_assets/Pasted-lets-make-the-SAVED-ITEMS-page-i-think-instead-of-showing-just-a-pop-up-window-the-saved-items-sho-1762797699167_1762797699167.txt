@@ -1,0 +1,13 @@
+lets make the SAVED ITEMS page. i think instead of showing just a pop up window, the saved items should be an individual page instead. lets design it. the page should have a standard header and below it a collumn with 1px lines creating a strip in the size of one third of the whole width of the page. this collumn is separated into 4 sections where (from the top) the first section is a horizontal rectangle that has this text centered: ULOŽENÉ PRODUKTY(in helvetice neue condensed bold) and underneath this title that is 2px smaller than the font size of the main logo in the middle of the header. underneath this there is a smaller text saying „Seznam věcí co jste si oblíbili“. 
+
+below this section there is a horizontal line and a small strip of a section that contains 1 white small button with 1px stroke that says „ULOŽENÉ PRODUKTY (1)“ (číslo se mění podle počtu momentálně uložených produktů) and next to this button there is a text saying NÁKUPNÍ KOŠÍK
+
+below this text there is the line across and a new section starts. this section is even a little bit taller than the first section is that we named ULOŽENÉ PRODUKTY. this new section has bold text saying NEZTRAŤE SVŮJ LIST
+
+underneath this text that is centred to the middle, there is this small text: Přihlaste se nebo si vytvořte účet a uložte si svůj wish list do budoucna
+
+below this text there is a small black button with white text saying PŘIHLÁSIT SE
+
+some free space and then there is another horizontal line across that separates this section from the othr section that is about to come now. this new horizontal rectangle section is showing a small preview of the product the user saved. this rectangle has 2 buttons in a form of simple text in the bottom left and bottom right corners. the bottom left corner says underline text: "Přesunout do košíku". the bottom right button thats just simple underline text says „Odstranit"
+
+a miniature of the product photo is shown, but only a small image that fills only half of the rectangle and is alligned to the left corner. next to this image to the right side, there is the name of the product in small bold text, underneath this text there is the price displayed as 1470 Kč. then below that there is 4px free space and then another information: Barva: Černá and below that there is Velikost: XL 
