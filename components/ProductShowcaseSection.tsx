@@ -43,7 +43,7 @@ export default function ProductShowcaseSection({
       )}
 
       <div className="absolute bottom-2 left-0 right-0 flex flex-col items-center px-4">
-        <h2 className="uppercase tracking-tighter text-black mb-2" style={{
+        <h2 className="uppercase tracking-tighter text-black mb-[8px]" style={{
           fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
           fontSize: '22px',
           fontWeight: 700,
@@ -51,7 +51,7 @@ export default function ProductShowcaseSection({
         }}>
           {headerText}
         </h2>
-        <div className="flex gap-[5px]">
+        <div className="flex gap-1">
           <AnimatedButton text={button1Text} link={button1Link} />
           <AnimatedButton text={button2Text} link={button2Link} />
         </div>

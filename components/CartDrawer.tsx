@@ -160,7 +160,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '14px',
                     fontWeight: 400,
-                    lineHeight: '13px',
+                    lineHeight: '9px',
                     letterSpacing: '0.8px',
                     paddingLeft: '12px',
                     paddingTop: '12px'

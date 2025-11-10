@@ -219,7 +219,7 @@ export default function HomePageContent() {
           <section key={category.slug} className="w-full border-b border-black" style={{ minHeight: '80vh' }}>
             <div className="w-full bg-white border-b border-black py-md px-5 relative">
               <div className="max-w-container mx-auto flex flex-col items-center">
-                <h2 className="uppercase tracking-tighter mb-2" style={{
+                <h2 className="uppercase tracking-tighter mb-[8px]" style={{
                   fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontSize: '22px',
                   fontWeight: 700,
@@ -227,7 +227,7 @@ export default function HomePageContent() {
                 }}>
                   {sectionData.title}
                 </h2>
-                <div className="flex gap-[5px]">
+                <div className="flex gap-1">
                   <AnimatedButton text={sectionData.button1Text} link={sectionData.button1Link} />
                   <AnimatedButton text={sectionData.button2Text} link={sectionData.button2Link} />
                 </div>
