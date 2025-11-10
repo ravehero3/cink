@@ -23,7 +23,7 @@ export default function Footer() {
             padding: '0px'
           }}
         >
-          <div className="px-4 py-6">
+          <div style={{ paddingTop: '4px', paddingLeft: '4px', paddingRight: '16px', paddingBottom: '24px' }}>
             <h3 className="uppercase mb-3 text-gray-500" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px', margin: '0px 0px 12px 0px', padding: '0px' }}>O nás</h3>
             <ul className="space-y-0" style={{ margin: '0px', padding: '0px' }}>
               <li style={{ margin: '0px', padding: '0px' }}><Link href="/o-nas" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px' }}>O společnosti</Link></li>
@@ -33,7 +33,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div className="px-4 py-6">
+          <div style={{ paddingTop: '4px', paddingLeft: '4px', paddingRight: '16px', paddingBottom: '24px' }}>
             <h3 className="uppercase mb-3 text-gray-500" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px', margin: '0px 0px 12px 0px', padding: '0px' }}>Zákaznický servis</h3>
             <ul className="space-y-0" style={{ margin: '0px', padding: '0px' }}>
               <li style={{ margin: '0px', padding: '0px' }}><Link href="/obchodni-podminky" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px' }}>Obchodní podmínky</Link></li>
@@ -43,7 +43,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div className="px-4 py-6">
+          <div style={{ paddingTop: '4px', paddingLeft: '4px', paddingRight: '16px', paddingBottom: '24px' }}>
             <h3 className="uppercase mb-3 text-gray-500" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px', margin: '0px 0px 12px 0px', padding: '0px' }}>Nákup</h3>
             <ul className="space-y-0" style={{ margin: '0px', padding: '0px' }}>
               <li style={{ margin: '0px', padding: '0px' }}><Link href="/jak-nakupovat" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px' }}>Jak nakupovat</Link></li>
@@ -53,7 +53,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div className="px-4 py-6">
+          <div style={{ paddingTop: '4px', paddingLeft: '4px', paddingRight: '16px', paddingBottom: '24px' }}>
             <h3 className="uppercase mb-3 text-gray-500" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px', margin: '0px 0px 12px 0px', padding: '0px' }}>Kontakt</h3>
             <ul className="space-y-0" style={{ margin: '0px', padding: '0px' }}>
               <li className="text-gray-500" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px', margin: '0px', padding: '0px' }}>Běloves 378</li>
@@ -64,7 +64,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div className="px-4 py-6">
+          <div style={{ paddingTop: '4px', paddingLeft: '4px', paddingRight: '16px', paddingBottom: '24px' }}>
             <h3 className="uppercase mb-3 text-gray-500" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px', margin: '0px 0px 12px 0px', padding: '0px' }}>Můj účet</h3>
             <ul className="space-y-0" style={{ margin: '0px', padding: '0px' }}>
               <li style={{ margin: '0px', padding: '0px' }}><Link href="/prihlaseni" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px' }}>Přihlášení</Link></li>
@@ -74,7 +74,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div className="px-4 py-6">
+          <div style={{ paddingTop: '4px', paddingLeft: '4px', paddingRight: '16px', paddingBottom: '24px' }}>
             <h3 className="uppercase mb-3 text-gray-500" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px', margin: '0px 0px 12px 0px', padding: '0px' }}>Newsletter</h3>
             <ul className="space-y-0" style={{ margin: '0px', padding: '0px' }}>
               <li style={{ margin: '0px', padding: '0px' }}><button onClick={() => setIsNewsletterOpen(true)} className="text-gray-500 hover:text-black transition-colors text-left" style={{ fontSize: '12px', lineHeight: '15.6px', letterSpacing: '0.12px' }}>Přihlásit k odběru</button></li>
