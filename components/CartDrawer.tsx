@@ -119,14 +119,14 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
           <div className="flex-1 overflow-y-auto">
             {items.length === 0 ? (
               <div className="h-full flex flex-col relative">
-                <div style={{ height: 'calc(25% - 0.5px)' }} className="flex flex-col items-center justify-end px-6 pb-8">
+                <div style={{ height: 'calc(25% - 0.5px)', paddingBottom: '40px' }} className="flex flex-col items-center justify-end px-6">
                   <p 
                     style={{
                       fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                       fontSize: '14px',
                       fontWeight: 400,
                       textAlign: 'center',
-                      marginBottom: '24px'
+                      marginBottom: '40px'
                     }}
                   >
                     Váš košík je prázdný
@@ -137,7 +137,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 <div className="border-b border-black" />
                 
                 <div style={{ height: 'calc(50% - 1px)' }} className="flex flex-col">
-                  <div className="text-center" style={{ marginTop: '72px' }}>
+                  <div className="text-center" style={{ marginTop: '64px' }}>
                     <h3 
                       style={{
                         fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -155,19 +155,21 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 
                 <div className="border-b border-black" />
                 
-                <div style={{ height: 'calc(25% - 0.5px)' }} className="flex flex-col pt-6 px-3">
-                  <div className="space-y-2 mb-6" style={{ 
+                <div style={{ height: 'calc(25% - 0.5px)', paddingTop: '24px', paddingLeft: '12px', paddingRight: '12px' }} className="flex flex-col">
+                  <div className="space-y-2" style={{ 
                     fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
+                    fontSize: '12px',
                     fontWeight: 400,
-                    lineHeight: '6px',
-                    paddingLeft: '9px'
+                    lineHeight: '12px',
+                    marginLeft: '-8px',
+                    marginTop: '-16px',
+                    marginBottom: '6px'
                   }}>
                     <p>• 30 dní free vrácení</p>
                     <p>• 30 dní free online výměna</p>
                     <p>• Nálepky v každé objednávce</p>
                   </div>
-                  <div className="flex items-center justify-center" style={{ gap: '4px' }}>
+                  <div className="flex items-center justify-center" style={{ gap: '4px', marginTop: '-12px' }}>
                     <svg className="h-3" viewBox="0 0 38 24" fill="none">
                       <rect width="38" height="24" rx="2" fill="#000000"/>
                       <path d="M15.258 18.126h2.484l1.554-9.588h-2.484l-1.554 9.588z" fill="#fff"/>
