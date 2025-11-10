@@ -122,8 +122,9 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 <div className="flex flex-col items-center px-6" style={{ paddingTop: '98px' }}>
                   <p 
                     style={{
-                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                       fontSize: '14px',
+                      fontWeight: 400,
                       textAlign: 'center',
                       marginBottom: '24px'
                     }}
@@ -153,7 +154,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '14px',
                     fontWeight: 400,
-                    lineHeight: '19.6px'
+                    lineHeight: '12px'
                   }}>
                     <p>• 30 dní free vrácení</p>
                     <p>• 30 dní free online výměna</p>

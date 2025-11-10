@@ -10,10 +10,10 @@ import CartDrawer from './CartDrawer';
 import Header2 from './Header2';
 
 const categories = [
-  { name: 'VOODOO808', slug: 'voodoo808', font: 'BB-CondBold, "Helvetica Neue", Helvetica, Arial, sans-serif' },
-  { name: 'SPACE LOVE', slug: 'space-love', font: '"Helvetica Neue", Helvetica, Arial, sans-serif' },
-  { name: 'RECREATION WELLNESS', slug: 'recreation-wellness', font: '"Helvetica Neue", Helvetica, Arial, sans-serif' },
-  { name: 'T SHIRT GALLERY', slug: 't-shirt-gallery', font: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif' },
+  { name: 'VOODOO808', slug: 'voodoo808', font: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif' },
+  { name: 'SPACE LOVE', slug: 'space-love', font: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif' },
+  { name: 'RECREATION WELLNESS', slug: 'recreation-wellness', font: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif' },
+  { name: 'T SHIRT GALLERY', slug: 't-shirt-gallery', font: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif' },
 ];
 
 export default function Header1() {
