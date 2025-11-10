@@ -134,7 +134,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   <SavedItemsButton onClose={onClose} />
                 </div>
                 <div className="border-b border-black" style={{ marginTop: '72px' }} />
-                <div className="text-center" style={{ marginTop: '84px' }}>
+                <div className="text-center" style={{ marginTop: '72px' }}>
                   <h3 
                     style={{
                       fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -149,12 +149,12 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   </h3>
                 </div>
                 <div className="border-b border-black" style={{ marginTop: '256px' }} />
-                <div className="px-6" style={{ marginTop: '24px' }}>
+                <div style={{ marginTop: '24px', paddingLeft: '12px' }}>
                   <div className="space-y-2 mb-6" style={{ 
                     fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '14px',
                     fontWeight: 400,
-                    lineHeight: '12px'
+                    lineHeight: '6px'
                   }}>
                     <p>• 30 dní free vrácení</p>
                     <p>• 30 dní free online výměna</p>
