@@ -89,7 +89,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             <h2 
               style={{
                 fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '13px',
+                fontSize: '15px',
                 fontWeight: 700,
                 textTransform: 'uppercase',
                 letterSpacing: '0.03em',
@@ -119,25 +119,25 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
           <div className="flex-1 overflow-y-auto">
             {items.length === 0 ? (
               <>
-                <div className="flex flex-col items-center px-6" style={{ paddingTop: '24px' }}>
+                <div className="flex flex-col items-center px-6" style={{ paddingTop: '58px' }}>
                   <p 
                     style={{
                       fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                       fontSize: '14px',
                       textAlign: 'center',
-                      marginBottom: '16px'
+                      marginBottom: '48px'
                     }}
                   >
                     Váš košík je prázdný
                   </p>
                   <SavedItemsButton onClose={onClose} />
                 </div>
-                <div className="border-b border-black" style={{ marginTop: '48px' }} />
-                <div className="text-center" style={{ marginTop: '184px' }}>
+                <div className="border-b border-black" style={{ marginTop: '72px' }} />
+                <div className="text-center" style={{ marginTop: '160px' }}>
                   <h3 
                     style={{
                       fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '13px',
+                      fontSize: '15px',
                       fontWeight: 700,
                       textTransform: 'uppercase',
                       letterSpacing: '0.03em',
@@ -148,6 +148,33 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   </h3>
                 </div>
                 <div className="border-b border-black" style={{ marginTop: '256px' }} />
+                <div className="px-6" style={{ marginTop: '24px' }}>
+                  <div className="space-y-1.5 text-xs mb-6">
+                    <p>• 30 dní free vrácení</p>
+                    <p>• 30 dní free online výměna</p>
+                    <p>• Nálepky v každé objednávce</p>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <svg className="h-2.5" viewBox="0 0 38 24" fill="none">
+                      <rect width="38" height="24" rx="2" fill="#1A1F71"/>
+                      <path d="M15.258 18.126h2.484l1.554-9.588h-2.484l-1.554 9.588z" fill="#fff"/>
+                    </svg>
+                    <svg className="h-2.5" viewBox="0 0 38 24" fill="none">
+                      <rect width="38" height="24" rx="2" fill="#EB001B"/>
+                      <circle cx="14.5" cy="12" r="7" fill="#FF5F00"/>
+                      <circle cx="23.5" cy="12" r="7" fill="#F79E1B"/>
+                    </svg>
+                    <svg className="h-2.5" viewBox="0 0 38 24" fill="none">
+                      <rect width="38" height="24" rx="2" fill="#0066B2"/>
+                    </svg>
+                    <svg className="h-2.5" viewBox="0 0 38 24" fill="none">
+                      <rect width="38" height="24" rx="2" fill="#00457C"/>
+                    </svg>
+                    <svg className="h-2.5" viewBox="0 0 38 24" fill="none">
+                      <rect width="38" height="24" rx="2" fill="#000000"/>
+                    </svg>
+                  </div>
+                </div>
               </>
             ) : (
               <div className="px-6 py-6">
