@@ -119,7 +119,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
           <div className="flex-1 overflow-y-auto">
             {items.length === 0 ? (
               <>
-                <div className="flex flex-col items-center px-6" style={{ paddingTop: '58px' }}>
+                <div className="flex flex-col items-center px-6" style={{ paddingTop: '98px' }}>
                   <p 
                     style={{
                       fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -133,7 +133,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   <SavedItemsButton onClose={onClose} />
                 </div>
                 <div className="border-b border-black" style={{ marginTop: '72px' }} />
-                <div className="text-center" style={{ marginTop: '160px' }}>
+                <div className="text-center" style={{ marginTop: '100px' }}>
                   <h3 
                     style={{
                       fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -149,29 +149,33 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 </div>
                 <div className="border-b border-black" style={{ marginTop: '256px' }} />
                 <div className="px-6" style={{ marginTop: '24px' }}>
-                  <div className="space-y-1.5 text-xs mb-6">
+                  <div className="space-y-2 mb-6" style={{ fontSize: '13px' }}>
                     <p>• 30 dní free vrácení</p>
                     <p>• 30 dní free online výměna</p>
                     <p>• Nálepky v každé objednávce</p>
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <svg className="h-2.5" viewBox="0 0 38 24" fill="none">
-                      <rect width="38" height="24" rx="2" fill="#1A1F71"/>
+                  <div className="flex items-center" style={{ gap: '4px' }}>
+                    <svg className="h-3" viewBox="0 0 38 24" fill="none">
+                      <rect width="38" height="24" rx="2" fill="#000000"/>
                       <path d="M15.258 18.126h2.484l1.554-9.588h-2.484l-1.554 9.588z" fill="#fff"/>
                     </svg>
-                    <svg className="h-2.5" viewBox="0 0 38 24" fill="none">
-                      <rect width="38" height="24" rx="2" fill="#EB001B"/>
-                      <circle cx="14.5" cy="12" r="7" fill="#FF5F00"/>
-                      <circle cx="23.5" cy="12" r="7" fill="#F79E1B"/>
-                    </svg>
-                    <svg className="h-2.5" viewBox="0 0 38 24" fill="none">
-                      <rect width="38" height="24" rx="2" fill="#0066B2"/>
-                    </svg>
-                    <svg className="h-2.5" viewBox="0 0 38 24" fill="none">
-                      <rect width="38" height="24" rx="2" fill="#00457C"/>
-                    </svg>
-                    <svg className="h-2.5" viewBox="0 0 38 24" fill="none">
+                    <svg className="h-3" viewBox="0 0 38 24" fill="none">
                       <rect width="38" height="24" rx="2" fill="#000000"/>
+                      <circle cx="14.5" cy="12" r="6" fill="#fff"/>
+                      <circle cx="23.5" cy="12" r="6" fill="#fff"/>
+                      <path d="M19 7.5 A 6 6 0 0 1 19 16.5 A 6 6 0 0 1 19 7.5" fill="#000"/>
+                    </svg>
+                    <svg className="h-3" viewBox="0 0 38 24" fill="none">
+                      <rect width="38" height="24" rx="2" fill="#000000"/>
+                      <text x="19" y="16" fill="#fff" fontSize="10" fontWeight="bold" textAnchor="middle" fontFamily="Arial">PayPal</text>
+                    </svg>
+                    <svg className="h-3" viewBox="0 0 38 24" fill="none">
+                      <rect width="38" height="24" rx="2" fill="#000000"/>
+                      <text x="19" y="16" fill="#fff" fontSize="10" fontWeight="bold" textAnchor="middle" fontFamily="Arial">GP</text>
+                    </svg>
+                    <svg className="h-3" viewBox="0 0 38 24" fill="none">
+                      <rect width="38" height="24" rx="2" fill="#000000"/>
+                      <circle cx="19" cy="12" r="5" fill="#fff"/>
                     </svg>
                   </div>
                 </div>
