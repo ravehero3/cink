@@ -49,7 +49,7 @@ export const useHeroSectionsStore = create<HeroSectionsState>()(
       },
       section3: {
         imageUrl: '',
-        headerText: 'VÍME ŽE JSI ALIEN',
+        headerText: 'TRIKA',
         button1Text: 'Shop Now',
         button2Text: 'View Collection',
         button1Link: '/kategorie/voodoo808',

@@ -56,8 +56,8 @@ export default function VideoSection({ videoUrl, headerText, button1Text, button
             <source src={videoUrl} type="video/mp4" />
           </video>
           
-          {headerText && button1Text && button2Text && (
-            <div className="absolute bottom-2 left-0 right-0 flex flex-col items-center px-4">
+          <div className="absolute bottom-2 left-0 right-0 flex flex-col items-center px-4">
+            {headerText && (
               <h2 className="uppercase tracking-tighter text-white mb-[8px]" style={{
                 fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                 fontSize: '22px',
@@ -66,12 +66,14 @@ export default function VideoSection({ videoUrl, headerText, button1Text, button
               }}>
                 {headerText}
               </h2>
+            )}
+            {button1Text && button2Text && (
               <div className="flex gap-1">
                 <AnimatedButton text={button1Text} link={button1Link || '#'} />
                 <AnimatedButton text={button2Text} link={button2Link || '#'} />
               </div>
-            </div>
-          )}
+            )}
+          </div>
 
           <div className="absolute bottom-4 right-4 flex gap-2">
             <button

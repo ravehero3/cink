@@ -11,7 +11,7 @@ export default function Footer() {
     <>
       <footer style={{ backgroundColor: '#aaaaad' }} className="w-full">
         <div 
-          className="w-full grid grid-cols-6 divide-x divide-black"
+          className="w-full grid grid-cols-6 divide-x divide-black border-t border-black"
           style={{
             fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
             fontSize: '12px',
@@ -86,7 +86,7 @@ export default function Footer() {
         </div>
 
         <div className="w-full border-t border-black px-4 py-2" style={{ backgroundColor: '#aaaaad' }}>
-          <p className="text-xs font-semibold text-gray-500 text-center">© 2026 UFO SPORT</p>
+          <p className="text-xs font-semibold text-gray-500 text-center" style={{ fontFamily: '"Helvetica Neue Condensed Regular", "Helvetica Neue", Helvetica, Arial, sans-serif' }}>© 2026 UFO SPORT</p>
         </div>
       </footer>
 
