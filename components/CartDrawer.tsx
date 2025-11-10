@@ -160,10 +160,10 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '14px',
                     fontWeight: 400,
-                    lineHeight: '15px',
+                    lineHeight: '13px',
                     letterSpacing: '0.8px',
-                    paddingLeft: '8px',
-                    paddingTop: '8px'
+                    paddingLeft: '12px',
+                    paddingTop: '12px'
                   }}>
                     <p>• 30 dní free vrácení</p>
                     <p>• 30 dní free online výměna</p>
