@@ -105,7 +105,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 width: '22px',
                 height: '22px',
                 top: '50%',
-                right: '28px',
+                right: '8px',
                 transform: 'translateY(-50%)',
                 padding: '0'
               }}
@@ -126,7 +126,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       fontSize: '14px',
                       fontWeight: 400,
                       textAlign: 'center',
-                      marginBottom: '40px'
+                      marginBottom: '8px'
                     }}
                   >
                     Váš košík je prázdný
@@ -155,21 +155,20 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 
                 <div className="border-b border-black" />
                 
-                <div style={{ height: 'calc(25% - 0.5px)', paddingTop: '24px', paddingLeft: '12px', paddingRight: '12px' }} className="flex flex-col">
+                <div style={{ height: 'calc(25% - 0.5px)', position: 'relative' }} className="flex flex-col">
                   <div className="space-y-2" style={{ 
                     fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '12px',
+                    fontSize: '16px',
                     fontWeight: 400,
-                    lineHeight: '12px',
-                    marginLeft: '-8px',
-                    marginTop: '-16px',
-                    marginBottom: '6px'
+                    lineHeight: '16px',
+                    paddingLeft: '10px',
+                    paddingTop: '14px'
                   }}>
                     <p>• 30 dní free vrácení</p>
                     <p>• 30 dní free online výměna</p>
                     <p>• Nálepky v každé objednávce</p>
                   </div>
-                  <div className="flex items-center justify-center" style={{ gap: '4px', marginTop: '-12px' }}>
+                  <div className="flex items-center justify-center" style={{ gap: '4px', position: 'absolute', top: '50%', left: '0', right: '0', transform: 'translateY(-50%)' }}>
                     <svg className="h-3" viewBox="0 0 38 24" fill="none">
                       <rect width="38" height="24" rx="2" fill="#000000"/>
                       <path d="M15.258 18.126h2.484l1.554-9.588h-2.484l-1.554 9.588z" fill="#fff"/>
