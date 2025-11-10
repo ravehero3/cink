@@ -119,7 +119,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
           <div className="flex-1 overflow-y-auto">
             {items.length === 0 ? (
               <div className="h-full flex flex-col relative">
-                <div style={{ height: 'calc(25% - 0.5px)', paddingBottom: '40px' }} className="flex flex-col items-center justify-end px-6">
+                <div style={{ height: 'calc(25% - 0.5px)' }} className="flex flex-col items-center justify-center px-6">
                   <p 
                     style={{
                       fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -155,14 +155,15 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 
                 <div className="border-b border-black" />
                 
-                <div style={{ height: 'calc(25% - 0.5px)', position: 'relative' }} className="flex flex-col">
+                <div style={{ height: 'calc(25% + 16px)', position: 'relative' }} className="flex flex-col">
                   <div className="space-y-2" style={{ 
                     fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '16px',
+                    fontSize: '14px',
                     fontWeight: 400,
-                    lineHeight: '16px',
-                    paddingLeft: '10px',
-                    paddingTop: '14px'
+                    lineHeight: '14px',
+                    letterSpacing: '0.5px',
+                    paddingLeft: '16px',
+                    paddingTop: '20px'
                   }}>
                     <p>• 30 dní free vrácení</p>
                     <p>• 30 dní free online výměna</p>
