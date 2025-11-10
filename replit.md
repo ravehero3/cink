@@ -1,237 +1,45 @@
 # UFO Sport E-shop
 
 ## Overview
-A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz) built with Next.js 14, TypeScript, and Tailwind CSS.
+A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz). The project aims to deliver a high-fashion, Balenciaga-inspired user experience with a focus on clean design, enlarged typography, and generous spacing. It supports a full e-commerce workflow from product browsing to secure payment and shipping.
 
-## Tech Stack
-- **Framework**: Next.js 14 with App Router and TypeScript ✓
-- **Styling**: Tailwind CSS (strict black/white palette) ✓
-- **Database**: PostgreSQL with Prisma ORM ✓ configured and seeded
-- **Authentication**: NextAuth.js ✓ configured (credentials-based)
-- **Payment**: GoPay integration (Czech payment gateway) - needs API keys
-- **Email**: Resend API for transactional emails - needs API key
-- **Shipping**: Zásilkovna (Packeta) API integration - needs API key
-- **File Storage**: Cloudinary for product images - needs API keys
+## User Preferences
+I prefer clear, concise explanations.
+I value a systematic and organized approach to development.
+Please ensure all UI/UX changes strictly adhere to the defined black/white/neon green color palette and minimalistic design principles.
+I prefer detailed explanations of complex architectural decisions.
+Ask before making major changes to the core design system or introducing new external dependencies.
 
-## Design System (Balenciaga-Inspired Minimalism)
-### Color Palette
-- **Background**: Pure white (#FFFFFF)
-- **Text/Lines/Borders**: Pure black (#000000)
-- **Accent**: Neon green (#00FF00) for primary CTAs
-- **Monochromatic aesthetic** - no grays, shadows, or gradients
+## System Architecture
 
-### Typography (Enlarged, Clean)
-- **Font**: "Helvetica Neue", Helvetica, Arial (sans-serif)
-- **Sizes**:
-  - Body text: 16px (line-height: 1.5)
-  - Small text: 14px (line-height: 1.5)
-  - Product names: 18px (line-height: 1.3)
-  - Section headers: 24px (line-height: 1.2)
-  - Page titles: 48px (line-height: 1.1)
-- **Weight**: Regular (400), Bold (700)
-- **Letter spacing**: -0.02em for headlines, normal for body
+### UI/UX Decisions
+The design is inspired by Balenciaga's minimalist aesthetic, featuring a strict black-and-white color palette with a neon green accent for primary calls to action. No grays, shadows, or gradients are used. Typography utilizes "Helvetica Neue" (or similar sans-serif) with enlarged sizes and specific letter spacing for headlines. A generous 8px-based spacing system is applied throughout. The layout includes a max-width container (1600px) and responsive product grids (3 columns desktop, 2 tablet, 1 mobile). Buttons have sharp corners and minimal hover effects. Headers are fixed with integrated search and redesigned with a three-column grid for balanced spacing, featuring reduced icon sizes (22px) and specific font styles for navigation links. Cart and saved products drawers slide in with semi-transparent overlays.
 
-### Layout System (Generous Spacing)
-- **Container**: Max-width 1600px, centered
-- **Spacing System** (8px base): 8px, 16px, 24px, 32px, 48px, 64px, 96px
-- **Product Grid**: 
-  - Desktop: 3 columns (generous 32px gap)
-  - Tablet: 2 columns
-  - Mobile: 1 column
-- **Section padding**: 64px vertical minimum
-- **Buttons**: Sharp corners, minimal hover effects
-- **Header**: Fixed 80px height with integrated search
+### Technical Implementations
+The project is built with Next.js 14 (App Router) and TypeScript. Styling is handled by Tailwind CSS. State management for cart, recently viewed, and saved products uses Zustand. The application includes a comprehensive checkout flow, order creation, and confirmation pages. Search functionality includes product filtering. Promo code validation and discount calculation are integrated. Video sections and category sections are customizable by an admin user with text overlays and button pairs, using a Zustand store for content (currently persisted in localStorage). UI animations are carefully crafted for a smooth user experience, such as search bar slide-down and delayed content fade-in.
 
-## Project Structure
-```
-/app                        # Next.js App Router
-  /api                      # API routes
-    /auth/[...nextauth]     # NextAuth authentication endpoint
-    /gopay                  # GoPay payment integration
-      /create-payment       # Create payment endpoint
-      /webhook              # Payment status webhook
-    /orders                 # Order management
-      /create               # Create new order
-    /test-db                # Database connection test
-  /hledat                   # Search results page
-  /oblibene                 # Category page (favorites)
-  /pokladna                 # Checkout page
-  /potvrzeni/[orderNumber]  # Order confirmation page
-  /produkt/[slug]           # Product detail page
-  /ulozeno                  # Saved products page
-  /globals.css              # Global styles with Tailwind
-  layout.tsx                # Root layout with headers/footer
-  page.tsx                  # Homepage
-/components                 # Reusable components
-  CartDrawer.tsx            # Shopping cart slide-in drawer (Balenciaga-inspired)
-  Footer.tsx                # Site footer
-  Header1.tsx               # Main navigation header with cart drawer integration
-  Header2.tsx               # Search and user actions header
-  ProductCard.tsx           # Product grid item component
-  SavedProductsWindow.tsx   # Saved products slide-in drawer
-/lib                        # Utility functions
-  cart-store.ts             # Shopping cart state management (Zustand)
-  prisma.ts                 # Prisma client instance
-  recently-viewed-store.ts  # Recently viewed products tracking (Zustand)
-  saved-products-store.ts   # Saved products state management (Zustand)
-  zasilkovna-widget.ts      # Zásilkovna pickup point selector
-/prisma                     # Database schema
-  schema.prisma             # Complete database schema
-  seed.ts                   # Database seeding (40 products, 4 categories)
-```
+### Feature Specifications
+- **Product Catalog**: Displays products with images, sizes, and stock.
+- **Shopping Cart**: Slide-in drawer with dimmed overlay, recently viewed products, and shipping/payment benefits.
+- **Checkout Flow**: Full process from cart to order creation, including promo code application, GoPay payment integration, and Zásilkovna pickup point selection.
+- **Order Management**: Creation and confirmation pages.
+- **User Accounts**: Basic user authentication (credentials-based).
+- **Saved Products**: Functionality to save products and view them on a dedicated page.
+- **Search**: Site-wide search with filtering capabilities.
+- **Admin Features**: Customizable content for video and category sections on the homepage.
 
-## Database
-The PostgreSQL database is configured with the following models:
-- **User**: User accounts with authentication
-- **Product**: Product catalog with images, sizes, stock
-- **Category**: Product categories (VOODOO808, SPACE LOVE, etc.)
-- **Order**: Customer orders with payment and shipping info
-- **PromoCode**: Discount codes and promotions
-- **NewsletterSubscriber**: Newsletter email subscriptions
+### System Design Choices
+- **Framework**: Next.js 14 with App Router.
+- **Language**: TypeScript for type safety.
+- **Styling**: Tailwind CSS for utility-first styling, strictly adhering to the design system.
+- **Database**: PostgreSQL with Prisma ORM for data modeling and interaction.
+- **Authentication**: NextAuth.js for secure user authentication.
+- **State Management**: Zustand for client-side global state.
 
-**Commands:**
-- `npm run db:push` - Push schema changes to database
-- `npm run db:generate` - Generate Prisma client
-- `npm run db:studio` - Open Prisma Studio (database GUI)
-
-## Development
-- **Port**: 5000 (configured for Replit)
-- **Host**: 0.0.0.0 (allows Replit proxy)
-- **Run**: `npm run dev`
-
-## Recent Changes
-- **2025-11-05**: 
-  - Initial project setup with Next.js 14, TypeScript, and Tailwind CSS configured with strict black/white design system
-  - Configured development server to run on port 5000 for Replit environment
-  - Set up PostgreSQL database with Prisma ORM
-  - Created complete database schema with all models (User, Product, Category, Order, PromoCode, NewsletterSubscriber)
-  - Successfully tested database connection
-  - Created basic homepage placeholder
-
-- **2025-11-06**:
-  - Created comprehensive database seed with 40 products across 4 categories (VOODOO808, SPACE LOVE, RECREATION WELLNESS, T SHIRT GALLERY)
-  - Implemented complete checkout flow with order creation API endpoint
-  - Created order confirmation page (/potvrzeni/[orderNumber]) showing order details and payment status
-  
-- **2025-11-08**:
-  - **COMPLETE REDESIGN** to match Balenciaga's minimalist aesthetic
-  - Updated Tailwind config with new design tokens (Helvetica Neue, larger typography, 8px spacing system, neon green accent)
-  - Merged Header2 into Header1 for cleaner navigation with integrated search
-  - Enlarged all typography: 16px body (was 14px), 18px products (was 16px), 48px titles (was 24px)
-  - Changed product grid from 4 to 3 columns with generous 32px spacing
-  - Simplified all components: removed decorative borders, increased white space throughout
-  - Updated homepage with large category link boxes
-  - Redesigned all forms, buttons, and interactive elements for minimal aesthetic
-  - All functionality preserved while achieving clean, catalogue-like design
-  - Set up PostgreSQL database with full schema migration
-  - Configured NextAuth with secure secret and URL
-  - Created admin user for testing: admin@ufosport.cz / admin123
-  - Refactored NextAuth to use shared Prisma client for better connection management
-  - Verified all core functionality: homepage, headers, categories, product listings, APIs
-  - Built saved products page (/ulozeno) with grid layout matching design system
-  - Implemented search results page (/hledat) with product filtering
-  - Created SavedProductsWindow component with slide-in animation
-  - Integrated GoPay payment gateway (webhook + payment creation endpoints with mandatory target/goid)
-  - Added Zásilkovna widget integration in checkout for pickup point selection
-  - Implemented promo code functionality in checkout with automatic validation and discount calculation
-  - Fixed all TypeScript errors and code quality issues
-  - All components strictly follow black/white design system with no grays or shadows
-  - **Enhanced Balenciaga-inspired UX features**:
-    - Implemented cart slide-in drawer with 50% opacity dimmed overlay effect
-    - Added recently viewed products tracking and display in cart drawer
-    - Navigation links now have rounded rectangle hover effects (subtle gray background)
-    - Cart drawer includes payment icons, shipping benefits, and recently viewed items section
-    - Product detail pages automatically track viewed items for personalized recommendations
-  - **Header Layout Refinement** (matches Balenciaga.com):
-    - Redesigned Header1 with three-column grid layout for balanced spacing
-    - UFO SPORT logo centered in middle column
-    - Category navigation (VOODOO808, SPACE LOVE, etc.) aligned to the left
-    - Account controls (search, saved, cart) aligned to the right
-    - All icons reduced to w-4 h-4 for cleaner, more minimal appearance
-    - Header2 positioned directly below Header1 using fixed positioning (z-20)
-    - Added 88px body padding to prevent content overlap
-    - Proper z-index layering (Header1 z-30, Header2 z-20)
-
-- **2025-11-09**:
-  - **Design System Refinements**:
-    - Verified logo uses HELVETICA NEUE CONDENSED BOLD font at 22px (exactly half of 44px header height)
-    - Improved search bar animation: now slides from below header with smooth opacity transitions
-    - Header elements fade when search is active for cleaner user experience
-    - Fixed white strip below header by correcting body paddingTop to 44px and removing duplicate Header2 component from layout
-  - **Footer Typography Update**:
-    - Applied BB-Regular font across all footer elements
-    - Set font-size to 12px, letter-spacing to 0.12px, line-height to 15.6px
-    - Zeroed all margins and padding for precise typography control
-  - **SavedProductsWindow Enhancement**:
-    - Changed overlay from solid white to semi-transparent dark (bg-black bg-opacity-50)
-    - Maintains page visibility while showing saved products panel
-  - **Two-Button Category Sections** (Admin-Editable):
-    - Created `categorySectionsStore.ts` - Zustand store for category section content (persisted to localStorage)
-    - Built `EditCategorySectionModal.tsx` - Modal component for admin editing of section titles and button labels/links
-    - Modified `HomePageContent.tsx` to implement two-button pattern across all category sections
-    - All category section titles use HELVETICA NEUE CONDENSED BOLD font
-    - Admin users see edit buttons on hover to customize section content
-    - Button hover animations with text slide-up/slide-down effect
-    - Note: Current implementation uses localStorage; may need API backing for multi-user persistence
-  - **Header & UI Refinements (November 9, 2025)**:
-    - Updated search close (X) button to absolute positioning with equal spacing from right and top edges (11px top, 32px right)
-    - Added border line below search bar to visually separate it from "nejčastěji vyhledávané" section
-    - Implemented split animations for search functionality:
-      - Search bar strip slides down smoothly from below header
-      - "Nejčastěji vyhledávané" section fades in independently with 0.5s delay
-    - Applied distinct fonts to category navigation links:
-      - VOODOO808: BB-CondBold for bold, condensed look
-      - SPACE LOVE: Helvetica Neue regular for clean, modern feel
-      - RECREATION WELLNESS: Helvetica Neue normal for balanced appearance
-      - T SHIRT GALLERY: Helvetica Neue condensed Bold for strong presence
-    - Resized all header icons to exactly 22px (half of 44px header height) for perfect alignment
-    - Adjusted right margin of header icons container to 32px for consistent spacing
-    - Changed login text from "Přihlásit se" to "PŘIHLÁSIT SE" (uppercase) for design consistency
-    - Updated cart drawer title to "NÁKUPNÍ KOŠÍK" with:
-      - Font: Helvetica Neue condensed Bold
-      - Size: 15px (approximately 1/3 of header height)
-      - Alignment: Centered in cart window
-      - Removed close button to maintain clean, minimal appearance
-  - **Additional UI Polish (November 9, 2025 - Second Pass)**:
-    - Adjusted cart drawer width to exactly 1/3 of viewport width for more elegant proportions
-    - Repositioned search close (X) button to exact top-right corner (0px from both edges) with padding for adequate click target
-    - Enhanced "nejčastěji vyhledávané" animation: now fades in smoothly over 1 second AFTER search bar finishes rolling in (0.4s delay ensures sequential timing)
-
-## Completed Features
-1. ✅ Database schema and Prisma ORM setup
-2. ✅ Core layout components (Header1, Header2, Footer)
-3. ✅ Product listing and category pages
-4. ✅ Product detail pages with size selection
-5. ✅ Shopping cart with slide-in drawer
-6. ✅ Complete checkout flow with order creation
-7. ✅ Order confirmation page
-8. ✅ Saved products functionality
-9. ✅ Search functionality
-10. ✅ Promo code system
-11. ✅ GoPay payment integration
-12. ✅ Zásilkovna shipping integration
-13. ✅ Database seeding with realistic product data
-
-## Environment Variables Needed
-Set these environment variables for full functionality:
-- `NEXTAUTH_SECRET` - Random secret for NextAuth.js session encryption
-- `NEXTAUTH_URL` - Full URL of the site (e.g., https://your-domain.replit.dev)
-- `GOPAY_GOID` - GoPay merchant ID (GOID)
-- `GOPAY_CLIENT_ID` - GoPay OAuth client ID
-- `GOPAY_CLIENT_SECRET` - GoPay OAuth client secret
-- `GOPAY_ENVIRONMENT` - Set to "production" for live payments (default: sandbox)
-- `NEXT_PUBLIC_ZASILKOVNA_API_KEY` - Zásilkovna API key for pickup widget
-- `RESEND_API_KEY` - Resend API key for transactional emails
-- `CLOUDINARY_CLOUD_NAME` - Cloudinary cloud name for image storage
-- `CLOUDINARY_API_KEY` - Cloudinary API key
-- `CLOUDINARY_API_SECRET` - Cloudinary API secret
-
-## Next Steps
-1. Set up environment variables for production integrations
-2. Configure NextAuth.js authentication providers
-3. Build admin panel for product/order management
-4. Implement Resend email notifications (order confirmations, shipping updates)
-5. Set up Cloudinary for product image uploads
-6. Add user account pages (profile, order history)
-7. Implement product reviews and ratings
-8. Deploy to production and configure custom domain
+## External Dependencies
+- **Database**: PostgreSQL (via Prisma ORM)
+- **Authentication**: NextAuth.js
+- **Payment Gateway**: GoPay (Czech payment gateway)
+- **Shipping Integration**: Zásilkovna (Packeta) API for pickup point selection
+- **Email Service**: Resend API (for transactional emails)
+- **File Storage**: Cloudinary (for product images)
