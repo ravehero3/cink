@@ -173,17 +173,21 @@ export default function HomePageContent() {
         </div>
       )}
 
-      {/* Section 1: Video Section */}
+      {/* Section 1: Video Section with VOODOO808 */}
       <VideoSection 
         videoUrl={section1.videoUrl}
-        headerText={section1.headerText}
-        button1Text={section1.button1Text}
-        button2Text={section1.button2Text}
-        button1Link={section1.button1Link}
-        button2Link={section1.button2Link}
+        headerText={categorySections.voodoo808.title}
+        button1Text={categorySections.voodoo808.button1Text}
+        button2Text={categorySections.voodoo808.button2Text}
+        button1Link={categorySections.voodoo808.button1Link}
+        button2Link={categorySections.voodoo808.button2Link}
         isAdmin={isAdmin}
         onEdit={() => handleEditSection('section1')}
+        onEditCategory={() => handleEditCategorySection('voodoo808')}
         sectionId="section1"
+        showProducts={true}
+        products={categoryProducts['voodoo808'] || []}
+        isLoading={isLoading}
       />
 
       {/* Section 3: Product Showcase */}
@@ -198,20 +202,24 @@ export default function HomePageContent() {
         onEdit={() => handleEditSection('section3')}
       />
 
-      {/* Section 2: Video Section */}
+      {/* Section 2: Video Section with SPACE LOVE */}
       <VideoSection 
         videoUrl={section2.videoUrl}
-        headerText={section2.headerText}
-        button1Text={section2.button1Text}
-        button2Text={section2.button2Text}
-        button1Link={section2.button1Link}
-        button2Link={section2.button2Link}
+        headerText={categorySections.spaceLove.title}
+        button1Text={categorySections.spaceLove.button1Text}
+        button2Text={categorySections.spaceLove.button2Text}
+        button1Link={categorySections.spaceLove.button1Link}
+        button2Link={categorySections.spaceLove.button2Link}
         isAdmin={isAdmin}
         onEdit={() => handleEditSection('section2')}
+        onEditCategory={() => handleEditCategorySection('spaceLove')}
         sectionId="section2"
+        showProducts={true}
+        products={categoryProducts['space-love'] || []}
+        isLoading={isLoading}
       />
 
-      {categories.map((category) => {
+      {categories.filter(cat => cat.slug !== 'voodoo808' && cat.slug !== 'space-love').map((category) => {
         const products = categoryProducts[category.slug] || [];
         const sectionData = categorySections[category.storeKey];
         
@@ -219,11 +227,12 @@ export default function HomePageContent() {
           <section key={category.slug} className="w-full border-b border-black" style={{ minHeight: '80vh' }}>
             <div className="w-full bg-white border-b border-black py-md px-5 relative">
               <div className="max-w-container mx-auto flex flex-col items-center">
-                <h2 className="uppercase tracking-tighter mb-[8px]" style={{
-                  fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                <h2 className="uppercase mb-[8px]" style={{
+                  fontFamily: '"Helvetica Neue Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontSize: '22px',
-                  fontWeight: 700,
-                  lineHeight: '1.1'
+                  fontWeight: 400,
+                  lineHeight: '1.1',
+                  letterSpacing: '1px'
                 }}>
                   {sectionData.title}
                 </h2>
