@@ -142,7 +142,7 @@ export default function Header1() {
               width: '22px', 
               height: '22px',
               top: '50%',
-              right: '32px',
+              right: '20px',
               transform: 'translateY(-50%)',
               padding: '0'
             }}
