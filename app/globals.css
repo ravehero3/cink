@@ -1,3 +1,6 @@
+@import url(https://db.onlinewebfonts.com/c/48f1766ca457e77c058f6c1889734588?family=Utah+WGL+Condensed+W10+Bold);
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -45,7 +48,13 @@ select:focus {
   border-width: 2px;
 }
 
-h1, h5, h6 {
+h1 {
+  font-family: "Utah WGL Condensed W10 Bold", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+h5, h6 {
   font-weight: 400;
   letter-spacing: -0.01em;
 }
