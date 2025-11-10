@@ -39,7 +39,7 @@ function AnimatedButton({ text, link }: { text: string; link: string }) {
     <a
       href={link}
       className="relative overflow-hidden bg-white text-black font-normal uppercase tracking-tight transition-all border border-black text-sm"
-      style={{ borderRadius: '4px', padding: '12.8px 25.6px' }}
+      style={{ borderRadius: '4px', padding: '13.8px 25.6px' }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -176,6 +176,11 @@ export default function HomePageContent() {
       {/* Section 1: Video Section */}
       <VideoSection 
         videoUrl={section1.videoUrl}
+        headerText={section1.headerText}
+        button1Text={section1.button1Text}
+        button2Text={section1.button2Text}
+        button1Link={section1.button1Link}
+        button2Link={section1.button2Link}
         isAdmin={isAdmin}
         onEdit={() => handleEditSection('section1')}
         sectionId="section1"
@@ -196,6 +201,11 @@ export default function HomePageContent() {
       {/* Section 2: Video Section */}
       <VideoSection 
         videoUrl={section2.videoUrl}
+        headerText={section2.headerText}
+        button1Text={section2.button1Text}
+        button2Text={section2.button2Text}
+        button1Link={section2.button1Link}
+        button2Link={section2.button2Link}
         isAdmin={isAdmin}
         onEdit={() => handleEditSection('section2')}
         sectionId="section2"
@@ -211,13 +221,13 @@ export default function HomePageContent() {
               <div className="max-w-container mx-auto flex flex-col items-center">
                 <h2 className="uppercase tracking-tighter mb-2" style={{
                   fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '31px',
+                  fontSize: '22px',
                   fontWeight: 700,
                   lineHeight: '1.1'
                 }}>
                   {sectionData.title}
                 </h2>
-                <div className="flex gap-1">
+                <div className="flex gap-[5px]">
                   <AnimatedButton text={sectionData.button1Text} link={sectionData.button1Link} />
                   <AnimatedButton text={sectionData.button2Text} link={sectionData.button2Link} />
                 </div>

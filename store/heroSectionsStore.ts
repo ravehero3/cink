@@ -3,6 +3,11 @@ import { persist } from 'zustand/middleware';
 
 interface VideoSectionData {
   videoUrl: string;
+  headerText?: string;
+  button1Text?: string;
+  button2Text?: string;
+  button1Link?: string;
+  button2Link?: string;
 }
 
 interface ProductSectionData {
@@ -28,9 +33,19 @@ export const useHeroSectionsStore = create<HeroSectionsState>()(
     (set) => ({
       section1: {
         videoUrl: '',
+        headerText: '',
+        button1Text: '',
+        button2Text: '',
+        button1Link: '',
+        button2Link: '',
       },
       section2: {
         videoUrl: '',
+        headerText: '',
+        button1Text: '',
+        button2Text: '',
+        button1Link: '',
+        button2Link: '',
       },
       section3: {
         imageUrl: '',

@@ -42,19 +42,78 @@ export default function EditSectionModal({
 
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           {sectionType === 'video' ? (
-            <div>
-              <label className="block text-sm font-bold mb-2">Video URL</label>
-              <input
-                type="url"
-                value={formData.videoUrl || ''}
-                onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
-                className="w-full px-4 py-2 border-2 border-black"
-                placeholder="https://example.com/video.mp4"
-              />
-              <p className="text-xs text-gray-600 mt-1">
-                Enter the URL of your video file (MP4 format recommended)
-              </p>
-            </div>
+            <>
+              <div>
+                <label className="block text-sm font-bold mb-2">Video URL</label>
+                <input
+                  type="url"
+                  value={formData.videoUrl || ''}
+                  onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
+                  className="w-full px-4 py-2 border-2 border-black"
+                  placeholder="https://example.com/video.mp4"
+                />
+                <p className="text-xs text-gray-600 mt-1">
+                  Enter the URL of your video file (MP4 format recommended)
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold mb-2">Header Text (Optional)</label>
+                <input
+                  type="text"
+                  value={formData.headerText || ''}
+                  onChange={(e) => setFormData({ ...formData, headerText: e.target.value })}
+                  className="w-full px-4 py-2 border-2 border-black"
+                  placeholder="NOVÝ MERCH"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold mb-2">Button 1 Text (Optional)</label>
+                  <input
+                    type="text"
+                    value={formData.button1Text || ''}
+                    onChange={(e) => setFormData({ ...formData, button1Text: e.target.value })}
+                    className="w-full px-4 py-2 border-2 border-black"
+                    placeholder="Shop Now"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold mb-2">Button 1 Link (Optional)</label>
+                  <input
+                    type="text"
+                    value={formData.button1Link || ''}
+                    onChange={(e) => setFormData({ ...formData, button1Link: e.target.value })}
+                    className="w-full px-4 py-2 border-2 border-black"
+                    placeholder="/kategorie/new"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold mb-2">Button 2 Text (Optional)</label>
+                  <input
+                    type="text"
+                    value={formData.button2Text || ''}
+                    onChange={(e) => setFormData({ ...formData, button2Text: e.target.value })}
+                    className="w-full px-4 py-2 border-2 border-black"
+                    placeholder="Learn More"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold mb-2">Button 2 Link (Optional)</label>
+                  <input
+                    type="text"
+                    value={formData.button2Link || ''}
+                    onChange={(e) => setFormData({ ...formData, button2Link: e.target.value })}
+                    className="w-full px-4 py-2 border-2 border-black"
+                    placeholder="/kategorie/featured"
+                  />
+                </div>
+              </div>
+            </>
           ) : (
             <>
               <div>

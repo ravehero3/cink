@@ -45,13 +45,13 @@ export default function ProductShowcaseSection({
       <div className="absolute bottom-2 left-0 right-0 flex flex-col items-center px-4">
         <h2 className="uppercase tracking-tighter text-black mb-2" style={{
           fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-          fontSize: '31px',
+          fontSize: '22px',
           fontWeight: 700,
           lineHeight: '1.1'
         }}>
           {headerText}
         </h2>
-        <div className="flex gap-1">
+        <div className="flex gap-[5px]">
           <AnimatedButton text={button1Text} link={button1Link} />
           <AnimatedButton text={button2Text} link={button2Link} />
         </div>
@@ -78,7 +78,7 @@ function AnimatedButton({ text, link }: { text: string; link: string }) {
     <a
       href={link}
       className="relative overflow-hidden bg-white text-black font-normal uppercase tracking-tight transition-all border border-black text-sm"
-      style={{ borderRadius: '4px', padding: '12.8px 25.6px' }}
+      style={{ borderRadius: '4px', padding: '13.8px 25.6px' }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
