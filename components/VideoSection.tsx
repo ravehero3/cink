@@ -72,7 +72,7 @@ export default function VideoSection({ videoUrl, headerText, button1Text, button
               <source src={videoUrl} type="video/mp4" />
             </video>
             
-            <div className="absolute left-0 right-0 flex flex-col items-center px-4" style={{ bottom: 'calc(2px + 420px)' }}>
+            <div className="absolute bottom-2 left-0 right-0 flex flex-col items-center px-4">
               {headerText && (
                 <h2 className="uppercase text-white mb-[8px]" style={{
                   fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -116,7 +116,7 @@ export default function VideoSection({ videoUrl, headerText, button1Text, button
               <p className="text-xl">No video uploaded</p>
             </div>
             {headerText && (
-              <div className="absolute left-0 right-0 flex flex-col items-center px-4" style={{ bottom: 'calc(2px + 420px)' }}>
+              <div className="absolute bottom-2 left-0 right-0 flex flex-col items-center px-4">
                 <h2 className="uppercase text-white mb-[8px]" style={{
                   fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontSize: '22px',
