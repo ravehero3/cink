@@ -10,10 +10,10 @@ import CartDrawer from './CartDrawer';
 import Header2 from './Header2';
 
 const categories = [
-  { name: 'VOODOO808', slug: 'voodoo808', font: '"Helvetica Neue Condensed Regular", "Helvetica Neue", Helvetica, Arial, sans-serif' },
-  { name: 'SPACE LOVE', slug: 'space-love', font: '"Helvetica Neue Condensed Regular", "Helvetica Neue", Helvetica, Arial, sans-serif' },
-  { name: 'RECREATION WELLNESS', slug: 'recreation-wellness', font: '"Helvetica Neue Condensed Regular", "Helvetica Neue", Helvetica, Arial, sans-serif' },
-  { name: 'T SHIRT GALLERY', slug: 't-shirt-gallery', font: '"Helvetica Neue Condensed Regular", "Helvetica Neue", Helvetica, Arial, sans-serif' },
+  { name: 'VOODOO808', slug: 'voodoo808' },
+  { name: 'SPACE LOVE', slug: 'space-love' },
+  { name: 'RECREATION WELLNESS', slug: 'recreation-wellness' },
+  { name: 'T SHIRT GALLERY', slug: 't-shirt-gallery' },
 ];
 
 export default function Header1() {
@@ -35,16 +35,10 @@ export default function Header1() {
               <Link
                 key={category.slug}
                 href={`/kategorie/${category.slug}`}
-                className="hover:opacity-70 transition-opacity whitespace-nowrap"
+                className="hover:opacity-70 transition-opacity whitespace-nowrap uppercase tracking-tight font-normal text-sm"
                 style={{
-                  fontFamily: category.font,
-                  fontSize: '12px',
-                  lineHeight: '15.6px',
                   color: 'rgb(0, 0, 0)',
-                  textDecoration: 'none',
-                  textTransform: 'none',
-                  letterSpacing: '1.36px',
-                  wordSpacing: '0px'
+                  textDecoration: 'none'
                 }}
               >
                 {category.name}
@@ -73,16 +67,10 @@ export default function Header1() {
             <div className={`flex items-center transition-opacity duration-300 ${showSearch ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ gap: '20px' }}>
               <Link
                 href={isLoggedIn ? "/ucet" : "/prihlaseni"}
-                className="hover:opacity-70 transition-opacity whitespace-nowrap"
+                className="hover:opacity-70 transition-opacity whitespace-nowrap uppercase tracking-tight font-normal text-sm"
                 style={{
-                  fontFamily: '"Helvetica Neue Condensed Regular", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '12px',
-                  lineHeight: '15.6px',
                   color: 'rgb(0, 0, 0)',
-                  textDecoration: 'none',
-                  textTransform: 'none',
-                  letterSpacing: '1.36px',
-                  wordSpacing: '0px'
+                  textDecoration: 'none'
                 }}
               >
                 {isLoggedIn ? "Účet" : "PŘIHLÁSIT SE"}

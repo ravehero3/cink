@@ -43,11 +43,13 @@ export default function ProductShowcaseSection({
       )}
 
       <div className="absolute bottom-2 left-0 right-0 flex flex-col items-center px-4">
-        <h2 className="uppercase tracking-tighter text-black mb-[8px]" style={{
+        <h2 className="uppercase text-black mb-[8px]" style={{
           fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
           fontSize: '22px',
           fontWeight: 700,
-          lineHeight: '1.1'
+          lineHeight: '22px',
+          letterSpacing: '0.03em',
+          fontStretch: 'condensed'
         }}>
           {headerText}
         </h2>

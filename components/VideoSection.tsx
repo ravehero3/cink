@@ -72,13 +72,15 @@ export default function VideoSection({ videoUrl, headerText, button1Text, button
               <source src={videoUrl} type="video/mp4" />
             </video>
             
-            <div className="absolute bottom-2 left-0 right-0 flex flex-col items-center px-4">
+            <div className="absolute left-0 right-0 flex flex-col items-center px-4" style={{ bottom: 'calc(2px + 420px)' }}>
               {headerText && (
-                <h2 className="uppercase tracking-tighter text-white mb-[8px]" style={{
+                <h2 className="uppercase text-white mb-[8px]" style={{
                   fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontSize: '22px',
                   fontWeight: 700,
-                  lineHeight: '1.1'
+                  lineHeight: '22px',
+                  letterSpacing: '0.03em',
+                  fontStretch: 'condensed'
                 }}>
                   {headerText}
                 </h2>
@@ -110,27 +112,29 @@ export default function VideoSection({ videoUrl, headerText, button1Text, button
           </>
         ) : (
           <>
-            <div className="w-full h-full flex flex-col items-center justify-center text-white">
-              <p className="text-xl mb-8">No video uploaded</p>
-              {headerText && (
-                <div className="flex flex-col items-center">
-                  <h2 className="uppercase tracking-tighter text-white mb-[8px]" style={{
-                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '22px',
-                    fontWeight: 700,
-                    lineHeight: '1.1'
-                  }}>
-                    {headerText}
-                  </h2>
-                  {button1Text && button2Text && (
-                    <div className="flex gap-1">
-                      <AnimatedButton text={button1Text} link={button1Link || '#'} />
-                      <AnimatedButton text={button2Text} link={button2Link || '#'} />
-                    </div>
-                  )}
-                </div>
-              )}
+            <div className="w-full h-full flex items-center justify-center text-white">
+              <p className="text-xl">No video uploaded</p>
             </div>
+            {headerText && (
+              <div className="absolute left-0 right-0 flex flex-col items-center px-4" style={{ bottom: 'calc(2px + 420px)' }}>
+                <h2 className="uppercase text-white mb-[8px]" style={{
+                  fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '22px',
+                  fontWeight: 700,
+                  lineHeight: '22px',
+                  letterSpacing: '0.03em',
+                  fontStretch: 'condensed'
+                }}>
+                  {headerText}
+                </h2>
+                {button1Text && button2Text && (
+                  <div className="flex gap-1">
+                    <AnimatedButton text={button1Text} link={button1Link || '#'} />
+                    <AnimatedButton text={button2Text} link={button2Link || '#'} />
+                  </div>
+                )}
+              </div>
+            )}
           </>
         )}
 
