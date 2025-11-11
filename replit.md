@@ -3,7 +3,15 @@
 ## Overview
 A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz). The project aims to deliver a high-fashion, Balenciaga-inspired user experience with a focus on clean design, enlarged typography, and generous spacing. It supports a full e-commerce workflow from product browsing to secure payment and shipping.
 
-## Recent Changes (November 10, 2025)
+## Recent Changes (November 11, 2025)
+- **Reklamační řád Page**: Created new dedicated page at /reklamacni-rad with complete consumer rights information
+- **Footer Contact Updates**:
+  - Updated phone number to +420 775 181 107
+  - Updated email to ufosport@mail.com
+  - Updated Instagram link to https://www.instagram.com/ufosport.cz/?hl=en
+  - Updated Facebook link to https://www.facebook.com/ufosports/?locale=cs_CZ
+
+## Previous Changes (November 10, 2025)
 - **Database Setup**: PostgreSQL database provisioned and schema migrated using Prisma
 - **Test Users Created**: 
   - Admin: admin@ufosport.cz / admin123
