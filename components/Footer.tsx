@@ -55,9 +55,8 @@ export default function Footer() {
             <ul className="space-y-0" style={{ margin: '0px', padding: '0px' }}>
               <li className="text-gray-500" style={{ fontSize: '12px', lineHeight: '17.6px', letterSpacing: '0.12px', margin: '0px', padding: '0px' }}>Běloves 378</li>
               <li className="text-gray-500" style={{ fontSize: '12px', lineHeight: '17.6px', letterSpacing: '0.12px', margin: '0px', padding: '0px' }}>547 01 Náchod</li>
-              <li className="text-gray-500" style={{ fontSize: '12px', lineHeight: '17.6px', letterSpacing: '0.12px', margin: '0px', padding: '0px' }}>+420 774 292 158</li>
-              <li className="text-gray-500" style={{ fontSize: '12px', lineHeight: '17.6px', letterSpacing: '0.12px', margin: '0px', padding: '0px' }}>+420 608 111 827</li>
-              <li style={{ margin: '0px', padding: '0px' }}><a href="mailto:info@ufosport.cz" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '17.6px', letterSpacing: '0.12px' }}>info@ufosport.cz</a></li>
+              <li className="text-gray-500" style={{ fontSize: '12px', lineHeight: '17.6px', letterSpacing: '0.12px', margin: '0px', padding: '0px' }}>+420 775 181 107</li>
+              <li style={{ margin: '0px', padding: '0px' }}><a href="mailto:ufosport@mail.com" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '17.6px', letterSpacing: '0.12px' }}>ufosport@mail.com</a></li>
             </ul>
           </div>
 
@@ -74,8 +73,8 @@ export default function Footer() {
           <div style={{ paddingTop: '4px', paddingLeft: '4px', paddingRight: '16px', paddingBottom: '24px' }}>
             <h3 className="uppercase mb-3 text-gray-500" style={{ fontSize: '12px', lineHeight: '17.6px', letterSpacing: '0.12px', margin: '0px 0px 12px 0px', padding: '0px' }}>Sledujte nás</h3>
             <ul className="space-y-0" style={{ margin: '0px', padding: '0px' }}>
-              <li style={{ margin: '0px', padding: '0px' }}><a href="https://www.instagram.com/ufosport" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '17.6px', letterSpacing: '0.12px' }}>Instagram</a></li>
-              <li style={{ margin: '0px', padding: '0px' }}><a href="https://www.facebook.com/ufosport" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '17.6px', letterSpacing: '0.12px' }}>Facebook</a></li>
+              <li style={{ margin: '0px', padding: '0px' }}><a href="https://www.instagram.com/ufosport.cz/?hl=en" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '17.6px', letterSpacing: '0.12px' }}>Instagram</a></li>
+              <li style={{ margin: '0px', padding: '0px' }}><a href="https://www.facebook.com/ufosports/?locale=cs_CZ" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-black transition-colors" style={{ fontSize: '12px', lineHeight: '17.6px', letterSpacing: '0.12px' }}>Facebook</a></li>
             </ul>
           </div>
         </div>
