@@ -72,14 +72,13 @@ export default function VideoSection({ videoUrl, headerText, button1Text, button
               <source src={videoUrl} type="video/mp4" />
             </video>
             
-            <div className="absolute left-0 right-0 flex flex-col items-center px-4" style={{ bottom: '8px' }}>
+            <div className="absolute bottom-2 left-0 right-0 flex flex-col items-center px-4">
               {headerText && (
-                <h2 className="uppercase text-white mb-[8px]" style={{
-                  fontFamily: '"Helvetica Neue Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                <h2 className="uppercase tracking-tighter text-white mb-[8px]" style={{
+                  fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontSize: '22px',
-                  fontWeight: 400,
-                  lineHeight: '1.1',
-                  letterSpacing: '1px'
+                  fontWeight: 700,
+                  lineHeight: '1.1'
                 }}>
                   {headerText}
                 </h2>
@@ -115,12 +114,11 @@ export default function VideoSection({ videoUrl, headerText, button1Text, button
               <p className="text-xl mb-8">No video uploaded</p>
               {headerText && (
                 <div className="flex flex-col items-center">
-                  <h2 className="uppercase text-white mb-[8px]" style={{
-                    fontFamily: '"Helvetica Neue Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  <h2 className="uppercase tracking-tighter text-white mb-[8px]" style={{
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '22px',
-                    fontWeight: 400,
-                    lineHeight: '1.1',
-                    letterSpacing: '1px'
+                    fontWeight: 700,
+                    lineHeight: '1.1'
                   }}>
                     {headerText}
                   </h2>
