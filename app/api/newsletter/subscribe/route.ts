@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { email, civility } = body;
+    const { email } = body;
 
     if (!email) {
       return NextResponse.json(
@@ -17,13 +17,6 @@ export async function POST(request: NextRequest) {
     if (!emailRegex.test(email)) {
       return NextResponse.json(
         { error: 'Neplatný formát e-mailu' },
-        { status: 400 }
-      );
-    }
-
-    if (!civility) {
-      return NextResponse.json(
-        { error: 'Oslovení je povinné' },
         { status: 400 }
       );
     }
@@ -42,7 +35,6 @@ export async function POST(request: NextRequest) {
     const subscriber = await prisma.newsletterSubscriber.create({
       data: {
         email: email.toLowerCase(),
-        civility,
       },
     });
 

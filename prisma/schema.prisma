@@ -110,9 +110,8 @@ model PromoCode {
 }
 
 model NewsletterSubscriber {
-  id        String   @id @default(uuid())
+  id        String   @id @default(cuid())
   email     String   @unique
-  civility  String
   createdAt DateTime @default(now())
 }
 

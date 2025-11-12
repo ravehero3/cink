@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 interface NewsletterSubscriber {
   id: string;
   email: string;
-  civility: string;
   createdAt: string;
 }
 
@@ -51,30 +50,23 @@ export default function AdminNewsletterPage() {
     }
   };
 
-  const exportToCSV = () => {
-    const headers = ['Email', 'Oslovení', 'Datum registrace'];
-    const rows = subscribers.map((sub) => [
-      sub.email,
-      sub.civility,
-      new Date(sub.createdAt).toLocaleDateString('cs-CZ'),
-    ]);
-
-    const csvContent = [
-      headers.join(','),
-      ...rows.map((row) => row.join(',')),
-    ].join('\n');
-
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    const url = URL.createObjectURL(blob);
-    
-    link.setAttribute('href', url);
-    link.setAttribute('download', `newsletter-subscribers-${new Date().toISOString().split('T')[0]}.csv`);
-    link.style.visibility = 'hidden';
-    
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const handleExportCSV = async () => {
+    try {
+      const response = await fetch('/api/admin/newsletter/export');
+      if (!response.ok) throw new Error('Export failed');
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `newsletter-subscribers-${new Date().toISOString().split('T')[0]}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error('Error exporting CSV:', error);
+      alert('Nepodařilo se exportovat CSV soubor');
+    }
   };
 
   if (loading) {
@@ -87,28 +79,25 @@ export default function AdminNewsletterPage() {
         <h1 className="text-title font-bold">NEWSLETTER ODBĚRATELÉ</h1>
         {subscribers.length > 0 && (
           <button
-            onClick={exportToCSV}
+            onClick={handleExportCSV}
             className="bg-black text-white px-6 py-3 text-body uppercase hover:bg-white hover:text-black border border-black transition-colors"
           >
-            Exportovat CSV
+            Stáhnout CSV
           </button>
         )}
       </div>
 
-      {/* Statistics */}
       <div className="border border-black p-6 mb-8">
         <div className="text-body">
           <strong>Celkem odběratelů:</strong> {subscribers.length}
         </div>
       </div>
 
-      {/* Subscribers Table */}
       <div className="border border-black">
         <table className="w-full">
           <thead>
             <tr className="border-b border-black">
               <th className="text-left p-4 text-body uppercase">Email</th>
-              <th className="text-left p-4 text-body uppercase">Oslovení</th>
               <th className="text-left p-4 text-body uppercase">Datum registrace</th>
               <th className="text-left p-4 text-body uppercase">Akce</th>
             </tr>
@@ -117,7 +106,6 @@ export default function AdminNewsletterPage() {
             {subscribers.map((subscriber) => (
               <tr key={subscriber.id} className="border-b border-black last:border-b-0">
                 <td className="p-4 text-body">{subscriber.email}</td>
-                <td className="p-4 text-body uppercase">{subscriber.civility}</td>
                 <td className="p-4 text-body">
                   {new Date(subscriber.createdAt).toLocaleDateString('cs-CZ', {
                     year: 'numeric',

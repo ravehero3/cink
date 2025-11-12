@@ -1,0 +1,65 @@
+lets work on the footer. to better understand each other i will refer to the 6 grey rectangles in order from left to right naming them like this: greyrectangle1 - (the one the most left in the footer) etc..
+
+greyrectangle1: 
+ODBĚR NOVINEK
+Přihlaste se k odběru novinek
+
+greyrectangle2:
+ZÁKAZNICKÝ SERVIS
+Často kladené dotazy (https://www.balenciaga.com/en-cz/faq)
+
+Sledování objednávky (https://www.balenciaga.com/en-cz/guestorder?orderType=order)
+
+Vrácení zboží (https://www.balenciaga.com/en-cz/guestorder?orderType=return)
+
+Doručení (https://www.balenciaga.com/en-cz/faq?faqCategory=FAQDelivery)
+
+Platba (https://www.balenciaga.com/en-cz/faq?faqCategory=FAQPayments)
+
+
+greyrectangle3:
+O SPOLEČNOSTI
+Právní informace (https://www.balenciaga.com/en-cz/legal/terms-and-conditions-of-use/terms-and-conditions-use.html)
+
+Zásady ochrany osobních údajů ()
+Zásady používání souborů cookie (https://www.balenciaga.com/en-cz/legal/cookie-policy/cookie-policy.html) 
+
+Nastavení cookies (https://www.balenciaga.com/en-cz/legal/cookie-policy/cookie-policy.html)
+
+
+Greyrectangle4 SLEDUJTE NÁS
+
+Facebook (link - https://www.facebook.com/ufosports/?locale=cs_CZ) 
+
+Instagram (https://www.instagram.com/ufosport.cz/?hl=en) 
+
+Tiktok 
+
+greyrectangle5
+TEAM UFO SPORT
+Země / Region: Česká republika
+Jazyk: Čeština
+
+Greyrectangle6
+KONTAKTUJTE NÁS
+Naši poradci jsou vám k dispozici Po–Pá od 9:30 do 19:00
+
+WhatsApp: +420 775 181 107
+
+Telefon: +420 775 181 107
+
+E-mail: Napište nám
+
+————————
+Some of this footer text needs to be a clickable underlined text that will open new page, when needed.  I will give you links in brackets like this (url) that contain the information we want to be displayed in the newly created pages such as:  Přihlaste se k odběru novinek (in the footer) should be underline text that opens a window that slides from the right edge. It has the same design as the shopping cart with some differences such as:   the header of this window is white with black text and it says: PŘIHLASTE SE K ODBĚRU NAŠEHO NEWSLETTERU   20px below this header is small text saying:  
+Přihlaste se k odběru e-mailových aktualizací o nejnovějších kolekcích, kampaních a videích Ufo Sport, Voodoo808, Space Love, Recreation Wellness a T Shirt Gallery.
+ below there is a type in field which fills most of the width of this pop up window. This type in field has a little grey text above the top left corner that says Email
+E-mail*
+
+Little grey text above the top right corner of the field says: *požadovaný  then we see thy type in field where the user can input their email.   below this there is a text.  this text appears 42px below the email type in field -  
+Přihlášením níže souhlasíte s tím, že zůstanete v kontaktu se společností Ufo Sport. Vaše osobní údaje použijeme k tomu, abychom vám mohli poskytovat přizpůsobené aktualizace o našich aktivitách, produktech a službách. Další informace o našich postupech ochrany osobních údajů a vašich právech naleznete v našich zásadách ochrany osobních údajů.  „osobních údajů“ is a clickable text which leads to the Zásady ochrany osobních údajů page  42px below this text, there is a line from left to right across the width of the window and 8px below this line there is a wide button that is almost the same width as the current pop up window. This button is black with white text saying:   PŘIHLÁSIT
+
+——————— please make sure all of this works and make sure the information users input is stored into a database of users that subscribed to the newsletter. Also make sure the admin, when logged in, can access this list (and download CSV or what’s the right format name)      
+
+
+
