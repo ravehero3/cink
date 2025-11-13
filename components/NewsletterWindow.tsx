@@ -90,15 +90,15 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
           </div>
 
           <div className="flex-1 overflow-y-auto flex flex-col" style={{ paddingLeft: '8px', paddingRight: '8px' }}>
-            <div style={{ marginTop: '20px', paddingLeft: '0px', paddingRight: '0px' }}>
-              <p className="text-center" style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', letterSpacing: 'normal', marginTop: '12px', marginBottom: '0px', display: 'block', boxSizing: 'border-box' }}>
+            <div style={{ display: 'flex', alignItems: 'center', paddingLeft: '0px', paddingRight: '0px' }} className="flex-1">
+              <p className="text-center" style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', letterSpacing: 'normal', marginTop: '0px', marginBottom: '0px', display: 'block', boxSizing: 'border-box' }}>
                 Přihlaste se k odběru našeho newsletteru a získejte přístup k nejnovějším kolekcím, exkluzivním nabídkám a novinkám ze světa sportu.
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="flex-1 flex flex-col">
-              <div style={{ marginTop: '80px', marginBottom: '24px' }}>
-                <div className="flex justify-between items-center" style={{ marginBottom: '2px' }}>
+            <form onSubmit={handleSubmit} className="flex flex-col">
+              <div style={{ marginBottom: '24px' }}>
+                <div className="flex justify-between items-center" style={{ marginBottom: '4px' }}>
                   <label style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px', fontWeight: 400, lineHeight: '12px', letterSpacing: '0.12px' }}>
                     E-mail*
                   </label>
@@ -133,7 +133,7 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
                 )}
               </div>
 
-              <div style={{ marginTop: '42px', marginBottom: '42px' }}>
+              <div style={{ marginTop: '24px', marginBottom: '42px' }}>
                 <p className="text-center" style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px', fontWeight: 400, lineHeight: '12px', letterSpacing: '0.12px', color: '#4b5563' }}>
                   Odesláním tohoto formuláře souhlasíte se zpracováním vašich{' '}
                   <Link href="/ochrana-osobnich-udaju" className="underline hover:text-black">
@@ -142,8 +142,6 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
                   {' '}za účelem zasílání newsletteru.
                 </p>
               </div>
-
-              <div className="flex-1"></div>
 
               <div className="border-t border-black" style={{ marginLeft: '-8px', marginRight: '-8px', marginBottom: '8px' }}></div>
 
