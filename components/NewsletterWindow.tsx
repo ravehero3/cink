@@ -54,14 +54,16 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
   return (
     <>
       <div 
-        className="fixed inset-0 bg-white z-40"
+        className="fixed inset-0 bg-black transition-opacity duration-300 z-40"
+        style={{ opacity: isOpen ? 0.5 : 0, pointerEvents: isOpen ? 'auto' : 'none' }}
         onClick={onClose}
       />
       
       <div 
-        className={`fixed top-0 right-0 h-full bg-white border-l border-black z-50 transition-transform duration-300 w-full md:w-[400px] ${
+        className={`fixed top-0 right-0 h-full bg-white border-l border-black z-50 transition-transform duration-300 ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
+        style={{ width: 'calc(100vw / 3)' }}
       >
         <div className="h-full flex flex-col">
           <div className="bg-white border-b border-black flex items-center justify-between px-6" style={{ height: '44px' }}>
@@ -78,33 +80,34 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
             </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto px-6">
-            <div style={{ marginTop: '20px' }}>
-              <p className="text-sm mb-6">
+          <div className="flex-1 overflow-y-auto flex flex-col" style={{ paddingLeft: '8px', paddingRight: '8px' }}>
+            <div style={{ marginTop: '20px', paddingLeft: '0px', paddingRight: '0px' }}>
+              <p className="text-center" style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px', fontWeight: 400, lineHeight: '23.6px', letterSpacing: '0.12px', marginBottom: '24px' }}>
                 Přihlaste se k odběru našeho newsletteru a získejte přístup k nejnovějším kolekcím, exkluzivním nabídkám a novinkám ze světa sportu.
               </p>
             </div>
 
-            <form onSubmit={handleSubmit}>
-              <div className="mb-6">
-                <div className="flex justify-between items-center mb-2">
-                  <label className="text-sm font-medium">
+            <form onSubmit={handleSubmit} className="flex-1 flex flex-col">
+              <div style={{ marginBottom: '24px' }}>
+                <div className="flex justify-between items-center" style={{ marginBottom: '4px' }}>
+                  <label style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px', fontWeight: 400, lineHeight: '23.6px', letterSpacing: '0.12px' }}>
                     E-mail*
                   </label>
-                  <span className="text-xs text-gray-500">*požadovaný</span>
+                  <span style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px', fontWeight: 400, lineHeight: '23.6px', letterSpacing: '0.12px', color: '#6b7280' }}>*požadovaný</span>
                 </div>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full border border-black px-3 py-2 text-base"
+                  className="w-full border border-black px-3 py-2"
+                  style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px' }}
                   placeholder="vas@email.cz"
                 />
               </div>
 
               <div style={{ marginTop: '42px', marginBottom: '42px' }}>
-                <p className="text-xs text-gray-600">
+                <p className="text-center" style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px', fontWeight: 400, lineHeight: '23.6px', letterSpacing: '0.12px', color: '#4b5563' }}>
                   Odesláním tohoto formuláře souhlasíte se zpracováním vašich{' '}
                   <Link href="/ochrana-osobnich-udaju" className="underline hover:text-black">
                     osobních údajů
@@ -113,18 +116,21 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
                 </p>
               </div>
 
-              <div className="border-t border-black" style={{ marginBottom: '8px' }}></div>
+              <div className="flex-1"></div>
+
+              <div className="border-t border-black" style={{ marginLeft: '-8px', marginRight: '-8px', marginBottom: '8px' }}></div>
 
               {message && (
-                <div className={`p-3 mb-4 border ${message.type === 'success' ? 'border-green-600 bg-green-50' : 'border-red-600 bg-red-50'}`}>
-                  <p className="text-sm">{message.text}</p>
+                <div className={`p-3 border text-center ${message.type === 'success' ? 'border-green-600 bg-green-50' : 'border-red-600 bg-red-50'}`} style={{ marginBottom: '8px' }}>
+                  <p style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px', lineHeight: '23.6px' }}>{message.text}</p>
                 </div>
               )}
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-black text-white py-3 text-sm uppercase tracking-wider font-bold hover:opacity-90 transition-opacity disabled:opacity-50"
+                className="bg-black text-white uppercase tracking-wider font-bold hover:opacity-90 transition-opacity disabled:opacity-50"
+                style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px', padding: '12px', marginBottom: '8px' }}
               >
                 {loading ? 'PŘIHLAŠOVÁNÍ...' : 'PŘIHLÁSIT'}
               </button>
