@@ -54,24 +54,24 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
   return (
     <>
       <div 
-        className="fixed inset-0 bg-black transition-opacity duration-300 z-40"
+        className="fixed inset-0 bg-black transition-opacity duration-1000 z-40"
         style={{ opacity: isOpen ? 0.5 : 0, pointerEvents: isOpen ? 'auto' : 'none' }}
         onClick={onClose}
       />
       
       <div 
-        className={`fixed top-0 right-0 h-full bg-white border-l border-black z-50 transition-transform duration-300 ${
+        className={`fixed top-0 right-0 h-full bg-white border-l border-black z-50 transition-transform duration-1000 ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
         style={{ width: 'calc(100vw / 3)' }}
       >
         <div className="h-full flex flex-col">
-          <div className="bg-white border-b border-black flex items-center justify-between px-6" style={{ height: '44px' }}>
+          <div className="bg-white border-b border-black relative flex items-center justify-center px-6" style={{ height: '44px' }}>
             <h2 className="uppercase tracking-wider" style={{ fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 700, fontStretch: 'condensed' }}>PŘIHLASTE SE K ODBĚRU NAŠEHO NEWSLETTERU</h2>
             <button
               onClick={onClose}
-              className="flex items-center justify-center hover:opacity-70 transition-opacity"
-              style={{ width: '22px', height: '22px', padding: '0', border: 'none', background: 'none' }}
+              className="absolute hover:opacity-70 transition-opacity"
+              style={{ width: '22px', height: '22px', top: '50%', right: '8px', transform: 'translateY(-50%)', padding: '0', border: 'none', background: 'none' }}
               aria-label="Close"
             >
               <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -82,18 +82,18 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
 
           <div className="flex-1 overflow-y-auto flex flex-col" style={{ paddingLeft: '8px', paddingRight: '8px' }}>
             <div style={{ marginTop: '20px', paddingLeft: '0px', paddingRight: '0px' }}>
-              <p className="text-center" style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px', fontWeight: 400, lineHeight: '23.6px', letterSpacing: '0.12px', marginBottom: '24px' }}>
+              <p className="text-center" style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', letterSpacing: 'normal', marginTop: '12px', marginBottom: '0px', display: 'block', boxSizing: 'border-box' }}>
                 Přihlaste se k odběru našeho newsletteru a získejte přístup k nejnovějším kolekcím, exkluzivním nabídkám a novinkám ze světa sportu.
               </p>
             </div>
 
             <form onSubmit={handleSubmit} className="flex-1 flex flex-col">
               <div style={{ marginBottom: '24px' }}>
-                <div className="flex justify-between items-center" style={{ marginBottom: '4px' }}>
-                  <label style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px', fontWeight: 400, lineHeight: '23.6px', letterSpacing: '0.12px' }}>
+                <div className="flex justify-between items-center" style={{ marginBottom: '2px' }}>
+                  <label style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px', fontWeight: 400, lineHeight: '12px', letterSpacing: '0.12px' }}>
                     E-mail*
                   </label>
-                  <span style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px', fontWeight: 400, lineHeight: '23.6px', letterSpacing: '0.12px', color: '#6b7280' }}>*požadovaný</span>
+                  <span style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px', fontWeight: 400, lineHeight: '12px', letterSpacing: '0.12px', color: '#6b7280' }}>*požadovaný</span>
                 </div>
                 <input
                   type="email"
@@ -101,13 +101,12 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   className="w-full border border-black px-3 py-2"
-                  style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px' }}
-                  placeholder="vas@email.cz"
+                  style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px', borderRadius: '4px' }}
                 />
               </div>
 
               <div style={{ marginTop: '42px', marginBottom: '42px' }}>
-                <p className="text-center" style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px', fontWeight: 400, lineHeight: '23.6px', letterSpacing: '0.12px', color: '#4b5563' }}>
+                <p className="text-center" style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px', fontWeight: 400, lineHeight: '12px', letterSpacing: '0.12px', color: '#4b5563' }}>
                   Odesláním tohoto formuláře souhlasíte se zpracováním vašich{' '}
                   <Link href="/ochrana-osobnich-udaju" className="underline hover:text-black">
                     osobních údajů
@@ -122,7 +121,7 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
 
               {message && (
                 <div className={`p-3 border text-center ${message.type === 'success' ? 'border-green-600 bg-green-50' : 'border-red-600 bg-red-50'}`} style={{ marginBottom: '8px' }}>
-                  <p style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px', lineHeight: '23.6px' }}>{message.text}</p>
+                  <p style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px', lineHeight: '12px' }}>{message.text}</p>
                 </div>
               )}
 

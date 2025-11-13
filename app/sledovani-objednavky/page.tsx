@@ -1,10 +1,10 @@
 export default function TrackingPage() {
   return (
     <div className="container mx-auto px-4 py-12">
-      <h1 className="text-4xl font-bold mb-8 uppercase tracking-wider">SLEDOVÁNÍ OBJEDNÁVKY</h1>
+      <h1 className="text-4xl font-bold mb-8 uppercase tracking-wider text-center">SLEDOVÁNÍ OBJEDNÁVKY</h1>
       
-      <div className="max-w-2xl">
-        <p className="text-base mb-8 leading-relaxed">
+      <div className="max-w-2xl mx-auto">
+        <p style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', marginTop: '12px', marginBottom: '12px', textAlign: 'center' }}>
           Zadejte číslo vaší objednávky pro sledování stavu zásilky.
         </p>
 
@@ -36,8 +36,8 @@ export default function TrackingPage() {
           </button>
         </div>
 
-        <div className="mt-8 p-6 bg-gray-100">
-          <p className="text-sm">
+        <div className="mt-8 p-6 bg-gray-100" style={{ textAlign: 'center' }}>
+          <p style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', marginTop: '12px', marginBottom: '12px' }}>
             <strong>Tip:</strong> Číslo objednávky a sledovací číslo najdete v potvrzovacím e-mailu, který jsme vám zaslali po vytvoření objednávky.
           </p>
         </div>

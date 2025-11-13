@@ -14,19 +14,19 @@ export default function CookieSettingsPage() {
 
   return (
     <div className="container mx-auto px-4 py-12">
-      <h1 className="text-4xl font-bold mb-8 uppercase tracking-wider">NASTAVENÍ COOKIES</h1>
+      <h1 className="text-4xl font-bold mb-8 uppercase tracking-wider text-center">NASTAVENÍ COOKIES</h1>
       
-      <div className="max-w-3xl">
-        <p className="text-base mb-8 leading-relaxed">
+      <div className="max-w-3xl mx-auto">
+        <p style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', marginTop: '12px', marginBottom: '12px', textAlign: 'center' }}>
           Zde můžete upravit své preference ohledně používání cookies na našich stránkách. Vaše volba bude uložena a použita při vašich dalších návštěvách.
         </p>
 
         <div className="space-y-6 mb-8">
-          <div className="border border-black p-6">
+          <div className="border border-black p-6" style={{ textAlign: 'center' }}>
             <div className="flex items-start justify-between mb-3">
               <div className="flex-1">
                 <h3 className="text-lg font-bold mb-2 uppercase">Nezbytné cookies</h3>
-                <p className="text-base leading-relaxed">
+                <p style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', marginTop: '12px', marginBottom: '12px' }}>
                   Tyto cookies jsou nutné pro správné fungování webu a nemohou být vypnuty.
                 </p>
               </div>
@@ -39,14 +39,14 @@ export default function CookieSettingsPage() {
                 />
               </div>
             </div>
-            <p className="text-sm text-gray-600">Vždy aktivní</p>
+            <p style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', marginTop: '12px', marginBottom: '12px', color: '#4b5563' }}>Vždy aktivní</p>
           </div>
 
-          <div className="border border-black p-6">
+          <div className="border border-black p-6" style={{ textAlign: 'center' }}>
             <div className="flex items-start justify-between mb-3">
               <div className="flex-1">
                 <h3 className="text-lg font-bold mb-2 uppercase">Analytické cookies</h3>
-                <p className="text-base leading-relaxed">
+                <p style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', marginTop: '12px', marginBottom: '12px' }}>
                   Pomáhají nám pochopit, jak návštěvníci používají náš web, abychom mohli vylepšit uživatelský zážitek.
                 </p>
               </div>
@@ -61,11 +61,11 @@ export default function CookieSettingsPage() {
             </div>
           </div>
 
-          <div className="border border-black p-6">
+          <div className="border border-black p-6" style={{ textAlign: 'center' }}>
             <div className="flex items-start justify-between mb-3">
               <div className="flex-1">
                 <h3 className="text-lg font-bold mb-2 uppercase">Marketingové cookies</h3>
-                <p className="text-base leading-relaxed">
+                <p style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', marginTop: '12px', marginBottom: '12px' }}>
                   Používají se k zobrazování relevantních reklam na základě vašich zájmů.
                 </p>
               </div>
@@ -99,7 +99,7 @@ export default function CookieSettingsPage() {
           </button>
         </div>
 
-        <p className="text-sm text-gray-600 mt-6">
+        <p style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', marginTop: '12px', marginBottom: '12px', color: '#4b5563', textAlign: 'center' }} className="mt-6">
           Více informací o našem používání cookies najdete v{' '}
           <a href="/cookies" className="underline hover:text-black">
             Zásadách používání souborů cookie

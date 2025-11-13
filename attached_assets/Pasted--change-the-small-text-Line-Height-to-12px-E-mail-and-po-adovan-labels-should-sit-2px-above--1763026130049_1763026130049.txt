@@ -1,0 +1,45 @@
+ change the small text Line Height to 12px
+ "E-mail*" and "*požadovaný" labels should sit 2px above the email input field
+
+Change the position of the X to be in the same place as other X symbols in other pop up windows in this app  make the email input field to have rounded corners the same size as buttons on the main page  the input field for the email should not have any text contents in it until the user starts typing   the přihlaste se k odběřu našeho newsletteru window should visibly slide out in 1 second time  change the little text from Přihlaste se k odběru našeho newsletteru a získejte přístup k nejnovějším kolekcím, exkluzivním nabídkám a novinkám ze světa sportu.  to: Přihlaste se k odběru našeho newsletteru a získejte přístup k nejnovějším kolekcím, exkluzivním nabídkám a novinkám ze světa Voodoo808, Space Love, Recreation Wellness, T Shirt Gallery & Ufo Sport  on the ČASTO KLADENÉ DOTAZY page we need to make some design changes. I really like how the design is handled on this website - https://www.balenciaga.com/en-cz/faq they seem to be using dropdown elements to keep the design clean, yet showing more information when clicked on. Can you please design the contents of this page to be looking visually design-wise more like the balenciaga faq page? Lets keep the Czech language  make sure the text on the page často kladené dotazy has these properties:   Font Information:
+* 		Font Family: BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif
+* 		Font Size: 14px
+* 		Font Weight: 400 (Regular)
+* 		Color: rgb(0, 0, 0) (Black)
+Spacing and Layout:
+* 		Line Height: 19.6px
+* 		Letter Spacing: normal
+* 		Word Spacing: 0px
+* 		Text Align: start
+* 		Text Indent: 0px
+* 		Text Transform: none
+* 		Text Decoration: none
+* 		Padding:
+    * 		Top: 0px
+    * 		Right: 0px
+    * 		Bottom: 0px
+    * 		Left: 0px
+* 		Margin:
+    * 		Top: 12px
+    * 		Right: 0px
+    * 		Bottom: 0px
+    * 		Left: 0px
+* 		Width: 491.328px
+* 		Height: 117.609px
+* 		Display: block
+* 		Box Sizing: border-box
+  also apply these properties to these following pages (if they are not yet created, please create them and fill out a text that is in Czech and makes sense professionally. Remember the shop is Czech for Czech customers under the Czech law. If you dont know anything please search internet or copy it from somewhere) :  sledování objednávky
+Vrácení zboží
+Doručení
+Platba
+Právní informace Zásady ochrany osobních údajů Zásady používání souborů cookie
+Nastavení Cookies
+
+Also make sure the information on these pages are styled the same way and are centered
+
+  On právní informace page change the information to this: 
+Název:	Vojtěch Vojkovský, Bachelor of Arts
+Sídlo:	Třebechovice pod Orebem
+IČO:	08701032
+  
+       
