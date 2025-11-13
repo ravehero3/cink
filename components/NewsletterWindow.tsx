@@ -63,13 +63,13 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
   return (
     <>
       <div 
-        className="fixed inset-0 bg-black transition-opacity duration-1000 z-40"
+        className="fixed inset-0 bg-black transition-opacity duration-300 z-40"
         style={{ opacity: isOpen ? 0.5 : 0, pointerEvents: isOpen ? 'auto' : 'none' }}
         onClick={onClose}
       />
       
       <div 
-        className={`fixed top-0 right-0 h-full bg-white border-l border-black z-50 transition-transform duration-1000 ${
+        className={`fixed top-0 right-0 h-full bg-white border-l border-black z-50 transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
         style={{ width: 'calc(100vw / 3)' }}
@@ -97,7 +97,7 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
             </div>
 
             <form onSubmit={handleSubmit} className="flex-1 flex flex-col">
-              <div style={{ marginTop: '40px', marginBottom: '24px' }}>
+              <div style={{ marginTop: '80px', marginBottom: '24px' }}>
                 <div className="flex justify-between items-center" style={{ marginBottom: '2px' }}>
                   <label style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px', fontWeight: 400, lineHeight: '12px', letterSpacing: '0.12px' }}>
                     E-mail*
@@ -128,7 +128,7 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
                     marginTop: '4px',
                     whiteSpace: 'pre-line'
                   }}>
-                    Neplatn  Invalid email format. Please try again, example "john.smith@email.com".{'\n\n'}Neplatný formát emailu. Zkuste to znovu, pro příklad „RaveHero3@gmail.com"
+                    Invalid email format. Please try again, example "john.smith@email.com".{'\n\n'}Neplatný formát emailu. Zkuste to znovu, pro příklad „RaveHero3@gmail.com"
                   </p>
                 )}
               </div>
