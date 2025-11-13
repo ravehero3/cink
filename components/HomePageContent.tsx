@@ -221,6 +221,18 @@ export default function HomePageContent() {
         showProducts={false}
       />
 
+      {/* T SHIRT GALLERY (duplicate) */}
+      <ProductShowcaseSection
+        imageUrl={section5.imageUrl}
+        headerText={categorySections.tShirtGallery.title}
+        button1Text={categorySections.tShirtGallery.button1Text}
+        button2Text={categorySections.tShirtGallery.button2Text}
+        button1Link={categorySections.tShirtGallery.button1Link}
+        button2Link={categorySections.tShirtGallery.button2Link}
+        isAdmin={isAdmin}
+        onEdit={() => handleEditSection('section5')}
+      />
+
       {/* Section 4: Video Section with RECREATION WELLNESS */}
       <VideoSection 
         videoUrl={section4.videoUrl}

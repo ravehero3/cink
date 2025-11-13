@@ -64,14 +64,17 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
         }`}
       >
         <div className="h-full flex flex-col">
-          <div className="bg-white border-b border-black flex items-center justify-between px-6 py-4">
-            <h2 className="text-lg font-bold uppercase tracking-wider">PŘIHLASTE SE K ODBĚRU NAŠEHO NEWSLETTERU</h2>
+          <div className="bg-white border-b border-black flex items-center justify-between px-6" style={{ height: '44px' }}>
+            <h2 className="uppercase tracking-wider" style={{ fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 700, fontStretch: 'condensed' }}>PŘIHLASTE SE K ODBĚRU NAŠEHO NEWSLETTERU</h2>
             <button
               onClick={onClose}
-              className="w-10 h-10 flex items-center justify-center border border-black hover:opacity-70 transition-opacity"
+              className="flex items-center justify-center hover:opacity-70 transition-opacity"
+              style={{ width: '22px', height: '22px', padding: '0', border: 'none', background: 'none' }}
               aria-label="Close"
             >
-              ✕
+              <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M6 18L18 6M6 6l12 12" />
+              </svg>
             </button>
           </div>
 
