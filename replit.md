@@ -4,9 +4,24 @@
 A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz). The project aims to deliver a high-fashion, Balenciaga-inspired user experience with a focus on clean design, enlarged typography, and generous spacing. It supports a full e-commerce workflow from product browsing to secure payment and shipping.
 
 ## Recent Changes (November 13, 2025)
+- **Input Field Border Radius Update**:
+  - Updated all input fields and buttons from 2px to 4px border radius across the entire app
+  - Applied to login, order tracking, returns, and saved products pages
+  - Ensures consistent, slightly more rounded corners throughout the user interface
+- **Saved Products Navigation Change**:
+  - Changed saved products/wishlist from popup modal to dedicated page
+  - Heart icon in header now navigates to /ulozeno page instead of opening SavedProductsWindow modal
+  - Provides better user experience with full-page layout for managing saved items
+- **Vertical Lines Repositioning**:
+  - Repositioned vertical guide lines 40px wider on each side (from 33.33%/66.66% to calc(33.33% - 40px)/calc(66.66% + 40px))
+  - Extended vertical lines to touch header (top: 0) and reach footer (bottom: 0)
+  - Updated all footer pages to fit content within vertical lines with 8px spacing
+- **Button Standardization**:
+  - Standardized all buttons with 4px border radius (previously 2px)
+  - Consistent button height across app: padding: 13.8px 25.6px
 - **Login Page Refinements**:
   - Updated Google login button to use black G logo (currentColor for proper hover states)
-  - Verified all input fields have 2px rounded corners and 1/3 page width
+  - Updated all input fields to have 4px rounded corners and 1/3 page width
   - Confirmed labels positioned 2px above input fields
 - **Newsletter Window Updates**:
   - Moved email input field 40px lower (from marginTop 40px to 80px)
