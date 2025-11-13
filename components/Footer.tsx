@@ -32,8 +32,17 @@ export default function Footer() {
               <li style={{ margin: '0px', padding: '0px' }}>
                 <button
                   onClick={() => setIsNewsletterOpen(true)}
-                  className="text-gray-500 hover:text-black transition-colors underline"
-                  style={{ fontSize: '12px', lineHeight: '23.6px', letterSpacing: '0.12px', textAlign: 'start', background: 'none', border: 'none', cursor: 'pointer', padding: '0px' }}
+                  className="bg-white text-black border border-black hover:bg-black hover:text-white transition-colors"
+                  style={{ 
+                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '12px', 
+                    lineHeight: '23.6px', 
+                    letterSpacing: '0.12px', 
+                    cursor: 'pointer', 
+                    padding: '8px 16px',
+                    borderRadius: '2px',
+                    textTransform: 'uppercase'
+                  }}
                 >
                   Přihlaste se k odběru novinek
                 </button>
