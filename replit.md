@@ -3,7 +3,21 @@
 ## Overview
 A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz). The project aims to deliver a high-fashion, Balenciaga-inspired user experience with a focus on clean design, enlarged typography, and generous spacing. It supports a full e-commerce workflow from product browsing to secure payment and shipping.
 
-## Recent Changes (November 11, 2025)
+## Recent Changes (November 13, 2025)
+- **Login Page Refinements**:
+  - Updated Google login button to use black G logo (currentColor for proper hover states)
+  - Verified all input fields have 2px rounded corners and 1/3 page width
+  - Confirmed labels positioned 2px above input fields
+- **Newsletter Window Updates**:
+  - Moved email input field 40px lower (from marginTop 40px to 80px)
+  - Updated slide-in animation to match cart drawer (300ms duration with ease-in-out)
+  - Fixed email validation to show red border and bilingual error message
+- **Legal Page Redesign**:
+  - Redesigned právní informace page with clean, minimalist Balenciaga-inspired layout
+  - Added numbered sections for better readability
+  - Improved typography and spacing throughout
+
+## Previous Changes (November 11, 2025)
 - **Reklamační řád Page**: Created new dedicated page at /reklamacni-rad with complete consumer rights information
 - **Footer Contact Updates**:
   - Updated phone number to +420 775 181 107
@@ -11,7 +25,7 @@ A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz). T
   - Updated Instagram link to https://www.instagram.com/ufosport.cz/?hl=en
   - Updated Facebook link to https://www.facebook.com/ufosports/?locale=cs_CZ
 
-## Previous Changes (November 10, 2025)
+## Earlier Changes (November 10, 2025)
 - **Database Setup**: PostgreSQL database provisioned and schema migrated using Prisma
 - **Test Users Created**: 
   - Admin: admin@ufosport.cz / admin123
