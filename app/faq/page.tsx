@@ -1,37 +1,119 @@
+import PageFrame from '@/components/PageFrame';
+
 export default function FAQPage() {
   return (
-    <div className="container mx-auto px-4 py-12">
-      <h1 className="text-4xl font-bold mb-8 uppercase tracking-wider">ČASTO KLADENÉ DOTAZY</h1>
-      
-      <div className="max-w-3xl">
-        <div className="mb-8 border-b border-black pb-6">
-          <h2 className="text-xl font-bold mb-3 uppercase">Jak mohu objednat?</h2>
-          <p className="text-base leading-relaxed">
-            Objednávku můžete provést přímo na našem e-shopu. Stačí si vybrat produkty, vložit je do košíku a postupovat podle pokynů v procesu objednávky.
-          </p>
-        </div>
+    <PageFrame>
+      <div className="container mx-auto px-4 py-16">
+        <h1 
+          className="uppercase mb-12"
+          style={{
+            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+            fontSize: '28px',
+            fontWeight: 700,
+            letterSpacing: '0.05em'
+          }}
+        >
+          ČASTO KLADENÉ DOTAZY
+        </h1>
+        
+        <div className="max-w-3xl">
+          <div className="mb-8 border-b border-black pb-6">
+            <h2 
+              className="uppercase mb-3"
+              style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '16px',
+                fontWeight: 700,
+                letterSpacing: '0.05em'
+              }}
+            >
+              Jak mohu objednat?
+            </h2>
+            <p 
+              style={{
+                fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '14px',
+                fontWeight: 400,
+                lineHeight: '1.6'
+              }}
+            >
+              Objednávku můžete provést přímo na našem e-shopu. Stačí si vybrat produkty, vložit je do košíku a postupovat podle pokynů v procesu objednávky.
+            </p>
+          </div>
 
-        <div className="mb-8 border-b border-black pb-6">
-          <h2 className="text-xl font-bold mb-3 uppercase">Jaké máte platební metody?</h2>
-          <p className="text-base leading-relaxed">
-            Akceptujeme platby kartou, bankovním převodem a dobírkou. Více informací najdete na stránce platby.
-          </p>
-        </div>
+          <div className="mb-8 border-b border-black pb-6">
+            <h2 
+              className="uppercase mb-3"
+              style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '16px',
+                fontWeight: 700,
+                letterSpacing: '0.05em'
+              }}
+            >
+              Jaké máte platební metody?
+            </h2>
+            <p 
+              style={{
+                fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '14px',
+                fontWeight: 400,
+                lineHeight: '1.6'
+              }}
+            >
+              Akceptujeme platby kartou, bankovním převodem a dobírkou. Více informací najdete na stránce platby.
+            </p>
+          </div>
 
-        <div className="mb-8 border-b border-black pb-6">
-          <h2 className="text-xl font-bold mb-3 uppercase">Jak dlouho trvá doručení?</h2>
-          <p className="text-base leading-relaxed">
-            Standardní doba doručení je 2-5 pracovních dnů od potvrzení objednávky. Více informací najdete na stránce doručení.
-          </p>
-        </div>
+          <div className="mb-8 border-b border-black pb-6">
+            <h2 
+              className="uppercase mb-3"
+              style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '16px',
+                fontWeight: 700,
+                letterSpacing: '0.05em'
+              }}
+            >
+              Jak dlouho trvá doručení?
+            </h2>
+            <p 
+              style={{
+                fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '14px',
+                fontWeight: 400,
+                lineHeight: '1.6'
+              }}
+            >
+              Standardní doba doručení je 2-5 pracovních dnů od potvrzení objednávky. Více informací najdete na stránce doručení.
+            </p>
+          </div>
 
-        <div className="mb-8 pb-6">
-          <h2 className="text-xl font-bold mb-3 uppercase">Mohu zboží vrátit?</h2>
-          <p className="text-base leading-relaxed">
-            Ano, zboží můžete vrátit do 14 dnů od převzetí. Více informací najdete na stránce vrácení zboží.
-          </p>
+          <div className="mb-8 pb-6">
+            <h2 
+              className="uppercase mb-3"
+              style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '16px',
+                fontWeight: 700,
+                letterSpacing: '0.05em'
+              }}
+            >
+              Mohu zboží vrátit?
+            </h2>
+            <p 
+              style={{
+                fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '14px',
+                fontWeight: 400,
+                lineHeight: '1.6'
+              }}
+            >
+              Ano, zboží můžete vrátit do 14 dnů od převzetí. Více informací najdete na stránce vrácení zboží.
+            </p>
+          </div>
         </div>
       </div>
-    </div>
+    </PageFrame>
   );
 }

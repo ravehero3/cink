@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import PageFrame from '@/components/PageFrame';
 
 export default function CookieSettingsPage() {
   const [necessary, setNecessary] = useState(true);
@@ -13,100 +14,207 @@ export default function CookieSettingsPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-12">
-      <h1 className="text-4xl font-bold mb-8 uppercase tracking-wider text-center">NASTAVENÍ COOKIES</h1>
-      
-      <div className="max-w-3xl mx-auto">
-        <p style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', marginTop: '12px', marginBottom: '12px', textAlign: 'center' }}>
-          Zde můžete upravit své preference ohledně používání cookies na našich stránkách. Vaše volba bude uložena a použita při vašich dalších návštěvách.
-        </p>
-
-        <div className="space-y-6 mb-8">
-          <div className="border border-black p-6" style={{ textAlign: 'center' }}>
-            <div className="flex items-start justify-between mb-3">
-              <div className="flex-1">
-                <h3 className="text-lg font-bold mb-2 uppercase">Nezbytné cookies</h3>
-                <p style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', marginTop: '12px', marginBottom: '12px' }}>
-                  Tyto cookies jsou nutné pro správné fungování webu a nemohou být vypnuty.
-                </p>
-              </div>
-              <div className="ml-4">
-                <input
-                  type="checkbox"
-                  checked={necessary}
-                  disabled
-                  className="w-6 h-6"
-                />
-              </div>
-            </div>
-            <p style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', marginTop: '12px', marginBottom: '12px', color: '#4b5563' }}>Vždy aktivní</p>
-          </div>
-
-          <div className="border border-black p-6" style={{ textAlign: 'center' }}>
-            <div className="flex items-start justify-between mb-3">
-              <div className="flex-1">
-                <h3 className="text-lg font-bold mb-2 uppercase">Analytické cookies</h3>
-                <p style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', marginTop: '12px', marginBottom: '12px' }}>
-                  Pomáhají nám pochopit, jak návštěvníci používají náš web, abychom mohli vylepšit uživatelský zážitek.
-                </p>
-              </div>
-              <div className="ml-4">
-                <input
-                  type="checkbox"
-                  checked={analytics}
-                  onChange={(e) => setAnalytics(e.target.checked)}
-                  className="w-6 h-6"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="border border-black p-6" style={{ textAlign: 'center' }}>
-            <div className="flex items-start justify-between mb-3">
-              <div className="flex-1">
-                <h3 className="text-lg font-bold mb-2 uppercase">Marketingové cookies</h3>
-                <p style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', marginTop: '12px', marginBottom: '12px' }}>
-                  Používají se k zobrazování relevantních reklam na základě vašich zájmů.
-                </p>
-              </div>
-              <div className="ml-4">
-                <input
-                  type="checkbox"
-                  checked={marketing}
-                  onChange={(e) => setMarketing(e.target.checked)}
-                  className="w-6 h-6"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex gap-4">
-          <button
-            onClick={handleSave}
-            className="flex-1 bg-black text-white py-3 text-sm uppercase tracking-wider font-bold hover:opacity-90 transition-opacity"
-          >
-            ULOŽIT NASTAVENÍ
-          </button>
-          <button
-            onClick={() => {
-              setAnalytics(true);
-              setMarketing(true);
+    <PageFrame>
+      <div className="container mx-auto px-4 py-16">
+        <h1 
+          className="uppercase text-center mb-8"
+          style={{
+            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+            fontSize: '28px',
+            fontWeight: 700,
+            letterSpacing: '0.05em'
+          }}
+        >
+          NASTAVENÍ COOKIES
+        </h1>
+        
+        <div className="max-w-3xl mx-auto">
+          <p 
+            className="text-center mb-12"
+            style={{
+              fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '14px',
+              fontWeight: 400,
+              lineHeight: '1.6'
             }}
-            className="flex-1 border border-black text-black py-3 text-sm uppercase tracking-wider font-bold hover:bg-black hover:text-white transition-colors"
           >
-            POVOLIT VŠE
-          </button>
-        </div>
+            Zde můžete upravit své preference ohledně používání cookies na našich stránkách. Vaše volba bude uložena a použita při vašich dalších návštěvách.
+          </p>
 
-        <p style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', marginTop: '12px', marginBottom: '12px', color: '#4b5563', textAlign: 'center' }} className="mt-6">
-          Více informací o našem používání cookies najdete v{' '}
-          <a href="/cookies" className="underline hover:text-black">
-            Zásadách používání souborů cookie
-          </a>
-          .
-        </p>
+          <div className="space-y-8 mb-12">
+            <div className="border-2 border-black p-6">
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex-1 text-left">
+                  <h3 
+                    className="uppercase mb-2"
+                    style={{
+                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontSize: '14px',
+                      fontWeight: 700,
+                      letterSpacing: '0.05em'
+                    }}
+                  >
+                    Nezbytné cookies
+                  </h3>
+                  <p 
+                    style={{
+                      fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontSize: '14px',
+                      fontWeight: 400,
+                      lineHeight: '1.6'
+                    }}
+                  >
+                    Tyto cookies jsou nutné pro správné fungování webu a nemohou být vypnuty.
+                  </p>
+                </div>
+                <div className="ml-4">
+                  <input
+                    type="checkbox"
+                    checked={necessary}
+                    disabled
+                    className="w-6 h-6"
+                  />
+                </div>
+              </div>
+              <p 
+                className="text-left"
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '12px',
+                  fontWeight: 400,
+                  lineHeight: '1.6',
+                  color: '#4b5563'
+                }}
+              >
+                Vždy aktivní
+              </p>
+            </div>
+
+            <div className="border-2 border-black p-6">
+              <div className="flex items-start justify-between">
+                <div className="flex-1 text-left">
+                  <h3 
+                    className="uppercase mb-2"
+                    style={{
+                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontSize: '14px',
+                      fontWeight: 700,
+                      letterSpacing: '0.05em'
+                    }}
+                  >
+                    Analytické cookies
+                  </h3>
+                  <p 
+                    style={{
+                      fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontSize: '14px',
+                      fontWeight: 400,
+                      lineHeight: '1.6'
+                    }}
+                  >
+                    Pomáhají nám pochopit, jak návštěvníci používají náš web, abychom mohli vylepšit uživatelský zážitek.
+                  </p>
+                </div>
+                <div className="ml-4">
+                  <input
+                    type="checkbox"
+                    checked={analytics}
+                    onChange={(e) => setAnalytics(e.target.checked)}
+                    className="w-6 h-6"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="border-2 border-black p-6">
+              <div className="flex items-start justify-between">
+                <div className="flex-1 text-left">
+                  <h3 
+                    className="uppercase mb-2"
+                    style={{
+                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontSize: '14px',
+                      fontWeight: 700,
+                      letterSpacing: '0.05em'
+                    }}
+                  >
+                    Marketingové cookies
+                  </h3>
+                  <p 
+                    style={{
+                      fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontSize: '14px',
+                      fontWeight: 400,
+                      lineHeight: '1.6'
+                    }}
+                  >
+                    Používají se k zobrazování relevantních reklam na základě vašich zájmů.
+                  </p>
+                </div>
+                <div className="ml-4">
+                  <input
+                    type="checkbox"
+                    checked={marketing}
+                    onChange={(e) => setMarketing(e.target.checked)}
+                    className="w-6 h-6"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex gap-4 mb-8">
+            <button
+              onClick={handleSave}
+              className="flex-1 bg-black text-white py-4 hover:opacity-90 transition-opacity"
+              style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '14px',
+                fontWeight: 700,
+                letterSpacing: '0.05em',
+                textTransform: 'uppercase',
+                borderRadius: '2px'
+              }}
+            >
+              ULOŽIT NASTAVENÍ
+            </button>
+            <button
+              onClick={() => {
+                setAnalytics(true);
+                setMarketing(true);
+              }}
+              className="flex-1 border-2 border-black text-black py-4 hover:bg-black hover:text-white transition-colors"
+              style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '14px',
+                fontWeight: 700,
+                letterSpacing: '0.05em',
+                textTransform: 'uppercase',
+                borderRadius: '2px'
+              }}
+            >
+              POVOLIT VŠE
+            </button>
+          </div>
+
+          <p 
+            className="text-center"
+            style={{
+              fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '14px',
+              fontWeight: 400,
+              lineHeight: '1.6',
+              color: '#4b5563'
+            }}
+          >
+            Více informací o našem používání cookies najdete v{' '}
+            <a href="/cookies" className="underline hover:text-black">
+              Zásadách používání souborů cookie
+            </a>
+            .
+          </p>
+        </div>
       </div>
-    </div>
+    </PageFrame>
   );
 }

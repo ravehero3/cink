@@ -1,6 +1,8 @@
+import PageFrame from '@/components/PageFrame';
+
 export default function LegalPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <PageFrame>
       <div className="max-w-4xl mx-auto px-8 py-16">
         <h1 
           className="uppercase mb-16" 
@@ -120,6 +122,6 @@ export default function LegalPage() {
           </section>
         </div>
       </div>
-    </div>
+    </PageFrame>
   );
 }

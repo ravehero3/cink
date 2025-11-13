@@ -1,60 +1,115 @@
+import PageFrame from '@/components/PageFrame';
+import Accordion from '@/components/Accordion';
+
 export default function DeliveryPage() {
-  return (
-    <div className="container mx-auto px-4 py-12">
-      <h1 className="text-4xl font-bold mb-8 uppercase tracking-wider text-center">DORUČENÍ</h1>
-      
-      <div className="max-w-3xl mx-auto">
-        <div className="mb-8" style={{ textAlign: 'center' }}>
-          <h2 className="text-2xl font-bold mb-4 uppercase">Možnosti doručení</h2>
-          <p style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', marginTop: '12px', marginBottom: '12px' }}>
-            Nabízíme několik možností doručení vašich objednávek:
-          </p>
-        </div>
-
-        <div className="grid gap-6 mb-8">
-          <div className="border border-black p-6" style={{ textAlign: 'center' }}>
-            <h3 className="text-xl font-bold mb-3 uppercase">Zásilkovna</h3>
-            <p style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', marginTop: '12px', marginBottom: '12px' }}>
-              Doručení na vybranou výdejní místo Zásilkovny
-            </p>
-            <p style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', marginTop: '12px', marginBottom: '12px' }}>
-              <strong>Cena:</strong> 79 Kč<br />
-              <strong>Doba doručení:</strong> 1-3 pracovní dny
-            </p>
+  const deliveryFAQs = [
+    {
+      title: 'Možnosti doručení',
+      content: (
+        <div className="space-y-4">
+          <div>
+            <p className="font-bold mb-2">Zásilkovna - 79 Kč</p>
+            <p>Doručení na vybranou výdejní místo Zásilkovny v celé České republice. Široká síť výdejních míst pro maximální pohodlí.</p>
           </div>
-
-          <div className="border border-black p-6" style={{ textAlign: 'center' }}>
-            <h3 className="text-xl font-bold mb-3 uppercase">Česká pošta</h3>
-            <p style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', marginTop: '12px', marginBottom: '12px' }}>
-              Doručení poštou na adresu
-            </p>
-            <p style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', marginTop: '12px', marginBottom: '12px' }}>
-              <strong>Cena:</strong> 99 Kč<br />
-              <strong>Doba doručení:</strong> 2-5 pracovních dnů
-            </p>
+          <div>
+            <p className="font-bold mb-2">Česká pošta - 99 Kč</p>
+            <p>Doručení poštou přímo na vaši adresu. Spolehlivá a osvědčená možnost doručení.</p>
           </div>
-
-          <div className="border border-black p-6" style={{ textAlign: 'center' }}>
-            <h3 className="text-xl font-bold mb-3 uppercase">PPL</h3>
-            <p style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', marginTop: '12px', marginBottom: '12px' }}>
-              Expresní doručení kurýrem na adresu
-            </p>
-            <p style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', marginTop: '12px', marginBottom: '12px' }}>
-              <strong>Cena:</strong> 129 Kč<br />
-              <strong>Doba doručení:</strong> 1-2 pracovní dny
-            </p>
+          <div>
+            <p className="font-bold mb-2">PPL - 129 Kč</p>
+            <p>Expresní doručení kurýrem přímo na vaši adresu. Nejrychlejší možnost dopravy.</p>
           </div>
         </div>
-
-        <div className="border border-black p-6 bg-gray-50" style={{ textAlign: 'center' }}>
-          <h3 className="text-lg font-bold mb-3 uppercase">Důležité informace</h3>
-          <ul className="list-disc list-inside space-y-2" style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', marginTop: '12px', marginBottom: '12px', textAlign: 'left', display: 'inline-block' }}>
-            <li>Objednávky odeslané do 14:00 jsou zpracovány tentýž den</li>
-            <li>O odeslání zásilky vás budeme informovat e-mailem</li>
-            <li>Při převzetí zásilky zkontrolujte její neporušenost</li>
+      )
+    },
+    {
+      title: 'Doba dodání',
+      content: (
+        <div className="space-y-3">
+          <p><strong>Zásilkovna:</strong> 1-3 pracovní dny od odeslání objednávky</p>
+          <p><strong>Česká pošta:</strong> 2-5 pracovních dnů od odeslání objednávky</p>
+          <p><strong>PPL:</strong> 1-2 pracovní dny od odeslání objednávky</p>
+          <p className="mt-4">Objednávky odeslané do 14:00 jsou zpracovány a odeslány tentýž pracovní den. Objednávky po 14:00 budou zpracovány následující pracovní den.</p>
+        </div>
+      )
+    },
+    {
+      title: 'Sledování zásilky',
+      content: (
+        <div className="space-y-3">
+          <p>Po odeslání objednávky obdržíte e-mail s potvrzením a sledovacím číslem zásilky.</p>
+          <p>Pomocí sledovacího čísla můžete kontrolovat aktuální stav vaší zásilky:</p>
+          <ul className="list-disc list-inside ml-4 space-y-2 mt-3">
+            <li>Zásilkovna: Sledování přes aplikaci nebo web Zásilkovny</li>
+            <li>Česká pošta: Sledování na trackandtrace.post.cz</li>
+            <li>PPL: Sledování na webu PPL</li>
+          </ul>
+          <p className="mt-4">Také můžete sledovat stav objednávky přímo na našem webu v sekci "Sledování objednávky".</p>
+        </div>
+      )
+    },
+    {
+      title: 'Podmínky doručení',
+      content: (
+        <div className="space-y-3">
+          <p>Pro úspěšné doručení zásilky je nutné dodržet následující podmínky:</p>
+          <ul className="list-disc list-inside ml-4 space-y-2 mt-3">
+            <li>Uvádějte přesnou a kompletní doručovací adresu</li>
+            <li>Při doručení na adresu je vyžadován podpis oprávněné osoby</li>
+            <li>Zásilku je nutné převzít do 7 dnů od doručení na výdejní místo</li>
+            <li>Při převzetí zkontrolujte neporušenost obalu</li>
+            <li>V případě viditelného poškození zásilku nepřebírejte a kontaktujte nás</li>
           </ul>
         </div>
+      )
+    },
+    {
+      title: 'Co dělat při poškozené zásilce',
+      content: (
+        <div className="space-y-3">
+          <p>Pokud obdržíte poškozenou zásilku, postupujte následovně:</p>
+          <ol className="list-decimal list-inside ml-4 space-y-2 mt-3">
+            <li>Nepřebírejte viditelně poškozenou zásilku od dopravce</li>
+            <li>Pokud již byla zásilka převzata, vyfotografujte poškození obalu i obsahu</li>
+            <li>Okamžitě nás kontaktujte na e-mailu ufosport@mail.com</li>
+            <li>Uveďte číslo objednávky a přiložte fotografie poškození</li>
+            <li>Zásilku nelikvidujte, budeme potřebovat posoudit škodu</li>
+          </ol>
+          <p className="mt-4">Vyřešíme situaci co nejrychleji - buď zašleme náhradní zboží, nebo vrátíme peníze.</p>
+        </div>
+      )
+    },
+    {
+      title: 'Mezinárodní doručení',
+      content: (
+        <div className="space-y-3">
+          <p>V současné době nabízíme doručení pouze v rámci České republiky.</p>
+          <p>Mezinárodní doprava není momentálně dostupná. Pracujeme na rozšíření možností doručení do dalších zemí.</p>
+          <p className="mt-4">Pokud máte zájem o mezinárodní doručení, kontaktujte nás prosím na e-mailu ufosport@mail.com a my vás budeme informovat, jakmile tuto službu zpřístupníme.</p>
+        </div>
+      )
+    }
+  ];
+
+  return (
+    <PageFrame>
+      <div className="container mx-auto px-4 py-16">
+        <div className="max-w-4xl mx-auto">
+          <h1 
+            className="uppercase text-center mb-12"
+            style={{
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '28px',
+              fontWeight: 700,
+              letterSpacing: '0.05em'
+            }}
+          >
+            DORUČENÍ - ČASTO KLADENÉ OTÁZKY
+          </h1>
+
+          <Accordion items={deliveryFAQs} />
+        </div>
       </div>
-    </div>
+    </PageFrame>
   );
 }

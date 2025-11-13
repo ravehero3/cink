@@ -1,42 +1,182 @@
+'use client';
+
+import { useState, FormEvent } from 'react';
+import PageFrame from '@/components/PageFrame';
+
 export default function ReturnsPage() {
-  return (
-    <div className="container mx-auto px-4 py-12">
-      <h1 className="text-4xl font-bold mb-8 uppercase tracking-wider text-center">VRÁCENÍ ZBOŽÍ</h1>
+  const [email, setEmail] = useState('');
+  const [orderNumber, setOrderNumber] = useState('');
+  const [errors, setErrors] = useState<{ email?: string; orderNumber?: string }>({});
+  const [submitted, setSubmitted] = useState(false);
+
+  const validateForm = () => {
+    const newErrors: { email?: string; orderNumber?: string } = {};
+    
+    if (!email) {
+      newErrors.email = 'E-mail je povinný';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      newErrors.email = 'Neplatný formát e-mailu';
+    }
+    
+    if (!orderNumber) {
+      newErrors.orderNumber = 'Číslo objednávky je povinné';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    
+    if (validateForm()) {
+      setSubmitted(true);
+      console.log('Return request submitted:', { email, orderNumber });
       
-      <div className="max-w-3xl mx-auto">
-        <div className="mb-8" style={{ textAlign: 'center' }}>
-          <h2 className="text-2xl font-bold mb-4 uppercase">Právo na odstoupení od smlouvy</h2>
-          <p style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', marginTop: '12px', marginBottom: '12px' }}>
-            V souladu s § 1829 odst. 1 zákona č. 89/2012 Sb., občanský zákoník, máte právo odstoupit od smlouvy bez udání důvodu do 14 dnů od převzetí zboží.
+      // Reset form after 3 seconds
+      setTimeout(() => {
+        setEmail('');
+        setOrderNumber('');
+        setSubmitted(false);
+      }, 3000);
+    }
+  };
+
+  return (
+    <PageFrame>
+      <div className="container mx-auto px-4 py-16">
+        <div className="max-w-2xl mx-auto">
+          <h1 
+            className="uppercase text-center mb-8"
+            style={{
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '28px',
+              fontWeight: 700,
+              letterSpacing: '0.05em'
+            }}
+          >
+            VRÁCENÍ OBJEDNÁVKY
+          </h1>
+
+          <p 
+            className="text-center mb-12"
+            style={{
+              fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '14px',
+              fontWeight: 400,
+              lineHeight: '1.6'
+            }}
+          >
+            Bezplatné vrácení do 30 dnů. Vyplňte formulář níže pro registraci vrácení zboží.
           </p>
-        </div>
 
-        <div className="mb-8" style={{ textAlign: 'center' }}>
-          <h2 className="text-2xl font-bold mb-4 uppercase">Jak vrátit zboží?</h2>
-          <ol className="list-decimal list-inside space-y-3" style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', textAlign: 'left', display: 'inline-block' }}>
-            <li>Kontaktujte nás na e-mailu ufosport@mail.com s číslem objednávky</li>
-            <li>Zabalte zboží v originálním obalu (pokud je to možné)</li>
-            <li>Přiložte kopii faktury nebo dokladu o koupi</li>
-            <li>Zašlete zboží na adresu: Třebechovice pod Orebem</li>
-          </ol>
-        </div>
+          {submitted && (
+            <div 
+              className="mb-8 p-4 border-2 border-black bg-white text-center"
+              style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '14px',
+                fontWeight: 400
+              }}
+            >
+              Žádost o vrácení byla úspěšně odeslána. Brzy vás budeme kontaktovat.
+            </div>
+          )}
 
-        <div className="mb-8" style={{ textAlign: 'center' }}>
-          <h2 className="text-2xl font-bold mb-4 uppercase">Podmínky vrácení</h2>
-          <ul className="list-disc list-inside space-y-2" style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', textAlign: 'left', display: 'inline-block' }}>
-            <li>Zboží musí být nepoužité a v původním stavu</li>
-            <li>Zboží musí být kompletní včetně všech součástí a příslušenství</li>
-            <li>Doporučujeme použít pojištěnou zásilku</li>
-          </ul>
-        </div>
+          <form onSubmit={handleSubmit} className="border-2 border-black p-8">
+            <div className="mb-8">
+              <label 
+                className="block uppercase mb-2"
+                style={{
+                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '12px',
+                  fontWeight: 700,
+                  letterSpacing: '0.05em'
+                }}
+              >
+                E-mail *
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full border-2 border-black px-4 py-3 focus:outline-none bg-white"
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '14px',
+                  borderRadius: '2px'
+                }}
+                placeholder="vas@email.cz"
+              />
+              {errors.email && (
+                <p 
+                  className="mt-2"
+                  style={{
+                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '12px',
+                    color: '#000000'
+                  }}
+                >
+                  {errors.email}
+                </p>
+              )}
+            </div>
 
-        <div className="border border-black p-6 bg-gray-50" style={{ textAlign: 'center' }}>
-          <h3 className="text-lg font-bold mb-3 uppercase">Vrácení peněz</h3>
-          <p style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', marginTop: '12px', marginBottom: '12px' }}>
-            Peníze vám vrátíme do 14 dnů od doručení vráceného zboží na náš sklad, a to stejným způsobem, jakým jste platbu provedli.
-          </p>
+            <div className="mb-8">
+              <label 
+                className="block uppercase mb-2"
+                style={{
+                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '12px',
+                  fontWeight: 700,
+                  letterSpacing: '0.05em'
+                }}
+              >
+                Číslo objednávky *
+              </label>
+              <input
+                type="text"
+                value={orderNumber}
+                onChange={(e) => setOrderNumber(e.target.value)}
+                className="w-full border-2 border-black px-4 py-3 focus:outline-none bg-white"
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '14px',
+                  borderRadius: '2px'
+                }}
+                placeholder="ORD-123456"
+              />
+              {errors.orderNumber && (
+                <p 
+                  className="mt-2"
+                  style={{
+                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '12px',
+                    color: '#000000'
+                  }}
+                >
+                  {errors.orderNumber}
+                </p>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-black text-white py-4 hover:opacity-90 transition-opacity"
+              style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '14px',
+                fontWeight: 700,
+                letterSpacing: '0.05em',
+                textTransform: 'uppercase',
+                borderRadius: '2px'
+              }}
+            >
+              REGISTROVAT VRÁCENÍ
+            </button>
+          </form>
         </div>
       </div>
-    </div>
+    </PageFrame>
   );
 }
