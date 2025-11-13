@@ -23,7 +23,7 @@ export default function LegalPage() {
         <div className="mb-8" style={{ textAlign: 'center' }}>
           <h2 className="text-2xl font-bold mb-4 uppercase">Reklamace</h2>
           <p style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', marginTop: '12px', marginBottom: '12px' }}>
-            Reklamaci můžete uplatnit osobně na našich prodejnách, písemně na naší adrese nebo e-mailem. Více informací naleznete v reklamačním řádu.
+            Reklamaci můžete uplatnit e-mailem. Více informací naleznete v reklamačním řádu.
           </p>
         </div>
 
@@ -31,13 +31,6 @@ export default function LegalPage() {
           <h2 className="text-2xl font-bold mb-4 uppercase">Ochrana osobních údajů</h2>
           <p style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', marginTop: '12px', marginBottom: '12px' }}>
             Zpracování osobních údajů se řídí nařízením GDPR a zákonem o ochraně osobních údajů. Vaše osobní údaje používáme pouze k vyřízení objednávky a nebudou poskytnuty třetím stranám.
-          </p>
-        </div>
-
-        <div className="border border-black p-6 bg-gray-50" style={{ textAlign: 'center' }}>
-          <h3 className="text-lg font-bold mb-3 uppercase">Mimosoudní řešení sporů</h3>
-          <p style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', marginTop: '12px', marginBottom: '12px' }}>
-            V případě sporu můžete využít služeb České obchodní inspekce nebo jiných subjektů mimosoudního řešení spotřebitelských sporů.
           </p>
         </div>
       </div>

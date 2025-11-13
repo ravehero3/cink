@@ -12,6 +12,7 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [emailError, setEmailError] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,8 +22,16 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
       return;
     }
 
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setEmailError(true);
+      return;
+    }
+
     setLoading(true);
     setMessage(null);
+    setEmailError(false);
 
     try {
       const response = await fetch('/api/newsletter/subscribe', {
@@ -88,7 +97,7 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
             </div>
 
             <form onSubmit={handleSubmit} className="flex-1 flex flex-col">
-              <div style={{ marginBottom: '24px' }}>
+              <div style={{ marginTop: '40px', marginBottom: '24px' }}>
                 <div className="flex justify-between items-center" style={{ marginBottom: '2px' }}>
                   <label style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px', fontWeight: 400, lineHeight: '12px', letterSpacing: '0.12px' }}>
                     E-mail*
@@ -98,11 +107,30 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
                 <input
                   type="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setEmailError(false);
+                  }}
                   required
-                  className="w-full border border-black px-3 py-2"
-                  style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px', borderRadius: '4px' }}
+                  className="w-full px-3 py-2"
+                  style={{ 
+                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', 
+                    fontSize: '12px', 
+                    borderRadius: '4px',
+                    border: emailError ? '1px solid red' : '1px solid black'
+                  }}
                 />
+                {emailError && (
+                  <p style={{ 
+                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', 
+                    fontSize: '12px', 
+                    color: 'red',
+                    marginTop: '4px',
+                    whiteSpace: 'pre-line'
+                  }}>
+                    Neplatn  Invalid email format. Please try again, example "john.smith@email.com".{'\n\n'}Neplatný formát emailu. Zkuste to znovu, pro příklad „RaveHero3@gmail.com"
+                  </p>
+                )}
               </div>
 
               <div style={{ marginTop: '42px', marginBottom: '42px' }}>
