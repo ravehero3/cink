@@ -12,10 +12,19 @@ A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz). T
   - Moved email input field 40px lower (from marginTop 40px to 80px)
   - Updated slide-in animation to match cart drawer (300ms duration with ease-in-out)
   - Fixed email validation to show red border and bilingual error message
+  - Reverted footer newsletter button to underlined text style (instead of white button)
+  - Updated spacing: E-mail label 4px above field, description text centered, consent text 24px below field
 - **Legal Page Redesign**:
   - Redesigned právní informace page with clean, minimalist Balenciaga-inspired layout
   - Added numbered sections for better readability
   - Improved typography and spacing throughout
+- **New Reusable Components**:
+  - Created PageFrame component with vertical lines (at 1/3 and 2/3 width, from 40px below top to 50% viewport height)
+  - Created Accordion component for collapsible FAQ sections with smooth animations and chevron icons
+- **Page Redesigns**:
+  - Redesigned vrácení zboží page with Balenciaga-inspired form (email + order number fields, clean centered layout)
+  - Redesigned doručení page with collapsible accordion FAQ (6 delivery-related sections)
+  - Applied PageFrame with vertical lines to all 9 footer-linked pages for consistent design
 
 ## Previous Changes (November 11, 2025)
 - **Reklamační řád Page**: Created new dedicated page at /reklamacni-rad with complete consumer rights information
