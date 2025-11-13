@@ -110,7 +110,7 @@ export default function ReturnsPage() {
                 style={{
                   fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontSize: '14px',
-                  borderRadius: '2px'
+                  borderRadius: '4px'
                 }}
                 placeholder="vas@email.cz"
               />
@@ -148,7 +148,7 @@ export default function ReturnsPage() {
                 style={{
                   fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontSize: '14px',
-                  borderRadius: '2px'
+                  borderRadius: '4px'
                 }}
                 placeholder="ORD-123456"
               />

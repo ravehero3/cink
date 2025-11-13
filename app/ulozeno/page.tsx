@@ -152,7 +152,7 @@ export default function SavedProductsPage() {
               className="bg-white text-black border border-black text-xs uppercase px-4 py-2 hover:bg-black hover:text-white transition-colors"
               style={{
                 fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                borderRadius: '2px'
+                borderRadius: '4px'
               }}
             >
               ULOŽENÉ PRODUKTY ({products.length})
@@ -199,7 +199,7 @@ export default function SavedProductsPage() {
                 style={{
                   fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontSize: '12px',
-                  borderRadius: '2px',
+                  borderRadius: '4px',
                   letterSpacing: '0.5px'
                 }}
               >
@@ -228,7 +228,7 @@ export default function SavedProductsPage() {
                 style={{
                   fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontSize: '12px',
-                  borderRadius: '2px',
+                  borderRadius: '4px',
                   letterSpacing: '0.5px'
                 }}
               >

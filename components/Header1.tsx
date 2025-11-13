@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useCartStore } from '@/lib/cart-store';
 import { useSavedProductsStore } from '@/lib/saved-products-store';
 import { useSession } from 'next-auth/react';
-import SavedProductsWindow from './SavedProductsWindow';
 import CartDrawer from './CartDrawer';
 import Header2 from './Header2';
 
@@ -21,7 +20,6 @@ export default function Header1() {
   const cartCount = useCartStore((state) => state.getItemCount());
   const savedCount = useSavedProductsStore((state) => state.getCount());
   const isLoggedIn = !!session;
-  const [showSavedWindow, setShowSavedWindow] = useState(false);
   const [showCartDrawer, setShowCartDrawer] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
 
@@ -76,8 +74,8 @@ export default function Header1() {
                 {isLoggedIn ? "Účet" : "PŘIHLÁSIT SE"}
               </Link>
 
-              <button 
-                onClick={() => setShowSavedWindow(true)}
+              <Link 
+                href="/ulozeno"
                 className="relative hover:opacity-70 transition-opacity"
                 aria-label="Saved"
                 style={{ width: '22px', height: '22px' }}
@@ -90,7 +88,7 @@ export default function Header1() {
                     {savedCount}
                   </span>
                 )}
-              </button>
+              </Link>
 
               <button 
                 onClick={() => setShowSearch(!showSearch)}
@@ -141,10 +139,6 @@ export default function Header1() {
           </button>
         </div>
         
-        <SavedProductsWindow 
-          isOpen={showSavedWindow}
-          onClose={() => setShowSavedWindow(false)}
-        />
         <CartDrawer 
           isOpen={showCartDrawer}
           onClose={() => setShowCartDrawer(false)}

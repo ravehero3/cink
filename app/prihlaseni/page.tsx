@@ -123,7 +123,7 @@ export default function LoginPage() {
                 style={{
                   fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                   padding: '13.8px 25.6px',
-                  borderRadius: '2px',
+                  borderRadius: '4px',
                   color: '#000000'
                 }}
               />
@@ -149,7 +149,7 @@ export default function LoginPage() {
                 style={{
                   fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                   padding: '13.8px 25.6px',
-                  borderRadius: '2px',
+                  borderRadius: '4px',
                   color: '#000000'
                 }}
               />
@@ -163,7 +163,7 @@ export default function LoginPage() {
                 fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                 fontSize: '13px',
                 padding: '13.8px 25.6px',
-                borderRadius: '2px',
+                borderRadius: '4px',
                 letterSpacing: '0.05em',
                 marginBottom: '8px'
               }}
@@ -192,7 +192,7 @@ export default function LoginPage() {
               fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
               fontSize: '13px',
               padding: '13.8px 25.6px',
-              borderRadius: '2px',
+              borderRadius: '4px',
               letterSpacing: '0.05em',
               marginBottom: '8px',
               width: '33.33%'

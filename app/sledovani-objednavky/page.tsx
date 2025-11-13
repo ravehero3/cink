@@ -54,7 +54,7 @@ export default function TrackingPage() {
                 style={{
                   fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontSize: '14px',
-                  borderRadius: '2px'
+                  borderRadius: '4px'
                 }}
                 placeholder="Např. ORD-123456"
               />
@@ -78,7 +78,7 @@ export default function TrackingPage() {
                 style={{
                   fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontSize: '14px',
-                  borderRadius: '2px'
+                  borderRadius: '4px'
                 }}
                 placeholder="vas@email.cz"
               />
