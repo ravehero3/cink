@@ -15,7 +15,13 @@ export default function CookieSettingsPage() {
 
   return (
     <PageFrame>
-      <div className="container mx-auto px-4 py-16">
+      <div 
+        className="py-16"
+        style={{
+          marginLeft: 'calc(33.33% - 32px)',
+          marginRight: 'calc(33.33% - 32px)'
+        }}
+      >
         <h1 
           className="uppercase text-center mb-8"
           style={{
@@ -28,7 +34,7 @@ export default function CookieSettingsPage() {
           NASTAVENÍ COOKIES
         </h1>
         
-        <div className="max-w-3xl mx-auto">
+        <div>
           <p 
             className="text-center mb-12"
             style={{
@@ -166,14 +172,15 @@ export default function CookieSettingsPage() {
           <div className="flex gap-4 mb-8">
             <button
               onClick={handleSave}
-              className="flex-1 bg-black text-white py-4 hover:opacity-90 transition-opacity"
+              className="flex-1 bg-black text-white hover:opacity-90 transition-opacity"
               style={{
                 fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '14px',
-                fontWeight: 700,
+                fontSize: '12px',
+                fontWeight: 400,
                 letterSpacing: '0.05em',
                 textTransform: 'uppercase',
-                borderRadius: '2px'
+                borderRadius: '4px',
+                padding: '13.8px 25.6px'
               }}
             >
               ULOŽIT NASTAVENÍ
@@ -183,14 +190,15 @@ export default function CookieSettingsPage() {
                 setAnalytics(true);
                 setMarketing(true);
               }}
-              className="flex-1 border-2 border-black text-black py-4 hover:bg-black hover:text-white transition-colors"
+              className="flex-1 border-2 border-black text-black hover:bg-black hover:text-white transition-colors"
               style={{
                 fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '14px',
-                fontWeight: 700,
+                fontSize: '12px',
+                fontWeight: 400,
                 letterSpacing: '0.05em',
                 textTransform: 'uppercase',
-                borderRadius: '2px'
+                borderRadius: '4px',
+                padding: '13.8px 25.6px'
               }}
             >
               POVOLIT VŠE

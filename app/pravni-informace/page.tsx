@@ -3,7 +3,13 @@ import PageFrame from '@/components/PageFrame';
 export default function LegalPage() {
   return (
     <PageFrame>
-      <div className="max-w-4xl mx-auto px-8 py-16">
+      <div 
+        className="py-16"
+        style={{
+          marginLeft: 'calc(33.33% - 32px)',
+          marginRight: 'calc(33.33% - 32px)'
+        }}
+      >
         <h1 
           className="uppercase mb-16" 
           style={{ 

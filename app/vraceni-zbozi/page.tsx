@@ -44,8 +44,14 @@ export default function ReturnsPage() {
 
   return (
     <PageFrame>
-      <div className="container mx-auto px-4 py-16">
-        <div className="max-w-2xl mx-auto">
+      <div 
+        className="py-16"
+        style={{
+          marginLeft: 'calc(33.33% - 32px)',
+          marginRight: 'calc(33.33% - 32px)'
+        }}
+      >
+        <div>
           <h1 
             className="uppercase text-center mb-8"
             style={{
@@ -162,14 +168,15 @@ export default function ReturnsPage() {
 
             <button
               type="submit"
-              className="w-full bg-black text-white py-4 hover:opacity-90 transition-opacity"
+              className="w-full bg-black text-white hover:opacity-90 transition-opacity"
               style={{
                 fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '14px',
-                fontWeight: 700,
+                fontSize: '12px',
+                fontWeight: 400,
                 letterSpacing: '0.05em',
                 textTransform: 'uppercase',
-                borderRadius: '2px'
+                borderRadius: '4px',
+                padding: '13.8px 25.6px'
               }}
             >
               REGISTROVAT VRÁCENÍ

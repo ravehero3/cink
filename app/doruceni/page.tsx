@@ -93,8 +93,14 @@ export default function DeliveryPage() {
 
   return (
     <PageFrame>
-      <div className="container mx-auto px-4 py-16">
-        <div className="max-w-4xl mx-auto">
+      <div 
+        className="py-16"
+        style={{
+          marginLeft: 'calc(33.33% - 32px)',
+          marginRight: 'calc(33.33% - 32px)'
+        }}
+      >
+        <div>
           <h1 
             className="uppercase text-center mb-12"
             style={{

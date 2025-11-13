@@ -1,7 +1,15 @@
+import PageFrame from '@/components/PageFrame';
+
 export default function ReklamacniRadPage() {
   return (
-    <div className="min-h-screen bg-white">
-      <div className="max-w-4xl mx-auto px-4 py-12">
+    <PageFrame>
+      <div 
+        className="py-16"
+        style={{
+          marginLeft: 'calc(33.33% - 32px)',
+          marginRight: 'calc(33.33% - 32px)'
+        }}
+      >
         <h1 
           className="uppercase text-center mb-12" 
           style={{ 
@@ -92,6 +100,6 @@ export default function ReklamacniRadPage() {
           </section>
         </div>
       </div>
-    </div>
+    </PageFrame>
   );
 }

@@ -3,7 +3,13 @@ import PageFrame from '@/components/PageFrame';
 export default function PrivacyPolicyPage() {
   return (
     <PageFrame>
-      <div className="container mx-auto px-4 py-16">
+      <div 
+        className="py-16"
+        style={{
+          marginLeft: 'calc(33.33% - 32px)',
+          marginRight: 'calc(33.33% - 32px)'
+        }}
+      >
         <h1 
           className="uppercase text-center mb-8"
           style={{
@@ -16,7 +22,7 @@ export default function PrivacyPolicyPage() {
           ZÁSADY OCHRANY OSOBNÍCH ÚDAJŮ
         </h1>
         
-        <div className="max-w-3xl mx-auto">
+        <div>
           <p 
             className="text-center mb-12"
             style={{

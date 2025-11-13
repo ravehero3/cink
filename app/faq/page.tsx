@@ -3,7 +3,13 @@ import PageFrame from '@/components/PageFrame';
 export default function FAQPage() {
   return (
     <PageFrame>
-      <div className="container mx-auto px-4 py-16">
+      <div 
+        className="py-16"
+        style={{
+          marginLeft: 'calc(33.33% - 32px)',
+          marginRight: 'calc(33.33% - 32px)'
+        }}
+      >
         <h1 
           className="uppercase mb-12"
           style={{
@@ -16,7 +22,7 @@ export default function FAQPage() {
           ČASTO KLADENÉ DOTAZY
         </h1>
         
-        <div className="max-w-3xl">
+        <div>
           <div className="mb-8 border-b border-black pb-6">
             <h2 
               className="uppercase mb-3"
