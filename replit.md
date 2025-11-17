@@ -3,7 +3,17 @@
 ## Overview
 A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz). The project aims to deliver a high-fashion, Balenciaga-inspired user experience with a focus on clean design, enlarged typography, and generous spacing. It supports a full e-commerce workflow from product browsing to secure payment and shipping.
 
-## Recent Changes (November 13, 2025)
+## Recent Changes (November 17, 2025)
+- **Cloudinary Media Library Implementation**:
+  - Added complete media management system for images and videos
+  - Created Media database model with Cloudinary integration
+  - Built admin media library page (/admin/media) with upload, browse, and delete functionality
+  - Implemented MediaSelector component for easy media selection throughout the app
+  - Integrated media selector into EditSectionModal for homepage content management
+  - Added security: admin-only API access, file type validation (JPEG, PNG, WebP, GIF, MP4, WebM, MOV), 100MB size limit
+  - Created comprehensive documentation in MEDIA_LIBRARY_GUIDE.md
+
+## Previous Changes (November 13, 2025)
 - **Input Field Border Radius Update**:
   - Updated all input fields and buttons from 2px to 4px border radius across the entire app
   - Applied to login, order tracking, returns, and saved products pages
