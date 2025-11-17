@@ -64,134 +64,254 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="border-b border-black">
-        <div className="max-w-7xl mx-auto px-4 py-8">
-          <h1 className="text-title font-bold text-center uppercase">REGISTRACE</h1>
-        </div>
-      </div>
+    <div className="min-h-screen bg-white relative">
+      {/* Horizontal line at 50% */}
+      <div className="absolute top-1/2 left-0 right-0 h-px bg-black z-0" />
+      
+      {/* Left vertical line - starts after header (44px) and extends to footer1 */}
+      <div className="absolute left-1/4 w-px bg-black z-0" style={{ top: '44px', bottom: 0 }} />
+      
+      {/* Right vertical line - starts after header (44px) and extends to footer1 */}
+      <div className="absolute right-1/4 w-px bg-black z-0" style={{ top: '44px', bottom: 0 }} />
 
-      <div className="max-w-md mx-auto px-4 py-12">
-        <form onSubmit={handleSubmit} className="border border-black p-8">
+      {/* Main content above the line */}
+      <div className="relative z-10 flex flex-col items-center pt-12 pb-16">
+        <h1 
+          className="uppercase text-center" 
+          style={{ 
+            fontFamily: '"Roboto Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
+            fontSize: '20px',
+            fontWeight: 700,
+            letterSpacing: '0.05em',
+            marginBottom: '8px'
+          }}
+        >
+          Vytvořit Můj Profil
+        </h1>
+
+        <div className="w-full flex flex-col items-center">
           {error && (
-            <div className="mb-6 p-4 border border-black bg-white text-body">
+            <div className="mb-6 p-3 bg-red-50 text-red-800 text-sm border border-red-200 text-center" style={{ width: '33.33%' }}>
               {error}
             </div>
           )}
 
-          <div className="mb-6">
-            <label className="block text-body font-bold mb-2 uppercase">
-              Oslovení
-            </label>
-            <div className="space-y-2">
-              {['Mr', 'Miss', 'Mrs', 'Ms', 'Mx'].map((option) => (
-                <label key={option} className="flex items-center text-body">
-                  <input
-                    type="radio"
-                    name="civility"
-                    value={option}
-                    checked={formData.civility === option}
-                    onChange={(e) => setFormData({ ...formData, civility: e.target.value })}
-                    className="mr-2"
-                  />
-                  {option}
-                </label>
-              ))}
+          <form onSubmit={handleSubmit} className="flex flex-col items-center" style={{ width: '33.33%' }}>
+            <div className="w-full relative" style={{ marginBottom: '8px' }}>
+              <label 
+                className="block text-xs mb-[2px]"
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  color: '#000000'
+                }}
+              >
+                Oslovení
+              </label>
+              <div className="flex gap-4">
+                {['Mr', 'Miss', 'Mrs', 'Ms', 'Mx'].map((option) => (
+                  <label 
+                    key={option} 
+                    className="flex items-center text-xs"
+                    style={{
+                      fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif'
+                    }}
+                  >
+                    <input
+                      type="radio"
+                      name="civility"
+                      value={option}
+                      checked={formData.civility === option}
+                      onChange={(e) => setFormData({ ...formData, civility: e.target.value })}
+                      className="mr-1"
+                    />
+                    {option}
+                  </label>
+                ))}
+              </div>
             </div>
-          </div>
 
-          <div className="mb-6">
-            <label className="block text-body font-bold mb-2 uppercase">
-              Jméno a příjmení
-            </label>
-            <input
-              type="text"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full border border-black px-4 py-2 text-body focus:outline-none focus:ring-1 focus:ring-black"
-            />
-          </div>
-
-          <div className="mb-6">
-            <label className="block text-body font-bold mb-2 uppercase">
-              E-mail *
-            </label>
-            <input
-              type="email"
-              required
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full border border-black px-4 py-2 text-body focus:outline-none focus:ring-1 focus:ring-black"
-            />
-          </div>
-
-          <div className="mb-6">
-            <label className="block text-body font-bold mb-2 uppercase">
-              Telefon
-            </label>
-            <input
-              type="tel"
-              value={formData.phone}
-              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              className="w-full border border-black px-4 py-2 text-body focus:outline-none focus:ring-1 focus:ring-black"
-            />
-          </div>
-
-          <div className="mb-6">
-            <label className="block text-body font-bold mb-2 uppercase">
-              Heslo *
-            </label>
-            <input
-              type="password"
-              required
-              value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              className="w-full border border-black px-4 py-2 text-body focus:outline-none focus:ring-1 focus:ring-black"
-            />
-          </div>
-
-          <div className="mb-6">
-            <label className="block text-body font-bold mb-2 uppercase">
-              Potvrzení hesla *
-            </label>
-            <input
-              type="password"
-              required
-              value={formData.confirmPassword}
-              onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-              className="w-full border border-black px-4 py-2 text-body focus:outline-none focus:ring-1 focus:ring-black"
-            />
-          </div>
-
-          <div className="mb-8">
-            <label className="flex items-start text-body">
+            <div className="w-full relative" style={{ marginBottom: '8px' }}>
+              <label 
+                className="block text-xs mb-[2px]"
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  color: '#000000'
+                }}
+              >
+                Jméno a příjmení
+              </label>
               <input
-                type="checkbox"
-                checked={formData.newsletterSubscribed}
-                onChange={(e) => setFormData({ ...formData, newsletterSubscribed: e.target.checked })}
-                className="mr-2 mt-1"
+                type="text"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                placeholder="Jméno a příjmení"
+                className="w-full border border-black text-sm focus:outline-none focus:border-black bg-white"
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  padding: '13.8px 25.6px',
+                  borderRadius: '4px',
+                  color: '#000000'
+                }}
               />
-              <span>Přihlásit se k odběru newsletteru</span>
-            </label>
-          </div>
+            </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-black text-white py-3 text-body uppercase border border-black hover:bg-white hover:text-black transition-colors disabled:bg-white disabled:text-black"
-          >
-            {loading ? 'NAČÍTÁNÍ...' : 'REGISTROVAT SE'}
-          </button>
+            <div className="w-full relative" style={{ marginBottom: '8px' }}>
+              <label 
+                className="block text-xs mb-[2px]"
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  color: '#000000'
+                }}
+              >
+                E-mail *
+              </label>
+              <input
+                type="email"
+                required
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                placeholder="E-mail"
+                className="w-full border border-black text-sm focus:outline-none focus:border-black bg-white"
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  padding: '13.8px 25.6px',
+                  borderRadius: '4px',
+                  color: '#000000'
+                }}
+              />
+            </div>
 
-          <div className="mt-6 text-center">
-            <p className="text-body">
-              Již máte účet?{' '}
-              <Link href="/prihlaseni" className="underline hover:no-underline">
-                Přihlásit se
-              </Link>
-            </p>
+            <div className="w-full relative" style={{ marginBottom: '8px' }}>
+              <label 
+                className="block text-xs mb-[2px]"
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  color: '#000000'
+                }}
+              >
+                Telefon
+              </label>
+              <input
+                type="tel"
+                value={formData.phone}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                placeholder="Telefon"
+                className="w-full border border-black text-sm focus:outline-none focus:border-black bg-white"
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  padding: '13.8px 25.6px',
+                  borderRadius: '4px',
+                  color: '#000000'
+                }}
+              />
+            </div>
+
+            <div className="w-full relative" style={{ marginBottom: '8px' }}>
+              <label 
+                className="block text-xs mb-[2px]"
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  color: '#000000'
+                }}
+              >
+                Heslo *
+              </label>
+              <input
+                type="password"
+                required
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                placeholder="Heslo"
+                className="w-full border border-black text-sm focus:outline-none focus:border-black bg-white"
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  padding: '13.8px 25.6px',
+                  borderRadius: '4px',
+                  color: '#000000'
+                }}
+              />
+            </div>
+
+            <div className="w-full relative" style={{ marginBottom: '8px' }}>
+              <label 
+                className="block text-xs mb-[2px]"
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  color: '#000000'
+                }}
+              >
+                Potvrzení hesla *
+              </label>
+              <input
+                type="password"
+                required
+                value={formData.confirmPassword}
+                onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                placeholder="Potvrzení hesla"
+                className="w-full border border-black text-sm focus:outline-none focus:border-black bg-white"
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  padding: '13.8px 25.6px',
+                  borderRadius: '4px',
+                  color: '#000000'
+                }}
+              />
+            </div>
+
+            <div className="w-full relative" style={{ marginBottom: '8px' }}>
+              <label 
+                className="flex items-center text-xs"
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif'
+                }}
+              >
+                <input
+                  type="checkbox"
+                  checked={formData.newsletterSubscribed}
+                  onChange={(e) => setFormData({ ...formData, newsletterSubscribed: e.target.checked })}
+                  className="mr-2"
+                />
+                <span>Přihlásit se k odběru newsletteru</span>
+              </label>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-black text-white uppercase hover:bg-gray-800 transition-colors disabled:bg-gray-400"
+              style={{
+                fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '13px',
+                padding: '13.8px 25.6px',
+                borderRadius: '4px',
+                letterSpacing: '0.05em',
+                marginBottom: '8px'
+              }}
+            >
+              {loading ? 'NAČÍTÁNÍ...' : 'REGISTROVAT SE'}
+            </button>
+          </form>
+
+          <div className="flex gap-4 items-center">
+            <span 
+              className="text-xs"
+              style={{
+                fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif'
+              }}
+            >
+              Již máte účet?
+            </span>
+            <Link
+              href="/prihlaseni"
+              className="text-sm underline hover:no-underline"
+              style={{
+                fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif'
+              }}
+            >
+              Přihlásit se
+            </Link>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

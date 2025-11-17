@@ -1,74 +1,80 @@
-import PageFrame from '@/components/PageFrame';
-
 export default function CookiesPage() {
   return (
-    <PageFrame>
-      <div 
-        className="py-16"
-        style={{
-          marginLeft: 'calc(33.33% - 32px)',
-          marginRight: 'calc(33.33% - 32px)'
-        }}
-      >
+    <div className="min-h-screen bg-white relative">
+      {/* Horizontal line at 50% */}
+      <div className="absolute top-1/2 left-0 right-0 h-px bg-black z-0" />
+      
+      {/* Left vertical line - starts after header (44px) and extends to footer1 */}
+      <div className="absolute left-1/4 w-px bg-black z-0" style={{ top: '44px', bottom: 0 }} />
+      
+      {/* Right vertical line - starts after header (44px) and extends to footer1 */}
+      <div className="absolute right-1/4 w-px bg-black z-0" style={{ top: '44px', bottom: 0 }} />
+
+      {/* Main content above the line */}
+      <div className="relative z-10 flex flex-col items-center pt-12 pb-16">
         <h1 
-          className="uppercase text-center mb-8"
-          style={{
-            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-            fontSize: '28px',
+          className="uppercase text-center" 
+          style={{ 
+            fontFamily: '"Roboto Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
+            fontSize: '20px',
             fontWeight: 700,
-            letterSpacing: '0.05em'
+            letterSpacing: '0.05em',
+            marginBottom: '24px'
           }}
         >
           ZÁSADY POUŽÍVÁNÍ SOUBORŮ COOKIE
         </h1>
-        
-        <div>
-          <div className="mb-12">
-            <h2 
-              className="uppercase mb-4"
-              style={{
-                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '20px',
-                fontWeight: 700,
-                letterSpacing: '0.05em'
-              }}
-            >
-              Co jsou cookies?
-            </h2>
-            <p 
-              style={{
-                fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '14px',
-                fontWeight: 400,
-                lineHeight: '1.6'
-              }}
-            >
-              Cookies jsou malé textové soubory, které se ukládají do vašeho zařízení při návštěvě webových stránek. Slouží k zajištění správné funkce webu a zlepšení uživatelského zážitku.
-            </p>
-          </div>
 
-          <div className="mb-12">
-            <h2 
-              className="uppercase mb-4"
-              style={{
-                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '20px',
-                fontWeight: 700,
-                letterSpacing: '0.05em'
-              }}
-            >
-              Jaké cookies používáme?
-            </h2>
-            
-            <div className="space-y-8">
-              <div className="border-l-4 border-black pl-6">
+        <div className="w-full flex flex-col items-center">
+          <div style={{ width: '33.33%' }}>
+            <div style={{ marginBottom: '24px' }}>
+              <h2 
+                className="uppercase"
+                style={{
+                  fontFamily: '"Roboto Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '16px',
+                  fontWeight: 700,
+                  letterSpacing: '0.05em',
+                  marginBottom: '8px'
+                }}
+              >
+                Co jsou cookies?
+              </h2>
+              <p 
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '14px',
+                  fontWeight: 400,
+                  lineHeight: '1.6'
+                }}
+              >
+                Cookies jsou malé textové soubory, které se ukládají do vašeho zařízení při návštěvě webových stránek. Slouží k zajištění správné funkce webu a zlepšení uživatelského zážitku.
+              </p>
+            </div>
+
+            <div style={{ marginBottom: '24px' }}>
+              <h2 
+                className="uppercase"
+                style={{
+                  fontFamily: '"Roboto Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '16px',
+                  fontWeight: 700,
+                  letterSpacing: '0.05em',
+                  marginBottom: '8px'
+                }}
+              >
+                Jaké cookies používáme?
+              </h2>
+              
+              <div style={{ marginBottom: '16px' }}>
                 <h3 
-                  className="uppercase mb-2"
+                  className="uppercase"
                   style={{
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
+                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '13px',
                     fontWeight: 700,
-                    letterSpacing: '0.05em'
+                    letterSpacing: '0.05em',
+                    marginBottom: '4px'
                   }}
                 >
                   Nezbytné cookies
@@ -85,14 +91,15 @@ export default function CookiesPage() {
                 </p>
               </div>
 
-              <div className="border-l-4 border-black pl-6">
+              <div style={{ marginBottom: '16px' }}>
                 <h3 
-                  className="uppercase mb-2"
+                  className="uppercase"
                   style={{
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
+                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '13px',
                     fontWeight: 700,
-                    letterSpacing: '0.05em'
+                    letterSpacing: '0.05em',
+                    marginBottom: '4px'
                   }}
                 >
                   Analytické cookies
@@ -109,14 +116,15 @@ export default function CookiesPage() {
                 </p>
               </div>
 
-              <div className="border-l-4 border-black pl-6">
+              <div style={{ marginBottom: '16px' }}>
                 <h3 
-                  className="uppercase mb-2"
+                  className="uppercase"
                   style={{
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
+                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '13px',
                     fontWeight: 700,
-                    letterSpacing: '0.05em'
+                    letterSpacing: '0.05em',
+                    marginBottom: '4px'
                   }}
                 >
                   Marketingové cookies
@@ -133,57 +141,61 @@ export default function CookiesPage() {
                 </p>
               </div>
             </div>
-          </div>
 
-          <div className="mb-12">
-            <h2 
-              className="uppercase mb-4"
-              style={{
-                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '20px',
-                fontWeight: 700,
-                letterSpacing: '0.05em'
-              }}
-            >
-              Jak spravovat cookies?
-            </h2>
-            <p 
-              style={{
-                fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '14px',
-                fontWeight: 400,
-                lineHeight: '1.6'
-              }}
-            >
-              Svůj souhlas s používáním cookies můžete kdykoli změnit v nastavení cookies. Cookies můžete také zakázat v nastavení vašeho prohlížeče.
-            </p>
-          </div>
+            <div style={{ marginBottom: '24px' }}>
+              <h2 
+                className="uppercase"
+                style={{
+                  fontFamily: '"Roboto Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '16px',
+                  fontWeight: 700,
+                  letterSpacing: '0.05em',
+                  marginBottom: '8px'
+                }}
+              >
+                Jak spravovat cookies?
+              </h2>
+              <p 
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '14px',
+                  fontWeight: 400,
+                  lineHeight: '1.6'
+                }}
+              >
+                Svůj souhlas s používáním cookies můžete kdykoli změnit v nastavení cookies. Cookies můžete také zakázat v nastavení vašeho prohlížeče.
+              </p>
+            </div>
 
-          <div className="border-2 border-black p-6 bg-white">
-            <h3 
-              className="uppercase mb-3 text-center"
-              style={{
-                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '14px',
-                fontWeight: 700,
-                letterSpacing: '0.05em'
-              }}
+            <div 
+              className="border border-black p-6 bg-white"
+              style={{ borderRadius: '4px' }}
             >
-              Odmítnutí cookies
-            </h3>
-            <p 
-              style={{
-                fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '14px',
-                fontWeight: 400,
-                lineHeight: '1.6'
-              }}
-            >
-              Pokud odmítnete cookies, některé funkce webu nemusí fungovat správně. Nezbytné cookies budou použity vždy, protože jsou nutné pro základní fungování webu.
-            </p>
+              <h3 
+                className="uppercase mb-3 text-center"
+                style={{
+                  fontFamily: '"Roboto Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '13px',
+                  fontWeight: 700,
+                  letterSpacing: '0.05em'
+                }}
+              >
+                Odmítnutí cookies
+              </h3>
+              <p 
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '14px',
+                  fontWeight: 400,
+                  lineHeight: '1.6'
+                }}
+              >
+                Pokud odmítnete cookies, některé funkce webu nemusí fungovat správně. Nezbytné cookies budou použity vždy, protože jsou nutné pro základní fungování webu.
+              </p>
+            </div>
           </div>
         </div>
       </div>
-    </PageFrame>
+    </div>
   );
 }
