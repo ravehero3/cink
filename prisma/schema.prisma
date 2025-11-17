@@ -130,3 +130,28 @@ model Settings {
   termsAndConditions  String?  @db.Text
   updatedAt           DateTime @updatedAt
 }
+
+model Media {
+  id            String      @id @default(uuid())
+  filename      String
+  originalName  String
+  url           String
+  publicId      String
+  resourceType  MediaType
+  format        String?
+  size          Int
+  width         Int?
+  height        Int?
+  duration      Float?
+  tags          String[]    @default([])
+  category      String?
+  description   String?     @db.Text
+  isActive      Boolean     @default(true)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+}
