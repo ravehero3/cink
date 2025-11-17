@@ -170,14 +170,6 @@ export default function HomePageContent() {
   return (
     <div className="w-full">
       <VideoPromo videoUrl={videoUrl} />
-      
-      {isAdmin && (
-        <div className="w-full bg-gray-100 border-b border-black p-sm text-center">
-          <button className="text-xs uppercase hover:underline">
-            Edit Video
-          </button>
-        </div>
-      )}
 
       {/* Section 1: Video Section with VOODOO808 */}
       <VideoSection 

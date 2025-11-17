@@ -9,7 +9,7 @@ export default function Footer() {
 
   return (
     <>
-      <footer style={{ backgroundColor: '#aaaaad' }} className="w-full">
+      <footer style={{ backgroundColor: '#aaaaad' }} className="w-full relative z-0">
         <div 
           className="w-full grid grid-cols-6 divide-x divide-black border-t border-black"
           style={{

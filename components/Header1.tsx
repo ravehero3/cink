@@ -74,6 +74,19 @@ export default function Header1() {
                 {isLoggedIn ? "Účet" : "PŘIHLÁSIT SE"}
               </Link>
 
+              {session?.user?.role === 'ADMIN' && (
+                <Link
+                  href="/admin"
+                  className="hover:opacity-70 transition-opacity whitespace-nowrap uppercase tracking-tight font-normal text-sm"
+                  style={{
+                    color: 'rgb(0, 0, 0)',
+                    textDecoration: 'none'
+                  }}
+                >
+                  SPRÁVCE ESHOPU
+                </Link>
+              )}
+
               <Link 
                 href="/ulozeno"
                 className="relative hover:opacity-70 transition-opacity"

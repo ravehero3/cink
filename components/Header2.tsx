@@ -139,13 +139,13 @@ export default function Header2({ isOpen, onClose }: Header2Props) {
               <div className="flex items-center justify-center" style={{ marginBottom: '8px' }}>
                 <h3 
                   style={{
-                    fontSize: '12px',
+                    fontSize: '22px',
                     fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontWeight: 700,
                     lineHeight: '16px',
                     textTransform: 'uppercase',
                     color: 'rgb(0, 0, 0)',
-                    letterSpacing: 'normal',
+                    letterSpacing: '0.03em',
                     wordSpacing: '0px',
                     padding: '0px 16px 0px 44px',
                     margin: '0px',

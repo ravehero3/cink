@@ -63,7 +63,7 @@ export default function ProductShowcaseSection({
         <div className="absolute top-4 right-4">
           <button
             onClick={onEdit}
-            className="px-4 py-2 bg-white text-black text-xs uppercase hover:bg-black hover:text-white transition-colors border border-black"
+            className="px-2 py-1 bg-white text-black text-xs uppercase hover:bg-black hover:text-white transition-colors border border-black"
           >
             Edit Section
           </button>

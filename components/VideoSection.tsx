@@ -142,14 +142,14 @@ export default function VideoSection({ videoUrl, headerText, button1Text, button
           <div className="absolute top-4 right-4 flex gap-2">
             <button
               onClick={onEdit}
-              className="px-4 py-2 bg-white text-black text-xs uppercase hover:bg-black hover:text-white transition-colors border border-white"
+              className="px-2 py-1 bg-white text-black text-xs uppercase hover:bg-black hover:text-white transition-colors border border-white"
             >
               Edit Video
             </button>
             {onEditCategory && (
               <button
                 onClick={onEditCategory}
-                className="px-4 py-2 bg-white text-black text-xs uppercase hover:bg-black hover:text-white transition-colors border border-white"
+                className="px-2 py-1 bg-white text-black text-xs uppercase hover:bg-black hover:text-white transition-colors border border-white"
               >
                 Edit Section
               </button>
