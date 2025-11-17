@@ -4,6 +4,12 @@ import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcrypt";
 import { prisma } from "@/lib/prisma";
 
+const getBaseUrl = () => {
+  if (process.env.NEXTAUTH_URL) return process.env.NEXTAUTH_URL;
+  if (process.env.REPLIT_DEV_DOMAIN) return `https://${process.env.REPLIT_DEV_DOMAIN}`;
+  return 'http://localhost:5000';
+};
+
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
