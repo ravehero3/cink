@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { X } from 'lucide-react';
+import { X, Image as ImageIcon } from 'lucide-react';
+import MediaSelector from './MediaSelector';
 
 interface EditSectionModalProps {
   isOpen: boolean;
@@ -19,6 +20,7 @@ export default function EditSectionModal({
   onSave
 }: EditSectionModalProps) {
   const [formData, setFormData] = useState(currentData);
+  const [showMediaSelector, setShowMediaSelector] = useState(false);
 
   if (!isOpen) return null;
 
@@ -45,15 +47,25 @@ export default function EditSectionModal({
             <>
               <div>
                 <label className="block text-sm font-bold mb-2">Video URL</label>
-                <input
-                  type="url"
-                  value={formData.videoUrl || ''}
-                  onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
-                  className="w-full px-4 py-2 border-2 border-black"
-                  placeholder="https://example.com/video.mp4"
-                />
+                <div className="flex gap-2">
+                  <input
+                    type="url"
+                    value={formData.videoUrl || ''}
+                    onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
+                    className="flex-1 px-4 py-2 border-2 border-black"
+                    placeholder="https://example.com/video.mp4"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowMediaSelector(true)}
+                    className="px-4 py-2 bg-black text-white hover:bg-gray-800 flex items-center gap-2 whitespace-nowrap"
+                  >
+                    <ImageIcon size={16} />
+                    Select from Library
+                  </button>
+                </div>
                 <p className="text-xs text-gray-600 mt-1">
-                  Enter the URL of your video file (MP4 format recommended)
+                  Enter a URL or select from your uploaded media
                 </p>
               </div>
 
@@ -118,13 +130,26 @@ export default function EditSectionModal({
             <>
               <div>
                 <label className="block text-sm font-bold mb-2">Product Image URL</label>
-                <input
-                  type="url"
-                  value={formData.imageUrl || ''}
-                  onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-                  className="w-full px-4 py-2 border-2 border-black"
-                  placeholder="https://example.com/image.jpg"
-                />
+                <div className="flex gap-2">
+                  <input
+                    type="url"
+                    value={formData.imageUrl || ''}
+                    onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
+                    className="flex-1 px-4 py-2 border-2 border-black"
+                    placeholder="https://example.com/image.jpg"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowMediaSelector(true)}
+                    className="px-4 py-2 bg-black text-white hover:bg-gray-800 flex items-center gap-2 whitespace-nowrap"
+                  >
+                    <ImageIcon size={16} />
+                    Select from Library
+                  </button>
+                </div>
+                <p className="text-xs text-gray-600 mt-1">
+                  Enter a URL or select from your uploaded media
+                </p>
               </div>
 
               <div>
@@ -203,6 +228,20 @@ export default function EditSectionModal({
           </div>
         </form>
       </div>
+
+      {showMediaSelector && (
+        <MediaSelector
+          type={sectionType === 'video' ? 'VIDEO' : 'IMAGE'}
+          onSelect={(media: any) => {
+            if (sectionType === 'video') {
+              setFormData({ ...formData, videoUrl: media.url });
+            } else {
+              setFormData({ ...formData, imageUrl: media.url });
+            }
+          }}
+          onClose={() => setShowMediaSelector(false)}
+        />
+      )}
     </div>
   );
 }
