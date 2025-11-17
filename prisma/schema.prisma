@@ -71,6 +71,7 @@ model Order {
   shippingMethod  String        @default("zasilkovna")
   zasilkovnaId    String?
   zasilkovnaName  String?
+  packetaPacketId String?
   trackingNumber  String?
   status          OrderStatus   @default(PENDING)
   invoiceUrl      String?
