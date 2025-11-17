@@ -3,6 +3,11 @@
 ## Overview
 A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz). The project aims to deliver a high-fashion, Balenciaga-inspired user experience with a focus on clean design, enlarged typography, and generous spacing. It supports a full e-commerce workflow from product browsing to secure payment and shipping.
 
+## Admin Access
+**Email:** admin@ufosport.cz  
+**Password:** admin123  
+This admin user is permanently stored in the PostgreSQL database and persists across deployments.
+
 ## Recent Changes (November 17, 2025)
 - **Cloudinary Media Library Implementation**:
   - Added complete media management system for images and videos
