@@ -56,27 +56,28 @@ model Category {
 }
 
 model Order {
-  id              String        @id @default(uuid())
-  orderNumber     String        @unique
-  userId          String?
-  user            User?         @relation(fields: [userId], references: [id])
-  customerEmail   String
-  customerName    String
-  customerPhone   String
-  items           Json
-  totalPrice      Decimal       @db.Decimal(10, 2)
-  paymentId       String?
-  paymentStatus   PaymentStatus @default(PENDING)
-  gopayData       Json?
-  shippingMethod  String        @default("zasilkovna")
-  zasilkovnaId    String?
-  zasilkovnaName  String?
-  packetaPacketId String?
-  trackingNumber  String?
-  status          OrderStatus   @default(PENDING)
-  invoiceUrl      String?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  id                String        @id @default(uuid())
+  orderNumber       String        @unique
+  userId            String?
+  user              User?         @relation(fields: [userId], references: [id])
+  customerEmail     String
+  customerName      String
+  customerPhone     String
+  items             Json
+  totalPrice        Decimal       @db.Decimal(10, 2)
+  paymentId         String?
+  paymentStatus     PaymentStatus @default(PENDING)
+  gopayData         Json?
+  shippingMethod    String        @default("zasilkovna")
+  zasilkovnaId      String?
+  zasilkovnaName    String?
+  packetaPacketId   String?
+  packetaError      String?       @db.Text
+  trackingNumber    String?
+  status            OrderStatus   @default(PENDING)
+  invoiceUrl        String?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
 }
 
 enum PaymentStatus {

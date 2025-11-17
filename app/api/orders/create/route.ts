@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { prisma } from '@/lib/prisma';
+import { createPacketaClient, PacketaAPIError } from '@/lib/packeta-api';
 
 async function generateOrderNumber(): Promise<string> {
   const now = new Date();
@@ -116,11 +117,66 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    let packetaPacketId: string | null = null;
+
+    if (shippingMethod === 'zasilkovna' && zasilkovnaId) {
+      try {
+        const packetaClient = createPacketaClient();
+        
+        const totalWeight = items.reduce((sum: number, item: any) => {
+          return sum + (item.quantity * 0.5);
+        }, 0);
+
+        const packet = await packetaClient.createPacket({
+          number: orderNumber,
+          name: customerName,
+          surname: '',
+          email: customerEmail,
+          phone: customerPhone,
+          addressId: zasilkovnaId,
+          value: Number(totalPrice),
+          weight: Math.max(totalWeight, 0.5),
+          eshop: 'UFOSport',
+        });
+
+        packetaPacketId = packet.id;
+
+        await prisma.order.update({
+          where: { id: order.id },
+          data: {
+            packetaPacketId: packet.id,
+            trackingNumber: packet.barcode,
+            packetaError: null,
+          },
+        });
+
+        console.log(`Created Packeta packet ${packet.id} for order ${orderNumber}`);
+      } catch (error) {
+        console.error('Failed to create Packeta packet:', error);
+        
+        let errorMessage = 'Unknown error';
+        if (error instanceof PacketaAPIError) {
+          errorMessage = error.message;
+          console.error('Packeta API Error details:', error.detail);
+        } else if (error instanceof Error) {
+          errorMessage = error.message;
+        }
+
+        await prisma.order.update({
+          where: { id: order.id },
+          data: {
+            packetaError: errorMessage,
+          },
+        });
+      }
+    }
+
     return NextResponse.json(
       {
         success: true,
         orderId: order.id,
         orderNumber: order.orderNumber,
+        packetaPacketId,
         message: 'Objednávka byla úspěšně vytvořena',
       },
       { status: 201 }

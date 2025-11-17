@@ -25,6 +25,8 @@ interface Order {
   shippingMethod: string;
   zasilkovnaId: string | null;
   zasilkovnaName: string | null;
+  packetaPacketId: string | null;
+  packetaError: string | null;
   trackingNumber: string | null;
   invoiceUrl: string | null;
   createdAt: string;
@@ -104,6 +106,31 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
     }
   };
 
+  const retryPacketaCreation = async () => {
+    if (!confirm('Zkusit znovu vytvořit zásilku v Zásilkovně?')) return;
+
+    setLoading(true);
+    try {
+      const response = await fetch(`/api/admin/orders/${params.id}/create-packet`, {
+        method: 'POST',
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert('Zásilka byla úspěšně vytvořena v Zásilkovně!');
+        fetchOrder();
+      } else {
+        alert(`Nepodařilo se vytvořit zásilku: ${data.error}`);
+      }
+    } catch (error) {
+      console.error('Failed to create Packeta packet:', error);
+      alert('Došlo k chybě při vytváření zásilky');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (loading) {
     return <div className="text-body">Načítání objednávky...</div>;
   }
@@ -148,8 +175,44 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
                   <div><strong>Název pobočky:</strong> {order.zasilkovnaName}</div>
                 </>
               )}
+              {order.packetaPacketId && (
+                <div className="mt-2 p-2 bg-green-50 border border-green-300">
+                  <strong>Packeta Packet ID:</strong> {order.packetaPacketId}
+                  <div className="text-small mt-1">
+                    ✓ Zásilka vytvořena v systému Zásilkovny
+                  </div>
+                </div>
+              )}
+              {order.packetaError && !order.packetaPacketId && order.shippingMethod === 'zasilkovna' && (
+                <div className="mt-2 p-3 bg-red-50 border border-red-300">
+                  <strong className="text-red-700">Chyba při vytváření zásilky:</strong>
+                  <div className="text-small mt-1 text-red-600">{order.packetaError}</div>
+                  <button
+                    onClick={retryPacketaCreation}
+                    className="mt-2 px-4 py-2 bg-red-600 text-white text-small uppercase hover:bg-red-700"
+                    disabled={loading}
+                  >
+                    {loading ? 'Zkouším...' : 'Zkusit znovu'}
+                  </button>
+                </div>
+              )}
+              {!order.packetaPacketId && !order.packetaError && order.shippingMethod === 'zasilkovna' && order.zasilkovnaId && (
+                <div className="mt-2 p-3 bg-yellow-50 border border-yellow-300">
+                  <strong className="text-yellow-700">Zásilka nebyla vytvořena</strong>
+                  <div className="text-small mt-1 text-yellow-600">
+                    Zásilka v systému Zásilkovny zatím nebyla vytvořena
+                  </div>
+                  <button
+                    onClick={retryPacketaCreation}
+                    className="mt-2 px-4 py-2 bg-yellow-600 text-white text-small uppercase hover:bg-yellow-700"
+                    disabled={loading}
+                  >
+                    {loading ? 'Vytvářím...' : 'Vytvořit zásilku'}
+                  </button>
+                </div>
+              )}
               <div className="mt-4">
-                <label className="block mb-2"><strong>Číslo zásilky:</strong></label>
+                <label className="block mb-2"><strong>Číslo zásilky (Tracking):</strong></label>
                 <div className="flex gap-2">
                   <input
                     type="text"
@@ -165,6 +228,11 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
                     Uložit
                   </button>
                 </div>
+                {order.packetaPacketId && !trackingNumber && (
+                  <div className="text-small mt-1 text-gray-600">
+                    Číslo zásilky bylo automaticky vytvořeno v Zásilkovně
+                  </div>
+                )}
               </div>
             </div>
           </div>
