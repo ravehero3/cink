@@ -195,6 +195,9 @@ export default function CookiesPage() {
             </div>
           </div>
         </div>
+
+        {/* Horizontal line 40px below the rectangle box */}
+        <div className="w-full h-px bg-black" style={{ marginTop: '40px' }} />
       </div>
     </div>
   );

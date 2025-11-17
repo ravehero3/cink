@@ -1,4 +1,3 @@
-import PageFrame from '@/components/PageFrame';
 import Accordion from '@/components/Accordion';
 
 export default function DeliveryPage() {
@@ -92,30 +91,34 @@ export default function DeliveryPage() {
   ];
 
   return (
-    <PageFrame>
-      <div 
-        className="py-16"
-        style={{
-          marginLeft: 'calc(33.33% - 32px)',
-          marginRight: 'calc(33.33% - 32px)'
-        }}
-      >
-        <div>
-          <h1 
-            className="uppercase text-center mb-12"
-            style={{
-              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-              fontSize: '28px',
-              fontWeight: 700,
-              letterSpacing: '0.05em'
-            }}
-          >
-            DORUČENÍ - ČASTO KLADENÉ OTÁZKY
-          </h1>
+    <div className="min-h-screen bg-white relative">
+      {/* Horizontal line at 50% */}
+      <div className="absolute top-1/2 left-0 right-0 h-px bg-black z-0" />
+      
+      {/* Left vertical line - starts after header (44px) and extends to footer */}
+      <div className="absolute left-1/4 w-px bg-black z-0" style={{ top: '44px', bottom: 0 }} />
+      
+      {/* Right vertical line - starts after header (44px) and extends to footer */}
+      <div className="absolute right-1/4 w-px bg-black z-0" style={{ top: '44px', bottom: 0 }} />
 
+      {/* Main content */}
+      <div className="relative z-10 flex flex-col items-center pt-12">
+        <h1 
+          className="uppercase text-center mb-12"
+          style={{
+            fontFamily: '"Roboto Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
+            fontSize: '20px',
+            fontWeight: 700,
+            letterSpacing: '0.05em'
+          }}
+        >
+          DORUČENÍ - ČASTO KLADENÉ OTÁZKY
+        </h1>
+
+        <div style={{ width: '33.33%' }}>
           <Accordion items={deliveryFAQs} />
         </div>
       </div>
-    </PageFrame>
+    </div>
   );
 }

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, FormEvent } from 'react';
-import PageFrame from '@/components/PageFrame';
 
 export default function ReturnsPage() {
   const [email, setEmail] = useState('');
@@ -43,61 +42,64 @@ export default function ReturnsPage() {
   };
 
   return (
-    <PageFrame>
-      <div 
-        className="py-16"
-        style={{
-          marginLeft: 'calc(33.33% - 32px)',
-          marginRight: 'calc(33.33% - 32px)'
-        }}
-      >
-        <div>
-          <h1 
-            className="uppercase text-center mb-8"
-            style={{
-              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-              fontSize: '28px',
-              fontWeight: 700,
-              letterSpacing: '0.05em'
-            }}
-          >
-            VRÁCENÍ OBJEDNÁVKY
-          </h1>
+    <div className="min-h-screen bg-white relative">
+      {/* Horizontal line at 50% */}
+      <div className="absolute top-1/2 left-0 right-0 h-px bg-black z-0" />
+      
+      {/* Left vertical line - starts after header (44px) and extends to footer1 */}
+      <div className="absolute left-1/4 w-px bg-black z-0" style={{ top: '44px', bottom: 0 }} />
+      
+      {/* Right vertical line - starts after header (44px) and extends to footer1 */}
+      <div className="absolute right-1/4 w-px bg-black z-0" style={{ top: '44px', bottom: 0 }} />
 
-          <p 
-            className="text-center mb-12"
-            style={{
-              fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-              fontSize: '14px',
-              fontWeight: 400,
-              lineHeight: '1.6'
-            }}
-          >
-            Bezplatné vrácení do 30 dnů. Vyplňte formulář níže pro registraci vrácení zboží.
-          </p>
+      {/* Main content above the line */}
+      <div className="relative z-10 flex flex-col items-center pt-12">
+        <h1 
+          className="uppercase text-center" 
+          style={{ 
+            fontFamily: '"Roboto Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
+            fontSize: '20px',
+            fontWeight: 700,
+            letterSpacing: '0.05em',
+            marginBottom: '8px'
+          }}
+        >
+          VRÁCENÍ OBJEDNÁVKY
+        </h1>
 
+        <p 
+          className="text-center mb-8"
+          style={{
+            fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+            fontSize: '14px',
+            fontWeight: 400,
+            lineHeight: '1.6',
+            width: '33.33%'
+          }}
+        >
+          Bezplatné vrácení do 30 dnů. Vyplňte formulář níže pro registraci vrácení zboží.
+        </p>
+
+        <div className="w-full flex flex-col items-center">
           {submitted && (
             <div 
-              className="mb-8 p-4 border-2 border-black bg-white text-center"
+              className="mb-6 p-3 bg-green-50 text-green-800 text-sm border border-green-200 text-center"
               style={{
-                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '14px',
-                fontWeight: 400
+                fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                width: '33.33%'
               }}
             >
               Žádost o vrácení byla úspěšně odeslána. Brzy vás budeme kontaktovat.
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="border-2 border-black p-8">
-            <div className="mb-8">
+          <form onSubmit={handleSubmit} className="flex flex-col items-center" style={{ width: '33.33%' }}>
+            <div className="w-full relative" style={{ marginBottom: '8px' }}>
               <label 
-                className="block uppercase mb-2"
+                className="block text-xs mb-[2px]"
                 style={{
-                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  letterSpacing: '0.05em'
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  color: '#000000'
                 }}
               >
                 E-mail *
@@ -106,21 +108,22 @@ export default function ReturnsPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full border-2 border-black px-4 py-3 focus:outline-none bg-white"
+                className="w-full border border-black text-sm focus:outline-none focus:border-black bg-white"
                 style={{
                   fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '14px',
-                  borderRadius: '4px'
+                  padding: '13.8px 25.6px',
+                  borderRadius: '4px',
+                  color: '#000000',
+                  fontSize: '14px'
                 }}
                 placeholder="vas@email.cz"
               />
               {errors.email && (
                 <p 
-                  className="mt-2"
+                  className="mt-2 text-xs"
                   style={{
                     fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '12px',
-                    color: '#000000'
+                    color: '#dc2626'
                   }}
                 >
                   {errors.email}
@@ -128,14 +131,12 @@ export default function ReturnsPage() {
               )}
             </div>
 
-            <div className="mb-8">
+            <div className="w-full relative" style={{ marginBottom: '8px' }}>
               <label 
-                className="block uppercase mb-2"
+                className="block text-xs mb-[2px]"
                 style={{
-                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  letterSpacing: '0.05em'
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  color: '#000000'
                 }}
               >
                 Číslo objednávky *
@@ -144,21 +145,22 @@ export default function ReturnsPage() {
                 type="text"
                 value={orderNumber}
                 onChange={(e) => setOrderNumber(e.target.value)}
-                className="w-full border-2 border-black px-4 py-3 focus:outline-none bg-white"
+                className="w-full border border-black text-sm focus:outline-none focus:border-black bg-white"
                 style={{
                   fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '14px',
-                  borderRadius: '4px'
+                  padding: '13.8px 25.6px',
+                  borderRadius: '4px',
+                  color: '#000000',
+                  fontSize: '14px'
                 }}
                 placeholder="ORD-123456"
               />
               {errors.orderNumber && (
                 <p 
-                  className="mt-2"
+                  className="mt-2 text-xs"
                   style={{
                     fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '12px',
-                    color: '#000000'
+                    color: '#dc2626'
                   }}
                 >
                   {errors.orderNumber}
@@ -168,15 +170,14 @@ export default function ReturnsPage() {
 
             <button
               type="submit"
-              className="w-full bg-black text-white hover:opacity-90 transition-opacity"
+              className="w-full bg-black text-white uppercase hover:bg-gray-800 transition-colors"
               style={{
-                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '12px',
-                fontWeight: 400,
-                letterSpacing: '0.05em',
-                textTransform: 'uppercase',
+                fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '13px',
+                padding: '13.8px 25.6px',
                 borderRadius: '4px',
-                padding: '13.8px 25.6px'
+                letterSpacing: '0.05em',
+                marginBottom: '8px'
               }}
             >
               REGISTROVAT VRÁCENÍ
@@ -184,6 +185,6 @@ export default function ReturnsPage() {
           </form>
         </div>
       </div>
-    </PageFrame>
+    </div>
   );
 }

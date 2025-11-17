@@ -311,6 +311,9 @@ export default function RegisterPage() {
               Přihlásit se
             </Link>
           </div>
+
+          {/* Horizontal line 40px below "Již máte účet?" text */}
+          <div className="w-screen relative h-px bg-black" style={{ marginTop: '40px', marginLeft: 'calc(-50vw + 50%)' }} />
         </div>
       </div>
     </div>

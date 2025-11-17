@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import PageFrame from '@/components/PageFrame';
 
 export default function CookieSettingsPage() {
   const [necessary, setNecessary] = useState(true);
@@ -14,27 +13,32 @@ export default function CookieSettingsPage() {
   };
 
   return (
-    <PageFrame>
-      <div 
-        className="py-16"
-        style={{
-          marginLeft: 'calc(33.33% - 32px)',
-          marginRight: 'calc(33.33% - 32px)'
-        }}
-      >
+    <div className="min-h-screen bg-white relative">
+      {/* Horizontal line at 50% */}
+      <div className="absolute top-1/2 left-0 right-0 h-px bg-black z-0" />
+      
+      {/* Left vertical line - starts after header (44px) and extends to footer1 */}
+      <div className="absolute left-1/4 w-px bg-black z-0" style={{ top: '44px', bottom: 0 }} />
+      
+      {/* Right vertical line - starts after header (44px) and extends to footer1 */}
+      <div className="absolute right-1/4 w-px bg-black z-0" style={{ top: '44px', bottom: 0 }} />
+
+      {/* Main content */}
+      <div className="relative z-10 flex flex-col items-center pt-12">
         <h1 
-          className="uppercase text-center mb-8"
+          className="uppercase text-center"
           style={{
-            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-            fontSize: '28px',
+            fontFamily: '"Roboto Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
+            fontSize: '20px',
             fontWeight: 700,
-            letterSpacing: '0.05em'
+            letterSpacing: '0.05em',
+            marginBottom: '8px'
           }}
         >
           NASTAVENÍ COOKIES
         </h1>
         
-        <div>
+        <div style={{ width: '33.33%' }}>
           <p 
             className="text-center mb-12"
             style={{
@@ -54,7 +58,7 @@ export default function CookieSettingsPage() {
                   <h3 
                     className="uppercase mb-2"
                     style={{
-                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontFamily: '"Roboto Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
                       fontSize: '14px',
                       fontWeight: 700,
                       letterSpacing: '0.05em'
@@ -102,7 +106,7 @@ export default function CookieSettingsPage() {
                   <h3 
                     className="uppercase mb-2"
                     style={{
-                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontFamily: '"Roboto Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
                       fontSize: '14px',
                       fontWeight: 700,
                       letterSpacing: '0.05em'
@@ -138,7 +142,7 @@ export default function CookieSettingsPage() {
                   <h3 
                     className="uppercase mb-2"
                     style={{
-                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontFamily: '"Roboto Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
                       fontSize: '14px',
                       fontWeight: 700,
                       letterSpacing: '0.05em'
@@ -174,8 +178,8 @@ export default function CookieSettingsPage() {
               onClick={handleSave}
               className="flex-1 bg-black text-white hover:opacity-90 transition-opacity"
               style={{
-                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '12px',
+                fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '13px',
                 fontWeight: 400,
                 letterSpacing: '0.05em',
                 textTransform: 'uppercase',
@@ -192,8 +196,8 @@ export default function CookieSettingsPage() {
               }}
               className="flex-1 border-2 border-black text-black hover:bg-black hover:text-white transition-colors"
               style={{
-                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '12px',
+                fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '13px',
                 fontWeight: 400,
                 letterSpacing: '0.05em',
                 textTransform: 'uppercase',
@@ -223,6 +227,6 @@ export default function CookieSettingsPage() {
           </p>
         </div>
       </div>
-    </PageFrame>
+    </div>
   );
 }
