@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { getCzechColorPlural } from '@/lib/czech-pluralization';
 
 interface ProductCardProps {
   id: string;
@@ -8,6 +9,7 @@ interface ProductCardProps {
   slug: string;
   price: number;
   image: string;
+  colorCount?: number;
   isSaved?: boolean;
   onToggleSave?: (id: string) => void;
 }
@@ -18,6 +20,7 @@ export default function ProductCard({
   slug,
   price,
   image,
+  colorCount = 1,
   isSaved = false,
   onToggleSave,
 }: ProductCardProps) {
@@ -37,10 +40,13 @@ export default function ProductCard({
         />
       </div>
       
-      <div className="pt-sm">
+      <div className="pt-sm text-center">
         <h3 className="text-product-name mb-xs uppercase tracking-normal">
           {name}
         </h3>
+        <p className="text-small mb-xs">
+          {colorCount} {getCzechColorPlural(colorCount)}
+        </p>
         <p className="text-small">{price} Kč</p>
       </div>
     </Link>

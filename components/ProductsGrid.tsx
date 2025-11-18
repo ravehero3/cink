@@ -8,27 +8,32 @@ interface Product {
   slug: string;
   price: number;
   images: string[];
+  color?: string;
+  colorCount?: number;
 }
 
 interface ProductsGridProps {
   products: Product[];
   savedProducts?: string[];
   onToggleSave?: (id: string) => void;
+  initialCount?: number;
 }
 
-export default function ProductsGrid({ products, savedProducts = [], onToggleSave }: ProductsGridProps) {
+export default function ProductsGrid({ products, savedProducts = [], onToggleSave, initialCount }: ProductsGridProps) {
+  const displayProducts = initialCount ? products.slice(0, initialCount) : products;
+
   if (products.length === 0) {
     return (
       <div className="py-2xl text-center">
-        <p className="text-product-name uppercase">No products found</p>
+        <p className="text-product-name uppercase">Nebyly nalezeny žádné produkty</p>
       </div>
     );
   }
 
   return (
     <div className="max-w-container mx-auto px-lg py-2xl">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-lg">
-        {products.map((product) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-lg">
+        {displayProducts.map((product) => (
           <ProductCard
             key={product.id}
             id={product.id}
@@ -36,6 +41,7 @@ export default function ProductsGrid({ products, savedProducts = [], onToggleSav
             slug={product.slug}
             price={Number(product.price)}
             image={product.images[0]}
+            colorCount={product.colorCount || 1}
             isSaved={savedProducts.includes(product.id)}
             onToggleSave={onToggleSave}
           />

@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import Titlebar from '@/components/Titlebar';
-import VideoPromo from '@/components/VideoPromo';
-import Infobar from '@/components/Infobar';
+import SearchBar from '@/components/SearchBar';
+import CategoryHero from '@/components/CategoryHero';
+import ControlBar from '@/components/ControlBar';
 import ProductsGrid from '@/components/ProductsGrid';
 import FilterWindow from '@/components/FilterWindow';
 import { useFilterStore } from '@/lib/filter-store';
+import { useSearchBarStore } from '@/lib/search-bar-store';
 
 interface Category {
   id: string;
@@ -24,6 +25,7 @@ interface Product {
   images: string[];
   color: string;
   sizes: Record<string, number>;
+  colorCount?: number;
 }
 
 export default function CategoryPage() {
@@ -32,12 +34,25 @@ export default function CategoryPage() {
   
   const [category, setCategory] = useState<Category | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
+  const [allCategoryProducts, setAllCategoryProducts] = useState<Product[]>([]);
   const [totalProducts, setTotalProducts] = useState(0);
   const [currentSort, setCurrentSort] = useState('newest');
   const [isLoading, setIsLoading] = useState(true);
   const [savedProducts, setSavedProducts] = useState<string[]>([]);
 
   const { colors, sizes } = useFilterStore();
+  const { setVisible, setShowSearchIcon } = useSearchBarStore();
+
+  // Initialize search bar on mount, cleanup on unmount
+  useEffect(() => {
+    setVisible(true);
+    setShowSearchIcon(false);
+    
+    return () => {
+      setVisible(false);
+      setShowSearchIcon(false);
+    };
+  }, [setVisible, setShowSearchIcon]);
 
   useEffect(() => {
     fetchCategory();
@@ -45,9 +60,15 @@ export default function CategoryPage() {
 
   useEffect(() => {
     if (category) {
+      fetchAllCategoryProducts();
+    }
+  }, [category]);
+
+  useEffect(() => {
+    if (category && allCategoryProducts.length > 0) {
       fetchProducts();
     }
-  }, [category, colors, sizes, currentSort]);
+  }, [category, allCategoryProducts, colors, sizes, currentSort]);
 
   const fetchCategory = async () => {
     try {
@@ -60,6 +81,36 @@ export default function CategoryPage() {
     } catch (error) {
       console.error('Error fetching category:', error);
     }
+  };
+
+  // Fetch all category products to calculate color counts
+  const fetchAllCategoryProducts = async () => {
+    if (!category) return;
+    
+    try {
+      const response = await fetch(`/api/products?category=${category.name}&limit=1000`);
+      const data = await response.json();
+      setAllCategoryProducts(data.products || []);
+    } catch (error) {
+      console.error('Error fetching all category products:', error);
+      setAllCategoryProducts([]);
+    }
+  };
+
+  // Calculate color count for each product based on product name
+  const calculateColorCounts = (products: Product[]): Product[] => {
+    if (allCategoryProducts.length === 0) return products;
+
+    return products.map(product => {
+      // Count unique colors for products with the same name
+      const sameNameProducts = allCategoryProducts.filter(p => p.name === product.name);
+      const uniqueColors = new Set(sameNameProducts.map(p => p.color));
+      
+      return {
+        ...product,
+        colorCount: uniqueColors.size,
+      };
+    });
   };
 
   const fetchProducts = async () => {
@@ -83,7 +134,8 @@ export default function CategoryPage() {
       const response = await fetch(`/api/products?${params.toString()}`);
       const data = await response.json();
       
-      setProducts(data.products || []);
+      const productsWithColorCount = calculateColorCounts(data.products || []);
+      setProducts(productsWithColorCount);
       setTotalProducts(data.total || 0);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -112,27 +164,25 @@ export default function CategoryPage() {
 
   return (
     <div>
-      <Titlebar title={category.name} />
-      <VideoPromo videoUrl={category.videoUrl} />
-      <Infobar
+      <SearchBar />
+      <CategoryHero title={category.name} imageUrl={category.videoUrl} />
+      <ControlBar
         productCount={totalProducts}
         currentSort={currentSort}
         onSortChange={setCurrentSort}
       />
       
-      <div className="container mx-auto px-8 py-8">
-        {isLoading ? (
-          <div className="text-center py-16">
-            <p className="text-product-name animate-pulse-color">načítá se</p>
-          </div>
-        ) : (
-          <ProductsGrid
-            products={products}
-            savedProducts={savedProducts}
-            onToggleSave={handleToggleSave}
-          />
-        )}
-      </div>
+      {isLoading ? (
+        <div className="text-center py-16">
+          <p className="text-product-name animate-pulse-color">načítá se</p>
+        </div>
+      ) : (
+        <ProductsGrid
+          products={products}
+          savedProducts={savedProducts}
+          onToggleSave={handleToggleSave}
+        />
+      )}
 
       <FilterWindow />
     </div>

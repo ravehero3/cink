@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useCartStore } from '@/lib/cart-store';
 import { useSavedProductsStore } from '@/lib/saved-products-store';
+import { useSearchBarStore } from '@/lib/search-bar-store';
 import { useSession } from 'next-auth/react';
 import CartDrawer from './CartDrawer';
 import Header2 from './Header2';
@@ -19,6 +20,7 @@ export default function Header1() {
   const { data: session } = useSession();
   const cartCount = useCartStore((state) => state.getItemCount());
   const savedCount = useSavedProductsStore((state) => state.getCount());
+  const { showSearchIcon, openSearchBar } = useSearchBarStore();
   const isLoggedIn = !!session;
   const [showCartDrawer, setShowCartDrawer] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
@@ -103,16 +105,30 @@ export default function Header1() {
                 )}
               </Link>
 
-              <button 
-                onClick={() => setShowSearch(!showSearch)}
-                className="relative hover:opacity-70 transition-opacity"
-                aria-label="Search"
-                style={{ width: '22px', height: '22px' }}
-              >
-                <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </button>
+              {/* Show category search icon when category search bar is hidden, otherwise show global search */}
+              {showSearchIcon ? (
+                <button 
+                  onClick={openSearchBar}
+                  className="relative hover:opacity-70 transition-opacity"
+                  aria-label="Open Category Search"
+                  style={{ width: '22px', height: '22px' }}
+                >
+                  <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </button>
+              ) : (
+                <button 
+                  onClick={() => setShowSearch(!showSearch)}
+                  className="relative hover:opacity-70 transition-opacity"
+                  aria-label="Search"
+                  style={{ width: '22px', height: '22px' }}
+                >
+                  <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </button>
+              )}
 
               <button 
                 onClick={() => setShowCartDrawer(true)}
