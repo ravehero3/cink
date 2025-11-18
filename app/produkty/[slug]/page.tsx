@@ -30,6 +30,7 @@ export default function ProductDetailPage() {
   const [selectedImage, setSelectedImage] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [expandedSection, setExpandedSection] = useState<string | null>(null);
 
   const { addItem } = useCartStore();
   const { isSaved, addProduct, removeProduct } = useSavedProductsStore();
@@ -111,6 +112,10 @@ export default function ProductDetailPage() {
     }
   };
 
+  const toggleSection = (section: string) => {
+    setExpandedSection(expandedSection === section ? null : section);
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-96">
@@ -128,11 +133,6 @@ export default function ProductDetailPage() {
   }
 
   const sizes = Object.entries(product.sizes || {});
-  const [expandedSection, setExpandedSection] = useState<string | null>(null);
-
-  const toggleSection = (section: string) => {
-    setExpandedSection(expandedSection === section ? null : section);
-  };
 
   return (
     <div className="bg-white">
