@@ -124,7 +124,8 @@ export default function TrackingPage() {
             style={{ 
               borderRadius: '4px',
               width: '33.33%',
-              marginTop: '16px'
+              marginTop: '16px',
+              marginBottom: '64px'
             }}
           >
             <p 

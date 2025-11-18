@@ -8,7 +8,7 @@ export default function FAQPage() {
       <div className="absolute right-1/4 w-px bg-black z-0" style={{ top: 0, bottom: 0 }} />
 
       {/* Main content */}
-      <div className="relative z-10 flex flex-col items-center">
+      <div className="relative z-10 flex flex-col items-center" style={{ paddingTop: '42px' }}>
         <div style={{ width: '33.33%' }}>
           <h1 
             className="uppercase mb-12"

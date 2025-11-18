@@ -99,7 +99,7 @@ export default function DeliveryPage() {
       <div className="absolute right-1/4 w-px bg-black z-0" style={{ top: 0, bottom: 0 }} />
 
       {/* Main content */}
-      <div className="relative z-10 flex flex-col items-center">
+      <div className="relative z-10 flex flex-col items-center" style={{ paddingTop: '64px' }}>
         <h1 
           className="uppercase text-center mb-12"
           style={{
