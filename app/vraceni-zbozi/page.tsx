@@ -180,6 +180,9 @@ export default function ReturnsPage() {
               REGISTROVAT VRÁCENÍ
             </button>
           </form>
+
+          {/* Horizontal line 64px below registration button */}
+          <div className="w-full h-px bg-black" style={{ marginTop: '64px' }} />
         </div>
       </div>
     </div>

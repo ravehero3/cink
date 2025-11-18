@@ -12,9 +12,6 @@ export default function TrackingPage() {
 
   return (
     <div className="min-h-screen bg-white relative">
-      {/* Horizontal line at 50% */}
-      <div className="absolute top-1/2 left-0 right-0 h-px bg-black z-0" />
-      
       {/* Left vertical line - starts at top (header padding handled by body) */}
       <div className="absolute left-1/4 w-px bg-black z-0" style={{ top: 0, bottom: 0 }} />
       
@@ -124,8 +121,7 @@ export default function TrackingPage() {
             style={{ 
               borderRadius: '4px',
               width: '33.33%',
-              marginTop: '16px',
-              marginBottom: '64px'
+              marginTop: '16px'
             }}
           >
             <p 
@@ -139,6 +135,9 @@ export default function TrackingPage() {
               <strong>Tip:</strong> Číslo objednávky a sledovací číslo najdete v potvrzovacím e-mailu, který jsme vám zaslali po vytvoření objednávky.
             </p>
           </div>
+
+          {/* Horizontal line 64px below Tip rectangle */}
+          <div className="w-full h-px bg-black" style={{ marginTop: '64px' }} />
         </div>
       </div>
     </div>
