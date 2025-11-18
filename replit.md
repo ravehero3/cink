@@ -23,6 +23,12 @@ This admin user is permanently stored in the PostgreSQL database and persists ac
   - Removed dobírka (cash on delivery) payment option from payment page
   - Updated FAQ to remove mention of dobírka payment method
   - Cleaner, more minimalist appearance across information pages
+- **Footer Pages Spacing Improvements**:
+  - Removed white strip below header on all footer pages (FAQ, Privacy Policy, Legal Info, Cookie Settings, Cookie Policy, Delivery, Returns)
+  - Changed padding from varied values to consistent 44px (matching header height) across all footer pages
+  - Removed duplicate horizontal line from Cookie Policy page (kept only the bottom line)
+  - Added 40px bottom spacing to Legal Info page for proper clearance before footer
+  - Improved overall consistency and minimalist aesthetic across all information pages
 
 ## Previous Changes (November 17, 2025)
 - **Cloudinary Media Library Implementation**:
