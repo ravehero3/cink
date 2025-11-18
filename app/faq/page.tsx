@@ -1,14 +1,14 @@
 export default function FAQPage() {
   return (
     <div className="min-h-screen bg-white relative">
-      {/* Left vertical line - starts after header (44px) and extends to footer1 */}
-      <div className="absolute left-1/4 w-px bg-black z-0" style={{ top: '44px', bottom: 0 }} />
+      {/* Left vertical line - starts at top (header padding handled by body) */}
+      <div className="absolute left-1/4 w-px bg-black z-0" style={{ top: 0, bottom: 0 }} />
       
-      {/* Right vertical line - starts after header (44px) and extends to footer1 */}
-      <div className="absolute right-1/4 w-px bg-black z-0" style={{ top: '44px', bottom: 0 }} />
+      {/* Right vertical line - starts at top (header padding handled by body) */}
+      <div className="absolute right-1/4 w-px bg-black z-0" style={{ top: 0, bottom: 0 }} />
 
       {/* Main content */}
-      <div className="relative z-10 flex flex-col items-center" style={{ paddingTop: '44px' }}>
+      <div className="relative z-10 flex flex-col items-center">
         <div style={{ width: '33.33%' }}>
           <h1 
             className="uppercase mb-12"
