@@ -43,9 +43,6 @@ export default function ReturnsPage() {
 
   return (
     <div className="min-h-screen bg-white relative">
-      {/* Horizontal line at 50% */}
-      <div className="absolute top-1/2 left-0 right-0 h-px bg-black z-0" />
-      
       {/* Left vertical line - starts after header (44px) and extends to footer1 */}
       <div className="absolute left-1/4 w-px bg-black z-0" style={{ top: '44px', bottom: 0 }} />
       
@@ -53,7 +50,7 @@ export default function ReturnsPage() {
       <div className="absolute right-1/4 w-px bg-black z-0" style={{ top: '44px', bottom: 0 }} />
 
       {/* Main content above the line */}
-      <div className="relative z-10 flex flex-col items-center pt-12">
+      <div className="relative z-10 flex flex-col items-center" style={{ paddingTop: '44px' }}>
         <h1 
           className="uppercase text-center" 
           style={{ 
