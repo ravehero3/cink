@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Accordion from '@/components/Accordion';
 
 export default function CookieSettingsPage() {
   const [necessary, setNecessary] = useState(true);
@@ -12,6 +13,60 @@ export default function CookieSettingsPage() {
     alert('Nastavení cookies bylo uloženo');
   };
 
+  const cookieItems = [
+    {
+      title: 'Nezbytné cookies',
+      content: (
+        <div className="space-y-3">
+          <p>Tyto cookies jsou nutné pro správné fungování webu a nemohou být vypnuty.</p>
+          <div className="flex items-center justify-between mt-4 p-4 border border-black bg-gray-50">
+            <p className="text-sm font-bold">Vždy aktivní</p>
+            <input
+              type="checkbox"
+              checked={necessary}
+              disabled
+              className="w-6 h-6"
+            />
+          </div>
+        </div>
+      )
+    },
+    {
+      title: 'Analytické cookies',
+      content: (
+        <div className="space-y-3">
+          <p>Pomáhají nám pochopit, jak návštěvníci používají náš web, abychom mohli vylepšit uživatelský zážitek.</p>
+          <div className="flex items-center justify-between mt-4 p-4 border border-black bg-white">
+            <p className="text-sm font-bold">Povolit analytické cookies</p>
+            <input
+              type="checkbox"
+              checked={analytics}
+              onChange={(e) => setAnalytics(e.target.checked)}
+              className="w-6 h-6 cursor-pointer"
+            />
+          </div>
+        </div>
+      )
+    },
+    {
+      title: 'Marketingové cookies',
+      content: (
+        <div className="space-y-3">
+          <p>Používají se k zobrazování relevantních reklam na základě vašich zájmů.</p>
+          <div className="flex items-center justify-between mt-4 p-4 border border-black bg-white">
+            <p className="text-sm font-bold">Povolit marketingové cookies</p>
+            <input
+              type="checkbox"
+              checked={marketing}
+              onChange={(e) => setMarketing(e.target.checked)}
+              className="w-6 h-6 cursor-pointer"
+            />
+          </div>
+        </div>
+      )
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-white relative">
       {/* Left vertical line - starts at top (header padding handled by body) */}
@@ -21,7 +76,7 @@ export default function CookieSettingsPage() {
       <div className="absolute right-1/4 w-px bg-black z-0" style={{ top: 0, bottom: 0 }} />
 
       {/* Main content */}
-      <div className="relative z-10 flex flex-col items-center">
+      <div className="relative z-10 flex flex-col items-center" style={{ paddingTop: '64px' }}>
         <h1 
           className="uppercase text-center"
           style={{
@@ -48,132 +103,12 @@ export default function CookieSettingsPage() {
             Zde můžete upravit své preference ohledně používání cookies na našich stránkách. Vaše volba bude uložena a použita při vašich dalších návštěvách.
           </p>
 
-          <div className="space-y-8 mb-12">
-            <div className="border-2 border-black p-6">
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex-1 text-left">
-                  <h3 
-                    className="uppercase mb-2"
-                    style={{
-                      fontFamily: '"Roboto Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '14px',
-                      fontWeight: 700,
-                      letterSpacing: '0.05em'
-                    }}
-                  >
-                    Nezbytné cookies
-                  </h3>
-                  <p 
-                    style={{
-                      fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '14px',
-                      fontWeight: 400,
-                      lineHeight: '1.6'
-                    }}
-                  >
-                    Tyto cookies jsou nutné pro správné fungování webu a nemohou být vypnuty.
-                  </p>
-                </div>
-                <div className="ml-4">
-                  <input
-                    type="checkbox"
-                    checked={necessary}
-                    disabled
-                    className="w-6 h-6"
-                  />
-                </div>
-              </div>
-              <p 
-                className="text-left"
-                style={{
-                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '12px',
-                  fontWeight: 400,
-                  lineHeight: '1.6',
-                  color: '#4b5563'
-                }}
-              >
-                Vždy aktivní
-              </p>
-            </div>
+          <Accordion items={cookieItems} />
 
-            <div className="border-2 border-black p-6">
-              <div className="flex items-start justify-between">
-                <div className="flex-1 text-left">
-                  <h3 
-                    className="uppercase mb-2"
-                    style={{
-                      fontFamily: '"Roboto Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '14px',
-                      fontWeight: 700,
-                      letterSpacing: '0.05em'
-                    }}
-                  >
-                    Analytické cookies
-                  </h3>
-                  <p 
-                    style={{
-                      fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '14px',
-                      fontWeight: 400,
-                      lineHeight: '1.6'
-                    }}
-                  >
-                    Pomáhají nám pochopit, jak návštěvníci používají náš web, abychom mohli vylepšit uživatelský zážitek.
-                  </p>
-                </div>
-                <div className="ml-4">
-                  <input
-                    type="checkbox"
-                    checked={analytics}
-                    onChange={(e) => setAnalytics(e.target.checked)}
-                    className="w-6 h-6"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="border-2 border-black p-6">
-              <div className="flex items-start justify-between">
-                <div className="flex-1 text-left">
-                  <h3 
-                    className="uppercase mb-2"
-                    style={{
-                      fontFamily: '"Roboto Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '14px',
-                      fontWeight: 700,
-                      letterSpacing: '0.05em'
-                    }}
-                  >
-                    Marketingové cookies
-                  </h3>
-                  <p 
-                    style={{
-                      fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '14px',
-                      fontWeight: 400,
-                      lineHeight: '1.6'
-                    }}
-                  >
-                    Používají se k zobrazování relevantních reklam na základě vašich zájmů.
-                  </p>
-                </div>
-                <div className="ml-4">
-                  <input
-                    type="checkbox"
-                    checked={marketing}
-                    onChange={(e) => setMarketing(e.target.checked)}
-                    className="w-6 h-6"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex gap-4 mb-8">
+          <div className="flex gap-4 my-8">
             <button
               onClick={handleSave}
-              className="flex-1 bg-black text-white hover:opacity-90 transition-opacity"
+              className="flex-1 bg-black text-white border border-black hover:bg-white hover:text-black transition-colors"
               style={{
                 fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                 fontSize: '13px',
@@ -191,7 +126,7 @@ export default function CookieSettingsPage() {
                 setAnalytics(true);
                 setMarketing(true);
               }}
-              className="flex-1 border-2 border-black text-black hover:bg-black hover:text-white transition-colors"
+              className="flex-1 border border-black text-black hover:bg-white hover:text-black transition-colors"
               style={{
                 fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                 fontSize: '13px',
