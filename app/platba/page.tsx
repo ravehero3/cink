@@ -119,42 +119,6 @@ export default function PaymentPage() {
                 <strong>Poznámka:</strong> Variabilní symbol obdržíte e-mailem
               </p>
             </div>
-
-            <div className="border-2 border-black p-6">
-              <h3 
-                className="uppercase mb-3 text-center"
-                style={{
-                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '16px',
-                  fontWeight: 700,
-                  letterSpacing: '0.05em'
-                }}
-              >
-                Dobírka
-              </h3>
-              <p 
-                className="mb-3"
-                style={{
-                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '14px',
-                  fontWeight: 400,
-                  lineHeight: '1.6'
-                }}
-              >
-                Platba v hotovosti při převzetí zásilky
-              </p>
-              <p 
-                style={{
-                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '14px',
-                  fontWeight: 400,
-                  lineHeight: '1.6'
-                }}
-              >
-                <strong>Poplatek:</strong> 30 Kč<br />
-                <strong>Zpracování:</strong> Okamžitě po objednání
-              </p>
-            </div>
           </div>
 
           <div className="border-2 border-black p-6 bg-white">

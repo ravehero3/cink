@@ -14,9 +14,6 @@ export default function CookieSettingsPage() {
 
   return (
     <div className="min-h-screen bg-white relative">
-      {/* Horizontal line at 50% */}
-      <div className="absolute top-1/2 left-0 right-0 h-px bg-black z-0" />
-      
       {/* Left vertical line - starts after header (44px) and extends to footer1 */}
       <div className="absolute left-1/4 w-px bg-black z-0" style={{ top: '44px', bottom: 0 }} />
       

@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import { useCartStore } from '@/lib/cart-store';
 import { useSavedProductsStore } from '@/lib/saved-products-store';
 import { useRecentlyViewedStore } from '@/lib/recently-viewed-store';
+import { ChevronDown } from 'lucide-react';
 
 interface Product {
   id: string;
@@ -127,129 +128,320 @@ export default function ProductDetailPage() {
   }
 
   const sizes = Object.entries(product.sizes || {});
+  const [expandedSection, setExpandedSection] = useState<string | null>(null);
+
+  const toggleSection = (section: string) => {
+    setExpandedSection(expandedSection === section ? null : section);
+  };
 
   return (
-    <div>
+    <div className="bg-white">
       {showConfirmation && (
-        <div className="fixed top-24 right-8 bg-black text-white px-6 py-4 z-50 border border-white">
-          <p className="text-xs">Produkt přidán do košíku</p>
+        <div className="fixed top-24 right-8 bg-black text-white px-6 py-4 z-50">
+          <p style={{ 
+            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+            fontSize: '12px',
+            fontWeight: 400
+          }}>
+            Produkt přidán do košíku
+          </p>
         </div>
       )}
 
-      <div className="container mx-auto px-6 py-6">
-        <div className="flex flex-col lg:flex-row gap-6">
-          <div className="lg:w-[65%]">
-            <div className="mb-3">
-              <img
-                src={product.images[selectedImage]}
-                alt={product.name}
-                className="w-full aspect-square object-cover"
-                style={{ filter: 'grayscale(1) contrast(1.2)' }}
-              />
-            </div>
-
-            {product.images.length > 1 && (
-              <div className="flex gap-2">
-                {product.images.map((image, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedImage(index)}
-                    className={`w-16 h-16 border ${
-                      selectedImage === index ? 'border-black border-2' : 'border-black'
-                    }`}
-                  >
-                    <img
-                      src={image}
-                      alt={`${product.name} ${index + 1}`}
-                      className="w-full h-full object-cover"
-                      style={{ filter: 'grayscale(1) contrast(1.2)' }}
-                    />
-                  </button>
-                ))}
+      <div className="flex">
+        <div className="w-[60%] pr-4">
+          <div className="space-y-2">
+            {product.images.map((image, index) => (
+              <div key={index} className="w-full">
+                <img
+                  src={image}
+                  alt={`${product.name} ${index + 1}`}
+                  className="w-full object-cover"
+                  style={{ filter: 'grayscale(1) contrast(1.2)' }}
+                />
               </div>
-            )}
+            ))}
+          </div>
+        </div>
+
+        <div className="w-[40%] pl-8 pr-12 py-8 sticky top-[44px] self-start h-screen overflow-y-auto">
+          <div className="mb-6">
+            <h1 
+              className="uppercase mb-3"
+              style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '16px',
+                fontWeight: 700,
+                letterSpacing: '0.05em',
+                lineHeight: '1.4'
+              }}
+            >
+              {product.name}
+            </h1>
+            
+            <p 
+              className="mb-6"
+              style={{
+                fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '14px',
+                fontWeight: 400
+              }}
+            >
+              {product.price} Kč
+            </p>
           </div>
 
-          <div className="lg:w-[35%] lg:pl-6">
-            <div className="flex justify-between items-start mb-2">
-              <h1 className="text-sm font-normal lowercase">{product.name}</h1>
-              <button
-                onClick={toggleSaved}
-                className="flex-shrink-0 ml-4"
-                aria-label={isSaved(product.id) ? 'Odebrat z uložených' : 'Uložit produkt'}
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <p 
+                className="uppercase"
+                style={{
+                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '12px',
+                  fontWeight: 700,
+                  letterSpacing: '0.05em'
+                }}
               >
-                <svg
-                  className="w-5 h-5"
-                  fill={isSaved(product.id) ? 'black' : 'none'}
-                  stroke="black"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1}
-                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                  />
-                </svg>
+                Size:
+              </p>
+              <button 
+                className="underline"
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '12px',
+                  fontWeight: 400
+                }}
+              >
+                Size guide
               </button>
             </div>
             
-            <p className="text-xs mb-6">{product.price} Kč</p>
+            <div className="grid grid-cols-4 gap-2 mb-4">
+              {sizes.map(([size, stock]) => {
+                const isAvailable = stock > 0;
+                const isSelected = selectedSize === size;
 
-            <div className="mb-6 pb-6 border-b border-black">
-              <p className="text-xs mb-3">{product.description}</p>
-              <p className="text-xs">Barva: {product.color}</p>
+                return (
+                  <button
+                    key={size}
+                    onClick={() => {
+                      if (isAvailable) {
+                        setSelectedSize(size);
+                        setQuantity(1);
+                      }
+                    }}
+                    disabled={!isAvailable}
+                    className={`py-3 border transition-colors ${
+                      isSelected
+                        ? 'bg-black text-white border-black'
+                        : isAvailable
+                        ? 'border-black hover:bg-black hover:text-white'
+                        : 'border-gray-300 text-gray-400 cursor-not-allowed'
+                    }`}
+                    style={{
+                      fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontSize: '13px',
+                      fontWeight: 400
+                    }}
+                  >
+                    {size}
+                    {!isAvailable && (
+                      <div 
+                        className="text-xs mt-1"
+                        style={{
+                          fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                          fontSize: '10px'
+                        }}
+                      >
+                        Notify me
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
             </div>
 
-            <div className="mb-6">
-              <p className="text-xs mb-3 uppercase">Size:</p>
-              <div className="flex flex-wrap gap-2">
-                {sizes.map(([size, stock]) => {
-                  const isAvailable = stock > 0;
-                  const isSelected = selectedSize === size;
+            {selectedSize && (
+              <p 
+                className="mb-4"
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '12px',
+                  fontWeight: 400,
+                  color: '#666'
+                }}
+              >
+                Odhadované doručení: {new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString('cs-CZ')}
+              </p>
+            )}
+          </div>
 
-                  return (
-                    <button
-                      key={size}
-                      onClick={() => {
-                        if (isAvailable) {
-                          setSelectedSize(size);
-                          setQuantity(1);
-                        }
-                      }}
-                      disabled={!isAvailable}
-                      className={`px-4 py-2 border text-xs transition-colors ${
-                        isSelected
-                          ? 'bg-black text-white border-black'
-                          : isAvailable
-                          ? 'border-black hover:bg-black hover:text-white'
-                          : 'border-black bg-white text-black cursor-not-allowed opacity-40'
-                      }`}
-                    >
-                      <span className={!isAvailable ? 'line-through' : ''}>{size}</span>
-                    </button>
-                  );
-                })}
-              </div>
+          <button
+            onClick={handleAddToCart}
+            className="w-full py-4 bg-black text-white hover:bg-gray-800 transition-colors mb-4"
+            style={{
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '13px',
+              fontWeight: 700,
+              letterSpacing: '0.05em',
+              textTransform: 'uppercase'
+            }}
+          >
+            Add to cart
+          </button>
+
+          <div className="border-t border-black pt-6 space-y-4">
+            <div className="border-b border-black">
+              <button
+                onClick={() => toggleSection('details')}
+                className="w-full py-4 flex items-center justify-between"
+              >
+                <span 
+                  className="uppercase"
+                  style={{
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    letterSpacing: '0.05em'
+                  }}
+                >
+                  Product details
+                </span>
+                <ChevronDown 
+                  className={`w-4 h-4 transition-transform ${expandedSection === 'details' ? 'rotate-180' : ''}`}
+                />
+              </button>
+              {expandedSection === 'details' && (
+                <div 
+                  className="pb-4"
+                  style={{
+                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '13px',
+                    fontWeight: 400,
+                    lineHeight: '1.6'
+                  }}
+                >
+                  <p className="mb-2">{product.description}</p>
+                  <p className="mb-1">Barva: {product.color}</p>
+                  <p className="mb-1">Kategorie: {product.category}</p>
+                  <p className="mb-1">Made in Czech Republic</p>
+                  <p className="mt-4 text-xs text-gray-600">Product ID: {product.id}</p>
+                </div>
+              )}
             </div>
 
-            <button
-              onClick={handleAddToCart}
-              className="w-full py-3 bg-black text-white text-xs uppercase border border-black hover:bg-white hover:text-black transition-colors mb-4"
-            >
-              Add to cart
-            </button>
+            <div className="border-b border-black">
+              <button
+                onClick={() => toggleSection('size-fit')}
+                className="w-full py-4 flex items-center justify-between"
+              >
+                <span 
+                  className="uppercase"
+                  style={{
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    letterSpacing: '0.05em'
+                  }}
+                >
+                  Size & fit
+                </span>
+                <ChevronDown 
+                  className={`w-4 h-4 transition-transform ${expandedSection === 'size-fit' ? 'rotate-180' : ''}`}
+                />
+              </button>
+              {expandedSection === 'size-fit' && (
+                <div 
+                  className="pb-4"
+                  style={{
+                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '13px',
+                    fontWeight: 400,
+                    lineHeight: '1.6'
+                  }}
+                >
+                  <p className="mb-2">Oversize fit</p>
+                  <p>Konzultujte naši tabulku velikostí pro více informací.</p>
+                </div>
+              )}
+            </div>
 
-            <div className="border-t border-black pt-6">
-              <div className="text-xs space-y-3">
-                <details className="cursor-pointer">
-                  <summary className="font-normal uppercase">Product details</summary>
-                  <div className="mt-3 text-xs leading-relaxed">
-                    <p>Kategorie: {product.category}</p>
-                    <p>Skladem: {product.totalStock} ks</p>
-                  </div>
-                </details>
-              </div>
+            <div className="border-b border-black">
+              <button
+                onClick={() => toggleSection('shipping')}
+                className="w-full py-4 flex items-center justify-between"
+              >
+                <span 
+                  className="uppercase"
+                  style={{
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    letterSpacing: '0.05em'
+                  }}
+                >
+                  Doprava zdarma, vrácení zdarma
+                </span>
+                <ChevronDown 
+                  className={`w-4 h-4 transition-transform ${expandedSection === 'shipping' ? 'rotate-180' : ''}`}
+                />
+              </button>
+              {expandedSection === 'shipping' && (
+                <div 
+                  className="pb-4"
+                  style={{
+                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '13px',
+                    fontWeight: 400,
+                    lineHeight: '1.6'
+                  }}
+                >
+                  <p className="mb-2">Nabízíme bezplatné expresní doručení při objednávce nad 2000 Kč.</p>
+                  <p className="mb-2">Bezplatné vrácení a výměna do 30 dnů od data doručení.</p>
+                  <p>Pro více informací navštivte naše <a href="/faq" className="underline">FAQ</a>.</p>
+                </div>
+              )}
+            </div>
+
+            <div className="border-b border-black">
+              <button
+                onClick={() => toggleSection('care')}
+                className="w-full py-4 flex items-center justify-between"
+              >
+                <span 
+                  className="uppercase"
+                  style={{
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    letterSpacing: '0.05em'
+                  }}
+                >
+                  Péče o produkt
+                </span>
+                <ChevronDown 
+                  className={`w-4 h-4 transition-transform ${expandedSection === 'care' ? 'rotate-180' : ''}`}
+                />
+              </button>
+              {expandedSection === 'care' && (
+                <div 
+                  className="pb-4"
+                  style={{
+                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '13px',
+                    fontWeight: 400,
+                    lineHeight: '1.6'
+                  }}
+                >
+                  <p className="mb-1">Prát max. při 30°C - šetrný proces</p>
+                  <p className="mb-1">Prát naruby</p>
+                  <p className="mb-1">Nebělit</p>
+                  <p className="mb-1">Nesušit v sušičce</p>
+                  <p className="mb-1">Sušit na vzduchu ve stínu</p>
+                  <p className="mb-1">Nežehlit</p>
+                  <p>Nečistit chemicky</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
