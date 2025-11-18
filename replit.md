@@ -9,6 +9,23 @@ A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz). T
 This admin user is permanently stored in the PostgreSQL database and persists across deployments.
 
 ## Recent Changes (November 18, 2025)
+- **Accordion Implementation Across Footer Pages**:
+  - Implemented accordion design system on právní informace page (4 collapsible sections)
+  - Implemented accordion design system on ochrana-osobních-údajů page (5 collapsible sections with contact box)
+  - Implemented accordion design system on nastavení-cookies page (3 cookie type sections with integrated toggles)
+  - All three pages now feature the same expandable/collapsible UI pattern as the doručení page
+  - Improved user experience with cleaner, more organized content presentation
+- **Precise Spacing Adjustments**:
+  - Fixed vertical line alignment on all 10 footer pages to touch header edge (changed from 88px to 44px offset)
+  - SLEDOVÁNÍ OBJEDNÁVKY page: Added 64px spacing below tip box before horizontal line
+  - FAQ page: Added 42px spacing between title and header
+  - VRÁCENÍ OBJEDNÁVKY page: Added 64px spacing between title and header
+  - Cookies page: Added 64px spacing between title and header
+  - DORUČENÍ page: Added 64px spacing between title and header
+- **Button Hover Effect Updates**:
+  - Updated nastavení-cookies page buttons to match main page hover pattern
+  - Changed from opacity-based hover to border-based white background hover effect
+  - Consistent `border border-black hover:bg-white hover:text-black transition-colors` across all buttons
 - **Product Detail Page Redesign**:
   - Completely redesigned product page to match Balenciaga's minimal luxury aesthetic
   - Implemented 60/40 split layout (images left, info sidebar right)
@@ -23,12 +40,6 @@ This admin user is permanently stored in the PostgreSQL database and persists ac
   - Removed dobírka (cash on delivery) payment option from payment page
   - Updated FAQ to remove mention of dobírka payment method
   - Cleaner, more minimalist appearance across information pages
-- **Footer Pages Spacing Improvements**:
-  - Removed white strip below header on all footer pages (FAQ, Privacy Policy, Legal Info, Cookie Settings, Cookie Policy, Delivery, Returns)
-  - Changed padding from varied values to consistent 44px (matching header height) across all footer pages
-  - Removed duplicate horizontal line from Cookie Policy page (kept only the bottom line)
-  - Added 40px bottom spacing to Legal Info page for proper clearance before footer
-  - Improved overall consistency and minimalist aesthetic across all information pages
 
 ## Previous Changes (November 17, 2025)
 - **Cloudinary Media Library Implementation**:
