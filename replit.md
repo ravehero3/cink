@@ -8,7 +8,23 @@ A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz). T
 **Password:** admin123  
 This admin user is permanently stored in the PostgreSQL database and persists across deployments.
 
-## Recent Changes (November 17, 2025)
+## Recent Changes (November 18, 2025)
+- **Product Detail Page Redesign**:
+  - Completely redesigned product page to match Balenciaga's minimal luxury aesthetic
+  - Implemented 60/40 split layout (images left, info sidebar right)
+  - Added sticky sidebar with product information that stays visible while scrolling
+  - Created accordion-style collapsible sections for Product Details, Size & Fit, Shipping Info, and Product Care
+  - Enhanced size selector with "Notify me" option for out-of-stock sizes
+  - Added estimated delivery date display when size is selected
+  - Improved typography and spacing to match high-fashion aesthetic
+  - Fixed critical React hook order violation to ensure page stability
+- **UI Cleanup and Refinements**:
+  - Removed horizontal decorative lines from 5 information pages (FAQ, Privacy Policy, Legal Information, Cookie Settings, Delivery)
+  - Removed dobírka (cash on delivery) payment option from payment page
+  - Updated FAQ to remove mention of dobírka payment method
+  - Cleaner, more minimalist appearance across information pages
+
+## Previous Changes (November 17, 2025)
 - **Cloudinary Media Library Implementation**:
   - Added complete media management system for images and videos
   - Created Media database model with Cloudinary integration
