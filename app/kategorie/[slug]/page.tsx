@@ -90,6 +90,7 @@ export default function CategoryPage() {
     try {
       const response = await fetch(`/api/products?category=${category.name}&limit=1000`);
       const data = await response.json();
+      console.log('fetchAllCategoryProducts data:', data);
       setAllCategoryProducts(data.products || []);
     } catch (error) {
       console.error('Error fetching all category products:', error);
@@ -114,8 +115,12 @@ export default function CategoryPage() {
   };
 
   const fetchProducts = async () => {
-    if (!category) return;
+    if (!category) {
+      console.log('fetchProducts: no category, returning');
+      return;
+    }
     
+    console.log('fetchProducts called, category:', category.name);
     setIsLoading(true);
     try {
       const params = new URLSearchParams({
@@ -131,17 +136,25 @@ export default function CategoryPage() {
         sizes.forEach(size => params.append('size', size));
       }
 
+      console.log('fetchProducts: about to fetch with URL:', `/api/products?${params.toString()}`);
       const response = await fetch(`/api/products?${params.toString()}`);
+      console.log('fetchProducts: fetch response received, status:', response.status);
       const data = await response.json();
+      console.log('fetchProducts data:', data);
       
+      console.log('fetchProducts: about to calculate color counts, allCategoryProducts length:', allCategoryProducts.length);
       const productsWithColorCount = calculateColorCounts(data.products || []);
+      console.log('productsWithColorCount:', productsWithColorCount);
+      console.log('fetchProducts: about to set products state');
       setProducts(productsWithColorCount);
       setTotalProducts(data.total || 0);
+      console.log('fetchProducts: state updated');
     } catch (error) {
-      console.error('Error fetching products:', error);
+      console.error('ERROR in fetchProducts:', error);
       setProducts([]);
       setTotalProducts(0);
     } finally {
+      console.log('fetchProducts: Setting isLoading to false');
       setIsLoading(false);
     }
   };
@@ -156,8 +169,8 @@ export default function CategoryPage() {
 
   if (!category) {
     return (
-      <div className="flex items-center justify-center h-96">
-        <p className="text-product-name">Načítání...</p>
+      <div className="flex items-center justify-center" style={{ paddingTop: '64px' }}>
+        <p className="text-product-name animate-pulse-color">Načítání...</p>
       </div>
     );
   }
@@ -173,8 +186,8 @@ export default function CategoryPage() {
       />
       
       {isLoading ? (
-        <div className="text-center py-16">
-          <p className="text-product-name animate-pulse-color">načítá se</p>
+        <div className="text-center" style={{ paddingTop: '64px' }}>
+          <p className="text-product-name animate-pulse-color">Načítání...</p>
         </div>
       ) : (
         <ProductsGrid
