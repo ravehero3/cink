@@ -8,7 +8,22 @@ A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz). T
 **Password:** admin123  
 This admin user is permanently stored in the PostgreSQL database and persists across deployments.
 
-## Recent Changes (November 18, 2025)
+## Recent Changes (November 19, 2025)
+- **Project Import and Database Setup**:
+  - Successfully migrated project to Replit environment
+  - Created PostgreSQL database and configured connection
+  - Ran database migrations using Prisma (npm run db:push)
+  - Seeded database with initial data: admin user, test user, 4 categories, and 40 sample products
+  - Configured Cloudinary credentials for media management (CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET)
+- **Product Page Layout Refinement**:
+  - Updated product detail page from 60/40 split to exact 50/50 split layout
+  - Changed left side width from `w-[60%]` to `w-1/2` (exactly 50%)
+  - Changed right side width from `w-[40%]` to `w-1/2` (exactly 50%)
+  - Added 1px vertical divider in the center (`border-r border-black`) for clean separation
+  - Design inspired by Balenciaga product pages with left side for scrollable images and right side for product information
+  - Maintained sticky product info sidebar and collapsible accordion sections
+
+## Previous Changes (November 18, 2025)
 - **Accordion Implementation Across Footer Pages**:
   - Implemented accordion design system on právní informace page (4 collapsible sections)
   - Implemented accordion design system on ochrana-osobních-údajů page (5 collapsible sections with contact box)
@@ -28,7 +43,7 @@ This admin user is permanently stored in the PostgreSQL database and persists ac
   - Consistent `border border-black hover:bg-white hover:text-black transition-colors` across all buttons
 - **Product Detail Page Redesign**:
   - Completely redesigned product page to match Balenciaga's minimal luxury aesthetic
-  - Implemented 60/40 split layout (images left, info sidebar right)
+  - Implemented split layout (images left, info sidebar right) - refined to 50/50 on Nov 19, 2025
   - Added sticky sidebar with product information that stays visible while scrolling
   - Created accordion-style collapsible sections for Product Details, Size & Fit, Shipping Info, and Product Care
   - Enhanced size selector with "Notify me" option for out-of-stock sizes
