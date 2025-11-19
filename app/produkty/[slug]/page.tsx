@@ -31,6 +31,7 @@ export default function ProductDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
+  const [isSizeDropdownOpen, setIsSizeDropdownOpen] = useState(false);
 
   const { addItem } = useCartStore();
   const { isSaved, addProduct, removeProduct } = useSavedProductsStore();
@@ -152,35 +153,53 @@ export default function ProductDetailPage() {
         <div className="w-1/2 border-r border-black">
           <div className="space-y-2">
             {product.images.map((image, index) => (
-              <div key={index} className="w-full">
+              <div key={index} className="w-full relative">
                 <img
                   src={image}
                   alt={`${product.name} ${index + 1}`}
                   className="w-full object-cover"
                   style={{ filter: 'grayscale(1) contrast(1.2)' }}
                 />
+                {index === 0 && (
+                  <button
+                    onClick={toggleSaved}
+                    className="absolute"
+                    style={{ top: '4px', right: '4px' }}
+                  >
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill={isSaved(product.id) ? 'white' : 'none'}
+                      stroke="white"
+                      strokeWidth="1"
+                    >
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                    </svg>
+                  </button>
+                )}
               </div>
             ))}
           </div>
         </div>
 
-        <div className="w-1/2 pl-8 pr-12 py-8 sticky top-[44px] self-start h-screen overflow-y-auto">
-          <div className="mb-6">
+        <div className="w-1/2 sticky top-[44px] self-start h-screen overflow-y-auto">
+          <div className="flex flex-col justify-center" style={{ height: '50vh', paddingLeft: '32px', paddingRight: '48px' }}>
             <h1 
-              className="uppercase mb-3"
+              className="uppercase"
               style={{
                 fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                 fontSize: '16px',
                 fontWeight: 700,
                 letterSpacing: '0.05em',
-                lineHeight: '1.4'
+                lineHeight: '1.4',
+                marginBottom: '8px'
               }}
             >
               {product.name}
             </h1>
             
             <p 
-              className="mb-6"
               style={{
                 fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                 fontSize: '14px',
@@ -191,110 +210,92 @@ export default function ProductDetailPage() {
             </p>
           </div>
 
-          <div className="mb-6">
-            <div className="flex items-center justify-between mb-4">
-              <p 
-                className="uppercase"
-                style={{
-                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  letterSpacing: '0.05em'
-                }}
-              >
-                Size:
-              </p>
-              <button 
-                className="underline"
-                style={{
-                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '12px',
-                  fontWeight: 400
-                }}
-              >
-                Size guide
-              </button>
-            </div>
-            
-            <div className="grid grid-cols-4 gap-2 mb-4">
-              {sizes.map(([size, stock]) => {
-                const isAvailable = stock > 0;
-                const isSelected = selectedSize === size;
+          <div style={{ paddingLeft: '32px', paddingRight: '48px', paddingBottom: '32px' }}>
+          <div className="mb-4" style={{ borderTop: '1px solid #000000', paddingTop: '0' }} />
 
-                return (
-                  <button
-                    key={size}
-                    onClick={() => {
-                      if (isAvailable) {
-                        setSelectedSize(size);
-                        setQuantity(1);
-                      }
-                    }}
-                    disabled={!isAvailable}
-                    className={`py-3 border transition-colors ${
-                      isSelected
-                        ? 'bg-black text-white border-black'
-                        : isAvailable
-                        ? 'border-black hover:bg-black hover:text-white'
-                        : 'border-gray-300 text-gray-400 cursor-not-allowed'
-                    }`}
-                    style={{
-                      fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '13px',
-                      fontWeight: 400
-                    }}
-                  >
-                    {size}
-                    {!isAvailable && (
-                      <div 
-                        className="text-xs mt-1"
+          <div className="mb-4 relative">
+            <button
+              onClick={() => setIsSizeDropdownOpen(!isSizeDropdownOpen)}
+              className="w-full bg-white text-black border border-black flex items-center justify-center"
+              style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '13px',
+                fontWeight: 700,
+                letterSpacing: '0.05em',
+                textTransform: 'uppercase',
+                borderRadius: '2px',
+                padding: '10.67px 0'
+              }}
+            >
+              {selectedSize || 'Vyberte velikost'}
+            </button>
+
+            {isSizeDropdownOpen && (
+              <>
+                <div
+                  className="fixed inset-0 bg-black z-40"
+                  style={{ opacity: 0.5 }}
+                  onClick={() => setIsSizeDropdownOpen(false)}
+                />
+                <div
+                  className="absolute left-0 right-0 bg-white border border-black z-50 mt-1"
+                  style={{ borderRadius: '2px' }}
+                >
+                  {sizes.map(([size, stock]) => {
+                    const isAvailable = stock > 0;
+                    return (
+                      <button
+                        key={size}
+                        onClick={() => {
+                          if (isAvailable) {
+                            setSelectedSize(size);
+                            setQuantity(1);
+                            setIsSizeDropdownOpen(false);
+                          }
+                        }}
+                        disabled={!isAvailable}
+                        className={`w-full py-3 border-b border-black last:border-b-0 transition-colors ${
+                          isAvailable
+                            ? 'hover:bg-black hover:text-white'
+                            : 'text-gray-400 cursor-not-allowed'
+                        }`}
                         style={{
                           fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                          fontSize: '10px'
+                          fontSize: '13px',
+                          fontWeight: 400
                         }}
                       >
-                        Notify me
-                      </div>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-
-            {selectedSize && (
-              <p 
-                className="mb-4"
-                style={{
-                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '12px',
-                  fontWeight: 400,
-                  color: '#666'
-                }}
-              >
-                Odhadované doručení: {new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString('cs-CZ')}
-              </p>
+                        {size}{!isAvailable && ' (Vyprodáno)'}
+                      </button>
+                    );
+                  })}
+                </div>
+              </>
             )}
           </div>
 
           <button
             onClick={handleAddToCart}
-            className="w-full py-4 bg-black text-white hover:bg-gray-800 transition-colors mb-4"
+            className="w-full bg-black text-white hover:bg-gray-800 transition-colors mb-4"
             style={{
               fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
               fontSize: '13px',
               fontWeight: 700,
               letterSpacing: '0.05em',
-              textTransform: 'uppercase'
+              textTransform: 'uppercase',
+              borderRadius: '2px',
+              padding: '10.67px 0'
             }}
           >
-            Add to cart
+            PŘIDAT DO KOŠÍKU
           </button>
 
           <div className="border-t border-black pt-6 space-y-4">
             <div className="border-b border-black">
               <button
                 onClick={() => toggleSection('details')}
-                className="w-full py-4 flex items-center justify-between"
+                className="w-full flex items-center justify-between"
+                style={{ height: '48px' }}
               >
                 <span 
                   className="uppercase"
@@ -333,7 +334,8 @@ export default function ProductDetailPage() {
             <div className="border-b border-black">
               <button
                 onClick={() => toggleSection('size-fit')}
-                className="w-full py-4 flex items-center justify-between"
+                className="w-full flex items-center justify-between"
+                style={{ height: '48px' }}
               >
                 <span 
                   className="uppercase"
@@ -369,7 +371,8 @@ export default function ProductDetailPage() {
             <div className="border-b border-black">
               <button
                 onClick={() => toggleSection('shipping')}
-                className="w-full py-4 flex items-center justify-between"
+                className="w-full flex items-center justify-between"
+                style={{ height: '48px' }}
               >
                 <span 
                   className="uppercase"
@@ -406,7 +409,8 @@ export default function ProductDetailPage() {
             <div className="border-b border-black">
               <button
                 onClick={() => toggleSection('care')}
-                className="w-full py-4 flex items-center justify-between"
+                className="w-full flex items-center justify-between"
+                style={{ height: '48px' }}
               >
                 <span 
                   className="uppercase"
@@ -443,6 +447,7 @@ export default function ProductDetailPage() {
                 </div>
               )}
             </div>
+          </div>
           </div>
         </div>
       </div>

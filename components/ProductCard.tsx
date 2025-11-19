@@ -27,7 +27,7 @@ export default function ProductCard({
   return (
     <Link
       href={`/produkty/${slug}`}
-      className="block bg-white border border-black"
+      className="block bg-white border border-black relative"
       style={{ marginRight: '-1px', marginBottom: '-1px' }}
     >
       <div className="relative overflow-hidden aspect-product">
@@ -41,8 +41,18 @@ export default function ProductCard({
         />
       </div>
       
-      <div className="pt-sm text-center">
-        <h3 className="text-product-name mb-xs uppercase tracking-normal">
+      <div className="text-center" style={{ position: 'absolute', bottom: '64px', left: 0, right: 0 }}>
+        <h3 
+          className="mb-xs uppercase"
+          style={{
+            fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+            fontSize: '13px',
+            fontWeight: 700,
+            letterSpacing: '0.03em',
+            fontStretch: 'condensed',
+            lineHeight: '1.4'
+          }}
+        >
           {name}
         </h3>
         <p className="text-small mb-xs">

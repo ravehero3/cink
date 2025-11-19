@@ -5,11 +5,8 @@ import { useEffect } from 'react';
 
 const sortOptions = [
   { value: 'newest', label: 'Od Nejnovějšího' },
-  { value: 'oldest', label: 'Od Nejstaršího' },
   { value: 'price-low', label: 'Od Nejlevnějšího' },
-  { value: 'price-high', label: 'Od nejdražšího' },
-  { value: 'name-az', label: 'Název: A-Z' },
-  { value: 'name-za', label: 'Název: Z-A' },
+  { value: 'price-high', label: 'Od Nejdražšího' },
 ];
 
 export default function SortPanel() {
@@ -37,8 +34,9 @@ export default function SortPanel() {
       />
 
       <div
-        className="fixed top-0 right-0 bottom-0 w-[400px] bg-white border-l border-black z-50 flex flex-col animate-slide-in"
+        className="fixed top-0 right-0 bottom-0 bg-white border-l border-black z-50 flex flex-col animate-slide-in"
         style={{
+          width: 'calc(100vw / 3)',
           animation: 'slideIn 0.3s ease-out',
         }}
       >
