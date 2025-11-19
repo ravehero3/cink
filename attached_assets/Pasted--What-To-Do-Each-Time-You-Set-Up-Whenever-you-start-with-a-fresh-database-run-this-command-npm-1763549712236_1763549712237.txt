@@ -1,0 +1,23 @@
+*** What To Do Each Time You Set Up:
+Whenever you start with a fresh database, run this command:
+npm run db:seed
+
+This will automatically create:
+* ✅ Admin user (admin@ufosport.cz / admin123)
+* ✅ Regular test user (user@ufosport.cz / user123)
+* ✅ 4 product categories
+* ✅ 40 sample products
+The seed script also created 40 sample products for you, so your store now has content to display! Try logging in now and visiting the admin panel at /admin to see all the products.
+
+
+For cloudinary:
+
+* CLOUDINARY_CLOUD_NAME: dq0qvtbst
+* CLOUDINARY_API_KEY: 596126671243338
+* CLOUDINARY_API_SECRET: -37hpT9LFVDodIVcLf2EKp7meRE
+
+
+Ok now lets make some slight design changes:  on the product page (where 1 product is viewed) we want the page to have 2 main elements. there is a 1px line in the middle going vertically from top to bottom which marks the exact middle of the page. The left side is for the photos to be scrolled and right side should show the info. We almost have the same thing as I am describing, but our elements are not yet exactly half/half like im describing. Visually we are taking inspiration from this page: https://www.balenciaga.com/en-cz/3b-football-v-neck-t-shirt-oversized-grey-white-857086TTVQ61461.html do you see what I mean?   also lets make the dropdown info on the product page to have 42px between each line that separates these dropdown infos. I mean the ones that say products details, size and fit, doprava zdarma, etc..  also, lets change the ADD TO CART button to be 42px in height and the same width as the dropdown sections.  above this button there should be little grey text saying: předpokládané doručení 2-5 dns  above this text there should be a dropdown select size/vyberte velikost menu where the user can select one of the lines with the size  this dropdown should have the same size as the black add to cart button.   above this dropdown there is a line in the same width as the button and above it  there is a little text explaining the item, above it there is little text with the price all centered and all either 16px distanced from each other or 24px distanced
+
+All of this is inspired by this:https://www.balenciaga.com/en-cz/3b-football-v-neck-t-shirt-oversized-grey-white-857086TTVQ61461.html please look and copy as much as you can
+
