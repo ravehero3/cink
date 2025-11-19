@@ -149,7 +149,7 @@ export default function ProductDetailPage() {
       )}
 
       <div className="flex">
-        <div className="w-[60%] pr-4">
+        <div className="w-1/2 border-r border-black">
           <div className="space-y-2">
             {product.images.map((image, index) => (
               <div key={index} className="w-full">
@@ -164,7 +164,7 @@ export default function ProductDetailPage() {
           </div>
         </div>
 
-        <div className="w-[40%] pl-8 pr-12 py-8 sticky top-[44px] self-start h-screen overflow-y-auto">
+        <div className="w-1/2 pl-8 pr-12 py-8 sticky top-[44px] self-start h-screen overflow-y-auto">
           <div className="mb-6">
             <h1 
               className="uppercase mb-3"
