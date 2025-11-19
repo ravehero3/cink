@@ -7,7 +7,9 @@ import CategoryHero from '@/components/CategoryHero';
 import ControlBar from '@/components/ControlBar';
 import ProductsGrid from '@/components/ProductsGrid';
 import FilterWindow from '@/components/FilterWindow';
+import SortPanel from '@/components/SortPanel';
 import { useFilterStore } from '@/lib/filter-store';
+import { useSortPanelStore } from '@/lib/sort-panel-store';
 import { useSearchBarStore } from '@/lib/search-bar-store';
 
 interface Category {
@@ -41,7 +43,13 @@ export default function CategoryPage() {
   const [savedProducts, setSavedProducts] = useState<string[]>([]);
 
   const { colors, sizes } = useFilterStore();
+  const { selectedSort } = useSortPanelStore();
   const { setVisible, setShowSearchIcon } = useSearchBarStore();
+
+  // Sync selectedSort from store to currentSort
+  useEffect(() => {
+    setCurrentSort(selectedSort);
+  }, [selectedSort]);
 
   // Initialize search bar on mount, cleanup on unmount
   useEffect(() => {
@@ -198,6 +206,7 @@ export default function CategoryPage() {
       )}
 
       <FilterWindow />
+      <SortPanel />
     </div>
   );
 }
