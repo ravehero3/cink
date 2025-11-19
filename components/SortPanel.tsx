@@ -72,8 +72,8 @@ export default function SortPanel() {
         </div>
 
         <div className="flex-1 overflow-y-auto">
-          <div style={{ padding: '24px' }}>
-            <div className="space-y-3">
+          <div style={{ padding: '2px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
               {sortOptions.map((option) => (
                 <button
                   key={option.value}
@@ -91,9 +91,9 @@ export default function SortPanel() {
           </div>
         </div>
 
-        <div style={{ borderTop: '1px solid #000000', marginBottom: '24px', marginLeft: '24px', marginRight: '24px' }} />
+        <div style={{ borderTop: '1px solid #000000', marginBottom: '2px', marginLeft: '2px', marginRight: '2px' }} />
 
-        <div style={{ padding: '0 24px 24px 24px' }} className="flex gap-6">
+        <div className="flex" style={{ gap: '2px', padding: '0 2px 2px 2px' }}>
           <button
             onClick={cancel}
             className="flex-1 px-lg py-sm text-small uppercase tracking-wider border border-black bg-white text-black hover:opacity-70 transition-opacity"

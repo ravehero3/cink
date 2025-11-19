@@ -30,11 +30,14 @@ export default function ProductCard({
 }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [hoveredSize, setHoveredSize] = useState<string | null>(null);
   const router = useRouter();
 
   const availableSizes = Object.entries(sizes)
     .filter(([_, stock]) => stock > 0)
     .map(([size, _]) => size);
+  
+  const allSizes = Object.entries(sizes).map(([size, stock]) => ({ size, stock }));
 
   const handleSizeClick = (e: React.MouseEvent, size: string) => {
     e.preventDefault();
@@ -183,27 +186,40 @@ export default function ProductCard({
           </h3>
         )}
         
-        {isHovered && availableSizes.length > 0 ? (
+        {isHovered && allSizes.length > 0 ? (
           <div 
             className="flex justify-center gap-1 flex-wrap px-2"
             style={{ marginBottom: '4px' }}
           >
-            {availableSizes.map((size) => (
-              <button
-                key={size}
-                onClick={(e) => handleSizeClick(e, size)}
-                className="bg-white border border-black hover:bg-black hover:text-white transition-colors"
-                style={{
-                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '11px',
-                  fontWeight: 400,
-                  padding: '2px 6px',
-                  minWidth: '28px'
-                }}
-              >
-                {size}
-              </button>
-            ))}
+            {allSizes.map(({ size, stock }) => {
+              const isAvailable = stock > 0;
+              const isHoveredSize = hoveredSize === size;
+              return (
+                <button
+                  key={size}
+                  onClick={(e) => isAvailable && handleSizeClick(e, size)}
+                  onMouseEnter={() => isAvailable && setHoveredSize(size)}
+                  onMouseLeave={() => setHoveredSize(null)}
+                  className={`border transition-colors ${
+                    isAvailable 
+                      ? 'bg-white border-black hover:bg-white hover:text-black' 
+                      : 'bg-transparent border-transparent cursor-default'
+                  }`}
+                  style={{
+                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '11px',
+                    fontWeight: 400,
+                    padding: '2px 6px',
+                    minWidth: '28px',
+                    color: isAvailable ? '#000' : '#999',
+                    textDecoration: isAvailable ? 'none' : 'line-through',
+                    position: 'relative'
+                  }}
+                >
+                  {size}
+                </button>
+              );
+            })}
           </div>
         ) : !isHovered ? (
           <p 
@@ -223,6 +239,7 @@ export default function ProductCard({
                 height: '4px',
                 border: '1px solid #000000',
                 backgroundColor: '#ffffff',
+                borderRadius: '2px',
               }}
             />
           </div>

@@ -202,7 +202,8 @@ export default function ProductDetailPage() {
                 fontWeight: 700,
                 letterSpacing: '0.05em',
                 lineHeight: '1.4',
-                marginBottom: '8px'
+                marginBottom: '4px',
+                textAlign: 'center'
               }}
             >
               {product.name}
@@ -212,7 +213,8 @@ export default function ProductDetailPage() {
               style={{
                 fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                 fontSize: '14px',
-                fontWeight: 400
+                fontWeight: 400,
+                textAlign: 'center'
               }}
             >
               {product.price} Kč
@@ -227,13 +229,15 @@ export default function ProductDetailPage() {
               onClick={() => setIsSizeDropdownOpen(!isSizeDropdownOpen)}
               className="w-full bg-white text-black border border-black flex items-center justify-center"
               style={{
-                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                 fontSize: '13px',
                 fontWeight: 700,
                 letterSpacing: '0.05em',
                 textTransform: 'uppercase',
                 borderRadius: '2px',
-                padding: '10.67px 0'
+                padding: '10.67px 0',
+                fontStretch: 'condensed',
+                textAlign: 'center'
               }}
             >
               {selectedSize || 'Vyberte velikost'}
@@ -287,20 +291,21 @@ export default function ProductDetailPage() {
             onClick={handleAddToCart}
             className="bg-black text-white hover:bg-gray-800 transition-colors mb-4"
             style={{
-              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
               fontSize: '13px',
               fontWeight: 700,
               letterSpacing: '0.05em',
               textTransform: 'uppercase',
               borderRadius: '2px',
               padding: '10.67px 0',
-              width: '30vw'
+              width: '30vw',
+              fontStretch: 'condensed'
             }}
           >
             PŘIDAT DO KOŠÍKU
           </button>
 
-          <div className="border-t border-black pt-6 space-y-4">
+          <div className="border-t border-black pt-6 flex flex-col gap-1">
             <div className="border-b border-black">
               <button
                 onClick={() => toggleSection('details')}
@@ -308,12 +313,13 @@ export default function ProductDetailPage() {
                 style={{ height: '48px' }}
               >
                 <span 
-                  className="uppercase"
+                  className="uppercase flex items-center"
                   style={{
                     fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '12px',
                     fontWeight: 700,
-                    letterSpacing: '0.05em'
+                    letterSpacing: '0.05em',
+                    height: '100%'
                   }}
                 >
                   Product details
@@ -348,12 +354,13 @@ export default function ProductDetailPage() {
                 style={{ height: '48px' }}
               >
                 <span 
-                  className="uppercase"
+                  className="uppercase flex items-center"
                   style={{
                     fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '12px',
                     fontWeight: 700,
-                    letterSpacing: '0.05em'
+                    letterSpacing: '0.05em',
+                    height: '100%'
                   }}
                 >
                   Size & fit
@@ -385,12 +392,13 @@ export default function ProductDetailPage() {
                 style={{ height: '48px' }}
               >
                 <span 
-                  className="uppercase"
+                  className="uppercase flex items-center"
                   style={{
                     fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '12px',
                     fontWeight: 700,
-                    letterSpacing: '0.05em'
+                    letterSpacing: '0.05em',
+                    height: '100%'
                   }}
                 >
                   Doprava zdarma, vrácení zdarma
@@ -423,12 +431,13 @@ export default function ProductDetailPage() {
                 style={{ height: '48px' }}
               >
                 <span 
-                  className="uppercase"
+                  className="uppercase flex items-center"
                   style={{
                     fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '12px',
                     fontWeight: 700,
-                    letterSpacing: '0.05em'
+                    letterSpacing: '0.05em',
+                    height: '100%'
                   }}
                 >
                   Péče o produkt
