@@ -1,148 +1,7 @@
 # UFO Sport E-shop
 
 ## Overview
-A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz). The project aims to deliver a high-fashion, Balenciaga-inspired user experience with a focus on clean design, enlarged typography, and generous spacing. It supports a full e-commerce workflow from product browsing to secure payment and shipping.
-
-## Admin Access
-**Email:** admin@ufosport.cz  
-**Password:** admin123  
-This admin user is permanently stored in the PostgreSQL database and persists across deployments.
-
-## Recent Changes (November 19, 2025)
-- **Layout Adjustments for Full Browser Resolution**:
-  - Moved FILTROVAT button 100px to the right in ControlBar (was 82px, now 100px)
-  - Moved shopping cart icon 100px to the right in Header1 (was 80px, now 100px)
-  - VOODOO808 navigation link remains at -80px to the left (verified correct)
-  - Product count "10 PRODUKTŮ" remains at -80px to the left (verified correct)
-- **Product Card Hover Interactions**:
-  - Implemented image carousel with state management (currentImageIndex)
-  - Added 3-dot indicator that appears on hover when product has multiple images
-  - Current dot is black (#000000), inactive dots are grey (#999999), each 4px diameter
-  - Left and right arrow navigation overlays on product image for switching between images
-  - Carousel limited to first 3 images maximum
-  - Price changes to 4px × 4px white square with 1px black stroke on hover for ALL products
-  - Image carousel resets to first image when mouse leaves (currentImageIndex resets to 0)
-  - Dot indicators only show for products with 2+ images (maxImages > 1)
-  - Architect-reviewed and verified: proper hover state reset, price square appears for all products
-- **Project Import and Database Setup**:
-  - Successfully migrated project to Replit environment
-  - Created PostgreSQL database and configured connection
-  - Ran database migrations using Prisma (npm run db:push)
-  - Seeded database with initial data: admin user, test user, 4 categories, and 40 sample products
-  - Configured Cloudinary credentials for media management (CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET)
-- **Product Page Layout Refinement**:
-  - Updated product detail page from 60/40 split to exact 50/50 split layout
-  - Changed left side width from `w-[60%]` to `w-1/2` (exactly 50%)
-  - Changed right side width from `w-[40%]` to `w-1/2` (exactly 50%)
-  - Added 1px vertical divider in the center (`border-r border-black`) for clean separation
-  - Design inspired by Balenciaga product pages with left side for scrollable images and right side for product information
-  - Maintained sticky product info sidebar and collapsible accordion sections
-
-## Previous Changes (November 18, 2025)
-- **Accordion Implementation Across Footer Pages**:
-  - Implemented accordion design system on právní informace page (4 collapsible sections)
-  - Implemented accordion design system on ochrana-osobních-údajů page (5 collapsible sections with contact box)
-  - Implemented accordion design system on nastavení-cookies page (3 cookie type sections with integrated toggles)
-  - All three pages now feature the same expandable/collapsible UI pattern as the doručení page
-  - Improved user experience with cleaner, more organized content presentation
-- **Precise Spacing Adjustments**:
-  - Fixed vertical line alignment on all 10 footer pages to touch header edge (changed from 88px to 44px offset)
-  - SLEDOVÁNÍ OBJEDNÁVKY page: Added 64px spacing below tip box before horizontal line
-  - FAQ page: Added 42px spacing between title and header
-  - VRÁCENÍ OBJEDNÁVKY page: Added 64px spacing between title and header
-  - Cookies page: Added 64px spacing between title and header
-  - DORUČENÍ page: Added 64px spacing between title and header
-- **Button Hover Effect Updates**:
-  - Updated nastavení-cookies page buttons to match main page hover pattern
-  - Changed from opacity-based hover to border-based white background hover effect
-  - Consistent `border border-black hover:bg-white hover:text-black transition-colors` across all buttons
-- **Product Detail Page Redesign**:
-  - Completely redesigned product page to match Balenciaga's minimal luxury aesthetic
-  - Implemented split layout (images left, info sidebar right) - refined to 50/50 on Nov 19, 2025
-  - Added sticky sidebar with product information that stays visible while scrolling
-  - Created accordion-style collapsible sections for Product Details, Size & Fit, Shipping Info, and Product Care
-  - Enhanced size selector with "Notify me" option for out-of-stock sizes
-  - Added estimated delivery date display when size is selected
-  - Improved typography and spacing to match high-fashion aesthetic
-  - Fixed critical React hook order violation to ensure page stability
-- **UI Cleanup and Refinements**:
-  - Removed horizontal decorative lines from 5 information pages (FAQ, Privacy Policy, Legal Information, Cookie Settings, Delivery)
-  - Removed dobírka (cash on delivery) payment option from payment page
-  - Updated FAQ to remove mention of dobírka payment method
-  - Cleaner, more minimalist appearance across information pages
-
-## Previous Changes (November 17, 2025)
-- **Cloudinary Media Library Implementation**:
-  - Added complete media management system for images and videos
-  - Created Media database model with Cloudinary integration
-  - Built admin media library page (/admin/media) with upload, browse, and delete functionality
-  - Implemented MediaSelector component for easy media selection throughout the app
-  - Integrated media selector into EditSectionModal for homepage content management
-  - Added security: admin-only API access, file type validation (JPEG, PNG, WebP, GIF, MP4, WebM, MOV), 100MB size limit
-  - Created comprehensive documentation in MEDIA_LIBRARY_GUIDE.md
-
-## Previous Changes (November 13, 2025)
-- **Input Field Border Radius Update**:
-  - Updated all input fields and buttons from 2px to 4px border radius across the entire app
-  - Applied to login, order tracking, returns, and saved products pages
-  - Ensures consistent, slightly more rounded corners throughout the user interface
-- **Saved Products Navigation Change**:
-  - Changed saved products/wishlist from popup modal to dedicated page
-  - Heart icon in header now navigates to /ulozeno page instead of opening SavedProductsWindow modal
-  - Provides better user experience with full-page layout for managing saved items
-- **Vertical Lines Repositioning**:
-  - Repositioned vertical guide lines 40px wider on each side (from 33.33%/66.66% to calc(33.33% - 40px)/calc(66.66% + 40px))
-  - Extended vertical lines to touch header (top: 0) and reach footer (bottom: 0)
-  - Updated all footer pages to fit content within vertical lines with 8px spacing
-- **Button Standardization**:
-  - Standardized all buttons with 4px border radius (previously 2px)
-  - Consistent button height across app: padding: 13.8px 25.6px
-- **Login Page Refinements**:
-  - Updated Google login button to use black G logo (currentColor for proper hover states)
-  - Updated all input fields to have 4px rounded corners and 1/3 page width
-  - Confirmed labels positioned 2px above input fields
-- **Newsletter Window Updates**:
-  - Moved email input field 40px lower (from marginTop 40px to 80px)
-  - Updated slide-in animation to match cart drawer (300ms duration with ease-in-out)
-  - Fixed email validation to show red border and bilingual error message
-  - Reverted footer newsletter button to underlined text style (instead of white button)
-  - Updated spacing: E-mail label 4px above field, description text centered, consent text 24px below field
-- **Legal Page Redesign**:
-  - Redesigned právní informace page with clean, minimalist Balenciaga-inspired layout
-  - Added numbered sections for better readability
-  - Improved typography and spacing throughout
-- **New Reusable Components**:
-  - Created PageFrame component with vertical lines (at 1/3 and 2/3 width, from 40px below top to 50% viewport height)
-  - Created Accordion component for collapsible FAQ sections with smooth animations and chevron icons
-- **Page Redesigns**:
-  - Redesigned vrácení zboží page with Balenciaga-inspired form (email + order number fields, clean centered layout)
-  - Redesigned doručení page with collapsible accordion FAQ (6 delivery-related sections)
-  - Applied PageFrame with vertical lines to all 9 footer-linked pages for consistent design
-
-## Previous Changes (November 11, 2025)
-- **Reklamační řád Page**: Created new dedicated page at /reklamacni-rad with complete consumer rights information
-- **Footer Contact Updates**:
-  - Updated phone number to +420 775 181 107
-  - Updated email to ufosport@mail.com
-  - Updated Instagram link to https://www.instagram.com/ufosport.cz/?hl=en
-  - Updated Facebook link to https://www.facebook.com/ufosports/?locale=cs_CZ
-
-## Earlier Changes (November 10, 2025)
-- **Database Setup**: PostgreSQL database provisioned and schema migrated using Prisma
-- **Test Users Created**: 
-  - Admin: admin@ufosport.cz / admin123
-  - Regular User: user@ufosport.cz / user123
-- **Login Page Redesign**: Complete redesign to match Balenciaga's minimal aesthetic with:
-  - Clean centered layout with minimal borders
-  - "Remember me" checkbox
-  - Expandable "Need help signing in?" section
-  - Password reset modal dialog
-  - "Create My Profile" CTA for registration
-- **Footer Updates**:
-  - Added 1px top border to main footer section (footer1)
-  - Changed copyright text (footer2) to use Helvetica Neue Condensed Regular font
-- **VideoSection Improvements**: Updated to always render overlay container for text and buttons, allowing admin to add/edit content
-- **Homepage Content**: Changed section3 default header text from "VÍME ŽE JSI ALIEN" to "TRIKA"
+A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz), designed with a high-fashion, Balenciaga-inspired aesthetic. The project focuses on clean design, enlarged typography, and generous spacing to deliver a premium user experience. It supports a comprehensive e-commerce workflow, from product browsing and selection to secure payment processing and shipping. The platform aims to provide a unique online shopping experience that aligns with a luxury, avant-garde brand image.
 
 ## User Preferences
 I prefer clear, concise explanations.
@@ -154,33 +13,33 @@ Ask before making major changes to the core design system or introducing new ext
 ## System Architecture
 
 ### UI/UX Decisions
-The design is inspired by Balenciaga's minimalist aesthetic, featuring a strict black-and-white color palette with a neon green accent for primary calls to action. No grays, shadows, or gradients are used. Typography utilizes "Helvetica Neue" (or similar sans-serif) with enlarged sizes and specific letter spacing for headlines. A generous 8px-based spacing system is applied throughout. The layout includes a max-width container (1600px) and responsive product grids (3 columns desktop, 2 tablet, 1 mobile). Buttons have sharp corners and minimal hover effects. Headers are fixed with integrated search and redesigned with a three-column grid for balanced spacing, featuring reduced icon sizes (22px) and specific font styles for navigation links. Cart and saved products drawers slide in with semi-transparent overlays.
+The design strictly adheres to a Balenciaga-inspired minimalist aesthetic, using a black-and-white color palette with neon green accents solely for primary calls to action. The design avoids grays, shadows, and gradients. Typography features enlarged "Helvetica Neue" (or similar sans-serif) with specific letter spacing for headlines. A consistent 8px-based spacing system is used throughout. The layout includes a 1600px max-width container and responsive product grids. Buttons have sharp corners with minimal hover effects. Headers are fixed, integrating search functionality and a three-column grid layout with reduced icon sizes (22px) and specific font styles for navigation. Cart and saved products use slide-in drawers with semi-transparent overlays.
 
 ### Technical Implementations
-The project is built with Next.js 14 (App Router) and TypeScript. Styling is handled by Tailwind CSS. State management for cart, recently viewed, and saved products uses Zustand. The application includes a comprehensive checkout flow, order creation, and confirmation pages. Search functionality includes product filtering. Promo code validation and discount calculation are integrated. Video sections and category sections are customizable by an admin user with text overlays and button pairs, using a Zustand store for content (currently persisted in localStorage). UI animations are carefully crafted for a smooth user experience, such as search bar slide-down and delayed content fade-in.
+The project is built using Next.js 14 (App Router) and TypeScript. Tailwind CSS manages all styling. State management for the cart, recently viewed items, and saved products is handled by Zustand. The application features a comprehensive checkout flow, order creation, and confirmation. Search functionality includes product filtering. Promo code validation and discount calculations are integrated. Homepage video and category sections are customizable via an admin interface, utilizing a Zustand store for content persistence. UI animations, such as search bar slide-down and delayed content fade-in, are carefully implemented for a smooth user experience.
 
 ### Feature Specifications
-- **Product Catalog**: Displays products with images, sizes, and stock.
-- **Shopping Cart**: Slide-in drawer with dimmed overlay, recently viewed products, and shipping/payment benefits.
-- **Checkout Flow**: Full process from cart to order creation, including promo code application, GoPay payment integration, and Zásilkovna pickup point selection.
-- **Order Management**: Creation and confirmation pages.
-- **User Accounts**: Basic user authentication (credentials-based).
-- **Saved Products**: Functionality to save products and view them on a dedicated page.
-- **Search**: Site-wide search with filtering capabilities.
-- **Admin Features**: Customizable content for video and category sections on the homepage.
+- **Product Catalog**: Comprehensive display of products with images, size options, and stock levels.
+- **Shopping Cart**: Slide-in drawer with recently viewed products and highlighted shipping/payment benefits.
+- **Checkout Flow**: End-to-end process including promo code application, payment gateway integration (GoPay), and shipping point selection (Zásilkovna).
+- **Order Management**: Creation and confirmation of customer orders.
+- **User Accounts**: Basic user authentication.
+- **Saved Products**: Functionality for users to save products to a dedicated wishlist page.
+- **Search**: Site-wide product search with filtering capabilities.
+- **Admin Features**: Content management for homepage sections (e.g., video and category displays).
 
 ### System Design Choices
-- **Framework**: Next.js 14 with App Router.
-- **Language**: TypeScript for type safety.
-- **Styling**: Tailwind CSS for utility-first styling, strictly adhering to the design system.
-- **Database**: PostgreSQL with Prisma ORM for data modeling and interaction.
-- **Authentication**: NextAuth.js for secure user authentication.
+- **Framework**: Next.js 14 (App Router).
+- **Language**: TypeScript.
+- **Styling**: Tailwind CSS.
+- **Database**: PostgreSQL via Prisma ORM.
+- **Authentication**: NextAuth.js.
 - **State Management**: Zustand for client-side global state.
 
 ## External Dependencies
-- **Database**: PostgreSQL (via Prisma ORM)
+- **Database**: PostgreSQL
 - **Authentication**: NextAuth.js
-- **Payment Gateway**: GoPay (Czech payment gateway)
-- **Shipping Integration**: Zásilkovna (Packeta) API for pickup point selection
-- **Email Service**: Resend API (for transactional emails)
-- **File Storage**: Cloudinary (for product images)
+- **Payment Gateway**: GoPay
+- **Shipping Integration**: Zásilkovna (Packeta) API
+- **Email Service**: Resend API
+- **File Storage**: Cloudinary
