@@ -169,8 +169,8 @@ export default function CategoryPage() {
 
   if (!category) {
     return (
-      <div className="flex items-center justify-center" style={{ paddingTop: '64px' }}>
-        <p className="text-product-name animate-pulse-color">Načítání...</p>
+      <div className="relative" style={{ paddingTop: '69px' }}>
+        <p className="text-product-name animate-pulse-color absolute left-1/2 transform -translate-x-1/2">Načítání...</p>
       </div>
     );
   }
@@ -186,8 +186,8 @@ export default function CategoryPage() {
       />
       
       {isLoading ? (
-        <div className="text-center" style={{ paddingTop: '64px' }}>
-          <p className="text-product-name animate-pulse-color">Načítání...</p>
+        <div className="relative" style={{ paddingTop: '69px' }}>
+          <p className="text-product-name animate-pulse-color absolute left-1/2 transform -translate-x-1/2">Načítání...</p>
         </div>
       ) : (
         <ProductsGrid
