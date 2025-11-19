@@ -9,6 +9,21 @@ A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz). T
 This admin user is permanently stored in the PostgreSQL database and persists across deployments.
 
 ## Recent Changes (November 19, 2025)
+- **Layout Adjustments for Full Browser Resolution**:
+  - Moved FILTROVAT button 100px to the right in ControlBar (was 82px, now 100px)
+  - Moved shopping cart icon 100px to the right in Header1 (was 80px, now 100px)
+  - VOODOO808 navigation link remains at -80px to the left (verified correct)
+  - Product count "10 PRODUKTŮ" remains at -80px to the left (verified correct)
+- **Product Card Hover Interactions**:
+  - Implemented image carousel with state management (currentImageIndex)
+  - Added 3-dot indicator that appears on hover when product has multiple images
+  - Current dot is black (#000000), inactive dots are grey (#999999), each 4px diameter
+  - Left and right arrow navigation overlays on product image for switching between images
+  - Carousel limited to first 3 images maximum
+  - Price changes to 4px × 4px white square with 1px black stroke on hover for ALL products
+  - Image carousel resets to first image when mouse leaves (currentImageIndex resets to 0)
+  - Dot indicators only show for products with 2+ images (maxImages > 1)
+  - Architect-reviewed and verified: proper hover state reset, price square appears for all products
 - **Project Import and Database Setup**:
   - Successfully migrated project to Replit environment
   - Created PostgreSQL database and configured connection
