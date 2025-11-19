@@ -8,6 +8,7 @@ interface Product {
   slug: string;
   price: number;
   images: string[];
+  sizes?: Record<string, number>;
   color?: string;
   colorCount?: number;
 }
@@ -40,7 +41,8 @@ export default function ProductsGrid({ products, savedProducts = [], onToggleSav
             name={product.name}
             slug={product.slug}
             price={Number(product.price)}
-            image={product.images[0]}
+            images={product.images}
+            sizes={product.sizes}
             colorCount={product.colorCount || 1}
             isSaved={savedProducts.includes(product.id)}
             onToggleSave={onToggleSave}

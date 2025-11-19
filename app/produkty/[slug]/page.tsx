@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { useCartStore } from '@/lib/cart-store';
 import { useSavedProductsStore } from '@/lib/saved-products-store';
 import { useRecentlyViewedStore } from '@/lib/recently-viewed-store';
@@ -22,7 +22,9 @@ interface Product {
 
 export default function ProductDetailPage() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const slug = params.slug as string;
+  const sizeFromUrl = searchParams.get('size');
 
   const [product, setProduct] = useState<Product | null>(null);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
@@ -40,6 +42,13 @@ export default function ProductDetailPage() {
   useEffect(() => {
     fetchProduct();
   }, [slug]);
+
+  // Pre-select size from URL parameter if present
+  useEffect(() => {
+    if (product && sizeFromUrl && product.sizes[sizeFromUrl] && product.sizes[sizeFromUrl] > 0) {
+      setSelectedSize(sizeFromUrl);
+    }
+  }, [product, sizeFromUrl]);
 
   const fetchProduct = async () => {
     setIsLoading(true);
