@@ -29,16 +29,17 @@ export default function Header1() {
     <>
       <header className="h-header border-b border-black bg-white fixed top-0 left-0 right-0 z-30">
         <div className="h-full max-w-container mx-auto flex items-center justify-between relative">
-          {/* Left Group: Category Navigation - 20px from left, 20px gap between items */}
+          {/* Left Group: Category Navigation - VOODOO808 moved 80px to left */}
           <nav className={`flex items-center transition-opacity duration-300 ${showSearch ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ gap: '20px', paddingLeft: '20px' }}>
-            {categories.map((category) => (
+            {categories.map((category, index) => (
               <Link
                 key={category.slug}
                 href={`/kategorie/${category.slug}`}
                 className="hover:opacity-70 transition-opacity whitespace-nowrap uppercase tracking-tight font-normal text-sm"
                 style={{
                   color: 'rgb(0, 0, 0)',
-                  textDecoration: 'none'
+                  textDecoration: 'none',
+                  marginLeft: index === 0 ? '-80px' : '0'
                 }}
               >
                 {category.name}
@@ -134,7 +135,7 @@ export default function Header1() {
                 onClick={() => setShowCartDrawer(true)}
                 className="relative hover:opacity-70 transition-opacity"
                 aria-label="Cart"
-                style={{ width: '22px', height: '22px' }}
+                style={{ width: '22px', height: '22px', marginRight: '80px' }}
               >
                 <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />

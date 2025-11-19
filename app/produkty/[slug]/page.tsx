@@ -220,9 +220,9 @@ export default function ProductDetailPage() {
           </div>
 
           <div style={{ paddingLeft: '32px', paddingRight: '48px', paddingBottom: '32px' }}>
-          <div className="mb-4" style={{ borderTop: '1px solid #000000', paddingTop: '0' }} />
+          <div className="mb-4" style={{ borderTop: '1px solid #000000', paddingTop: '0', width: '30vw' }} />
 
-          <div className="mb-4 relative">
+          <div className="mb-4 relative" style={{ width: '30vw' }}>
             <button
               onClick={() => setIsSizeDropdownOpen(!isSizeDropdownOpen)}
               className="w-full bg-white text-black border border-black flex items-center justify-center"
@@ -285,7 +285,7 @@ export default function ProductDetailPage() {
 
           <button
             onClick={handleAddToCart}
-            className="w-full bg-black text-white hover:bg-gray-800 transition-colors mb-4"
+            className="bg-black text-white hover:bg-gray-800 transition-colors mb-4"
             style={{
               fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
               fontSize: '13px',
@@ -293,7 +293,8 @@ export default function ProductDetailPage() {
               letterSpacing: '0.05em',
               textTransform: 'uppercase',
               borderRadius: '2px',
-              padding: '10.67px 0'
+              padding: '10.67px 0',
+              width: '30vw'
             }}
           >
             PŘIDAT DO KOŠÍKU
