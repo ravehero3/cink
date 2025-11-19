@@ -1,0 +1,20 @@
+*** What To Do Each Time You Set Up:
+Whenever you start with a fresh database, run this command:
+npm run db:seed
+
+This will automatically create:
+* ✅ Admin user (admin@ufosport.cz / admin123)
+* ✅ Regular test user (user@ufosport.cz / user123)
+* ✅ 4 product categories
+* ✅ 40 sample products
+The seed script also created 40 sample products for you, so your store now has content to display! Try logging in now and visiting the admin panel at /admin to see all the products.
+
+
+For cloudinary:
+
+* CLOUDINARY_CLOUD_NAME: dq0qvtbst
+* CLOUDINARY_API_KEY: 596126671243338
+CLOUDINARY_API_SECRET: -37hpT9LFVDodIVcLf2EKp7meRE  now in the product grid - product rectangle shows 1 barva information. Lets make it a rule, that when the user hovers over a product in the product grid, the image changes to image number 2 and instead of showing color options it shows which sizes are currently available with the option of the user clicking on one of the sizes and opening a product window where the user has the size he selected .but lets change this to not show colors, but available sizes instead. As soon as the user hovers over the product rectangle, two arrows appear. One to the left and the other one to the right. The left arrow is 4px from the left edge and the right arrow is 4px from the right edge
+
+
+also in this product rectangle, lets make sure there is 4px distance between the product title, the sizes and the price. Also there seem to be a 2px line between the edge of the product grid and the filtrovat strip. Lets make sure we only have 1px line separating these elements from themselves  lets make sure each product rectangle has a heart symbol that works as a save/wishlist button. The heart should be 4px from the top right corner    I wonder about one thing. When we work on the app in replit the resolution/ratio is a little different from when we actually browse internet, because in replit there is the panel on left. when I remove the panel on the left, I can finally see the full version of the app and I see that some elements tend to be in different places than I want them to be, for example the header when we view our shop in full size, the footer shows the VOODOO808, SPACE LOVE, etc.. titles too far away from the actual edge. They should be 8px from the left edge, yet they are alligned quite far away from that. can you please change this so when the full size (browser size) is shown, these elements stick to the left and right edges? I say right edge because this is true also for the elements on the right side of the header - the přihlásit se, heart symbol, search symbol, shopping cart symbol should also stick to be 8px from the right edge of the full sized shop, does this make sense?   the same applies for the filtrovat strip which has elements that should too stick to the sides accordingly.  also when I view the seřadit podle pop up window, I want to still be able to see the rest of the page, just a little bit darker. This effect is used when nákupní košík window is opened. Can you find how this is done? I think we used grey overlay or was it a different effect?
