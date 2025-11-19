@@ -38,7 +38,7 @@ export default function ControlBar({ productCount, currentSort, onSortChange }: 
           <button
             onClick={open}
             className="text-sm uppercase tracking-tight font-normal border border-black px-lg py-sm hover:opacity-70 transition-opacity"
-            style={{ marginRight: '82px' }}
+            style={{ marginRight: '100px' }}
           >
             FILTROVAT
           </button>

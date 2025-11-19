@@ -29,6 +29,7 @@ export default function ProductCard({
   onToggleSave,
 }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const router = useRouter();
 
   const availableSizes = Object.entries(sizes)
@@ -49,7 +50,20 @@ export default function ProductCard({
     }
   };
 
-  const displayImage = isHovered && images.length > 1 ? images[1] : images[0];
+  const handlePrevImage = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setCurrentImageIndex((prev) => (prev === 0 ? Math.min(images.length - 1, 2) : prev - 1));
+  };
+
+  const handleNextImage = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setCurrentImageIndex((prev) => (prev >= Math.min(images.length - 1, 2) ? 0 : prev + 1));
+  };
+
+  const displayImage = images[currentImageIndex] || images[0];
+  const maxImages = Math.min(images.length, 3);
 
   return (
     <Link
@@ -57,7 +71,10 @@ export default function ProductCard({
       className="block bg-white border border-black relative"
       style={{ marginRight: '-1px', marginBottom: '-1px', marginTop: '-1px' }}
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseLeave={() => {
+        setIsHovered(false);
+        setCurrentImageIndex(0);
+      }}
     >
       <div className="relative overflow-hidden aspect-product">
         <img
@@ -87,23 +104,84 @@ export default function ProductCard({
             </svg>
           </button>
         )}
+
+        {/* Navigation Arrows - Show on hover if multiple images */}
+        {isHovered && maxImages > 1 && (
+          <>
+            <button
+              onClick={handlePrevImage}
+              className="absolute z-10 hover:opacity-70 transition-opacity"
+              style={{ 
+                left: '8px', 
+                top: '50%', 
+                transform: 'translateY(-50%)',
+                background: 'none',
+                border: 'none',
+                padding: '4px',
+                cursor: 'pointer'
+              }}
+            >
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" strokeWidth="2">
+                <path d="M10 12L6 8L10 4" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+            
+            <button
+              onClick={handleNextImage}
+              className="absolute z-10 hover:opacity-70 transition-opacity"
+              style={{ 
+                right: '8px', 
+                top: '50%', 
+                transform: 'translateY(-50%)',
+                background: 'none',
+                border: 'none',
+                padding: '4px',
+                cursor: 'pointer'
+              }}
+            >
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" strokeWidth="2">
+                <path d="M6 4L10 8L6 12" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+          </>
+        )}
       </div>
       
       <div className="text-center" style={{ position: 'absolute', bottom: '64px', left: 0, right: 0 }}>
-        <h3 
-          className="uppercase"
-          style={{
-            fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-            fontSize: '13px',
-            fontWeight: 700,
-            letterSpacing: '0.03em',
-            fontStretch: 'condensed',
-            lineHeight: '1.4',
-            marginBottom: '4px'
-          }}
-        >
-          {name}
-        </h3>
+        {/* Title or Dot Indicators */}
+        {isHovered && maxImages > 1 ? (
+          <div 
+            className="flex justify-center gap-1"
+            style={{ marginBottom: '4px', height: '18px', alignItems: 'center' }}
+          >
+            {Array.from({ length: maxImages }).map((_, index) => (
+              <div
+                key={index}
+                style={{
+                  width: '4px',
+                  height: '4px',
+                  borderRadius: '50%',
+                  backgroundColor: index === currentImageIndex ? '#000000' : '#999999',
+                }}
+              />
+            ))}
+          </div>
+        ) : (
+          <h3 
+            className="uppercase"
+            style={{
+              fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '13px',
+              fontWeight: 700,
+              letterSpacing: '0.03em',
+              fontStretch: 'condensed',
+              lineHeight: '1.4',
+              marginBottom: '4px'
+            }}
+          >
+            {name}
+          </h3>
+        )}
         
         {isHovered && availableSizes.length > 0 ? (
           <div 
@@ -127,16 +205,30 @@ export default function ProductCard({
               </button>
             ))}
           </div>
-        ) : (
+        ) : !isHovered ? (
           <p 
             className="text-small"
             style={{ marginBottom: '4px' }}
           >
             {colorCount} {getCzechColorPlural(colorCount)}
           </p>
-        )}
+        ) : null}
         
-        <p className="text-small">{price} Kč</p>
+        {/* Price or Square Box */}
+        {isHovered ? (
+          <div className="flex justify-center">
+            <div
+              style={{
+                width: '4px',
+                height: '4px',
+                border: '1px solid #000000',
+                backgroundColor: '#ffffff',
+              }}
+            />
+          </div>
+        ) : (
+          <p className="text-small">{price} Kč</p>
+        )}
       </div>
     </Link>
   );

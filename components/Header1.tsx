@@ -135,7 +135,7 @@ export default function Header1() {
                 onClick={() => setShowCartDrawer(true)}
                 className="relative hover:opacity-70 transition-opacity"
                 aria-label="Cart"
-                style={{ width: '22px', height: '22px', marginRight: '80px' }}
+                style={{ width: '22px', height: '22px', marginRight: '100px' }}
               >
                 <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
