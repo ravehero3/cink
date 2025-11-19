@@ -27,7 +27,8 @@ export default function ProductCard({
   return (
     <Link
       href={`/produkty/${slug}`}
-      className="block bg-white"
+      className="block bg-white border border-black"
+      style={{ marginRight: '-1px', marginBottom: '-1px' }}
     >
       <div className="relative overflow-hidden aspect-product">
         <img

@@ -32,7 +32,7 @@ export default function ProductsGrid({ products, savedProducts = [], onToggleSav
 
   return (
     <div className="max-w-container mx-auto px-lg py-2xl">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-lg">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
         {displayProducts.map((product) => (
           <ProductCard
             key={product.id}
