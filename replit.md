@@ -36,8 +36,18 @@ The project is built using Next.js 14 (App Router) and TypeScript. Tailwind CSS 
 - **Authentication**: NextAuth.js.
 - **State Management**: Zustand for client-side global state.
 
+## Recent Changes (November 20, 2025)
+- **Database Setup**: PostgreSQL database provisioned and schema pushed
+- **Data Seeding**: Created admin user (admin@ufosport.cz / admin123), 4 product categories, and 40 sample products
+- **Environment Configuration**: Added Cloudinary credentials and NextAuth secret
+- **Design Refinements**:
+  - Updated spacing in ControlBar: Product counter 12px from left edge, SEŘADIT PODLE 12px from dropdown arrow, arrow 12px from FILTROVAT button
+  - Updated SearchBar: Magnifying glass 12px from left edge, search placeholder 12px from icon, matched font styling with header
+  - Updated ProductCard: Reduced line height spacing by 2px, added 1px black stroke hover effect on size options, made heart icon always visible
+  - Heart click functionality already implemented to save products to wishlist
+
 ## External Dependencies
-- **Database**: PostgreSQL
+- **Database**: PostgreSQL (Neon-backed)
 - **Authentication**: NextAuth.js
 - **Payment Gateway**: GoPay
 - **Shipping Integration**: Zásilkovna (Packeta) API
