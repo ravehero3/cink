@@ -1,0 +1,44 @@
+You are an expert full-stack developer and DevOps engineer. My current Replit project is a complete, working e-commerce website (the new version of www.ufosport.cz) that uses:
+- Node.js (probably Next.js or similar)
+- User authentication / login
+- Cloudinary for images
+- Zásilkovna (Packeta) API for delivery
+- It already works perfectly when I run it locally in Replit
+
+I want you to do ALL of the following automatically, step by step, without me doing anything manually except:
+1. Giving you my secrets when you ask for them (one by one, securely)
+2. Pasting the final DNS records into Wedos
+
+Please perform these tasks in order:
+
+1. Detect the framework (Next.js, Vite, Remix, etc.) and make sure there is a correct vercel.json or proper build settings for Vercel.
+
+2. Create a new GitHub repository (ask me for the repo name, e.g. ufosport-new) and push the entire current Replit project to it (including .gitignore with .env*).
+
+3. Connect this Replit (or the GitHub repo) to Vercel and deploy it automatically. Use Vercel’s CLI if needed inside Replit.
+
+4. Ask me one by one (never all at once) for these secrets and then add them as environment variables in Vercel (Production + Preview):
+   - CLOUDINARY_CLOUD_NAME
+   - CLOUDINARY_API_KEY
+   - CLOUDINARY_API_SECRET
+   - ZASILKOVNA_API_PASSWORD or PACKETA_API_KEY (whatever my code uses)
+   - NEXTAUTH_SECRET or JWT secret (generate one with openssl rand -base64 64 if I don’t have it)
+   - Any other secrets you find in .env.example or that the app needs (database URL, etc.)
+
+5. Add my custom domains to the Vercel project:
+   - www.ufosport.cz
+   - ufosport.cz (and automatically redirect ufosport.cz → www.ufosport.cz)
+
+6. Generate and display the exact DNS records I have to put into Wedos (CNAME www → cname.vercel-dns.com
+   - A record @ → 76.76.21.21
+   (or ALIAS/ANAME if Wedos supports it)
+
+7. Force HTTPS and give me the final live URLs (Vercel preview URL and the final www.ufosport.cz once DNS propagates).
+
+8. Add a simple /api/health route that returns {status:"ok"} so I can monitor it.
+
+9. After everything is deployed successfully, give me a final checklist and tell me exactly what to paste into Wedos DNS management.
+
+Do everything step by step, tell me clearly what you are you doing, and only continue after I confirm or after I give you each secret. Never expose my secrets in logs.
+
+Start now.

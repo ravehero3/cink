@@ -12,11 +12,6 @@ const nextConfig = {
       },
     ],
   },
-  experimental: {
-    serverActions: {
-      allowedOrigins: ['*'],
-    },
-  },
   devIndicators: {
     buildActivity: false,
   },
