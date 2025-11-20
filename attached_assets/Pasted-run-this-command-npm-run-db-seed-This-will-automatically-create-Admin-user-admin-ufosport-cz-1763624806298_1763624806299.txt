@@ -1,0 +1,29 @@
+run this command:
+npm run db:seed
+
+This will automatically create:
+* ✅ Admin user (admin@ufosport.cz / admin123)
+* ✅ Regular test user (user@ufosport.cz / user123)
+* ✅ 4 product categories
+* ✅ 40 sample products
+The seed script also created 40 sample products for you, so your store now has content to display! Try logging in now and visiting the admin panel at /admin to see all the products.
+
+
+For cloudinary:
+
+* CLOUDINARY_CLOUD_NAME: dq0qvtbst
+* CLOUDINARY_API_KEY: 596126671243338
+CLOUDINARY_API_SECRET: -37hpT9LFVDodIVcLf2EKp7meRE
+
+
+Let’s make a slight design change.  
+1. we want the arrow from „SEŘADIT PODLE“ to be distanced exactly 12px from the F in the FILTROVAT. it should stick to being 12px from the FILTROVAT even if we resize the window or the app
+2. SEŘADIT PODLE should be exactly 12px from the downwards facing arrow and it should stick to being 12px from the ARROW even if we resize the window or the app
+3. Similar but on other side should be true for the product counter that currently says: 10 Produktů. This info text should be exactly 12px from the left edge of the page and it should stick to being 12px from the edge even if we resize the window or the app
+4. also lets make sure that the CO PRÁVĚ HLEDÁTE text is the same size, font and everything as the text in the header
+5. all we want is for the magnifying glass symbol that is located in the search bar to be exactly 12px from the left edge of the page and it should stick to being 12px from the edge even if we resize the window or the app.
+6. 12px to the right from this magnifying glass symbol in the search bar we want to have the CO PRÁVĚ HLEDÁTE?
+7. Lets make some little changes in the product grid: In the product rectangle,  make the line height between the title of the product and the text 1 barva and the price smaller by 2
+8. when user hovers over the product rectangle, we want to be able to hover over a size option like XL for example and we want to visually see a little rectangle that has 1px black line stroke to highlight which size is currently selected.
+9. also in the product grid, we want to be able to see the heart symbol in the top right corner of each product rectangle in the product grid even if we dont hover over. Can you make this happen please?
+10. also make sure pressing the heart symbol will add the item into saved items/ uložené produkty   
