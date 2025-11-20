@@ -95,28 +95,26 @@ export default function SearchBar() {
 
   return (
     <div className="fixed top-header left-0 right-0 z-20 bg-white border-b border-black">
-      <div className="h-header flex items-center max-w-container mx-auto">
-        <div className="flex items-center flex-1" style={{ paddingRight: '12px' }}>
-          <svg style={{ width: '17px', height: '17px', marginLeft: '12px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-          <input
-            ref={inputRef}
-            type="text"
-            placeholder="CO PRÁVĚ HLEDÁTE?"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="flex-1 bg-transparent border-none outline-none placeholder:text-black"
-            style={{ 
-              marginLeft: '12px',
-              fontFamily: '"BB-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif',
-              fontSize: '14px',
-              fontWeight: 400,
-              textTransform: 'uppercase',
-              letterSpacing: '0.02em'
-            }}
-          />
-        </div>
+      <div className="h-header flex items-center" style={{ paddingLeft: '12px', paddingRight: '12px' }}>
+        <svg style={{ width: '17px', height: '17px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input
+          ref={inputRef}
+          type="text"
+          placeholder="CO PRÁVĚ HLEDÁTE?"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="flex-1 bg-transparent border-none outline-none placeholder:text-black"
+          style={{ 
+            marginLeft: '12px',
+            fontFamily: '"BB-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif',
+            fontSize: '14px',
+            fontWeight: 400,
+            textTransform: 'uppercase',
+            letterSpacing: '0.02em'
+          }}
+        />
       </div>
 
       {/* Search Results */}
