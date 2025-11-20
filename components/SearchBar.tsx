@@ -106,7 +106,7 @@ export default function SearchBar() {
             placeholder="CO PRÁVĚ HLEDÁTE?"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="flex-1 text-body bg-transparent border-none outline-none placeholder:text-black placeholder:uppercase"
+            className="flex-1 text-sm uppercase tracking-tight font-normal bg-transparent border-none outline-none placeholder:text-black placeholder:uppercase"
           />
         </div>
       </div>

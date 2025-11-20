@@ -1,0 +1,24 @@
+*** What To Do Each Time You Set Up:
+Whenever you start with a fresh database, run this command:
+npm run db:seed
+
+This will automatically create:
+* ✅ Admin user (admin@ufosport.cz / admin123)
+* ✅ Regular test user (user@ufosport.cz / user123)
+* ✅ 4 product categories
+* ✅ 40 sample products
+The seed script also created 40 sample products for you, so your store now has content to display! Try logging in now and visiting the admin panel at /admin to see all the products.
+
+
+For cloudinary:
+
+* CLOUDINARY_CLOUD_NAME: dq0qvtbst
+* CLOUDINARY_API_KEY: 596126671243338
+CLOUDINARY_API_SECRET: -37hpT9LFVDodIVcLf2EKp7meRE   ok lets make sure when we resize the page to be in the full size (browser size - similar to full hd) we want some elements (in the header and in the filtrovat bar - its currently above the product grid) to stick to the edge to be 12px distance from the edge of the page. By this I mean these elements:   VOODOO808, SPACE LOVE, RECREATION WELLNESS, T SHIRT GALLERY texts in the header should stick to the left edge to be 12px distanced from the left edge.  shopping cart/nákupní košík symbol should always stick to being 12px from the right edge. And his friends - magnifying glass/search bar icon, heart symbol and přihlásit se button should stick to being distanced 12px from the nákupní košík symbol.   lets do something similar with the filtrovat/seřadit podle bar that is currently located above the product grid.
+
+We want the FILTROVAT text to be distanced exactly 12px from the right edge of the page and it should stick to being 12px from the edge even if we resize the window or the app
+
+we want the arrow from „SEŘADIT PODLE“ to be distanced exactly 12px from the F in the FILTROVAT. it should stick to being 12px from the FILTROVAT even if we resize the window or the app
+ SEŘADIT PODLE should be exactly 12px from the downwards facing arrow and it should stick to being 12px from the ARROW even if we resize the window or the app
+
+Similar but on other side should be true for the product counter that currently says: 10 Produktů. This info text should be exactly 12px from the left edge of the page and it should stick to being 12px from the edge even if we resize the window or the app  also  lets make sure that the CO PRÁVĚ HLEDÁTE text is the same size, font and everything as the text in the header    

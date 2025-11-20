@@ -29,8 +29,8 @@ export default function Header1() {
     <>
       <header className="h-header border-b border-black bg-white fixed top-0 left-0 right-0 z-30">
         <div className="h-full max-w-container mx-auto flex items-center justify-between relative">
-          {/* Left Group: Category Navigation - VOODOO808 moved 80px to left */}
-          <nav className={`flex items-center transition-opacity duration-300 ${showSearch ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ gap: '20px', paddingLeft: '20px' }}>
+          {/* Left Group: Category Navigation */}
+          <nav className={`flex items-center transition-opacity duration-300 ${showSearch ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ gap: '20px', paddingLeft: '12px' }}>
             {categories.map((category, index) => (
               <Link
                 key={category.slug}
@@ -38,8 +38,7 @@ export default function Header1() {
                 className="hover:opacity-70 transition-opacity whitespace-nowrap uppercase tracking-tight font-normal text-sm"
                 style={{
                   color: 'rgb(0, 0, 0)',
-                  textDecoration: 'none',
-                  marginLeft: index === 0 ? '-80px' : '0'
+                  textDecoration: 'none'
                 }}
               >
                 {category.name}
@@ -63,9 +62,9 @@ export default function Header1() {
             UFO SPORT
           </Link>
 
-          {/* Right Group: Login and Icons - 20px from right, 20px gap between items */}
-          <div className="flex items-center" style={{ gap: '20px', paddingRight: '20px' }}>
-            <div className={`flex items-center transition-opacity duration-300 ${showSearch ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ gap: '20px' }}>
+          {/* Right Group: Login and Icons - 12px from right, 12px gap between items */}
+          <div className="flex items-center" style={{ gap: '12px', paddingRight: '12px' }}>
+            <div className={`flex items-center transition-opacity duration-300 ${showSearch ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ gap: '12px' }}>
               <Link
                 href={isLoggedIn ? "/ucet" : "/prihlaseni"}
                 className="hover:opacity-70 transition-opacity whitespace-nowrap uppercase tracking-tight font-normal text-sm"
@@ -135,7 +134,7 @@ export default function Header1() {
                 onClick={() => setShowCartDrawer(true)}
                 className="relative hover:opacity-70 transition-opacity"
                 aria-label="Cart"
-                style={{ width: '22px', height: '22px', marginRight: '100px' }}
+                style={{ width: '22px', height: '22px' }}
               >
                 <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
@@ -158,7 +157,7 @@ export default function Header1() {
               width: '22px', 
               height: '22px',
               top: '50%',
-              right: '20px',
+              right: '12px',
               transform: 'translateY(-50%)',
               padding: '0'
             }}

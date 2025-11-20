@@ -16,18 +16,17 @@ export default function ControlBar({ productCount, currentSort, onSortChange }: 
 
   return (
     <div className="border-b border-black bg-white h-header">
-      <div className="max-w-container mx-auto h-full flex items-center justify-between" style={{ paddingLeft: '16px', paddingRight: '24px' }}>
-        {/* Left: Product count - moved 80px to left */}
-        <div className="text-sm uppercase tracking-tight font-normal" style={{ marginLeft: '-80px' }}>
+      <div className="max-w-container mx-auto h-full flex items-center justify-between" style={{ paddingLeft: '12px', paddingRight: '12px' }}>
+        {/* Left: Product count */}
+        <div className="text-sm uppercase tracking-tight font-normal">
           {productCount} {getCzechProductPlural(productCount)}
         </div>
 
         {/* Right: Sort and Filter buttons */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-3">
           <button
             onClick={openSortPanel}
-            className="flex items-center gap-2 text-sm uppercase tracking-tight font-normal hover:opacity-70 transition-opacity"
-            style={{ marginRight: '100px' }}
+            className="flex items-center gap-3 text-sm uppercase tracking-tight font-normal hover:opacity-70 transition-opacity"
           >
             <span>SEŘADIT PODLE</span>
             <svg width="12" height="8" viewBox="0 0 12 8" fill="none" stroke="currentColor">
@@ -38,7 +37,6 @@ export default function ControlBar({ productCount, currentSort, onSortChange }: 
           <button
             onClick={open}
             className="text-sm uppercase tracking-tight font-normal border border-black px-lg py-sm hover:opacity-70 transition-opacity"
-            style={{ marginRight: '100px' }}
           >
             FILTROVAT
           </button>
