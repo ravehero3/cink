@@ -105,13 +105,12 @@ export default function SearchBar() {
           placeholder="CO PRÁVĚ HLEDÁTE?"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="flex-1 bg-transparent border-none outline-none placeholder:text-black"
+          className="flex-1 bg-transparent border-none outline-none placeholder:text-black placeholder:uppercase"
           style={{ 
             marginLeft: '12px',
-            fontFamily: '"BB-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif',
+            fontFamily: 'inherit',
             fontSize: '14px',
             fontWeight: 400,
-            textTransform: 'uppercase',
             letterSpacing: '0.02em'
           }}
         />
