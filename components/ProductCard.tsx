@@ -93,7 +93,7 @@ export default function ProductCard({
           <button
             onClick={handleHeartClick}
             className="absolute z-10"
-            style={{ top: '4px', right: '4px' }}
+            style={{ top: '4px', right: '4px', opacity: 1 }}
           >
             <svg
               width="24"
@@ -179,7 +179,7 @@ export default function ProductCard({
               letterSpacing: '0.03em',
               fontStretch: 'condensed',
               lineHeight: '1.4',
-              marginBottom: '4px'
+              marginBottom: '2px'
             }}
           >
             {name}
@@ -189,7 +189,7 @@ export default function ProductCard({
         {isHovered && allSizes.length > 0 ? (
           <div 
             className="flex justify-center gap-1 flex-wrap px-2"
-            style={{ marginBottom: '4px' }}
+            style={{ marginBottom: '2px' }}
           >
             {allSizes.map(({ size, stock }) => {
               const isAvailable = stock > 0;
@@ -200,11 +200,7 @@ export default function ProductCard({
                   onClick={(e) => isAvailable && handleSizeClick(e, size)}
                   onMouseEnter={() => isAvailable && setHoveredSize(size)}
                   onMouseLeave={() => setHoveredSize(null)}
-                  className={`border transition-colors ${
-                    isAvailable 
-                      ? 'bg-white border-black hover:bg-white hover:text-black' 
-                      : 'bg-transparent border-transparent cursor-default'
-                  }`}
+                  className="transition-colors"
                   style={{
                     fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '11px',
@@ -213,7 +209,10 @@ export default function ProductCard({
                     minWidth: '28px',
                     color: isAvailable ? '#000' : '#999',
                     textDecoration: isAvailable ? 'none' : 'line-through',
-                    position: 'relative'
+                    position: 'relative',
+                    background: isAvailable && isHoveredSize ? 'white' : 'transparent',
+                    border: isAvailable && isHoveredSize ? '1px solid black' : '1px solid transparent',
+                    cursor: isAvailable ? 'pointer' : 'default'
                   }}
                 >
                   {size}
@@ -224,7 +223,7 @@ export default function ProductCard({
         ) : !isHovered ? (
           <p 
             className="text-small"
-            style={{ marginBottom: '4px' }}
+            style={{ marginBottom: '2px' }}
           >
             {colorCount} {getCzechColorPlural(colorCount)}
           </p>
