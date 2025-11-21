@@ -221,26 +221,32 @@ export default function ProductDetailPage() {
             </p>
           </div>
 
-          <div style={{ paddingLeft: '32px', paddingRight: '48px', paddingBottom: '32px' }}>
+          <div style={{ paddingLeft: '32px', paddingRight: '48px', paddingBottom: '32px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <div className="mb-4" style={{ borderTop: '1px solid #000000', paddingTop: '0', width: '30vw' }} />
 
           <div className="mb-4 relative" style={{ width: '30vw' }}>
             <button
               onClick={() => setIsSizeDropdownOpen(!isSizeDropdownOpen)}
-              className="w-full bg-white text-black border border-black flex items-center justify-center"
+              className="w-full bg-white text-black flex items-center justify-center relative"
               style={{
                 fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '13px',
+                fontSize: '15px',
                 fontWeight: 700,
-                letterSpacing: '0.05em',
+                letterSpacing: '0.03em',
                 textTransform: 'uppercase',
-                borderRadius: '2px',
                 padding: '10.67px 0',
                 fontStretch: 'condensed',
-                textAlign: 'center'
+                textAlign: 'center',
+                border: '1px solid #000',
+                borderRadius: '0'
               }}
             >
               {selectedSize || 'Vyberte velikost'}
+              <ChevronDown 
+                className="absolute right-3"
+                size={16}
+                strokeWidth={1}
+              />
             </button>
 
             {isSizeDropdownOpen && (
@@ -292,14 +298,14 @@ export default function ProductDetailPage() {
             className="bg-black text-white hover:bg-gray-800 transition-colors mb-4"
             style={{
               fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-              fontSize: '13px',
+              fontSize: '15px',
               fontWeight: 700,
-              letterSpacing: '0.05em',
+              letterSpacing: '0.03em',
               textTransform: 'uppercase',
-              borderRadius: '2px',
               padding: '10.67px 0',
               width: '30vw',
-              fontStretch: 'condensed'
+              fontStretch: 'condensed',
+              borderRadius: '0'
             }}
           >
             PŘIDAT DO KOŠÍKU
@@ -325,7 +331,9 @@ export default function ProductDetailPage() {
                   Product details
                 </span>
                 <ChevronDown 
-                  className={`w-4 h-4 transition-transform ${expandedSection === 'details' ? 'rotate-180' : ''}`}
+                  className={`transition-transform ${expandedSection === 'details' ? 'rotate-180' : ''}`}
+                  size={16}
+                  strokeWidth={1}
                 />
               </button>
               {expandedSection === 'details' && (
@@ -366,7 +374,9 @@ export default function ProductDetailPage() {
                   Size & fit
                 </span>
                 <ChevronDown 
-                  className={`w-4 h-4 transition-transform ${expandedSection === 'size-fit' ? 'rotate-180' : ''}`}
+                  className={`transition-transform ${expandedSection === 'size-fit' ? 'rotate-180' : ''}`}
+                  size={16}
+                  strokeWidth={1}
                 />
               </button>
               {expandedSection === 'size-fit' && (
@@ -404,7 +414,9 @@ export default function ProductDetailPage() {
                   Doprava zdarma, vrácení zdarma
                 </span>
                 <ChevronDown 
-                  className={`w-4 h-4 transition-transform ${expandedSection === 'shipping' ? 'rotate-180' : ''}`}
+                  className={`transition-transform ${expandedSection === 'shipping' ? 'rotate-180' : ''}`}
+                  size={16}
+                  strokeWidth={1}
                 />
               </button>
               {expandedSection === 'shipping' && (
@@ -443,7 +455,9 @@ export default function ProductDetailPage() {
                   Péče o produkt
                 </span>
                 <ChevronDown 
-                  className={`w-4 h-4 transition-transform ${expandedSection === 'care' ? 'rotate-180' : ''}`}
+                  className={`transition-transform ${expandedSection === 'care' ? 'rotate-180' : ''}`}
+                  size={16}
+                  strokeWidth={1}
                 />
               </button>
               {expandedSection === 'care' && (
