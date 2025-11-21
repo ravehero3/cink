@@ -93,3 +93,10 @@ externalPort = 9000
 [[ports]]
 localPort = 46769
 externalPort = 8080
+
+[userenv]
+
+[userenv.shared]
+CLOUDINARY_CLOUD_NAME = "dq0qvtbst"
+CLOUDINARY_API_KEY = "596126671243338"
+CLOUDINARY_API_SECRET = "-37hpT9LFVDodIVcLf2EKp7meRE"

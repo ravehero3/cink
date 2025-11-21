@@ -193,7 +193,7 @@ export default function ProductDetailPage() {
         </div>
 
         <div className="w-1/2 sticky top-[44px] self-start h-screen overflow-y-auto">
-          <div className="flex flex-col justify-center" style={{ height: '50vh', paddingLeft: '32px', paddingRight: '48px' }}>
+          <div className="flex flex-col justify-center" style={{ paddingLeft: '32px', paddingRight: '48px', paddingTop: '64px' }}>
             <h1 
               className="uppercase"
               style={{
@@ -214,23 +214,23 @@ export default function ProductDetailPage() {
                 fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                 fontSize: '14px',
                 fontWeight: 400,
-                textAlign: 'center'
+                textAlign: 'center',
+                marginBottom: '64px'
               }}
             >
               {product.price} Kč
             </p>
-          </div>
 
-          <div style={{ paddingLeft: '32px', paddingRight: '48px', paddingBottom: '32px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <div className="mb-4" style={{ borderTop: '1px solid #000000', paddingTop: '0', width: '30vw' }} />
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+          <div style={{ borderTop: '1px solid #000000', paddingTop: '0', width: '36vw', marginBottom: '0px' }} />
 
-          <div className="mb-4 relative" style={{ width: '30vw' }}>
+          <div className="relative" style={{ width: '36vw', marginBottom: '-4px' }}>
             <button
               onClick={() => setIsSizeDropdownOpen(!isSizeDropdownOpen)}
               className="w-full bg-white text-black flex items-center justify-center relative"
               style={{
                 fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '15px',
+                fontSize: '22px',
                 fontWeight: 700,
                 letterSpacing: '0.03em',
                 textTransform: 'uppercase',
@@ -238,7 +238,7 @@ export default function ProductDetailPage() {
                 fontStretch: 'condensed',
                 textAlign: 'center',
                 border: '1px solid #000',
-                borderRadius: '0'
+                borderRadius: '4px'
               }}
             >
               {selectedSize || 'Vyberte velikost'}
@@ -295,23 +295,25 @@ export default function ProductDetailPage() {
 
           <button
             onClick={handleAddToCart}
-            className="bg-black text-white hover:bg-gray-800 transition-colors mb-4"
+            className="bg-black text-white hover:bg-gray-800 transition-colors"
             style={{
               fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-              fontSize: '15px',
+              fontSize: '22px',
               fontWeight: 700,
               letterSpacing: '0.03em',
               textTransform: 'uppercase',
               padding: '10.67px 0',
-              width: '30vw',
+              width: '36vw',
               fontStretch: 'condensed',
-              borderRadius: '0'
+              borderRadius: '4px',
+              marginBottom: '16px'
             }}
           >
             PŘIDAT DO KOŠÍKU
           </button>
 
-          <div className="border-t border-black pt-6 flex flex-col gap-1">
+          <div style={{ width: '36vw' }}>
+          <div className="border-t border-black flex flex-col gap-1">
             <div className="border-b border-black">
               <button
                 onClick={() => toggleSection('details')}
@@ -321,14 +323,15 @@ export default function ProductDetailPage() {
                 <span 
                   className="uppercase flex items-center"
                   style={{
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '12px',
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '22px',
                     fontWeight: 700,
-                    letterSpacing: '0.05em',
-                    height: '100%'
+                    letterSpacing: '0.03em',
+                    height: '100%',
+                    fontStretch: 'condensed'
                   }}
                 >
-                  Product details
+                  INFORMACE O PRODUKTU
                 </span>
                 <ChevronDown 
                   className={`transition-transform ${expandedSection === 'details' ? 'rotate-180' : ''}`}
@@ -340,10 +343,12 @@ export default function ProductDetailPage() {
                 <div 
                   className="pb-4"
                   style={{
-                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '13px',
-                    fontWeight: 400,
-                    lineHeight: '1.6'
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '22px',
+                    fontWeight: 700,
+                    letterSpacing: '0.03em',
+                    lineHeight: '1.6',
+                    fontStretch: 'condensed'
                   }}
                 >
                   <p className="mb-2">{product.description}</p>
@@ -364,11 +369,12 @@ export default function ProductDetailPage() {
                 <span 
                   className="uppercase flex items-center"
                   style={{
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '12px',
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '22px',
                     fontWeight: 700,
-                    letterSpacing: '0.05em',
-                    height: '100%'
+                    letterSpacing: '0.03em',
+                    height: '100%',
+                    fontStretch: 'condensed'
                   }}
                 >
                   Size & fit
@@ -383,10 +389,12 @@ export default function ProductDetailPage() {
                 <div 
                   className="pb-4"
                   style={{
-                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '13px',
-                    fontWeight: 400,
-                    lineHeight: '1.6'
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '22px',
+                    fontWeight: 700,
+                    letterSpacing: '0.03em',
+                    lineHeight: '1.6',
+                    fontStretch: 'condensed'
                   }}
                 >
                   <p className="mb-2">Oversize fit</p>
@@ -404,11 +412,12 @@ export default function ProductDetailPage() {
                 <span 
                   className="uppercase flex items-center"
                   style={{
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '12px',
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '22px',
                     fontWeight: 700,
-                    letterSpacing: '0.05em',
-                    height: '100%'
+                    letterSpacing: '0.03em',
+                    height: '100%',
+                    fontStretch: 'condensed'
                   }}
                 >
                   Doprava zdarma, vrácení zdarma
@@ -423,10 +432,12 @@ export default function ProductDetailPage() {
                 <div 
                   className="pb-4"
                   style={{
-                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '13px',
-                    fontWeight: 400,
-                    lineHeight: '1.6'
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '22px',
+                    fontWeight: 700,
+                    letterSpacing: '0.03em',
+                    lineHeight: '1.6',
+                    fontStretch: 'condensed'
                   }}
                 >
                   <p className="mb-2">Nabízíme bezplatné expresní doručení při objednávce nad 2000 Kč.</p>
@@ -445,11 +456,12 @@ export default function ProductDetailPage() {
                 <span 
                   className="uppercase flex items-center"
                   style={{
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '12px',
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '22px',
                     fontWeight: 700,
-                    letterSpacing: '0.05em',
-                    height: '100%'
+                    letterSpacing: '0.03em',
+                    height: '100%',
+                    fontStretch: 'condensed'
                   }}
                 >
                   Péče o produkt
@@ -464,10 +476,12 @@ export default function ProductDetailPage() {
                 <div 
                   className="pb-4"
                   style={{
-                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '13px',
-                    fontWeight: 400,
-                    lineHeight: '1.6'
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '22px',
+                    fontWeight: 700,
+                    letterSpacing: '0.03em',
+                    lineHeight: '1.6',
+                    fontStretch: 'condensed'
                   }}
                 >
                   <p className="mb-1">Prát max. při 30°C - šetrný proces</p>
@@ -480,6 +494,8 @@ export default function ProductDetailPage() {
                 </div>
               )}
             </div>
+          </div>
+          <div style={{ height: '64px' }} />
           </div>
           </div>
         </div>

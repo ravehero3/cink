@@ -29,7 +29,8 @@ export default function SortPanel() {
   return (
     <>
       <div
-        className="fixed inset-0 bg-white z-40 cursor-pointer"
+        className="fixed inset-0 bg-black z-40 cursor-pointer"
+        style={{ opacity: 0.5 }}
         onClick={close}
       />
 

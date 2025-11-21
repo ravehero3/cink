@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { getCzechColorPlural } from '@/lib/czech-pluralization';
@@ -31,6 +31,7 @@ export default function ProductCard({
   const [isHovered, setIsHovered] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [hoveredSize, setHoveredSize] = useState<string | null>(null);
+  const [showHeartAnimation, setShowHeartAnimation] = useState(false);
   const router = useRouter();
 
   const availableSizes = Object.entries(sizes)
@@ -49,7 +50,9 @@ export default function ProductCard({
     e.preventDefault();
     e.stopPropagation();
     if (onToggleSave) {
+      setShowHeartAnimation(true);
       onToggleSave(id);
+      setTimeout(() => setShowHeartAnimation(false), 600);
     }
   };
 
@@ -69,6 +72,7 @@ export default function ProductCard({
   const maxImages = Math.min(images.length, 3);
 
   return (
+    <>
     <Link
       href={`/produkty/${slug}`}
       className="block bg-white border border-black relative"
@@ -92,19 +96,45 @@ export default function ProductCard({
         {onToggleSave && (
           <button
             onClick={handleHeartClick}
-            className="absolute z-10"
-            style={{ top: '4px', right: '4px', opacity: 1 }}
+            className="absolute z-10 relative"
+            style={{ top: '4px', right: '4px', opacity: 1, width: '22px', height: '22px' }}
           >
             <svg
-              width="24"
-              height="24"
+              width="22"
+              height="22"
               viewBox="0 0 24 24"
               fill={isSaved ? 'black' : 'none'}
               stroke="black"
-              strokeWidth="1"
+              strokeWidth="1.75"
             >
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>
+            {showHeartAnimation && (
+              <span 
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  animation: 'heartPulse 0.6s ease-out'
+                }}
+              >
+                {[...Array(8)].map((_, i) => (
+                  <span
+                    key={i}
+                    className="absolute"
+                    style={{
+                      top: '50%',
+                      left: '50%',
+                      width: '4px',
+                      height: '4px',
+                      backgroundColor: isSaved ? 'black' : 'white',
+                      borderRadius: '50%',
+                      transform: `translate(-50%, -50%) rotate(${i * 45}deg) translateY(-12px)`,
+                      opacity: 0,
+                      animation: `sparkle 0.6s ease-out ${i * 0.05}s`
+                    }}
+                  />
+                ))}
+              </span>
+            )}
           </button>
         )}
 
@@ -158,13 +188,22 @@ export default function ProductCard({
             style={{ marginBottom: '4px', height: '18px', alignItems: 'center' }}
           >
             {Array.from({ length: maxImages }).map((_, index) => (
-              <div
+              <button
                 key={index}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setCurrentImageIndex(index);
+                }}
                 style={{
                   width: '4px',
                   height: '4px',
                   borderRadius: '50%',
                   backgroundColor: index === currentImageIndex ? '#000000' : '#999999',
+                  border: 'none',
+                  padding: 0,
+                  cursor: 'pointer',
+                  transition: 'background-color 0.2s'
                 }}
               />
             ))}
@@ -229,23 +268,45 @@ export default function ProductCard({
           </p>
         ) : null}
         
-        {/* Price or Square Box */}
-        {isHovered ? (
-          <div className="flex justify-center">
-            <div
-              style={{
-                width: '4px',
-                height: '4px',
-                border: '1px solid #000000',
-                backgroundColor: '#ffffff',
-                borderRadius: '2px',
-              }}
-            />
+        {/* Price or Color Squares */}
+        {isHovered && colorCount > 0 ? (
+          <div className="flex justify-center gap-1">
+            {[...Array(Math.min(colorCount, 5))].map((_, i) => (
+              <div
+                key={i}
+                style={{
+                  width: '16px',
+                  height: '16px',
+                  border: '1px solid #000000',
+                  backgroundColor: '#ffffff',
+                  borderRadius: '2px',
+                }}
+              />
+            ))}
           </div>
         ) : (
           <p className="text-small">{price} Kč</p>
         )}
       </div>
     </Link>
+    <style jsx>{`
+      @keyframes heartPulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.2); }
+        100% { transform: scale(1); }
+      }
+      
+      @keyframes sparkle {
+        0% {
+          opacity: 1;
+          transform: translate(-50%, -50%) rotate(var(--rotation)) translateY(-12px) scale(1);
+        }
+        100% {
+          opacity: 0;
+          transform: translate(-50%, -50%) rotate(var(--rotation)) translateY(-20px) scale(0.5);
+        }
+      }
+    `}</style>
+    </>
   );
 }
