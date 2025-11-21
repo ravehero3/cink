@@ -497,7 +497,6 @@ export default function ProductDetailPage() {
           </div>
           <div style={{ height: '64px' }} />
           </div>
-          </div>
         </div>
       </div>
     </div>

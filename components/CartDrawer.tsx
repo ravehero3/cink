@@ -42,6 +42,40 @@ function SavedItemsButton({ onClose }: { onClose: () => void }) {
   );
 }
 
+function CheckoutButton({ total, onClose }: { total: number; onClose: () => void }) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <Link
+      href="/pokladna"
+      onClick={onClose}
+      className="block w-full relative overflow-hidden bg-black text-white text-center text-xs uppercase tracking-tight font-bold"
+      style={{ borderRadius: '4px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <span
+        className="block transition-all duration-300"
+        style={{
+          transform: isHovered ? 'translateY(-150%)' : 'translateY(0)',
+          opacity: isHovered ? 0 : 1,
+        }}
+      >
+        PŘEJÍT K POKLADNĚ · {total.toFixed(2)} Kč
+      </span>
+      <span
+        className="absolute inset-0 flex items-center justify-center transition-all duration-300"
+        style={{
+          transform: isHovered ? 'translateY(0)' : 'translateY(150%)',
+          opacity: isHovered ? 1 : 0,
+        }}
+      >
+        PŘEJÍT K POKLADNĚ · {total.toFixed(2)} Kč
+      </span>
+    </Link>
+  );
+}
+
 interface CartDrawerProps {
   isOpen: boolean;
   onClose: () => void;
@@ -165,14 +199,14 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     paddingLeft: '12px',
                     paddingTop: '12px'
                   }}>
-                    <p>• Odesíláme ihned!!!</p>
+                    <p>• Odesíláme ASAP</p>
                     <p>• Možnost vrácení do 14ti dnů</p>
                   </div>
                   <div className="flex items-center justify-center" style={{ position: 'absolute', top: '50%', left: '0', right: '0', transform: 'translateY(-50%)' }}>
                     <img 
                       src="/payment-methods.jpg" 
                       alt="Payment Methods: Visa, Mastercard, GoPay, PayPal, Apple Pay" 
-                      style={{ height: '32px', width: 'auto' }}
+                      style={{ height: '64px', width: 'auto' }}
                     />
                   </div>
                 </div>
@@ -285,7 +319,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
           {items.length > 0 && (
             <div className="border-t border-black px-6 py-6">
               <div className="mb-6 space-y-1.5 text-xs">
-                <p>• Odesíláme ihned!!!</p>
+                <p>• Odesíláme ASAP</p>
                 <p>• Možnost vrácení do 14ti dnů</p>
               </div>
 
@@ -293,18 +327,11 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 <img 
                   src="/payment-methods.jpg" 
                   alt="Payment Methods: Visa, Mastercard, GoPay, PayPal, Apple Pay" 
-                  style={{ height: '32px', width: 'auto' }}
+                  style={{ height: '64px', width: 'auto' }}
                 />
               </div>
 
-              <Link
-                href="/pokladna"
-                onClick={onClose}
-                className="block w-full bg-black text-white text-center text-xs uppercase tracking-tight py-4 hover:opacity-90 transition-opacity font-bold"
-                style={{ borderRadius: '4px' }}
-              >
-                PŘEJÍT K POKLADNĚ · {total.toFixed(2)} Kč
-              </Link>
+              <CheckoutButton total={total} onClose={onClose} />
             </div>
           )}
         </div>
