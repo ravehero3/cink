@@ -53,6 +53,21 @@ The project is built using Next.js 14 (App Router) and TypeScript. Tailwind CSS 
 - **Test Deployment**: Live at https://alienshop-7cfqq31v1-voodoo808s-projects.vercel.app/
 - **Domain**: Ready to configure ufosport.cz with DNS records for Wedos
 
+### November 21, 2025 - UI/UX Enhancements
+- **Product Grid Improvements**:
+  - Standardized heart icon to 22x22px across all product displays (matching header size)
+  - Added magic sparkle animation when saving products to wishlist
+  - Implemented color variant display on hover (16x16px squares, 2px border-radius, 1px black stroke)
+  - Made image navigation dots clickable to switch between product images on hover
+- **Sort Panel Overlay**: Updated to show 50% opacity black backdrop instead of solid white background
+- **Single Product Page Refinements**:
+  - Widened buttons from 30vw to 36vw with 4px border-radius
+  - Updated all fonts to match header typography (22px Helvetica Neue Condensed Bold for buttons, BB-Regular for body text)
+  - Reduced spacing between buttons to -4px for tighter visual grouping
+  - Changed "Product details" to Czech text "INFORMACE O PRODUKTU"
+  - Repositioned info sections to 64px below price (removed excessive vertical spacing)
+  - Added 64px bottom padding after last accordion section
+
 ### November 20, 2025 - Database and Design
 - **Database Setup**: PostgreSQL database provisioned and schema pushed
 - **Data Seeding**: Created admin user (admin@ufosport.cz / admin123), 4 product categories, and 40 sample products
