@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Titlebar from '@/components/Titlebar';
 import Infobar from '@/components/Infobar';
@@ -15,7 +15,7 @@ interface Product {
   category: string;
 }
 
-export default function SearchPage() {
+function SearchContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get('q') || '';
   const [products, setProducts] = useState<Product[]>([]);
@@ -83,5 +83,20 @@ export default function SearchPage() {
         </>
       )}
     </>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense fallback={
+      <>
+        <Titlebar title="VYHLEDÁVÁNÍ" />
+        <div className="min-h-screen flex items-center justify-center">
+          <p className="text-body animate-pulse-color">načítá se</p>
+        </div>
+      </>
+    }>
+      <SearchContent />
+    </Suspense>
   );
 }

@@ -37,11 +37,11 @@ export async function POST(request: Request) {
       },
     });
 
-    if (newsletterSubscribed && civility) {
+    if (newsletterSubscribed) {
       await prisma.newsletterSubscriber.upsert({
         where: { email },
-        update: { civility },
-        create: { email, civility },
+        update: {},
+        create: { email },
       });
     }
 

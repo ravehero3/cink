@@ -15,6 +15,9 @@ const nextConfig = {
   devIndicators: {
     buildActivity: false,
   },
+  experimental: {
+    serverComponentsExternalPackages: ['@react-pdf/renderer'],
+  },
 };
 
 module.exports = nextConfig;
