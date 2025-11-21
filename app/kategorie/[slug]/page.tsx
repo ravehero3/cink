@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import SearchBar from '@/components/SearchBar';
 import CategoryHero from '@/components/CategoryHero';
 import ControlBar from '@/components/ControlBar';
@@ -11,6 +12,7 @@ import SortPanel from '@/components/SortPanel';
 import { useFilterStore } from '@/lib/filter-store';
 import { useSortPanelStore } from '@/lib/sort-panel-store';
 import { useSearchBarStore } from '@/lib/search-bar-store';
+import { Upload, X } from 'lucide-react';
 
 interface Category {
   id: string;
@@ -33,6 +35,7 @@ interface Product {
 export default function CategoryPage() {
   const params = useParams();
   const slug = params.slug as string;
+  const { data: session } = useSession();
   
   const [category, setCategory] = useState<Category | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
@@ -42,9 +45,15 @@ export default function CategoryPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [savedProducts, setSavedProducts] = useState<string[]>([]);
 
+  const [showMediaModal, setShowMediaModal] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+
   const { colors, sizes } = useFilterStore();
   const { selectedSort } = useSortPanelStore();
   const { setVisible, setShowSearchIcon } = useSearchBarStore();
+
+  const isAdmin = session?.user?.role === 'ADMIN';
 
   // Sync selectedSort from store to currentSort
   useEffect(() => {
@@ -175,6 +184,60 @@ export default function CategoryPage() {
     );
   };
 
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setSelectedFile(e.target.files[0]);
+    }
+  };
+
+  const handleMediaUpload = async () => {
+    if (!selectedFile || !category) return;
+
+    setIsUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+      formData.append('category', category.name);
+
+      const uploadResponse = await fetch('/api/admin/media/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!uploadResponse.ok) {
+        throw new Error('Upload failed');
+      }
+
+      const uploadData = await uploadResponse.json();
+      const mediaUrl = uploadData.media.url;
+
+      const updateResponse = await fetch(`/api/admin/categories/${category.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          videoUrl: mediaUrl,
+        }),
+      });
+
+      if (!updateResponse.ok) {
+        throw new Error('Category update failed');
+      }
+
+      const updatedCategory = await updateResponse.json();
+      setCategory(updatedCategory);
+      setShowMediaModal(false);
+      setSelectedFile(null);
+      alert('Médium bylo úspěšně nahráno a kategorie aktualizována');
+    } catch (error) {
+      console.error('Error uploading media:', error);
+      alert('Chyba při nahrávání média');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   if (!category) {
     return (
       <div className="relative" style={{ paddingTop: '69px' }}>
@@ -186,7 +249,23 @@ export default function CategoryPage() {
   return (
     <div>
       <SearchBar />
-      <CategoryHero title={category.name} imageUrl={category.videoUrl} />
+      <div className="relative">
+        <CategoryHero title={category.name} imageUrl={category.videoUrl} />
+        {isAdmin && (
+          <button
+            onClick={() => setShowMediaModal(true)}
+            className="absolute top-4 right-4 flex items-center gap-2 px-4 py-2 bg-white border border-black hover:bg-black hover:text-white transition-colors z-10"
+            style={{
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '12px',
+              fontWeight: 400,
+            }}
+          >
+            <Upload size={14} />
+            Upravit médium
+          </button>
+        )}
+      </div>
       <ControlBar
         productCount={totalProducts}
         currentSort={currentSort}
@@ -207,6 +286,88 @@ export default function CategoryPage() {
 
       <FilterWindow />
       <SortPanel />
+
+      {showMediaModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-8 max-w-md w-full border border-black">
+            <div className="flex justify-between items-center mb-6">
+              <h2 
+                style={{
+                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '20px',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                }}
+              >
+                Nahrát médium
+              </h2>
+              <button 
+                onClick={() => {
+                  setShowMediaModal(false);
+                  setSelectedFile(null);
+                }}
+                className="hover:bg-gray-100 p-1"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="mb-4">
+              <p className="text-sm mb-2 text-gray-600">
+                Doporučené rozlišení pro obrázky: 1920x960px (16:9)
+              </p>
+              <p className="text-sm mb-4 text-gray-600">
+                Podporované formáty: JPEG, PNG, WebP, GIF, MP4, WebM
+              </p>
+
+              <input
+                type="file"
+                onChange={handleFileSelect}
+                accept="image/*,video/*"
+                className="w-full border border-black p-2 mb-2"
+              />
+
+              {selectedFile && (
+                <p className="text-sm text-gray-700 mb-4">
+                  Vybraný soubor: {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
+                </p>
+              )}
+            </div>
+
+            <div className="flex gap-2">
+              <button
+                onClick={handleMediaUpload}
+                disabled={!selectedFile || isUploading}
+                className="flex-1 bg-black text-white px-4 py-3 hover:bg-gray-800 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+                style={{
+                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '14px',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                }}
+              >
+                {isUploading ? 'Nahrávání...' : 'Nahrát'}
+              </button>
+              <button
+                onClick={() => {
+                  setShowMediaModal(false);
+                  setSelectedFile(null);
+                }}
+                disabled={isUploading}
+                className="flex-1 bg-white text-black px-4 py-3 border border-black hover:bg-gray-100 transition-colors disabled:opacity-50"
+                style={{
+                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '14px',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                }}
+              >
+                Zrušit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { useCartStore } from '@/lib/cart-store';
 import { useSavedProductsStore } from '@/lib/saved-products-store';
 import { useRecentlyViewedStore } from '@/lib/recently-viewed-store';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Edit2, Save, X } from 'lucide-react';
 
 interface Product {
   id: string;
@@ -25,6 +26,7 @@ export default function ProductDetailPage() {
   const searchParams = useSearchParams();
   const slug = params.slug as string;
   const sizeFromUrl = searchParams.get('size');
+  const { data: session } = useSession();
 
   const [product, setProduct] = useState<Product | null>(null);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
@@ -35,9 +37,19 @@ export default function ProductDetailPage() {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
   const [isSizeDropdownOpen, setIsSizeDropdownOpen] = useState(false);
 
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editedName, setEditedName] = useState('');
+  const [editedDescription, setEditedDescription] = useState('');
+  const [editedPrice, setEditedPrice] = useState('');
+  const [editedColor, setEditedColor] = useState('');
+  const [editedSizes, setEditedSizes] = useState<Record<string, number>>({});
+  const [isSaving, setIsSaving] = useState(false);
+
   const { addItem } = useCartStore();
   const { isSaved, addProduct, removeProduct } = useSavedProductsStore();
   const { addProduct: addRecentlyViewed } = useRecentlyViewedStore();
+
+  const isAdmin = session?.user?.role === 'ADMIN';
 
   useEffect(() => {
     fetchProduct();
@@ -126,6 +138,62 @@ export default function ProductDetailPage() {
     setExpandedSection(expandedSection === section ? null : section);
   };
 
+  const handleEditClick = () => {
+    if (!product) return;
+    setEditedName(product.name);
+    setEditedDescription(product.description);
+    setEditedPrice(product.price.toString());
+    setEditedColor(product.color);
+    setEditedSizes(product.sizes);
+    setIsEditMode(true);
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditMode(false);
+  };
+
+  const handleSaveEdit = async () => {
+    if (!product) return;
+    
+    setIsSaving(true);
+    try {
+      const response = await fetch(`/api/admin/products/${product.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: editedName,
+          description: editedDescription,
+          price: parseFloat(editedPrice),
+          color: editedColor,
+          sizes: editedSizes,
+        }),
+      });
+
+      if (response.ok) {
+        const updatedProduct = await response.json();
+        setProduct(updatedProduct);
+        setIsEditMode(false);
+        alert('Produkt byl úspěšně upraven');
+      } else {
+        alert('Chyba při ukládání změn');
+      }
+    } catch (error) {
+      console.error('Error saving product:', error);
+      alert('Chyba při ukládání změn');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleSizeStockChange = (size: string, newStock: number) => {
+    setEditedSizes(prev => ({
+      ...prev,
+      [size]: newStock,
+    }));
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-96">
@@ -194,36 +262,165 @@ export default function ProductDetailPage() {
 
         <div className="w-1/2 sticky top-[44px] self-start h-screen overflow-y-auto">
           <div className="flex flex-col justify-center" style={{ paddingLeft: '32px', paddingRight: '48px', paddingTop: '64px' }}>
-            <h1 
-              className="uppercase"
-              style={{
-                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '16px',
-                fontWeight: 700,
-                letterSpacing: '0.05em',
-                lineHeight: '1.4',
-                marginBottom: '4px',
-                textAlign: 'center'
-              }}
-            >
-              {product.name}
-            </h1>
-            
-            <p 
-              style={{
-                fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '14px',
-                fontWeight: 400,
-                textAlign: 'center',
-                marginBottom: '64px'
-              }}
-            >
-              {product.price} Kč
-            </p>
+            {isAdmin && !isEditMode && (
+              <button
+                onClick={handleEditClick}
+                className="flex items-center justify-center gap-2 mb-4 px-4 py-2 border border-black hover:bg-black hover:text-white transition-colors"
+                style={{
+                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '12px',
+                  fontWeight: 400,
+                }}
+              >
+                <Edit2 size={14} />
+                Upravit produkt
+              </button>
+            )}
+
+            {isEditMode ? (
+              <>
+                <input
+                  type="text"
+                  value={editedName}
+                  onChange={(e) => setEditedName(e.target.value)}
+                  className="uppercase border border-black px-3 py-2 mb-2"
+                  style={{
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '16px',
+                    fontWeight: 700,
+                    letterSpacing: '0.05em',
+                    textAlign: 'center'
+                  }}
+                />
+                <input
+                  type="number"
+                  value={editedPrice}
+                  onChange={(e) => setEditedPrice(e.target.value)}
+                  className="border border-black px-3 py-2 mb-4"
+                  style={{
+                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '14px',
+                    fontWeight: 400,
+                    textAlign: 'center'
+                  }}
+                />
+              </>
+            ) : (
+              <>
+                <h1 
+                  className="uppercase"
+                  style={{
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '16px',
+                    fontWeight: 700,
+                    letterSpacing: '0.05em',
+                    lineHeight: '1.4',
+                    marginBottom: '4px',
+                    textAlign: 'center'
+                  }}
+                >
+                  {product.name}
+                </h1>
+                
+                <p 
+                  style={{
+                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '14px',
+                    fontWeight: 400,
+                    textAlign: 'center',
+                    marginBottom: '64px'
+                  }}
+                >
+                  {product.price} Kč
+                </p>
+              </>
+            )}
+
+          {isEditMode && (
+            <div style={{ marginBottom: '32px', width: '100%' }}>
+              <label className="block mb-2" style={{ fontSize: '12px', fontWeight: 500 }}>
+                Barva:
+              </label>
+              <input
+                type="text"
+                value={editedColor}
+                onChange={(e) => setEditedColor(e.target.value)}
+                className="w-full border border-black px-3 py-2 mb-4"
+                style={{ fontSize: '14px' }}
+              />
+              
+              <label className="block mb-2" style={{ fontSize: '12px', fontWeight: 500 }}>
+                Popis:
+              </label>
+              <textarea
+                value={editedDescription}
+                onChange={(e) => setEditedDescription(e.target.value)}
+                className="w-full border border-black px-3 py-2 mb-4"
+                rows={4}
+                style={{ fontSize: '14px' }}
+              />
+
+              <label className="block mb-2" style={{ fontSize: '12px', fontWeight: 500 }}>
+                Velikosti a skladové zásoby:
+              </label>
+              <div className="grid grid-cols-2 gap-2 mb-4">
+                {Object.entries(editedSizes).map(([size, stock]) => (
+                  <div key={size} className="flex items-center gap-2 border border-black p-2">
+                    <span className="font-medium" style={{ width: '60px' }}>{size}:</span>
+                    <input
+                      type="number"
+                      value={stock}
+                      onChange={(e) => handleSizeStockChange(size, parseInt(e.target.value) || 0)}
+                      className="flex-1 border border-gray-300 px-2 py-1"
+                      min="0"
+                      style={{ fontSize: '14px' }}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex gap-2">
+                <button
+                  onClick={handleSaveEdit}
+                  disabled={isSaving}
+                  className="flex-1 bg-black text-white px-4 py-3 hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
+                  style={{
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '16px',
+                    fontWeight: 700,
+                    letterSpacing: '0.03em',
+                    textTransform: 'uppercase',
+                    fontStretch: 'condensed',
+                  }}
+                >
+                  <Save size={16} />
+                  {isSaving ? 'Ukládání...' : 'Uložit změny'}
+                </button>
+                <button
+                  onClick={handleCancelEdit}
+                  disabled={isSaving}
+                  className="flex-1 bg-white text-black px-4 py-3 border border-black hover:bg-gray-100 transition-colors flex items-center justify-center gap-2"
+                  style={{
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '16px',
+                    fontWeight: 700,
+                    letterSpacing: '0.03em',
+                    textTransform: 'uppercase',
+                    fontStretch: 'condensed',
+                  }}
+                >
+                  <X size={16} />
+                  Zrušit
+                </button>
+              </div>
+            </div>
+          )}
 
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
           <div style={{ borderTop: '1px solid #000000', paddingTop: '0', width: '36vw', marginBottom: '0px' }} />
 
+          {!isEditMode && (
+            <>
           <div className="relative" style={{ width: '36vw', marginBottom: '-4px' }}>
             <button
               onClick={() => setIsSizeDropdownOpen(!isSizeDropdownOpen)}
@@ -311,6 +508,8 @@ export default function ProductDetailPage() {
           >
             PŘIDAT DO KOŠÍKU
           </button>
+            </>
+          )}
 
           <div style={{ width: '36vw' }}>
           <div className="border-t border-black flex flex-col gap-1">
