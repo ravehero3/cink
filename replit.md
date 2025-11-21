@@ -36,7 +36,24 @@ The project is built using Next.js 14 (App Router) and TypeScript. Tailwind CSS 
 - **Authentication**: NextAuth.js.
 - **State Management**: Zustand for client-side global state.
 
-## Recent Changes (November 20, 2025)
+## Recent Changes
+
+### November 21, 2025 - Production Deployment Configuration
+- **Deployment Setup**: Updated deployment scripts for production launch
+- **Environment Variables**: Configured all production environment variables (.env.local)
+  - NEXTAUTH_SECRET: qTWz3Gp3zJCZGkB7kLaLdbR8tApisv2a1uXBkoRwSf8=
+  - NEXTAUTH_URL: https://ufosport.cz
+  - Cloudinary credentials configured (dq0qvtbst)
+- **Deployment Scripts**:
+  - deploy-to-vercel.sh: Automated production deployment with all environment variables
+  - add-domain-to-vercel.sh: Custom domain configuration for ufosport.cz
+- **Documentation Created**:
+  - PRODUCTION_DEPLOYMENT.md: Comprehensive deployment guide with DNS configuration
+  - LAUNCH_SUMMARY.md: Quick-start production launch guide
+- **Test Deployment**: Live at https://alienshop-7cfqq31v1-voodoo808s-projects.vercel.app/
+- **Domain**: Ready to configure ufosport.cz with DNS records for Wedos
+
+### November 20, 2025 - Database and Design
 - **Database Setup**: PostgreSQL database provisioned and schema pushed
 - **Data Seeding**: Created admin user (admin@ufosport.cz / admin123), 4 product categories, and 40 sample products
 - **Environment Configuration**: Added Cloudinary credentials and NextAuth secret
