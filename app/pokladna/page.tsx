@@ -164,7 +164,7 @@ export default function CheckoutPage() {
 
               <div className="mb-1">
                 <label 
-                  className="block uppercase"
+                  className="block"
                   style={{
                     fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '10px',
@@ -190,7 +190,7 @@ export default function CheckoutPage() {
 
               <div className="mb-1">
                 <label 
-                  className="block uppercase"
+                  className="block"
                   style={{
                     fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '10px',
@@ -216,7 +216,7 @@ export default function CheckoutPage() {
 
               <div className="mb-1">
                 <label 
-                  className="block uppercase"
+                  className="block"
                   style={{
                     fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '10px',
@@ -332,7 +332,7 @@ export default function CheckoutPage() {
 
               <div className="mb-4 mt-4">
                 <label 
-                  className="block font-bold uppercase text-body"
+                  className="block font-bold text-body"
                   style={{
                     fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '10px',
