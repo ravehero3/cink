@@ -162,7 +162,7 @@ export default function CheckoutPage() {
                 KONTAKTNÍ ÚDAJE
               </h2>
 
-              <div className="mb-4">
+              <div className="mb-2">
                 <label 
                   className="block uppercase"
                   style={{
@@ -188,7 +188,7 @@ export default function CheckoutPage() {
                 />
               </div>
 
-              <div className="mb-4">
+              <div className="mb-2">
                 <label 
                   className="block uppercase"
                   style={{
@@ -214,7 +214,7 @@ export default function CheckoutPage() {
                 />
               </div>
 
-              <div className="mb-4">
+              <div className="mb-2">
                 <label 
                   className="block uppercase"
                   style={{
