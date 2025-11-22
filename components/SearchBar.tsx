@@ -102,17 +102,17 @@ export default function SearchBar() {
         <input
           ref={inputRef}
           type="text"
-          placeholder="Co právě hledáte?"
+          placeholder="CO PRÁVĚ HLEDÁTE?"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="flex-1 bg-transparent border-none outline-none placeholder:text-black"
+          className="flex-1 bg-transparent border-none outline-none placeholder:text-black placeholder:uppercase"
           style={{ 
             marginLeft: '12px',
             fontFamily: 'inherit',
-            fontSize: '31px',
-            fontWeight: 700,
+            fontSize: '12px',
+            fontWeight: 400,
             letterSpacing: '-0.01em',
-            lineHeight: '1.1'
+            lineHeight: '1.6'
           }}
         />
       </div>
