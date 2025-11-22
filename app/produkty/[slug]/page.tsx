@@ -417,7 +417,7 @@ export default function ProductDetailPage() {
           )}
 
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-          <div style={{ borderTop: '1px solid #000000', paddingTop: '0', width: '36vw', marginBottom: '0px' }} />
+          <div style={{ borderTop: '1px solid #000000', paddingTop: '0', width: '36vw', marginBottom: '0px' }}></div>
 
           {!isEditMode && (
             <>
@@ -694,9 +694,11 @@ export default function ProductDetailPage() {
               )}
             </div>
           </div>
-          <div style={{ height: '64px' }} />
+          <div style={{ height: '64px' }}></div>
           </div>
         </div>
+        </div>
+      </div>
       </div>
     </div>
   );
