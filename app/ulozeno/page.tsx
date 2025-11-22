@@ -260,7 +260,7 @@ export default function SavedProductsPage() {
           products.map((product, index) => (
             <div 
               key={product.id}
-              className={`relative ${index !== 0 ? 'border-t border-black' : ''}`}
+              className="relative border-b border-black"
               style={{ minHeight: '200px' }}
             >
               <div className="flex h-full">
