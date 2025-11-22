@@ -156,10 +156,10 @@ export default function CheckoutPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
             <form onSubmit={handleSubmit} className="border border-black p-8">
-              <h2 className="text-header font-bold mb-6 uppercase">KONTAKTNÍ ÚDAJE</h2>
+              <h2 className="text-title font-bold mb-6 uppercase">KONTAKTNÍ ÚDAJE</h2>
 
               <div className="mb-6">
-                <label className="block text-body font-bold mb-2 uppercase">E-mail *</label>
+                <label className="block text-title font-bold mb-2 uppercase">E-mail *</label>
                 <input
                   type="email"
                   required
@@ -170,7 +170,7 @@ export default function CheckoutPage() {
               </div>
 
               <div className="mb-6">
-                <label className="block text-body font-bold mb-2 uppercase">Jméno a příjmení *</label>
+                <label className="block text-title font-bold mb-2 uppercase">Jméno a příjmení *</label>
                 <input
                   type="text"
                   required
@@ -181,7 +181,7 @@ export default function CheckoutPage() {
               </div>
 
               <div className="mb-8">
-                <label className="block text-body font-bold mb-2 uppercase">Telefon *</label>
+                <label className="block text-title font-bold mb-2 uppercase">Telefon *</label>
                 <input
                   type="tel"
                   required
@@ -191,7 +191,7 @@ export default function CheckoutPage() {
                 />
               </div>
 
-              <h2 className="text-header font-bold mb-6 uppercase border-t border-black pt-8">DOPRAVA</h2>
+              <h2 className="text-title font-bold mb-6 uppercase border-t border-black pt-8">DOPRAVA</h2>
 
               <div className="mb-6">
                 <label className="flex items-start border border-black p-4 cursor-pointer">
@@ -233,7 +233,7 @@ export default function CheckoutPage() {
 
           <div className="lg:col-span-1">
             <div className="border border-black p-6 sticky top-24">
-              <h2 className="text-header font-bold mb-6 uppercase">SOUHRN</h2>
+              <h2 className="text-title font-bold mb-6 uppercase">SOUHRN</h2>
 
               <div className="mb-6 border-b border-black pb-6">
                 {items.map((item) => (
@@ -256,7 +256,7 @@ export default function CheckoutPage() {
               </div>
 
               <div className="mb-4">
-                <label className="block text-body font-bold mb-2 uppercase text-[12px]">Promo kód</label>
+                <label className="block text-title font-bold mb-2 uppercase text-[12px]">Promo kód</label>
                 <div className="flex gap-2">
                   <input
                     type="text"
