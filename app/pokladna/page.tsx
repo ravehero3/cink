@@ -147,7 +147,7 @@ export default function CheckoutPage() {
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <div className="max-w-7xl mx-auto px-4 flex-1">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 h-full">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 h-full border-b border-black">
           <div className="lg:col-span-2 h-full flex flex-col">
             <form onSubmit={handleSubmit} className="border-l border-black p-8 flex flex-col h-full">
               <h2 
