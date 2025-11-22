@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams, useSearchParams } from 'next/navigation';
+import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useCartStore } from '@/lib/cart-store';
 import { useSavedProductsStore } from '@/lib/saved-products-store';
@@ -25,6 +25,7 @@ interface Product {
 export default function ProductDetailPage() {
   const params = useParams();
   const searchParams = useSearchParams();
+  const router = useRouter();
   const slug = params.slug as string;
   const sizeFromUrl = searchParams.get('size');
   const { data: session } = useSession();
@@ -109,8 +110,8 @@ export default function ProductDetailPage() {
 
     setShowConfirmation(true);
     setTimeout(() => {
-      setShowConfirmation(false);
-    }, 3000);
+      router.push('/kosik');
+    }, 500);
   };
 
   const toggleSaved = async () => {
