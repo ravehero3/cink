@@ -490,7 +490,7 @@ export default function ProductDetailPage() {
 
           {!isEditMode && (
             <>
-          <div className="relative" style={{ width: '36vw', marginBottom: '-4px' }}>
+          <div className="relative" style={{ width: '36vw', marginBottom: '-4px', paddingTop: '32px' }}>
             <button
               onClick={() => setIsSizeDropdownOpen(!isSizeDropdownOpen)}
               className="w-full bg-white text-black flex items-center justify-center relative"
