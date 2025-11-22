@@ -354,7 +354,7 @@ export default function CheckoutPage() {
                       setFormData({ ...formData, promoCode: e.target.value });
                       setPromoError('');
                     }}
-                    className="flex-1 border border-black px-2 py-2 text-body focus:outline-none"
+                    className="flex-1 border border-black px-2 py-1 text-body focus:outline-none"
                     placeholder="KÓD"
                     style={{ borderRadius: '4px' }}
                   />
