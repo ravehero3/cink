@@ -149,7 +149,7 @@ export default function CheckoutPage() {
       <div className="max-w-7xl mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-0">
           <div className="lg:col-span-2">
-            <form onSubmit={handleSubmit} className="border border-black p-8">
+            <form onSubmit={handleSubmit} className="border-l border-black p-8">
               <h2 className="text-title font-bold mb-4 uppercase">KONTAKTNÍ ÚDAJE</h2>
 
               <div className="mb-4">
@@ -170,6 +170,7 @@ export default function CheckoutPage() {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   className="w-full border border-black px-4 py-2 text-body focus:outline-none focus:ring-1 focus:ring-black"
+                  style={{ borderRadius: '4px' }}
                 />
               </div>
 
@@ -191,6 +192,7 @@ export default function CheckoutPage() {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="w-full border border-black px-4 py-2 text-body focus:outline-none focus:ring-1 focus:ring-black"
+                  style={{ borderRadius: '4px' }}
                 />
               </div>
 
@@ -212,13 +214,14 @@ export default function CheckoutPage() {
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   className="w-full border border-black px-4 py-2 text-body focus:outline-none focus:ring-1 focus:ring-black"
+                  style={{ borderRadius: '4px' }}
                 />
               </div>
 
-              <h2 className="text-title font-bold mb-4 uppercase border-t border-black pt-4">DOPRAVA</h2>
+              <h2 className="text-title font-bold mb-4 uppercase pt-4">DOPRAVA</h2>
 
               <div className="mb-4">
-                <label className="flex items-start border border-black p-4 cursor-pointer">
+                <label className="flex items-start p-4 cursor-pointer">
                   <input
                     type="radio"
                     name="shipping"
@@ -239,6 +242,7 @@ export default function CheckoutPage() {
                     type="button"
                     onClick={openZasilkovnaWidget}
                     className="mt-4 w-full border border-black px-4 py-2 text-body uppercase hover:bg-black hover:text-white transition-colors"
+                    style={{ borderRadius: '4px' }}
                   >
                     {formData.zasilkovnaName ? `Změnit: ${formData.zasilkovnaName}` : 'VYBRAT VÝDEJNÍ MÍSTO'}
                   </button>
@@ -249,6 +253,7 @@ export default function CheckoutPage() {
                 type="submit"
                 disabled={loading}
                 className="w-full bg-black text-white py-4 text-body uppercase font-bold border border-black hover:bg-white hover:text-black transition-colors disabled:bg-white disabled:text-black mt-4"
+                style={{ borderRadius: '4px' }}
               >
                 {loading ? 'ZPRACOVÁNÍ...' : 'PŘEJÍT K PLATBĚ'}
               </button>
@@ -256,13 +261,13 @@ export default function CheckoutPage() {
           </div>
 
           <div className="lg:col-span-1">
-            <div className="border border-black p-6 sticky top-0">
+            <div className="border-l border-black p-6 sticky top-0">
               <h2 className="text-title font-bold mb-4 uppercase">SOUHRN</h2>
 
-              <div className="mb-4 border-b border-black pb-4">
+              <div className="mb-4 pb-4">
                 {items.map((item) => (
                   <div key={`${item.productId}-${item.size}`} className="flex gap-4 mb-4">
-                    <div className="w-16 h-16 border border-black relative flex-shrink-0">
+                    <div className="w-16 h-16 border border-black relative flex-shrink-0" style={{ borderRadius: '4px' }}>
                       <Image
                         src={item.image}
                         alt={item.name}
@@ -291,11 +296,13 @@ export default function CheckoutPage() {
                     }}
                     className="flex-1 border border-black px-3 py-2 text-body focus:outline-none focus:ring-1 focus:ring-black"
                     placeholder="KÓD"
+                    style={{ borderRadius: '4px' }}
                   />
                   <button
                     type="button"
                     onClick={handleApplyPromo}
                     className="border border-black px-4 py-2 text-body uppercase hover:bg-black hover:text-white transition-colors"
+                    style={{ borderRadius: '4px' }}
                   >
                     POUŽÍT
                   </button>
@@ -318,7 +325,7 @@ export default function CheckoutPage() {
                     <span>-{discount} Kč</span>
                   </div>
                 )}
-                <div className="border-t border-black pt-4">
+                <div className="pt-4">
                   <div className="flex justify-between text-product-name font-bold">
                     <span>CELKEM</span>
                     <span>{total} Kč</span>
