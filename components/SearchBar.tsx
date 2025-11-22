@@ -109,7 +109,7 @@ export default function SearchBar() {
           style={{ 
             marginLeft: '12px',
             fontFamily: "'BB-CondBold', 'Helvetica Neue', Helvetica, Arial, sans-serif",
-            fontSize: '12px',
+            fontSize: '14px',
             fontWeight: 400,
             letterSpacing: '0.42px',
             lineHeight: '16.1px'
