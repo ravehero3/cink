@@ -8,12 +8,10 @@ import Image from 'next/image';
 
 function AnimatedCheckoutButton({ 
   text, 
-  onClick, 
   loading, 
   disabled 
 }: { 
   text: string; 
-  onClick: (e: React.FormEvent) => void; 
   loading: boolean;
   disabled: boolean;
 }) {
@@ -22,7 +20,6 @@ function AnimatedCheckoutButton({
   return (
     <button
       type="submit"
-      onClick={onClick}
       disabled={disabled || loading}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -329,7 +326,6 @@ export default function CheckoutPage() {
               <div className="mt-4">
                 <AnimatedCheckoutButton 
                   text="PŘEJÍT K PLATBĚ" 
-                  onClick={handleSubmit}
                   loading={loading}
                   disabled={!formData.email || !formData.name || !formData.phone || (formData.shippingMethod === 'zasilkovna' && !formData.zasilkovnaId)}
                 />
