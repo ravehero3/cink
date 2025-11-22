@@ -155,7 +155,7 @@ export default function CheckoutPage() {
                 style={{
                   fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontSize: '14px',
-                  fontWeight: 400,
+                  fontWeight: 700,
                   lineHeight: '16.1px'
                 }}
               >
