@@ -146,13 +146,13 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-0">
           <div className="lg:col-span-2">
             <form onSubmit={handleSubmit} className="border border-black p-8">
-              <h2 className="text-title font-bold mb-6 uppercase">KONTAKTNÍ ÚDAJE</h2>
+              <h2 className="text-title font-bold mb-4 uppercase">KONTAKTNÍ ÚDAJE</h2>
 
-              <div className="mb-6">
+              <div className="mb-4">
                 <label 
                   className="block mb-2 uppercase"
                   style={{
@@ -173,7 +173,7 @@ export default function CheckoutPage() {
                 />
               </div>
 
-              <div className="mb-6">
+              <div className="mb-4">
                 <label 
                   className="block mb-2 uppercase"
                   style={{
@@ -194,7 +194,7 @@ export default function CheckoutPage() {
                 />
               </div>
 
-              <div className="mb-8">
+              <div className="mb-4">
                 <label 
                   className="block mb-2 uppercase"
                   style={{
@@ -215,9 +215,9 @@ export default function CheckoutPage() {
                 />
               </div>
 
-              <h2 className="text-title font-bold mb-6 uppercase border-t border-black pt-8">DOPRAVA</h2>
+              <h2 className="text-title font-bold mb-4 uppercase border-t border-black pt-4">DOPRAVA</h2>
 
-              <div className="mb-6">
+              <div className="mb-4">
                 <label className="flex items-start border border-black p-4 cursor-pointer">
                   <input
                     type="radio"
@@ -248,7 +248,7 @@ export default function CheckoutPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-black text-white py-4 text-body uppercase font-bold border border-black hover:bg-white hover:text-black transition-colors disabled:bg-white disabled:text-black mt-8"
+                className="w-full bg-black text-white py-4 text-body uppercase font-bold border border-black hover:bg-white hover:text-black transition-colors disabled:bg-white disabled:text-black mt-4"
               >
                 {loading ? 'ZPRACOVÁNÍ...' : 'PŘEJÍT K PLATBĚ'}
               </button>
@@ -256,10 +256,10 @@ export default function CheckoutPage() {
           </div>
 
           <div className="lg:col-span-1">
-            <div className="border border-black p-6 sticky top-24">
-              <h2 className="text-title font-bold mb-6 uppercase">SOUHRN</h2>
+            <div className="border border-black p-6 sticky top-0">
+              <h2 className="text-title font-bold mb-4 uppercase">SOUHRN</h2>
 
-              <div className="mb-6 border-b border-black pb-6">
+              <div className="mb-4 border-b border-black pb-4">
                 {items.map((item) => (
                   <div key={`${item.productId}-${item.size}`} className="flex gap-4 mb-4">
                     <div className="w-16 h-16 border border-black relative flex-shrink-0">
@@ -279,7 +279,7 @@ export default function CheckoutPage() {
                 ))}
               </div>
 
-              <div className="mb-4">
+              <div className="mb-4 mt-4">
                 <label className="block text-title font-bold mb-2 uppercase text-[12px]">Promo kód</label>
                 <div className="flex gap-2">
                   <input
