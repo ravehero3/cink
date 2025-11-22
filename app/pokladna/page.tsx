@@ -145,11 +145,11 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-0">
-          <div className="lg:col-span-2">
-            <form onSubmit={handleSubmit} className="border-l border-black p-8">
+    <div className="min-h-screen bg-white flex flex-col">
+      <div className="max-w-7xl mx-auto px-4 flex-1">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 h-full">
+          <div className="lg:col-span-2 h-full flex flex-col">
+            <form onSubmit={handleSubmit} className="border-l border-black p-8 flex flex-col h-full">
               <h2 className="text-title font-bold mb-4 uppercase">KONTAKTNÍ ÚDAJE</h2>
 
               <div className="mb-4">
@@ -260,8 +260,8 @@ export default function CheckoutPage() {
             </form>
           </div>
 
-          <div className="lg:col-span-1">
-            <div className="border-l border-black p-6 sticky top-0">
+          <div className="lg:col-span-1 h-full">
+            <div className="border-l border-black p-6 h-full flex flex-col">
               <h2 className="text-title font-bold mb-4 uppercase">SOUHRN</h2>
 
               <div className="mb-4 pb-4">
