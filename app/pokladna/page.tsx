@@ -361,22 +361,22 @@ export default function CheckoutPage() {
               </div>
 
               <div className="space-y-2 mb-6">
-                <div className="flex justify-between text-body">
+                <div className="flex justify-between" style={{ fontSize: '10px' }}>
                   <span>Mezisoučet</span>
                   <span>{subtotal} Kč</span>
                 </div>
-                <div className="flex justify-between text-body">
+                <div className="flex justify-between" style={{ fontSize: '10px' }}>
                   <span>Doprava</span>
                   <span>{shippingCost} Kč</span>
                 </div>
                 {discount > 0 && (
-                  <div className="flex justify-between text-body">
+                  <div className="flex justify-between" style={{ fontSize: '10px' }}>
                     <span>Sleva</span>
                     <span>-{discount} Kč</span>
                   </div>
                 )}
                 <div className="pt-4">
-                  <div className="flex justify-between text-product-name font-bold">
+                  <div className="flex justify-between font-bold" style={{ fontSize: '10px' }}>
                     <span>CELKEM</span>
                     <span>{total} Kč</span>
                   </div>
