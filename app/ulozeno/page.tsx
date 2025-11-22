@@ -21,23 +21,34 @@ interface Product {
 export default function SavedProductsPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const savedProductIds = useSavedProductsStore((state) => state.savedIds);
   const removeProduct = useSavedProductsStore((state) => state.removeProduct);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const { addItem } = useCartStore();
 
   useEffect(() => {
-    if (status === 'authenticated' && savedProductIds.length > 0) {
+    // For authenticated users, always fetch from database
+    if (status === 'authenticated') {
       fetchSavedProducts();
-    } else if (status === 'authenticated') {
-      setLoading(false);
-    } else if (status === 'unauthenticated' && savedProductIds.length > 0) {
-      fetchSavedProductsLocal();
-    } else {
+    } 
+    // For unauthenticated users, use local store
+    else if (status === 'unauthenticated') {
+      const savedProductIds = useSavedProductsStore.getState().savedIds;
+      if (savedProductIds.length > 0) {
+        fetchSavedProductsLocal();
+      } else {
+        setLoading(false);
+      }
+    } 
+    // Loading state
+    else if (status === 'loading') {
+      setLoading(true);
+    }
+    // Other cases
+    else {
       setLoading(false);
     }
-  }, [status, savedProductIds]);
+  }, [status]);
 
   const fetchSavedProducts = async () => {
     try {
@@ -57,6 +68,7 @@ export default function SavedProductsPage() {
     try {
       const response = await fetch('/api/products');
       if (response.ok) {
+        const savedProductIds = useSavedProductsStore.getState().savedIds;
         const data = await response.json();
         const savedProducts = data.products?.filter((p: Product) => savedProductIds.includes(p.id)) || [];
         setProducts(savedProducts);
@@ -68,9 +80,20 @@ export default function SavedProductsPage() {
     }
   };
 
-  const handleRemove = (productId: string) => {
+  const handleRemove = async (productId: string) => {
     removeProduct(productId);
     setProducts(products.filter(p => p.id !== productId));
+    
+    // If authenticated, also remove from database
+    if (session?.user) {
+      try {
+        await fetch(`/api/saved-products?productId=${productId}`, {
+          method: 'DELETE',
+        });
+      } catch (error) {
+        console.error('Error removing saved product:', error);
+      }
+    }
   };
 
   const handleMoveToCart = (product: Product) => {
