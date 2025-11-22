@@ -6,6 +6,51 @@ import { useSession } from 'next-auth/react';
 import { useCartStore } from '@/lib/cart-store';
 import Image from 'next/image';
 
+function AnimatedCheckoutButton({ 
+  text, 
+  onClick, 
+  loading, 
+  disabled 
+}: { 
+  text: string; 
+  onClick: (e: React.FormEvent) => void; 
+  loading: boolean;
+  disabled: boolean;
+}) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <button
+      type="submit"
+      onClick={onClick}
+      disabled={disabled || loading}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="w-full bg-black text-white text-body uppercase font-bold border border-black relative overflow-hidden disabled:opacity-50"
+      style={{ borderRadius: '4px', padding: '8px 0', height: '32px' }}
+    >
+      <span
+        className="block transition-all duration-300"
+        style={{
+          transform: isHovered ? 'translateY(-150%)' : 'translateY(0)',
+          opacity: isHovered ? 0 : 1,
+        }}
+      >
+        {loading ? 'ZPRACOVÁNÍ...' : text}
+      </span>
+      <span
+        className="absolute inset-0 flex items-center justify-center transition-all duration-300"
+        style={{
+          transform: isHovered ? 'translateY(0)' : 'translateY(150%)',
+          opacity: isHovered ? 1 : 0,
+        }}
+      >
+        {text}
+      </span>
+    </button>
+  );
+}
+
 export default function CheckoutPage() {
   const router = useRouter();
   const { data: session } = useSession();
@@ -281,14 +326,14 @@ export default function CheckoutPage() {
                 )}
               </div>
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-black text-white py-2 text-body uppercase font-bold border border-black hover:bg-gray-900 transition-colors disabled:opacity-50 mt-4"
-                style={{ borderRadius: '4px' }}
-              >
-                {loading ? 'ZPRACOVÁNÍ...' : 'PŘEJÍT K PLATBĚ'}
-              </button>
+              <div className="mt-4">
+                <AnimatedCheckoutButton 
+                  text="PŘEJÍT K PLATBĚ" 
+                  onClick={handleSubmit}
+                  loading={loading}
+                  disabled={!formData.email || !formData.name || !formData.phone || (formData.shippingMethod === 'zasilkovna' && !formData.zasilkovnaId)}
+                />
+              </div>
             </form>
           </div>
 
