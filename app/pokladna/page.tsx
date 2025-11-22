@@ -323,9 +323,9 @@ export default function CheckoutPage() {
                   className="block font-bold mb-1 uppercase text-body"
                   style={{
                     fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
+                    fontSize: '12px',
                     fontWeight: 400,
-                    lineHeight: '16.1px'
+                    lineHeight: '14.1px'
                   }}
                 >
                   Promo kód
