@@ -108,9 +108,9 @@ export default function SearchBar() {
           className="flex-1 bg-transparent border-none outline-none placeholder:text-black placeholder:uppercase"
           style={{ 
             marginLeft: '12px',
-            fontFamily: 'inherit',
+            fontFamily: '"Utah WGL Condensed W10 Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
             fontSize: '12px',
-            fontWeight: 400,
+            fontWeight: 700,
             letterSpacing: '-0.01em',
             lineHeight: '1.6'
           }}
