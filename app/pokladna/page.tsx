@@ -167,9 +167,11 @@ export default function CheckoutPage() {
                   className="block mb-1 uppercase"
                   style={{
                     fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
+                    fontSize: '12px',
                     fontWeight: 400,
-                    lineHeight: '16.1px'
+                    lineHeight: '14.1px',
+                    paddingLeft: '2px',
+                    paddingRight: '2px'
                   }}
                 >
                   E-mail *
@@ -189,9 +191,11 @@ export default function CheckoutPage() {
                   className="block mb-1 uppercase"
                   style={{
                     fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
+                    fontSize: '12px',
                     fontWeight: 400,
-                    lineHeight: '16.1px'
+                    lineHeight: '14.1px',
+                    paddingLeft: '2px',
+                    paddingRight: '2px'
                   }}
                 >
                   Jméno a příjmení *
@@ -211,9 +215,11 @@ export default function CheckoutPage() {
                   className="block mb-1 uppercase"
                   style={{
                     fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
+                    fontSize: '12px',
                     fontWeight: 400,
-                    lineHeight: '16.1px'
+                    lineHeight: '14.1px',
+                    paddingLeft: '2px',
+                    paddingRight: '2px'
                   }}
                 >
                   Telefon *
@@ -261,8 +267,8 @@ export default function CheckoutPage() {
                   <button
                     type="button"
                     onClick={openZasilkovnaWidget}
-                    className="mt-4 w-full border border-black px-4 py-2 text-body uppercase hover:bg-black hover:text-white transition-colors"
-                    style={{ borderRadius: '4px' }}
+                    className="w-full border border-black px-4 py-2 text-body uppercase hover:bg-black hover:text-white transition-colors"
+                    style={{ borderRadius: '4px', marginTop: '4px' }}
                   >
                     {formData.zasilkovnaName ? `Změnit: ${formData.zasilkovnaName}` : 'VYBRAT VÝDEJNÍ MÍSTO'}
                   </button>
