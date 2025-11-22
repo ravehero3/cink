@@ -78,13 +78,15 @@ The project is built using Next.js 14 (App Router) and TypeScript. Tailwind CSS 
   - Changed from BB-CondBold to "Helvetica Neue Condensed Bold" at 14px
   - Maintains uppercase styling with proper letter-spacing (0.03em) and font-stretch: condensed
   
-- **Button Font Updates**:
-  - "VYBERTE VELIKOST" button: Now uses Helvetica Neue Condensed Bold at 22px (matches VOODOO808 header text exactly)
-  - "PŘIDAT DO KOŠÍKU" button: Now uses Helvetica Neue Condensed Bold at 22px (matches VOODOO808 header text exactly)
-  - Both buttons maintain uppercase styling, proper letter-spacing, and font-stretch properties
+- **Button Font Updates** (Updated November 22, 2025):
+  - "VYBERTE VELIKOST" button: Now uses Helvetica Neue at 14px with font-weight 400 (normal)
+  - "PŘIDAT DO KOŠÍKU" button: Now uses Helvetica Neue at 14px with font-weight 400 (normal)
+  - Changed to match Balenciaga's minimalist aesthetic - understated, not "shouting"
+  - Both buttons maintain uppercase styling with tight letter-spacing
   
 - **Spacing Adjustments**:
   - Line height between product title and price reduced to 4px (was larger before)
+  - Short description to VYBERTE VELIKOST button: 8px gap (was 64px, now more compact)
   - Ensures compact, elegant visual grouping
   
 - **Product Short Description Field**:

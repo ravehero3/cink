@@ -495,13 +495,12 @@ export default function ProductDetailPage() {
               onClick={() => setIsSizeDropdownOpen(!isSizeDropdownOpen)}
               className="w-full bg-white text-black flex items-center justify-center relative"
               style={{
-                fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '22px',
-                fontWeight: 700,
-                letterSpacing: '0.03em',
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '14px',
+                fontWeight: 400,
+                letterSpacing: 'tight',
                 textTransform: 'uppercase',
                 padding: '10.67px 0',
-                fontStretch: 'condensed',
                 textAlign: 'center',
                 border: '1px solid #000',
                 borderRadius: '4px'
@@ -563,14 +562,13 @@ export default function ProductDetailPage() {
             onClick={handleAddToCart}
             className="bg-black text-white hover:bg-gray-800 transition-colors"
             style={{
-              fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-              fontSize: '22px',
-              fontWeight: 700,
-              letterSpacing: '0.03em',
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '14px',
+              fontWeight: 400,
+              letterSpacing: 'tight',
               textTransform: 'uppercase',
               padding: '10.67px 0',
               width: '36vw',
-              fontStretch: 'condensed',
               borderRadius: '4px',
               marginBottom: '16px'
             }}
