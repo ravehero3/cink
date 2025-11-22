@@ -322,9 +322,9 @@ export default function CheckoutPage() {
                       />
                     </div>
                     <div className="flex-1">
-                      <p className="text-body font-bold">{item.name}</p>
-                      <p className="text-body">{item.size} / {item.quantity}x</p>
-                      <p className="text-body">{item.price * item.quantity} Kč</p>
+                      <p style={{ fontSize: '14px', fontWeight: 'bold' }}>{item.name}</p>
+                      <p style={{ fontSize: '14px' }}>{item.size} / {item.quantity}x</p>
+                      <p style={{ fontSize: '14px' }}>{item.price * item.quantity} Kč</p>
                     </div>
                   </div>
                 ))}
@@ -371,22 +371,22 @@ export default function CheckoutPage() {
               </div>
 
               <div className="space-y-2 mb-6">
-                <div className="flex justify-between" style={{ fontSize: '10px' }}>
+                <div className="flex justify-between" style={{ fontSize: '14px' }}>
                   <span>Mezisoučet</span>
                   <span>{subtotal} Kč</span>
                 </div>
-                <div className="flex justify-between" style={{ fontSize: '10px' }}>
+                <div className="flex justify-between" style={{ fontSize: '14px' }}>
                   <span>Doprava</span>
                   <span>{shippingCost} Kč</span>
                 </div>
                 {discount > 0 && (
-                  <div className="flex justify-between" style={{ fontSize: '10px' }}>
+                  <div className="flex justify-between" style={{ fontSize: '14px' }}>
                     <span>Sleva</span>
                     <span>-{discount} Kč</span>
                   </div>
                 )}
                 <div className="pt-4">
-                  <div className="flex justify-between font-bold" style={{ fontSize: '10px' }}>
+                  <div className="flex justify-between font-bold" style={{ fontSize: '14px' }}>
                     <span>CELKEM</span>
                     <span>{total} Kč</span>
                   </div>
