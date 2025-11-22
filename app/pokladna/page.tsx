@@ -150,7 +150,17 @@ export default function CheckoutPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 h-full">
           <div className="lg:col-span-2 h-full flex flex-col">
             <form onSubmit={handleSubmit} className="border-l border-black p-8 flex flex-col h-full">
-              <h2 className="text-title font-bold mb-4 uppercase">KONTAKTNÍ ÚDAJE</h2>
+              <h2 
+                className="font-bold mb-4 uppercase"
+                style={{
+                  fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '14px',
+                  fontWeight: 400,
+                  lineHeight: '16.1px'
+                }}
+              >
+                KONTAKTNÍ ÚDAJE
+              </h2>
 
               <div className="mb-4">
                 <label 
@@ -218,7 +228,17 @@ export default function CheckoutPage() {
                 />
               </div>
 
-              <h2 className="text-title font-bold mb-4 uppercase pt-4">DOPRAVA</h2>
+              <h2 
+                className="font-bold mb-4 uppercase pt-4"
+                style={{
+                  fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '14px',
+                  fontWeight: 400,
+                  lineHeight: '16.1px'
+                }}
+              >
+                DOPRAVA
+              </h2>
 
               <div className="mb-4">
                 <label className="flex items-start p-4 cursor-pointer">
@@ -261,8 +281,22 @@ export default function CheckoutPage() {
           </div>
 
           <div className="lg:col-span-1 h-full">
-            <div className="border-l border-black p-6 h-full flex flex-col">
-              <h2 className="text-title font-bold mb-4 uppercase">SOUHRN</h2>
+            <div className="border-l border-black h-full flex flex-col">
+              <div className="p-6 pb-0">
+                <h2 
+                  className="font-bold uppercase"
+                  style={{
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '14px',
+                    fontWeight: 400,
+                    lineHeight: '16.1px'
+                  }}
+                >
+                  SOUHRN OBJEDNÁVKY
+                </h2>
+              </div>
+              <div className="border-b border-black"></div>
+              <div className="p-6 overflow-auto flex flex-col flex-1">
 
               <div className="mb-4 pb-4">
                 {items.map((item) => (
@@ -277,7 +311,7 @@ export default function CheckoutPage() {
                     </div>
                     <div className="flex-1">
                       <p className="text-body font-bold">{item.name}</p>
-                      <p className="text-[12px]">{item.size} / {item.quantity}x</p>
+                      <p className="text-body">{item.size} / {item.quantity}x</p>
                       <p className="text-body">{item.price * item.quantity} Kč</p>
                     </div>
                   </div>
@@ -285,7 +319,17 @@ export default function CheckoutPage() {
               </div>
 
               <div className="mb-4 mt-4">
-                <label className="block text-title font-bold mb-2 uppercase text-[12px]">Promo kód</label>
+                <label 
+                  className="block font-bold mb-2 uppercase text-body"
+                  style={{
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '14px',
+                    fontWeight: 400,
+                    lineHeight: '16.1px'
+                  }}
+                >
+                  Promo kód
+                </label>
                 <div className="flex gap-2">
                   <input
                     type="text"
@@ -307,7 +351,7 @@ export default function CheckoutPage() {
                     POUŽÍT
                   </button>
                 </div>
-                {promoError && <p className="text-[12px] mt-2 text-black">{promoError}</p>}
+                {promoError && <p className="text-body mt-2 text-black">{promoError}</p>}
               </div>
 
               <div className="space-y-2 mb-6">
@@ -331,6 +375,7 @@ export default function CheckoutPage() {
                     <span>{total} Kč</span>
                   </div>
                 </div>
+              </div>
               </div>
             </div>
           </div>
