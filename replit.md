@@ -80,6 +80,39 @@ Created a new comprehensive 3-step checkout flow with full Czech language suppor
 - Added `/api/products` endpoint support for fetching products by ID
 - ULOŽENÉ PRODUKTY page with proper 1px borders between items
 
+### November 22, 2025 - POKLADNA Page Styling Refinement
+Enhanced the checkout summary page (POKLADNA) with minimalist border styling:
+
+**Design Changes**:
+- Replaced all full borders with strategic minimal borders (bottom only or right+bottom)
+- All contact form inputs (E-mail, Jméno a příjmení, Telefon): Bottom border only (border-b)
+- Promo code input field: Right and bottom borders (border-r border-b) for directional accent
+- All form sections extend full height with proper vertical line dividers (left and right edges)
+- Vertical lines run from header to footer edge for visual continuity
+
+**Header Styling**:
+- Changed "SOUHRN" to "SOUHRN OBJEDNÁVKY" with dedicated header section
+- Header height matches main navigation (h-header = 44px)
+- Added horizontal line divider (border-b) below header
+- Consistent HELVETICA NEUE CONDENSED BOLD typography (14px) for all titles
+
+**Typography Standardization**:
+- All text on POKLADNA page standardized to 14px (text-body)
+- Form section titles (KONTAKTNÍ ÚDAJE, DOPRAVA): HELVETICA NEUE CONDENSED BOLD, 14px
+- Right panel header (SOUHRN OBJEDNÁVKY): HELVETICA NEUE CONDENSED BOLD, 14px
+- Removed 12px font sizes in favor of consistent 14px throughout
+
+**Border Styling System**:
+- Left panel: border-l (vertical line only)
+- Right panel: border-l (vertical line only)
+- Form inputs: border-b (minimalist underline style)
+- Promo code input: border-r border-b (two-edge directional style)
+- Removed all focus rings for cleaner minimal appearance
+
+**Button Styling**:
+- PŘEJÍT K PLATBĚ button: py-2 (matches input field height), hover:bg-gray-900 (subtle darkening)
+- Removed color inversion hover effect in favor of subtle gray darkening
+
 ### Recent Design Improvements
 - Fixed "VYBERTE VELIKOST" button spacing (added 32px top padding)
 - Product detail "PŘIDAT DO KOŠÍKU" button now redirects to cart
