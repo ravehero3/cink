@@ -153,7 +153,17 @@ export default function CheckoutPage() {
               <h2 className="text-title font-bold mb-6 uppercase">KONTAKTNÍ ÚDAJE</h2>
 
               <div className="mb-6">
-                <label className="block text-title font-bold mb-2 uppercase">E-mail *</label>
+                <label 
+                  className="block mb-2 uppercase"
+                  style={{
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '14px',
+                    fontWeight: 400,
+                    lineHeight: '16.1px'
+                  }}
+                >
+                  E-mail *
+                </label>
                 <input
                   type="email"
                   required
@@ -164,7 +174,17 @@ export default function CheckoutPage() {
               </div>
 
               <div className="mb-6">
-                <label className="block text-title font-bold mb-2 uppercase">Jméno a příjmení *</label>
+                <label 
+                  className="block mb-2 uppercase"
+                  style={{
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '14px',
+                    fontWeight: 400,
+                    lineHeight: '16.1px'
+                  }}
+                >
+                  Jméno a příjmení *
+                </label>
                 <input
                   type="text"
                   required
@@ -175,7 +195,17 @@ export default function CheckoutPage() {
               </div>
 
               <div className="mb-8">
-                <label className="block text-title font-bold mb-2 uppercase">Telefon *</label>
+                <label 
+                  className="block mb-2 uppercase"
+                  style={{
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '14px',
+                    fontWeight: 400,
+                    lineHeight: '16.1px'
+                  }}
+                >
+                  Telefon *
+                </label>
                 <input
                   type="tel"
                   required
