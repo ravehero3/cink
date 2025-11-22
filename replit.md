@@ -38,26 +38,59 @@ The project is built using Next.js 14 (App Router) and TypeScript. Tailwind CSS 
 
 ## Recent Changes
 
-### November 22, 2025 - Font Standardization & Heart Icon Alignment
-- **Heart Icon Design Standardization**: 
-  - Updated ProductCard heart icon from 24px to 22px to match header heart size
-  - Changed from filled heart design to stroke-based design (matching header's aesthetic)
-  - Heart starts as white with black stroke, becomes filled black when saved
-  - Scale Pop animation preserved with same easing: cubic-bezier(0.175, 0.885, 0.32, 1.275)
-- **Single Product View Font Updates**:
-  - Product name (h1): Changed to BB-CondBold at 14px (from "Helvetica Neue Condensed Bold" at 16px)
-  - Price and body text: Uses BB-Regular at 14px
-  - Accordion section headers ("INFORMACE O PRODUKTU", "Size & fit", "Doprava zdarma, vrácení zdarma", "Péče o produkt"): BB-CondBold at 14px
-  - Accordion content (expanded sections): BB-Regular at 14px
-  - "PŘIDAT DO KOŠÍKU" button: BB-CondBold at 14px (updated from "Helvetica Neue Condensed Bold" 22px)
-- **Database & Seed**: Created PostgreSQL database with full seed data
-  - Admin user: admin@ufosport.cz / admin123
-  - Test user: user@ufosport.cz / user123
-  - 4 product categories and 40 sample products
-- **Bug Fixes**: Fixed JSX syntax errors in product detail page
-  - Added 3 missing closing `</div>` tags in component structure
-  - Fixed self-closing div tags (changed `<div />` to `<div></div>`)
-  - Application now compiles successfully
+### November 22, 2025 - Comprehensive Single Product Page Redesign & Accordion Animations
+- **Heart Icon on Product Images**: 
+  - Added heart icon to top-right corner of first product image on single product view page
+  - Icon is 22px (matching header heart size) with stroke-based design (white with black stroke initially)
+  - Fully clickable to save/unsave products with Scale Pop animation (same effect as product grid heart)
+  - Turns black when saved, white when unsaved
+  - Uses cubic-bezier(0.175, 0.885, 0.32, 1.275) easing for smooth animation
+  
+- **Product Title Font Standardization**:
+  - Changed from BB-CondBold to "Helvetica Neue Condensed Bold" at 14px
+  - Maintains uppercase styling with proper letter-spacing (0.03em) and font-stretch: condensed
+  
+- **Button Font Updates**:
+  - "VYBERTE VELIKOST" button: Now uses Helvetica Neue Condensed Bold at 22px (matches VOODOO808 header text exactly)
+  - "PŘIDAT DO KOŠÍKU" button: Now uses Helvetica Neue Condensed Bold at 22px (matches VOODOO808 header text exactly)
+  - Both buttons maintain uppercase styling, proper letter-spacing, and font-stretch properties
+  
+- **Spacing Adjustments**:
+  - Line height between product title and price reduced to 4px (was larger before)
+  - Ensures compact, elegant visual grouping
+  
+- **Product Short Description Field**:
+  - Added new "shortDescription" field to database schema (String, optional)
+  - Displays below price at 14px using BB-Regular font
+  - Example text: "Top triko v černé barvě. Kus oblečení co poznají všichni fanoušci VOODOO808"
+  - **Admin Features**: Fully editable by logged-in admin users
+  - Can be set when creating new products or editing existing products
+  - Seamlessly integrated into product detail page UI
+  
+- **Accordion Animations** (Product Information, Size & Fit, Shipping, Care sections):
+  - **Arrow Rotation**: ChevronDown icon rotates 180 degrees smoothly on accordion open/close
+    - Duration: 0.3 seconds
+    - Easing: cubic-bezier(0.4, 0, 0.2, 1)
+    - Uses CSS transform: rotate(180deg)
+  - **Content Reveal**: Accordion content smoothly slides down/up on toggle
+    - Duration: 0.4 seconds
+    - Easing: cubic-bezier(0.4, 0, 0.2, 1)
+    - Uses CSS max-height transition with overflow: hidden
+    - Smooth in both directions with no jerky movements
+  
+- **Database Schema Updates**:
+  - Added `shortDescription String? @db.Text` field to Product model
+  - Successfully migrated PostgreSQL database with `npm run db:push`
+  - Field is optional to maintain backwards compatibility
+  
+- **API Endpoint Updates**:
+  - Updated PATCH `/api/admin/products/[id]` endpoint to handle shortDescription field
+  - Admin can now update shortDescription via product edit form
+  
+- **UI Components Updated**:
+  - Product interface includes optional shortDescription property
+  - Admin edit form includes dedicated textarea for "Krátký popis (zobrazen pod cenou)"
+  - Separate fields for short description and detailed description for clarity
 
 ### November 21, 2025 - Production Deployment Configuration
 - **Deployment Setup**: Updated deployment scripts for production launch

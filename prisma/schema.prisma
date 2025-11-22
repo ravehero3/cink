@@ -28,21 +28,22 @@ enum Role {
 }
 
 model Product {
-  id          String    @id @default(uuid())
-  name        String
-  slug        String    @unique
-  description String    @db.Text
-  price       Decimal   @db.Decimal(10, 2)
-  category    String
-  color       String
-  images      String[]
-  videoUrl    String?
-  sizes       Json
-  totalStock  Int       @default(0)
-  isVisible   Boolean   @default(true)
-  sortOrder   Int       @default(0)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id                 String    @id @default(uuid())
+  name               String
+  slug               String    @unique
+  description        String    @db.Text
+  shortDescription   String?   @db.Text
+  price              Decimal   @db.Decimal(10, 2)
+  category           String
+  color              String
+  images             String[]
+  videoUrl           String?
+  sizes              Json
+  totalStock         Int       @default(0)
+  isVisible          Boolean   @default(true)
+  sortOrder          Int       @default(0)
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
 }
 
 model Category {

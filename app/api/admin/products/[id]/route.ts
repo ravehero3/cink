@@ -55,6 +55,7 @@ export async function PATCH(
     }
     
     if (data.description !== undefined) updateData.description = data.description;
+    if (data.shortDescription !== undefined) updateData.shortDescription = data.shortDescription;
     if (data.price !== undefined) updateData.price = data.price;
     if (data.category !== undefined) updateData.category = data.category;
     if (data.color !== undefined) updateData.color = data.color;

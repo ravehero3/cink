@@ -13,6 +13,7 @@ interface Product {
   name: string;
   slug: string;
   description: string;
+  shortDescription?: string;
   price: number;
   category: string;
   color: string;
@@ -40,10 +41,12 @@ export default function ProductDetailPage() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [editedName, setEditedName] = useState('');
   const [editedDescription, setEditedDescription] = useState('');
+  const [editedShortDescription, setEditedShortDescription] = useState('');
   const [editedPrice, setEditedPrice] = useState('');
   const [editedColor, setEditedColor] = useState('');
   const [editedSizes, setEditedSizes] = useState<Record<string, number>>({});
   const [isSaving, setIsSaving] = useState(false);
+  const [showHeartAnimation, setShowHeartAnimation] = useState(false);
 
   const { addItem } = useCartStore();
   const { isSaved, addProduct, removeProduct } = useSavedProductsStore();
@@ -142,6 +145,7 @@ export default function ProductDetailPage() {
     if (!product) return;
     setEditedName(product.name);
     setEditedDescription(product.description);
+    setEditedShortDescription(product.shortDescription || '');
     setEditedPrice(product.price.toString());
     setEditedColor(product.color);
     setEditedSizes(product.sizes);
@@ -165,6 +169,7 @@ export default function ProductDetailPage() {
         body: JSON.stringify({
           name: editedName,
           description: editedDescription,
+          shortDescription: editedShortDescription,
           price: parseFloat(editedPrice),
           color: editedColor,
           sizes: editedSizes,
@@ -239,19 +244,29 @@ export default function ProductDetailPage() {
                 />
                 {index === 0 && (
                   <button
-                    onClick={toggleSaved}
-                    className="absolute"
-                    style={{ top: '4px', right: '4px' }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setShowHeartAnimation(true);
+                      toggleSaved();
+                      setTimeout(() => setShowHeartAnimation(false), 600);
+                    }}
+                    className={`absolute heart-icon-pdp ${showHeartAnimation ? 'liked' : ''}`}
+                    style={{ top: '4px', right: '4px', width: '22px', height: '22px' }}
                   >
                     <svg
-                      width="24"
-                      height="24"
+                      width="22"
+                      height="22"
                       viewBox="0 0 24 24"
-                      fill={isSaved(product.id) ? 'white' : 'none'}
-                      stroke="white"
-                      strokeWidth="1"
+                      fill={isSaved(product.id) ? 'black' : 'white'}
+                      stroke="black"
+                      strokeWidth="1.75"
                     >
-                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                      <path 
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                      />
                     </svg>
                   </button>
                 )}
@@ -310,13 +325,14 @@ export default function ProductDetailPage() {
                 <h1 
                   className="uppercase"
                   style={{
-                    fontFamily: 'BB-CondBold, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '14px',
-                    fontWeight: 400,
+                    fontWeight: 700,
                     letterSpacing: '0.03em',
                     lineHeight: '1.4',
                     marginBottom: '4px',
-                    textAlign: 'center'
+                    textAlign: 'center',
+                    fontStretch: 'condensed'
                   }}
                 >
                   {product.name}
@@ -328,11 +344,25 @@ export default function ProductDetailPage() {
                     fontSize: '14px',
                     fontWeight: 400,
                     textAlign: 'center',
-                    marginBottom: '64px'
+                    marginBottom: '4px'
                   }}
                 >
                   {product.price} Kč
                 </p>
+                
+                {product.shortDescription && (
+                  <p 
+                    style={{
+                      fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontSize: '14px',
+                      fontWeight: 400,
+                      textAlign: 'center',
+                      marginBottom: '64px'
+                    }}
+                  >
+                    {product.shortDescription}
+                  </p>
+                )}
               </>
             )}
 
@@ -350,7 +380,18 @@ export default function ProductDetailPage() {
               />
               
               <label className="block mb-2" style={{ fontSize: '12px', fontWeight: 500 }}>
-                Popis:
+                Krátký popis (zobrazen pod cenou):
+              </label>
+              <textarea
+                value={editedShortDescription}
+                onChange={(e) => setEditedShortDescription(e.target.value)}
+                className="w-full border border-black px-3 py-2 mb-4"
+                rows={2}
+                style={{ fontSize: '14px' }}
+              />
+
+              <label className="block mb-2" style={{ fontSize: '12px', fontWeight: 500 }}>
+                Podrobný popis:
               </label>
               <textarea
                 value={editedDescription}
@@ -438,7 +479,7 @@ export default function ProductDetailPage() {
                 borderRadius: '4px'
               }}
             >
-              {selectedSize || 'Vyberte velikost'}
+              {selectedSize ? selectedSize.toUpperCase() : 'VYBERTE VELIKOST'}
               <ChevronDown 
                 className="absolute right-3"
                 size={16}
@@ -494,13 +535,14 @@ export default function ProductDetailPage() {
             onClick={handleAddToCart}
             className="bg-black text-white hover:bg-gray-800 transition-colors"
             style={{
-              fontFamily: 'BB-CondBold, "Helvetica Neue", Helvetica, Arial, sans-serif',
-              fontSize: '14px',
-              fontWeight: 400,
+              fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '22px',
+              fontWeight: 700,
               letterSpacing: '0.03em',
               textTransform: 'uppercase',
               padding: '10.67px 0',
               width: '36vw',
+              fontStretch: 'condensed',
               borderRadius: '4px',
               marginBottom: '16px'
             }}
@@ -531,29 +573,30 @@ export default function ProductDetailPage() {
                   INFORMACE O PRODUKTU
                 </span>
                 <ChevronDown 
-                  className={`transition-transform ${expandedSection === 'details' ? 'rotate-180' : ''}`}
+                  className={`accordion-arrow transition-transform ${expandedSection === 'details' ? 'accordion-arrow-active' : ''}`}
                   size={16}
                   strokeWidth={1}
                 />
               </button>
-              {expandedSection === 'details' && (
-                <div 
-                  className="pb-4"
-                  style={{
-                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
-                    fontWeight: 400,
-                    letterSpacing: '0.03em',
-                    lineHeight: '1.6'
-                  }}
-                >
+              <div 
+                className={`accordion-content ${expandedSection === 'details' ? 'accordion-content-active' : ''}`}
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '14px',
+                  fontWeight: 400,
+                  letterSpacing: '0.03em',
+                  lineHeight: '1.6',
+                  maxHeight: expandedSection === 'details' ? '500px' : '0',
+                  overflow: 'hidden',
+                  transition: 'max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+                }}
+              >
                   <p className="mb-2">{product.description}</p>
                   <p className="mb-1">Barva: {product.color}</p>
                   <p className="mb-1">Kategorie: {product.category}</p>
                   <p className="mb-1">Made in Czech Republic</p>
                   <p className="mt-4 text-xs text-gray-600">Product ID: {product.id}</p>
-                </div>
-              )}
+              </div>
             </div>
 
             <div className="border-b border-black">
@@ -575,26 +618,29 @@ export default function ProductDetailPage() {
                   Size & fit
                 </span>
                 <ChevronDown 
-                  className={`transition-transform ${expandedSection === 'size-fit' ? 'rotate-180' : ''}`}
+                  className={`accordion-arrow ${expandedSection === 'size-fit' ? 'accordion-arrow-active' : ''}`}
                   size={16}
                   strokeWidth={1}
                 />
               </button>
-              {expandedSection === 'size-fit' && (
-                <div 
-                  className="pb-4"
-                  style={{
-                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
-                    fontWeight: 400,
-                    letterSpacing: '0.03em',
-                    lineHeight: '1.6'
-                  }}
-                >
+              <div 
+                className={`accordion-content ${expandedSection === 'size-fit' ? 'accordion-content-active' : ''}`}
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '14px',
+                  fontWeight: 400,
+                  letterSpacing: '0.03em',
+                  lineHeight: '1.6',
+                  maxHeight: expandedSection === 'size-fit' ? '500px' : '0',
+                  overflow: 'hidden',
+                  transition: 'max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+                }}
+              >
+                <div className="pb-4">
                   <p className="mb-2">Oversize fit</p>
                   <p>Konzultujte naši tabulku velikostí pro více informací.</p>
                 </div>
-              )}
+              </div>
             </div>
 
             <div className="border-b border-black">
@@ -616,27 +662,30 @@ export default function ProductDetailPage() {
                   Doprava zdarma, vrácení zdarma
                 </span>
                 <ChevronDown 
-                  className={`transition-transform ${expandedSection === 'shipping' ? 'rotate-180' : ''}`}
+                  className={`accordion-arrow ${expandedSection === 'shipping' ? 'accordion-arrow-active' : ''}`}
                   size={16}
                   strokeWidth={1}
                 />
               </button>
-              {expandedSection === 'shipping' && (
-                <div 
-                  className="pb-4"
-                  style={{
-                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
-                    fontWeight: 400,
-                    letterSpacing: '0.03em',
-                    lineHeight: '1.6'
-                  }}
-                >
+              <div 
+                className={`accordion-content ${expandedSection === 'shipping' ? 'accordion-content-active' : ''}`}
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '14px',
+                  fontWeight: 400,
+                  letterSpacing: '0.03em',
+                  lineHeight: '1.6',
+                  maxHeight: expandedSection === 'shipping' ? '500px' : '0',
+                  overflow: 'hidden',
+                  transition: 'max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+                }}
+              >
+                <div className="pb-4">
                   <p className="mb-2">Nabízíme bezplatné expresní doručení při objednávce nad 2000 Kč.</p>
                   <p className="mb-2">Bezplatné vrácení a výměna do 30 dnů od data doručení.</p>
                   <p>Pro více informací navštivte naše <a href="/faq" className="underline">FAQ</a>.</p>
                 </div>
-              )}
+              </div>
             </div>
 
             <div className="border-b border-black">
@@ -658,22 +707,25 @@ export default function ProductDetailPage() {
                   Péče o produkt
                 </span>
                 <ChevronDown 
-                  className={`transition-transform ${expandedSection === 'care' ? 'rotate-180' : ''}`}
+                  className={`accordion-arrow ${expandedSection === 'care' ? 'accordion-arrow-active' : ''}`}
                   size={16}
                   strokeWidth={1}
                 />
               </button>
-              {expandedSection === 'care' && (
-                <div 
-                  className="pb-4"
-                  style={{
-                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
-                    fontWeight: 400,
-                    letterSpacing: '0.03em',
-                    lineHeight: '1.6'
-                  }}
-                >
+              <div 
+                className={`accordion-content ${expandedSection === 'care' ? 'accordion-content-active' : ''}`}
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '14px',
+                  fontWeight: 400,
+                  letterSpacing: '0.03em',
+                  lineHeight: '1.6',
+                  maxHeight: expandedSection === 'care' ? '500px' : '0',
+                  overflow: 'hidden',
+                  transition: 'max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+                }}
+              >
+                <div className="pb-4">
                   <p className="mb-1">Prát max. při 30°C - šetrný proces</p>
                   <p className="mb-1">Prát naruby</p>
                   <p className="mb-1">Nebělit</p>
@@ -682,7 +734,7 @@ export default function ProductDetailPage() {
                   <p className="mb-1">Nežehlit</p>
                   <p>Nečistit chemicky</p>
                 </div>
-              )}
+              </div>
             </div>
           </div>
           <div style={{ height: '64px' }}></div>
@@ -691,6 +743,41 @@ export default function ProductDetailPage() {
         </div>
       </div>
       </div>
+
+      <style jsx>{`
+        .heart-icon-pdp {
+          transition: transform 0.1s ease;
+          cursor: pointer;
+        }
+
+        .heart-icon-pdp.liked {
+          animation: scalePop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes scalePop {
+          0% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.3);
+          }
+          100% {
+            transform: scale(1);
+          }
+        }
+
+        .heart-icon-pdp path {
+          transition: fill 0.2s ease;
+        }
+
+        .accordion-arrow {
+          transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .accordion-arrow-active {
+          transform: rotate(180deg);
+        }
+      `}</style>
     </div>
   );
 }
