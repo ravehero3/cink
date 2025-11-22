@@ -54,8 +54,10 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
+    console.log('[saved-products POST] Session:', session?.user ? 'authenticated' : 'NOT authenticated');
 
     if (!session?.user) {
+      console.log('[saved-products POST] No session, returning 401');
       return NextResponse.json(
         { error: 'Musíte být přihlášeni' },
         { status: 401 }
@@ -64,6 +66,7 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
     const { productId } = body;
+    console.log('[saved-products POST] Adding product:', productId, 'for user:', session.user.id);
 
     if (!productId) {
       return NextResponse.json(
@@ -104,15 +107,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    await prisma.user.update({
+    const updatedUser = await prisma.user.update({
       where: { id: session.user.id },
       data: {
         savedProducts: [...savedProducts, productId],
       },
+      select: { savedProducts: true },
     });
 
+    console.log('[saved-products POST] Updated user saved products:', updatedUser.savedProducts);
+
     return NextResponse.json(
-      { success: true, message: 'Produkt byl uložen' },
+      { success: true, message: 'Produkt byl uložen', savedProducts: updatedUser.savedProducts },
       { status: 201 }
     );
   } catch (error) {

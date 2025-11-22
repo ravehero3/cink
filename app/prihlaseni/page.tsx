@@ -40,7 +40,15 @@ function LoginContent() {
         setError('Nesprávný e-mail nebo heslo');
         setLoading(false);
       } else {
-        router.push('/ucet');
+        // Check if user is admin
+        const sessionRes = await fetch('/api/auth/session');
+        const session = await sessionRes.json();
+        
+        if (session?.user?.role === 'ADMIN') {
+          router.push('/admin');
+        } else {
+          router.push('/ucet');
+        }
         router.refresh();
       }
     } catch (err) {

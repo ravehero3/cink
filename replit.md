@@ -38,6 +38,17 @@ The project is built using Next.js 14 (App Router) and TypeScript. Tailwind CSS 
 
 ## Recent Changes
 
+### November 22, 2025 - Admin Redirect & Saved Products Fixes
+- **Admin Redirect on Login**: When admin users log in via the login page, they are now automatically redirected to `/admin` dashboard instead of the account page
+  - Login page now checks user role after successful authentication
+  - Admin-only route checks session and redirects non-admins to homepage
+- **Saved Products Database Sync**: Fixed synchronization between UI heart clicks and database saves
+  - Category page now initializes saved products from database for authenticated users on mount
+  - For unauthenticated users, falls back to Zustand store (browser localStorage)
+  - API endpoint now returns updated saved products list for verification
+  - Added detailed logging to debug sync flow
+- **Key Fix**: Authenticated users now see all their previously saved products when visiting the category page or ULOŽENÉ PRODUKTY page
+
 ### November 22, 2025 - ULOŽENÉ PRODUKTY Page Layout Refinement
 - **Removed Duplicate "UFO SPORT" Header Bar**: Deleted the separate header section that appeared below the main navigation
 - **Extended Vertical Lines**: The left and right borders now extend the full page height from the main header (88px) to the bottom

@@ -82,6 +82,31 @@ export default function CategoryPage() {
     }
   }, [category]);
 
+  // Load saved products from database (if authenticated) or Zustand (if not)
+  useEffect(() => {
+    const loadSavedProducts = async () => {
+      if (session?.user) {
+        // Authenticated: fetch from database
+        try {
+          const response = await fetch('/api/saved-products');
+          if (response.ok) {
+            const data = await response.json();
+            const savedIds = data.map((product: any) => product.id);
+            setSavedProducts(savedIds);
+          }
+        } catch (error) {
+          console.error('[kategorie] Error fetching saved products:', error);
+        }
+      } else if (session === null) {
+        // Only set from Zustand when we're sure not authenticated (status !== loading)
+        const zustandSavedIds = useSavedProductsStore.getState().savedIds;
+        setSavedProducts(zustandSavedIds);
+      }
+    };
+    
+    loadSavedProducts();
+  }, [session]);
+
   useEffect(() => {
     if (category && allCategoryProducts.length > 0) {
       fetchProducts();
@@ -178,7 +203,7 @@ export default function CategoryPage() {
   };
 
   const handleToggleSave = async (productId: string) => {
-    console.log('handleToggleSave called:', { productId, session: session?.user ? 'logged in' : 'not logged in' });
+    console.log('[handleToggleSave] Called with:', { productId, authenticated: !!session?.user, userEmail: session?.user?.email });
     const isSaved = savedProducts.includes(productId);
     
     // Update local state immediately for UI feedback
@@ -197,7 +222,7 @@ export default function CategoryPage() {
     
     // If authenticated, sync with database
     if (session?.user) {
-      console.log('User is authenticated, syncing to database...');
+      console.log('[handleToggleSave] User is authenticated, syncing to database...');
       try {
         const url = isSaved 
           ? `/api/saved-products?productId=${productId}`
@@ -205,18 +230,19 @@ export default function CategoryPage() {
         const method = isSaved ? 'DELETE' : 'POST';
         const body = isSaved ? undefined : JSON.stringify({ productId });
         
-        console.log('Making API call:', { url, method });
+        console.log('[handleToggleSave] Making API call:', { url, method, body });
         const response = await fetch(url, {
           method,
           headers: body ? { 'Content-Type': 'application/json' } : {},
           body,
         });
-        console.log('API response:', response.status, await response.text());
+        const responseText = await response.text();
+        console.log('[handleToggleSave] API response:', { status: response.status, body: responseText });
       } catch (error) {
-        console.error('Error syncing saved product:', error);
+        console.error('[handleToggleSave] Error syncing saved product:', error);
       }
     } else {
-      console.log('User NOT authenticated - skipping database sync');
+      console.log('[handleToggleSave] User NOT authenticated - skipping database sync');
     }
   };
 

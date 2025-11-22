@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 interface Stats {
@@ -13,12 +15,23 @@ interface Stats {
 }
 
 export default function AdminDashboard() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Check if admin on mount
   useEffect(() => {
-    fetchStats();
-  }, []);
+    if (status === 'unauthenticated' || (session && session.user?.role !== 'ADMIN')) {
+      router.push('/');
+    }
+  }, [status, session, router]);
+
+  useEffect(() => {
+    if (session?.user?.role === 'ADMIN') {
+      fetchStats();
+    }
+  }, [session]);
 
   const fetchStats = async () => {
     try {
