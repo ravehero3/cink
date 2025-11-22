@@ -38,6 +38,15 @@ The project is built using Next.js 14 (App Router) and TypeScript. Tailwind CSS 
 
 ## Recent Changes
 
+### November 22, 2025 - ULOŽENÉ PRODUKTY Page Layout Refinement
+- **Removed Duplicate "UFO SPORT" Header Bar**: Deleted the separate header section that appeared below the main navigation
+- **Extended Vertical Lines**: The left and right borders now extend the full page height from the main header (88px) to the bottom
+- **Cleaner Design**: Removed redundant page header, creating a more minimalist appearance consistent with Balenciaga aesthetic
+- **Structure Changes**:
+  - Main page container uses `paddingTop: 88px` to account for fixed header
+  - Border container uses `flex flex-col` to extend full height
+  - All content sections properly nested within bordered container
+
 ### November 22, 2025 - Fixed Saved Products Synchronization Bug (Complete Fix)
 - **Phase 1 - Initial Issue**: When authenticated users saved products by clicking the heart icon, the count in the header showed only "1" instead of the actual number, and the saved products page was empty
 - **Root Cause**: 

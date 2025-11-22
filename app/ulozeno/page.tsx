@@ -102,254 +102,224 @@ export default function SavedProductsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white">
-        <header className="border-b border-black" style={{ height: '44px' }}>
-          <div className="max-w-7xl mx-auto px-4 h-full flex items-center justify-center">
-            <h1 
-              className="uppercase text-center" 
-              style={{ 
-                fontFamily: '"Helvetica Neue Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '14px',
-                fontWeight: 400,
-                letterSpacing: '1px'
-              }}
-            >
-              UFO SPORT
-            </h1>
+      <div className="min-h-screen bg-white flex justify-center" style={{ paddingTop: '88px' }}>
+        <div 
+          className="border-l border-r border-black relative w-full flex flex-col" 
+          style={{ width: '33.333%', minWidth: '400px', maxWidth: '600px' }}
+        >
+          <div className="flex items-center justify-center py-20">
+            <p className="text-sm">Načítám...</p>
           </div>
-        </header>
-        <div className="flex items-center justify-center py-20">
-          <p className="text-sm">Načítám...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      <header className="border-b border-black" style={{ height: '44px' }}>
-        <div className="max-w-7xl mx-auto px-4 h-full flex items-center justify-between">
-          <Link href="/" className="hover:opacity-70">
-            <span 
-              className="uppercase" 
-              style={{ 
-                fontFamily: '"Helvetica Neue Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '14px',
-                fontWeight: 400,
-                letterSpacing: '1px'
-              }}
-            >
-              UFO SPORT
-            </span>
+    <div className="min-h-screen bg-white flex justify-center" style={{ paddingTop: '88px' }}>
+      <div 
+        className="border-l border-r border-black relative w-full flex flex-col" 
+        style={{ width: '33.333%', minWidth: '400px', maxWidth: '600px' }}
+      >
+        <div 
+          className="border-b border-black flex items-center justify-center"
+          style={{ height: '80px' }}
+        >
+          <h1 
+            className="uppercase text-center"
+            style={{
+              fontFamily: '"Helvetica Neue Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '16px',
+              fontWeight: 400,
+              letterSpacing: '1px'
+            }}
+          >
+            ULOŽENÉ PRODUKTY
+          </h1>
+        </div>
+
+        <div 
+          className="border-b border-black flex items-center px-6 gap-4"
+          style={{ height: '60px' }}
+        >
+          <button
+            className="bg-white text-black border border-black text-xs uppercase px-4 py-2 hover:bg-black hover:text-white transition-colors"
+            style={{
+              fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+              borderRadius: '4px'
+            }}
+          >
+            ULOŽENÉ PRODUKTY ({products.length})
+          </button>
+          <Link 
+            href="/kosik"
+            className="text-xs uppercase hover:underline"
+            style={{
+              fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif'
+            }}
+          >
+            NÁKUPNÍ KOŠÍK
           </Link>
         </div>
-      </header>
 
-      <div className="flex justify-center py-8">
-        <div 
-          className="border-l border-r border-black relative" 
-          style={{ width: '33.333%', minWidth: '400px' }}
-        >
+        {status !== 'authenticated' && (
           <div 
-            className="border-b border-black flex items-center justify-center"
-            style={{ height: '80px' }}
+            className="border-b border-black flex flex-col items-center justify-center px-8 text-center"
+            style={{ minHeight: '200px', paddingTop: '40px', paddingBottom: '40px' }}
           >
-            <h1 
-              className="uppercase text-center"
-              style={{
-                fontFamily: '"Helvetica Neue Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '16px',
-                fontWeight: 400,
-                letterSpacing: '1px'
-              }}
-            >
-              ULOŽENÉ PRODUKTY
-            </h1>
-          </div>
-
-          <div 
-            className="border-b border-black flex items-center px-6 gap-4"
-            style={{ height: '60px' }}
-          >
-            <button
-              className="bg-white text-black border border-black text-xs uppercase px-4 py-2 hover:bg-black hover:text-white transition-colors"
+            <h2 
+              className="mb-4"
               style={{
                 fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                borderRadius: '4px'
+                fontSize: '16px',
+                fontWeight: 700
               }}
             >
-              ULOŽENÉ PRODUKTY ({products.length})
-            </button>
-            <Link 
-              href="/kosik"
-              className="text-xs uppercase hover:underline"
+              NEZTRAŤTE SVŮJ LIST
+            </h2>
+            <p 
+              className="mb-6"
               style={{
-                fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif'
+                fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '12px',
+                lineHeight: '1.6'
               }}
             >
-              NÁKUPNÍ KOŠÍK
+              Přihlaste se nebo si vytvořte účet a uložte si svůj wish list do budoucna
+            </p>
+            <Link
+              href="/prihlaseni?redirect=/ulozeno"
+              className="bg-black text-white uppercase px-8 py-3 hover:bg-gray-800 transition-colors"
+              style={{
+                fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '12px',
+                borderRadius: '4px',
+                letterSpacing: '0.5px'
+              }}
+            >
+              PŘIHLÁSIT SE
             </Link>
           </div>
+        )}
 
-          {status !== 'authenticated' && (
-            <div 
-              className="border-b border-black flex flex-col items-center justify-center px-8 text-center"
-              style={{ minHeight: '200px', paddingTop: '40px', paddingBottom: '40px' }}
+        {products.length === 0 ? (
+          <div 
+            className="flex flex-col items-center justify-center px-8 text-center"
+            style={{ minHeight: '300px' }}
+          >
+            <p 
+              className="mb-6"
+              style={{
+                fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '14px'
+              }}
             >
-              <h2 
-                className="mb-4"
-                style={{
-                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '16px',
-                  fontWeight: 700
-                }}
-              >
-                NEZTRAŤTE SVŮJ LIST
-              </h2>
-              <p 
-                className="mb-6"
-                style={{
-                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '12px',
-                  lineHeight: '1.6'
-                }}
-              >
-                Přihlaste se nebo si vytvořte účet a uložte si svůj wish list do budoucna
-              </p>
-              <Link
-                href="/prihlaseni?redirect=/ulozeno"
-                className="bg-black text-white uppercase px-8 py-3 hover:bg-gray-800 transition-colors"
-                style={{
-                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '12px',
-                  borderRadius: '4px',
-                  letterSpacing: '0.5px'
-                }}
-              >
-                PŘIHLÁSIT SE
-              </Link>
-            </div>
-          )}
+              Nemáte žádné uložené produkty
+            </p>
+            <Link
+              href="/"
+              className="bg-black text-white uppercase px-8 py-3 hover:bg-gray-800 transition-colors"
+              style={{
+                fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '12px',
+                borderRadius: '4px',
+                letterSpacing: '0.5px'
+              }}
+            >
+              POKRAČOVAT V NÁKUPU
+            </Link>
+          </div>
+        ) : (
+          products.map((product, index) => (
+            <div 
+              key={product.id}
+              className={`relative ${index !== 0 ? 'border-t border-black' : ''}`}
+              style={{ minHeight: '200px' }}
+            >
+              <div className="flex h-full">
+                <div className="w-1/2 border-r border-black relative">
+                  <Link href={`/produkty/${product.slug}`}>
+                    <div className="relative w-full h-full" style={{ minHeight: '200px' }}>
+                      <Image
+                        src={product.images[0] || '/placeholder.png'}
+                        alt={product.name}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  </Link>
+                </div>
 
-          {products.length === 0 ? (
-            <div 
-              className="flex flex-col items-center justify-center px-8 text-center"
-              style={{ minHeight: '300px' }}
-            >
-              <p 
-                className="mb-6"
-                style={{
-                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '14px'
-                }}
-              >
-                Nemáte žádné uložené produkty
-              </p>
-              <Link
-                href="/"
-                className="bg-black text-white uppercase px-8 py-3 hover:bg-gray-800 transition-colors"
-                style={{
-                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '12px',
-                  borderRadius: '4px',
-                  letterSpacing: '0.5px'
-                }}
-              >
-                POKRAČOVAT V NÁKUPU
-              </Link>
-            </div>
-          ) : (
-            products.map((product, index) => (
-              <div 
-                key={product.id}
-                className={`relative ${index !== 0 ? 'border-t border-black' : ''}`}
-                style={{ minHeight: '200px' }}
-              >
-                <div className="flex h-full">
-                  <div className="w-1/2 border-r border-black relative">
+                <div className="w-1/2 p-4 flex flex-col justify-between">
+                  <div>
                     <Link href={`/produkty/${product.slug}`}>
-                      <div className="relative w-full h-full" style={{ minHeight: '200px' }}>
-                        <Image
-                          src={product.images[0] || '/placeholder.png'}
-                          alt={product.name}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
+                      <h3 
+                        className="mb-2 hover:underline"
+                        style={{
+                          fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                          fontSize: '13px',
+                          fontWeight: 700
+                        }}
+                      >
+                        {product.name}
+                      </h3>
                     </Link>
+                    <p 
+                      className="mb-2"
+                      style={{
+                        fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                        fontSize: '13px'
+                      }}
+                    >
+                      {product.price} Kč
+                    </p>
+                    <div style={{ marginBottom: '4px' }}>
+                      <p 
+                        style={{
+                          fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                          fontSize: '11px'
+                        }}
+                      >
+                        Barva: {product.color || 'Černá'}
+                      </p>
+                    </div>
+                    <p 
+                      style={{
+                        fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                        fontSize: '11px'
+                      }}
+                    >
+                      Velikost: XL
+                    </p>
                   </div>
 
-                  <div className="w-1/2 p-4 flex flex-col justify-between">
-                    <div>
-                      <Link href={`/produkty/${product.slug}`}>
-                        <h3 
-                          className="mb-2 hover:underline"
-                          style={{
-                            fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                            fontSize: '13px',
-                            fontWeight: 700
-                          }}
-                        >
-                          {product.name}
-                        </h3>
-                      </Link>
-                      <p 
-                        className="mb-2"
-                        style={{
-                          fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                          fontSize: '13px'
-                        }}
-                      >
-                        {product.price} Kč
-                      </p>
-                      <div style={{ marginBottom: '4px' }}>
-                        <p 
-                          style={{
-                            fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                            fontSize: '11px'
-                          }}
-                        >
-                          Barva: {product.color || 'Černá'}
-                        </p>
-                      </div>
-                      <p 
-                        style={{
-                          fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                          fontSize: '11px'
-                        }}
-                      >
-                        Velikost: XL
-                      </p>
-                    </div>
-
-                    <div className="flex justify-between items-end pt-4">
-                      <button
-                        onClick={() => handleMoveToCart(product)}
-                        className="underline hover:no-underline text-left"
-                        style={{
-                          fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                          fontSize: '11px'
-                        }}
-                      >
-                        Přesunout do košíku
-                      </button>
-                      <button
-                        onClick={() => handleRemove(product.id)}
-                        className="underline hover:no-underline text-right"
-                        style={{
-                          fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                          fontSize: '11px'
-                        }}
-                      >
-                        Odstranit
-                      </button>
-                    </div>
+                  <div className="flex justify-between items-end pt-4">
+                    <button
+                      onClick={() => handleMoveToCart(product)}
+                      className="underline hover:no-underline text-left"
+                      style={{
+                        fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                        fontSize: '11px'
+                      }}
+                    >
+                      Přesunout do košíku
+                    </button>
+                    <button
+                      onClick={() => handleRemove(product.id)}
+                      className="underline hover:no-underline text-right"
+                      style={{
+                        fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                        fontSize: '11px'
+                      }}
+                    >
+                      Odstranit
+                    </button>
                   </div>
                 </div>
               </div>
-            ))
-          )}
-        </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
