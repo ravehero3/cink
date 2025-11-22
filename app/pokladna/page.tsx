@@ -268,7 +268,7 @@ export default function CheckoutPage() {
                     type="button"
                     onClick={openZasilkovnaWidget}
                     className="w-full border border-black px-4 py-2 text-body uppercase hover:bg-black hover:text-white transition-colors"
-                    style={{ borderRadius: '4px', marginTop: '4px' }}
+                    style={{ borderRadius: '4px', marginTop: '4px', borderWidth: '1px' }}
                   >
                     {formData.zasilkovnaName ? `Změnit: ${formData.zasilkovnaName}` : 'VYBRAT VÝDEJNÍ MÍSTO'}
                   </button>
