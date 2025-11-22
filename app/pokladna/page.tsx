@@ -164,15 +164,16 @@ export default function CheckoutPage() {
 
               <div className="mb-4">
                 <label 
-                  className="block mb-1 uppercase"
+                  className="block uppercase"
                   style={{
                     fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '12px',
+                    fontSize: '10px',
                     fontWeight: 400,
                     lineHeight: '14.1px',
                     paddingLeft: '2px',
                     paddingRight: '2px',
-                    color: '#999'
+                    color: '#999',
+                    marginBottom: '2px'
                   }}
                 >
                   E-mail *
@@ -189,15 +190,16 @@ export default function CheckoutPage() {
 
               <div className="mb-4">
                 <label 
-                  className="block mb-1 uppercase"
+                  className="block uppercase"
                   style={{
                     fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '12px',
+                    fontSize: '10px',
                     fontWeight: 400,
                     lineHeight: '14.1px',
                     paddingLeft: '2px',
                     paddingRight: '2px',
-                    color: '#999'
+                    color: '#999',
+                    marginBottom: '2px'
                   }}
                 >
                   Jméno a příjmení *
@@ -214,15 +216,16 @@ export default function CheckoutPage() {
 
               <div className="mb-4">
                 <label 
-                  className="block mb-1 uppercase"
+                  className="block uppercase"
                   style={{
                     fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '12px',
+                    fontSize: '10px',
                     fontWeight: 400,
                     lineHeight: '14.1px',
                     paddingLeft: '2px',
                     paddingRight: '2px',
-                    color: '#999'
+                    color: '#999',
+                    marginBottom: '2px'
                   }}
                 >
                   Telefon *
@@ -329,15 +332,16 @@ export default function CheckoutPage() {
 
               <div className="mb-4 mt-4">
                 <label 
-                  className="block font-bold mb-1 uppercase text-body"
+                  className="block font-bold uppercase text-body"
                   style={{
                     fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '12px',
+                    fontSize: '10px',
                     fontWeight: 400,
                     lineHeight: '14.1px',
                     paddingLeft: '2px',
                     paddingRight: '2px',
-                    color: '#999'
+                    color: '#999',
+                    marginBottom: '2px'
                   }}
                 >
                   Promo kód
