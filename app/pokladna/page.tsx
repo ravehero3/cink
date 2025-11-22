@@ -361,7 +361,7 @@ export default function CheckoutPage() {
                   <button
                     type="button"
                     onClick={handleApplyPromo}
-                    className="border border-black px-4 py-2 text-body uppercase hover:bg-black hover:text-white transition-colors"
+                    className="border border-black px-4 py-1 text-body uppercase hover:bg-black hover:text-white transition-colors"
                     style={{ borderRadius: '4px' }}
                   >
                     POUŽÍT
