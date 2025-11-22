@@ -146,12 +146,6 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="border-b border-black">
-        <div className="max-w-7xl mx-auto px-4 py-8">
-          <h1 className="text-title font-bold text-center uppercase">POKLADNA</h1>
-        </div>
-      </div>
-
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
