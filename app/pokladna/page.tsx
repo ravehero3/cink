@@ -281,7 +281,7 @@ export default function CheckoutPage() {
           </div>
 
           <div className="lg:col-span-1 h-full">
-            <div className="border-l border-black h-full flex flex-col">
+            <div className="border-l border-r border-black h-full flex flex-col">
               <div className="h-header flex items-center px-6">
                 <h2 
                   className="font-bold uppercase"
