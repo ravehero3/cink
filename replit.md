@@ -113,6 +113,26 @@ Enhanced the checkout summary page (POKLADNA) with minimalist border styling:
 - PŘEJÍT K PLATBĚ button: py-2 (matches input field height), hover:bg-gray-900 (subtle darkening)
 - Removed color inversion hover effect in favor of subtle gray darkening
 
+### November 22, 2025 - POKLADNA Page Header & Typography Updates
+Enhanced the checkout page with refined header behavior and typography adjustments:
+
+**Header Behavior**:
+- Header now displays only UFO SPORT logo on pokladna page (all navigation, icons, and controls hidden)
+- Implemented using `usePathname()` in Header1.tsx with conditional rendering
+- Rule: When user navigates to `/pokladna`, left navigation (categories), right side icons (login, saved, search, cart), and close search button are hidden
+- Logo remains visible and centered on all pages
+
+**Typography Refinements**:
+- Contact form labels (E-mail, Jméno a příjmení, Telefon): 12px (2px smaller), 2px padding on left/right
+- Promo code label: 12px (reduced from 14px)
+- Order summary section (Mezisoučet, Doprava, Sleva, CELKEM): 10px
+- "SOUHRN OBJEDNÁVKY" header: 9.33px (1.5x smaller than standard, centered in 44px header)
+
+**Order Summary Panel**:
+- Right panel header (44px height): Centered text at 9.33px
+- Summary items text: 10px throughout
+- Maintains minimalist aesthetic with consistent spacing
+
 ### Recent Design Improvements
 - Fixed "VYBERTE VELIKOST" button spacing (added 32px top padding)
 - Product detail "PŘIDAT DO KOŠÍKU" button now redirects to cart

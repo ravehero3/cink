@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { useCartStore } from '@/lib/cart-store';
 import { useSavedProductsStore } from '@/lib/saved-products-store';
@@ -18,6 +19,8 @@ const categories = [
 
 export default function Header1() {
   const { data: session } = useSession();
+  const pathname = usePathname();
+  const isPokladna = pathname === '/pokladna';
   const cartCount = useCartStore((state) => state.getItemCount());
   const savedCount = useSavedProductsStore((state) => state.getCount());
   const { showSearchIcon, openSearchBar } = useSearchBarStore();
@@ -30,21 +33,23 @@ export default function Header1() {
       <header className="h-header border-b border-black bg-white fixed top-0 left-0 right-0 z-30">
         <div className="h-full flex items-center justify-between relative">
           {/* Left Group: Category Navigation - stick to left edge */}
-          <nav className={`flex items-center transition-opacity duration-300 ${showSearch ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ gap: '20px', paddingLeft: '12px' }}>
-            {categories.map((category, index) => (
-              <Link
-                key={category.slug}
-                href={`/kategorie/${category.slug}`}
-                className="hover:opacity-70 transition-opacity whitespace-nowrap uppercase tracking-tight font-normal text-sm"
-                style={{
-                  color: 'rgb(0, 0, 0)',
-                  textDecoration: 'none'
-                }}
-              >
-                {category.name}
-              </Link>
-            ))}
-          </nav>
+          {!isPokladna && (
+            <nav className={`flex items-center transition-opacity duration-300 ${showSearch ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ gap: '20px', paddingLeft: '12px' }}>
+              {categories.map((category, index) => (
+                <Link
+                  key={category.slug}
+                  href={`/kategorie/${category.slug}`}
+                  className="hover:opacity-70 transition-opacity whitespace-nowrap uppercase tracking-tight font-normal text-sm"
+                  style={{
+                    color: 'rgb(0, 0, 0)',
+                    textDecoration: 'none'
+                  }}
+                >
+                  {category.name}
+                </Link>
+              ))}
+            </nav>
+          )}
 
           {/* Center: Logo - Exact center */}
           <Link 
@@ -63,109 +68,113 @@ export default function Header1() {
           </Link>
 
           {/* Right Group: Login and Icons - stick to right edge */}
-          <div className="flex items-center" style={{ gap: '12px', paddingRight: '12px' }}>
-            <div className={`flex items-center transition-opacity duration-300 ${showSearch ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ gap: '12px' }}>
-              <Link
-                href={isLoggedIn ? "/ucet" : "/prihlaseni"}
-                className="hover:opacity-70 transition-opacity whitespace-nowrap uppercase tracking-tight font-normal text-sm"
-                style={{
-                  color: 'rgb(0, 0, 0)',
-                  textDecoration: 'none'
-                }}
-              >
-                {isLoggedIn ? "Účet" : "PŘIHLÁSIT SE"}
-              </Link>
-
-              {session?.user?.role === 'ADMIN' && (
+          {!isPokladna && (
+            <div className="flex items-center" style={{ gap: '12px', paddingRight: '12px' }}>
+              <div className={`flex items-center transition-opacity duration-300 ${showSearch ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ gap: '12px' }}>
                 <Link
-                  href="/admin"
+                  href={isLoggedIn ? "/ucet" : "/prihlaseni"}
                   className="hover:opacity-70 transition-opacity whitespace-nowrap uppercase tracking-tight font-normal text-sm"
                   style={{
                     color: 'rgb(0, 0, 0)',
                     textDecoration: 'none'
                   }}
                 >
-                  SPRÁVCE ESHOPU
+                  {isLoggedIn ? "Účet" : "PŘIHLÁSIT SE"}
                 </Link>
-              )}
 
-              <Link 
-                href="/ulozeno"
-                className="relative hover:opacity-70 transition-opacity"
-                aria-label="Saved"
-                style={{ width: '22px', height: '22px' }}
-              >
-                <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-                {savedCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-black text-white text-[9px] w-3.5 h-3.5 flex items-center justify-center rounded-full">
-                    {savedCount}
-                  </span>
+                {session?.user?.role === 'ADMIN' && (
+                  <Link
+                    href="/admin"
+                    className="hover:opacity-70 transition-opacity whitespace-nowrap uppercase tracking-tight font-normal text-sm"
+                    style={{
+                      color: 'rgb(0, 0, 0)',
+                      textDecoration: 'none'
+                    }}
+                  >
+                    SPRÁVCE ESHOPU
+                  </Link>
                 )}
-              </Link>
 
-              {/* Show category search icon when category search bar is hidden, otherwise show global search */}
-              {showSearchIcon ? (
-                <button 
-                  onClick={openSearchBar}
+                <Link 
+                  href="/ulozeno"
                   className="relative hover:opacity-70 transition-opacity"
-                  aria-label="Open Category Search"
+                  aria-label="Saved"
                   style={{ width: '22px', height: '22px' }}
                 >
                   <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                   </svg>
-                </button>
-              ) : (
+                  {savedCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-black text-white text-[9px] w-3.5 h-3.5 flex items-center justify-center rounded-full">
+                      {savedCount}
+                    </span>
+                  )}
+                </Link>
+
+                {/* Show category search icon when category search bar is hidden, otherwise show global search */}
+                {showSearchIcon ? (
+                  <button 
+                    onClick={openSearchBar}
+                    className="relative hover:opacity-70 transition-opacity"
+                    aria-label="Open Category Search"
+                    style={{ width: '22px', height: '22px' }}
+                  >
+                    <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </button>
+                ) : (
+                  <button 
+                    onClick={() => setShowSearch(!showSearch)}
+                    className="relative hover:opacity-70 transition-opacity"
+                    aria-label="Search"
+                    style={{ width: '22px', height: '22px' }}
+                  >
+                    <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </button>
+                )}
+
                 <button 
-                  onClick={() => setShowSearch(!showSearch)}
+                  onClick={() => setShowCartDrawer(true)}
                   className="relative hover:opacity-70 transition-opacity"
-                  aria-label="Search"
+                  aria-label="Cart"
                   style={{ width: '22px', height: '22px' }}
                 >
                   <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                   </svg>
+                  {cartCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-black text-white text-[9px] w-3.5 h-3.5 flex items-center justify-center rounded-full">
+                      {cartCount}
+                    </span>
+                  )}
                 </button>
-              )}
-
-              <button 
-                onClick={() => setShowCartDrawer(true)}
-                className="relative hover:opacity-70 transition-opacity"
-                aria-label="Cart"
-                style={{ width: '22px', height: '22px' }}
-              >
-                <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                </svg>
-                {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-black text-white text-[9px] w-3.5 h-3.5 flex items-center justify-center rounded-full">
-                    {cartCount}
-                  </span>
-                )}
-              </button>
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Close Search Button */}
-          <button 
-            onClick={() => setShowSearch(false)}
-            className={`absolute hover:opacity-70 transition-opacity ${showSearch ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
-            aria-label="Close Search"
-            style={{ 
-              width: '22px', 
-              height: '22px',
-              top: '50%',
-              right: '12px',
-              transform: 'translateY(-50%)',
-              padding: '0'
-            }}
-          >
-            <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+          {!isPokladna && (
+            <button 
+              onClick={() => setShowSearch(false)}
+              className={`absolute hover:opacity-70 transition-opacity ${showSearch ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+              aria-label="Close Search"
+              style={{ 
+                width: '22px', 
+                height: '22px',
+                top: '50%',
+                right: '12px',
+                transform: 'translateY(-50%)',
+                padding: '0'
+              }}
+            >
+              <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          )}
         </div>
         
         <CartDrawer 
