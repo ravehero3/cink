@@ -288,14 +288,14 @@ export default function CheckoutPage() {
 
           <div className="lg:col-span-1 h-full">
             <div className="border-l border-r border-black h-full flex flex-col">
-              <div className="h-header flex items-center px-6">
+              <div className="h-header flex items-center justify-center px-6">
                 <h2 
                   className="font-bold uppercase"
                   style={{
                     fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
+                    fontSize: '9.33px',
                     fontWeight: 400,
-                    lineHeight: '16.1px'
+                    lineHeight: '10.7px'
                   }}
                 >
                   SOUHRN OBJEDNÁVKY
