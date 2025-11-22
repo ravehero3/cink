@@ -171,7 +171,8 @@ export default function CheckoutPage() {
                     fontWeight: 400,
                     lineHeight: '14.1px',
                     paddingLeft: '2px',
-                    paddingRight: '2px'
+                    paddingRight: '2px',
+                    color: '#999'
                   }}
                 >
                   E-mail *
@@ -195,7 +196,8 @@ export default function CheckoutPage() {
                     fontWeight: 400,
                     lineHeight: '14.1px',
                     paddingLeft: '2px',
-                    paddingRight: '2px'
+                    paddingRight: '2px',
+                    color: '#999'
                   }}
                 >
                   Jméno a příjmení *
@@ -219,7 +221,8 @@ export default function CheckoutPage() {
                     fontWeight: 400,
                     lineHeight: '14.1px',
                     paddingLeft: '2px',
-                    paddingRight: '2px'
+                    paddingRight: '2px',
+                    color: '#999'
                   }}
                 >
                   Telefon *
@@ -331,7 +334,10 @@ export default function CheckoutPage() {
                     fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '12px',
                     fontWeight: 400,
-                    lineHeight: '14.1px'
+                    lineHeight: '14.1px',
+                    paddingLeft: '2px',
+                    paddingRight: '2px',
+                    color: '#999'
                   }}
                 >
                   Promo kód
