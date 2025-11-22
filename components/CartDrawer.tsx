@@ -206,7 +206,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     <img 
                       src="/payment-methods.jpg" 
                       alt="Payment Methods: Visa, Mastercard, GoPay, PayPal, Apple Pay" 
-                      style={{ height: '64px', width: 'auto' }}
+                      style={{ height: '76.8px', width: 'auto' }}
                     />
                   </div>
                 </div>
@@ -327,7 +327,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 <img 
                   src="/payment-methods.jpg" 
                   alt="Payment Methods: Visa, Mastercard, GoPay, PayPal, Apple Pay" 
-                  style={{ height: '64px', width: 'auto' }}
+                  style={{ height: '76.8px', width: 'auto' }}
                 />
               </div>
 
