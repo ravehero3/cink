@@ -179,7 +179,7 @@ export default function CheckoutPage() {
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full border border-black px-4 py-2 text-body focus:outline-none focus:ring-1 focus:ring-black"
+                  className="w-full border-b border-black px-4 py-2 text-body focus:outline-none"
                   style={{ borderRadius: '4px' }}
                 />
               </div>
@@ -201,7 +201,7 @@ export default function CheckoutPage() {
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full border border-black px-4 py-2 text-body focus:outline-none focus:ring-1 focus:ring-black"
+                  className="w-full border-b border-black px-4 py-2 text-body focus:outline-none"
                   style={{ borderRadius: '4px' }}
                 />
               </div>
@@ -223,7 +223,7 @@ export default function CheckoutPage() {
                   required
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full border border-black px-4 py-2 text-body focus:outline-none focus:ring-1 focus:ring-black"
+                  className="w-full border-b border-black px-4 py-2 text-body focus:outline-none"
                   style={{ borderRadius: '4px' }}
                 />
               </div>
