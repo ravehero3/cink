@@ -43,7 +43,8 @@ The project is built using Next.js 14 (App Router) and TypeScript. Tailwind CSS 
 - **Extended Vertical Lines**: The left and right borders now extend the full page height from the main header (88px) to the bottom
 - **Cleaner Design**: Removed redundant page header, creating a more minimalist appearance consistent with Balenciaga aesthetic
 - **Structure Changes**:
-  - Main page container uses `paddingTop: 88px` to account for fixed header
+  - Border container uses combination of `paddingTop: 88px` and `marginTop: -88px` so borders touch the header
+  - The padding creates space for the border to extend through, while negative margin pulls element up visually
   - Border container uses `flex flex-col` to extend full height
   - All content sections properly nested within bordered container
 

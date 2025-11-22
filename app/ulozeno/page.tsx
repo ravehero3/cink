@@ -102,10 +102,10 @@ export default function SavedProductsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white flex justify-center" style={{ paddingTop: '88px' }}>
+      <div className="min-h-screen bg-white flex justify-center">
         <div 
           className="border-l border-r border-black relative w-full flex flex-col" 
-          style={{ width: '33.333%', minWidth: '400px', maxWidth: '600px' }}
+          style={{ width: '33.333%', minWidth: '400px', maxWidth: '600px', paddingTop: '88px', marginTop: '-88px' }}
         >
           <div className="flex items-center justify-center py-20">
             <p className="text-sm">Načítám...</p>
@@ -116,10 +116,10 @@ export default function SavedProductsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex justify-center" style={{ paddingTop: '88px' }}>
+    <div className="min-h-screen bg-white flex justify-center">
       <div 
         className="border-l border-r border-black relative w-full flex flex-col" 
-        style={{ width: '33.333%', minWidth: '400px', maxWidth: '600px' }}
+        style={{ width: '33.333%', minWidth: '400px', maxWidth: '600px', paddingTop: '88px', marginTop: '-88px' }}
       >
         <div 
           className="border-b border-black flex items-center justify-center"
