@@ -283,35 +283,41 @@ export default function CheckoutPaymentPage() {
       </div>
 
       {/* Right: Payment Methods */}
-      <div className="flex-1 border-l border-black p-12 bg-white sticky top-0 h-screen overflow-y-auto">
-        <h2
-          className="uppercase mb-8"
-          style={{
-            fontFamily: '"Helvetica Neue Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
-            fontSize: '16px',
-            fontWeight: 400,
-            letterSpacing: '1px'
-          }}
-        >
-          Platební metody
-        </h2>
+      <div className="flex-1 border-l border-black bg-white sticky top-0 h-screen overflow-y-auto">
+        {/* Header Panel */}
+        <div className="border-b border-black p-12">
+          <h2
+            className="uppercase"
+            style={{
+              fontFamily: '"Helvetica Neue Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '16px',
+              fontWeight: 400,
+              letterSpacing: '1px'
+            }}
+          >
+            Platební metody
+          </h2>
+        </div>
 
-        <div className="space-y-4">
-          <div className="p-4 border-2 border-black bg-black text-white">
-            <p style={{ fontSize: '14px', fontWeight: 600, marginBottom: '8px' }}>GoPay</p>
-            <p style={{ fontSize: '12px', color: '#f0f0f0' }}>
-              Platba kartou, bankovním převodem a dalšími metodami
-            </p>
-          </div>
+        {/* Content */}
+        <div className="p-12 overflow-y-auto flex-1">
+          <div className="space-y-4">
+            <div className="p-4 border-2 border-black bg-black text-white">
+              <p style={{ fontSize: '14px', fontWeight: 600, marginBottom: '8px' }}>GoPay</p>
+              <p style={{ fontSize: '12px', color: '#f0f0f0' }}>
+                Platba kartou, bankovním převodem a dalšími metodami
+              </p>
+            </div>
 
-          <div style={{ borderTop: '1px solid #ccc', paddingTop: '16px', marginTop: '16px' }}>
-            <p style={{ fontSize: '12px', color: '#666', lineHeight: '1.6' }}>
-              Vaše osobní údaje budou použity k zpracování objednávky. Podrobnosti najdete v našich{' '}
-              <Link href="/podminky" className="underline hover:no-underline">
-                podmínkách
-              </Link>
-              .
-            </p>
+            <div style={{ borderTop: '1px solid #ccc', paddingTop: '16px', marginTop: '16px' }}>
+              <p style={{ fontSize: '12px', color: '#666', lineHeight: '1.6' }}>
+                Vaše osobní údaje budou použity k zpracování objednávky. Podrobnosti najdete v našich{' '}
+                <Link href="/podminky" className="underline hover:no-underline">
+                  podmínkách
+                </Link>
+                .
+              </p>
+            </div>
           </div>
         </div>
       </div>

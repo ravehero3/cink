@@ -191,10 +191,11 @@ export default function CheckoutEmailPage() {
       </div>
 
       {/* Right: Order Summary */}
-      <div className="flex-1 border-l border-black p-12 bg-white flex flex-col justify-between sticky top-0 h-screen overflow-y-auto">
-        <div>
+      <div className="flex-1 border-l border-black bg-white flex flex-col justify-between sticky top-0 h-screen overflow-y-auto">
+        {/* Header Panel */}
+        <div className="border-b border-black p-12">
           <h2
-            className="uppercase mb-8"
+            className="uppercase"
             style={{
               fontFamily: '"Helvetica Neue Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
               fontSize: '16px',
@@ -204,8 +205,12 @@ export default function CheckoutEmailPage() {
           >
             SOUHRN OBJEDNÁVKY
           </h2>
+        </div>
 
-          <div className="space-y-4 mb-8 border-b border-black pb-8">
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto p-12 flex flex-col justify-between">
+          <div>
+            <div className="space-y-4 mb-8 border-b border-black pb-8">
             {items.map((item) => (
               <div key={`${item.productId}-${item.size}`} className="flex justify-between text-sm">
                 <span>{item.name} × {item.quantity}</span>
@@ -223,25 +228,26 @@ export default function CheckoutEmailPage() {
               <span>Doprava</span>
               <span>Vypočítáno dále</span>
             </div>
-          </div>
-        </div>
-
-        <div className="border-t border-black pt-6">
-          <div className="flex justify-between mb-6">
-            <span style={{ fontSize: '16px', fontWeight: 600 }}>CELKEM</span>
-            <span style={{ fontSize: '16px', fontWeight: 600 }}>{subtotal} Kč</span>
+            </div>
           </div>
 
-          <Link
-            href="/kosik"
-            className="block text-center py-2 text-xs uppercase underline hover:no-underline"
-            style={{
-              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-              fontSize: '12px'
-            }}
-          >
-            Zpět do košíku
-          </Link>
+          <div className="border-t border-black pt-6">
+            <div className="flex justify-between mb-6">
+              <span style={{ fontSize: '16px', fontWeight: 600 }}>CELKEM</span>
+              <span style={{ fontSize: '16px', fontWeight: 600 }}>{subtotal} Kč</span>
+            </div>
+
+            <Link
+              href="/kosik"
+              className="block text-center py-2 text-xs uppercase underline hover:no-underline"
+              style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '12px'
+              }}
+            >
+              Zpět do košíku
+            </Link>
+          </div>
         </div>
       </div>
     </div>
