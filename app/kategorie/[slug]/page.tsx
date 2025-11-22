@@ -178,6 +178,7 @@ export default function CategoryPage() {
   };
 
   const handleToggleSave = async (productId: string) => {
+    console.log('handleToggleSave called:', { productId, session: session?.user ? 'logged in' : 'not logged in' });
     const isSaved = savedProducts.includes(productId);
     
     // Update local state immediately for UI feedback
@@ -196,23 +197,26 @@ export default function CategoryPage() {
     
     // If authenticated, sync with database
     if (session?.user) {
+      console.log('User is authenticated, syncing to database...');
       try {
-        if (isSaved) {
-          // Remove from database
-          await fetch(`/api/saved-products?productId=${productId}`, {
-            method: 'DELETE',
-          });
-        } else {
-          // Add to database
-          await fetch('/api/saved-products', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ productId }),
-          });
-        }
+        const url = isSaved 
+          ? `/api/saved-products?productId=${productId}`
+          : '/api/saved-products';
+        const method = isSaved ? 'DELETE' : 'POST';
+        const body = isSaved ? undefined : JSON.stringify({ productId });
+        
+        console.log('Making API call:', { url, method });
+        const response = await fetch(url, {
+          method,
+          headers: body ? { 'Content-Type': 'application/json' } : {},
+          body,
+        });
+        console.log('API response:', response.status, await response.text());
       } catch (error) {
         console.error('Error syncing saved product:', error);
       }
+    } else {
+      console.log('User NOT authenticated - skipping database sync');
     }
   };
 
