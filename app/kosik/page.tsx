@@ -131,7 +131,7 @@ export default function CartPage() {
               </div>
 
               <Link
-                href="/pokladna"
+                href="/checkout/email"
                 className="block w-full bg-black text-white text-center py-3 text-body uppercase border border-black hover:bg-white hover:text-black transition-colors"
               >
                 POKRAČOVAT K POKLADNĚ

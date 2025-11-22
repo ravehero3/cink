@@ -43,3 +43,38 @@ The project is built using Next.js 14 (App Router) and TypeScript, with Tailwind
 - **Shipping Integration**: Zásilkovna (Packeta) API
 - **Email Service**: Resend API
 - **File Storage**: Cloudinary
+
+## Recent Implementations
+
+### November 22, 2025 - Three-Step Checkout Flow (Czech Implementation)
+Created a new comprehensive 3-step checkout flow with full Czech language support and Balenciaga minimalist design:
+
+**Pages Created**:
+1. `/checkout/email` - Email authentication (Google OAuth or guest checkout)
+2. `/checkout/doprava` - Shipping address & method selection (Zásilkovna integration)
+3. `/checkout/platba` - Payment processing (GoPay integration)
+
+**Features**:
+- Google OAuth integration for seamless authentication
+- Guest checkout option for non-authenticated users
+- Zásilkovna delivery point selection widget
+- Promo code validation and discount application
+- Session storage for checkout data persistence
+- GoPay payment gateway processing
+- Order summary sidebars on all pages
+- Fully translated to Czech (all text, labels, placeholders)
+- Consistent minimalist black/white design with proper spacing
+
+**Flow**: Cart → Email Step → Shipping Step → Payment Step → GoPay → Confirmation
+
+### Saved Products Feature
+- Fixed Zustand hydration timing issues
+- Implemented database sync for authenticated users
+- LocalStorage persistence for guest users
+- Added `/api/products` endpoint support for fetching products by ID
+- ULOŽENÉ PRODUKTY page with proper 1px borders between items
+
+### Recent Design Improvements
+- Fixed "VYBERTE VELIKOST" button spacing (added 32px top padding)
+- Product detail "PŘIDAT DO KOŠÍKU" button now redirects to cart
+- All pages maintain Balenciaga-inspired minimalist aesthetic
