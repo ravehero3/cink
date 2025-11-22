@@ -96,45 +96,21 @@ export default function ProductCard({
         {onToggleSave && (
           <button
             onClick={handleHeartClick}
-            className="absolute z-10 relative"
-            style={{ top: '4px', right: '4px', opacity: 1, width: '22px', height: '22px' }}
+            className={`absolute z-10 heart-icon ${showHeartAnimation ? 'liked' : ''}`}
+            style={{ top: '4px', right: '4px', opacity: 1, width: '24px', height: '24px' }}
           >
             <svg
-              width="22"
-              height="22"
+              width="24"
+              height="24"
               viewBox="0 0 24 24"
-              fill={isSaved ? 'black' : 'none'}
-              stroke="black"
-              strokeWidth="1.75"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              <path 
+                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                fill={isSaved ? 'black' : 'white'}
+                stroke="black"
+                strokeWidth="1"
+              />
             </svg>
-            {showHeartAnimation && (
-              <span 
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                  animation: 'heartPulse 0.6s ease-out'
-                }}
-              >
-                {[...Array(8)].map((_, i) => (
-                  <span
-                    key={i}
-                    className="absolute"
-                    style={{
-                      top: '50%',
-                      left: '50%',
-                      width: '4px',
-                      height: '4px',
-                      backgroundColor: isSaved ? 'black' : 'white',
-                      borderRadius: '50%',
-                      transform: `translate(-50%, -50%) rotate(${i * 45}deg) translateY(-12px)`,
-                      opacity: 0,
-                      animation: `sparkle 0.6s ease-out ${i * 0.05}s`
-                    }}
-                  />
-                ))}
-              </span>
-            )}
           </button>
         )}
 
@@ -188,15 +164,8 @@ export default function ProductCard({
             style={{ marginBottom: '4px', height: '18px', alignItems: 'center' }}
           >
             {Array.from({ length: maxImages }).map((_, index) => (
-              <button
+              <div
                 key={index}
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  if (index < images.length) {
-                    setCurrentImageIndex(index);
-                  }
-                }}
                 style={{
                   width: '4px',
                   height: '4px',
@@ -204,7 +173,6 @@ export default function ProductCard({
                   backgroundColor: index === currentImageIndex ? '#000000' : '#999999',
                   border: 'none',
                   padding: 0,
-                  cursor: 'pointer',
                   transition: 'background-color 0.2s'
                 }}
               />
@@ -292,21 +260,29 @@ export default function ProductCard({
       </div>
     </Link>
     <style jsx>{`
-      @keyframes heartPulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.2); }
-        100% { transform: scale(1); }
+      .heart-icon {
+        transition: transform 0.1s ease;
+        cursor: pointer;
       }
-      
-      @keyframes sparkle {
+
+      .heart-icon.liked {
+        animation: scalePop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      @keyframes scalePop {
         0% {
-          opacity: 1;
-          transform: translate(-50%, -50%) rotate(var(--rotation)) translateY(-12px) scale(1);
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.3);
         }
         100% {
-          opacity: 0;
-          transform: translate(-50%, -50%) rotate(var(--rotation)) translateY(-20px) scale(0.5);
+          transform: scale(1);
         }
+      }
+
+      .heart-icon path {
+        transition: fill 0.2s ease;
       }
     `}</style>
     </>
