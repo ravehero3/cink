@@ -12,6 +12,7 @@ import SortPanel from '@/components/SortPanel';
 import { useFilterStore } from '@/lib/filter-store';
 import { useSortPanelStore } from '@/lib/sort-panel-store';
 import { useSearchBarStore } from '@/lib/search-bar-store';
+import { useSavedProductsStore } from '@/lib/saved-products-store';
 import { Upload, X } from 'lucide-react';
 
 interface Category {
@@ -176,12 +177,43 @@ export default function CategoryPage() {
     }
   };
 
-  const handleToggleSave = (productId: string) => {
+  const handleToggleSave = async (productId: string) => {
+    const isSaved = savedProducts.includes(productId);
+    
+    // Update local state immediately for UI feedback
     setSavedProducts(prev =>
       prev.includes(productId)
         ? prev.filter(id => id !== productId)
         : [...prev, productId]
     );
+    
+    // Update Zustand store
+    if (isSaved) {
+      useSavedProductsStore.getState().removeProduct(productId);
+    } else {
+      useSavedProductsStore.getState().addProduct(productId);
+    }
+    
+    // If authenticated, sync with database
+    if (session?.user) {
+      try {
+        if (isSaved) {
+          // Remove from database
+          await fetch(`/api/saved-products?productId=${productId}`, {
+            method: 'DELETE',
+          });
+        } else {
+          // Add to database
+          await fetch('/api/saved-products', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ productId }),
+          });
+        }
+      } catch (error) {
+        console.error('Error syncing saved product:', error);
+      }
+    }
   };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {

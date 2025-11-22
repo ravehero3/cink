@@ -38,6 +38,25 @@ The project is built using Next.js 14 (App Router) and TypeScript. Tailwind CSS 
 
 ## Recent Changes
 
+### November 22, 2025 - Fixed Saved Products Synchronization Bug
+- **Issue Identified**: When authenticated users saved products by clicking the heart icon, the count in the header showed only "1" instead of the actual number, and the saved products page was empty
+- **Root Cause**: The heart click handlers (`handleToggleSave` in category page and `toggleSaved` in product detail page) only updated the Zustand store (browser localStorage) without syncing to the database. Authenticated users' saved products were stored in localStorage, not in the database.
+- **Solution Implemented**:
+  - **Updated `handleToggleSave` in** `app/kategorie/[slug]/page.tsx`:
+    - Now syncs with `/api/saved-products` endpoint when authenticated
+    - Calls POST to add product to database, DELETE to remove
+    - Updates Zustand store immediately for UI feedback
+    - Works for both authenticated and unauthenticated users
+  - **Updated `toggleSaved` in** `app/produkty/[slug]/page.tsx`:
+    - Same API sync logic as category page
+    - Properly triggers heart animation on animation state
+    - Syncs to database for authenticated users
+- **Result**: 
+  - Saved products now sync to database immediately when heart is clicked
+  - Header count accurately reflects saved products from database
+  - Saved products page now displays all products user saved
+  - Both authenticated and unauthenticated users have working wishlist functionality
+
 ### November 22, 2025 - Comprehensive Single Product Page Redesign & Accordion Animations
 - **Heart Icon on Product Images**: 
   - Added heart icon to top-right corner of first product image on single product view page

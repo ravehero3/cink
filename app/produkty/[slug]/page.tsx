@@ -113,13 +113,41 @@ export default function ProductDetailPage() {
     }, 3000);
   };
 
-  const toggleSaved = () => {
+  const toggleSaved = async () => {
     if (!product) return;
-    if (isSaved(product.id)) {
+    
+    const currentlySaved = isSaved(product.id);
+    setShowHeartAnimation(true);
+    
+    // Update Zustand store immediately for UI feedback
+    if (currentlySaved) {
       removeProduct(product.id);
     } else {
       addProduct(product.id);
     }
+    
+    // If authenticated, sync with database
+    if (session?.user) {
+      try {
+        if (currentlySaved) {
+          // Remove from database
+          await fetch(`/api/saved-products?productId=${product.id}`, {
+            method: 'DELETE',
+          });
+        } else {
+          // Add to database
+          await fetch('/api/saved-products', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ productId: product.id }),
+          });
+        }
+      } catch (error) {
+        console.error('Error syncing saved product:', error);
+      }
+    }
+    
+    setTimeout(() => setShowHeartAnimation(false), 400);
   };
 
   const incrementQuantity = () => {
