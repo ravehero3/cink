@@ -38,22 +38,25 @@ The project is built using Next.js 14 (App Router) and TypeScript. Tailwind CSS 
 
 ## Recent Changes
 
-### November 22, 2025 - Scale Pop Heart Animation & UI Improvements
-- **Heart Icon Animation**: Implemented Scale Pop animation for wishlist favorite functionality
-  - Heart icon 24x24px with white fill and 1px black stroke initially
-  - Scales up to 1.3x then back to 1x in 0.4 seconds on click
-  - Uses cubic-bezier(0.175, 0.885, 0.32, 1.275) easing for smooth animation
-  - Color transitions from white to black on click with 0.2s ease
-- **Product Grid Navigation**: Removed click functionality from three dots in product preview
-  - Three dots now serve as visual indicator only (no longer clickable)
-  - Image navigation via hover arrows remains fully functional
+### November 22, 2025 - Font Standardization & Heart Icon Alignment
+- **Heart Icon Design Standardization**: 
+  - Updated ProductCard heart icon from 24px to 22px to match header heart size
+  - Changed from filled heart design to stroke-based design (matching header's aesthetic)
+  - Heart starts as white with black stroke, becomes filled black when saved
+  - Scale Pop animation preserved with same easing: cubic-bezier(0.175, 0.885, 0.32, 1.275)
+- **Single Product View Font Updates**:
+  - Product name (h1): Changed to BB-CondBold at 14px (from "Helvetica Neue Condensed Bold" at 16px)
+  - Price and body text: Uses BB-Regular at 14px
+  - Accordion section headers ("INFORMACE O PRODUKTU", "Size & fit", "Doprava zdarma, vrácení zdarma", "Péče o produkt"): BB-CondBold at 14px
+  - Accordion content (expanded sections): BB-Regular at 14px
+  - "PŘIDAT DO KOŠÍKU" button: BB-CondBold at 14px (updated from "Helvetica Neue Condensed Bold" 22px)
 - **Database & Seed**: Created PostgreSQL database with full seed data
   - Admin user: admin@ufosport.cz / admin123
   - Test user: user@ufosport.cz / user123
   - 4 product categories and 40 sample products
 - **Bug Fixes**: Fixed JSX syntax errors in product detail page
   - Added 3 missing closing `</div>` tags in component structure
-  - Fixed 2 self-closing div tags (changed `<div />` to `<div></div>`)
+  - Fixed self-closing div tags (changed `<div />` to `<div></div>`)
   - Application now compiles successfully
 
 ### November 21, 2025 - Production Deployment Configuration

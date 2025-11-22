@@ -310,10 +310,10 @@ export default function ProductDetailPage() {
                 <h1 
                   className="uppercase"
                   style={{
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '16px',
-                    fontWeight: 700,
-                    letterSpacing: '0.05em',
+                    fontFamily: 'BB-CondBold, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '14px',
+                    fontWeight: 400,
+                    letterSpacing: '0.03em',
                     lineHeight: '1.4',
                     marginBottom: '4px',
                     textAlign: 'center'
@@ -494,14 +494,13 @@ export default function ProductDetailPage() {
             onClick={handleAddToCart}
             className="bg-black text-white hover:bg-gray-800 transition-colors"
             style={{
-              fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-              fontSize: '22px',
-              fontWeight: 700,
+              fontFamily: 'BB-CondBold, "Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '14px',
+              fontWeight: 400,
               letterSpacing: '0.03em',
               textTransform: 'uppercase',
               padding: '10.67px 0',
               width: '36vw',
-              fontStretch: 'condensed',
               borderRadius: '4px',
               marginBottom: '16px'
             }}
@@ -522,12 +521,11 @@ export default function ProductDetailPage() {
                 <span 
                   className="uppercase flex items-center"
                   style={{
-                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '22px',
-                    fontWeight: 700,
+                    fontFamily: 'BB-CondBold, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '14px',
+                    fontWeight: 400,
                     letterSpacing: '0.03em',
-                    height: '100%',
-                    fontStretch: 'condensed'
+                    height: '100%'
                   }}
                 >
                   INFORMACE O PRODUKTU
@@ -542,12 +540,11 @@ export default function ProductDetailPage() {
                 <div 
                   className="pb-4"
                   style={{
-                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '22px',
-                    fontWeight: 700,
+                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '14px',
+                    fontWeight: 400,
                     letterSpacing: '0.03em',
-                    lineHeight: '1.6',
-                    fontStretch: 'condensed'
+                    lineHeight: '1.6'
                   }}
                 >
                   <p className="mb-2">{product.description}</p>
@@ -568,12 +565,11 @@ export default function ProductDetailPage() {
                 <span 
                   className="uppercase flex items-center"
                   style={{
-                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '22px',
-                    fontWeight: 700,
+                    fontFamily: 'BB-CondBold, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '14px',
+                    fontWeight: 400,
                     letterSpacing: '0.03em',
-                    height: '100%',
-                    fontStretch: 'condensed'
+                    height: '100%'
                   }}
                 >
                   Size & fit
@@ -588,12 +584,11 @@ export default function ProductDetailPage() {
                 <div 
                   className="pb-4"
                   style={{
-                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '22px',
-                    fontWeight: 700,
+                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '14px',
+                    fontWeight: 400,
                     letterSpacing: '0.03em',
-                    lineHeight: '1.6',
-                    fontStretch: 'condensed'
+                    lineHeight: '1.6'
                   }}
                 >
                   <p className="mb-2">Oversize fit</p>
@@ -611,12 +606,11 @@ export default function ProductDetailPage() {
                 <span 
                   className="uppercase flex items-center"
                   style={{
-                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '22px',
-                    fontWeight: 700,
+                    fontFamily: 'BB-CondBold, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '14px',
+                    fontWeight: 400,
                     letterSpacing: '0.03em',
-                    height: '100%',
-                    fontStretch: 'condensed'
+                    height: '100%'
                   }}
                 >
                   Doprava zdarma, vrácení zdarma
@@ -631,12 +625,11 @@ export default function ProductDetailPage() {
                 <div 
                   className="pb-4"
                   style={{
-                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '22px',
-                    fontWeight: 700,
+                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '14px',
+                    fontWeight: 400,
                     letterSpacing: '0.03em',
-                    lineHeight: '1.6',
-                    fontStretch: 'condensed'
+                    lineHeight: '1.6'
                   }}
                 >
                   <p className="mb-2">Nabízíme bezplatné expresní doručení při objednávce nad 2000 Kč.</p>
@@ -655,12 +648,11 @@ export default function ProductDetailPage() {
                 <span 
                   className="uppercase flex items-center"
                   style={{
-                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '22px',
-                    fontWeight: 700,
+                    fontFamily: 'BB-CondBold, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '14px',
+                    fontWeight: 400,
                     letterSpacing: '0.03em',
-                    height: '100%',
-                    fontStretch: 'condensed'
+                    height: '100%'
                   }}
                 >
                   Péče o produkt
@@ -675,12 +667,11 @@ export default function ProductDetailPage() {
                 <div 
                   className="pb-4"
                   style={{
-                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '22px',
-                    fontWeight: 700,
+                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '14px',
+                    fontWeight: 400,
                     letterSpacing: '0.03em',
-                    lineHeight: '1.6',
-                    fontStretch: 'condensed'
+                    lineHeight: '1.6'
                   }}
                 >
                   <p className="mb-1">Prát max. při 30°C - šetrný proces</p>
