@@ -164,7 +164,7 @@ export default function CheckoutPage() {
 
               <div className="mb-4">
                 <label 
-                  className="block mb-2 uppercase"
+                  className="block mb-1 uppercase"
                   style={{
                     fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '14px',
@@ -179,14 +179,14 @@ export default function CheckoutPage() {
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full border-b border-black px-4 py-2 text-body focus:outline-none"
+                  className="w-full border border-black px-4 py-2 text-body focus:outline-none"
                   style={{ borderRadius: '4px' }}
                 />
               </div>
 
               <div className="mb-4">
                 <label 
-                  className="block mb-2 uppercase"
+                  className="block mb-1 uppercase"
                   style={{
                     fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '14px',
@@ -201,14 +201,14 @@ export default function CheckoutPage() {
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full border-b border-black px-4 py-2 text-body focus:outline-none"
+                  className="w-full border border-black px-4 py-2 text-body focus:outline-none"
                   style={{ borderRadius: '4px' }}
                 />
               </div>
 
               <div className="mb-4">
                 <label 
-                  className="block mb-2 uppercase"
+                  className="block mb-1 uppercase"
                   style={{
                     fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '14px',
@@ -223,7 +223,7 @@ export default function CheckoutPage() {
                   required
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full border-b border-black px-4 py-2 text-body focus:outline-none"
+                  className="w-full border border-black px-4 py-2 text-body focus:outline-none"
                   style={{ borderRadius: '4px' }}
                 />
               </div>
@@ -320,7 +320,7 @@ export default function CheckoutPage() {
 
               <div className="mb-4 mt-4">
                 <label 
-                  className="block font-bold mb-2 uppercase text-body"
+                  className="block font-bold mb-1 uppercase text-body"
                   style={{
                     fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '14px',
@@ -338,7 +338,7 @@ export default function CheckoutPage() {
                       setFormData({ ...formData, promoCode: e.target.value });
                       setPromoError('');
                     }}
-                    className="flex-1 border-r border-b border-black px-3 py-2 text-body focus:outline-none"
+                    className="flex-1 border border-black px-3 py-2 text-body focus:outline-none"
                     placeholder="KÓD"
                     style={{ borderRadius: '4px' }}
                   />
