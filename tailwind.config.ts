@@ -81,6 +81,9 @@ const config: Config = {
       inset: {
         'header': '44px',
       },
+      height: {
+        'header': '44px',
+      },
     },
   },
   plugins: [],
