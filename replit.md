@@ -67,6 +67,12 @@ Created a new comprehensive 3-step checkout flow with full Czech language suppor
 
 **Flow**: Cart → Email Step → Shipping Step → Payment Step → GoPay → Confirmation
 
+**Design Adjustments**:
+- Right panel (order summary) positioned at exactly 33% width mark
+- Left panel (form) takes 67% width for optimal content presentation
+- Consistent layout across all three checkout pages
+- Follows Balenciaga minimalist design principles
+
 ### Saved Products Feature
 - Fixed Zustand hydration timing issues
 - Implemented database sync for authenticated users

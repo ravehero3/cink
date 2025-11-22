@@ -61,7 +61,7 @@ export default function CheckoutEmailPage() {
   return (
     <div className="min-h-screen bg-white flex">
       {/* Left: Form */}
-      <div className="flex-1 border-r border-black p-12 flex flex-col justify-center max-w-2xl">
+      <div className="flex-[2] border-r border-black p-12 flex flex-col justify-center">
         <div className="mb-12">
           <h1 
             className="uppercase mb-2"
@@ -191,7 +191,7 @@ export default function CheckoutEmailPage() {
       </div>
 
       {/* Right: Order Summary */}
-      <div className="w-96 border-l border-black p-12 bg-white flex flex-col justify-between sticky top-0 h-screen overflow-y-auto">
+      <div className="flex-1 border-l border-black p-12 bg-white flex flex-col justify-between sticky top-0 h-screen overflow-y-auto">
         <div>
           <h2
             className="uppercase mb-8"
