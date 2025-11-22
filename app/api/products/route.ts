@@ -10,6 +10,7 @@ export async function GET(request: Request) {
     const colors = searchParams.getAll('color');
     const sizes = searchParams.getAll('size');
     const search = searchParams.get('search');
+    const ids = searchParams.getAll('id');
     const sort = searchParams.get('sort') || 'newest';
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '20');
@@ -17,6 +18,11 @@ export async function GET(request: Request) {
     const where: Prisma.ProductWhereInput = {
       isVisible: true,
     };
+
+    // If specific IDs are requested, fetch only those
+    if (ids.length > 0) {
+      where.id = { in: ids };
+    }
 
     if (category) {
       where.category = category;

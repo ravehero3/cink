@@ -22,21 +22,34 @@ export default function SavedProductsPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const removeProduct = useSavedProductsStore((state) => state.removeProduct);
+  // Use hook selector to ensure Zustand is properly hydrated
+  const savedProductIds = useSavedProductsStore((state) => state.savedIds);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
   const { addItem } = useCartStore();
 
+  // Set mounted flag to prevent hydration mismatch
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+
     // For authenticated users, always fetch from database
     if (status === 'authenticated') {
+      console.log('[ULOŽENÉ PRODUKTY] Authenticated user, fetching from database');
       fetchSavedProducts();
     } 
     // For unauthenticated users, use local store
     else if (status === 'unauthenticated') {
-      const savedProductIds = useSavedProductsStore.getState().savedIds;
+      console.log('[ULOŽENÉ PRODUKTY] Unauthenticated user, using Zustand store. SavedIds:', savedProductIds);
       if (savedProductIds.length > 0) {
+        console.log('[ULOŽENÉ PRODUKTY] Found saved products, fetching details...');
         fetchSavedProductsLocal();
       } else {
+        console.log('[ULOŽENÉ PRODUKTY] No saved products in Zustand');
         setLoading(false);
       }
     } 
@@ -48,7 +61,7 @@ export default function SavedProductsPage() {
     else {
       setLoading(false);
     }
-  }, [status]);
+  }, [status, mounted, savedProductIds]);
 
   const fetchSavedProducts = async () => {
     try {
@@ -66,15 +79,29 @@ export default function SavedProductsPage() {
 
   const fetchSavedProductsLocal = async () => {
     try {
-      const response = await fetch('/api/products');
+      if (savedProductIds.length === 0) {
+        setProducts([]);
+        setLoading(false);
+        return;
+      }
+
+      // Fetch only the saved products by ID
+      const params = new URLSearchParams();
+      savedProductIds.forEach(id => params.append('id', id));
+      
+      const response = await fetch(`/api/products?${params.toString()}`);
       if (response.ok) {
-        const savedProductIds = useSavedProductsStore.getState().savedIds;
         const data = await response.json();
-        const savedProducts = data.products?.filter((p: Product) => savedProductIds.includes(p.id)) || [];
-        setProducts(savedProducts);
+        console.log('[ULOŽENÉ PRODUKTY] Fetched saved products:', data);
+        // Handle both formats: direct array or object with products field
+        const products = Array.isArray(data) ? data : (data.products || []);
+        console.log('[ULOŽENÉ PRODUKTY] Retrieved saved products count:', products.length);
+        setProducts(products);
+      } else {
+        console.error('[ULOŽENÉ PRODUKTY] API response not ok:', response.status);
       }
     } catch (error) {
-      console.error('Error fetching products:', error);
+      console.error('[ULOŽENÉ PRODUKTY] Error fetching products:', error);
     } finally {
       setLoading(false);
     }
@@ -162,7 +189,7 @@ export default function SavedProductsPage() {
           </Link>
         </div>
 
-        {status !== 'authenticated' && (
+        {status !== 'authenticated' && products.length === 0 && (
           <div 
             className="border-b border-black flex flex-col items-center justify-center px-8 text-center"
             style={{ minHeight: '200px', paddingTop: '40px', paddingBottom: '40px' }}

@@ -13,10 +13,10 @@ Ask before making major changes to the core design system or introducing new ext
 ## System Architecture
 
 ### UI/UX Decisions
-The design strictly adheres to a Balenciaga-inspired minimalist aesthetic, using a black-and-white color palette with neon green accents solely for primary calls to action. The design avoids grays, shadows, and gradients. Typography features enlarged "Helvetica Neue" (or similar sans-serif) with specific letter spacing for headlines. A consistent 8px-based spacing system is used throughout. The layout includes a 1600px max-width container and responsive product grids. Buttons have sharp corners with minimal hover effects. Headers are fixed, integrating search functionality and a three-column grid layout with reduced icon sizes (22px) and specific font styles for navigation. Cart and saved products use slide-in drawers with semi-transparent overlays.
+The design strictly adheres to a Balenciaga-inspired minimalist aesthetic, using a black-and-white color palette with neon green accents solely for primary calls to action. The design avoids grays, shadows, and gradients. Typography features enlarged "Helvetica Neue" (or similar sans-serif) with specific letter spacing for headlines. A consistent 8px-based spacing system is used throughout. The layout includes a 1600px max-width container and responsive product grids. Buttons have sharp corners with minimal hover effects. Headers are fixed, integrating search functionality and a three-column grid layout with reduced icon sizes (22px) and specific font styles for navigation. Cart and saved products use slide-in drawers with semi-transparent overlays. Product cards include color variant display on hover and clickable image navigation dots. Single product pages feature a heart icon for saving, standardized typography for titles and buttons, and carefully adjusted spacing. Accordion sections (Product Information, Size & Fit, Shipping, Care) include smooth arrow rotation and content reveal animations.
 
 ### Technical Implementations
-The project is built using Next.js 14 (App Router) and TypeScript. Tailwind CSS manages all styling. State management for the cart, recently viewed items, and saved products is handled by Zustand. The application features a comprehensive checkout flow, order creation, and confirmation. Search functionality includes product filtering. Promo code validation and discount calculations are integrated. Homepage video and category sections are customizable via an admin interface, utilizing a Zustand store for content persistence. UI animations, such as search bar slide-down and delayed content fade-in, are carefully implemented for a smooth user experience.
+The project is built using Next.js 14 (App Router) and TypeScript, with Tailwind CSS for styling. Zustand manages client-side state for the cart, recently viewed items, and saved products. The application features a comprehensive checkout flow, order creation, and confirmation. Search functionality includes product filtering. Promo code validation and discount calculations are integrated. Homepage video and category sections are customizable via an admin interface. UI animations, such as search bar slide-down, delayed content fade-in, and interactive elements (like sparkle animation on saving products), are implemented for a smooth user experience. Saved product functionality includes database synchronization for authenticated users and local storage persistence for unauthenticated users. Admin users are redirected to the admin dashboard upon login.
 
 ### Feature Specifications
 - **Product Catalog**: Comprehensive display of products with images, size options, and stock levels.
@@ -24,9 +24,9 @@ The project is built using Next.js 14 (App Router) and TypeScript. Tailwind CSS 
 - **Checkout Flow**: End-to-end process including promo code application, payment gateway integration (GoPay), and shipping point selection (Zásilkovna).
 - **Order Management**: Creation and confirmation of customer orders.
 - **User Accounts**: Basic user authentication.
-- **Saved Products**: Functionality for users to save products to a dedicated wishlist page.
+- **Saved Products**: Functionality for users to save products to a dedicated wishlist page, with persistence across sessions for authenticated users.
 - **Search**: Site-wide product search with filtering capabilities.
-- **Admin Features**: Content management for homepage sections (e.g., video and category displays).
+- **Admin Features**: Content management for homepage sections (e.g., video and category displays) and product details including a "shortDescription" field.
 
 ### System Design Choices
 - **Framework**: Next.js 14 (App Router).
@@ -35,153 +35,6 @@ The project is built using Next.js 14 (App Router) and TypeScript. Tailwind CSS 
 - **Database**: PostgreSQL via Prisma ORM.
 - **Authentication**: NextAuth.js.
 - **State Management**: Zustand for client-side global state.
-
-## Recent Changes
-
-### November 22, 2025 - Admin Redirect & Saved Products Fixes
-- **Admin Redirect on Login**: When admin users log in via the login page, they are now automatically redirected to `/admin` dashboard instead of the account page
-  - Login page now checks user role after successful authentication
-  - Admin-only route checks session and redirects non-admins to homepage
-- **Saved Products Database Sync**: Fixed synchronization between UI heart clicks and database saves
-  - Category page now initializes saved products from database for authenticated users on mount
-  - For unauthenticated users, falls back to Zustand store (browser localStorage)
-  - API endpoint now returns updated saved products list for verification
-  - Added detailed logging to debug sync flow
-- **Key Fix**: Authenticated users now see all their previously saved products when visiting the category page or ULOŽENÉ PRODUKTY page
-
-### November 22, 2025 - ULOŽENÉ PRODUKTY Page Layout Refinement
-- **Removed Duplicate "UFO SPORT" Header Bar**: Deleted the separate header section that appeared below the main navigation
-- **Extended Vertical Lines**: The left and right borders now extend the full page height from the main header (88px) to the bottom
-- **Cleaner Design**: Removed redundant page header, creating a more minimalist appearance consistent with Balenciaga aesthetic
-- **Structure Changes**:
-  - Border container uses combination of `paddingTop: 88px` and `marginTop: -88px` so borders touch the header
-  - The padding creates space for the border to extend through, while negative margin pulls element up visually
-  - Border container uses `flex flex-col` to extend full height
-  - All content sections properly nested within bordered container
-
-### November 22, 2025 - Fixed Saved Products Synchronization Bug (Complete Fix)
-- **Phase 1 - Initial Issue**: When authenticated users saved products by clicking the heart icon, the count in the header showed only "1" instead of the actual number, and the saved products page was empty
-- **Root Cause**: 
-  - Heart click handlers only updated Zustand store (browser localStorage) without syncing to database
-  - Saved products page had conditional logic that only fetched from database if Zustand store had items
-  - For authenticated users, the page relied on localStorage being restored, which could fail
-- **Complete Solution**:
-  - **Heart click handlers** (both category and product detail pages):
-    - Now sync with `/api/saved-products` endpoint for authenticated users
-    - Update Zustand store immediately for UI feedback
-    - Call POST to add or DELETE to remove from database
-    - Work seamlessly for both authenticated and unauthenticated users
-  
-  - **Saved Products Page** (`app/ulozeno/page.tsx`):
-    - **For authenticated users**: ALWAYS fetches from database (ignores Zustand/localStorage)
-    - **For unauthenticated users**: Uses Zustand store from browser localStorage
-    - Fixed dependency array to prevent React warnings
-    - Properly handles session loading states
-  
-  - **Remove Product Handler**: Also syncs with database when user removes products from saved list
-  
-- **Result**:
-  - Header count shows correct number of saved products ✓
-  - Saved products page displays all saved products ✓
-  - Authenticated users' data persists across sessions ✓
-  - Unauthenticated users can save locally and view in same session ✓
-  - All changes sync in real-time ✓
-
-### November 22, 2025 - Comprehensive Single Product Page Redesign & Accordion Animations
-- **Heart Icon on Product Images**: 
-  - Added heart icon to top-right corner of first product image on single product view page
-  - Icon is 22px (matching header heart size) with stroke-based design (white with black stroke initially)
-  - Fully clickable to save/unsave products with Scale Pop animation (same effect as product grid heart)
-  - Turns black when saved, white when unsaved
-  - Uses cubic-bezier(0.175, 0.885, 0.32, 1.275) easing for smooth animation
-  
-- **Product Title Font Standardization**:
-  - Changed from BB-CondBold to "Helvetica Neue Condensed Bold" at 14px
-  - Maintains uppercase styling with proper letter-spacing (0.03em) and font-stretch: condensed
-  
-- **Button Font Updates** (Updated November 22, 2025):
-  - "VYBERTE VELIKOST" button: Now uses Helvetica Neue at 14px with font-weight 400 (normal)
-  - "PŘIDAT DO KOŠÍKU" button: Now uses Helvetica Neue at 14px with font-weight 400 (normal)
-  - Changed to match Balenciaga's minimalist aesthetic - understated, not "shouting"
-  - Both buttons maintain uppercase styling with tight letter-spacing
-  
-- **Spacing Adjustments**:
-  - Line height between product title and price reduced to 4px (was larger before)
-  - Short description to VYBERTE VELIKOST button: 8px gap (was 64px, now more compact)
-  - Ensures compact, elegant visual grouping
-  
-- **Product Short Description Field**:
-  - Added new "shortDescription" field to database schema (String, optional)
-  - Displays below price at 14px using BB-Regular font
-  - Example text: "Top triko v černé barvě. Kus oblečení co poznají všichni fanoušci VOODOO808"
-  - **Admin Features**: Fully editable by logged-in admin users
-  - Can be set when creating new products or editing existing products
-  - Seamlessly integrated into product detail page UI
-  
-- **Accordion Animations** (Product Information, Size & Fit, Shipping, Care sections):
-  - **Arrow Rotation**: ChevronDown icon rotates 180 degrees smoothly on accordion open/close
-    - Duration: 0.3 seconds
-    - Easing: cubic-bezier(0.4, 0, 0.2, 1)
-    - Uses CSS transform: rotate(180deg)
-  - **Content Reveal**: Accordion content smoothly slides down/up on toggle
-    - Duration: 0.4 seconds
-    - Easing: cubic-bezier(0.4, 0, 0.2, 1)
-    - Uses CSS max-height transition with overflow: hidden
-    - Smooth in both directions with no jerky movements
-  
-- **Database Schema Updates**:
-  - Added `shortDescription String? @db.Text` field to Product model
-  - Successfully migrated PostgreSQL database with `npm run db:push`
-  - Field is optional to maintain backwards compatibility
-  
-- **API Endpoint Updates**:
-  - Updated PATCH `/api/admin/products/[id]` endpoint to handle shortDescription field
-  - Admin can now update shortDescription via product edit form
-  
-- **UI Components Updated**:
-  - Product interface includes optional shortDescription property
-  - Admin edit form includes dedicated textarea for "Krátký popis (zobrazen pod cenou)"
-  - Separate fields for short description and detailed description for clarity
-
-### November 21, 2025 - Production Deployment Configuration
-- **Deployment Setup**: Updated deployment scripts for production launch
-- **Environment Variables**: Configured all production environment variables (.env.local)
-  - NEXTAUTH_SECRET: qTWz3Gp3zJCZGkB7kLaLdbR8tApisv2a1uXBkoRwSf8=
-  - NEXTAUTH_URL: https://ufosport.cz
-  - Cloudinary credentials configured (dq0qvtbst)
-- **Deployment Scripts**:
-  - deploy-to-vercel.sh: Automated production deployment with all environment variables
-  - add-domain-to-vercel.sh: Custom domain configuration for ufosport.cz
-- **Documentation Created**:
-  - PRODUCTION_DEPLOYMENT.md: Comprehensive deployment guide with DNS configuration
-  - LAUNCH_SUMMARY.md: Quick-start production launch guide
-- **Test Deployment**: Live at https://alienshop-7cfqq31v1-voodoo808s-projects.vercel.app/
-- **Domain**: Ready to configure ufosport.cz with DNS records for Wedos
-
-### November 21, 2025 - UI/UX Enhancements
-- **Product Grid Improvements**:
-  - Standardized heart icon to 22x22px across all product displays (matching header size)
-  - Added magic sparkle animation when saving products to wishlist
-  - Implemented color variant display on hover (16x16px squares, 2px border-radius, 1px black stroke)
-  - Made image navigation dots clickable to switch between product images on hover
-- **Sort Panel Overlay**: Updated to show 50% opacity black backdrop instead of solid white background
-- **Single Product Page Refinements**:
-  - Widened buttons from 30vw to 36vw with 4px border-radius
-  - Updated all fonts to match header typography (22px Helvetica Neue Condensed Bold for buttons, BB-Regular for body text)
-  - Reduced spacing between buttons to -4px for tighter visual grouping
-  - Changed "Product details" to Czech text "INFORMACE O PRODUKTU"
-  - Repositioned info sections to 64px below price (removed excessive vertical spacing)
-  - Added 64px bottom padding after last accordion section
-
-### November 20, 2025 - Database and Design
-- **Database Setup**: PostgreSQL database provisioned and schema pushed
-- **Data Seeding**: Created admin user (admin@ufosport.cz / admin123), 4 product categories, and 40 sample products
-- **Environment Configuration**: Added Cloudinary credentials and NextAuth secret
-- **Design Refinements**:
-  - Updated spacing in ControlBar: Product counter 12px from left edge, SEŘADIT PODLE 12px from dropdown arrow, arrow 12px from FILTROVAT button
-  - Updated SearchBar: Magnifying glass 12px from left edge, search placeholder 12px from icon, matched font styling with header
-  - Updated ProductCard: Reduced line height spacing by 2px, added 1px black stroke hover effect on size options, made heart icon always visible
-  - Heart click functionality already implemented to save products to wishlist
 
 ## External Dependencies
 - **Database**: PostgreSQL (Neon-backed)
