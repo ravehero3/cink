@@ -385,7 +385,7 @@ export default function ProductDetailPage() {
                       fontSize: '14px',
                       fontWeight: 400,
                       textAlign: 'center',
-                      marginBottom: '64px'
+                      marginBottom: '8px'
                     }}
                   >
                     {product.shortDescription}
