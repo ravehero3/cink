@@ -282,7 +282,7 @@ export default function CheckoutPage() {
 
           <div className="lg:col-span-1 h-full">
             <div className="border-l border-black h-full flex flex-col">
-              <div className="p-6 pb-0">
+              <div className="h-header flex items-center px-6">
                 <h2 
                   className="font-bold uppercase"
                   style={{
