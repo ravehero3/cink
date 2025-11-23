@@ -94,7 +94,7 @@ export default function Header2({ isOpen, onClose }: Header2Props) {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               autoFocus
-              className="flex-1 bg-transparent border-none outline-none placeholder:text-black placeholder:uppercase"
+              className="flex-1 bg-transparent border-none outline-none placeholder:uppercase placeholder:text-gray-500"
               style={{
                 fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                 fontSize: '12px',
