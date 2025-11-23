@@ -96,11 +96,10 @@ export default function Header2({ isOpen, onClose }: Header2Props) {
               autoFocus
               className="flex-1 bg-transparent border-none outline-none placeholder:text-black placeholder:uppercase"
               style={{
-                fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '22px',
-                fontWeight: 700,
-                letterSpacing: '0.03em',
-                fontStretch: 'condensed'
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '12px',
+                fontWeight: 400,
+                letterSpacing: '0.42px'
               }}
             />
           </div>
