@@ -11,7 +11,7 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const [totalOrders, pendingOrders, products, promoCodes, newsletter, orders] = await Promise.all([
+    const [totalOrders, pendingOrders, products, promoCodes, newsletter, orders, allProducts] = await Promise.all([
       prisma.order.count(),
       prisma.order.count({
         where: {
@@ -32,10 +32,19 @@ export async function GET() {
         select: {
           totalPrice: true
         }
+      }),
+      prisma.product.findMany({
+        select: {
+          totalStock: true,
+          lowStockThreshold: true
+        }
       })
     ]);
 
     const totalRevenue = orders.reduce((sum: number, order: any) => sum + Number(order.totalPrice), 0);
+    const lowStockProducts = allProducts.filter(
+      (p: any) => p.totalStock <= p.lowStockThreshold
+    ).length;
 
     return NextResponse.json({
       totalOrders,
@@ -44,6 +53,7 @@ export async function GET() {
       productsCount: products,
       promoCodesCount: promoCodes,
       newsletterCount: newsletter,
+      lowStockProducts,
     });
   } catch (error) {
     console.error('Error fetching admin stats:', error);

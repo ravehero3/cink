@@ -12,6 +12,7 @@ interface Stats {
   productsCount: number;
   promoCodesCount: number;
   newsletterCount: number;
+  lowStockProducts: number;
 }
 
 export default function AdminDashboard() {
@@ -81,6 +82,14 @@ export default function AdminDashboard() {
           <div className="text-body uppercase mb-2">Newsletter odběratelé</div>
           <div className="text-title font-bold">{stats?.newsletterCount || 0}</div>
         </div>
+        {stats?.lowStockProducts !== undefined && (
+          <div className={`border-2 p-6 ${stats.lowStockProducts > 0 ? 'border-red-600 bg-red-50' : 'border-black'}`}>
+            <div className="text-body uppercase mb-2">⚠️ Nízký sklad</div>
+            <div className={`text-title font-bold ${stats.lowStockProducts > 0 ? 'text-red-600' : ''}`}>
+              {stats.lowStockProducts}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Quick Links */}

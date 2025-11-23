@@ -137,3 +137,41 @@ Enhanced the checkout page with refined header behavior and typography adjustmen
 - Fixed "VYBERTE VELIKOST" button spacing (added 32px top padding)
 - Product detail "PŘIDAT DO KOŠÍKU" button now redirects to cart
 - All pages maintain Balenciaga-inspired minimalist aesthetic
+
+### November 23, 2025 - Admin Inventory Management & Bulk Operations
+
+**Feature #2: Inventory Alerts & Low Stock Management**
+- Added `lowStockThreshold` field to Product model (default: 5 units)
+- Dashboard now displays "⚠️ Nízký sklad" (Low Stock) card showing count of products below threshold
+- Low stock card highlights in red when products need attention
+- New "Nízký sklad" filter on products page to quickly find understock items
+- Products with low stock are highlighted in red on product list
+- Each product shows warning emoji (⚠️) when stock is below threshold
+
+**Feature #6: Product Bulk Operations**
+- Added checkbox selection for products on admin products page
+- "Select All" checkbox to select/deselect all visible products at once
+- Bulk operations panel appears when products are selected, showing count
+- Bulk operations available:
+  - **💰 Hromadná cena** - Update price for multiple products at once
+  - **📁 Hromadná kategorie** - Change category for multiple products
+  - **👁️ Hromadná viditelnost** - Toggle visibility (visible/hidden) for multiple products
+  - **📦 Hromadný sklad** - Update stock levels for multiple products
+  - **⚠️ Hromadný práh** - Set low stock threshold for multiple products
+- **Kopie (Duplicate)** button on each product row:
+  - Creates exact copy of product with "(kopie)" suffix added to name
+  - New slug generated with timestamp to ensure uniqueness
+  - Duplicated products are hidden by default for safety
+  - All product details (price, images, sizes, stock) are copied
+
+**Database Schema Changes**:
+- Added `lowStockThreshold: Int @default(5)` to Product model
+- Allows per-product customization of low stock alerts
+
+**API Endpoints Created**:
+- `POST /api/admin/products/bulk` - Handles all bulk operations (price, category, visibility, stock, threshold)
+- `POST /api/admin/products/duplicate` - Duplicates a product with safety measures
+
+**Admin Dashboard Updates**:
+- Stats endpoint now includes `lowStockProducts` count
+- Low stock card appears in dashboard statistics grid

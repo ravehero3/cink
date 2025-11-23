@@ -40,6 +40,7 @@ model Product {
   videoUrl           String?
   sizes              Json
   totalStock         Int       @default(0)
+  lowStockThreshold  Int       @default(5)
   isVisible          Boolean   @default(true)
   sortOrder          Int       @default(0)
   createdAt          DateTime  @default(now())
