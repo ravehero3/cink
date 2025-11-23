@@ -523,9 +523,10 @@ export default function ProductDetailPage() {
               />
             )}
             <div
-              className="absolute left-0 right-0 bg-white border border-black z-50 mt-1 transform transition-transform duration-300 ease-in-out origin-top overflow-hidden"
+              className="absolute left-0 right-0 bg-white border border-black z-50 transform transition-transform duration-300 ease-in-out origin-top overflow-hidden"
               style={{ 
                 borderRadius: '2px',
+                top: '100%',
                 transform: isSizeDropdownOpen ? 'scaleY(1)' : 'scaleY(0)',
                 transformOrigin: 'top'
               }}
