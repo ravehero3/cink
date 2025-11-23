@@ -38,49 +38,47 @@ export default function AdminLayout({
       <div className="flex">
         {/* Sidebar */}
         <aside className="w-64 min-h-screen border-r border-black bg-white">
-          <div className="pb-8 pl-4">
-            <h2 className="text-header font-bold pt-8 pb-4">ADMIN PANEL</h2>
-            <nav className="space-y-0.5">
+          <nav className="space-y-0.5" style={{ padding: '2px 0 32px 2px' }}>
+            <h2 className="text-header font-bold mb-1">ADMIN PANEL</h2>
+            <Link
+              href="/admin"
+              className="block text-body uppercase hover:underline py-0.5"
+            >
+              Dashboard
+            </Link>
+            <Link
+              href="/admin/produkty"
+              className="block text-body uppercase hover:underline py-0.5"
+            >
+              Produkty
+            </Link>
+            <Link
+              href="/admin/objednavky"
+              className="block text-body uppercase hover:underline py-0.5"
+            >
+              Objednávky
+            </Link>
+            <Link
+              href="/admin/promo-kody"
+              className="block text-body uppercase hover:underline py-0.5"
+            >
+              Promo kódy
+            </Link>
+            <Link
+              href="/admin/newsletter"
+              className="block text-body uppercase hover:underline py-0.5"
+            >
+              Newsletter
+            </Link>
+            <div className="pt-2 mt-2 border-t border-black">
               <Link
-                href="/admin"
+                href="/"
                 className="block text-body uppercase hover:underline py-0.5"
               >
-                Dashboard
+                ← Zpět na e-shop
               </Link>
-              <Link
-                href="/admin/produkty"
-                className="block text-body uppercase hover:underline py-0.5"
-              >
-                Produkty
-              </Link>
-              <Link
-                href="/admin/objednavky"
-                className="block text-body uppercase hover:underline py-0.5"
-              >
-                Objednávky
-              </Link>
-              <Link
-                href="/admin/promo-kody"
-                className="block text-body uppercase hover:underline py-0.5"
-              >
-                Promo kódy
-              </Link>
-              <Link
-                href="/admin/newsletter"
-                className="block text-body uppercase hover:underline py-0.5"
-              >
-                Newsletter
-              </Link>
-              <div className="pt-2 mt-2 border-t border-black text-center">
-                <Link
-                  href="/"
-                  className="block text-body uppercase hover:underline py-0.5"
-                >
-                  ← Zpět na e-shop
-                </Link>
-              </div>
-            </nav>
-          </div>
+            </div>
+          </nav>
         </aside>
 
         {/* Main content */}
