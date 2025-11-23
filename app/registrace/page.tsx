@@ -58,7 +58,9 @@ export default function RegisterPage() {
 
       router.push('/prihlaseni?registered=true');
     } catch (err) {
-      setError('Došlo k chybě. Zkuste to prosím znovu.');
+      const errorMsg = err instanceof Error ? err.message : 'Neznámá chyba';
+      console.error('Registration catch error:', err);
+      setError('Chyba: ' + errorMsg);
       setLoading(false);
     }
   };
