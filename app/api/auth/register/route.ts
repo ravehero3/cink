@@ -50,9 +50,11 @@ export async function POST(request: Request) {
       { status: 201 }
     );
   } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Neznámá chyba';
     console.error('Registration error:', error);
+    console.error('Error message:', errorMessage);
     return NextResponse.json(
-      { error: 'Došlo k chybě při registraci' },
+      { error: 'Došlo k chybě při registraci: ' + errorMessage },
       { status: 500 }
     );
   }
