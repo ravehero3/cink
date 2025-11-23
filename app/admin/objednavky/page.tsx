@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface Order {
   id: string;
@@ -18,6 +19,8 @@ interface Order {
 const STATUS_OPTIONS = ['PENDING', 'PAID', 'PROCESSING', 'SHIPPED', 'COMPLETED', 'CANCELLED'];
 const PAYMENT_STATUS_OPTIONS = ['PENDING', 'PAID', 'FAILED', 'REFUNDED'];
 
+const TIME_PERIODS = ['Dnes', '24 hodin', 'Týden', 'Měsíc', 'Rok'];
+
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,10 +30,16 @@ export default function AdminOrdersPage() {
   const [statusModalOpen, setStatusModalOpen] = useState(false);
   const [selectedOrderForStatus, setSelectedOrderForStatus] = useState<Order | null>(null);
   const [newStatus, setNewStatus] = useState<string>('');
+  const [selectedPeriod, setSelectedPeriod] = useState('Měsíc');
+  const [chartData, setChartData] = useState<any[]>([]);
 
   useEffect(() => {
     fetchOrders();
   }, []);
+
+  useEffect(() => {
+    setChartData(generateChartData());
+  }, [orders, selectedPeriod]);
 
   const fetchOrders = async () => {
     try {
@@ -94,6 +103,138 @@ export default function AdminOrdersPage() {
     }
   };
 
+  const calculateStatsForPeriod = (period: string) => {
+    const now = new Date();
+    let startDate = new Date();
+
+    if (period === 'Dnes') {
+      startDate.setHours(0, 0, 0, 0);
+    } else if (period === '24 hodin') {
+      startDate.setDate(now.getDate() - 1);
+    } else if (period === 'Týden') {
+      startDate.setDate(now.getDate() - 7);
+    } else if (period === 'Měsíc') {
+      startDate.setMonth(now.getMonth() - 1);
+    } else if (period === 'Rok') {
+      startDate.setFullYear(now.getFullYear() - 1);
+    }
+
+    const periodOrders = orders.filter((order) => new Date(order.createdAt) >= startDate);
+    const revenue = periodOrders.reduce((sum, order) => sum + Number(order.totalPrice), 0);
+
+    return {
+      revenue: revenue.toFixed(2),
+      orders: periodOrders.length.toString(),
+    };
+  };
+
+  const generateChartData = () => {
+    const now = new Date();
+    let dataPoints: Array<{ label: string; revenue: number; orders: number }> = [];
+
+    if (selectedPeriod === 'Dnes') {
+      // Group by hour
+      for (let i = 0; i < 24; i++) {
+        const hourStart = new Date(now);
+        hourStart.setHours(i, 0, 0, 0);
+        const hourEnd = new Date(now);
+        hourEnd.setHours(i + 1, 0, 0, 0);
+
+        const hourOrders = orders.filter((o) => {
+          const date = new Date(o.createdAt);
+          return date >= hourStart && date < hourEnd && new Date(o.createdAt).toDateString() === now.toDateString();
+        });
+
+        dataPoints.push({
+          label: `${i}:00`,
+          revenue: hourOrders.reduce((sum, o) => sum + Number(o.totalPrice), 0),
+          orders: hourOrders.length,
+        });
+      }
+    } else if (selectedPeriod === '24 hodin') {
+      for (let i = 0; i < 24; i++) {
+        const hourStart = new Date();
+        hourStart.setHours(-i, 0, 0, 0);
+        const hourEnd = new Date();
+        hourEnd.setHours(-i + 1, 0, 0, 0);
+
+        const hourOrders = orders.filter((o) => {
+          const date = new Date(o.createdAt);
+          return date >= hourStart && date < hourEnd;
+        });
+
+        dataPoints.push({
+          label: `${i}:00`,
+          revenue: hourOrders.reduce((sum, o) => sum + Number(o.totalPrice), 0),
+          orders: hourOrders.length,
+        });
+      }
+    } else if (selectedPeriod === 'Týden') {
+      const days = ['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne'];
+      for (let i = 0; i < 7; i++) {
+        const dayStart = new Date(now);
+        dayStart.setDate(now.getDate() - i);
+        dayStart.setHours(0, 0, 0, 0);
+        const dayEnd = new Date(dayStart);
+        dayEnd.setDate(dayEnd.getDate() + 1);
+
+        const dayOrders = orders.filter((o) => {
+          const date = new Date(o.createdAt);
+          return date >= dayStart && date < dayEnd;
+        });
+
+        dataPoints.unshift({
+          label: days[dayStart.getDay()],
+          revenue: dayOrders.reduce((sum, o) => sum + Number(o.totalPrice), 0),
+          orders: dayOrders.length,
+        });
+      }
+    } else if (selectedPeriod === 'Měsíc') {
+      const daysInMonth = 30;
+      for (let i = 0; i < daysInMonth; i++) {
+        const dayStart = new Date(now);
+        dayStart.setDate(now.getDate() - i);
+        dayStart.setHours(0, 0, 0, 0);
+        const dayEnd = new Date(dayStart);
+        dayEnd.setDate(dayEnd.getDate() + 1);
+
+        const dayOrders = orders.filter((o) => {
+          const date = new Date(o.createdAt);
+          return date >= dayStart && date < dayEnd;
+        });
+
+        dataPoints.unshift({
+          label: dayStart.getDate().toString(),
+          revenue: dayOrders.reduce((sum, o) => sum + Number(o.totalPrice), 0),
+          orders: dayOrders.length,
+        });
+      }
+    } else if (selectedPeriod === 'Rok') {
+      const months = ['Led', 'Úno', 'Bře', 'Dub', 'Kvě', 'Čer', 'Čer', 'Srp', 'Zář', 'Říj', 'Lis', 'Pro'];
+      for (let i = 0; i < 12; i++) {
+        const monthStart = new Date(now);
+        monthStart.setMonth(now.getMonth() - i);
+        monthStart.setDate(1);
+        monthStart.setHours(0, 0, 0, 0);
+        const monthEnd = new Date(monthStart);
+        monthEnd.setMonth(monthEnd.getMonth() + 1);
+
+        const monthOrders = orders.filter((o) => {
+          const date = new Date(o.createdAt);
+          return date >= monthStart && date < monthEnd;
+        });
+
+        dataPoints.unshift({
+          label: months[monthStart.getMonth()],
+          revenue: monthOrders.reduce((sum, o) => sum + Number(o.totalPrice), 0),
+          orders: monthOrders.length,
+        });
+      }
+    }
+
+    return dataPoints;
+  };
+
   const filteredOrders = orders.filter((order) => {
     if (statusFilter !== 'all' && order.status !== statusFilter) return false;
     if (paymentFilter !== 'all' && order.paymentStatus !== paymentFilter) return false;
@@ -107,6 +248,66 @@ export default function AdminOrdersPage() {
   return (
     <div>
       <h1 className="text-title font-bold mb-8">OBJEDNÁVKY</h1>
+
+      {/* Stats by Period */}
+      <div className="border border-black mb-8 overflow-hidden">
+        <div className="grid grid-cols-5 gap-0 bg-black">
+          {TIME_PERIODS.map((period) => {
+            const stats = calculateStatsForPeriod(period);
+            const isSelected = selectedPeriod === period;
+            return (
+              <button
+                key={period}
+                onClick={() => setSelectedPeriod(period)}
+                className={`p-6 text-center cursor-pointer transition-colors ${
+                  isSelected ? 'bg-gray-200' : 'bg-white'
+                } hover:bg-gray-100 border-r border-black last:border-r-0`}
+              >
+                <div className="text-small uppercase mb-3 text-gray-600">{period}</div>
+                <div className="text-title font-bold mb-2">{stats.revenue} Kč</div>
+                <div className="text-body text-gray-600">{stats.orders} objednávek</div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Chart */}
+      <div className="border border-black p-6 mb-8">
+        <div className="text-small uppercase text-gray-600 mb-6">Graf tržeb - {selectedPeriod}</div>
+        <div style={{ height: '300px' }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={chartData}>
+              <CartesianGrid strokeDasharray="0" stroke="#000" strokeWidth={0.5} />
+              <XAxis
+                dataKey="label"
+                stroke="#000"
+                style={{ fontSize: '11px', fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}
+              />
+              <YAxis
+                stroke="#000"
+                style={{ fontSize: '11px', fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}
+              />
+              <Tooltip
+                contentStyle={{
+                  border: '1px solid black',
+                  background: 'white',
+                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '12px',
+                }}
+              />
+              <Line
+                type="monotone"
+                dataKey="revenue"
+                stroke="#000"
+                strokeWidth={2}
+                dot={{ fill: '#000', r: 3 }}
+                name="Tržby (Kč)"
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
 
       {/* Filters */}
       <div className="mb-6 space-y-4">

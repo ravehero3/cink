@@ -1,0 +1,207 @@
+import React, { useState } from 'react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+
+const OrderDashboardV2 = () => {
+  const [selectedPeriod, setSelectedPeriod] = useState('Měsíc');
+
+  const timeFrames = [
+    { label: 'Dnes', revenue: '0 Kč', orders: '0 objednávek' },
+    { label: '24 hodin', revenue: '0 Kč', orders: '0 objednávek' },
+    { label: 'Týden', revenue: '0 Kč', orders: '0 objednávek' },
+    { label: 'Měsíc', revenue: '1 628 Kč', orders: '2 objednávky' },
+    { label: 'Rok', revenue: '59 147 Kč', orders: '61 objednávek' }
+  ];
+
+  const metrics = [
+    { 
+      label: 'Prodej', 
+      value: '0 Kč', 
+      change: '+0%',
+      absolute: '(0 Kč)' 
+    },
+    { 
+      label: 'Objednávky', 
+      value: '0', 
+      change: '+0%',
+      absolute: '(0)' 
+    },
+    { 
+      label: 'Marže', 
+      value: '0 Kč', 
+      change: '+0%',
+      absolute: '(0 Kč)' 
+    }
+  ];
+
+  const generateChartData = (period) => {
+    const dataPoints = {
+      'Dnes': 24,
+      '24 hodin': 24,
+      'Týden': 7,
+      'Měsíc': 30,
+      'Rok': 12
+    };
+
+    const labels = {
+      'Dnes': Array.from({length: 24}, (_, i) => `${i}:00`),
+      '24 hodin': Array.from({length: 24}, (_, i) => `${i}:00`),
+      'Týden': ['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne'],
+      'Měsíc': Array.from({length: 30}, (_, i) => `${i + 1}`),
+      'Rok': ['Led', 'Úno', 'Bře', 'Dub', 'Kvě', 'Čer', 'Čer', 'Srp', 'Zář', 'Říj', 'Lis', 'Pro']
+    };
+
+    const count = dataPoints[period];
+    const periodLabels = labels[period];
+
+    return Array.from({length: count}, (_, i) => ({
+      name: periodLabels[i],
+      revenue: period === 'Měsíc' ? Math.random() * 2000 : period === 'Rok' ? Math.random() * 8000 : 0,
+      orders: period === 'Měsíc' ? Math.floor(Math.random() * 5) : period === 'Rok' ? Math.floor(Math.random() * 10) : 0
+    }));
+  };
+
+  const chartData = generateChartData(selectedPeriod);
+
+  return (
+    <div style={{ 
+      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+      background: 'white',
+      padding: '32px',
+      maxWidth: '1400px',
+      margin: '0 auto'
+    }}>
+      <div style={{ 
+        display: 'grid',
+        gridTemplateColumns: 'repeat(5, 1fr)',
+        gap: '1px',
+        background: 'black',
+        border: '1px solid black',
+        marginBottom: '32px'
+      }}>
+        {timeFrames.map((frame, idx) => (
+          <div 
+            key={idx} 
+            onClick={() => setSelectedPeriod(frame.label)}
+            style={{ 
+              background: selectedPeriod === frame.label ? '#f5f5f5' : 'white',
+              padding: '20px',
+              textAlign: 'center',
+              cursor: 'pointer',
+              transition: 'background 0.2s'
+            }}>
+            <div style={{ 
+              fontSize: '11px', 
+              color: '#666',
+              marginBottom: '12px',
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px'
+            }}>
+              {frame.label}
+            </div>
+            <div style={{ 
+              fontSize: '20px', 
+              fontWeight: selectedPeriod === frame.label ? '500' : '400',
+              marginBottom: '6px'
+            }}>
+              {frame.revenue}
+            </div>
+            <div style={{ 
+              fontSize: '12px', 
+              color: '#666'
+            }}>
+              {frame.orders}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ 
+        border: '1px solid black',
+        padding: '32px',
+        marginBottom: '32px'
+      }}>
+        <div style={{ 
+          fontSize: '11px', 
+          marginBottom: '24px',
+          color: '#666',
+          textTransform: 'uppercase',
+          letterSpacing: '0.5px'
+        }}>
+          Graf prodeje - {selectedPeriod}
+        </div>
+        <div style={{ height: '400px' }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={chartData}>
+              <CartesianGrid strokeDasharray="0" stroke="#000" strokeWidth={0.5} />
+              <XAxis 
+                dataKey="name" 
+                stroke="#000"
+                style={{ fontSize: '11px', fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}
+              />
+              <YAxis 
+                stroke="#000"
+                style={{ fontSize: '11px', fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}
+              />
+              <Tooltip 
+                contentStyle={{ 
+                  border: '1px solid black', 
+                  background: 'white',
+                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '12px'
+                }}
+              />
+              <Line 
+                type="monotone" 
+                dataKey="revenue" 
+                stroke="#000" 
+                strokeWidth={2}
+                dot={{ fill: '#000', r: 3 }}
+                name="Prodej (Kč)"
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+      
+      <div style={{ 
+        display: 'flex',
+        gap: '1px',
+        background: 'black',
+        border: '1px solid black'
+      }}>
+        {metrics.map((metric, idx) => (
+          <div key={idx} style={{ 
+            flex: 1,
+            background: 'white',
+            padding: '24px'
+          }}>
+            <div style={{ 
+              fontSize: '11px', 
+              color: '#666',
+              marginBottom: '16px',
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px'
+            }}>
+              {metric.label}
+            </div>
+            <div style={{ 
+              fontSize: '28px', 
+              fontWeight: '400',
+              marginBottom: '8px'
+            }}>
+              {metric.value}
+            </div>
+            <div style={{ 
+              fontSize: '13px', 
+              color: '#666'
+            }}>
+              {metric.change} {metric.absolute}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default OrderDashboardV2;
