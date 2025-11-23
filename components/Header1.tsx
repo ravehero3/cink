@@ -69,7 +69,7 @@ export default function Header1() {
 
           {/* Right Group: Login and Icons - stick to right edge */}
           {!isPokladna && (
-            <div className="flex items-center" style={{ gap: '12px', paddingRight: '12px' }}>
+            <div className="flex items-center" style={{ gap: '12px', paddingRight: '4px' }}>
               <div className={`flex items-center transition-opacity duration-300 ${showSearch ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ gap: '12px' }}>
                 <Link
                   href={isLoggedIn ? "/ucet" : "/prihlaseni"}
@@ -140,20 +140,20 @@ export default function Header1() {
                   onClick={() => setShowCartDrawer(true)}
                   className="relative hover:opacity-70 transition-opacity"
                   aria-label="Cart"
-                  style={{ width: '22px', height: '22px' }}
+                  style={{ width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                 >
                   {cartCount > 0 ? (
                     <div 
                       style={{
-                        width: '22px',
-                        height: '22px',
+                        width: '36px',
+                        height: '36px',
                         backgroundColor: '#6bdc66',
                         borderRadius: '4px',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                        fontSize: '12px',
+                        fontSize: '16px',
                         fontWeight: 700,
                         color: '#000000'
                       }}
