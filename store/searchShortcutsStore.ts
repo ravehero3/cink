@@ -11,8 +11,8 @@ interface SearchShortcutsState {
 
 export const useSearchShortcutsStore = create<SearchShortcutsState>((set) => ({
   shortcuts: [
-    { text: 'TRIKO' },
-    { text: 'MIKINA' },
+    { text: 'Triko' },
+    { text: 'Mikina' },
   ],
   updateShortcuts: (shortcuts) => set({ shortcuts }),
 }));

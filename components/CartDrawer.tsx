@@ -118,7 +118,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        <div className="h-full flex flex-col">
+        <div className="h-full flex flex-col border-l border-black">
           <div className="border-b border-black relative" style={{ height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#6bdc66' }}>
             <h2 
               style={{
