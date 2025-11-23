@@ -152,12 +152,12 @@ export default function Header1() {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                         fontSize: '14px',
-                        fontWeight: 700,
-                        letterSpacing: '0.03em',
-                        fontStretch: 'condensed',
-                        color: '#000000'
+                        fontWeight: 400,
+                        color: '#000000',
+                        textTransform: 'uppercase',
+                        letterSpacing: 'normal',
+                        fontFamily: 'inherit'
                       }}
                     >
                       {cartCount}
