@@ -24,6 +24,9 @@ export default function AdminOrdersPage() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [paymentFilter, setPaymentFilter] = useState('all');
   const [updatingOrderId, setUpdatingOrderId] = useState<string | null>(null);
+  const [statusModalOpen, setStatusModalOpen] = useState(false);
+  const [selectedOrderForStatus, setSelectedOrderForStatus] = useState<Order | null>(null);
+  const [newStatus, setNewStatus] = useState<string>('');
 
   useEffect(() => {
     fetchOrders();
@@ -54,10 +57,24 @@ export default function AdminOrdersPage() {
     }
   };
 
-  const updateStatus = async (orderId: string, newStatus: string) => {
-    setUpdatingOrderId(orderId);
+  const openStatusModal = (order: Order) => {
+    setSelectedOrderForStatus(order);
+    setNewStatus(order.status);
+    setStatusModalOpen(true);
+  };
+
+  const closeStatusModal = () => {
+    setStatusModalOpen(false);
+    setSelectedOrderForStatus(null);
+    setNewStatus('');
+  };
+
+  const confirmStatusChange = async () => {
+    if (!selectedOrderForStatus) return;
+
+    setUpdatingOrderId(selectedOrderForStatus.id);
     try {
-      const response = await fetch(`/api/admin/orders/${orderId}`, {
+      const response = await fetch(`/api/admin/orders/${selectedOrderForStatus.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus }),
@@ -65,6 +82,7 @@ export default function AdminOrdersPage() {
 
       if (response.ok) {
         fetchOrders();
+        closeStatusModal();
       } else {
         alert('Nepodařilo se změnit status');
       }
@@ -175,20 +193,15 @@ export default function AdminOrdersPage() {
                   </span>
                 </td>
                 <td className="p-4">
-                  <select
-                    value={order.status}
-                    onChange={(e) => updateStatus(order.id, e.target.value)}
+                  <button
+                    onClick={() => openStatusModal(order)}
                     disabled={updatingOrderId === order.id}
-                    className={`px-3 py-1 text-body uppercase border border-black bg-white cursor-pointer ${
+                    className={`px-3 py-1 text-body uppercase border border-black bg-white cursor-pointer hover:bg-black hover:text-white ${
                       updatingOrderId === order.id ? 'opacity-50 cursor-not-allowed' : ''
                     }`}
                   >
-                    {STATUS_OPTIONS.map((status) => (
-                      <option key={status} value={status}>
-                        {status}
-                      </option>
-                    ))}
-                  </select>
+                    {order.status}
+                  </button>
                 </td>
                 <td className="p-4 text-body">
                   {new Date(order.createdAt).toLocaleDateString('cs-CZ')}
@@ -216,6 +229,66 @@ export default function AdminOrdersPage() {
       <div className="mt-6 text-body">
         Zobrazeno: {filteredOrders.length} z {orders.length} objednávek
       </div>
+
+      {/* Status Change Modal Overlay */}
+      {statusModalOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={closeStatusModal}
+        />
+      )}
+
+      {/* Status Change Modal */}
+      {statusModalOpen && selectedOrderForStatus && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
+          <div className="bg-white border-2 border-black p-8 max-w-md w-full">
+            <h2 className="text-header font-bold mb-6">ZMĚNA STATUSU</h2>
+            
+            <div className="mb-6">
+              <p className="text-body mb-4">
+                <strong>Objednávka:</strong> {selectedOrderForStatus.orderNumber}
+              </p>
+              <p className="text-body mb-4">
+                <strong>Aktuální status:</strong> {selectedOrderForStatus.status}
+              </p>
+            </div>
+
+            <div className="mb-8">
+              <label className="block text-body uppercase mb-4">Nový status:</label>
+              <select
+                value={newStatus}
+                onChange={(e) => setNewStatus(e.target.value)}
+                className="w-full px-4 py-3 border-2 border-black text-body uppercase bg-white"
+              >
+                {STATUS_OPTIONS.map((status) => (
+                  <option key={status} value={status}>
+                    {status}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex gap-4">
+              <button
+                onClick={confirmStatusChange}
+                disabled={updatingOrderId === selectedOrderForStatus.id}
+                className={`flex-1 px-6 py-3 text-body uppercase border-2 border-black font-bold hover:bg-black hover:text-white transition-colors ${
+                  updatingOrderId === selectedOrderForStatus.id ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
+              >
+                {updatingOrderId === selectedOrderForStatus.id ? 'Ukládám...' : 'Potvrdit'}
+              </button>
+              <button
+                onClick={closeStatusModal}
+                disabled={updatingOrderId === selectedOrderForStatus.id}
+                className="flex-1 px-6 py-3 text-body uppercase border-2 border-black hover:bg-black hover:text-white transition-colors"
+              >
+                Zrušit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
