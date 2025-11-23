@@ -61,7 +61,7 @@ export default function Header1() {
                     style={{
                       inset: '-4px',
                       border: '1px solid #000000',
-                      borderRadius: '8px',
+                      borderRadius: '4px',
                     }}
                   />
                 </div>
