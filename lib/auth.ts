@@ -56,36 +56,48 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async signIn({ user, account, profile }) {
-      if (account?.provider === "google") {
-        const existingUser = await prisma.user.findUnique({
-          where: { email: user.email! }
-        });
-
-        if (!existingUser) {
-          await prisma.user.create({
-            data: {
-              email: user.email!,
-              name: user.name || "",
-              password: "",
-              role: "USER",
-            }
+      try {
+        if (account?.provider === "google") {
+          const existingUser = await prisma.user.findUnique({
+            where: { email: user.email! }
           });
+
+          if (!existingUser) {
+            console.log(`Creating new user from Google OAuth: ${user.email}`);
+            await prisma.user.create({
+              data: {
+                email: user.email!,
+                name: user.name || "",
+                password: "",
+                role: "USER",
+              }
+            });
+            console.log(`Successfully created user: ${user.email}`);
+          }
         }
+        return true;
+      } catch (error) {
+        console.error('Error in signIn callback:', error);
+        return false;
       }
-      return true;
     },
     async jwt({ token, user, account }) {
-      if (user) {
-        const dbUser = await prisma.user.findUnique({
-          where: { email: user.email! }
-        });
-        
-        if (dbUser) {
-          token.role = dbUser.role;
-          token.id = dbUser.id;
+      try {
+        if (user) {
+          const dbUser = await prisma.user.findUnique({
+            where: { email: user.email! }
+          });
+          
+          if (dbUser) {
+            token.role = dbUser.role;
+            token.id = dbUser.id;
+          }
         }
+        return token;
+      } catch (error) {
+        console.error('Error in jwt callback:', error);
+        return token;
       }
-      return token;
     },
     async session({ session, token }) {
       if (session.user) {
