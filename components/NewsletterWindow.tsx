@@ -111,10 +111,10 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
             <form onSubmit={handleSubmit} className="flex flex-col">
               <div style={{ marginBottom: '24px' }}>
                 <div className="flex justify-between items-center" style={{ marginBottom: '4px' }}>
-                  <label style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px', fontWeight: 400, lineHeight: '12px', letterSpacing: '0.12px' }}>
+                  <label style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px', fontWeight: 400, lineHeight: '12px', letterSpacing: '0.12px', color: emailError && touched ? 'red' : 'black' }}>
                     E-mail*
                   </label>
-                  <span style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px', fontWeight: 400, lineHeight: '12px', letterSpacing: '0.12px', color: '#6b7280' }}>*požadovaný</span>
+                  <span style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px', fontWeight: 400, lineHeight: '12px', letterSpacing: '0.12px', color: emailError && touched ? 'red' : '#6b7280' }}>*požadovaný</span>
                 </div>
                 <input
                   type="email"
@@ -142,7 +142,7 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
                     marginTop: '4px',
                     whiteSpace: 'pre-line'
                   }}>
-                    Invalid email format. Please try again, example "john.smith@email.com".{'\n\n'}Neplatný formát emailu. Zkuste to znovu, pro příklad „RaveHero3@gmail.com"
+                    Neplatný formát emailu. Zkuste to znovu, pro příklad „RaveHero3@gmail.com"
                   </p>
                 )}
               </div>
