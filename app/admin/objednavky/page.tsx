@@ -32,14 +32,18 @@ export default function AdminOrdersPage() {
   const [newStatus, setNewStatus] = useState<string>('');
   const [selectedPeriod, setSelectedPeriod] = useState('Měsíc');
   const [chartData, setChartData] = useState<any[]>([]);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     fetchOrders();
+    setMounted(true);
   }, []);
 
   useEffect(() => {
-    setChartData(generateChartData());
-  }, [orders, selectedPeriod]);
+    if (mounted) {
+      setChartData(generateChartData());
+    }
+  }, [orders, selectedPeriod, mounted]);
 
   const fetchOrders = async () => {
     try {
@@ -123,17 +127,26 @@ export default function AdminOrdersPage() {
     const revenue = periodOrders.reduce((sum, order) => sum + Number(order.totalPrice), 0);
 
     return {
-      revenue: revenue.toFixed(2),
-      orders: periodOrders.length.toString(),
+      revenue: revenue.toLocaleString('cs-CZ', { minimumFractionDigits: 0, maximumFractionDigits: 0 }),
+      orders: periodOrders.length,
     };
+  };
+
+  const getTimeFrames = () => {
+    return [
+      { label: 'Dnes', ...calculateStatsForPeriod('Dnes'), countLabel: calculateStatsForPeriod('Dnes').orders + ' objednávek' },
+      { label: '24 hodin', ...calculateStatsForPeriod('24 hodin'), countLabel: calculateStatsForPeriod('24 hodin').orders + ' objednávek' },
+      { label: 'Týden', ...calculateStatsForPeriod('Týden'), countLabel: calculateStatsForPeriod('Týden').orders + ' objednávek' },
+      { label: 'Měsíc', ...calculateStatsForPeriod('Měsíc'), countLabel: calculateStatsForPeriod('Měsíc').orders + ' objednávek' },
+      { label: 'Rok', ...calculateStatsForPeriod('Rok'), countLabel: calculateStatsForPeriod('Rok').orders + ' objednávek' }
+    ];
   };
 
   const generateChartData = () => {
     const now = new Date();
-    let dataPoints: Array<{ label: string; revenue: number; orders: number }> = [];
+    const dataPoints: Array<{ name: string; revenue: number; orders: number }> = [];
 
     if (selectedPeriod === 'Dnes') {
-      // Group by hour
       for (let i = 0; i < 24; i++) {
         const hourStart = new Date(now);
         hourStart.setHours(i, 0, 0, 0);
@@ -146,17 +159,17 @@ export default function AdminOrdersPage() {
         });
 
         dataPoints.push({
-          label: `${i}:00`,
+          name: `${i}:00`,
           revenue: hourOrders.reduce((sum, o) => sum + Number(o.totalPrice), 0),
           orders: hourOrders.length,
         });
       }
     } else if (selectedPeriod === '24 hodin') {
-      for (let i = 0; i < 24; i++) {
-        const hourStart = new Date();
-        hourStart.setHours(-i, 0, 0, 0);
-        const hourEnd = new Date();
-        hourEnd.setHours(-i + 1, 0, 0, 0);
+      for (let i = 23; i >= 0; i--) {
+        const hourStart = new Date(now);
+        hourStart.setHours(now.getHours() - i, 0, 0, 0);
+        const hourEnd = new Date(hourStart);
+        hourEnd.setHours(hourEnd.getHours() + 1);
 
         const hourOrders = orders.filter((o) => {
           const date = new Date(o.createdAt);
@@ -164,14 +177,14 @@ export default function AdminOrdersPage() {
         });
 
         dataPoints.push({
-          label: `${i}:00`,
+          name: `${i}:00`,
           revenue: hourOrders.reduce((sum, o) => sum + Number(o.totalPrice), 0),
           orders: hourOrders.length,
         });
       }
     } else if (selectedPeriod === 'Týden') {
       const days = ['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne'];
-      for (let i = 0; i < 7; i++) {
+      for (let i = 6; i >= 0; i--) {
         const dayStart = new Date(now);
         dayStart.setDate(now.getDate() - i);
         dayStart.setHours(0, 0, 0, 0);
@@ -183,15 +196,14 @@ export default function AdminOrdersPage() {
           return date >= dayStart && date < dayEnd;
         });
 
-        dataPoints.unshift({
-          label: days[dayStart.getDay()],
+        dataPoints.push({
+          name: days[dayStart.getDay()],
           revenue: dayOrders.reduce((sum, o) => sum + Number(o.totalPrice), 0),
           orders: dayOrders.length,
         });
       }
     } else if (selectedPeriod === 'Měsíc') {
-      const daysInMonth = 30;
-      for (let i = 0; i < daysInMonth; i++) {
+      for (let i = 29; i >= 0; i--) {
         const dayStart = new Date(now);
         dayStart.setDate(now.getDate() - i);
         dayStart.setHours(0, 0, 0, 0);
@@ -203,15 +215,15 @@ export default function AdminOrdersPage() {
           return date >= dayStart && date < dayEnd;
         });
 
-        dataPoints.unshift({
-          label: dayStart.getDate().toString(),
+        dataPoints.push({
+          name: dayStart.getDate().toString(),
           revenue: dayOrders.reduce((sum, o) => sum + Number(o.totalPrice), 0),
           orders: dayOrders.length,
         });
       }
     } else if (selectedPeriod === 'Rok') {
       const months = ['Led', 'Úno', 'Bře', 'Dub', 'Kvě', 'Čer', 'Čer', 'Srp', 'Zář', 'Říj', 'Lis', 'Pro'];
-      for (let i = 0; i < 12; i++) {
+      for (let i = 11; i >= 0; i--) {
         const monthStart = new Date(now);
         monthStart.setMonth(now.getMonth() - i);
         monthStart.setDate(1);
@@ -224,8 +236,8 @@ export default function AdminOrdersPage() {
           return date >= monthStart && date < monthEnd;
         });
 
-        dataPoints.unshift({
-          label: months[monthStart.getMonth()],
+        dataPoints.push({
+          name: months[monthStart.getMonth()],
           revenue: monthOrders.reduce((sum, o) => sum + Number(o.totalPrice), 0),
           orders: monthOrders.length,
         });
@@ -249,63 +261,103 @@ export default function AdminOrdersPage() {
     <div>
       <h1 className="text-title font-bold mb-8">OBJEDNÁVKY</h1>
 
-      {/* Stats by Period */}
-      <div className="border border-black mb-8 overflow-hidden">
-        <div className="grid grid-cols-5 gap-0 bg-black">
-          {TIME_PERIODS.map((period) => {
-            const stats = calculateStatsForPeriod(period);
-            const isSelected = selectedPeriod === period;
-            return (
-              <button
-                key={period}
-                onClick={() => setSelectedPeriod(period)}
-                className={`p-6 text-center cursor-pointer transition-colors ${
-                  isSelected ? 'bg-gray-200' : 'bg-white'
-                } hover:bg-gray-100 border-r border-black last:border-r-0`}
-              >
-                <div className="text-small uppercase mb-3 text-gray-600">{period}</div>
-                <div className="text-title font-bold mb-2">{stats.revenue} Kč</div>
-                <div className="text-body text-gray-600">{stats.orders} objednávek</div>
-              </button>
-            );
-          })}
+      {/* Order Dashboard */}
+      <div style={{ 
+        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+        background: 'white',
+        marginBottom: '32px'
+      }}>
+        <div style={{ 
+          display: 'grid',
+          gridTemplateColumns: 'repeat(5, 1fr)',
+          gap: '1px',
+          background: 'black',
+          border: '1px solid black',
+          marginBottom: '32px'
+        }}>
+          {getTimeFrames().map((frame, idx) => (
+            <div 
+              key={idx} 
+              onClick={() => setSelectedPeriod(frame.label)}
+              style={{ 
+                background: selectedPeriod === frame.label ? '#f5f5f5' : 'white',
+                padding: '20px',
+                textAlign: 'center',
+                cursor: 'pointer',
+                transition: 'background 0.2s'
+              }}>
+              <div style={{ 
+                fontSize: '11px', 
+                color: '#666',
+                marginBottom: '12px',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px'
+              }}>
+                {frame.label}
+              </div>
+              <div style={{ 
+                fontSize: '20px', 
+                fontWeight: selectedPeriod === frame.label ? '500' : '400',
+                marginBottom: '6px'
+              }}>
+                {frame.revenue} Kč
+              </div>
+              <div style={{ 
+                fontSize: '12px', 
+                color: '#666'
+              }}>
+                {frame.countLabel}
+              </div>
+            </div>
+          ))}
         </div>
-      </div>
 
-      {/* Chart */}
-      <div className="border border-black p-6 mb-8">
-        <div className="text-small uppercase text-gray-600 mb-6">Graf tržeb - {selectedPeriod}</div>
-        <div style={{ height: '300px' }}>
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={chartData}>
-              <CartesianGrid strokeDasharray="0" stroke="#000" strokeWidth={0.5} />
-              <XAxis
-                dataKey="label"
-                stroke="#000"
-                style={{ fontSize: '11px', fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}
-              />
-              <YAxis
-                stroke="#000"
-                style={{ fontSize: '11px', fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}
-              />
-              <Tooltip
-                contentStyle={{
-                  border: '1px solid black',
-                  background: 'white',
-                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '12px',
-                }}
-              />
-              <Line
-                type="monotone"
-                dataKey="revenue"
-                stroke="#000"
-                strokeWidth={2}
-                dot={{ fill: '#000', r: 3 }}
-                name="Tržby (Kč)"
-              />
-            </LineChart>
-          </ResponsiveContainer>
+        <div style={{ 
+          border: '1px solid black',
+          padding: '32px',
+          marginBottom: '32px'
+        }}>
+          <div style={{ 
+            fontSize: '11px', 
+            marginBottom: '24px',
+            color: '#666',
+            textTransform: 'uppercase',
+            letterSpacing: '0.5px'
+          }}>
+            Graf prodeje - {selectedPeriod}
+          </div>
+          <div style={{ height: '400px' }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={chartData}>
+                <CartesianGrid strokeDasharray="0" stroke="#000" strokeWidth={0.5} />
+                <XAxis 
+                  dataKey="name" 
+                  stroke="#000"
+                  style={{ fontSize: '11px', fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}
+                />
+                <YAxis 
+                  stroke="#000"
+                  style={{ fontSize: '11px', fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}
+                />
+                <Tooltip 
+                  contentStyle={{ 
+                    border: '1px solid black', 
+                    background: 'white',
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '12px'
+                  }}
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="revenue" 
+                  stroke="#000" 
+                  strokeWidth={2}
+                  dot={{ fill: '#000', r: 3 }}
+                  name="Prodej (Kč)"
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
 

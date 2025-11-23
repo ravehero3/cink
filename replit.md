@@ -138,6 +138,42 @@ Enhanced the checkout page with refined header behavior and typography adjustmen
 - Product detail "PŘIDAT DO KOŠÍKU" button now redirects to cart
 - All pages maintain Balenciaga-inspired minimalist aesthetic
 
+### November 23, 2025 - Order Statistics Dashboard (OrderDashboardV2)
+
+**Features**:
+- Implemented elegant minimalist dashboard at top of admin orders page (/admin/objednavky)
+- Real-time revenue and order statistics with data calculations from actual orders
+- 5 time period buttons with interactive selection:
+  - **Dnes** (Today) - Hourly breakdown (0-23 hours)
+  - **24 hodin** (24 Hours) - Hourly data
+  - **Týden** (Week) - Daily breakdown with Czech day abbreviations (Po, Út, St, Čt, Pá, So, Ne)
+  - **Měsíc** (Month) - Daily breakdown (1-30)
+  - **Rok** (Year) - Monthly breakdown with Czech month abbreviations
+- Recharts LineChart visualization with black/white minimalist design
+- Stats cards showing revenue in Kč and order count for each period
+- Selected period highlighted with light gray background (#f5f5f5)
+- Smooth transitions and hover effects (0.2s)
+
+**Design Details**:
+- Grid layout with 1px black dividers between time period cards
+- 20px padding per card, 11px font for labels, 20px font for revenue values
+- Chart height: 400px with full width responsive container
+- Helvetica Neue typography maintained throughout
+- Black grid lines and axes (strokeWidth: 0.5)
+- White tooltip background with black border
+- Black line with 2px stroke width, 3px radius black dots
+
+**Technical Implementation**:
+- Wrapped in client-side 'use client' directive for proper React hydration
+- Added `mounted` state to prevent SSR hydration mismatches with ResponsiveContainer
+- Chart data generated dynamically from orders filtered by selected time period
+- Revenue values formatted with Czech locale (cs-CZ) for number formatting
+
+**API Integration**:
+- Uses existing `/api/admin/orders` endpoint
+- Calculates statistics client-side from fetched order data
+- No new API endpoints required
+
 ### November 23, 2025 - Admin Inventory Management & Bulk Operations
 
 **Feature #2: Inventory Alerts & Low Stock Management**
