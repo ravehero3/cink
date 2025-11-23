@@ -2,7 +2,6 @@ import { create } from 'zustand';
 
 interface SearchShortcut {
   text: string;
-  link: string;
 }
 
 interface SearchShortcutsState {
@@ -12,8 +11,8 @@ interface SearchShortcutsState {
 
 export const useSearchShortcutsStore = create<SearchShortcutsState>((set) => ({
   shortcuts: [
-    { text: 'TRIKO', link: '/vyhledavani?search=triko' },
-    { text: 'MIKINA', link: '/vyhledavani?search=mikina' },
+    { text: 'TRIKO' },
+    { text: 'MIKINA' },
   ],
   updateShortcuts: (shortcuts) => set({ shortcuts }),
 }));
