@@ -24,7 +24,7 @@ function AnimatedCheckoutButton({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className="w-full bg-black text-white uppercase font-bold border border-black relative overflow-hidden disabled:opacity-50"
-      style={{ borderRadius: '4px', padding: '8px 0', height: '32px', fontSize: '12px' }}
+      style={{ borderRadius: '4px', padding: '8px 0', height: '32px', fontSize: '12px', textAlign: 'center' }}
     >
       <span
         className="block transition-all duration-300"
