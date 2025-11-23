@@ -38,9 +38,9 @@ export async function POST(request: NextRequest) {
         price: originalProduct.price,
         category: originalProduct.category,
         color: originalProduct.color,
-        images: originalProduct.images,
-        videoUrl: originalProduct.videoUrl,
-        sizes: originalProduct.sizes,
+        images: originalProduct.images as any,
+        videoUrl: originalProduct.videoUrl as any,
+        sizes: originalProduct.sizes as any,
         totalStock: originalProduct.totalStock,
         lowStockThreshold: originalProduct.lowStockThreshold,
         isVisible: false, // New products hidden by default

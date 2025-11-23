@@ -1,0 +1,88 @@
+15:52:03.747 Running build in Portland, USA (West) – pdx1
+15:52:03.747 Build machine configuration: 2 cores, 8 GB
+15:52:03.850 Cloning github.com/ravehero3/cink (Branch: main, Commit: 8605559)
+15:52:03.851 Previous build caches not available.
+15:52:04.321 Cloning completed: 471.000ms
+15:52:04.373 Found .vercelignore
+15:52:04.375 Removed 0 ignored files defined in .vercelignore
+15:52:04.719 Running "vercel build"
+15:52:05.155 Vercel CLI 48.10.5
+15:52:05.484 Running "install" command: `npm install`...
+15:52:07.906 npm warn deprecated querystring@0.2.1: The querystring API is considered Legacy. new code should use the URLSearchParams API instead.
+15:52:08.326 npm warn deprecated q@1.5.1: You or someone you depend on is using Q, the JavaScript Promise library that gave JavaScript developers strong feelings about promises. They can almost certainly migrate to the native JavaScript promise now. Thank you literally everyone for joining me in this bet against the odds. Be excellent to each other.
+15:52:08.326 npm warn deprecated
+15:52:08.326 npm warn deprecated (For a CapTP with native promises, see @endo/eventual-send and @endo/captp)
+15:52:25.283 
+15:52:25.283 > workspace@1.0.0 postinstall
+15:52:25.284 > prisma generate
+15:52:25.284 
+15:52:26.060 warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+15:52:26.060 For more information, see: https://pris.ly/prisma-config
+15:52:26.060 
+15:52:26.275 Prisma schema loaded from prisma/schema.prisma
+15:52:26.646 ┌─────────────────────────────────────────────────────────┐
+15:52:26.647 │  Update available 6.19.0 -> 7.0.0                       │
+15:52:26.648 │                                                         │
+15:52:26.648 │  This is a major update - please follow the guide at    │
+15:52:26.648 │  https://pris.ly/d/major-version-upgrade                │
+15:52:26.648 │                                                         │
+15:52:26.648 │  Run the following to update                            │
+15:52:26.649 │    npm i --save-dev prisma@latest                       │
+15:52:26.649 │    npm i @prisma/client@latest                          │
+15:52:26.649 └─────────────────────────────────────────────────────────┘
+15:52:26.649 
+15:52:26.649 ✔ Generated Prisma Client (v6.19.0) to ./node_modules/@prisma/client in 217ms
+15:52:26.650 
+15:52:26.650 Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+15:52:26.650 
+15:52:26.650 Tip: Need your database queries to be 1000x faster? Accelerate offers you that and more: https://pris.ly/tip-2-accelerate
+15:52:26.650 
+15:52:26.668 
+15:52:26.669 added 410 packages, and audited 411 packages in 21s
+15:52:26.669 
+15:52:26.669 71 packages are looking for funding
+15:52:26.669   run `npm fund` for details
+15:52:26.680 
+15:52:26.681 8 vulnerabilities (1 low, 7 high)
+15:52:26.681 
+15:52:26.681 To address issues that do not require attention, run:
+15:52:26.682   npm audit fix
+15:52:26.682 
+15:52:26.682 To address all issues possible (including breaking changes), run:
+15:52:26.682   npm audit fix --force
+15:52:26.682 
+15:52:26.682 Some issues need review, and may require choosing
+15:52:26.683 a different dependency.
+15:52:26.683 
+15:52:26.683 Run `npm audit` for details.
+15:52:26.897 Detected Next.js version: 14.2.33
+15:52:26.899 Running "npm run build"
+15:52:27.016 
+15:52:27.017 > workspace@1.0.0 build
+15:52:27.017 > next build
+15:52:27.017 
+15:52:27.584 Attention: Next.js now collects completely anonymous telemetry regarding usage.
+15:52:27.584 This information is used to shape Next.js' roadmap and prioritize features.
+15:52:27.585 You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+15:52:27.585 https://nextjs.org/telemetry
+15:52:27.585 
+15:52:27.637   ▲ Next.js 14.2.33
+15:52:27.638 
+15:52:27.681    Creating an optimized production build ...
+15:52:44.870  ✓ Compiled successfully
+15:52:44.871    Linting and checking validity of types ...
+15:52:53.854 Failed to compile.
+15:52:53.855 
+15:52:53.855 ./app/api/admin/products/duplicate/route.ts:43:9
+15:52:53.855 Type error: Type 'JsonValue' is not assignable to type 'JsonNull | InputJsonValue'.
+15:52:53.856   Type 'null' is not assignable to type 'JsonNull | InputJsonValue'.
+15:52:53.856 
+15:52:53.856 [0m [90m 41 |[39m         images[33m:[39m originalProduct[33m.[39mimages[33m,[39m[0m
+15:52:53.856 [0m [90m 42 |[39m         videoUrl[33m:[39m originalProduct[33m.[39mvideoUrl[33m,[39m[0m
+15:52:53.856 [0m[31m[1m>[22m[39m[90m 43 |[39m         sizes[33m:[39m originalProduct[33m.[39msizes[33m,[39m[0m
+15:52:53.856 [0m [90m    |[39m         [31m[1m^[22m[39m[0m
+15:52:53.857 [0m [90m 44 |[39m         totalStock[33m:[39m originalProduct[33m.[39mtotalStock[33m,[39m[0m
+15:52:53.857 [0m [90m 45 |[39m         lowStockThreshold[33m:[39m originalProduct[33m.[39mlowStockThreshold[33m,[39m[0m
+15:52:53.857 [0m [90m 46 |[39m         isVisible[33m:[39m [36mfalse[39m[33m,[39m [90m// New products hidden by default[39m[0m
+15:52:53.879 Next.js build worker exited with code: 1 and signal: null
+15:52:53.898 Error: Command "npm run build" exited with 1
