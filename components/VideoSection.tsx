@@ -217,7 +217,7 @@ function AnimatedButton({ text, link }: { text: string; link: string }) {
       onMouseLeave={() => setIsHovered(false)}
     >
       <span
-        className="block transition-all duration-300"
+        className="block transition-all duration-200"
         style={{
           transform: isHovered ? 'translateY(-150%)' : 'translateY(0)',
           opacity: isHovered ? 0 : 1,
@@ -226,7 +226,7 @@ function AnimatedButton({ text, link }: { text: string; link: string }) {
         {text}
       </span>
       <span
-        className="absolute inset-0 flex items-center justify-center transition-all duration-300"
+        className="absolute inset-0 flex items-center justify-center transition-all duration-200"
         style={{
           transform: isHovered ? 'translateY(0)' : 'translateY(150%)',
           opacity: isHovered ? 1 : 0,
