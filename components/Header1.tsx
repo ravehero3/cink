@@ -69,7 +69,7 @@ export default function Header1() {
 
           {/* Right Group: Login and Icons - stick to right edge */}
           {!isPokladna && (
-            <div className="flex items-center" style={{ gap: '12px', paddingRight: '8px' }}>
+            <div className="flex items-center" style={{ gap: '12px', paddingRight: '12px' }}>
               <div className={`flex items-center transition-opacity duration-300 ${showSearch ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ gap: '12px' }}>
                 <Link
                   href={isLoggedIn ? "/ucet" : "/prihlaseni"}
@@ -152,7 +152,7 @@ export default function Header1() {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        fontSize: '12px',
+                        fontSize: '14px',
                         fontWeight: 400,
                         color: '#000000',
                         textTransform: 'uppercase',
