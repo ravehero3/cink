@@ -12,6 +12,16 @@ Ask before making major changes to the core design system or introducing new ext
 
 ## Recent Updates
 
+### November 23, 2025 - Authentication & Vercel Deployment Fixes
+- **Enhanced Auth Error Handling**: Added try-catch blocks to NextAuth callbacks (signIn, jwt) for better error logging
+- **Environment Checker**: Created `/api/check-env` endpoint to verify production environment setup
+- **Vercel Deployment Guide**: Comprehensive guide for fixing Google OAuth and user registration on Vercel
+- **Security Improvements**: Better logging for OAuth user creation and database connection issues
+- **Fixed Issues**:
+  - Google sign-up now works correctly with proper environment variable configuration
+  - User account creation fixed with proper database setup instructions
+  - Added production deployment checklist and troubleshooting guide
+
 ### November 23, 2025 - Admin Panel Navigation Improvements
 - **Renamed "ADMIN PANEL" to "ADMIN"**: Cleaner, more concise header in sidebar
 - **Active Page Highlighting**: Currently viewed admin page is now **bold** in navigation
