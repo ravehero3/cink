@@ -13,7 +13,7 @@ function SavedItemsButton({ onClose }: { onClose: () => void }) {
 
   return (
     <Link
-      href="/ulozene"
+      href="/ulozeno"
       onClick={onClose}
       className="relative overflow-hidden bg-white text-black font-normal uppercase tracking-tight transition-all border border-black"
       style={{ borderRadius: '4px', padding: '8px 20px', fontSize: '12px' }}
