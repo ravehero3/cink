@@ -78,7 +78,7 @@ export default function Header2({ isOpen, onClose }: Header2Props) {
         }}
       >
         <div 
-          className="h-header flex items-center max-w-container mx-auto border-b border-black bg-white"
+          className="h-header flex items-center w-full border-b border-black bg-white"
           style={{
             transform: isOpen ? 'translateY(0)' : 'translateY(-44px)',
             transition: 'transform 0.4s ease-in-out'
