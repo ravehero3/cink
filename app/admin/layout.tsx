@@ -71,7 +71,7 @@ export default function AdminLayout({
               >
                 Newsletter
               </Link>
-              <div className="pt-2 mt-2 border-t border-black">
+              <div className="pt-2 mt-2 border-t border-black text-center">
                 <Link
                   href="/"
                   className="block text-body uppercase hover:underline py-0.5"
