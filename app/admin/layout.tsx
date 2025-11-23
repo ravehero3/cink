@@ -37,8 +37,8 @@ export default function AdminLayout({
     <div className="min-h-screen bg-white">
       <div className="flex">
         {/* Sidebar */}
-        <aside className="w-64 min-h-screen border-r border-black bg-white">
-          <nav className="space-y-0.5" style={{ padding: '2px 0 32px 2px' }}>
+        <aside className="min-h-screen border-r border-black bg-white" style={{ width: '280px' }}>
+          <nav className="space-y-0.5" style={{ padding: '8px 8px 32px 8px' }}>
             <h2 className="text-header font-bold mb-1">ADMIN PANEL</h2>
             <Link
               href="/admin"

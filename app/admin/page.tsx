@@ -21,6 +21,11 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Redirect to orders page on mount
+  useEffect(() => {
+    router.push('/admin/objednavky');
+  }, [router]);
+
   // Check if admin on mount
   useEffect(() => {
     if (status === 'unauthenticated' || (session && session.user?.role !== 'ADMIN')) {
