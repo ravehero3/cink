@@ -59,8 +59,6 @@ export default function AdminDashboard() {
 
   return (
     <div>
-      <h1 className="text-title font-bold mb-8">DASHBOARD</h1>
-
       {/* Statistics Grid */}
       <div className="grid grid-cols-3 gap-6 mb-12">
         <div className="border border-black p-6">

@@ -1,7 +1,7 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect } from 'react';
 
@@ -12,6 +12,7 @@ export default function AdminLayout({
 }) {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     if (status === 'loading') return;
@@ -39,34 +40,36 @@ export default function AdminLayout({
         {/* Sidebar */}
         <aside className="min-h-screen border-r border-black bg-white" style={{ width: '280px' }}>
           <nav className="space-y-0.5" style={{ padding: '8px 8px 32px 8px' }}>
-            <h2 className="text-header font-bold mb-1">ADMIN PANEL</h2>
-            <Link
-              href="/admin"
-              className="block text-body uppercase hover:underline py-0.5"
-            >
-              Dashboard
-            </Link>
-            <Link
-              href="/admin/produkty"
-              className="block text-body uppercase hover:underline py-0.5"
-            >
-              Produkty
-            </Link>
+            <h2 className="text-header font-bold mb-1">ADMIN</h2>
             <Link
               href="/admin/objednavky"
-              className="block text-body uppercase hover:underline py-0.5"
+              className={`block text-body uppercase hover:underline py-0.5 ${
+                pathname === '/admin/objednavky' ? 'font-bold' : ''
+              }`}
             >
               Objednávky
             </Link>
             <Link
+              href="/admin/produkty"
+              className={`block text-body uppercase hover:underline py-0.5 ${
+                pathname === '/admin/produkty' || pathname.startsWith('/admin/produkty/') ? 'font-bold' : ''
+              }`}
+            >
+              Produkty
+            </Link>
+            <Link
               href="/admin/promo-kody"
-              className="block text-body uppercase hover:underline py-0.5"
+              className={`block text-body uppercase hover:underline py-0.5 ${
+                pathname === '/admin/promo-kody' ? 'font-bold' : ''
+              }`}
             >
               Promo kódy
             </Link>
             <Link
               href="/admin/newsletter"
-              className="block text-body uppercase hover:underline py-0.5"
+              className={`block text-body uppercase hover:underline py-0.5 ${
+                pathname === '/admin/newsletter' ? 'font-bold' : ''
+              }`}
             >
               Newsletter
             </Link>

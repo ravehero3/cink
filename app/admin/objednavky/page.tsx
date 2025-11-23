@@ -287,8 +287,6 @@ export default function AdminOrdersPage() {
 
   return (
     <div>
-      <h1 className="text-title font-bold mb-8">OBJEDNÁVKY</h1>
-
       {/* Order Dashboard */}
       <div style={{ 
         fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',

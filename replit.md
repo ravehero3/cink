@@ -12,6 +12,13 @@ Ask before making major changes to the core design system or introducing new ext
 
 ## Recent Updates
 
+### November 23, 2025 - Admin Panel Navigation Improvements
+- **Renamed "ADMIN PANEL" to "ADMIN"**: Cleaner, more concise header in sidebar
+- **Active Page Highlighting**: Currently viewed admin page is now **bold** in navigation
+- **Removed Dashboard Title**: "DASHBOARD" text removed from dashboard page
+- **Removed Orders Page Title**: "OBJEDNÁVKY" header removed from orders page (graph now at top)
+- **Removed Dashboard Link**: Dashboard is no longer a separate nav item (orders auto-redirect)
+
 ### November 23, 2025 - Clickable Product Rows in Admin
 - **Clickable Rows**: Entire product row in admin table is now clickable to open UPRAVIT page
 - **Hover Effect**: Rows turn slightly grey on hover (light grey for normal products, light red for low stock)
