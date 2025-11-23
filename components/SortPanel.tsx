@@ -35,10 +35,11 @@ export default function SortPanel() {
       />
 
       <div
-        className="fixed top-0 right-0 bottom-0 bg-white border-l border-black z-50 flex flex-col animate-slide-in"
+        className={`fixed top-0 right-0 bottom-0 bg-white border-l border-black z-50 flex flex-col transform transition-transform duration-300 ease-in-out ${
+          isOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
         style={{
           width: 'calc(100vw / 3)',
-          animation: 'slideIn 0.3s ease-out',
         }}
       >
         <div className="border-b border-black relative" style={{ height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
