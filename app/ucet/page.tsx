@@ -99,7 +99,10 @@ export default function AccountPage() {
               <p className="text-body">{session.user?.email}</p>
             </div>
             <button
-              onClick={() => signOut({ callbackUrl: '/' })}
+              onClick={async () => {
+                await signOut({ redirect: false });
+                window.location.href = '/';
+              }}
               className="border border-black px-6 py-2 text-body uppercase hover:bg-black hover:text-white transition-colors"
             >
               ODHLÁSIT SE
