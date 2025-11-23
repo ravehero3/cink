@@ -31,6 +31,8 @@ function AnimatedCheckoutButton({
         style={{
           transform: isHovered ? 'translateY(-150%)' : 'translateY(0)',
           opacity: isHovered ? 0 : 1,
+          width: '100%',
+          textAlign: 'center'
         }}
       >
         {loading ? 'ZPRACOVÁNÍ...' : text}
