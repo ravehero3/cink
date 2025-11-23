@@ -9,6 +9,7 @@ interface Order {
   orderNumber: string;
   customerName: string;
   customerEmail: string;
+  customerPhone: string;
   totalPrice: number;
   status: string;
   paymentStatus: string;
@@ -397,6 +398,7 @@ export default function AdminOrdersPage() {
               <th className="text-left p-4 text-body uppercase">Číslo objednávky</th>
               <th className="text-left p-4 text-body uppercase">Zákazník</th>
               <th className="text-left p-4 text-body uppercase">Email</th>
+              <th className="text-left p-4 text-body uppercase">Telefon</th>
               <th className="text-left p-4 text-body uppercase">Adresa</th>
               <th className="text-left p-4 text-body uppercase">Cena</th>
               <th 
@@ -435,6 +437,7 @@ export default function AdminOrdersPage() {
                 <td className="p-4 text-body font-bold">{order.orderNumber}</td>
                 <td className="p-4 text-body">{order.customerName}</td>
                 <td className="p-4 text-body">{order.customerEmail}</td>
+                <td className="p-4 text-body">{order.customerPhone}</td>
                 <td className="p-4 text-body text-small">
                   {order.zasilkovnaName ? order.zasilkovnaName : '—'}
                 </td>
