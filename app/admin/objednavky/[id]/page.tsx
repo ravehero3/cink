@@ -38,12 +38,35 @@ const STATUS_OPTIONS = ['PENDING', 'PAID', 'PROCESSING', 'SHIPPED', 'COMPLETED',
 export default function OrderDetailPage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [order, setOrder] = useState<Order | null>(null);
+  const [allOrders, setAllOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [trackingNumber, setTrackingNumber] = useState('');
+  const [nextOrderId, setNextOrderId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchOrder();
+    fetchAllOrders();
   }, [params.id]);
+
+  const fetchAllOrders = async () => {
+    try {
+      const response = await fetch('/api/admin/orders');
+      if (response.ok) {
+        const data = await response.json();
+        setAllOrders(data);
+        
+        // Find next order
+        const currentIndex = data.findIndex((o: Order) => o.id === params.id);
+        if (currentIndex !== -1 && currentIndex < data.length - 1) {
+          setNextOrderId(data[currentIndex + 1].id);
+        } else {
+          setNextOrderId(null);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to fetch all orders:', error);
+    }
+  };
 
   const fetchOrder = async () => {
     try {
@@ -143,12 +166,22 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
     <div>
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-title font-bold">OBJEDNÁVKA #{order.orderNumber}</h1>
-        <button
-          onClick={() => router.back()}
-          className="px-6 py-2 text-body uppercase border border-black hover:bg-black hover:text-white"
-        >
-          ← Zpět
-        </button>
+        <div className="flex gap-4">
+          {nextOrderId && (
+            <button
+              onClick={() => router.push(`/admin/objednavky/${nextOrderId}`)}
+              className="px-6 py-2 text-body uppercase border border-black hover:bg-black hover:text-white"
+            >
+              Další Objednávka →
+            </button>
+          )}
+          <button
+            onClick={() => router.back()}
+            className="px-6 py-2 text-body uppercase border border-black hover:bg-black hover:text-white"
+          >
+            ← Zpět
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-8">
