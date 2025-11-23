@@ -27,6 +27,7 @@ export default function Header1() {
   const isLoggedIn = !!session;
   const [showCartDrawer, setShowCartDrawer] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const [isCartBadgeHovered, setIsCartBadgeHovered] = useState(false);
 
   return (
     <>
@@ -138,9 +139,11 @@ export default function Header1() {
 
                 <button 
                   onClick={() => setShowCartDrawer(true)}
-                  className="relative hover:opacity-70 transition-opacity"
+                  className="relative transition-opacity"
                   aria-label="Cart"
                   style={{ width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  onMouseEnter={() => setIsCartBadgeHovered(true)}
+                  onMouseLeave={() => setIsCartBadgeHovered(false)}
                 >
                   {cartCount > 0 ? (
                     <div 
@@ -157,7 +160,8 @@ export default function Header1() {
                         color: '#000000',
                         textTransform: 'uppercase',
                         letterSpacing: 'normal',
-                        fontFamily: 'inherit'
+                        fontFamily: 'inherit',
+                        border: isCartBadgeHovered ? '1px solid #000000' : 'none'
                       }}
                     >
                       {cartCount}
