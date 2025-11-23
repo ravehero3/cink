@@ -193,7 +193,7 @@ export default function CheckoutPage() {
           <div className="lg:col-span-2 h-full flex flex-col">
             <form onSubmit={handleSubmit} className="border-l border-black p-8 flex flex-col h-full">
               <h2 
-                className="font-bold mb-4 uppercase"
+                className="font-bold mb-4"
                 style={{
                   fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontSize: '14px',
@@ -201,7 +201,7 @@ export default function CheckoutPage() {
                   lineHeight: '16.1px'
                 }}
               >
-                KONTAKTNÍ ÚDAJE
+                Kontaktní údaje
               </h2>
 
               <div className="mb-1">
@@ -283,7 +283,7 @@ export default function CheckoutPage() {
               </div>
 
               <h2 
-                className="font-bold mb-4 uppercase pt-4"
+                className="font-bold mb-4 pt-4"
                 style={{
                   fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontSize: '14px',
@@ -291,7 +291,7 @@ export default function CheckoutPage() {
                   lineHeight: '16.1px'
                 }}
               >
-                DOPRAVA
+                Doprava
               </h2>
 
               <div className="mb-4">
@@ -318,7 +318,7 @@ export default function CheckoutPage() {
                     className="w-full border border-black bg-white text-black px-4 py-2 text-body uppercase hover:bg-gray-100 transition-colors"
                     style={{ borderRadius: '4px', marginTop: '4px', borderWidth: '1px' }}
                   >
-                    {formData.zasilkovnaName ? `Změnit: ${formData.zasilkovnaName}` : 'VYBRAT VÝDEJNÍ MÍSTO'}
+                    {formData.zasilkovnaName ? `Změnit: ${formData.zasilkovnaName}` : 'Vybrat výdejní místo'}
                   </button>
                 )}
               </div>
@@ -405,7 +405,7 @@ export default function CheckoutPage() {
                     className="border border-black px-4 py-1 text-body uppercase hover:bg-black hover:text-white transition-colors"
                     style={{ borderRadius: '4px' }}
                   >
-                    POUŽÍT
+                    Použít
                   </button>
                 </div>
                 {promoError && <p className="text-body mt-2 text-black">{promoError}</p>}
@@ -428,7 +428,7 @@ export default function CheckoutPage() {
                 )}
                 <div className="pt-4">
                   <div className="flex justify-between font-bold" style={{ fontSize: '14px' }}>
-                    <span>CELKEM</span>
+                    <span>Celkem</span>
                     <span>{total} Kč</span>
                   </div>
                 </div>
