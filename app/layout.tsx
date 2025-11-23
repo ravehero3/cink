@@ -14,6 +14,7 @@ export default function RootLayout({
 }) {
   const pathname = usePathname();
   const isPokladna = pathname === '/pokladna';
+  const isAdmin = pathname.startsWith('/admin');
 
   return (
     <html lang="cs">
@@ -21,7 +22,7 @@ export default function RootLayout({
         <SessionProvider>
           <Header1 />
           <main className="flex-1">{children}</main>
-          {!isPokladna && <Footer />}
+          {!isPokladna && !isAdmin && <Footer />}
         </SessionProvider>
       </body>
     </html>

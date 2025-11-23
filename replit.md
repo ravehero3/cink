@@ -10,6 +10,14 @@ Please ensure all UI/UX changes strictly adhere to the defined black/white/neon 
 I prefer detailed explanations of complex architectural decisions.
 Ask before making major changes to the core design system or introducing new external dependencies.
 
+## Recent Updates
+
+### November 23, 2025 - Admin Footer Hidden
+- Footer is now hidden on all admin panel pages (`/admin/*`)
+- Improves admin focus and clean interface
+- Follows existing pattern (footer already hidden on `/pokladna`)
+- Implemented in root layout with pathname check
+
 ## System Architecture
 
 ### UI/UX Decisions
