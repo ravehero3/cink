@@ -140,21 +140,23 @@ export default function Header1() {
                   onClick={() => setShowCartDrawer(true)}
                   className="relative hover:opacity-70 transition-opacity"
                   aria-label="Cart"
-                  style={{ width: '38px', height: '38px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  style={{ width: '30px', height: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                 >
                   {cartCount > 0 ? (
                     <div 
                       style={{
-                        width: '38px',
-                        height: '38px',
+                        width: '30px',
+                        height: '30px',
                         backgroundColor: '#6bdc66',
                         borderRadius: '4px',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                        fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                         fontSize: '14px',
                         fontWeight: 700,
+                        letterSpacing: '0.03em',
+                        fontStretch: 'condensed',
                         color: '#000000'
                       }}
                     >
