@@ -12,6 +12,16 @@ Ask before making major changes to the core design system or introducing new ext
 
 ## Recent Updates
 
+### November 23, 2025 - Product Edit Page Enhancements
+- **Media Library Integration**: Admins can now upload/select images from internal database instead of URL-only input
+- **Image Previews**: Added thumbnail previews (130px height) for each uploaded image
+- **Short Description Field**: Added missing `shortDescription` field to product edit form for list summaries
+- **UI Improvements**: 
+  - Media picker modal displays uploaded images in 4-column grid
+  - "Vybrat z knihovny" (Select from Library) button for each image
+  - Image preview shows below URL input for visual feedback
+- **API Updates**: Both POST and PATCH endpoints now handle `shortDescription`
+
 ### November 23, 2025 - Admin Footer Hidden
 - Footer is now hidden on all admin panel pages (`/admin/*`)
 - Improves admin focus and clean interface

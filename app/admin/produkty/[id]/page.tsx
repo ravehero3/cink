@@ -6,6 +6,12 @@ import { useRouter } from 'next/navigation';
 const CATEGORIES = ['voodoo808', 'space-love', 'recreation-wellness', 't-shirt-gallery'];
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
+interface Media {
+  id: string;
+  url: string;
+  originalName: string;
+}
+
 export default function EditProductPage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -13,6 +19,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
   const [formData, setFormData] = useState({
     name: '',
     description: '',
+    shortDescription: '',
     price: '',
     category: CATEGORIES[0],
     color: '',
@@ -23,6 +30,10 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
   const [sizes, setSizes] = useState<Record<string, number>>(
     SIZES.reduce((acc, size) => ({ ...acc, [size]: 0 }), {})
   );
+  const [mediaOpen, setMediaOpen] = useState(false);
+  const [mediaList, setMediaList] = useState<Media[]>([]);
+  const [mediaLoading, setMediaLoading] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
 
   useEffect(() => {
     fetchProduct();
@@ -36,6 +47,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
         setFormData({
           name: product.name,
           description: product.description,
+          shortDescription: product.shortDescription || '',
           price: product.price.toString(),
           category: product.category,
           color: product.color || '',
@@ -56,6 +68,30 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
     }
   };
 
+  const fetchMedia = async () => {
+    try {
+      setMediaLoading(true);
+      const response = await fetch('/api/media?type=IMAGE');
+      const data = await response.json();
+      setMediaList(data.media || []);
+    } catch (error) {
+      console.error('Failed to fetch media:', error);
+      alert('Chyba při načítání médií');
+    } finally {
+      setMediaLoading(false);
+    }
+  };
+
+  const handleSelectMedia = (media: Media) => {
+    if (selectedImageIndex !== null) {
+      const newImages = [...images];
+      newImages[selectedImageIndex] = media.url;
+      setImages(newImages);
+      setMediaOpen(false);
+      setSelectedImageIndex(null);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
@@ -69,6 +105,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
           price: parseFloat(formData.price),
           images: images.filter((img) => img.trim() !== ''),
           sizes,
+          shortDescription: formData.shortDescription,
         }),
       });
 
@@ -124,6 +161,17 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               className="w-full border border-black p-3 text-body"
+            />
+          </div>
+
+          <div>
+            <label className="block text-body uppercase mb-2">Krátký popis</label>
+            <textarea
+              rows={2}
+              value={formData.shortDescription}
+              onChange={(e) => setFormData({ ...formData, shortDescription: e.target.value })}
+              className="w-full border border-black p-3 text-body"
+              placeholder="Stručný popis pro seznamy produktů"
             />
           </div>
 
@@ -193,24 +241,49 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
         {/* Images */}
         <div className="mb-8">
           <label className="block text-body uppercase mb-2">Obrázky</label>
-          <div className="space-y-3">
+          <div className="space-y-4">
             {images.map((image, index) => (
-              <div key={index} className="flex gap-2">
-                <input
-                  type="url"
-                  value={image}
-                  onChange={(e) => updateImage(index, e.target.value)}
-                  className="flex-1 border border-black p-3 text-body"
-                  placeholder="URL obrázku"
-                />
-                {images.length > 1 && (
+              <div key={index} className="border border-black p-4">
+                <div className="flex gap-2 mb-3">
+                  <input
+                    type="url"
+                    value={image}
+                    onChange={(e) => updateImage(index, e.target.value)}
+                    className="flex-1 border border-black p-3 text-body"
+                    placeholder="URL obrázku"
+                  />
                   <button
                     type="button"
-                    onClick={() => removeImage(index)}
-                    className="px-4 py-2 border border-black text-body uppercase hover:bg-black hover:text-white"
+                    onClick={() => {
+                      setSelectedImageIndex(index);
+                      fetchMedia();
+                      setMediaOpen(true);
+                    }}
+                    className="px-4 py-2 border border-black text-body uppercase hover:bg-black hover:text-white whitespace-nowrap"
                   >
-                    Odebrat
+                    Vybrat z knihovny
                   </button>
+                  {images.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeImage(index)}
+                      className="px-4 py-2 border border-black text-body uppercase hover:bg-black hover:text-white whitespace-nowrap"
+                    >
+                      Odebrat
+                    </button>
+                  )}
+                </div>
+                {image && (
+                  <div className="relative w-full h-32 bg-gray-100 border border-black overflow-hidden">
+                    <img
+                      src={image}
+                      alt={`Náhled ${index + 1}`}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.display = 'none';
+                      }}
+                    />
+                  </div>
                 )}
               </div>
             ))}
@@ -222,9 +295,6 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
               + Přidat obrázek
             </button>
           </div>
-          <p className="text-body mt-2 border-t border-black pt-2">
-            Tip: Nahrajte obrázky na Cloudinary a vložte zde URL
-          </p>
         </div>
 
         {/* Sizes and Stock */}
@@ -281,6 +351,49 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
           </button>
         </div>
       </form>
+
+      {/* Media Picker Modal */}
+      {mediaOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white border-2 border-black p-6 max-w-2xl w-full max-h-96 flex flex-col">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-header font-bold uppercase">Vybrat obrázek z knihovny</h2>
+              <button
+                onClick={() => {
+                  setMediaOpen(false);
+                  setSelectedImageIndex(null);
+                }}
+                className="text-2xl font-bold"
+              >
+                ×
+              </button>
+            </div>
+            
+            {mediaLoading ? (
+              <div className="text-body">Načítání obrázků...</div>
+            ) : mediaList.length === 0 ? (
+              <div className="text-body">Žádné obrázky v knihovně. Nahrajte si nejdříve obrázky v sekci Média.</div>
+            ) : (
+              <div className="grid grid-cols-4 gap-3 overflow-y-auto flex-1">
+                {mediaList.map((media) => (
+                  <button
+                    key={media.id}
+                    onClick={() => handleSelectMedia(media)}
+                    className="border-2 border-black p-2 hover:bg-black hover:opacity-80 transition-all"
+                  >
+                    <img
+                      src={media.url}
+                      alt={media.originalName}
+                      className="w-full h-20 object-cover"
+                    />
+                    <p className="text-xs text-center mt-1 truncate">{media.originalName}</p>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
