@@ -13,6 +13,20 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [emailError, setEmailError] = useState(false);
+  const [touched, setTouched] = useState(false);
+
+  const validateEmail = (value: string) => {
+    if (!value) return false;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(value);
+  };
+
+  const handleBlur = () => {
+    setTouched(true);
+    if (email && !validateEmail(email)) {
+      setEmailError(true);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -109,13 +123,15 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
                     setEmail(e.target.value);
                     setEmailError(false);
                   }}
+                  onBlur={handleBlur}
                   required
                   className="w-full px-3 py-2"
                   style={{ 
                     fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', 
                     fontSize: '12px', 
                     borderRadius: '4px',
-                    border: emailError ? '1px solid red' : '1px solid black'
+                    border: emailError && touched ? '1px solid red' : '1px solid black',
+                    color: emailError && touched ? 'red' : 'black'
                   }}
                 />
                 {emailError && (
