@@ -126,7 +126,7 @@ export default function CheckoutShippingPage() {
       <div className="flex-[2] border-r border-black p-12 flex flex-col justify-center overflow-y-auto">
         <div className="mb-12">
           <h1 
-            className="mb-2"
+            className="uppercase mb-2"
             style={{
               fontFamily: '"Helvetica Neue Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif',
               fontSize: '24px',
@@ -134,7 +134,7 @@ export default function CheckoutShippingPage() {
               letterSpacing: '1px'
             }}
           >
-            Doprava
+            DOPRAVA
           </h1>
           <p
             style={{
