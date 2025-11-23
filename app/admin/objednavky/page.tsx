@@ -400,7 +400,7 @@ export default function AdminOrdersPage() {
               <th className="text-left p-4 text-body uppercase">Adresa</th>
               <th className="text-left p-4 text-body uppercase">Cena</th>
               <th 
-                className="text-left p-4 text-body uppercase cursor-pointer hover:bg-gray-100 transition-colors group relative"
+                className="text-left p-4 text-body uppercase cursor-pointer hover:bg-gray-100 transition-colors group relative whitespace-nowrap"
                 onClick={() => handleSort('paymentStatus')}
               >
                 Status platby
@@ -409,7 +409,7 @@ export default function AdminOrdersPage() {
                 </span>
               </th>
               <th 
-                className="text-left p-4 text-body uppercase cursor-pointer hover:bg-gray-100 transition-colors group relative"
+                className="text-left p-4 text-body uppercase cursor-pointer hover:bg-gray-100 transition-colors group relative whitespace-nowrap"
                 onClick={() => handleSort('status')}
               >
                 Status objednávky
@@ -418,7 +418,7 @@ export default function AdminOrdersPage() {
                 </span>
               </th>
               <th 
-                className="text-left p-4 text-body uppercase cursor-pointer hover:bg-gray-100 transition-colors group relative"
+                className="text-left p-4 text-body uppercase cursor-pointer hover:bg-gray-100 transition-colors group relative whitespace-nowrap"
                 onClick={() => handleSort('createdAt')}
               >
                 Datum
