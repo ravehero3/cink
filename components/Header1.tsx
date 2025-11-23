@@ -37,17 +37,34 @@ export default function Header1() {
           {!isPokladna && (
             <nav className={`flex items-center transition-opacity duration-300 ${showSearch ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ gap: '20px', paddingLeft: '12px' }}>
               {categories.map((category, index) => (
-                <Link
+                <div
                   key={category.slug}
-                  href={`/kategorie/${category.slug}`}
-                  className="hover:opacity-70 transition-opacity whitespace-nowrap uppercase tracking-tight font-normal text-sm"
                   style={{
-                    color: 'rgb(0, 0, 0)',
-                    textDecoration: 'none'
+                    position: 'relative',
                   }}
+                  className="group"
                 >
-                  {category.name}
-                </Link>
+                  <Link
+                    href={`/kategorie/${category.slug}`}
+                    className="whitespace-nowrap uppercase tracking-tight font-normal text-sm"
+                    style={{
+                      color: 'rgb(0, 0, 0)',
+                      textDecoration: 'none',
+                      display: 'block',
+                      padding: '0 8px'
+                    }}
+                  >
+                    {category.name}
+                  </Link>
+                  <div
+                    className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                    style={{
+                      inset: '-8px',
+                      border: '1px solid #000000',
+                      borderRadius: '8px',
+                    }}
+                  />
+                </div>
               ))}
             </nav>
           )}
