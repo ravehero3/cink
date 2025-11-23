@@ -12,6 +12,13 @@ Ask before making major changes to the core design system or introducing new ext
 
 ## Recent Updates
 
+### November 23, 2025 - Clickable Product Rows in Admin
+- **Clickable Rows**: Entire product row in admin table is now clickable to open UPRAVIT page
+- **Hover Effect**: Rows turn slightly grey on hover (light grey for normal products, light red for low stock)
+- **Smart Click Handling**: Checkbox and action buttons (Kopie, Smazat) don't trigger navigation with stopPropagation
+- **Removed "Upravit" Button**: No longer needed since entire row is clickable
+- **Cursor Feedback**: Cursor changes to pointer to indicate clickability
+
 ### November 23, 2025 - Product Edit Page Enhancements
 - **Media Library Integration**: Admins can now upload/select images from internal database instead of URL-only input
 - **Image Previews**: Added thumbnail previews (130px height) for each uploaded image

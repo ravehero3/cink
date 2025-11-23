@@ -364,11 +364,12 @@ export default function AdminProductsPage() {
               return (
                 <tr
                   key={product.id}
-                  className={`border-b border-black last:border-b-0 ${
-                    isLowStock ? 'bg-red-50' : ''
+                  onClick={() => router.push(`/admin/produkty/${product.id}`)}
+                  className={`border-b border-black last:border-b-0 cursor-pointer transition-colors ${
+                    isLowStock ? 'bg-red-50 hover:bg-red-100' : 'hover:bg-gray-200'
                   }`}
                 >
-                  <td className="p-4">
+                  <td className="p-4" onClick={(e) => e.stopPropagation()}>
                     <input
                       type="checkbox"
                       checked={selectedProducts.has(product.id)}
@@ -400,14 +401,8 @@ export default function AdminProductsPage() {
                       {product.isVisible ? 'Viditelný' : 'Skrytý'}
                     </button>
                   </td>
-                  <td className="p-4">
+                  <td className="p-4" onClick={(e) => e.stopPropagation()}>
                     <div className="flex gap-2 flex-wrap">
-                      <Link
-                        href={`/admin/produkty/${product.id}`}
-                        className="px-3 py-1 text-body uppercase border border-black hover:bg-black hover:text-white text-sm"
-                      >
-                        Upravit
-                      </Link>
                       <button
                         onClick={() => handleDuplicate(product.id)}
                         className="px-3 py-1 text-body uppercase border border-black hover:bg-blue-600 hover:text-white text-sm"
