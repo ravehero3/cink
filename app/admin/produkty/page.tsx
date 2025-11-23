@@ -366,7 +366,7 @@ export default function AdminProductsPage() {
                   key={product.id}
                   onClick={() => router.push(`/admin/produkty/${product.id}`)}
                   className={`border-b border-black last:border-b-0 cursor-pointer transition-colors ${
-                    isLowStock ? 'bg-red-50 hover:bg-red-100' : 'hover:bg-gray-200'
+                    isLowStock ? 'bg-red-50 hover:bg-red-200' : 'hover:bg-gray-300'
                   }`}
                 >
                   <td className="p-4" onClick={(e) => e.stopPropagation()}>
