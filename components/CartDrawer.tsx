@@ -16,7 +16,7 @@ function SavedItemsButton({ onClose }: { onClose: () => void }) {
       href="/ulozene"
       onClick={onClose}
       className="relative overflow-hidden bg-white text-black font-normal uppercase tracking-tight transition-all border border-black"
-      style={{ borderRadius: '4px', padding: '10px 20px', fontSize: '12px' }}
+      style={{ borderRadius: '4px', padding: '8px 20px', fontSize: '12px' }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -50,7 +50,7 @@ function CheckoutButton({ total, onClose }: { total: number; onClose: () => void
       href="/pokladna"
       onClick={onClose}
       className="block w-full relative overflow-hidden bg-black text-white text-center text-xs uppercase tracking-tight font-bold"
-      style={{ borderRadius: '4px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+      style={{ borderRadius: '4px', height: '52px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

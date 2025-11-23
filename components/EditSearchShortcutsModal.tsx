@@ -72,13 +72,15 @@ export default function EditSearchShortcutsModal({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-6 py-3 border-2 border-black hover:bg-gray-100 font-bold uppercase"
+              className="flex-1 px-6 border-2 border-black hover:bg-gray-100 font-bold uppercase"
+              style={{ paddingTop: '10px', paddingBottom: '10px' }}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 px-6 py-3 bg-black text-white hover:bg-gray-800 font-bold uppercase"
+              className="flex-1 px-6 bg-black text-white hover:bg-gray-800 font-bold uppercase"
+              style={{ paddingTop: '10px', paddingBottom: '10px' }}
             >
               Save Changes
             </button>
