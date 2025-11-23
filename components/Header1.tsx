@@ -59,7 +59,7 @@ export default function Header1() {
                   <div
                     className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
                     style={{
-                      inset: '-8px',
+                      inset: '-4px',
                       border: '1px solid #000000',
                       borderRadius: '8px',
                     }}
