@@ -516,47 +516,49 @@ export default function ProductDetailPage() {
             </button>
 
             {isSizeDropdownOpen && (
-              <>
-                <div
-                  className="fixed inset-0 bg-black z-40"
-                  style={{ opacity: 0.5 }}
-                  onClick={() => setIsSizeDropdownOpen(false)}
-                />
-                <div
-                  className="absolute left-0 right-0 bg-white border border-black z-50 mt-1"
-                  style={{ borderRadius: '2px' }}
-                >
-                  {sizes.map(([size, stock]) => {
-                    const isAvailable = stock > 0;
-                    return (
-                      <button
-                        key={size}
-                        onClick={() => {
-                          if (isAvailable) {
-                            setSelectedSize(size);
-                            setQuantity(1);
-                            setIsSizeDropdownOpen(false);
-                          }
-                        }}
-                        disabled={!isAvailable}
-                        className={`w-full py-3 border-b border-black last:border-b-0 transition-colors ${
-                          isAvailable
-                            ? 'hover:bg-black hover:text-white'
-                            : 'text-gray-400 cursor-not-allowed'
-                        }`}
-                        style={{
-                          fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                          fontSize: '13px',
-                          fontWeight: 400
-                        }}
-                      >
-                        {size}{!isAvailable && ' (Vyprodáno)'}
-                      </button>
-                    );
-                  })}
-                </div>
-              </>
+              <div
+                className="fixed inset-0 bg-black z-40 transition-opacity duration-300"
+                style={{ opacity: 0.5 }}
+                onClick={() => setIsSizeDropdownOpen(false)}
+              />
             )}
+            <div
+              className="absolute left-0 right-0 bg-white border border-black z-50 mt-1 transform transition-transform duration-300 ease-in-out origin-top overflow-hidden"
+              style={{ 
+                borderRadius: '2px',
+                transform: isSizeDropdownOpen ? 'scaleY(1)' : 'scaleY(0)',
+                transformOrigin: 'top'
+              }}
+            >
+              {sizes.map(([size, stock]) => {
+                const isAvailable = stock > 0;
+                return (
+                  <button
+                    key={size}
+                    onClick={() => {
+                      if (isAvailable) {
+                        setSelectedSize(size);
+                        setQuantity(1);
+                        setIsSizeDropdownOpen(false);
+                      }
+                    }}
+                    disabled={!isAvailable}
+                    className={`w-full py-3 border-b border-black last:border-b-0 transition-colors ${
+                      isAvailable
+                        ? 'hover:bg-black hover:text-white'
+                        : 'text-gray-400 cursor-not-allowed'
+                    }`}
+                    style={{
+                      fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontSize: '13px',
+                      fontWeight: 400
+                    }}
+                  >
+                    {size}{!isAvailable && ' (Vyprodáno)'}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           <button
