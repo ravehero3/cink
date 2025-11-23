@@ -12,6 +12,7 @@ interface Order {
   status: string;
   paymentStatus: string;
   createdAt: string;
+  zasilkovnaName: string | null;
 }
 
 const STATUS_OPTIONS = ['PENDING', 'PAID', 'PROCESSING', 'SHIPPED', 'COMPLETED', 'CANCELLED'];
@@ -22,6 +23,7 @@ export default function AdminOrdersPage() {
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState('all');
   const [paymentFilter, setPaymentFilter] = useState('all');
+  const [updatingOrderId, setUpdatingOrderId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchOrders();
@@ -49,6 +51,28 @@ export default function AdminOrdersPage() {
         return 'bg-white text-black border-2 border-black';
       default:
         return 'bg-white text-black border border-black';
+    }
+  };
+
+  const updateStatus = async (orderId: string, newStatus: string) => {
+    setUpdatingOrderId(orderId);
+    try {
+      const response = await fetch(`/api/admin/orders/${orderId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      if (response.ok) {
+        fetchOrders();
+      } else {
+        alert('Nepodařilo se změnit status');
+      }
+    } catch (error) {
+      console.error('Failed to update status:', error);
+      alert('Došlo k chybě při změně statusu');
+    } finally {
+      setUpdatingOrderId(null);
     }
   };
 
@@ -120,13 +144,14 @@ export default function AdminOrdersPage() {
       </div>
 
       {/* Orders Table */}
-      <div className="border border-black">
+      <div className="border border-black overflow-x-auto">
         <table className="w-full">
           <thead>
             <tr className="border-b border-black">
               <th className="text-left p-4 text-body uppercase">Číslo objednávky</th>
               <th className="text-left p-4 text-body uppercase">Zákazník</th>
               <th className="text-left p-4 text-body uppercase">Email</th>
+              <th className="text-left p-4 text-body uppercase">Adresa</th>
               <th className="text-left p-4 text-body uppercase">Cena</th>
               <th className="text-left p-4 text-body uppercase">Status platby</th>
               <th className="text-left p-4 text-body uppercase">Status objednávky</th>
@@ -140,6 +165,9 @@ export default function AdminOrdersPage() {
                 <td className="p-4 text-body font-bold">{order.orderNumber}</td>
                 <td className="p-4 text-body">{order.customerName}</td>
                 <td className="p-4 text-body">{order.customerEmail}</td>
+                <td className="p-4 text-body text-small">
+                  {order.zasilkovnaName ? order.zasilkovnaName : '—'}
+                </td>
                 <td className="p-4 text-body">{Number(order.totalPrice).toFixed(2)} Kč</td>
                 <td className="p-4">
                   <span className="px-3 py-1 text-body uppercase border border-black">
@@ -147,9 +175,20 @@ export default function AdminOrdersPage() {
                   </span>
                 </td>
                 <td className="p-4">
-                  <span className={`px-3 py-1 text-body uppercase ${getStatusColor(order.status)}`}>
-                    {order.status}
-                  </span>
+                  <select
+                    value={order.status}
+                    onChange={(e) => updateStatus(order.id, e.target.value)}
+                    disabled={updatingOrderId === order.id}
+                    className={`px-3 py-1 text-body uppercase border border-black bg-white cursor-pointer ${
+                      updatingOrderId === order.id ? 'opacity-50 cursor-not-allowed' : ''
+                    }`}
+                  >
+                    {STATUS_OPTIONS.map((status) => (
+                      <option key={status} value={status}>
+                        {status}
+                      </option>
+                    ))}
+                  </select>
                 </td>
                 <td className="p-4 text-body">
                   {new Date(order.createdAt).toLocaleDateString('cs-CZ')}
