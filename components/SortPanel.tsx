@@ -24,13 +24,11 @@ export default function SortPanel() {
     };
   }, [isOpen]);
 
-  if (!isOpen) return null;
-
   return (
     <>
       <div
-        className="fixed inset-0 bg-black z-40 cursor-pointer"
-        style={{ opacity: 0.5 }}
+        className="fixed inset-0 bg-black z-40 cursor-pointer transition-opacity duration-300"
+        style={{ opacity: isOpen ? 0.5 : 0, pointerEvents: isOpen ? 'auto' : 'none' }}
         onClick={close}
       />
 

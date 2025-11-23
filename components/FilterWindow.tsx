@@ -21,12 +21,12 @@ export default function FilterWindow() {
     };
   }, [isOpen]);
 
-  if (!isOpen) return null;
-
   return (
     <>
       <div
-        className="fixed inset-0 bg-white z-40 cursor-pointer"
+        className={`fixed inset-0 bg-white z-40 cursor-pointer transition-opacity duration-300 ${
+          isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
         onClick={close}
       />
 

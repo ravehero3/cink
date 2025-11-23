@@ -58,8 +58,6 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
     }
   };
 
-  if (!isOpen) return null;
-
   return (
     <>
       <div 
