@@ -90,7 +90,7 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
           <div className="flex-1 overflow-y-auto flex flex-col" style={{ paddingLeft: '8px', paddingRight: '8px' }}>
             <div style={{ display: 'flex', alignItems: 'center', paddingLeft: '0px', paddingRight: '0px' }} className="flex-1">
               <p className="text-center" style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', fontWeight: 400, lineHeight: '19.6px', letterSpacing: 'normal', marginTop: '0px', marginBottom: '0px', display: 'block', boxSizing: 'border-box' }}>
-                Přihlaste se k odběru našeho newsletteru a získejte přístup k nejnovějším kolekcím, exkluzivním nabídkám a novinkám ze světa sportu.
+                Přihlaste se k odběru našeho newsletteru a získejte přístup k nejnovějším kolekcím, exkluzivním nabídkám a novinkám ze světa Ufo Sportu.
               </p>
             </div>
 
