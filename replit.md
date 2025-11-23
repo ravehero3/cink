@@ -174,6 +174,28 @@ Enhanced the checkout page with refined header behavior and typography adjustmen
 - Calculates statistics client-side from fetched order data
 - No new API endpoints required
 
+### November 23, 2025 - Admin Orders Sorting System
+
+**Features**:
+- Removed filter panels (Status objednávky and Status platby buttons)
+- Implemented clickable column headers for sorting
+- Admin can sort orders by:
+  - **Status platby** (Payment Status)
+  - **Status objednávky** (Order Status)
+  - **Datum** (Date)
+- Downward arrow (↓) appears on hover over sortable columns
+- Arrow becomes permanently visible when column is actively sorted
+- Click column header to toggle between ascending and descending order
+- Clean minimalist UI with hover effects (transition 0.2s)
+
+**Technical Implementation**:
+- Added `sortBy` state to track which column is being sorted
+- Added `sortOrder` state to track sort direction (asc/desc)
+- `handleSort()` function toggles sort column and order
+- `displayedOrders` computed array sorts orders client-side
+- Sort logic handles three data types: text (paymentStatus/status) and date (createdAt)
+- Arrow indicator uses conditional opacity: fully visible when active, hidden on default, visible on hover otherwise
+
 ### November 23, 2025 - Admin Inventory Management & Bulk Operations
 
 **Feature #2: Inventory Alerts & Low Stock Management**

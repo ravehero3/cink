@@ -24,8 +24,6 @@ const TIME_PERIODS = ['Dnes', '24 hodin', 'Týden', 'Měsíc', 'Rok'];
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
-  const [statusFilter, setStatusFilter] = useState('all');
-  const [paymentFilter, setPaymentFilter] = useState('all');
   const [updatingOrderId, setUpdatingOrderId] = useState<string | null>(null);
   const [statusModalOpen, setStatusModalOpen] = useState(false);
   const [selectedOrderForStatus, setSelectedOrderForStatus] = useState<Order | null>(null);
@@ -33,6 +31,8 @@ export default function AdminOrdersPage() {
   const [selectedPeriod, setSelectedPeriod] = useState('Měsíc');
   const [chartData, setChartData] = useState<any[]>([]);
   const [mounted, setMounted] = useState(false);
+  const [sortBy, setSortBy] = useState<'paymentStatus' | 'status' | 'createdAt' | null>(null);
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
   useEffect(() => {
     fetchOrders();
@@ -247,10 +247,37 @@ export default function AdminOrdersPage() {
     return dataPoints;
   };
 
-  const filteredOrders = orders.filter((order) => {
-    if (statusFilter !== 'all' && order.status !== statusFilter) return false;
-    if (paymentFilter !== 'all' && order.paymentStatus !== paymentFilter) return false;
-    return true;
+  const handleSort = (column: 'paymentStatus' | 'status' | 'createdAt') => {
+    if (sortBy === column) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortBy(column);
+      setSortOrder('asc');
+    }
+  };
+
+  const displayedOrders = [...orders].sort((a, b) => {
+    if (!sortBy) return 0;
+
+    let aValue: any;
+    let bValue: any;
+
+    if (sortBy === 'paymentStatus') {
+      aValue = a.paymentStatus;
+      bValue = b.paymentStatus;
+    } else if (sortBy === 'status') {
+      aValue = a.status;
+      bValue = b.status;
+    } else if (sortBy === 'createdAt') {
+      aValue = new Date(a.createdAt).getTime();
+      bValue = new Date(b.createdAt).getTime();
+    }
+
+    if (sortOrder === 'asc') {
+      return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
+    } else {
+      return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
+    }
   });
 
   if (loading) {
@@ -361,58 +388,6 @@ export default function AdminOrdersPage() {
         </div>
       </div>
 
-      {/* Filters */}
-      <div className="mb-6 space-y-4">
-        <div>
-          <label className="text-body uppercase mb-2 block">Status objednávky:</label>
-          <div className="flex gap-2 flex-wrap">
-            <button
-              onClick={() => setStatusFilter('all')}
-              className={`px-4 py-2 text-body uppercase border border-black ${
-                statusFilter === 'all' ? 'bg-black text-white' : 'bg-white text-black'
-              }`}
-            >
-              Všechny
-            </button>
-            {STATUS_OPTIONS.map((status) => (
-              <button
-                key={status}
-                onClick={() => setStatusFilter(status)}
-                className={`px-4 py-2 text-body uppercase border border-black ${
-                  statusFilter === status ? 'bg-black text-white' : 'bg-white text-black'
-                }`}
-              >
-                {status}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div>
-          <label className="text-body uppercase mb-2 block">Status platby:</label>
-          <div className="flex gap-2 flex-wrap">
-            <button
-              onClick={() => setPaymentFilter('all')}
-              className={`px-4 py-2 text-body uppercase border border-black ${
-                paymentFilter === 'all' ? 'bg-black text-white' : 'bg-white text-black'
-              }`}
-            >
-              Všechny
-            </button>
-            {PAYMENT_STATUS_OPTIONS.map((status) => (
-              <button
-                key={status}
-                onClick={() => setPaymentFilter(status)}
-                className={`px-4 py-2 text-body uppercase border border-black ${
-                  paymentFilter === status ? 'bg-black text-white' : 'bg-white text-black'
-                }`}
-              >
-                {status}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
 
       {/* Orders Table */}
       <div className="border border-black overflow-x-auto">
@@ -424,14 +399,38 @@ export default function AdminOrdersPage() {
               <th className="text-left p-4 text-body uppercase">Email</th>
               <th className="text-left p-4 text-body uppercase">Adresa</th>
               <th className="text-left p-4 text-body uppercase">Cena</th>
-              <th className="text-left p-4 text-body uppercase">Status platby</th>
-              <th className="text-left p-4 text-body uppercase">Status objednávky</th>
-              <th className="text-left p-4 text-body uppercase">Datum</th>
+              <th 
+                className="text-left p-4 text-body uppercase cursor-pointer hover:bg-gray-100 transition-colors group relative"
+                onClick={() => handleSort('paymentStatus')}
+              >
+                Status platby
+                <span className={`ml-1 inline-block transition-opacity ${sortBy === 'paymentStatus' ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+                  ↓
+                </span>
+              </th>
+              <th 
+                className="text-left p-4 text-body uppercase cursor-pointer hover:bg-gray-100 transition-colors group relative"
+                onClick={() => handleSort('status')}
+              >
+                Status objednávky
+                <span className={`ml-1 inline-block transition-opacity ${sortBy === 'status' ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+                  ↓
+                </span>
+              </th>
+              <th 
+                className="text-left p-4 text-body uppercase cursor-pointer hover:bg-gray-100 transition-colors group relative"
+                onClick={() => handleSort('createdAt')}
+              >
+                Datum
+                <span className={`ml-1 inline-block transition-opacity ${sortBy === 'createdAt' ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+                  ↓
+                </span>
+              </th>
               <th className="text-left p-4 text-body uppercase">Akce</th>
             </tr>
           </thead>
           <tbody>
-            {filteredOrders.map((order) => (
+            {displayedOrders.map((order) => (
               <tr key={order.id} className="border-b border-black last:border-b-0">
                 <td className="p-4 text-body font-bold">{order.orderNumber}</td>
                 <td className="p-4 text-body">{order.customerName}</td>
@@ -473,14 +472,14 @@ export default function AdminOrdersPage() {
         </table>
       </div>
 
-      {filteredOrders.length === 0 && (
+      {displayedOrders.length === 0 && (
         <div className="text-center py-12 text-body">
           Žádné objednávky nebyly nalezeny.
         </div>
       )}
 
       <div className="mt-6 text-body">
-        Zobrazeno: {filteredOrders.length} z {orders.length} objednávek
+        Zobrazeno: {displayedOrders.length} z {orders.length} objednávek
       </div>
 
       {/* Status Change Modal Overlay */}
