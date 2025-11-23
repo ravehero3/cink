@@ -142,13 +142,28 @@ export default function Header1() {
                   aria-label="Cart"
                   style={{ width: '22px', height: '22px' }}
                 >
-                  <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                  </svg>
-                  {cartCount > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-black text-white text-[9px] w-3.5 h-3.5 flex items-center justify-center rounded-full">
+                  {cartCount > 0 ? (
+                    <div 
+                      style={{
+                        width: '22px',
+                        height: '22px',
+                        backgroundColor: '#6bdc66',
+                        borderRadius: '4px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                        fontSize: '12px',
+                        fontWeight: 700,
+                        color: '#000000'
+                      }}
+                    >
                       {cartCount}
-                    </span>
+                    </div>
+                  ) : (
+                    <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
                   )}
                 </button>
               </div>
