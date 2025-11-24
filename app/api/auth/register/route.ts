@@ -6,7 +6,18 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
   try {
-    const { email, password, name, phone, civility, newsletterSubscribed } = await request.json();
+    let body;
+    try {
+      body = await request.json();
+    } catch (parseError) {
+      console.error('JSON parse error:', parseError);
+      return NextResponse.json(
+        { error: 'Neplatný formát požadavku' },
+        { status: 400 }
+      );
+    }
+
+    const { email, password, name, phone, civility, newsletterSubscribed } = body;
 
     if (!email || !password) {
       return NextResponse.json(
