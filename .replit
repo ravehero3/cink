@@ -106,3 +106,4 @@ NEXTAUTH_URL = "http://localhost:5000"
 
 [userenv.development]
 POSTGRES_PRISMA_URL = "postgresql://postgres.guwlfilsuxvolnwmkvuz:H4enViSv%25UiRs5G@aws-1-eu-central-2.pooler.supabase.com:5432/postgres"
+RESEND_API_KEY = "re_Hxzi2bjv_LpdCUjYTGdm17zPnXu5J8gUP"
