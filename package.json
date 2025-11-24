@@ -26,7 +26,7 @@
     "@types/react-dom": "^18.3.7",
     "@types/xml2js": "^0.4.14",
     "autoprefixer": "^10.4.21",
-    "bcrypt": "^6.0.0",
+    "bcryptjs": "^2.4.3",
     "cloudinary": "^2.8.0",
     "date-fns": "^4.1.0",
     "jspdf": "^3.0.3",
@@ -47,7 +47,6 @@
     "zustand": "^5.0.8"
   },
   "devDependencies": {
-    "@types/bcrypt": "^6.0.0",
     "@vercel/client": "^17.2.8",
     "tsx": "^4.20.6"
   }

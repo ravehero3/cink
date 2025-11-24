@@ -1,0 +1,144 @@
+09:21:00
+09:27:10
+09:33:10
+09:39:10
+09:51:00
+Time
+Status
+Host
+Request
+Messages
+Nov 24 09:34:51.06
+POST
+405
+cink-voodoo808s-projects.vercel.app
+/api/auth/register
+2
+Error: No native build was found for platform=linux arch=x64 runtime=node abi=127 uv=1 libc=glibc node=22.20.0 loaded from: /var/task/node_modules/bcrypt at load.resolve.load.path (/var/task/node_modules/node-gyp-build/node-gyp-build.js:60:9) at load (/var/task/node_modules/node-gyp-build/node-gyp-build.js:22:30) at Object.<anonymous> (/var/task/node_modules/bcrypt/bcrypt.js:2:43) at Module.<anonymous> (/opt/rust/bytecode.js:2:1435) at A.l._compile (/opt/rust/bytecode.js:2:3182) at Object..js (node:internal/modules/cjs/loader:1839:10) at Module.load (node:internal/modules/cjs/loader:1441:32) at Function.<anonymous> (node:internal/modules/cjs/loader:1263:12) at /opt/rust/nodejs.js:2:13527 at Function.Jr (/opt/rust/nodejs.js:2:13905) { page: '/api/auth/register' }
+Nov 24 09:34:31.02
+GET
+500
+cink-voodoo808s-projects.vercel.app
+/api/auth/providers
+2
+Error: No native build was found for platform=linux arch=x64 runtime=node abi=127 uv=1 libc=glibc node=22.20.0 loaded from: /var/task/node_modules/bcrypt at load.resolve.load.path (/var/task/node_modules/node-gyp-build/node-gyp-build.js:60:9) at load (/var/task/node_modules/node-gyp-build/node-gyp-build.js:22:30) at Object.<anonymous> (/var/task/node_modules/bcrypt/bcrypt.js:2:43) at Module.<anonymous> (/opt/rust/bytecode.js:2:1435) at A.l._compile (/opt/rust/bytecode.js:2:3182) at Object..js (node:internal/modules/cjs/loader:1839:10) at Module.load (node:internal/modules/cjs/loader:1441:32) at Function.<anonymous> (node:internal/modules/cjs/loader:1263:12) at /opt/rust/nodejs.js:2:13527 at Function.Jr (/opt/rust/nodejs.js:2:13905) { page: '/api/auth/providers' }
+Nov 24 09:34:25.56
+POST
+405
+cink-voodoo808s-projects.vercel.app
+/api/auth/_log
+2
+Error: No native build was found for platform=linux arch=x64 runtime=node abi=127 uv=1 libc=glibc node=22.20.0 loaded from: /var/task/node_modules/bcrypt at load.resolve.load.path (/var/task/node_modules/node-gyp-build/node-gyp-build.js:60:9) at load (/var/task/node_modules/node-gyp-build/node-gyp-build.js:22:30) at Object.<anonymous> (/var/task/node_modules/bcrypt/bcrypt.js:2:43) at Module.<anonymous> (/opt/rust/bytecode.js:2:1435) at A.l._compile (/opt/rust/bytecode.js:2:3182) at Object..js (node:internal/modules/cjs/loader:1839:10) at Module.load (node:internal/modules/cjs/loader:1441:32) at Function.<anonymous> (node:internal/modules/cjs/loader:1263:12) at /opt/rust/nodejs.js:2:13527 at Function.Jr (/opt/rust/nodejs.js:2:13905) { page: '/api/auth/_log' }
+Nov 24 09:34:25.39
+GET
+500
+cink-voodoo808s-projects.vercel.app
+/api/auth/session
+2
+Error: No native build was found for platform=linux arch=x64 runtime=node abi=127 uv=1 libc=glibc node=22.20.0 loaded from: /var/task/node_modules/bcrypt at load.resolve.load.path (/var/task/node_modules/node-gyp-build/node-gyp-build.js:60:9) at load (/var/task/node_modules/node-gyp-build/node-gyp-build.js:22:30) at Object.<anonymous> (/var/task/node_modules/bcrypt/bcrypt.js:2:43) at Module.<anonymous> (/opt/rust/bytecode.js:2:1435) at A.l._compile (/opt/rust/bytecode.js:2:3182) at Object..js (node:internal/modules/cjs/loader:1839:10) at Module.load (node:internal/modules/cjs/loader:1441:32) at Function.<anonymous> (node:internal/modules/cjs/loader:1263:12) at /opt/rust/nodejs.js:2:13527 at Function.Jr (/opt/rust/nodejs.js:2:13905) { page: '/api/auth/session' }
+Nov 24 09:33:01.43
+GET
+500
+cink-sable.vercel.app
+/api/auth/error
+2
+Error: No native build was found for platform=linux arch=x64 runtime=node abi=127 uv=1 libc=glibc node=22.20.0 loaded from: /var/task/node_modules/bcrypt at load.resolve.load.path (/var/task/node_modules/node-gyp-build/node-gyp-build.js:60:9) at load (/var/task/node_modules/node-gyp-build/node-gyp-build.js:22:30) at Object.<anonymous> (/var/task/node_modules/bcrypt/bcrypt.js:2:43) at Module.<anonymous> (/opt/rust/bytecode.js:2:1435) at A.l._compile (/opt/rust/bytecode.js:2:3182) at Object..js (node:internal/modules/cjs/loader:1839:10) at Module.load (node:internal/modules/cjs/loader:1441:32) at Function.<anonymous> (node:internal/modules/cjs/loader:1263:12) at /opt/rust/nodejs.js:2:13527 at Function.Jr (/opt/rust/nodejs.js:2:13905) { page: '/api/auth/error' }
+Nov 24 09:33:01.42
+POST
+405
+cink-sable.vercel.app
+/api/auth/_log
+2
+Error: No native build was found for platform=linux arch=x64 runtime=node abi=127 uv=1 libc=glibc node=22.20.0 loaded from: /var/task/node_modules/bcrypt at load.resolve.load.path (/var/task/node_modules/node-gyp-build/node-gyp-build.js:60:9) at load (/var/task/node_modules/node-gyp-build/node-gyp-build.js:22:30) at Object.<anonymous> (/var/task/node_modules/bcrypt/bcrypt.js:2:43) at Module.<anonymous> (/opt/rust/bytecode.js:2:1435) at A.l._compile (/opt/rust/bytecode.js:2:3182) at Object..js (node:internal/modules/cjs/loader:1839:10) at Module.load (node:internal/modules/cjs/loader:1441:32) at Function.<anonymous> (node:internal/modules/cjs/loader:1263:12) at /opt/rust/nodejs.js:2:13527 at Function.Jr (/opt/rust/nodejs.js:2:13905) { page: '/api/auth/_log' }
+Nov 24 09:33:01.42
+GET
+---
+cink-sable.vercel.app
+/api/auth/session
+2
+Error: No native build was found for platform=linux arch=x64 runtime=node abi=127 uv=1 libc=glibc node=22.20.0 loaded from: /var/task/node_modules/bcrypt at load.resolve.load.path (/var/task/node_modules/node-gyp-build/node-gyp-build.js:60:9) at load (/var/task/node_modules/node-gyp-build/node-gyp-build.js:22:30) at Object.<anonymous> (/var/task/node_modules/bcrypt/bcrypt.js:2:43) at Module.<anonymous> (/opt/rust/bytecode.js:2:1435) at A.l._compile (/opt/rust/bytecode.js:2:3182) at Object..js (node:internal/modules/cjs/loader:1839:10) at Module.load (node:internal/modules/cjs/loader:1441:32) at Function.<anonymous> (node:internal/modules/cjs/loader:1263:12) at /opt/rust/nodejs.js:2:13527 at Function.Jr (/opt/rust/nodejs.js:2:13905) { page: '/api/auth/session' }
+Nov 24 09:33:01.21
+GET
+500
+cink-sable.vercel.app
+/api/auth/providers
+2
+Error: No native build was found for platform=linux arch=x64 runtime=node abi=127 uv=1 libc=glibc node=22.20.0 loaded from: /var/task/node_modules/bcrypt at load.resolve.load.path (/var/task/node_modules/node-gyp-build/node-gyp-build.js:60:9) at load (/var/task/node_modules/node-gyp-build/node-gyp-build.js:22:30) at Object.<anonymous> (/var/task/node_modules/bcrypt/bcrypt.js:2:43) at Module.<anonymous> (/opt/rust/bytecode.js:2:1435) at A.l._compile (/opt/rust/bytecode.js:2:3182) at Object..js (node:internal/modules/cjs/loader:1839:10) at Module.load (node:internal/modules/cjs/loader:1441:32) at Function.<anonymous> (node:internal/modules/cjs/loader:1263:12) at /opt/rust/nodejs.js:2:13527 at Function.Jr (/opt/rust/nodejs.js:2:13905) { page: '/api/auth/providers' }
+Nov 24 09:32:52.91
+GET
+500
+cink-sable.vercel.app
+/api/auth/providers
+2
+Error: No native build was found for platform=linux arch=x64 runtime=node abi=127 uv=1 libc=glibc node=22.20.0 loaded from: /var/task/node_modules/bcrypt at load.resolve.load.path (/var/task/node_modules/node-gyp-build/node-gyp-build.js:60:9) at load (/var/task/node_modules/node-gyp-build/node-gyp-build.js:22:30) at Object.<anonymous> (/var/task/node_modules/bcrypt/bcrypt.js:2:43) at Module.<anonymous> (/opt/rust/bytecode.js:2:1435) at A.l._compile (/opt/rust/bytecode.js:2:3182) at Object..js (node:internal/modules/cjs/loader:1839:10) at Module.load (node:internal/modules/cjs/loader:1441:32) at Function.<anonymous> (node:internal/modules/cjs/loader:1263:12) at /opt/rust/nodejs.js:2:13527 at Function.Jr (/opt/rust/nodejs.js:2:13905) { page: '/api/auth/providers' }
+Nov 24 09:31:41.44
+POST
+405
+cink-sable.vercel.app
+/api/auth/_log
+2
+Error: No native build was found for platform=linux arch=x64 runtime=node abi=127 uv=1 libc=glibc node=22.20.0 loaded from: /var/task/node_modules/bcrypt at load.resolve.load.path (/var/task/node_modules/node-gyp-build/node-gyp-build.js:60:9) at load (/var/task/node_modules/node-gyp-build/node-gyp-build.js:22:30) at Object.<anonymous> (/var/task/node_modules/bcrypt/bcrypt.js:2:43) at Module.<anonymous> (/opt/rust/bytecode.js:2:1435) at A.l._compile (/opt/rust/bytecode.js:2:3182) at Object..js (node:internal/modules/cjs/loader:1839:10) at Module.load (node:internal/modules/cjs/loader:1441:32) at Function.<anonymous> (node:internal/modules/cjs/loader:1263:12) at /opt/rust/nodejs.js:2:13527 at Function.Jr (/opt/rust/nodejs.js:2:13905) { page: '/api/auth/_log' }
+Nov 24 09:31:41.29
+POST
+405
+cink-sable.vercel.app
+/api/auth/_log
+2
+Error: No native build was found for platform=linux arch=x64 runtime=node abi=127 uv=1 libc=glibc node=22.20.0 loaded from: /var/task/node_modules/bcrypt at load.resolve.load.path (/var/task/node_modules/node-gyp-build/node-gyp-build.js:60:9) at load (/var/task/node_modules/node-gyp-build/node-gyp-build.js:22:30) at Object.<anonymous> (/var/task/node_modules/bcrypt/bcrypt.js:2:43) at Module.<anonymous> (/opt/rust/bytecode.js:2:1435) at A.l._compile (/opt/rust/bytecode.js:2:3182) at Object..js (node:internal/modules/cjs/loader:1839:10) at Module.load (node:internal/modules/cjs/loader:1441:32) at Function.<anonymous> (node:internal/modules/cjs/loader:1263:12) at /opt/rust/nodejs.js:2:13527 at Function.Jr (/opt/rust/nodejs.js:2:13905) { page: '/api/auth/_log' }
+Nov 24 09:31:41.26
+GET
+500
+cink-sable.vercel.app
+/api/auth/session
+2
+Error: No native build was found for platform=linux arch=x64 runtime=node abi=127 uv=1 libc=glibc node=22.20.0 loaded from: /var/task/node_modules/bcrypt at load.resolve.load.path (/var/task/node_modules/node-gyp-build/node-gyp-build.js:60:9) at load (/var/task/node_modules/node-gyp-build/node-gyp-build.js:22:30) at Object.<anonymous> (/var/task/node_modules/bcrypt/bcrypt.js:2:43) at Module.<anonymous> (/opt/rust/bytecode.js:2:1435) at A.l._compile (/opt/rust/bytecode.js:2:3182) at Object..js (node:internal/modules/cjs/loader:1839:10) at Module.load (node:internal/modules/cjs/loader:1441:32) at Function.<anonymous> (node:internal/modules/cjs/loader:1263:12) at /opt/rust/nodejs.js:2:13527 at Function.Jr (/opt/rust/nodejs.js:2:13905) { page: '/api/auth/session' }
+Nov 24 09:31:40.56
+POST
+405
+cink-sable.vercel.app
+/api/auth/_log
+2
+Error: No native build was found for platform=linux arch=x64 runtime=node abi=127 uv=1 libc=glibc node=22.20.0 loaded from: /var/task/node_modules/bcrypt at load.resolve.load.path (/var/task/node_modules/node-gyp-build/node-gyp-build.js:60:9) at load (/var/task/node_modules/node-gyp-build/node-gyp-build.js:22:30) at Object.<anonymous> (/var/task/node_modules/bcrypt/bcrypt.js:2:43) at Module.<anonymous> (/opt/rust/bytecode.js:2:1435) at A.l._compile (/opt/rust/bytecode.js:2:3182) at Object..js (node:internal/modules/cjs/loader:1839:10) at Module.load (node:internal/modules/cjs/loader:1441:32) at Function.<anonymous> (node:internal/modules/cjs/loader:1263:12) at /opt/rust/nodejs.js:2:13527 at Function.Jr (/opt/rust/nodejs.js:2:13905) { page: '/api/auth/_log' }
+Nov 24 09:31:40.52
+GET
+500
+cink-sable.vercel.app
+/api/auth/session
+2
+Error: No native build was found for platform=linux arch=x64 runtime=node abi=127 uv=1 libc=glibc node=22.20.0 loaded from: /var/task/node_modules/bcrypt at load.resolve.load.path (/var/task/node_modules/node-gyp-build/node-gyp-build.js:60:9) at load (/var/task/node_modules/node-gyp-build/node-gyp-build.js:22:30) at Object.<anonymous> (/var/task/node_modules/bcrypt/bcrypt.js:2:43) at Module.<anonymous> (/opt/rust/bytecode.js:2:1435) at A.l._compile (/opt/rust/bytecode.js:2:3182) at Object..js (node:internal/modules/cjs/loader:1839:10) at Module.load (node:internal/modules/cjs/loader:1441:32) at Function.<anonymous> (node:internal/modules/cjs/loader:1263:12) at /opt/rust/nodejs.js:2:13527 at Function.Jr (/opt/rust/nodejs.js:2:13905) { page: '/api/auth/session' }
+Nov 24 09:31:40.24
+GET
+500
+cink-sable.vercel.app
+/api/auth/session
+2
+Error: No native build was found for platform=linux arch=x64 runtime=node abi=127 uv=1 libc=glibc node=22.20.0 loaded from: /var/task/node_modules/bcrypt at load.resolve.load.path (/var/task/node_modules/node-gyp-build/node-gyp-build.js:60:9) at load (/var/task/node_modules/node-gyp-build/node-gyp-build.js:22:30) at Object.<anonymous> (/var/task/node_modules/bcrypt/bcrypt.js:2:43) at Module.<anonymous> (/opt/rust/bytecode.js:2:1435) at A.l._compile (/opt/rust/bytecode.js:2:3182) at Object..js (node:internal/modules/cjs/loader:1839:10) at Module.load (node:internal/modules/cjs/loader:1441:32) at Function.<anonymous> (node:internal/modules/cjs/loader:1263:12) at /opt/rust/nodejs.js:2:13527 at Function.Jr (/opt/rust/nodejs.js:2:13905) { page: '/api/auth/session' }
+Nov 24 09:31:40.23
+POST
+---
+cink-sable.vercel.app
+/api/auth/_log
+2
+Error: No native build was found for platform=linux arch=x64 runtime=node abi=127 uv=1 libc=glibc node=22.20.0 loaded from: /var/task/node_modules/bcrypt at load.resolve.load.path (/var/task/node_modules/node-gyp-build/node-gyp-build.js:60:9) at load (/var/task/node_modules/node-gyp-build/node-gyp-build.js:22:30) at Object.<anonymous> (/var/task/node_modules/bcrypt/bcrypt.js:2:43) at Module.<anonymous> (/opt/rust/bytecode.js:2:1435) at A.l._compile (/opt/rust/bytecode.js:2:3182) at Object..js (node:internal/modules/cjs/loader:1839:10) at Module.load (node:internal/modules/cjs/loader:1441:32) at Function.<anonymous> (node:internal/modules/cjs/loader:1263:12) at /opt/rust/nodejs.js:2:13527 at Function.Jr (/opt/rust/nodejs.js:2:13905) { page: '/api/auth/_log' }
+Nov 24 09:31:39.26
+GET
+500
+cink-sable.vercel.app
+/api/auth/session
+2
+Error: No native build was found for platform=linux arch=x64 runtime=node abi=127 uv=1 libc=glibc node=22.20.0 loaded from: /var/task/node_modules/bcrypt at load.resolve.load.path (/var/task/node_modules/node-gyp-build/node-gyp-build.js:60:9) at load (/var/task/node_modules/node-gyp-build/node-gyp-build.js:22:30) at Object.<anonymous> (/var/task/node_modules/bcrypt/bcrypt.js:2:43) at Module.<anonymous> (/opt/rust/bytecode.js:2:1435) at A.l._compile (/opt/rust/bytecode.js:2:3182) at Object..js (node:internal/modules/cjs/loader:1839:10) at Module.load (node:internal/modules/cjs/loader:1441:32) at Function.<anonymous> (node:internal/modules/cjs/loader:1263:12) at /opt/rust/nodejs.js:2:13527 at Function.Jr (/opt/rust/nodejs.js:2:13905) { page: '/api/auth/session' }
+Nov 24 09:29:38.95
+GET
+500
+cink-2i3vhq2k8-voodoo808s-projects.vercel.app
+/api/auth/session
+2
+Error: No native build was found for platform=linux arch=x64 runtime=node abi=127 uv=1 libc=glibc node=22.20.0 loaded from: /var/task/node_modules/bcrypt at load.resolve.load.path (/var/task/node_modules/node-gyp-build/node-gyp-build.js:60:9) at load (/var/task/node_modules/node-gyp-build/node-gyp-build.js:22:30) at Object.<anonymous> (/var/task/node_modules/bcrypt/bcrypt.js:2:43) at Module.<anonymous> (/opt/rust/bytecode.js:2:1435) at A.l._compile (/opt/rust/bytecode.js:2:3182) at Object..js (node:internal/modules/cjs/loader:1839:10) at Module.load (node:internal/modules/cjs/loader:1441:32) at Function.<anonymous> (node:internal/modules/cjs/loader:1263:12) at /opt/rust/nodejs.js:2:13527 at Function.Jr (/opt/rust/nodejs.js:2:13905) { page: '/api/auth/session' }
+Nov 24 09:29:38.51
+GET
+500
+cink-2i3vhq2k8-voodoo808s-projects.vercel.app
+/api/auth/session
+2
+Error: No native build was found for platform=linux arch=x64 runtime=node abi=127 uv=1 libc=glibc node=22.20.0 loaded from: /var/task/node_modules/bcrypt at load.resolve.load.path (/var/task/node_modules/node-gyp-build/node-gyp-build.js:60:9) at load (/var/task/node_modules/node-gyp-build/node-gyp-build.js:22:30) at Object.<anonymous> (/var/task/node_modules/bcrypt/bcrypt.js:2:43) at Module.<anonymous> (/opt/rust/bytecode.js:2:1435) at A.l._compile (/opt/rust/bytecode.js:2:3182) at Object..js (node:internal/modules/cjs/loader:1839:10) at Module.load (node:internal/modules/cjs/loader:1441:32) at Function.<anonymous> (node:internal/modules/cjs/loader:1263:12) at /opt/rust/nodejs.js:2:13527 at Function.Jr (/opt/rust/nodejs.js:2:13905) { page: '/api/auth/session' }
+No more logs to show within selected timeline
