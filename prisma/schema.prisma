@@ -19,6 +19,8 @@ model User {
   newsletterSubscribed  Boolean   @default(false)
   savedProducts         String[]
   orders                Order[]
+  resetToken            String?
+  resetTokenExpiry      DateTime?
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
 }

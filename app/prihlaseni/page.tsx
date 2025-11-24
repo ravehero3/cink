@@ -69,14 +69,37 @@ function LoginContent() {
     signIn('google', { callbackUrl: '/ucet' });
   };
 
-  const handlePasswordReset = (e: React.FormEvent) => {
+  const handlePasswordReset = async (e: React.FormEvent) => {
     e.preventDefault();
-    setResetSuccess(true);
-    setTimeout(() => {
-      setShowPasswordReset(false);
-      setResetSuccess(false);
-      setResetEmail('');
-    }, 3000);
+    setError('');
+    setLoading(true);
+
+    try {
+      const response = await fetch('/api/auth/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: resetEmail }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error || 'Došlo k chybě');
+        setLoading(false);
+        return;
+      }
+
+      setResetSuccess(true);
+      setTimeout(() => {
+        setShowPasswordReset(false);
+        setResetSuccess(false);
+        setResetEmail('');
+        setLoading(false);
+      }, 3000);
+    } catch (err) {
+      setError('Došlo k chybě. Zkuste to prosím znovu.');
+      setLoading(false);
+    }
   };
 
   return (
