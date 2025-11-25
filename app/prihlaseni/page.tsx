@@ -300,6 +300,12 @@ function LoginContent() {
                   Zadejte prosím svou e-mailovou adresu, na kterou vám zašleme odkaz pro obnovení hesla.
                 </p>
 
+                {error && (
+                  <div className="mb-4 p-3 bg-red-50 text-red-800 text-sm border border-red-200">
+                    {error}
+                  </div>
+                )}
+
                 <form onSubmit={handlePasswordReset}>
                   <div className="mb-6">
                     <label className="block text-xs mb-2">
@@ -317,10 +323,11 @@ function LoginContent() {
 
                   <button
                     type="submit"
-                    className="w-full bg-black text-white py-3 text-sm uppercase hover:bg-gray-800 transition-colors"
+                    disabled={loading}
+                    className="w-full bg-black text-white py-3 text-sm uppercase hover:bg-gray-800 transition-colors disabled:bg-gray-400"
                     style={{ borderRadius: '50px' }}
                   >
-                    Odeslat
+                    {loading ? 'ODESÍLÁNÍ...' : 'Odeslat'}
                   </button>
                 </form>
               </>
