@@ -108,10 +108,10 @@ export default function CategoryPage() {
   }, [session]);
 
   useEffect(() => {
-    if (category && allCategoryProducts.length > 0) {
+    if (category) {
       fetchProducts();
     }
-  }, [category, allCategoryProducts, colors, sizes, currentSort]);
+  }, [category, colors, sizes, currentSort]);
 
   const fetchCategory = async () => {
     try {
@@ -160,6 +160,7 @@ export default function CategoryPage() {
   const fetchProducts = async () => {
     if (!category) {
       console.log('fetchProducts: no category, returning');
+      setIsLoading(false);
       return;
     }
     
@@ -182,6 +183,11 @@ export default function CategoryPage() {
       console.log('fetchProducts: about to fetch with URL:', `/api/products?${params.toString()}`);
       const response = await fetch(`/api/products?${params.toString()}`);
       console.log('fetchProducts: fetch response received, status:', response.status);
+      
+      if (!response.ok) {
+        throw new Error(`API returned status ${response.status}`);
+      }
+      
       const data = await response.json();
       console.log('fetchProducts data:', data);
       
@@ -191,7 +197,7 @@ export default function CategoryPage() {
       console.log('fetchProducts: about to set products state');
       setProducts(productsWithColorCount);
       setTotalProducts(data.total || 0);
-      console.log('fetchProducts: state updated');
+      console.log('fetchProducts: state updated, showing', productsWithColorCount.length, 'products');
     } catch (error) {
       console.error('ERROR in fetchProducts:', error);
       setProducts([]);
