@@ -1,0 +1,77 @@
+ Doména ufosport.cz
+Seznam domén
+Detail domény
+Přehled fakturace
+Prodloužení domény
+Miniweb
+Nastavení přesměrování
+Přehled požadavků
+Doplňkové služby
+Certifikáty WEDOS
+Změna majitele
+Změna DNS serverů
+Nastavení DNSSEC
+Editace DNS záznamů
+Nastavení DNS záznamů služby
+Delegace NS
+Autorizační heslo
+Diagnostika domény
+Kontaktní údaje (odběratel)
+Změna zákaznického účtu
+Výpověď/doběhnutí služby
+ DNS ufosport.cz
+Seznam domén v DNS
+Nastavení domény
+DNS záznamy
+Historie změn
+Aktuální stav
+Import přes AXFR
+Historie sériových čísel
+Změna zákaznického účtu
+Diagnostika domény
+ Domény
+Seznam domén
+Registrovat doménu
+Přeregistrovat doménu
+Rychlá registrace
+Rychlá přeregistrace
+WAPI rozhraní
+Nastavení expirace služeb
+Migrace domén od Ascio k WEDOS
+Hromadná registrace
+Hromadná přeregistrace
+Hromadné zaslání aut. hesla
+Přesun mezi účty heslem
+ Nástroje CZ
+ Nástroje EU
+ Nástroje SK
+ Nástroje PL
+ Nástroje gTLD - ascio
+ Nástroje gTLD - subreg
+ Nástroje gTLD - Verisign
+ Nástroje nTLD - CentralNic
+ Nástroje nTLD - Donuts
+ Nástroje nTLD - GoDaddy
+ Nástroje nTLD - Tucows
+ Zákaznická podpora
+Nástroje
+WHOIS
+⚠️ Upozornění: Změna bankovního účtu pro platby za služby WEDOS! ⚠️
+V souvislosti s organizačními změnami došlo ke změně bankovního účtu. Používejte prosím pouze údaje z nově vystavených faktur. Platby na původní účet budou vráceny.
+Bankovní spojení pro platby v CZK: 13071377 / 2010, Fio banka, a.s.
+Bankovní spojení pro platby v EUR: CZ24 2010 0000 0000 1307 7779 – BIC: FIOBCZPPXXX , Fio banka, a.s.
+ nápověda
+domény > doména ufosport.cz > změna dns serverů
+Doména ufosport.cz - změna DNS serverů
+UPOZORNĚNÍ! U domény nejsou nastaveny naše DNS servery. Chcete-li to napravit, proveďte změnu DNS serverů.
+TIP: Objednejte si k této doméně náš neomezený webhosting za 100 Kč měsíčně - objednat webhosting pro ufosport.cz
+TIP: Pro změnu u více domén najednou je možné využít hromadné změny DNS
+DNS servery
+Server	IPv4	IPv6	 
+ns1.myshoptet.com			 
+ns2.myshoptet.com			 
+UPOZORNĚNÍ! U domén ufosport.cz může trvat nejméně 6 hodin než se změna DNS serverů projeví na celém Internetu. Po provedení změny je tedy potřeba trpělivě vyčkat.
+ Výchozí NSSET WEDOS
+ Nastavit existující NSSET
+ Vytvořit a nastavit nový NSSET
+
