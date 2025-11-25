@@ -53,8 +53,12 @@ export async function POST(request: Request) {
     const resetLink = `${getBaseUrl()}/obnovit-heslo?token=${resetToken}&email=${encodeURIComponent(email)}`;
 
     // Send email
-    console.log('Attempting to send email with API key:', process.env.RESEND_API_KEY ? 'SET' : 'MISSING');
+    console.log('🔵 FORGOT PASSWORD - API KEY:', process.env.RESEND_API_KEY ? `SET (${process.env.RESEND_API_KEY.substring(0, 10)}...)` : 'MISSING');
+    console.log('🔵 FORGOT PASSWORD - Sending to:', email);
+    console.log('🔵 FORGOT PASSWORD - Reset link:', resetLink);
+    
     try {
+      console.log('🔵 FORGOT PASSWORD - Calling resend.emails.send...');
       const result = await resend.emails.send({
         from: 'onboarding@resend.dev',
         to: email,
@@ -72,14 +76,11 @@ export async function POST(request: Request) {
           </div>
         `,
       });
-      console.log('Email sent successfully:', result);
+      console.log('✅ RESEND SUCCESS:', result);
     } catch (emailError) {
-      console.error('🔴 RESEND ERROR DETAILS:', {
-        error: emailError,
-        message: (emailError as any)?.message,
-        status: (emailError as any)?.status,
-      });
-      throw new Error(`Email send failed: ${JSON.stringify(emailError)}`);
+      console.error('🔴 RESEND ERROR:', emailError);
+      console.error('🔴 RESEND ERROR TYPE:', typeof emailError);
+      console.error('🔴 RESEND ERROR JSON:', JSON.stringify(emailError, null, 2));
     }
 
     return NextResponse.json(
