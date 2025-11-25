@@ -55,7 +55,7 @@ export async function POST(request: Request) {
     // Send email
     try {
       await resend.emails.send({
-        from: 'UFO Sport <noreply@ufosport.cz>',
+        from: 'onboarding@resend.dev',
         to: email,
         subject: 'Obnovení hesla - UFO Sport',
         html: `
@@ -73,7 +73,7 @@ export async function POST(request: Request) {
       });
     } catch (emailError) {
       console.error('Error sending email:', emailError);
-      // Even if email fails, don't expose the error to user
+      throw new Error(`Email send failed: ${emailError}`);
     }
 
     return NextResponse.json(
