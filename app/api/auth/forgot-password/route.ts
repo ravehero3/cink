@@ -53,8 +53,9 @@ export async function POST(request: Request) {
     const resetLink = `${getBaseUrl()}/obnovit-heslo?token=${resetToken}&email=${encodeURIComponent(email)}`;
 
     // Send email
+    console.log('Attempting to send email with API key:', process.env.RESEND_API_KEY ? 'SET' : 'MISSING');
     try {
-      await resend.emails.send({
+      const result = await resend.emails.send({
         from: 'onboarding@resend.dev',
         to: email,
         subject: 'Obnovení hesla - UFO Sport',
@@ -71,9 +72,14 @@ export async function POST(request: Request) {
           </div>
         `,
       });
+      console.log('Email sent successfully:', result);
     } catch (emailError) {
-      console.error('Error sending email:', emailError);
-      throw new Error(`Email send failed: ${emailError}`);
+      console.error('🔴 RESEND ERROR DETAILS:', {
+        error: emailError,
+        message: (emailError as any)?.message,
+        status: (emailError as any)?.status,
+      });
+      throw new Error(`Email send failed: ${JSON.stringify(emailError)}`);
     }
 
     return NextResponse.json(
