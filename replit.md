@@ -12,6 +12,20 @@ Ask before making major changes to the core design system or introducing new ext
 
 ## Recent Updates
 
+### November 25, 2025 - Database Schema & Email Setup Fixes
+- **Database Auto-Sync**: Added `prisma db push --skip-generate` to build process so Vercel automatically syncs schema on every deployment
+- **Fixed Registration Error**: Resolved "resetToken column does not exist" error by ensuring database schema synced before Next.js build
+- **Forgotten Password Setup**: Implemented Resend email integration for password reset functionality
+- **DNS & Email Verification**:
+  - Added DKIM, SPF, and MX records to WEDOS for ufosport.cz domain
+  - Changed email sender from `onboarding@resend.dev` to `noreply@ufosport.cz`
+  - DNS propagation in progress (60 minutes to 24 hours for full global propagation)
+- **Current Status**: 
+  - ✅ User registration working (verified with vojisek@seznam.cz)
+  - ✅ Forgotten password API functional
+  - ⏳ Awaiting DNS propagation for domain verification (should complete by Nov 26, 2025)
+  - Once DNS verified: Forgotten password emails will work to all addresses
+
 ### November 23, 2025 - Authentication & Vercel Deployment Fixes
 - **Enhanced Auth Error Handling**: Added try-catch blocks to NextAuth callbacks (signIn, jwt) for better error logging
 - **Environment Checker**: Created `/api/check-env` endpoint to verify production environment setup
