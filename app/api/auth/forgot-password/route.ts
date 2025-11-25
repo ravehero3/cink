@@ -60,7 +60,7 @@ export async function POST(request: Request) {
     try {
       console.log('🔵 FORGOT PASSWORD - Calling resend.emails.send...');
       const result = await resend.emails.send({
-        from: 'onboarding@resend.dev',
+        from: 'noreply@ufosport.cz',
         to: email,
         subject: 'Obnovení hesla - UFO Sport',
         html: `
