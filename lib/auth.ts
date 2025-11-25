@@ -64,27 +64,39 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ user, account, profile }) {
       try {
+        console.log('🔵 signIn callback triggered:', { provider: account?.provider, email: user.email });
+        
         if (account?.provider === "google") {
+          console.log('🔵 Google OAuth detected, checking user...');
+          
           const existingUser = await prisma.user.findUnique({
             where: { email: user.email! }
           });
 
-          if (!existingUser) {
-            console.log(`Creating new user from Google OAuth: ${user.email}`);
-            await prisma.user.create({
-              data: {
-                email: user.email!,
-                name: user.name || "",
-                password: "",
-                role: "USER",
-              }
-            });
-            console.log(`Successfully created user: ${user.email}`);
+          if (existingUser) {
+            console.log('🔵 User already exists:', existingUser.email);
+            return true;
           }
+
+          console.log('🔵 Creating new user from Google OAuth:', user.email);
+          const newUser = await prisma.user.create({
+            data: {
+              email: user.email!,
+              name: user.name || "",
+              password: "",
+              role: "USER",
+            }
+          });
+          console.log('🟢 Successfully created user:', newUser.email);
         }
         return true;
       } catch (error) {
-        console.error('Error in signIn callback:', error);
+        console.error('🔴 Error in signIn callback:', {
+          message: (error as any)?.message,
+          code: (error as any)?.code,
+          meta: (error as any)?.meta,
+          fullError: error
+        });
         return false;
       }
     },
