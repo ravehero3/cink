@@ -123,6 +123,9 @@ export default function CategoryPage() {
       }
     } catch (error) {
       console.error('Error fetching category:', error);
+      setCategory(null);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -306,10 +309,21 @@ export default function CategoryPage() {
     }
   };
 
-  if (!category) {
+  if (!category && isLoading) {
     return (
       <div className="relative" style={{ paddingTop: '69px' }}>
         <p className="text-product-name animate-pulse-color absolute left-1/2 transform -translate-x-1/2">Načítání...</p>
+      </div>
+    );
+  }
+
+  if (!category && !isLoading) {
+    return (
+      <div>
+        <SearchBar />
+        <div className="relative" style={{ paddingTop: '69px', minHeight: '400px' }}>
+          <p className="text-center text-lg mt-20">Kategorie nebyla nalezena</p>
+        </div>
       </div>
     );
   }
