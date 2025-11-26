@@ -602,7 +602,7 @@ export default function ProductDetailPage() {
               padding: '10.67px 0',
               width: '36vw',
               borderRadius: '4px',
-              marginTop: '4px',
+              marginTop: '12px',
               marginBottom: '16px'
             }}
           >
