@@ -88,6 +88,7 @@ export default function ProductCard({
           src={displayImage}
           alt={name}
           className="object-contain w-full h-full"
+          style={{ transform: 'scale(1.1)' }}
         />
         
         {onToggleSave && (
