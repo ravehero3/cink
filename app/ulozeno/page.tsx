@@ -266,14 +266,12 @@ export default function SavedProductsPage() {
               <div className="flex h-full">
                 <div className="w-1/2 border-r border-black relative">
                   <Link href={`/produkty/${product.slug}`}>
-                    <div className="relative w-full h-full" style={{ minHeight: '200px' }}>
-                      <Image
-                        src={product.images[0] || '/placeholder.png'}
-                        alt={product.name}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
+                    <img
+                      src={product.images[0] || '/placeholder.png'}
+                      alt={product.name}
+                      className="w-full h-full object-cover"
+                      style={{ minHeight: '200px', display: 'block' }}
+                    />
                   </Link>
                 </div>
 
