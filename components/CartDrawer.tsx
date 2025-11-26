@@ -225,13 +225,11 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       onClick={onClose}
                       className="flex-shrink-0"
                     >
-                      <div className="w-24 h-32 relative bg-white border border-black p-1 flex items-center justify-center">
-                        <Image
+                      <div className="w-24 h-32 bg-white border border-black p-1 flex items-center justify-center overflow-hidden">
+                        <img
                           src={item.image}
                           alt={item.name}
-                          fill
-                          className="object-contain"
-                          sizes="96px"
+                          className="object-contain w-full h-full"
                         />
                       </div>
                     </Link>

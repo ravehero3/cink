@@ -50,14 +50,11 @@ export default function CartPage() {
                 >
                   <div className="flex gap-6">
                     <Link href={`/produkty/${item.slug}`} className="flex-shrink-0">
-                      <div className="w-32 h-32 border border-black relative">
-                        <Image
+                      <div className="w-32 h-32 border border-black flex items-center justify-center overflow-hidden bg-white">
+                        <img
                           src={item.image}
                           alt={item.name}
-                          fill
-                          className="object-cover"
-                          sizes="128px"
-                          unoptimized
+                          className="object-contain w-full h-full p-1"
                         />
                       </div>
                     </Link>
