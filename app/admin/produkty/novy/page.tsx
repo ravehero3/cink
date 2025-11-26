@@ -2,8 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import SizeChartEditor from '@/components/admin/SizeChartEditor';
-import { SizeChartType, SizeChartData } from '@/components/SizeChart';
 
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
@@ -23,6 +21,7 @@ export default function NewProductPage() {
     sizeFit: '',
     shippingInfo: '',
     careInfo: '',
+    sizeChartImage: '',
   });
 
   useEffect(() => {
@@ -47,8 +46,6 @@ export default function NewProductPage() {
   const [sizes, setSizes] = useState<Record<string, number>>(
     SIZES.reduce((acc, size) => ({ ...acc, [size]: 0 }), {})
   );
-  const [sizeChartType, setSizeChartType] = useState<SizeChartType>(null);
-  const [sizeChartData, setSizeChartData] = useState<SizeChartData | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,8 +64,7 @@ export default function NewProductPage() {
           sizeFit: formData.sizeFit || null,
           shippingInfo: formData.shippingInfo || null,
           careInfo: formData.careInfo || null,
-          sizeChartType,
-          sizeChartData,
+          sizeChartImage: formData.sizeChartImage || null,
         }),
       });
 
@@ -279,15 +275,27 @@ export default function NewProductPage() {
           </div>
         </div>
 
-        {/* Size Chart Editor */}
-        <SizeChartEditor
-          sizeChartType={sizeChartType}
-          sizeChartData={sizeChartData}
-          onChange={(type, data) => {
-            setSizeChartType(type);
-            setSizeChartData(data);
-          }}
-        />
+        {/* Size Chart Image */}
+        <div className="mb-8">
+          <label className="block text-body uppercase mb-2">Tabulka velikostí - Obrázek</label>
+          <input
+            type="url"
+            value={formData.sizeChartImage}
+            onChange={(e) => setFormData({ ...formData, sizeChartImage: e.target.value })}
+            className="w-full border border-black p-3 text-body mb-2"
+            placeholder="URL obrázku tabulky velikostí (16:9 aspect ratio doporučeno)"
+          />
+          {formData.sizeChartImage && (
+            <div className="border border-black p-3 bg-gray-50">
+              <img 
+                src={formData.sizeChartImage} 
+                alt="Preview" 
+                style={{ maxHeight: '300px', maxWidth: '100%' }}
+                onError={() => alert('Nepodařilo se načíst obrázek')}
+              />
+            </div>
+          )}
+        </div>
 
         {/* Images */}
         <div className="mb-8">
