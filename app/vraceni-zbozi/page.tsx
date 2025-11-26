@@ -84,9 +84,9 @@ export default function ReturnsPage() {
               style={{
                 fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                 width: '33.33%',
-                backgroundColor: '#00FF00',
+                backgroundColor: '#6bdc66',
                 color: '#000000',
-                borderColor: '#00FF00'
+                borderColor: '#6bdc66'
               }}
             >
               Žádost o vrácení byla úspěšně odeslána. Brzy vás budeme kontaktovat.

@@ -160,7 +160,7 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
               <div className="border-t border-black" style={{ marginLeft: '-8px', marginRight: '-8px', marginBottom: '8px' }}></div>
 
               {message && (
-                <div className={`p-3 border text-center`} style={{ marginBottom: '8px', borderColor: message.type === 'success' ? '#00FF00' : '#dc2626', backgroundColor: message.type === 'success' ? '#00FF00' : '#fee2e2', color: message.type === 'success' ? '#000000' : '#991b1b' }}>
+                <div className={`p-3 border text-center`} style={{ marginBottom: '8px', borderColor: message.type === 'success' ? '#6bdc66' : '#dc2626', backgroundColor: message.type === 'success' ? '#6bdc66' : '#fee2e2', color: message.type === 'success' ? '#000000' : '#991b1b' }}>
                   <p style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px', lineHeight: '12px' }}>{message.text}</p>
                 </div>
               )}

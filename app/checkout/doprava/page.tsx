@@ -296,7 +296,7 @@ export default function CheckoutShippingPage() {
             <p style={{ fontSize: '12px', color: '#dc2626', marginTop: '8px' }}>{promoError}</p>
           )}
           {discount > 0 && (
-            <p style={{ fontSize: '12px', color: '#16a34a', marginTop: '8px' }}>
+            <p style={{ fontSize: '12px', color: '#6bdc66', marginTop: '8px' }}>
               Sleva uplatnena: -{discount} Kč
             </p>
           )}
@@ -369,7 +369,7 @@ export default function CheckoutShippingPage() {
               <span>{shippingCost} Kč</span>
             </div>
             {discount > 0 && (
-              <div className="flex justify-between text-sm" style={{ color: '#00FF00' }}>
+              <div className="flex justify-between text-sm" style={{ color: '#6bdc66' }}>
                 <span>Sleva</span>
                 <span>-{discount} Kč</span>
               </div>
