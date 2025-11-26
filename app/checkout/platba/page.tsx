@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCartStore } from '@/lib/cart-store';
+import { calculateShippingCost } from '@/lib/shipping';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -47,7 +48,7 @@ export default function CheckoutPaymentPage() {
 
     try {
       const subtotal = getTotal();
-      const shippingCost = 79;
+      const shippingCost = calculateShippingCost(subtotal);
       const discount = checkoutData.promoCode ? 0 : 0; // Will be calculated by backend
       const totalPrice = subtotal + shippingCost - discount;
 
@@ -119,7 +120,7 @@ export default function CheckoutPaymentPage() {
   }
 
   const subtotal = getTotal();
-  const shippingCost = 79;
+  const shippingCost = calculateShippingCost(subtotal);
   const total = subtotal + shippingCost;
 
   return (
@@ -191,7 +192,9 @@ export default function CheckoutPaymentPage() {
             </div>
             <div className="flex justify-between">
               <span>Doprava (Zásilkovna)</span>
-              <span>{shippingCost} Kč</span>
+              <span style={{ color: shippingCost === 0 ? '#6bdc66' : 'inherit' }}>
+                {shippingCost === 0 ? 'ZDARMA' : `${shippingCost} Kč`}
+              </span>
             </div>
           </div>
 

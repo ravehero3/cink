@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCartStore } from '@/lib/cart-store';
+import { calculateShippingCost, getShippingLabel, getAmountToFreeShipping, FREE_SHIPPING_THRESHOLD } from '@/lib/shipping';
 import Link from 'next/link';
 import { ChevronDown } from 'lucide-react';
 
@@ -117,7 +118,8 @@ export default function CheckoutShippingPage() {
   };
 
   const subtotal = getTotal();
-  const shippingCost = 79;
+  const shippingCost = calculateShippingCost(subtotal);
+  const amountToFreeShipping = getAmountToFreeShipping(subtotal);
   const total = subtotal + shippingCost - discount;
 
   return (
@@ -248,9 +250,15 @@ export default function CheckoutShippingPage() {
               className="w-4 h-4"
             />
             <label htmlFor="zasilkovna" className="flex-1" style={{ fontSize: '14px', fontWeight: 600, cursor: 'pointer' }}>
-              Zásilkovna (79 Kč)
+              Zásilkovna ({getShippingLabel(subtotal)})
             </label>
           </div>
+          
+          {amountToFreeShipping > 0 && (
+            <p style={{ fontSize: '12px', color: '#6bdc66', marginTop: '8px' }}>
+              Přidejte zboží za {amountToFreeShipping} Kč pro dopravu zdarma!
+            </p>
+          )}
         </div>
 
         {/* Promo Code */}
@@ -366,7 +374,9 @@ export default function CheckoutShippingPage() {
             </div>
             <div className="flex justify-between text-sm">
               <span>Doprava</span>
-              <span>{shippingCost} Kč</span>
+              <span style={{ color: shippingCost === 0 ? '#6bdc66' : 'inherit' }}>
+                {shippingCost === 0 ? 'ZDARMA' : `${shippingCost} Kč`}
+              </span>
             </div>
             {discount > 0 && (
               <div className="flex justify-between text-sm" style={{ color: '#6bdc66' }}>

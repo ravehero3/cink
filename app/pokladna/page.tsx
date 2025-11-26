@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useCartStore } from '@/lib/cart-store';
+import { calculateShippingCost, getShippingLabel, getAmountToFreeShipping } from '@/lib/shipping';
 import Image from 'next/image';
 
 function AnimatedCheckoutButton({ 
@@ -83,7 +84,8 @@ export default function CheckoutPage() {
   }, [session?.user?.email]);
 
   const subtotal = getTotal();
-  const shippingCost = 79;
+  const shippingCost = calculateShippingCost(subtotal);
+  const amountToFreeShipping = getAmountToFreeShipping(subtotal);
   const total = subtotal + shippingCost - discount;
 
   const handleApplyPromo = async () => {
@@ -316,7 +318,9 @@ export default function CheckoutPage() {
                     <p className="text-body font-bold">Zásilkovna</p>
                     <p className="text-body">Doručení na výdejní místo</p>
                   </div>
-                  <p className="text-body font-bold">79 Kč</p>
+                  <p className="text-body font-bold" style={{ color: shippingCost === 0 ? '#6bdc66' : 'inherit' }}>
+                    {shippingCost === 0 ? 'ZDARMA' : `${shippingCost} Kč`}
+                  </p>
                 </label>
 
                 {formData.shippingMethod === 'zasilkovna' && (
@@ -425,8 +429,15 @@ export default function CheckoutPage() {
                 </div>
                 <div className="flex justify-between" style={{ fontSize: '14px' }}>
                   <span>Doprava</span>
-                  <span>{shippingCost} Kč</span>
+                  <span style={{ color: shippingCost === 0 ? '#6bdc66' : 'inherit' }}>
+                    {shippingCost === 0 ? 'ZDARMA' : `${shippingCost} Kč`}
+                  </span>
                 </div>
+                {amountToFreeShipping > 0 && (
+                  <p style={{ fontSize: '11px', color: '#6bdc66', marginTop: '4px' }}>
+                    Přidejte zboží za {amountToFreeShipping} Kč pro dopravu zdarma!
+                  </p>
+                )}
                 {discount > 0 && (
                   <div className="flex justify-between" style={{ fontSize: '14px' }}>
                     <span>Sleva</span>
