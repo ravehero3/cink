@@ -12,7 +12,7 @@ export async function GET() {
     }
 
     const categories = await prisma.category.findMany({
-      orderBy: { order: 'asc' },
+      orderBy: { sortOrder: 'asc' },
     });
 
     return NextResponse.json(categories);
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { name, slug, videoUrl, order } = body;
+    const { name, slug, videoUrl, sortOrder } = body;
 
     if (!name || !slug) {
       return NextResponse.json({ error: 'Name and slug are required' }, { status: 400 });
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
         name,
         slug,
         videoUrl: videoUrl || null,
-        order: order || 0,
+        sortOrder: sortOrder || 0,
       },
     });
 
@@ -62,7 +62,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { id, name, slug, videoUrl, order } = body;
+    const { id, name, slug, videoUrl, sortOrder } = body;
 
     if (!id) {
       return NextResponse.json({ error: 'ID is required' }, { status: 400 });
@@ -74,7 +74,7 @@ export async function PUT(request: NextRequest) {
         ...(name && { name }),
         ...(slug && { slug }),
         ...(videoUrl !== undefined && { videoUrl }),
-        ...(order !== undefined && { order }),
+        ...(sortOrder !== undefined && { sortOrder }),
       },
     });
 

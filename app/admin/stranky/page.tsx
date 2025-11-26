@@ -8,7 +8,7 @@ interface Category {
   name: string;
   slug: string;
   videoUrl: string | null;
-  order: number;
+  sortOrder: number;
 }
 
 export default function StrankyPage() {
@@ -19,7 +19,7 @@ export default function StrankyPage() {
     name: '',
     slug: '',
     videoUrl: '',
-    order: 0,
+    sortOrder: 0,
   });
   const [isCreating, setIsCreating] = useState(false);
 
@@ -51,8 +51,8 @@ export default function StrankyPage() {
       const url = editingId ? '/api/categories-admin' : '/api/categories-admin';
       const method = editingId ? 'PUT' : 'POST';
       const body = editingId
-        ? { id: editingId, ...formData, order: parseInt(String(formData.order)) }
-        : { ...formData, order: parseInt(String(formData.order)) };
+        ? { id: editingId, ...formData, sortOrder: parseInt(String(formData.sortOrder)) }
+        : { ...formData, sortOrder: parseInt(String(formData.sortOrder)) };
 
       const response = await fetch(url, {
         method,
@@ -90,7 +90,7 @@ export default function StrankyPage() {
       name: category.name,
       slug: category.slug,
       videoUrl: category.videoUrl || '',
-      order: category.order,
+      sortOrder: category.sortOrder,
     });
     setIsCreating(false);
   };
@@ -98,7 +98,7 @@ export default function StrankyPage() {
   const handleCancel = () => {
     setEditingId(null);
     setIsCreating(false);
-    setFormData({ name: '', slug: '', videoUrl: '', order: 0 });
+    setFormData({ name: '', slug: '', videoUrl: '', sortOrder: 0 });
   };
 
   if (loading) {
@@ -164,8 +164,8 @@ export default function StrankyPage() {
               <label className="block text-sm uppercase font-medium mb-2">Pořadí</label>
               <input
                 type="number"
-                value={formData.order}
-                onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) })}
+                value={formData.sortOrder}
+                onChange={(e) => setFormData({ ...formData, sortOrder: parseInt(e.target.value) })}
                 className="w-full px-3 py-2 border border-black text-sm"
               />
             </div>
