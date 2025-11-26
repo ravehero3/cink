@@ -4,6 +4,19 @@
 A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz), designed with a high-fashion, Balenciaga-inspired aesthetic. The project focuses on clean design, enlarged typography, and generous spacing to deliver a premium user experience. It supports a comprehensive e-commerce workflow, from product browsing and selection to secure payment processing and shipping. The platform aims to provide a unique online shopping experience that aligns with a luxury, avant-garde brand image.
 
 ## Recent Changes (November 26, 2025)
+
+**Product Display and Delivery Date Improvements:**
+1. **Product Grid Images** - Changed from `object-cover` to `object-contain` in ProductCard.tsx so full product photos are visible without cropping sides
+2. **Color Product Photos** - Removed grayscale filter (`filter: 'grayscale(1) contrast(1.2)'`) from product detail page images so photos display in full color
+3. **Estimated Delivery Date** - Added delivery date display on product detail pages showing "Odhadované datum doručení: DD/MM/YYYY - DD/MM/YYYY":
+   - Located between price and size selector
+   - Calculates 3-5 working days delivery time
+   - Respects 17:00 CET cutoff (orders before 17:00 count today as day 1)
+   - Skips weekends (Saturday/Sunday)
+   - Skips Czech public holidays (including Easter calculation)
+   - Utility: `lib/delivery-date.ts`
+4. **Search Bar Thumbnails** - Added 48x48px product image previews in search results
+
 **Category Products Not Showing on Vercel - FIXED:**
 - **Root Cause**: The `/api/products` route was using exact string matching for category filtering (`where.category = category`), but search used case-insensitive matching. This caused a mismatch on Vercel deployment.
 - **Solution**: Changed category filter to use case-insensitive matching: `where.category = { equals: category, mode: 'insensitive' }`
