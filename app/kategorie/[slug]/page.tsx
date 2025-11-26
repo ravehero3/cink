@@ -328,6 +328,9 @@ export default function CategoryPage() {
     );
   }
 
+  // At this point, category must exist (both null checks have returned)
+  if (!category) return null;
+
   return (
     <div>
       <SearchBar />
