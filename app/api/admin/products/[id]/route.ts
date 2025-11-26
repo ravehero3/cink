@@ -64,6 +64,10 @@ export async function PATCH(
     if (data.images !== undefined) updateData.images = data.images;
     if (data.videoUrl !== undefined) updateData.videoUrl = data.videoUrl;
     if (data.isVisible !== undefined) updateData.isVisible = data.isVisible;
+    if (data.productInfo !== undefined) updateData.productInfo = data.productInfo;
+    if (data.sizeFit !== undefined) updateData.sizeFit = data.sizeFit;
+    if (data.shippingInfo !== undefined) updateData.shippingInfo = data.shippingInfo;
+    if (data.careInfo !== undefined) updateData.careInfo = data.careInfo;
     
     if (data.sizes !== undefined) {
       updateData.sizes = data.sizes;

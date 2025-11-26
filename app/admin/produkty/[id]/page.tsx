@@ -25,6 +25,10 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
     color: '',
     videoUrl: '',
     isVisible: true,
+    productInfo: '',
+    sizeFit: '',
+    shippingInfo: '',
+    careInfo: '',
   });
   const [images, setImages] = useState<string[]>(['']);
   const [sizes, setSizes] = useState<Record<string, number>>(
@@ -53,6 +57,10 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
           color: product.color || '',
           videoUrl: product.videoUrl || '',
           isVisible: product.isVisible,
+          productInfo: product.productInfo || '',
+          sizeFit: product.sizeFit || '',
+          shippingInfo: product.shippingInfo || '',
+          careInfo: product.careInfo || '',
         });
         setImages(product.images.length > 0 ? product.images : ['']);
         setSizes(product.sizes || SIZES.reduce((acc, size) => ({ ...acc, [size]: 0 }), {}));
@@ -106,6 +114,10 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
           images: images.filter((img) => img.trim() !== ''),
           sizes,
           shortDescription: formData.shortDescription,
+          productInfo: formData.productInfo || null,
+          sizeFit: formData.sizeFit || null,
+          shippingInfo: formData.shippingInfo || null,
+          careInfo: formData.careInfo || null,
         }),
       });
 
@@ -235,6 +247,57 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
               className="w-full border border-black p-3 text-body"
               placeholder="https://..."
             />
+          </div>
+        </div>
+
+        {/* Product Detail Sections */}
+        <div className="mb-8 border border-black p-6">
+          <h2 className="text-header font-bold mb-6 uppercase">Detailní informace produktu</h2>
+          
+          <div className="space-y-6">
+            <div>
+              <label className="block text-body uppercase mb-2">Informace o produktu</label>
+              <textarea
+                rows={4}
+                value={formData.productInfo}
+                onChange={(e) => setFormData({ ...formData, productInfo: e.target.value })}
+                className="w-full border border-black p-3 text-body"
+                placeholder="Detailní informace o produktu, materiály, vlastnosti..."
+              />
+            </div>
+
+            <div>
+              <label className="block text-body uppercase mb-2">Size & Fit</label>
+              <textarea
+                rows={4}
+                value={formData.sizeFit}
+                onChange={(e) => setFormData({ ...formData, sizeFit: e.target.value })}
+                className="w-full border border-black p-3 text-body"
+                placeholder="Informace o velikostech a střihu produktu..."
+              />
+            </div>
+
+            <div>
+              <label className="block text-body uppercase mb-2">Doprava zdarma, vrácení zdarma</label>
+              <textarea
+                rows={4}
+                value={formData.shippingInfo}
+                onChange={(e) => setFormData({ ...formData, shippingInfo: e.target.value })}
+                className="w-full border border-black p-3 text-body"
+                placeholder="Informace o dopravě a vrácení zboží..."
+              />
+            </div>
+
+            <div>
+              <label className="block text-body uppercase mb-2">Péče o produkt</label>
+              <textarea
+                rows={4}
+                value={formData.careInfo}
+                onChange={(e) => setFormData({ ...formData, careInfo: e.target.value })}
+                className="w-full border border-black p-3 text-body"
+                placeholder="Pokyny pro péči o produkt, praní, údržba..."
+              />
+            </div>
           </div>
         </div>
 

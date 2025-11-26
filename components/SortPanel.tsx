@@ -1,7 +1,7 @@
 'use client';
 
 import { useSortPanelStore } from '@/lib/sort-panel-store';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const sortOptions = [
   { value: 'newest', label: 'Od Nejnovějšího' },
@@ -11,6 +11,7 @@ const sortOptions = [
 
 export default function SortPanel() {
   const { isOpen, tempSelectedSort, setTempSort, apply, cancel, close } = useSortPanelStore();
+  const [hoveredOption, setHoveredOption] = useState<string | null>(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -27,98 +28,156 @@ export default function SortPanel() {
   return (
     <>
       <div
-        className="fixed inset-0 bg-black z-40 cursor-pointer transition-opacity duration-300"
+        className="fixed inset-0 bg-black z-40 transition-opacity duration-300"
         style={{ opacity: isOpen ? 0.5 : 0, pointerEvents: isOpen ? 'auto' : 'none' }}
         onClick={close}
       />
 
       <div
-        className={`fixed top-0 right-0 bottom-0 bg-white border-l border-black z-50 flex flex-col transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 right-0 h-full bg-white border-l border-black z-50 transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
-        style={{
-          width: 'calc(100vw / 3)',
-        }}
+        style={{ width: 'calc(100vw / 3)' }}
       >
-        <div className="border-b border-black relative" style={{ height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <h2 
-            style={{
-              fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-              fontSize: '15px',
-              fontWeight: 700,
-              textTransform: 'uppercase',
-              letterSpacing: '0.03em',
-              fontStretch: 'condensed'
-            }}
-          >
-            SEŘADIT PODLE
-          </h2>
-          <button
-            onClick={close}
-            className="absolute hover:opacity-70 transition-opacity"
-            style={{
-              width: '22px',
-              height: '22px',
-              top: '50%',
-              right: '8px',
-              transform: 'translateY(-50%)',
-              padding: '0'
-            }}
-          >
-            <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
+        <div className="h-full flex flex-col">
+          <div className="bg-white border-b border-black relative flex items-center justify-center px-6" style={{ height: '44px' }}>
+            <h2 
+              className="uppercase tracking-wider"
+              style={{ 
+                fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif', 
+                fontSize: '14px', 
+                fontWeight: 700, 
+                fontStretch: 'condensed' 
+              }}
+            >
+              SEŘADIT PODLE
+            </h2>
+            <button
+              onClick={close}
+              className="absolute hover:opacity-70 transition-opacity"
+              style={{ 
+                width: '22px', 
+                height: '22px', 
+                top: '50%', 
+                right: '8px', 
+                transform: 'translateY(-50%)', 
+                padding: '0', 
+                border: 'none', 
+                background: 'none' 
+              }}
+              aria-label="Close"
+            >
+              <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
 
-        <div className="flex-1 overflow-y-auto">
-          <div style={{ padding: '2px' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              {sortOptions.map((option) => (
-                <button
-                  key={option.value}
-                  onClick={() => setTempSort(option.value)}
-                  className="w-full px-lg py-sm text-small uppercase tracking-wider border border-black bg-white text-black hover:opacity-70 transition-opacity text-left"
-                  style={{
-                    backgroundColor: tempSelectedSort === option.value ? '#000000' : '#FFFFFF',
-                    color: tempSelectedSort === option.value ? '#FFFFFF' : '#000000',
+          <div className="flex-1 overflow-y-auto flex flex-col" style={{ paddingLeft: '8px', paddingRight: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', paddingTop: '24px', paddingBottom: '24px' }} className="flex-1">
+              <p 
+                className="text-center w-full" 
+                style={{ 
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', 
+                  fontSize: '14px', 
+                  fontWeight: 400, 
+                  lineHeight: '19.6px' 
+                }}
+              >
+                Vyberte, jak chcete produkty seřadit
+              </p>
+            </div>
+
+            <div style={{ marginBottom: '24px' }}>
+              <div className="flex justify-between items-center" style={{ marginBottom: '8px' }}>
+                <label 
+                  style={{ 
+                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', 
+                    fontSize: '12px', 
+                    fontWeight: 400, 
+                    lineHeight: '12px', 
+                    letterSpacing: '0.12px' 
                   }}
                 >
-                  {option.label}
-                </button>
-              ))}
+                  Řazení
+                </label>
+              </div>
+              
+              <div className="space-y-2">
+                {sortOptions.map((option) => {
+                  const isSelected = tempSelectedSort === option.value;
+                  const isHovered = hoveredOption === option.value;
+                  
+                  return (
+                    <button
+                      key={option.value}
+                      onClick={() => setTempSort(option.value)}
+                      onMouseEnter={() => setHoveredOption(option.value)}
+                      onMouseLeave={() => setHoveredOption(null)}
+                      className="w-full text-left px-4 py-3 transition-all duration-200"
+                      style={{
+                        fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                        fontSize: '12px',
+                        borderRadius: '4px',
+                        border: isSelected ? '1px solid black' : '1px solid #d1d5db',
+                        backgroundColor: isSelected ? '#000000' : (isHovered ? '#f3f4f6' : '#FFFFFF'),
+                        color: isSelected ? '#FFFFFF' : '#000000',
+                      }}
+                    >
+                      {option.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div style={{ marginTop: 'auto', marginBottom: '24px' }}>
+              <p 
+                className="text-center" 
+                style={{ 
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', 
+                  fontSize: '12px', 
+                  fontWeight: 400, 
+                  lineHeight: '12px', 
+                  letterSpacing: '0.12px', 
+                  color: '#4b5563' 
+                }}
+              >
+                Vybrané řazení se uloží pro celý váš prohlížeč.
+              </p>
+            </div>
+
+            <div className="border-t border-black" style={{ marginLeft: '-8px', marginRight: '-8px', marginBottom: '8px' }}></div>
+
+            <div className="flex gap-2" style={{ marginBottom: '8px' }}>
+              <button
+                onClick={cancel}
+                className="flex-1 bg-white text-black uppercase tracking-wider font-bold hover:opacity-70 transition-opacity border border-black"
+                style={{ 
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', 
+                  fontSize: '12px', 
+                  padding: '12px',
+                  borderRadius: '4px'
+                }}
+              >
+                ZRUŠIT
+              </button>
+              <button
+                onClick={apply}
+                className="flex-1 bg-black text-white uppercase tracking-wider font-bold hover:opacity-90 transition-opacity"
+                style={{ 
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', 
+                  fontSize: '12px', 
+                  padding: '12px',
+                  borderRadius: '4px'
+                }}
+              >
+                ULOŽIT
+              </button>
             </div>
           </div>
         </div>
-
-        <div style={{ borderTop: '1px solid #000000', marginBottom: '2px', marginLeft: '2px', marginRight: '2px' }} />
-
-        <div className="flex" style={{ gap: '2px', padding: '0 2px 2px 2px' }}>
-          <button
-            onClick={cancel}
-            className="flex-1 px-lg py-sm text-small uppercase tracking-wider border border-black bg-white text-black hover:opacity-70 transition-opacity"
-          >
-            Zrušit
-          </button>
-          <button
-            onClick={apply}
-            className="flex-1 px-lg py-sm text-small uppercase tracking-wider bg-black text-white border border-black hover:opacity-90 transition-opacity"
-          >
-            Uložit
-          </button>
-        </div>
       </div>
-
-      <style jsx>{`
-        @keyframes slideIn {
-          from {
-            transform: translateX(100%);
-          }
-          to {
-            transform: translateX(0);
-          }
-        }
-      `}</style>
     </>
   );
 }

@@ -209,7 +209,7 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
                 </>
               )}
               {order.packetaPacketId && (
-                <div className="mt-2 p-2 bg-green-50 border border-green-300">
+                <div className="mt-2 p-2 bg-gray-50 border border-black">
                   <strong>Packeta Packet ID:</strong> {order.packetaPacketId}
                   <div className="text-small mt-1">
                     ✓ Zásilka vytvořena v systému Zásilkovny

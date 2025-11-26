@@ -124,7 +124,7 @@ export default function StrankyPage() {
       {(isCreating || editingId) && (
         <div
           className="mb-8 p-6 border-l-4"
-          style={{ borderLeftColor: '#00FF00', backgroundColor: '#f9f9f9' }}
+          style={{ borderLeftColor: '#000000', backgroundColor: '#f9f9f9' }}
         >
           <div className="grid grid-cols-2 gap-6 mb-6">
             <div>
@@ -218,8 +218,7 @@ export default function StrankyPage() {
               </button>
               <Link
                 href={`/kategorie/${category.slug}`}
-                className="px-4 py-2 border border-green-500 text-green-500 uppercase text-xs font-medium hover:opacity-70 transition-opacity inline-block"
-                style={{ color: '#00FF00', borderColor: '#00FF00' }}
+                className="px-4 py-2 border border-black text-black uppercase text-xs font-medium hover:opacity-70 transition-opacity inline-block"
               >
                 Náhled
               </Link>

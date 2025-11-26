@@ -235,7 +235,7 @@ export default function AdminProductsPage() {
 
       {/* Bulk Operations Panel */}
       {selectedProducts.size > 0 && (
-        <div className="border-2 border-green-600 bg-green-50 p-6 mb-6">
+        <div className="border-2 border-black bg-gray-50 p-6 mb-6">
           <div className="flex justify-between items-center flex-wrap gap-4">
             <div className="text-body font-bold">
               Vybráno {selectedProducts.size} produktů
@@ -318,7 +318,7 @@ export default function AdminProductsPage() {
                 <button
                   onClick={handleBulkOperation}
                   disabled={processingBulk}
-                  className="px-4 py-2 bg-green-600 text-white text-body uppercase hover:bg-green-700 disabled:opacity-50"
+                  className="px-4 py-2 bg-black text-white text-body uppercase hover:opacity-80 disabled:opacity-50"
                 >
                   {processingBulk ? 'Zpracovávám...' : '✓ Potvrdit'}
                 </button>

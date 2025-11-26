@@ -60,6 +60,10 @@ export async function POST(request: NextRequest) {
         sizes: data.sizes || {},
         totalStock,
         isVisible: data.isVisible ?? true,
+        productInfo: data.productInfo || null,
+        sizeFit: data.sizeFit || null,
+        shippingInfo: data.shippingInfo || null,
+        careInfo: data.careInfo || null,
       },
     });
 

@@ -119,7 +119,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
         }`}
       >
         <div className="h-full flex flex-col border-l border-black">
-          <div className="border-b border-black relative" style={{ height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#6bdc66' }}>
+          <div className="border-b border-black relative" style={{ height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#000000' }}>
             <h2 
               style={{
                 fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -127,7 +127,8 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 fontWeight: 700,
                 textTransform: 'uppercase',
                 letterSpacing: '0.03em',
-                fontStretch: 'condensed'
+                fontStretch: 'condensed',
+                color: '#FFFFFF'
               }}
             >
               NÁKUPNÍ KOŠÍK
@@ -141,7 +142,8 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 top: '50%',
                 right: '8px',
                 transform: 'translateY(-50%)',
-                padding: '0'
+                padding: '0',
+                color: '#FFFFFF'
               }}
             >
               <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">

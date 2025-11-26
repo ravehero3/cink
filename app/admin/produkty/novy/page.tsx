@@ -17,6 +17,10 @@ export default function NewProductPage() {
     color: '',
     videoUrl: '',
     isVisible: true,
+    productInfo: '',
+    sizeFit: '',
+    shippingInfo: '',
+    careInfo: '',
   });
 
   useEffect(() => {
@@ -55,6 +59,10 @@ export default function NewProductPage() {
           price: parseFloat(formData.price),
           images: images.filter((img) => img.trim() !== ''),
           sizes,
+          productInfo: formData.productInfo || null,
+          sizeFit: formData.sizeFit || null,
+          shippingInfo: formData.shippingInfo || null,
+          careInfo: formData.careInfo || null,
         }),
       });
 
@@ -211,6 +219,57 @@ export default function NewProductPage() {
               className="w-full border border-black p-3 text-body"
               placeholder="https://..."
             />
+          </div>
+        </div>
+
+        {/* Product Detail Sections */}
+        <div className="mb-8 border border-black p-6">
+          <h2 className="text-header font-bold mb-6 uppercase">Detailní informace produktu</h2>
+          
+          <div className="space-y-6">
+            <div>
+              <label className="block text-body uppercase mb-2">Informace o produktu</label>
+              <textarea
+                rows={4}
+                value={formData.productInfo}
+                onChange={(e) => setFormData({ ...formData, productInfo: e.target.value })}
+                className="w-full border border-black p-3 text-body"
+                placeholder="Detailní informace o produktu, materiály, vlastnosti..."
+              />
+            </div>
+
+            <div>
+              <label className="block text-body uppercase mb-2">Size & Fit</label>
+              <textarea
+                rows={4}
+                value={formData.sizeFit}
+                onChange={(e) => setFormData({ ...formData, sizeFit: e.target.value })}
+                className="w-full border border-black p-3 text-body"
+                placeholder="Informace o velikostech a střihu produktu..."
+              />
+            </div>
+
+            <div>
+              <label className="block text-body uppercase mb-2">Doprava zdarma, vrácení zdarma</label>
+              <textarea
+                rows={4}
+                value={formData.shippingInfo}
+                onChange={(e) => setFormData({ ...formData, shippingInfo: e.target.value })}
+                className="w-full border border-black p-3 text-body"
+                placeholder="Informace o dopravě a vrácení zboží..."
+              />
+            </div>
+
+            <div>
+              <label className="block text-body uppercase mb-2">Péče o produkt</label>
+              <textarea
+                rows={4}
+                value={formData.careInfo}
+                onChange={(e) => setFormData({ ...formData, careInfo: e.target.value })}
+                className="w-full border border-black p-3 text-body"
+                placeholder="Pokyny pro péči o produkt, praní, údržba..."
+              />
+            </div>
           </div>
         </div>
 
