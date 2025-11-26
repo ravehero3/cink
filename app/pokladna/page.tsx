@@ -155,7 +155,8 @@ export default function CheckoutPage() {
     setLoading(true);
 
     try {
-      const response = await fetch('/api/orders/create', {
+      // Create order
+      const orderResponse = await fetch('/api/orders/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -171,17 +172,45 @@ export default function CheckoutPage() {
         }),
       });
 
-      const data = await response.json();
+      const orderData = await orderResponse.json();
 
-      if (response.ok) {
-        if (data.paymentUrl) {
-          window.location.href = data.paymentUrl;
-        } else {
-          router.push(`/potvrzeni/${data.orderNumber}`);
-        }
-      } else {
-        alert(data.error || 'Chyba při vytváření objednávky');
+      if (!orderResponse.ok) {
+        alert(orderData.error || 'Chyba při vytváření objednávky');
         setLoading(false);
+        return;
+      }
+
+      // Create GoPay payment
+      const paymentResponse = await fetch('/api/gopay/create-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          orderNumber: orderData.orderNumber,
+          amount: total,
+          customerName: formData.name,
+          customerEmail: formData.email,
+          customerPhone: formData.phone,
+          items,
+        }),
+      });
+
+      const paymentData = await paymentResponse.json();
+
+      if (!paymentResponse.ok) {
+        // Even if payment creation fails, order was created, so show confirmation
+        alert('Objednávka byla vytvořena, ale tvorba platby selhala. Přejděte prosím do svého účtu.');
+      }
+
+      // Clear cart and cleanup
+      clearCart();
+      sessionStorage.removeItem('checkoutEmail');
+      sessionStorage.removeItem('checkoutData');
+
+      // Redirect to payment or confirmation
+      if (paymentResponse.ok && paymentData.gatewayUrl) {
+        window.location.href = paymentData.gatewayUrl;
+      } else {
+        router.push(`/potvrzeni/${orderData.orderNumber}`);
       }
     } catch (error) {
       alert('Došlo k chybě. Zkuste to prosím znovu.');
