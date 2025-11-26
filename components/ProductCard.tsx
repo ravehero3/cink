@@ -87,7 +87,7 @@ export default function ProductCard({
         <img
           src={displayImage}
           alt={name}
-          className="object-cover"
+          className="object-contain"
           style={{ 
             width: '70%',
             height: '70%',

@@ -7,6 +7,7 @@ import { useCartStore } from '@/lib/cart-store';
 import { useSavedProductsStore } from '@/lib/saved-products-store';
 import { useRecentlyViewedStore } from '@/lib/recently-viewed-store';
 import { ChevronDown, Edit2, Save, X } from 'lucide-react';
+import { getDeliveryDateRange } from '@/lib/delivery-date';
 
 interface Product {
   id: string;
@@ -269,7 +270,6 @@ export default function ProductDetailPage() {
                   src={image}
                   alt={`${product.name} ${index + 1}`}
                   className="w-full object-cover"
-                  style={{ filter: 'grayscale(1) contrast(1.2)' }}
                 />
                 {index === 0 && (
                   <button
@@ -491,7 +491,26 @@ export default function ProductDetailPage() {
 
           {!isEditMode && (
             <>
-          <div className="relative" style={{ width: '36vw', marginBottom: '-4px', paddingTop: '32px' }}>
+          {(() => {
+            const delivery = getDeliveryDateRange();
+            return (
+              <p
+                style={{
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '12px',
+                  fontWeight: 400,
+                  color: '#666666',
+                  textAlign: 'center',
+                  marginTop: '12px',
+                  marginBottom: '8px',
+                  width: '36vw'
+                }}
+              >
+                Odhadované datum doručení: {delivery.minDate} - {delivery.maxDate}
+              </p>
+            );
+          })()}
+          <div className="relative" style={{ width: '36vw', marginBottom: '-4px', paddingTop: '12px' }}>
             <button
               onClick={() => setIsSizeDropdownOpen(!isSizeDropdownOpen)}
               className="w-full bg-white text-black flex items-center justify-center relative"
