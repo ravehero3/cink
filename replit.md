@@ -12,26 +12,25 @@ Ask before making major changes to the core design system or introducing new ext
 
 ## Recent Updates
 
-### November 26, 2025 - Admin Pages Manager & Direct File Uploads
+### November 26, 2025 - Admin Pages Manager, Direct File Uploads & Production Database Sync
 - **New Admin Pages Manager** (`/admin/stranky`): 
-  - Admins can now click the bold "ADMIN" title in the sidebar to manage all category pages
+  - Admins can click the bold "ADMIN" title in the sidebar to manage all category pages
   - Full CRUD operations: Create, Edit, Delete, and Preview categories
   - Form includes name, slug URL, optional video URL, and display order
   - Categories automatically appear in product creation dropdown
-  - Neon database verified: 4 categories (VOODOO808, SPACE LOVE, T SHIRT GALLERY, RECREATION WELLNESS) and 4 products exist
   
 - **Direct File Uploads** (Vercel Blob Storage):
   - Admins can now upload images directly from their computer when creating products
   - Files are stored on Vercel's CDN instead of requiring Cloudinary URLs
   - Multi-file upload support: select multiple images at once
-  - Images automatically added to product form
-  - File input section in "NOVÝ PRODUKT" form with drag-and-drop ready UI
-  - No more need to copy/paste Cloudinary URLs
+  - File input section in "NOVÝ PRODUKT" form ready for production use
 
-- **Dynamic Category Loading**:
-  - Product creation form now automatically loads categories from database
-  - Any new categories created in `/admin/stranky` instantly appear as options
-  - Fixed database field naming: `order` → `sortOrder` to match Prisma schema
+- **Production Database Seeding**:
+  - Successfully seeded Neon production database with 4 categories and 40 products
+  - Seed includes all category pages with product variants (10 products per category)
+  - Admin user created: admin@ufosport.cz / admin123
+  - Fixed database synchronization: Local dev and production now properly synced
+  - Products now visible on all category pages in production (https://cink-sable.vercel.app)
 
 ### November 25, 2025 - Vercel Build Script Fix
 - **Fixed Build Error**: Added `--accept-data-loss` flag to `prisma db push` in build script
