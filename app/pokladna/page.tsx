@@ -76,6 +76,12 @@ export default function CheckoutPage() {
     }
   }, [items, router]);
 
+  useEffect(() => {
+    if (session?.user?.email) {
+      setFormData(prev => ({ ...prev, email: session.user.email || '' }));
+    }
+  }, [session?.user?.email]);
+
   const subtotal = getTotal();
   const shippingCost = 79;
   const total = subtotal + shippingCost - discount;

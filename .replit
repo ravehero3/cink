@@ -1,4 +1,4 @@
-modules = ["nodejs-20", "bash", "web"]
+modules = ["nodejs-20", "bash", "web", "postgresql-16"]
 [agent]
 expertMode = true
 integrations = ["javascript_database:1.0.0", "github:1.0.0"]
@@ -106,5 +106,6 @@ NEXTAUTH_URL = "https://cink-sable.vercel.app"
 RESEND_API_KEY = "re_Hxzi2bjv_LpdCUjYTGdm17zPnXu5J8gUP"
 POSTGRES_PRISMA_URL = "postgresql://neondb_owner:npg_YfvpBPyZ91FK@ep-summer-sound-agjq94k0.c-2.eu-central-1.aws.neon.tech/neondb?sslmode=require"
 ZASILKOVNA_API_KEY = "40feed3e1efff3f6"
+DATABASE_URL = "postgresql://neondb_owner:npg_YfvpBPyZ91FK@ep-summer-sound-agjq94k0.c-2.eu-central-1.aws.neon.tech/neondb?sslmode=require"
 
 [userenv.development]

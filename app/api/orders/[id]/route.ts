@@ -12,15 +12,8 @@ export async function GET(
   try {
     const session = await getServerSession(authOptions);
 
-    if (!session?.user) {
-      return NextResponse.json(
-        { error: 'Musíte být přihlášeni' },
-        { status: 401 }
-      );
-    }
-
     const order = await prisma.order.findUnique({
-      where: { id: params.id },
+      where: { orderNumber: params.id },
       include: {
         user: {
           select: {
@@ -39,11 +32,13 @@ export async function GET(
       );
     }
 
-    if (order.userId !== session.user.id && session.user.role !== 'ADMIN') {
-      return NextResponse.json(
-        { error: 'Nemáte oprávnění k zobrazení této objednávky' },
-        { status: 403 }
-      );
+    if (session?.user) {
+      if (order.userId !== session.user.id && session.user.role !== 'ADMIN') {
+        return NextResponse.json(
+          { error: 'Nemáte oprávnění k zobrazení této objednávky' },
+          { status: 403 }
+        );
+      }
     }
 
     return NextResponse.json(order, { status: 200 });
