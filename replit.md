@@ -1,58 +1,101 @@
 # UFO Sport E-shop
 
 ## Overview
-A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz), designed with a high-fashion, Balenciaga-inspired aesthetic. The project focuses on clean design, enlarged typography, and generous spacing to deliver a premium user experience. It supports a comprehensive e-commerce workflow, from product browsing and selection to secure payment processing and shipping. The platform aims to provide a unique online shopping experience that aligns with a luxury, avant-garde brand image.
+A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz), designed with a high-fashion, Balenciaga-inspired aesthetic. The project focuses on clean design, enlarged typography, and generous spacing to deliver a premium user experience. It supports a comprehensive e-commerce workflow, from product browsing and selection to secure payment processing and shipping. The platform includes advanced admin features for customer management, email campaigns, SEO optimization, and dynamic pricing rules.
 
 ## Recent Changes (November 26, 2025)
 
-**Admin Panel & Design Updates:**
-1. **Cart Drawer Header** - Changed header background from green (#6bdc66) to black with white text for consistent branding
-2. **Admin Panel Color Scheme** - Updated all green elements across admin pages to black:
-   - Bulk operations panel border and confirm button (produkty page)
-   - Edit form border indicator (stranky page)
-   - Preview links styling (stranky page)
-   - Packeta success indicator (objednavky detail page)
-3. **Sort Panel Redesign** - Improved SortPanel styling to match NewsletterWindow design:
-   - Clean rounded buttons with black/white selection state
-   - Consistent typography and spacing
-   - Better visual hierarchy
-4. **Product Detail Fields** - Added 4 new optional text fields to products:
-   - `productInfo` - Informace o produktu
-   - `sizeFit` - Size & Fit
-   - `shippingInfo` - Doprava
-   - `careInfo` - Péče
-   - Updated admin forms (create/edit) with corresponding textareas
-5. **Packeta/Zasilkovna API** - Configured environment variables for shipping integration
+**Four Advanced Admin Features Implemented:**
 
-**Product Display and Delivery Date Improvements:**
-1. **Product Grid Images** - Changed from `object-cover` to `object-contain` in ProductCard.tsx so full product photos are visible without cropping sides
-2. **Color Product Photos** - Removed grayscale filter (`filter: 'grayscale(1) contrast(1.2)'`) from product detail page images so photos display in full color
-3. **Estimated Delivery Date** - Added delivery date display on product detail pages showing "Odhadované datum doručení: DD/MM/YYYY - DD/MM/YYYY":
-   - Located between price and size selector
-   - Calculates 3-5 working days delivery time
-   - Respects 17:00 CET cutoff (orders before 17:00 count today as day 1)
-   - Skips weekends (Saturday/Sunday)
-   - Skips Czech public holidays (including Easter calculation)
-   - Utility: `lib/delivery-date.ts`
-4. **Search Bar Thumbnails** - Added 48x48px product image previews in search results
+### 1. Customer Management Dashboard (`/admin/customers`)
+- View all customers with order history, total spending, phone contact info
+- Filter by user role (regular/admin)
+- Sort by name, total spending, or join date
+- Click "Detail" to view individual customer profile with all their orders
+- Track newsletter subscription status
 
-**Category Products Not Showing on Vercel - FIXED:**
-- **Root Cause**: The `/api/products` route was using exact string matching for category filtering (`where.category = category`), but search used case-insensitive matching. This caused a mismatch on Vercel deployment.
-- **Solution**: Changed category filter to use case-insensitive matching: `where.category = { equals: category, mode: 'insensitive' }`
-- **Result**: Category pages (VOODOO808, SPACE LOVE, etc.) now return products correctly, matching search behavior.
+**Files:**
+- `app/admin/customers/page.tsx` - Main customer list view
+- `app/admin/customers/[id]/page.tsx` - Individual customer detail page
+- `app/api/admin/customers/route.ts` - List customers API
+- `app/api/admin/customers/[id]/route.ts` - Customer detail API
 
-**Previous Critical Bug Fixes for Vercel Deployment:**
-1. **Order Confirmation Fix** - Updated order lookup API to search by `orderNumber` instead of UUID, enabling guest checkout users to view their order confirmations without authentication
-2. **Checkout Email Auto-Fill** - Improved email field synchronization to populate from session data in all navigation scenarios (login, page refresh, back navigation)
-3. **Safari Compatibility** - Replaced `requestIdleCallback` with `setTimeout` in cart button handler for cross-browser support (Safari/iOS compatibility)
-4. **Database Connection** - Fixed production database connection from local Replit heliumdb to Neon PostgreSQL
-5. **Database Seeding** - Populated production database with 40 products across 4 categories (RECREATION WELLNESS, SPACE LOVE, T SHIRT GALLERY, VOODOO808)
+### 2. Email Campaigns Manager (`/admin/email-campaigns`)
+- Create, draft, and send targeted email campaigns
+- Choose target audience (all subscribers, abandoned carts, VIP customers)
+- Track campaign status (draft, scheduled, sent)
+- View open rates and engagement metrics
+- Edit or delete existing campaigns
+- Create new campaign form at `/admin/email-campaigns/new`
 
-**Technical Details:**
-- Order numbers follow format: `UFO{YY}{MM}{DD}{NNN}` (e.g., UFO251126001)
-- Guest checkout orders are accessible via orderNumber as a secure token
-- All APIs verified working with 200 OK responses
-- Application ready for Vercel deployment
+**Files:**
+- `app/admin/email-campaigns/page.tsx` - Main campaigns list
+- `app/admin/email-campaigns/new/page.tsx` - Create new campaign form
+- `app/api/admin/email-campaigns/route.ts` - Create/list campaigns
+- `app/api/admin/email-campaigns/[id]/route.ts` - Edit/delete campaign
+
+### 3. SEO Management (`/admin/seo-management`)
+- Optimize SEO for every product with individual metadata
+- Set meta title (50-60 char limit with counter)
+- Set meta description (150-160 char limit with counter)
+- Add target keywords
+- Set OG image for social media sharing
+- Alert system shows products missing SEO data
+- Search and filter products for quick access
+
+**Files:**
+- `app/admin/seo-management/page.tsx` - SEO management interface
+- Updated `app/api/admin/products/[id]/route.ts` - PATCH endpoint for SEO fields
+
+### 4. Dynamic Pricing Rules (`/admin/pricing-rules`)
+- Create flexible discount rules without touching code
+- Rule types: volume discounts, minimum order amounts, first-time customer offers, seasonal sales
+- Set discount as percentage or fixed amount
+- Specify validity dates (valid from/until)
+- Set minimum quantity or minimum order amount requirements
+- Toggle rules active/inactive without deleting
+- Full CRUD interface with professional form validation
+
+**Files:**
+- `app/admin/pricing-rules/page.tsx` - Rules management interface
+- `app/api/admin/pricing-rules/route.ts` - Create/list rules
+- `app/api/admin/pricing-rules/[id]/route.ts` - Edit/delete rules
+
+**Database Schema Updates:**
+- Added `EmailCampaign` model with campaign tracking (sent count, open count, status)
+- Added `PricingRule` model with flexible discount configuration
+- Extended `Product` model with SEO fields: `seoTitle`, `seoDescription`, `seoKeywords`, `ogImage`
+
+**Admin Panel Color Scheme** - All green elements replaced with black:
+- Cart Drawer Header - black background with white text
+- Admin controls use black/white button styling
+- Consistent minimalist design throughout
+
+**Product Detail Fields** - Added 4 optional text fields to products:
+- `productInfo` - Informace o produktu
+- `sizeFit` - Size & Fit
+- `shippingInfo` - Doprava
+- `careInfo` - Péče
+
+**Size Charts System** - Comprehensive visual sizing for different product types:
+- T-shirt sizing with SVG diagram
+- Hoodie sizing with measurements
+- Crewneck sizing with neckline detail
+- Generic item dimensions (Length, Width, Depth)
+- Modal display on product pages when users click "Size & fit"
+
+**Search Bar Thumbnails** - Added 48x48px product image previews in search results
+
+**Category Products Fix** - Fixed case-insensitive matching for category filtering
+
+**Order Status Translations** - Czech translations for order statuses (ČEKÁ NA VYŘÍZENÍ, ZPRACOVÁVÁ SE, etc.)
+
+**Previous Critical Bug Fixes:**
+1. Order confirmation lookup by orderNumber (guest checkout support)
+2. Checkout email auto-fill synchronization
+3. Safari compatibility (requestIdleCallback → setTimeout)
+4. Production database connection to Neon PostgreSQL
+5. Database seeding with 40+ products
 
 ## User Preferences
 I prefer clear, concise explanations.
@@ -63,11 +106,37 @@ Ask before making major changes to the core design system or introducing new ext
 
 ## System Architecture
 
+### Admin Features Architecture
+**Customer Management:**
+- Queries user data with nested order counts and spending calculations
+- Supports multiple sorting options (name, spending, date)
+- Role-based filtering for admin/regular users
+- Detail pages fetch full order history for individual customers
+
+**Email Campaigns:**
+- Stores campaign metadata (subject, content, audience targeting)
+- Tracks engagement (sent count, open count, open rate percentage)
+- Status tracking (draft, scheduled, sent)
+- Supports selective audience targeting (future: integration with Resend)
+
+**SEO Management:**
+- Per-product SEO fields stored in database
+- Character count feedback for optimal tag length
+- Bulk product search and filter capability
+- Alert system for missing metadata
+
+**Pricing Rules:**
+- Flexible rule system with multiple discount types
+- Time-based validation (valid from/until dates)
+- Minimum quantity or order amount constraints
+- Active/inactive toggle without deletion
+- Supports percentage and fixed amount discounts
+
 ### UI/UX Decisions
 The design strictly adheres to a Balenciaga-inspired minimalist aesthetic, using a black-and-white color palette with neon green accents solely for primary calls to action. The design avoids grays, shadows, and gradients. Typography features enlarged "Helvetica Neue" (or similar sans-serif) with specific letter spacing for headlines. A consistent 8px-based spacing system is used throughout. The layout includes a 1600px max-width container and responsive product grids. Buttons have sharp corners with minimal hover effects. Headers are fixed, integrating search functionality and a three-column grid layout with reduced icon sizes (22px) and specific font styles for navigation. Cart and saved products use slide-in drawers with semi-transparent overlays. Product cards include color variant display on hover and clickable image navigation dots. Single product pages feature a heart icon for saving, standardized typography for titles and buttons, and carefully adjusted spacing. Accordion sections include smooth arrow rotation and content reveal animations. Checkout flows follow a three-step process with a 33/67% split for order summary/form, and minimalist border styling. Admin dashboards feature minimalist design with 1px black dividers and 20px padding.
 
 ### Technical Implementations
-The project is built using Next.js 14 (App Router) and TypeScript, with Tailwind CSS for styling. Zustand manages client-side state for the cart, recently viewed items, and saved products. The application features a comprehensive checkout flow, order creation, and confirmation. Search functionality includes product filtering. Promo code validation and discount calculations are integrated. Homepage video and category sections are customizable via an admin interface. UI animations, such as search bar slide-down, delayed content fade-in, and interactive elements (like sparkle animation on saving products), are implemented for a smooth user experience. Saved product functionality includes database synchronization for authenticated users and local storage persistence for unauthenticated users. Admin users are redirected to the admin dashboard upon login, which includes real-time revenue and order statistics with Recharts LineChart visualization, order sorting, customer phone display, inventory alerts, low stock management, and bulk product operations (price, category, visibility, stock, threshold, duplicate).
+The project is built using Next.js 14 (App Router) and TypeScript, with Tailwind CSS for styling. Zustand manages client-side state for the cart, recently viewed items, and saved products. The application features a comprehensive checkout flow, order creation, and confirmation. Search functionality includes product filtering. Promo code validation and discount calculations are integrated. Homepage video and category sections are customizable via an admin interface. UI animations, such as search bar slide-down, delayed content fade-in, and interactive elements (like sparkle animation on saving products), are implemented for a smooth user experience. Saved product functionality includes database synchronization for authenticated users and local storage persistence for unauthenticated users. Admin users are redirected to the admin dashboard upon login, which includes real-time revenue and order statistics with Recharts LineChart visualization, order sorting, customer phone display, inventory alerts, low stock management, bulk product operations (price, category, visibility, stock, threshold, duplicate), and new advanced features (customer management, email campaigns, SEO management, pricing rules).
 
 ### Feature Specifications
 - **Product Catalog**: Display of products with images, size options, and stock levels.
@@ -77,7 +146,7 @@ The project is built using Next.js 14 (App Router) and TypeScript, with Tailwind
 - **User Accounts**: Basic user authentication and saved products functionality.
 - **Saved Products**: Wishlist functionality with persistence.
 - **Search**: Site-wide product search with filtering.
-- **Admin Features**: Content management for homepage sections, product details, order statistics dashboard, inventory alerts, and bulk product operations.
+- **Admin Features**: Content management for homepage sections, product details, order statistics dashboard, inventory alerts, bulk product operations, **customer management dashboard**, **email campaign management**, **SEO optimization tools**, and **dynamic pricing rules**.
 
 ### System Design Choices
 - **Framework**: Next.js 14 (App Router).
