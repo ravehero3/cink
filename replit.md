@@ -12,6 +12,27 @@ Ask before making major changes to the core design system or introducing new ext
 
 ## Recent Updates
 
+### November 26, 2025 - Admin Pages Manager & Direct File Uploads
+- **New Admin Pages Manager** (`/admin/stranky`): 
+  - Admins can now click the bold "ADMIN" title in the sidebar to manage all category pages
+  - Full CRUD operations: Create, Edit, Delete, and Preview categories
+  - Form includes name, slug URL, optional video URL, and display order
+  - Categories automatically appear in product creation dropdown
+  - Neon database verified: 4 categories (VOODOO808, SPACE LOVE, T SHIRT GALLERY, RECREATION WELLNESS) and 4 products exist
+  
+- **Direct File Uploads** (Vercel Blob Storage):
+  - Admins can now upload images directly from their computer when creating products
+  - Files are stored on Vercel's CDN instead of requiring Cloudinary URLs
+  - Multi-file upload support: select multiple images at once
+  - Images automatically added to product form
+  - File input section in "NOVÝ PRODUKT" form with drag-and-drop ready UI
+  - No more need to copy/paste Cloudinary URLs
+
+- **Dynamic Category Loading**:
+  - Product creation form now automatically loads categories from database
+  - Any new categories created in `/admin/stranky` instantly appear as options
+  - Fixed database field naming: `order` → `sortOrder` to match Prisma schema
+
 ### November 25, 2025 - Vercel Build Script Fix
 - **Fixed Build Error**: Added `--accept-data-loss` flag to `prisma db push` in build script
 - **Issue**: Vercel deployments were failing with Prisma data loss warnings
