@@ -40,7 +40,12 @@ export default function AdminLayout({
         {/* Sidebar */}
         <aside className="min-h-screen border-r border-black bg-white" style={{ width: '280px' }}>
           <nav className="space-y-0.5" style={{ padding: '8px 8px 32px 8px' }}>
-            <h2 className="text-header font-bold mb-1">ADMIN</h2>
+            <Link
+              href="/admin/stranky"
+              className="block text-header font-bold mb-3 hover:opacity-70 transition-opacity cursor-pointer"
+            >
+              ADMIN
+            </Link>
             <Link
               href="/admin/objednavky"
               className={`block text-body uppercase hover:underline py-0.5 ${
