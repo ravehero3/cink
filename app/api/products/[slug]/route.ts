@@ -28,8 +28,6 @@ export async function GET(
         sizeFit: true,
         shippingInfo: true,
         careInfo: true,
-        sizeChartType: true,
-        sizeChartData: true,
       },
     });
 
