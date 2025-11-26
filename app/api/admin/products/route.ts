@@ -64,6 +64,8 @@ export async function POST(request: NextRequest) {
         sizeFit: data.sizeFit || null,
         shippingInfo: data.shippingInfo || null,
         careInfo: data.careInfo || null,
+        sizeChartType: data.sizeChartType || null,
+        sizeChartData: data.sizeChartData || null,
       },
     });
 
