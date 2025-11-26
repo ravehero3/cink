@@ -173,7 +173,7 @@ const ItemDimensionsSVG = () => (
 );
 
 interface SizeChartProps {
-  type: SizeChartType;
+  type?: SizeChartType;
   data?: SizeChartData;
   isOpen: boolean;
   onClose: () => void;
