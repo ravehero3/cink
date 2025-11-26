@@ -27,6 +27,8 @@ export default function SavedProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
+  const [addingToCart, setAddingToCart] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const { addItem } = useCartStore();
 
   // Set mounted flag to prevent hydration mismatch
@@ -123,8 +125,50 @@ export default function SavedProductsPage() {
     }
   };
 
-  const handleMoveToCart = (product: Product) => {
-    router.push(`/produkty/${product.slug}`);
+  const handleMoveToCart = async (product: Product) => {
+    try {
+      setAddingToCart(product.id);
+      
+      // Fetch full product data to get sizes
+      const response = await fetch(`/api/products/${product.slug}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch product details');
+      }
+      
+      const fullProduct = await response.json();
+      const sizes = fullProduct.sizes || {};
+      
+      // Find first available size
+      const availableSize = Object.entries(sizes).find(([_, stock]: [string, number]) => stock > 0)?.[0];
+      
+      if (!availableSize) {
+        alert('Žádná velikost není k dispozici');
+        setAddingToCart(null);
+        return;
+      }
+      
+      // Add to cart
+      addItem({
+        productId: product.id,
+        name: product.name,
+        slug: product.slug,
+        size: availableSize,
+        quantity: 1,
+        price: Number(product.price),
+        image: product.images[0],
+        color: product.color,
+      });
+      
+      // Show success message
+      setSuccessMessage(`${product.name} přidán do košíku`);
+      setTimeout(() => setSuccessMessage(null), 2000);
+      
+    } catch (error) {
+      console.error('Error moving to cart:', error);
+      alert('Chyba při přidávání do košíku');
+    } finally {
+      setAddingToCart(null);
+    }
   };
 
   if (loading) {
@@ -148,6 +192,19 @@ export default function SavedProductsPage() {
         className="border-l border-r border-black relative w-full flex flex-col" 
         style={{ width: '33.333%', minWidth: '400px', maxWidth: '600px', paddingTop: '88px', marginTop: '-88px' }}
       >
+        {successMessage && (
+          <div 
+            className="border-b border-black bg-black text-white"
+            style={{
+              padding: '12px 16px',
+              fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '12px',
+              textAlign: 'center'
+            }}
+          >
+            {successMessage}
+          </div>
+        )}
         <div 
           className="border-b border-black flex items-center justify-center"
           style={{ height: '80px' }}
@@ -321,13 +378,15 @@ export default function SavedProductsPage() {
                   <div className="flex justify-between items-end pt-4">
                     <button
                       onClick={() => handleMoveToCart(product)}
-                      className="underline hover:no-underline text-left"
+                      disabled={addingToCart === product.id}
+                      className="underline hover:no-underline text-left disabled:opacity-50"
                       style={{
                         fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                        fontSize: '11px'
+                        fontSize: '11px',
+                        cursor: addingToCart === product.id ? 'not-allowed' : 'pointer'
                       }}
                     >
-                      Přesunout do košíku
+                      {addingToCart === product.id ? 'Přidávám...' : 'Přesunout do košíku'}
                     </button>
                     <button
                       onClick={() => handleRemove(product.id)}
