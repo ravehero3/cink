@@ -3,6 +3,20 @@
 ## Overview
 A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz), designed with a high-fashion, Balenciaga-inspired aesthetic. The project focuses on clean design, enlarged typography, and generous spacing to deliver a premium user experience. It supports a comprehensive e-commerce workflow, from product browsing and selection to secure payment processing and shipping. The platform aims to provide a unique online shopping experience that aligns with a luxury, avant-garde brand image.
 
+## Recent Changes (November 26, 2025)
+**Critical Bug Fixes for Vercel Deployment:**
+1. **Order Confirmation Fix** - Updated order lookup API to search by `orderNumber` instead of UUID, enabling guest checkout users to view their order confirmations without authentication
+2. **Checkout Email Auto-Fill** - Improved email field synchronization to populate from session data in all navigation scenarios (login, page refresh, back navigation)
+3. **Safari Compatibility** - Replaced `requestIdleCallback` with `setTimeout` in cart button handler for cross-browser support (Safari/iOS compatibility)
+4. **Database Connection** - Fixed production database connection from local Replit heliumdb to Neon PostgreSQL
+5. **Database Seeding** - Populated production database with 40 products across 4 categories (RECREATION WELLNESS, SPACE LOVE, T SHIRT GALLERY, VOODOO808)
+
+**Technical Details:**
+- Order numbers follow format: `UFO{YY}{MM}{DD}{NNN}` (e.g., UFO251126001)
+- Guest checkout orders are accessible via orderNumber as a secure token
+- All APIs verified working with 200 OK responses
+- Application ready for Vercel deployment
+
 ## User Preferences
 I prefer clear, concise explanations.
 I value a systematic and organized approach to development.
