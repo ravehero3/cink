@@ -41,35 +41,23 @@ export default function CheckoutShippingPage() {
   }, [items, router]);
 
   useEffect(() => {
-    // Load Zasilkovna widget script
+    // Script is loaded globally in layout.tsx
+    // Just verify it's available
     if (typeof window === 'undefined') return;
     
-    // Check if script is already loaded
-    if ((window as any).Packeta?.Widget?.pick) {
-      return;
-    }
-
-    // Check if script tag already exists
-    if (document.getElementById('zasilkovna-widget-script')) {
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.id = 'zasilkovna-widget-script';
-    script.src = 'https://widget.packeta.com/v6/www/js/packetaWidget.js';
-    script.async = true;
-    script.type = 'text/javascript';
-    script.onerror = () => {
-      console.error('Failed to load Zasilkovna widget script');
-    };
-    script.onload = () => {
-      console.log('Zasilkovna widget script loaded successfully');
-    };
-    document.head.appendChild(script);
+    let checkCount = 0;
+    const checkInterval = setInterval(() => {
+      checkCount++;
+      if ((window as any).Packeta?.Widget?.pick) {
+        console.log('Zasilkovna widget is ready');
+        clearInterval(checkInterval);
+      } else if (checkCount > 100) {
+        console.error('Zasilkovna widget failed to load');
+        clearInterval(checkInterval);
+      }
+    }, 100);
     
-    return () => {
-      // Don't remove the script - it should persist across navigation
-    };
+    return () => clearInterval(checkInterval);
   }, []);
 
   const handleApplyPromo = async () => {
@@ -106,7 +94,7 @@ export default function CheckoutShippingPage() {
     if (typeof window === 'undefined') return;
     
     let retries = 0;
-    const maxRetries = 50;
+    const maxRetries = 100;
     
     const openWidget = () => {
       if ((window as any).Packeta?.Widget?.pick) {
@@ -128,9 +116,9 @@ export default function CheckoutShippingPage() {
       } else {
         retries++;
         if (retries < maxRetries) {
-          setTimeout(openWidget, 100);
+          setTimeout(openWidget, 50);
         } else {
-          console.error('Widget failed to load');
+          console.error('Widget still not loaded after waiting');
           alert('Nemohu načíst Zásilkovnu. Prosím obnovte stránku.');
         }
       }

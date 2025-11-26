@@ -26,6 +26,19 @@ const nextConfig = {
     maxInactiveAge: 60 * 1000,
     pagesBufferLength: 5,
   },
+  headers: async () => {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Access-Control-Allow-Credentials',
+            value: 'true',
+          },
+        ],
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;
