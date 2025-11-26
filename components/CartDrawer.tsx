@@ -119,7 +119,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
         }`}
       >
         <div className="h-full flex flex-col border-l border-black">
-          <div className="border-b border-black relative" style={{ height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#000000' }}>
+          <div className="border-b border-black relative" style={{ height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#00FF00' }}>
             <h2 
               style={{
                 fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -128,7 +128,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 textTransform: 'uppercase',
                 letterSpacing: '0.03em',
                 fontStretch: 'condensed',
-                color: '#FFFFFF'
+                color: '#000000'
               }}
             >
               NÁKUPNÍ KOŠÍK
@@ -303,6 +303,8 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                           alt={product.name}
                           fill
                           className="object-cover"
+                          sizes="80px"
+                          unoptimized
                         />
                       </div>
                       <div className="flex-1">

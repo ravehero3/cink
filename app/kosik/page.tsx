@@ -56,6 +56,8 @@ export default function CartPage() {
                           alt={item.name}
                           fill
                           className="object-cover"
+                          sizes="128px"
+                          unoptimized
                         />
                       </div>
                     </Link>
