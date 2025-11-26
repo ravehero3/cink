@@ -140,7 +140,7 @@ export default function NewProductPage() {
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                 className="w-full border border-black p-3 text-body"
               >
-                {CATEGORIES.map((cat) => (
+                {categories.map((cat) => (
                   <option key={cat} value={cat}>
                     {cat.toUpperCase()}
                   </option>
