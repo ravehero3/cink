@@ -136,10 +136,10 @@ export default function SavedProductsPage() {
       }
       
       const fullProduct = await response.json();
-      const sizes = fullProduct.sizes || {};
+      const sizes = (fullProduct.sizes || {}) as Record<string, number>;
       
       // Find first available size
-      const availableSize = Object.entries(sizes).find(([_, stock]: [string, number]) => stock > 0)?.[0];
+      const availableSize = Object.entries(sizes).find(([_, stock]) => stock > 0)?.[0];
       
       if (!availableSize) {
         alert('Žádná velikost není k dispozici');
