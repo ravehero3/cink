@@ -5,6 +5,25 @@ A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz), d
 
 ## Recent Changes (November 26, 2025)
 
+**Admin Panel & Design Updates:**
+1. **Cart Drawer Header** - Changed header background from green (#6bdc66) to black with white text for consistent branding
+2. **Admin Panel Color Scheme** - Updated all green elements across admin pages to black:
+   - Bulk operations panel border and confirm button (produkty page)
+   - Edit form border indicator (stranky page)
+   - Preview links styling (stranky page)
+   - Packeta success indicator (objednavky detail page)
+3. **Sort Panel Redesign** - Improved SortPanel styling to match NewsletterWindow design:
+   - Clean rounded buttons with black/white selection state
+   - Consistent typography and spacing
+   - Better visual hierarchy
+4. **Product Detail Fields** - Added 4 new optional text fields to products:
+   - `productInfo` - Informace o produktu
+   - `sizeFit` - Size & Fit
+   - `shippingInfo` - Doprava
+   - `careInfo` - Péče
+   - Updated admin forms (create/edit) with corresponding textareas
+5. **Packeta/Zasilkovna API** - Configured environment variables for shipping integration
+
 **Product Display and Delivery Date Improvements:**
 1. **Product Grid Images** - Changed from `object-cover` to `object-contain` in ProductCard.tsx so full product photos are visible without cropping sides
 2. **Color Product Photos** - Removed grayscale filter (`filter: 'grayscale(1) contrast(1.2)'`) from product detail page images so photos display in full color
