@@ -510,7 +510,7 @@ export default function ProductDetailPage() {
                   fontWeight: 400,
                   color: '#666666',
                   textAlign: 'center',
-                  marginTop: '16px',
+                  marginTop: '20px',
                   marginBottom: '8px',
                   width: '36vw'
                 }}
