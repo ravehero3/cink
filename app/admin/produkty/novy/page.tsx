@@ -1,23 +1,42 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-const CATEGORIES = ['voodoo808', 'space-love', 'recreation-wellness', 't-shirt-gallery'];
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
 export default function NewProductPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
     price: '',
-    category: CATEGORIES[0],
+    category: '',
     color: '',
     videoUrl: '',
     isVisible: true,
   });
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('/api/categories-admin');
+        if (response.ok) {
+          const data = await response.json();
+          const slugs = data.map((cat: any) => cat.slug);
+          setCategories(slugs);
+          if (slugs.length > 0) {
+            setFormData(prev => ({ ...prev, category: slugs[0] }));
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+    fetchCategories();
+  }, []);
   const [images, setImages] = useState<string[]>(['']);
   const [sizes, setSizes] = useState<Record<string, number>>(
     SIZES.reduce((acc, size) => ({ ...acc, [size]: 0 }), {})
