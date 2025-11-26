@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { useCartStore } from '@/lib/cart-store';
@@ -18,6 +18,7 @@ const categories = [
 ];
 
 export default function Header1() {
+  const [isHydrated, setIsHydrated] = useState(false);
   const { data: session } = useSession();
   const pathname = usePathname();
   const isPokladna = pathname === '/pokladna';
@@ -28,6 +29,10 @@ export default function Header1() {
   const [showCartDrawer, setShowCartDrawer] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [isCartBadgeHovered, setIsCartBadgeHovered] = useState(false);
+
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   return (
     <>
@@ -90,17 +95,17 @@ export default function Header1() {
             <div className="flex items-center" style={{ gap: '12px', paddingRight: '12px' }}>
               <div className={`flex items-center transition-opacity duration-300 ${showSearch ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} style={{ gap: '12px' }}>
                 <Link
-                  href={isLoggedIn ? "/ucet" : "/prihlaseni"}
+                  href={isHydrated && isLoggedIn ? "/ucet" : "/prihlaseni"}
                   className="hover:opacity-70 transition-opacity whitespace-nowrap uppercase tracking-tight font-normal text-sm"
                   style={{
                     color: 'rgb(0, 0, 0)',
                     textDecoration: 'none'
                   }}
                 >
-                  {isLoggedIn ? "Účet" : "PŘIHLÁSIT SE"}
+                  {isHydrated && isLoggedIn ? "Účet" : "PŘIHLÁSIT SE"}
                 </Link>
 
-                {session?.user?.role === 'ADMIN' && (
+                {isHydrated && session?.user?.role === 'ADMIN' && (
                   <Link
                     href="/admin"
                     className="hover:opacity-70 transition-opacity whitespace-nowrap uppercase tracking-tight font-normal text-sm"
@@ -122,7 +127,7 @@ export default function Header1() {
                   <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                   </svg>
-                  {savedCount > 0 && (
+                  {isHydrated && savedCount > 0 && (
                     <span className="absolute -top-1 -right-1 bg-black text-white text-[9px] w-3.5 h-3.5 flex items-center justify-center rounded-full">
                       {savedCount}
                     </span>
@@ -162,7 +167,7 @@ export default function Header1() {
                   onMouseEnter={() => setIsCartBadgeHovered(true)}
                   onMouseLeave={() => setIsCartBadgeHovered(false)}
                 >
-                  {cartCount > 0 ? (
+                  {isHydrated && cartCount > 0 ? (
                     <div 
                       style={{
                         width: '24px',
