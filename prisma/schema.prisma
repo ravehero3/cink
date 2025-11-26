@@ -30,27 +30,36 @@ enum Role {
 }
 
 model Product {
-  id                 String    @id @default(uuid())
+  id                 String          @id @default(uuid())
   name               String
-  slug               String    @unique
-  description        String    @db.Text
-  shortDescription   String?   @db.Text
-  price              Decimal   @db.Decimal(10, 2)
+  slug               String          @unique
+  description        String          @db.Text
+  shortDescription   String?         @db.Text
+  price              Decimal         @db.Decimal(10, 2)
   category           String
   color              String
   images             String[]
   videoUrl           String?
   sizes              Json
-  totalStock         Int       @default(0)
-  lowStockThreshold  Int       @default(5)
-  isVisible          Boolean   @default(true)
-  sortOrder          Int       @default(0)
-  productInfo        String?   @db.Text
-  sizeFit            String?   @db.Text
-  shippingInfo       String?   @db.Text
-  careInfo           String?   @db.Text
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @updatedAt
+  totalStock         Int             @default(0)
+  lowStockThreshold  Int             @default(5)
+  isVisible          Boolean         @default(true)
+  sortOrder          Int             @default(0)
+  productInfo        String?         @db.Text
+  sizeFit            String?         @db.Text
+  shippingInfo       String?         @db.Text
+  careInfo           String?         @db.Text
+  sizeChartType      SizeChartType?
+  sizeChartData      Json?
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+}
+
+enum SizeChartType {
+  TSHIRT
+  HOODIE
+  CREWNECK
+  ITEM
 }
 
 model Category {
