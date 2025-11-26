@@ -33,7 +33,7 @@ export async function GET(
     }
 
     if (session?.user) {
-      if (order.userId !== session.user.id && session.user.role !== 'ADMIN') {
+      if (order.userId && order.userId !== session.user.id && session.user.role !== 'ADMIN') {
         return NextResponse.json(
           { error: 'Nemáte oprávnění k zobrazení této objednávky' },
           { status: 403 }
