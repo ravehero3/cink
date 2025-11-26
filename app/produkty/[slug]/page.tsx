@@ -654,7 +654,7 @@ export default function ProductDetailPage() {
                   <p className="mb-1">Barva: {product.color}</p>
                   <p className="mb-1">Kategorie: {product.category}</p>
                   <p className="mb-1">Made in Czech Republic</p>
-                  <p className="mt-4 text-xs text-gray-600">Product ID: {product.id}</p>
+                  {isAdmin && <p className="mt-4 text-xs text-gray-600">Product ID: {product.id}</p>}
               </div>
             </div>
 
@@ -679,7 +679,7 @@ export default function ProductDetailPage() {
                     height: '100%'
                   }}
                 >
-                  Size & fit
+                  VELIKOST & FIT
                 </span>
                 <ChevronDown 
                   className={`accordion-arrow ${expandedSection === 'size-fit' ? 'accordion-arrow-active' : ''}`}
