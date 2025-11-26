@@ -10,6 +10,7 @@ interface SearchResult {
   slug: string;
   price: number;
   category: string;
+  images: string[];
 }
 
 export default function SearchBar() {
@@ -131,12 +132,21 @@ export default function SearchBar() {
                   onClick={handleResultClick}
                   className="block p-4 border-t border-black hover:bg-gray-100 transition-colors"
                 >
-                  <div className="flex justify-between items-start gap-4">
-                    <div className="flex-1">
-                      <div className="text-sm font-bold uppercase">{result.name}</div>
+                  <div className="flex items-center gap-4">
+                    {result.images && result.images.length > 0 && (
+                      <div className="flex-shrink-0" style={{ width: '48px', height: '48px' }}>
+                        <img
+                          src={result.images[0]}
+                          alt={result.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-bold uppercase truncate">{result.name}</div>
                       <div className="text-xs uppercase mt-1">{result.category}</div>
                     </div>
-                    <div className="text-sm">{result.price} Kč</div>
+                    <div className="text-sm flex-shrink-0">{result.price} Kč</div>
                   </div>
                 </Link>
               ))}

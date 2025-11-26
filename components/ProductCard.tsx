@@ -83,13 +83,14 @@ export default function ProductCard({
         setCurrentImageIndex(0);
       }}
     >
-      <div className="relative overflow-hidden aspect-product">
+      <div className="relative overflow-hidden aspect-product flex items-center justify-center bg-white">
         <img
           src={displayImage}
           alt={name}
-          className="w-full h-full object-cover"
+          className="object-cover"
           style={{ 
-            filter: 'grayscale(1) contrast(1.2)',
+            width: '70%',
+            height: '70%',
           }}
         />
         
