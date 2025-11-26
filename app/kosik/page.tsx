@@ -3,11 +3,21 @@
 import { useCartStore } from '@/lib/cart-store';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
 export default function CartPage() {
+  const [isHydrated, setIsHydrated] = useState(false);
   const { items, updateQuantity, removeItem, getTotal } = useCartStore();
 
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
+
   const total = getTotal();
+
+  if (!isHydrated) {
+    return <div className="min-h-screen bg-white" />;
+  }
 
   if (items.length === 0) {
     return (
@@ -50,7 +60,7 @@ export default function CartPage() {
                 >
                   <div className="flex gap-6">
                     <Link href={`/produkty/${item.slug}`} className="flex-shrink-0">
-                      <div className="w-32 h-32 border border-black flex items-center justify-center overflow-hidden bg-white">
+                      <div className="w-32 border border-black flex items-center justify-center overflow-hidden bg-white">
                         <img
                           src={item.image}
                           alt={item.name}
