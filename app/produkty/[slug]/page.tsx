@@ -659,7 +659,12 @@ export default function ProductDetailPage() {
 
             <div className="border-b border-black">
               <button
-                onClick={() => toggleSection('size-fit')}
+                onClick={() => {
+                  toggleSection('size-fit');
+                  if (product.sizeChartType) {
+                    setShowSizeChart(true);
+                  }
+                }}
                 className="w-full flex items-center justify-between"
                 style={{ height: '48px' }}
               >
@@ -696,7 +701,15 @@ export default function ProductDetailPage() {
               >
                 <div className="pb-4">
                   <p className="mb-2">Oversize fit</p>
-                  <p>Konzultujte naši tabulku velikostí pro více informací.</p>
+                  <p className="mb-4">Konzultujte naši tabulku velikostí pro více informací.</p>
+                  {product.sizeChartType && (
+                    <button
+                      onClick={() => setShowSizeChart(true)}
+                      className="px-4 py-2 border border-black bg-white text-black uppercase text-xs font-medium hover:bg-black hover:text-white transition-colors"
+                    >
+                      Zobrazit tabulku velikostí
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -801,6 +814,14 @@ export default function ProductDetailPage() {
         </div>
       </div>
       </div>
+
+      {/* Size Chart Modal */}
+      <SizeChart
+        type={product.sizeChartType}
+        data={product.sizeChartData}
+        isOpen={showSizeChart}
+        onClose={() => setShowSizeChart(false)}
+      />
 
       <style jsx>{`
         .heart-icon-pdp {
