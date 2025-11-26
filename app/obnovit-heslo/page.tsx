@@ -124,7 +124,7 @@ function ResetPasswordContent() {
 
           {success ? (
             <div className="text-center" style={{ width: '33.33%' }}>
-              <div className="mb-6 p-3 bg-green-50 text-green-800 text-sm border border-green-200 text-center">
+              <div className="mb-6 p-3 text-sm border text-center" style={{ backgroundColor: '#00FF00', color: '#000000', borderColor: '#00FF00' }}>
                 Heslo bylo úspěšně obnoveno! Nyní vás přesmerujeme na přihlášení...
               </div>
             </div>

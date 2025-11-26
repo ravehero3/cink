@@ -80,10 +80,13 @@ export default function ReturnsPage() {
         <div className="w-full flex flex-col items-center">
           {submitted && (
             <div 
-              className="mb-6 p-3 bg-green-50 text-green-800 text-sm border border-green-200 text-center"
+              className="mb-6 p-3 text-sm border text-center"
               style={{
                 fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                width: '33.33%'
+                width: '33.33%',
+                backgroundColor: '#00FF00',
+                color: '#000000',
+                borderColor: '#00FF00'
               }}
             >
               Žádost o vrácení byla úspěšně odeslána. Brzy vás budeme kontaktovat.

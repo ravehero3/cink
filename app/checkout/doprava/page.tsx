@@ -369,7 +369,7 @@ export default function CheckoutShippingPage() {
               <span>{shippingCost} Kč</span>
             </div>
             {discount > 0 && (
-              <div className="flex justify-between text-sm text-green-700">
+              <div className="flex justify-between text-sm" style={{ color: '#00FF00' }}>
                 <span>Sleva</span>
                 <span>-{discount} Kč</span>
               </div>
