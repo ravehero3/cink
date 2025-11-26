@@ -65,38 +65,47 @@ export default function FilterWindow() {
                 Barva
               </h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {availableColors.map((color) => (
-                  <label key={color} className="flex items-center gap-2 cursor-pointer">
-                    <div
-                      className="w-5 h-5 border border-black flex items-center justify-center"
-                      style={{
-                        backgroundColor: colors.includes(color) ? '#000000' : '#FFFFFF',
-                        borderRadius: '2px'
-                      }}
-                    >
-                      {colors.includes(color) && (
-                        <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 16 16">
-                          <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
-                        </svg>
-                      )}
-                    </div>
-                    <input
-                      type="checkbox"
-                      checked={colors.includes(color)}
-                      onChange={() => toggleColor(color)}
-                      className="hidden"
-                    />
-                    <span 
-                      style={{ 
-                        fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', 
-                        fontSize: '14px', 
-                        fontWeight: 400
-                      }}
-                    >
-                      {color}
-                    </span>
-                  </label>
-                ))}
+                {availableColors.map((color) => {
+                  const isBlack = color === 'Černá';
+                  const isSelected = colors.includes(color);
+                  return (
+                    <label key={color} className="flex items-center gap-2 cursor-pointer">
+                      <div
+                        className="w-5 h-5 flex items-center justify-center relative"
+                        style={{
+                          backgroundColor: isBlack ? '#000000' : '#FFFFFF',
+                          border: '1px solid #000000',
+                          borderRadius: '3px'
+                        }}
+                      >
+                        {isSelected && (
+                          <svg 
+                            className="w-3 h-3" 
+                            fill={isBlack ? '#FFFFFF' : '#000000'} 
+                            viewBox="0 0 16 16"
+                          >
+                            <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                          </svg>
+                        )}
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={() => toggleColor(color)}
+                        className="hidden"
+                      />
+                      <span 
+                        style={{ 
+                          fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', 
+                          fontSize: '14px', 
+                          fontWeight: 400
+                        }}
+                      >
+                        {color}
+                      </span>
+                    </label>
+                  );
+                })}
               </div>
             </div>
 
