@@ -83,6 +83,26 @@ export default function CheckoutPage() {
     }
   }, [session?.user?.email]);
 
+  useEffect(() => {
+    // Load Zasilkovna widget script
+    if (typeof window === 'undefined') return;
+    
+    // Check if script is already loaded
+    if ((window as any).Packeta) {
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = 'https://widget.packeta.com/v6/www/js/packetaWidget.js';
+    script.async = true;
+    script.type = 'text/javascript';
+    document.head.appendChild(script);
+    
+    return () => {
+      // Don't remove the script - it should persist across navigation
+    };
+  }, []);
+
   const subtotal = getTotal();
   const shippingCost = calculateShippingCost(subtotal);
   const amountToFreeShipping = getAmountToFreeShipping(subtotal);
@@ -169,27 +189,29 @@ export default function CheckoutPage() {
   };
 
   const openZasilkovnaWidget = () => {
-    if (typeof window !== 'undefined' && (window as any).Packeta) {
-      (window as any).Packeta.Widget.pick(process.env.NEXT_PUBLIC_ZASILKOVNA_API_KEY || 'demo', (point: any) => {
-        if (point) {
-          setFormData({
-            ...formData,
-            zasilkovnaId: point.id,
-            zasilkovnaName: `${point.name}, ${point.street}, ${point.zip} ${point.place}`,
-          });
-        }
-      }, {
-        country: 'cz',
-        language: 'cs',
-      });
-    } else {
-      alert('Zásilkovna widget není k dispozici. Použijte placeholder výdejní místo pro testování.');
-      setFormData({
-        ...formData,
-        zasilkovnaId: 'TEST123',
-        zasilkovnaName: 'Test Výdejní Místo - Praha 1, 110 00 Praha',
-      });
-    }
+    if (typeof window === 'undefined') return;
+
+    const tryOpenWidget = () => {
+      if ((window as any).Packeta && (window as any).Packeta.Widget && (window as any).Packeta.Widget.pick) {
+        (window as any).Packeta.Widget.pick(process.env.NEXT_PUBLIC_ZASILKOVNA_API_KEY || 'demo', (point: any) => {
+          if (point) {
+            setFormData({
+              ...formData,
+              zasilkovnaId: point.id,
+              zasilkovnaName: `${point.name}, ${point.street}, ${point.zip} ${point.place}`,
+            });
+          }
+        }, {
+          country: 'cz',
+          language: 'cs',
+        });
+      } else {
+        // Widget not ready, retry after a short delay
+        setTimeout(tryOpenWidget, 500);
+      }
+    };
+
+    tryOpenWidget();
   };
 
   if (items.length === 0) {

@@ -41,13 +41,22 @@ export default function CheckoutShippingPage() {
   }, [items, router]);
 
   useEffect(() => {
-    // Load Zasilkovna widget
+    // Load Zasilkovna widget script
+    if (typeof window === 'undefined') return;
+    
+    // Check if script is already loaded
+    if ((window as any).Packeta) {
+      return;
+    }
+
     const script = document.createElement('script');
     script.src = 'https://widget.packeta.com/v6/www/js/packetaWidget.js';
     script.async = true;
-    document.body.appendChild(script);
+    script.type = 'text/javascript';
+    document.head.appendChild(script);
+    
     return () => {
-      document.body.removeChild(script);
+      // Don't remove the script - it should persist across navigation
     };
   }, []);
 
@@ -82,19 +91,28 @@ export default function CheckoutShippingPage() {
   };
 
   const handleSelectZasilkovnaPoint = () => {
-    if (typeof window !== 'undefined' && (window as any).Packeta) {
-      (window as any).Packeta.Widget.pick(process.env.NEXT_PUBLIC_ZASILKOVNA_API_KEY || 'demo', (point: any) => {
-        if (point) {
-          setFormData({
-            ...formData,
-            zasilkovnaId: point.id,
-            zasilkovnaName: point.name,
-            zasilkovnaCity: point.city,
-          });
-          setSelectedZasilkovnaPoint(point);
-        }
-      });
-    }
+    if (typeof window === 'undefined') return;
+
+    const tryOpenWidget = () => {
+      if ((window as any).Packeta && (window as any).Packeta.Widget && (window as any).Packeta.Widget.pick) {
+        (window as any).Packeta.Widget.pick(process.env.NEXT_PUBLIC_ZASILKOVNA_API_KEY || 'demo', (point: any) => {
+          if (point) {
+            setFormData({
+              ...formData,
+              zasilkovnaId: point.id,
+              zasilkovnaName: point.name,
+              zasilkovnaCity: point.city,
+            });
+            setSelectedZasilkovnaPoint(point);
+          }
+        });
+      } else {
+        // Widget not ready, retry after a short delay
+        setTimeout(tryOpenWidget, 500);
+      }
+    };
+
+    tryOpenWidget();
   };
 
   const handleContinue = async () => {
