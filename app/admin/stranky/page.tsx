@@ -63,7 +63,7 @@ export default function StrankyPage() {
       if (response.ok) {
         fetchCategories();
         setEditingId(null);
-        setFormData({ name: '', slug: '', videoUrl: '', order: 0 });
+        setFormData({ name: '', slug: '', videoUrl: '', sortOrder: 0 });
         setIsCreating(false);
       }
     } catch (error) {
