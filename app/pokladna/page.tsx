@@ -189,60 +189,28 @@ export default function CheckoutPage() {
   };
 
   const openZasilkovnaWidget = () => {
-    if (typeof window === 'undefined') {
-      console.error('Window is not defined');
-      return;
-    }
-
-    console.log('openZasilkovnaWidget called');
-    console.log('Packeta available:', !!(window as any).Packeta);
-    console.log('API Key:', process.env.NEXT_PUBLIC_ZASILKOVNA_API_KEY);
-
-    let retries = 0;
-    const maxRetries = 5;
-
-    const tryOpenWidget = () => {
-      console.log(`Attempt ${retries + 1}/${maxRetries + 1} to open widget`);
-      console.log('Packeta:', (window as any).Packeta);
-      console.log('Packeta.Widget:', (window as any).Packeta?.Widget);
-      console.log('Packeta.Widget.pick:', (window as any).Packeta?.Widget?.pick);
-
+    if (typeof window === 'undefined') return;
+    
+    const openWidget = () => {
       if ((window as any).Packeta?.Widget?.pick) {
-        console.log('Opening Zasilkovna widget...');
-        try {
-          (window as any).Packeta.Widget.pick(
-            process.env.NEXT_PUBLIC_ZASILKOVNA_API_KEY || 'demo',
-            (point: any) => {
-              console.log('Point selected:', point);
-              if (point) {
-                setFormData({
-                  ...formData,
-                  zasilkovnaId: point.id,
-                  zasilkovnaName: `${point.name}, ${point.street}, ${point.zip} ${point.place}`,
-                });
-              }
-            },
-            {
-              country: 'cz',
-              language: 'cs',
-            }
-          );
-        } catch (err) {
-          console.error('Error opening widget:', err);
-        }
+        (window as any).Packeta.Widget.pick(process.env.NEXT_PUBLIC_ZASILKOVNA_API_KEY || 'demo', (point: any) => {
+          if (point) {
+            setFormData({
+              ...formData,
+              zasilkovnaId: point.id,
+              zasilkovnaName: `${point.name}, ${point.street}, ${point.zip} ${point.place}`,
+            });
+          }
+        }, {
+          country: 'cz',
+          language: 'cs',
+        });
       } else {
-        retries++;
-        if (retries < maxRetries) {
-          console.log(`Widget not ready, retrying in 500ms...`);
-          setTimeout(tryOpenWidget, 500);
-        } else {
-          console.error('Widget failed to load after max retries');
-          alert('Zásilkovna widget se nepodařilo načíst. Zkuste prosím stránku obnovit.');
-        }
+        setTimeout(openWidget, 200);
       }
     };
-
-    tryOpenWidget();
+    
+    openWidget();
   };
 
   if (items.length === 0) {

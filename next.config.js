@@ -22,6 +22,10 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ['@react-pdf/renderer'],
   },
+  onDemandEntries: {
+    maxInactiveAge: 60 * 1000,
+    pagesBufferLength: 5,
+  },
 };
 
 module.exports = nextConfig;
