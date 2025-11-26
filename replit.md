@@ -4,7 +4,12 @@
 A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz), designed with a high-fashion, Balenciaga-inspired aesthetic. The project focuses on clean design, enlarged typography, and generous spacing to deliver a premium user experience. It supports a comprehensive e-commerce workflow, from product browsing and selection to secure payment processing and shipping. The platform aims to provide a unique online shopping experience that aligns with a luxury, avant-garde brand image.
 
 ## Recent Changes (November 26, 2025)
-**Critical Bug Fixes for Vercel Deployment:**
+**Category Products Not Showing on Vercel - FIXED:**
+- **Root Cause**: The `/api/products` route was using exact string matching for category filtering (`where.category = category`), but search used case-insensitive matching. This caused a mismatch on Vercel deployment.
+- **Solution**: Changed category filter to use case-insensitive matching: `where.category = { equals: category, mode: 'insensitive' }`
+- **Result**: Category pages (VOODOO808, SPACE LOVE, etc.) now return products correctly, matching search behavior.
+
+**Previous Critical Bug Fixes for Vercel Deployment:**
 1. **Order Confirmation Fix** - Updated order lookup API to search by `orderNumber` instead of UUID, enabling guest checkout users to view their order confirmations without authentication
 2. **Checkout Email Auto-Fill** - Improved email field synchronization to populate from session data in all navigation scenarios (login, page refresh, back navigation)
 3. **Safari Compatibility** - Replaced `requestIdleCallback` with `setTimeout` in cart button handler for cross-browser support (Safari/iOS compatibility)

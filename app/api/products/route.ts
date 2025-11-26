@@ -27,7 +27,7 @@ export async function GET(request: Request) {
     }
 
     if (category) {
-      where.category = category;
+      where.category = { equals: category, mode: 'insensitive' };
     }
 
     if (colors.length > 0) {
