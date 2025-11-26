@@ -88,14 +88,26 @@ export default function CheckoutPage() {
     if (typeof window === 'undefined') return;
     
     // Check if script is already loaded
-    if ((window as any).Packeta) {
+    if ((window as any).Packeta?.Widget?.pick) {
+      return;
+    }
+
+    // Check if script tag already exists
+    if (document.getElementById('zasilkovna-widget-script')) {
       return;
     }
 
     const script = document.createElement('script');
+    script.id = 'zasilkovna-widget-script';
     script.src = 'https://widget.packeta.com/v6/www/js/packetaWidget.js';
     script.async = true;
     script.type = 'text/javascript';
+    script.onerror = () => {
+      console.error('Failed to load Zasilkovna widget script');
+    };
+    script.onload = () => {
+      console.log('Zasilkovna widget script loaded successfully');
+    };
     document.head.appendChild(script);
     
     return () => {
@@ -191,22 +203,35 @@ export default function CheckoutPage() {
   const openZasilkovnaWidget = () => {
     if (typeof window === 'undefined') return;
     
+    let retries = 0;
+    const maxRetries = 50;
+    
     const openWidget = () => {
       if ((window as any).Packeta?.Widget?.pick) {
-        (window as any).Packeta.Widget.pick(process.env.NEXT_PUBLIC_ZASILKOVNA_API_KEY || 'demo', (point: any) => {
-          if (point) {
-            setFormData({
-              ...formData,
-              zasilkovnaId: point.id,
-              zasilkovnaName: `${point.name}, ${point.street}, ${point.zip} ${point.place}`,
-            });
-          }
-        }, {
-          country: 'cz',
-          language: 'cs',
-        });
+        try {
+          (window as any).Packeta.Widget.pick(process.env.NEXT_PUBLIC_ZASILKOVNA_API_KEY || 'demo', (point: any) => {
+            if (point) {
+              setFormData({
+                ...formData,
+                zasilkovnaId: point.id,
+                zasilkovnaName: `${point.name}, ${point.street}, ${point.zip} ${point.place}`,
+              });
+            }
+          }, {
+            country: 'cz',
+            language: 'cs',
+          });
+        } catch (err) {
+          console.error('Error opening widget:', err);
+        }
       } else {
-        setTimeout(openWidget, 200);
+        retries++;
+        if (retries < maxRetries) {
+          setTimeout(openWidget, 100);
+        } else {
+          console.error('Widget failed to load');
+          alert('Nemohu načíst Zásilkovnu. Prosím obnovte stránku.');
+        }
       }
     };
     
