@@ -87,6 +87,48 @@ export default function NewProductPage() {
     setImages(images.filter((_, i) => i !== index));
   };
 
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.currentTarget.files;
+    if (!files) return;
+
+    const newImages = [...images];
+    let uploadedCount = 0;
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        setLoading(true);
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          newImages.push(data.url);
+          uploadedCount++;
+        } else {
+          alert(`Chyba při nahrávání ${file.name}`);
+        }
+      } catch (error) {
+        console.error('Upload error:', error);
+        alert(`Chyba při nahrávání ${file.name}`);
+      }
+    }
+
+    setLoading(false);
+    setImages(newImages);
+    if (uploadedCount > 0) {
+      alert(`${uploadedCount} obrázků bylo úspěšně nahráno`);
+    }
+    
+    // Clear file input
+    e.currentTarget.value = '';
+  };
+
   const updateSize = (size: string, value: string) => {
     setSizes({ ...sizes, [size]: parseInt(value) || 0 });
   };
@@ -183,7 +225,7 @@ export default function NewProductPage() {
                   value={image}
                   onChange={(e) => updateImage(index, e.target.value)}
                   className="flex-1 border border-black p-3 text-body"
-                  placeholder="URL obrázku"
+                  placeholder="URL obrázku (nebo nahrajte soubor níže)"
                 />
                 {images.length > 1 && (
                   <button
@@ -204,9 +246,20 @@ export default function NewProductPage() {
               + Přidat obrázek
             </button>
           </div>
-          <p className="text-body mt-2 border-t border-black pt-2">
-            Tip: Nahrajte obrázky na Cloudinary a vložte zde URL
-          </p>
+          
+          {/* File Upload */}
+          <div className="mt-4 p-4 border border-dashed border-black bg-gray-50">
+            <label className="block text-body uppercase mb-2">Nebo nahrajte obrázky přímo ze svého počítače:</label>
+            <input
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={(e) => handleFileUpload(e)}
+              disabled={loading}
+              className="w-full p-2 text-body cursor-pointer"
+            />
+            <p className="text-xs text-gray-600 mt-2">Obrázky se uloží přímo na náš server (podporuje PNG, JPG, WebP)</p>
+          </div>
         </div>
 
         {/* Sizes and Stock */}
