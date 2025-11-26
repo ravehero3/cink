@@ -24,6 +24,12 @@ export async function GET(
         sizes: true,
         totalStock: true,
         createdAt: true,
+        productInfo: true,
+        sizeFit: true,
+        shippingInfo: true,
+        careInfo: true,
+        sizeChartType: true,
+        sizeChartData: true,
       },
     });
 

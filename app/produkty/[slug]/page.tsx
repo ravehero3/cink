@@ -8,6 +8,8 @@ import { useSavedProductsStore } from '@/lib/saved-products-store';
 import { useRecentlyViewedStore } from '@/lib/recently-viewed-store';
 import { ChevronDown, Edit2, Save, X } from 'lucide-react';
 import { getDeliveryDateRange } from '@/lib/delivery-date';
+import SizeChart from '@/components/SizeChart';
+import type { SizeChartType } from '@/components/SizeChart';
 
 interface Product {
   id: string;
@@ -21,6 +23,12 @@ interface Product {
   images: string[];
   sizes: Record<string, number>;
   totalStock: number;
+  productInfo?: string;
+  sizeFit?: string;
+  shippingInfo?: string;
+  careInfo?: string;
+  sizeChartType?: SizeChartType;
+  sizeChartData?: any;
 }
 
 export default function ProductDetailPage() {
@@ -49,6 +57,7 @@ export default function ProductDetailPage() {
   const [editedSizes, setEditedSizes] = useState<Record<string, number>>({});
   const [isSaving, setIsSaving] = useState(false);
   const [showHeartAnimation, setShowHeartAnimation] = useState(false);
+  const [showSizeChart, setShowSizeChart] = useState(false);
 
   const { addItem } = useCartStore();
   const { isSaved, addProduct, removeProduct } = useSavedProductsStore();

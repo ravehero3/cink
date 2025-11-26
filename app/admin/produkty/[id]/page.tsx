@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import SizeChartEditor from '@/components/admin/SizeChartEditor';
+import { SizeChartType, SizeChartData } from '@/components/SizeChart';
 
 const CATEGORIES = ['voodoo808', 'space-love', 'recreation-wellness', 't-shirt-gallery'];
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
@@ -34,6 +36,8 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
   const [sizes, setSizes] = useState<Record<string, number>>(
     SIZES.reduce((acc, size) => ({ ...acc, [size]: 0 }), {})
   );
+  const [sizeChartType, setSizeChartType] = useState<SizeChartType>(null);
+  const [sizeChartData, setSizeChartData] = useState<SizeChartData | null>(null);
   const [mediaOpen, setMediaOpen] = useState(false);
   const [mediaList, setMediaList] = useState<Media[]>([]);
   const [mediaLoading, setMediaLoading] = useState(false);
@@ -64,6 +68,8 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
         });
         setImages(product.images.length > 0 ? product.images : ['']);
         setSizes(product.sizes || SIZES.reduce((acc, size) => ({ ...acc, [size]: 0 }), {}));
+        setSizeChartType(product.sizeChartType || null);
+        setSizeChartData(product.sizeChartData || null);
       } else {
         alert('Produkt nenalezen');
         router.push('/admin/produkty');
@@ -118,6 +124,8 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
           sizeFit: formData.sizeFit || null,
           shippingInfo: formData.shippingInfo || null,
           careInfo: formData.careInfo || null,
+          sizeChartType,
+          sizeChartData,
         }),
       });
 
@@ -300,6 +308,16 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
             </div>
           </div>
         </div>
+
+        {/* Size Chart Editor */}
+        <SizeChartEditor
+          sizeChartType={sizeChartType}
+          sizeChartData={sizeChartData}
+          onChange={(type, data) => {
+            setSizeChartType(type);
+            setSizeChartData(data);
+          }}
+        />
 
         {/* Images */}
         <div className="mb-8">
