@@ -51,6 +51,10 @@ model Product {
   careInfo           String?         @db.Text
   sizeChartType      SizeChartType?
   sizeChartData      Json?
+  seoTitle           String?
+  seoDescription     String?
+  seoKeywords        String?
+  ogImage            String?
   createdAt          DateTime        @default(now())
   updatedAt          DateTime        @updatedAt
 }
@@ -133,6 +137,39 @@ model NewsletterSubscriber {
   id        String   @id @default(cuid())
   email     String   @unique
   createdAt DateTime @default(now())
+}
+
+model EmailCampaign {
+  id                    String    @id @default(uuid())
+  name                  String
+  subject               String
+  content               String    @db.Text
+  targetAudience        String    @default("all")
+  recipientEmails       String[]  @default([])
+  status                String    @default("draft")
+  sentAt                DateTime?
+  openedCount           Int       @default(0)
+  sentCount             Int       @default(0)
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+}
+
+model PricingRule {
+  id                    String    @id @default(uuid())
+  name                  String
+  ruleType              String
+  discountType          String
+  discountValue         Decimal   @db.Decimal(10, 2)
+  minQuantity           Int?
+  minOrderAmount        Decimal?  @db.Decimal(10, 2)
+  applicableCategories  String[]  @default([])
+  applicableProducts    String[]  @default([])
+  validFrom             DateTime
+  validUntil            DateTime
+  customerGroups        String[]  @default([])
+  isActive              Boolean   @default(true)
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
 }
 
 model Settings {
