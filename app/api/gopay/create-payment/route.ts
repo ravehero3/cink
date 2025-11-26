@@ -79,8 +79,10 @@ export async function POST(request: NextRequest) {
 
     if (!paymentResponse.ok) {
       const errorData = await paymentResponse.json();
-      console.error('GoPay payment creation error:', errorData);
-      throw new Error('Failed to create GoPay payment');
+      console.error('GoPay payment creation error - Status:', paymentResponse.status);
+      console.error('GoPay payment creation error - Response:', JSON.stringify(errorData, null, 2));
+      console.error('GoPay payment creation error - Request data was:', JSON.stringify(paymentData, null, 2));
+      throw new Error(`GoPay error (${paymentResponse.status}): ${JSON.stringify(errorData)}`);
     }
 
     const payment = await paymentResponse.json();
