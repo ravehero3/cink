@@ -20,15 +20,21 @@ interface Order {
 const STATUS_OPTIONS = ['PENDING', 'PAID', 'PROCESSING', 'SHIPPED', 'COMPLETED', 'CANCELLED'];
 const PAYMENT_STATUS_OPTIONS = ['PENDING', 'PAID', 'FAILED', 'REFUNDED'];
 
+const STATUS_TRANSLATIONS: Record<string, string> = {
+  'PENDING': 'ČEKÁ NA VYŘÍZENÍ',
+  'PAID': 'ZAPLACENO',
+  'PROCESSING': 'ZPRACOVÁVÁ SE',
+  'SHIPPED': 'ODESLÁNO',
+  'COMPLETED': 'DOKONČENO',
+  'CANCELLED': 'ZRUŠENO',
+};
+
 const TIME_PERIODS = ['Dnes', '24 hodin', 'Týden', 'Měsíc', 'Rok'];
 
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [updatingOrderId, setUpdatingOrderId] = useState<string | null>(null);
-  const [statusModalOpen, setStatusModalOpen] = useState(false);
-  const [selectedOrderForStatus, setSelectedOrderForStatus] = useState<Order | null>(null);
-  const [newStatus, setNewStatus] = useState<string>('');
   const [selectedPeriod, setSelectedPeriod] = useState('Měsíc');
   const [chartData, setChartData] = useState<any[]>([]);
   const [mounted, setMounted] = useState(false);
@@ -71,24 +77,10 @@ export default function AdminOrdersPage() {
     }
   };
 
-  const openStatusModal = (order: Order) => {
-    setSelectedOrderForStatus(order);
-    setNewStatus(order.status);
-    setStatusModalOpen(true);
-  };
-
-  const closeStatusModal = () => {
-    setStatusModalOpen(false);
-    setSelectedOrderForStatus(null);
-    setNewStatus('');
-  };
-
-  const confirmStatusChange = async () => {
-    if (!selectedOrderForStatus) return;
-
-    setUpdatingOrderId(selectedOrderForStatus.id);
+  const handleStatusChange = async (orderId: string, newStatus: string) => {
+    setUpdatingOrderId(orderId);
     try {
-      const response = await fetch(`/api/admin/orders/${selectedOrderForStatus.id}`, {
+      const response = await fetch(`/api/admin/orders/${orderId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus }),
@@ -96,7 +88,6 @@ export default function AdminOrdersPage() {
 
       if (response.ok) {
         fetchOrders();
-        closeStatusModal();
       } else {
         alert('Nepodařilo se změnit status');
       }
@@ -446,15 +437,21 @@ export default function AdminOrdersPage() {
                   </span>
                 </td>
                 <td className="p-4">
-                  <button
-                    onClick={() => openStatusModal(order)}
+                  <select
+                    value={order.status}
+                    onChange={(e) => handleStatusChange(order.id, e.target.value)}
                     disabled={updatingOrderId === order.id}
-                    className={`px-3 py-1 text-body uppercase border border-black bg-white cursor-pointer hover:bg-black hover:text-white ${
+                    className={`px-3 py-1 text-body uppercase border border-black bg-white cursor-pointer hover:bg-gray-50 ${
                       updatingOrderId === order.id ? 'opacity-50 cursor-not-allowed' : ''
                     }`}
+                    style={{ minWidth: '160px' }}
                   >
-                    {order.status}
-                  </button>
+                    {STATUS_OPTIONS.map((status) => (
+                      <option key={status} value={status}>
+                        {STATUS_TRANSLATIONS[status] || status}
+                      </option>
+                    ))}
+                  </select>
                 </td>
                 <td className="p-4 text-body">
                   {new Date(order.createdAt).toLocaleDateString('cs-CZ')}
@@ -482,66 +479,6 @@ export default function AdminOrdersPage() {
       <div className="mt-6 text-body">
         Zobrazeno: {displayedOrders.length} z {orders.length} objednávek
       </div>
-
-      {/* Status Change Modal Overlay */}
-      {statusModalOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40"
-          onClick={closeStatusModal}
-        />
-      )}
-
-      {/* Status Change Modal */}
-      {statusModalOpen && selectedOrderForStatus && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
-          <div className="bg-white border-2 border-black p-8 max-w-md w-full">
-            <h2 className="text-header font-bold mb-6">ZMĚNA STATUSU</h2>
-            
-            <div className="mb-6">
-              <p className="text-body mb-4">
-                <strong>Objednávka:</strong> {selectedOrderForStatus.orderNumber}
-              </p>
-              <p className="text-body mb-4">
-                <strong>Aktuální status:</strong> {selectedOrderForStatus.status}
-              </p>
-            </div>
-
-            <div className="mb-8">
-              <label className="block text-body uppercase mb-4">Nový status:</label>
-              <select
-                value={newStatus}
-                onChange={(e) => setNewStatus(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-black text-body uppercase bg-white"
-              >
-                {STATUS_OPTIONS.map((status) => (
-                  <option key={status} value={status}>
-                    {status}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="flex gap-4">
-              <button
-                onClick={confirmStatusChange}
-                disabled={updatingOrderId === selectedOrderForStatus.id}
-                className={`flex-1 px-6 py-3 text-body uppercase border-2 border-black font-bold hover:bg-black hover:text-white transition-colors ${
-                  updatingOrderId === selectedOrderForStatus.id ? 'opacity-50 cursor-not-allowed' : ''
-                }`}
-              >
-                {updatingOrderId === selectedOrderForStatus.id ? 'Ukládám...' : 'Potvrdit'}
-              </button>
-              <button
-                onClick={closeStatusModal}
-                disabled={updatingOrderId === selectedOrderForStatus.id}
-                className="flex-1 px-6 py-3 text-body uppercase border-2 border-black hover:bg-black hover:text-white transition-colors"
-              >
-                Zrušit
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
