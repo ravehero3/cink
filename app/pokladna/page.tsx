@@ -362,12 +362,11 @@ export default function CheckoutPage() {
               <div className="mb-4 pb-4">
                 {items.map((item) => (
                   <div key={`${item.productId}-${item.size}`} className="flex gap-4 mb-4">
-                    <div className="w-16 h-16 border border-black relative flex-shrink-0" style={{ borderRadius: '4px' }}>
-                      <Image
+                    <div className="w-16 h-16 border border-black flex-shrink-0 flex items-center justify-center overflow-hidden" style={{ borderRadius: '4px' }}>
+                      <img
                         src={item.image}
                         alt={item.name}
-                        fill
-                        className="object-cover"
+                        className="object-cover w-full h-full"
                       />
                     </div>
                     <div className="flex-1">
