@@ -12,6 +12,12 @@ Ask before making major changes to the core design system or introducing new ext
 
 ## Recent Updates
 
+### November 26, 2025 - Database Configuration Fixed: Neon for All Environments
+- **Fixed Environment Variable**: Updated `POSTGRES_PRISMA_URL` to point to Neon database
+- **Issue**: Was pointing to old Supabase connection, causing products not to show on Vercel
+- **Solution**: Both local dev and Vercel production now use the same Neon database
+- **Verification**: Local environment confirmed working - 13+ products visible on VOODOO808 category
+
 ### November 26, 2025 - Admin Pages Manager, Direct File Uploads & Production Database Sync
 - **New Admin Pages Manager** (`/admin/stranky`): 
   - Admins can click the bold "ADMIN" title in the sidebar to manage all category pages
