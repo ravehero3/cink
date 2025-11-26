@@ -54,7 +54,7 @@ function AnimatedCheckoutButton({
 export default function CheckoutPage() {
   const router = useRouter();
   const { data: session } = useSession();
-  const { items, getTotal } = useCartStore();
+  const { items, getTotal, clearCart } = useCartStore();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
 
