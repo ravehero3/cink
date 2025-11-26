@@ -238,7 +238,7 @@ export default function CheckoutShippingPage() {
           </h3>
 
           {formData.shippingMethod === 'zasilkovna' && (
-            <div className="mb-6 p-4 border-2 border-black">
+            <div className="mb-6 p-4 border-2 border-black space-y-3">
               {selectedZasilkovnaPoint ? (
                 <div>
                   <p style={{ fontSize: '14px', fontWeight: 600, marginBottom: '12px' }}>
@@ -255,7 +255,7 @@ export default function CheckoutShippingPage() {
                     Vybrat jiné místo
                   </button>
                 </div>
-              ) : (
+              ) : !showManualEntryForm ? (
                 <button
                   onClick={handleSelectZasilkovnaPoint}
                   className="w-full py-3 border border-black hover:bg-black hover:text-white transition-colors"
@@ -267,6 +267,39 @@ export default function CheckoutShippingPage() {
                 >
                   Vybrat výdejní místo
                 </button>
+              ) : (
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-sm font-medium mb-2" style={{fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '13px'}}>Název výdejního místa</label>
+                    <input
+                      type="text"
+                      placeholder="např. Zásilkovna Praha - Nákupní galerie"
+                      className="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+                      value={formData.zasilkovnaName}
+                      onChange={(e) => setFormData({...formData, zasilkovnaName: e.target.value})}
+                      style={{fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '13px'}}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2" style={{fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '13px'}}>Město</label>
+                    <input
+                      type="text"
+                      placeholder="např. Praha"
+                      className="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+                      value={formData.zasilkovnaCity}
+                      onChange={(e) => setFormData({...formData, zasilkovnaCity: e.target.value})}
+                      style={{fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '13px'}}
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowManualEntryForm(false)}
+                    className="w-full px-4 py-2 bg-gray-200 rounded text-sm hover:bg-gray-300 transition"
+                    style={{fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '13px'}}
+                  >
+                    Zpět
+                  </button>
+                </div>
               )}
             </div>
           )}

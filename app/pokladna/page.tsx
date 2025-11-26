@@ -70,6 +70,7 @@ export default function CheckoutPage() {
 
   const [discount, setDiscount] = useState(0);
   const [promoError, setPromoError] = useState('');
+  const [showManualZasilkovnaForm, setShowManualZasilkovnaForm] = useState(false);
 
   useEffect(() => {
     if (items.length === 0) {
@@ -192,7 +193,7 @@ export default function CheckoutPage() {
     if (typeof window === 'undefined') return;
     
     let retries = 0;
-    const maxRetries = 100;
+    const maxRetries = 20;
     
     const openWidget = () => {
       if ((window as any).Packeta?.Widget?.pick) {
@@ -211,14 +212,15 @@ export default function CheckoutPage() {
           });
         } catch (err) {
           console.error('Error opening widget:', err);
+          setShowManualZasilkovnaForm(true);
         }
       } else {
         retries++;
         if (retries < maxRetries) {
           setTimeout(openWidget, 50);
         } else {
-          console.error('Widget still not loaded after waiting');
-          alert('Nemohu načíst Zásilkovnu. Prosím obnovte stránku.');
+          console.error('Widget not available, showing manual form');
+          setShowManualZasilkovnaForm(true);
         }
       }
     };
