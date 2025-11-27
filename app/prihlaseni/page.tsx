@@ -130,7 +130,7 @@ function LoginContent() {
 
         <div className="w-full flex flex-col items-center">
           {showRegisteredMessage && (
-            <div className="mb-6 p-3 text-sm border text-center" style={{ width: '33.33%', backgroundColor: '#6bdc66', color: '#000000', borderColor: '#6bdc66' }}>
+            <div className="mb-6 p-3 text-sm border text-center" style={{ width: '33.33%', backgroundColor: '#24e053', color: '#000000', borderColor: '#24e053' }}>
               Registrace byla úspěšná! Nyní se můžete přihlásit.
             </div>
           )}
@@ -333,7 +333,7 @@ function LoginContent() {
               </>
             ) : (
               <div className="text-center py-8">
-                <p className="text-sm mb-4" style={{ color: '#6bdc66' }}>
+                <p className="text-sm mb-4" style={{ color: '#24e053' }}>
                   E-mail s odkazem pro obnovení hesla byl úspěšně odeslán!
                 </p>
                 <p className="text-xs text-gray-600">

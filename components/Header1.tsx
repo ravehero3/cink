@@ -172,7 +172,7 @@ export default function Header1() {
                       style={{
                         width: '24px',
                         height: '24px',
-                        backgroundColor: '#6bdc66',
+                        backgroundColor: '#24e053',
                         borderRadius: '4px',
                         display: 'flex',
                         alignItems: 'center',

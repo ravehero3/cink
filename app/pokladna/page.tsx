@@ -340,7 +340,7 @@ export default function CheckoutPage() {
                     <p className="text-body font-bold">Zásilkovna</p>
                     <p className="text-body">Doručení na výdejní místo</p>
                   </div>
-                  <p className="text-body font-bold" style={{ color: shippingCost === 0 ? '#6bdc66' : 'inherit' }}>
+                  <p className="text-body font-bold" style={{ color: shippingCost === 0 ? '#24e053' : 'inherit' }}>
                     {shippingCost === 0 ? 'ZDARMA' : `${shippingCost} Kč`}
                   </p>
                 </label>
@@ -453,12 +453,12 @@ export default function CheckoutPage() {
                 </div>
                 <div className="flex justify-between" style={{ fontSize: '14px' }}>
                   <span>Doprava</span>
-                  <span style={{ color: shippingCost === 0 ? '#6bdc66' : 'inherit' }}>
+                  <span style={{ color: shippingCost === 0 ? '#24e053' : 'inherit' }}>
                     {shippingCost === 0 ? 'ZDARMA' : `${shippingCost} Kč`}
                   </span>
                 </div>
                 {amountToFreeShipping > 0 && (
-                  <p style={{ fontSize: '11px', color: '#6bdc66', marginTop: '4px' }}>
+                  <p style={{ fontSize: '11px', color: '#24e053', marginTop: '4px' }}>
                     Přidejte zboží za {amountToFreeShipping} Kč pro dopravu zdarma!
                   </p>
                 )}

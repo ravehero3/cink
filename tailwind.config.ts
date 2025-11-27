@@ -10,7 +10,7 @@ const config: Config = {
     colors: {
       black: '#000000',
       white: '#FFFFFF',
-      'neon-green': '#6bdc66',
+      'neon-green': '#24e053',
       transparent: 'transparent',
       current: 'currentColor',
     },

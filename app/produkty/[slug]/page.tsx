@@ -496,7 +496,7 @@ export default function ProductDetailPage() {
           )}
 
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-          <div style={{ borderTop: '1px solid #000000', paddingTop: '0', width: '36vw', marginBottom: '0px' }}></div>
+          <div style={{ borderTop: '1px solid #000000', paddingTop: '0', width: '36vw', marginBottom: '0px', marginTop: '4px' }}></div>
 
           {!isEditMode && (
             <>
