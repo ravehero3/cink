@@ -119,7 +119,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 right: '8px',
                 transform: 'translateY(-50%)',
                 padding: '0',
-                color: '#FFFFFF'
+                color: '#000000'
               }}
             >
               <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
