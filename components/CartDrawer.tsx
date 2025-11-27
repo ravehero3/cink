@@ -537,7 +537,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     fontSize: '12px',
                     fontWeight: 400,
                     lineHeight: '19.6px',
-                    color: '#000000'
+                    color: '#999999'
                   }}>
                     79 Kč
                   </span>
