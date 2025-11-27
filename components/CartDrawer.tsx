@@ -99,7 +99,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             <h2 
               style={{
                 fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '15px',
+                fontSize: '14px',
                 fontWeight: 700,
                 textTransform: 'uppercase',
                 letterSpacing: '0.03em',
@@ -234,7 +234,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         >
                           <h3 style={{
                             fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                            fontSize: '15px',
+                            fontSize: '14px',
                             fontWeight: 700,
                             textTransform: 'uppercase',
                             marginBottom: '4px',
@@ -502,7 +502,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 }}>
                   <span style={{
                     fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '15px',
+                    fontSize: '14px',
                     fontWeight: 700,
                     lineHeight: '19.6px',
                     letterSpacing: '0.03em',
@@ -513,7 +513,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   </span>
                   <span style={{
                     fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '15px',
+                    fontSize: '14px',
                     fontWeight: 700,
                     lineHeight: '19.6px',
                     letterSpacing: '0.03em',
