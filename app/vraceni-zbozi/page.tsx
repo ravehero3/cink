@@ -116,7 +116,7 @@ export default function ReturnsPage() {
                   color: '#000000',
                   fontSize: '14px'
                 }}
-                placeholder="vas@email.cz"
+                placeholder="miluju@ufosport.cz"
               />
               {errors.email && (
                 <p 
@@ -153,7 +153,7 @@ export default function ReturnsPage() {
                   color: '#000000',
                   fontSize: '14px'
                 }}
-                placeholder="ORD-123456"
+                placeholder="UFO1234567"
               />
               {errors.orderNumber && (
                 <p 
