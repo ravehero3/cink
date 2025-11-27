@@ -6,50 +6,7 @@ import { useSession } from 'next-auth/react';
 import { useCartStore } from '@/lib/cart-store';
 import { calculateShippingCost, getShippingLabel, getAmountToFreeShipping } from '@/lib/shipping';
 import Image from 'next/image';
-
-function AnimatedCheckoutButton({ 
-  text, 
-  loading, 
-  disabled 
-}: { 
-  text: string; 
-  loading: boolean;
-  disabled: boolean;
-}) {
-  const [isHovered, setIsHovered] = useState(false);
-
-  return (
-    <button
-      type="submit"
-      disabled={disabled || loading}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className="w-full bg-black text-white uppercase font-bold border border-black relative overflow-hidden disabled:opacity-50"
-      style={{ borderRadius: '4px', padding: '8px 0', height: '32px', fontSize: '12px', textAlign: 'center' }}
-    >
-      <span
-        className="block transition-all duration-300"
-        style={{
-          transform: isHovered ? 'translateY(-150%)' : 'translateY(0)',
-          opacity: isHovered ? 0 : 1,
-          width: '100%',
-          textAlign: 'center'
-        }}
-      >
-        {loading ? 'ZPRACOVÁNÍ...' : text}
-      </span>
-      <span
-        className="absolute inset-0 flex items-center justify-center transition-all duration-300"
-        style={{
-          transform: isHovered ? 'translateY(0)' : 'translateY(150%)',
-          opacity: isHovered ? 1 : 0,
-        }}
-      >
-        {text}
-      </span>
-    </button>
-  );
-}
+import AnimatedButton from '@/components/AnimatedButton';
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -401,10 +358,12 @@ export default function CheckoutPage() {
               </div>
 
               <div className="mt-4">
-                <AnimatedCheckoutButton 
+                <AnimatedButton 
                   text="PŘEJÍT K PLATBĚ" 
                   loading={loading}
                   disabled={!formData.email || !formData.name || !formData.phone || (formData.shippingMethod === 'zasilkovna' && !formData.zasilkovnaId)}
+                  type="submit"
+                  className="w-full"
                 />
               </div>
             </form>

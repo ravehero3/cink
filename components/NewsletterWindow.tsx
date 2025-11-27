@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import AnimatedButton from './AnimatedButton';
 
 interface NewsletterWindowProps {
   isOpen: boolean;
@@ -165,14 +166,18 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
                 </div>
               )}
 
-              <button
+              <AnimatedButton 
+                text="PŘIHLÁSIT"
+                loading={loading}
                 type="submit"
-                disabled={loading}
-                className="bg-black text-white uppercase tracking-wider font-bold hover:opacity-90 transition-opacity disabled:opacity-50"
-                style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px', padding: '12px', marginBottom: '8px' }}
-              >
-                {loading ? 'PŘIHLAŠOVÁNÍ...' : 'PŘIHLÁSIT'}
-              </button>
+                className="w-full"
+                style={{ 
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', 
+                  padding: '12px', 
+                  marginBottom: '8px',
+                  height: '44px'
+                }}
+              />
             </form>
           </div>
         </div>
