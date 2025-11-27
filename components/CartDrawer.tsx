@@ -453,7 +453,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   fontStretch: 'condensed',
                   color: '#000000'
                 }}>
-                  RECENTLY VIEWED
+                  PROHLÍŽELI JSTE
                 </h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                   {recentlyViewed.map((product) => (
@@ -539,7 +539,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     lineHeight: '19.6px',
                     color: '#000000'
                   }}>
-                    129 Kč
+                    79 Kč
                   </span>
                 </div>
                 
@@ -568,7 +568,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     fontStretch: 'condensed',
                     color: '#000000'
                   }}>
-                    {(total + 129).toFixed(2)} Kč
+                    {(total + 79).toFixed(2)} Kč
                   </span>
                 </div>
               </div>
