@@ -32,12 +32,12 @@ export default function AnimatedButton({
       style={{ borderRadius: '4px', padding: '8px 0', height: '32px', fontSize: '12px', textAlign: 'center', ...style }}
     >
       <span
-        className="block transition-all duration-300"
+        className="flex items-center justify-center transition-all duration-300"
         style={{
           transform: isHovered ? 'translateY(-150%)' : 'translateY(0)',
           opacity: isHovered ? 0 : 1,
           width: '100%',
-          textAlign: 'center'
+          height: '100%'
         }}
       >
         {loading ? 'ZPRACOVÁNÍ...' : text}
