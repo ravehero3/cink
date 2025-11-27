@@ -27,7 +27,7 @@ export default function DeleteConfirmModal({
         onClick={onClose}
       />
       
-      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white border border-black" style={{ width: '33.33%' }}>
+      <div className="fixed top-1/2 z-50 bg-white border border-black" style={{ width: '33.33%', left: 'calc(50% + 6px)', transform: 'translate(-50%, -50%)' }}>
         <div className="border-b border-black" style={{ height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#ffffff' }}>
           <h2 style={{
             fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',

@@ -150,7 +150,18 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 overflow-y-auto relative">
+            {isDeleteModalOpen && (
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                  zIndex: 10,
+                  pointerEvents: 'none'
+                }}
+              />
+            )}
             {items.length === 0 ? (
               <div className="h-full flex flex-col relative">
                 <div style={{ height: 'calc(25% - 0.5px)' }} className="flex flex-col items-center justify-center px-6">
