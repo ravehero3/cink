@@ -230,12 +230,13 @@ export default function SavedProductsPage() {
       }} />
 
       <div className="flex justify-center">
-        <div className="mx-auto px-4 py-8" style={{ width: '50%', borderBottom: '1px solid #000' }}>
+        <div style={{ width: '50%', padding: '32px 16px 32px 16px', borderBottom: '1px solid #000' }}>
           <h1 className="text-center uppercase" style={{
             fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
             fontSize: '16px',
             fontWeight: 700,
-            letterSpacing: '0.05em'
+            letterSpacing: '0.05em',
+            margin: 0
           }}>
             ULOŽENÉ PRODUKTY
           </h1>
@@ -367,14 +368,6 @@ export default function SavedProductsPage() {
                   Smazat
                 </button>
               </div>
-
-              {/* Horizontal line at bottom */}
-              {index === products.length - 1 && (
-                <div style={{
-                  marginTop: '16px',
-                  borderBottom: '1px solid #000'
-                }} />
-              )}
             </div>
           ))}
         </div>
@@ -398,13 +391,21 @@ export default function SavedProductsPage() {
           <div style={{ width: '50%' }}>
             <Link
               href="/kosik"
-              className="block w-full text-center bg-black text-white px-4 py-3 uppercase hover:bg-gray-800 transition-colors"
               style={{
+                display: 'block',
+                width: '100%',
+                textAlign: 'center',
+                backgroundColor: '#000',
+                color: '#fff',
+                padding: '12px',
                 fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                 fontSize: '12px',
                 fontWeight: 400,
+                textTransform: 'uppercase',
+                textDecoration: 'none',
                 borderRadius: '4px'
               }}
+              className="hover:opacity-90 transition-opacity"
             >
               PŘEJÍT NA NÁKUPNÍ KOŠÍK
             </Link>
