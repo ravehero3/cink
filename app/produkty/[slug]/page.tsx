@@ -258,18 +258,6 @@ export default function ProductDetailPage() {
 
   return (
     <div className="bg-white">
-      {showConfirmation && (
-        <div className="fixed top-24 right-8 bg-black text-white px-6 py-4 z-50">
-          <p style={{ 
-            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-            fontSize: '12px',
-            fontWeight: 400
-          }}>
-            Produkt přidán do košíku
-          </p>
-        </div>
-      )}
-
       <div className="flex">
         <div className="w-1/2 border-r border-black">
           <div className="space-y-2">
