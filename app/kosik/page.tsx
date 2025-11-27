@@ -66,7 +66,7 @@ export default function CartPage() {
       }} />
 
       <div className="flex justify-center">
-        <div className="mx-auto px-4 py-8 border-b border-black" style={{ width: '50%' }}>
+        <div className="mx-auto px-4 py-8" style={{ width: '50%', borderBottom: '1px solid #000' }}>
           <h1 className="text-center uppercase" style={{
             fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
             fontSize: '16px',
