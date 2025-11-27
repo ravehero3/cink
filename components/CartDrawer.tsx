@@ -201,29 +201,50 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     }}
                   >
                     <div style={{ display: 'flex', gap: '12px' }}>
-                      <Link
-                        href={`/produkty/${item.slug}`}
-                        onClick={onClose}
-                        style={{ flexShrink: 0 }}
-                      >
-                        <div style={{
-                          width: '80px',
-                          height: '106px',
-                          border: '1px solid #000',
-                          padding: '4px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          overflow: 'hidden',
-                          backgroundColor: '#fff'
-                        }}>
-                          <img
-                            src={item.image}
-                            alt={item.name}
-                            style={{ objectFit: 'contain', width: '100%', height: '100%' }}
-                          />
-                        </div>
-                      </Link>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        <Link
+                          href={`/produkty/${item.slug}`}
+                          onClick={onClose}
+                          style={{ flexShrink: 0 }}
+                        >
+                          <div style={{
+                            width: '80px',
+                            height: '106px',
+                            border: '1px solid #000',
+                            padding: '4px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            overflow: 'hidden',
+                            backgroundColor: '#fff'
+                          }}>
+                            <img
+                              src={item.image}
+                              alt={item.name}
+                              style={{ objectFit: 'contain', width: '100%', height: '100%' }}
+                            />
+                          </div>
+                        </Link>
+                        <button
+                          onClick={() => handleSaveForLater(item.productId, item.size)}
+                          style={{
+                            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                            fontSize: '14px',
+                            fontWeight: 400,
+                            lineHeight: '19.6px',
+                            color: 'rgb(0, 0, 0)',
+                            textDecoration: 'underline',
+                            border: 'none',
+                            background: 'none',
+                            cursor: 'pointer',
+                            padding: 0,
+                            textAlign: 'left'
+                          }}
+                          className="hover:opacity-60 transition-opacity"
+                        >
+                          Uložit na později
+                        </button>
+                      </div>
 
                       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                         <Link
@@ -351,12 +372,28 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
                         <div style={{
                           display: 'flex',
-                          justifyContent: 'space-between',
+                          justifyContent: 'flex-end',
                           alignItems: 'flex-end',
+                          gap: '12px',
                           marginTop: 'auto'
                         }}>
+                          <Link
+                            href={`/produkty/${item.slug}`}
+                            onClick={onClose}
+                            style={{
+                              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                              fontSize: '14px',
+                              fontWeight: 400,
+                              lineHeight: '19.6px',
+                              color: 'rgb(0, 0, 0)',
+                              textDecoration: 'underline'
+                            }}
+                            className="hover:opacity-60 transition-opacity"
+                          >
+                            Upravit
+                          </Link>
                           <button
-                            onClick={() => handleSaveForLater(item.productId, item.size)}
+                            onClick={() => removeItem(item.productId, item.size)}
                             style={{
                               fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                               fontSize: '14px',
@@ -367,49 +404,12 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                               border: 'none',
                               background: 'none',
                               cursor: 'pointer',
-                              padding: '16px 0 0 0',
-                              marginBottom: 0
+                              padding: 0
                             }}
                             className="hover:opacity-60 transition-opacity"
                           >
-                            Uložit na později
+                            Smazat
                           </button>
-
-                          <div style={{ display: 'flex', gap: '12px' }}>
-                            <Link
-                              href={`/produkty/${item.slug}`}
-                              onClick={onClose}
-                              style={{
-                                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                                fontSize: '14px',
-                                fontWeight: 400,
-                                lineHeight: '19.6px',
-                                color: 'rgb(0, 0, 0)',
-                                textDecoration: 'underline'
-                              }}
-                              className="hover:opacity-60 transition-opacity"
-                            >
-                              Upravit
-                            </Link>
-                            <button
-                              onClick={() => removeItem(item.productId, item.size)}
-                              style={{
-                                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                                fontSize: '14px',
-                                fontWeight: 400,
-                                lineHeight: '19.6px',
-                                color: 'rgb(0, 0, 0)',
-                                textDecoration: 'underline',
-                                border: 'none',
-                                background: 'none',
-                                cursor: 'pointer',
-                                padding: 0
-                              }}
-                              className="hover:opacity-60 transition-opacity"
-                            >
-                              Smazat
-                            </button>
-                          </div>
                         </div>
                       </div>
                     </div>
@@ -500,21 +500,19 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   alignItems: 'center'
                 }}>
                   <span style={{
-                    fontFamily: 'BB-CondBold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
-                    fontWeight: 700,
-                    lineHeight: '16.1px',
-                    letterSpacing: '0.42px',
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '12px',
+                    fontWeight: 400,
+                    lineHeight: '19.6px',
                     color: '#000000'
                   }}>
                     CENA ZA DOPRAVU
                   </span>
                   <span style={{
-                    fontFamily: 'BB-CondBold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
-                    fontWeight: 700,
-                    lineHeight: '16.1px',
-                    letterSpacing: '0.42px',
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '12px',
+                    fontWeight: 400,
+                    lineHeight: '19.6px',
                     color: '#000000'
                   }}>
                     129 Kč
@@ -527,19 +525,21 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   alignItems: 'center'
                 }}>
                   <span style={{
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '12px',
-                    fontWeight: 400,
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '14px',
+                    fontWeight: 700,
                     lineHeight: '19.6px',
+                    letterSpacing: '0.03em',
                     color: '#000000'
                   }}>
                     PŘEDPOKLÁDANÁ CENA
                   </span>
                   <span style={{
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '12px',
-                    fontWeight: 400,
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '14px',
+                    fontWeight: 700,
                     lineHeight: '19.6px',
+                    letterSpacing: '0.03em',
                     color: '#000000'
                   }}>
                     {(total + 129).toFixed(2)} Kč
