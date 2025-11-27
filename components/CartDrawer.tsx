@@ -479,6 +479,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                           fontSize: '14px',
                           fontWeight: 700,
                           textTransform: 'uppercase',
+                          marginTop: 0,
                           marginBottom: '4px',
                           letterSpacing: '0.03em',
                           fontStretch: 'condensed',
