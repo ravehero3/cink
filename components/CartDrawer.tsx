@@ -237,8 +237,12 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                             border: 'none',
                             background: 'none',
                             cursor: 'pointer',
-                            padding: 0,
-                            textAlign: 'left'
+                            paddingLeft: 0,
+                            paddingRight: 0,
+                            paddingTop: 0,
+                            paddingBottom: '16px',
+                            textAlign: 'left',
+                            marginTop: 'auto'
                           }}
                           className="hover:opacity-60 transition-opacity"
                         >
