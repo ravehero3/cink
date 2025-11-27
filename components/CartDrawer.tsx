@@ -195,7 +195,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   <div
                     key={`${item.productId}-${item.size}`}
                     style={{
-                      borderBottom: '1px solid #000',
+                      borderBottom: index < items.length - 1 ? '1px solid #000' : 'none',
                       padding: '16px',
                       position: 'relative'
                     }}
