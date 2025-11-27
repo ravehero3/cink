@@ -66,7 +66,7 @@ export default function CartPage() {
       }} />
 
       <div className="flex justify-center">
-        <div className="mx-auto px-4 py-8 border-b border-black" style={{ width: '33.333%', minWidth: '400px', maxWidth: '600px' }}>
+        <div className="mx-auto px-4 py-8 border-b border-black" style={{ width: '50%' }}>
           <h1 className="text-center uppercase" style={{
             fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
             fontSize: '16px',
@@ -79,13 +79,11 @@ export default function CartPage() {
       </div>
 
       <div className="flex-1 flex justify-center" style={{ paddingBottom: '80px' }}>
-        <div style={{ width: '33.333%', minWidth: '400px', maxWidth: '600px', position: 'relative' }}>
+        <div style={{ width: '50%', position: 'relative' }}>
           {items.map((item, index) => (
             <div
               key={`${item.productId}-${item.size}`}
               style={{
-                borderRight: '1px solid #000',
-                borderLeft: '1px solid #000',
                 borderTop: index === 0 ? '1px solid #000' : 'none',
                 borderBottom: '1px solid #000',
                 padding: '16px',
@@ -308,7 +306,7 @@ export default function CartPage() {
           justifyContent: 'center',
           padding: '12px'
         }}>
-          <div style={{ width: '33.333%', minWidth: '400px', maxWidth: '600px' }}>
+          <div style={{ width: '50%' }}>
             <AnimatedButton
               text={`PŘEJÍT K POKLADNĚ (${items.length})`}
               onClick={() => router.push('/pokladna')}
