@@ -13,7 +13,10 @@ export default function CategoryHero({ title, imageUrl }: CategoryHeroProps) {
         className="bg-white border-b border-black flex items-center justify-center"
         style={{ height: 'calc(6 * 44px)' }}
       >
-        <h1 className="text-page-title font-bold text-center uppercase tracking-tighter">
+        <h1 
+          className="text-page-title font-bold text-center uppercase tracking-tighter w-full"
+          style={{ margin: 0 }}
+        >
           {title}
         </h1>
       </div>
