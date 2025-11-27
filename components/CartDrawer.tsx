@@ -233,13 +233,15 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                           className="hover:opacity-60 transition-opacity"
                         >
                           <h3 style={{
-                            fontFamily: 'BB-CondBold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                            fontSize: '14px',
+                            fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                            fontSize: '15px',
                             fontWeight: 700,
                             textTransform: 'uppercase',
                             marginBottom: '4px',
                             lineHeight: '19.6px',
-                            color: 'rgb(0, 0, 0)'
+                            letterSpacing: '0.03em',
+                            fontStretch: 'condensed',
+                            color: '#000000'
                           }}>
                             {item.name}
                           </h3>
@@ -499,20 +501,24 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   alignItems: 'center'
                 }}>
                   <span style={{
-                    fontFamily: 'BB-CondBold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '15px',
                     fontWeight: 700,
                     lineHeight: '19.6px',
-                    color: 'rgb(0, 0, 0)'
+                    letterSpacing: '0.03em',
+                    fontStretch: 'condensed',
+                    color: '#000000'
                   }}>
                     PŘEDPOKLÁDANÁ CENA
                   </span>
                   <span style={{
-                    fontFamily: 'BB-CondBold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '15px',
                     fontWeight: 700,
                     lineHeight: '19.6px',
-                    color: 'rgb(0, 0, 0)'
+                    letterSpacing: '0.03em',
+                    fontStretch: 'condensed',
+                    color: '#000000'
                   }}>
                     {(total + 129).toFixed(2)} Kč
                   </span>
