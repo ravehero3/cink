@@ -419,11 +419,20 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             )}
 
             {recentlyViewed.length > 0 && (
-              <div className="border-t border-black px-6 py-6">
-                <h3 className="text-sm font-bold uppercase tracking-tight mb-6">
+              <div style={{ borderTop: '1px solid #000', paddingTop: '16px', paddingLeft: '16px', paddingRight: '16px', paddingBottom: '16px' }}>
+                <h3 style={{
+                  fontFamily: 'BB-CondBold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '14px',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  marginBottom: '16px',
+                  lineHeight: '16.1px',
+                  letterSpacing: '0.42px',
+                  color: '#000000'
+                }}>
                   RECENTLY VIEWED
                 </h3>
-                <div className="space-y-5">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                   {recentlyViewed.map((product) => (
                     <Link
                       key={product.id}
@@ -442,10 +451,25 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         />
                       </div>
                       <div className="flex-1">
-                        <h4 className="text-xs font-bold uppercase tracking-tight mb-1 line-clamp-2">
+                        <h4 style={{
+                          fontFamily: 'BB-CondBold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                          fontSize: '14px',
+                          fontWeight: 700,
+                          textTransform: 'uppercase',
+                          marginBottom: '4px',
+                          lineHeight: '16.1px',
+                          letterSpacing: '0.42px',
+                          color: '#000000'
+                        }}>
                           {product.name}
                         </h4>
-                        <p className="text-xs font-medium">{product.price} Kč</p>
+                        <p style={{
+                          fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                          fontSize: '14px',
+                          fontWeight: 400,
+                          lineHeight: '19.6px',
+                          color: '#000000'
+                        }}>{product.price} Kč</p>
                       </div>
                     </Link>
                   ))}
