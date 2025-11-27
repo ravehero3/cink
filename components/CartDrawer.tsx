@@ -365,8 +365,8 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                               border: 'none',
                               background: 'none',
                               cursor: 'pointer',
-                              padding: 0,
-                              alignSelf: 'flex-start'
+                              padding: '16px 0 0 0',
+                              marginBottom: 0
                             }}
                             className="hover:opacity-60 transition-opacity"
                           >
