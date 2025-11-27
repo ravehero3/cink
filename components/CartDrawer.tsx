@@ -476,20 +476,22 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   alignItems: 'center'
                 }}>
                   <span style={{
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '12px',
-                    fontWeight: 400,
-                    lineHeight: '19.6px',
-                    color: '#999999'
+                    fontFamily: 'BB-CondBold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '14px',
+                    fontWeight: 700,
+                    lineHeight: '16.1px',
+                    letterSpacing: '0.42px',
+                    color: '#000000'
                   }}>
                     CENA ZA DOPRAVU
                   </span>
                   <span style={{
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '12px',
-                    fontWeight: 400,
-                    lineHeight: '19.6px',
-                    color: '#999999'
+                    fontFamily: 'BB-CondBold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '14px',
+                    fontWeight: 700,
+                    lineHeight: '16.1px',
+                    letterSpacing: '0.42px',
+                    color: '#000000'
                   }}>
                     129 Kč
                   </span>
