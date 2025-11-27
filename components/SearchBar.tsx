@@ -120,7 +120,7 @@ export default function SearchBar() {
 
       {/* Search Results */}
       {searchQuery.trim().length > 0 && (
-        <div className="bg-white border-b border-black max-h-96 overflow-y-auto">
+        <div className="bg-white max-h-96 overflow-y-auto" style={{ borderBottom: '1px solid #000' }}>
           {isLoading ? (
             <div className="p-6 text-center text-sm">Hledání...</div>
           ) : searchResults.length > 0 ? (
