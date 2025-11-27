@@ -527,23 +527,19 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   alignItems: 'center'
                 }}>
                   <span style={{
-                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
-                    fontWeight: 700,
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '12px',
+                    fontWeight: 400,
                     lineHeight: '19.6px',
-                    letterSpacing: '0.03em',
-                    fontStretch: 'condensed',
                     color: '#000000'
                   }}>
                     PŘEDPOKLÁDANÁ CENA
                   </span>
                   <span style={{
-                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
-                    fontWeight: 700,
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '12px',
+                    fontWeight: 400,
                     lineHeight: '19.6px',
-                    letterSpacing: '0.03em',
-                    fontStretch: 'condensed',
                     color: '#000000'
                   }}>
                     {(total + 129).toFixed(2)} Kč
