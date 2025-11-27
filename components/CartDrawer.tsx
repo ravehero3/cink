@@ -422,13 +422,13 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             {recentlyViewed.length > 0 && (
               <div style={{ borderTop: '1px solid #000', paddingTop: '16px', paddingLeft: '16px', paddingRight: '16px', paddingBottom: '16px' }}>
                 <h3 style={{
-                  fontFamily: 'BB-CondBold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontSize: '14px',
                   fontWeight: 700,
                   textTransform: 'uppercase',
                   marginBottom: '16px',
-                  lineHeight: '16.1px',
-                  letterSpacing: '0.42px',
+                  letterSpacing: '0.03em',
+                  fontStretch: 'condensed',
                   color: '#000000'
                 }}>
                   RECENTLY VIEWED
@@ -453,13 +453,13 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       </div>
                       <div className="flex-1">
                         <h4 style={{
-                          fontFamily: 'BB-CondBold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                          fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                           fontSize: '14px',
                           fontWeight: 700,
                           textTransform: 'uppercase',
                           marginBottom: '4px',
-                          lineHeight: '16.1px',
-                          letterSpacing: '0.42px',
+                          letterSpacing: '0.03em',
+                          fontStretch: 'condensed',
                           color: '#000000'
                         }}>
                           {product.name}
