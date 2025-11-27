@@ -6,7 +6,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useCartStore } from '@/lib/cart-store';
 import { useRecentlyViewedStore } from '@/lib/recently-viewed-store';
+import { useSavedProductsStore } from '@/lib/saved-products-store';
 import { X } from 'lucide-react';
+import AnimatedButton from './AnimatedButton';
+import { useRouter } from 'next/navigation';
 
 function SavedItemsButton({ onClose }: { onClose: () => void }) {
   const [isHovered, setIsHovered] = useState(false);
@@ -42,50 +45,23 @@ function SavedItemsButton({ onClose }: { onClose: () => void }) {
   );
 }
 
-function CheckoutButton({ total, onClose }: { total: number; onClose: () => void }) {
-  const [isHovered, setIsHovered] = useState(false);
-
-  return (
-    <Link
-      href="/pokladna"
-      onClick={onClose}
-      className="block w-full relative overflow-hidden bg-black text-white text-center text-xs uppercase tracking-tight font-bold"
-      style={{ borderRadius: '4px', height: '52px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <span
-        className="block transition-all duration-300"
-        style={{
-          transform: isHovered ? 'translateY(-150%)' : 'translateY(0)',
-          opacity: isHovered ? 0 : 1,
-        }}
-      >
-        PŘEJÍT K POKLADNĚ · {total.toFixed(2)} Kč
-      </span>
-      <span
-        className="absolute inset-0 flex items-center justify-center transition-all duration-300"
-        style={{
-          transform: isHovered ? 'translateY(0)' : 'translateY(150%)',
-          opacity: isHovered ? 1 : 0,
-        }}
-      >
-        PŘEJÍT K POKLADNĚ · {total.toFixed(2)} Kč
-      </span>
-    </Link>
-  );
-}
-
 interface CartDrawerProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
 export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
+  const router = useRouter();
   const { items, updateQuantity, removeItem, getTotal } = useCartStore();
+  const { addProduct: saveProduct } = useSavedProductsStore();
   const recentlyViewedProducts = useRecentlyViewedStore((state) => state.products);
   const recentlyViewed = useMemo(() => recentlyViewedProducts.slice(0, 3), [recentlyViewedProducts]);
   const total = useMemo(() => getTotal(), [items]);
+
+  const handleSaveForLater = (productId: string, size: string) => {
+    saveProduct(productId);
+    removeItem(productId, size);
+  };
 
   useEffect(() => {
     if (isOpen) {
@@ -214,68 +190,201 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 </div>
               </div>
             ) : (
-              <div className="px-6 py-6">
-                {items.map((item) => (
+              <div style={{ padding: '0' }}>
+                {items.map((item, index) => (
                   <div
                     key={`${item.productId}-${item.size}`}
-                    className="flex gap-4 mb-6 pb-6 border-b border-black last:border-0"
+                    style={{
+                      borderBottom: '1px solid #000',
+                      padding: '16px',
+                      position: 'relative'
+                    }}
                   >
-                    <Link
-                      href={`/produkty/${item.slug}`}
-                      onClick={onClose}
-                      className="flex-shrink-0"
-                    >
-                      <div className="w-24 h-32 bg-white border border-black p-1 flex items-center justify-center overflow-hidden">
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className="object-contain w-full h-full"
-                        />
-                      </div>
-                    </Link>
-
-                    <div className="flex-1 flex flex-col text-sm">
+                    <div style={{ display: 'flex', gap: '12px' }}>
                       <Link
                         href={`/produkty/${item.slug}`}
                         onClick={onClose}
-                        className="hover:opacity-60 transition-opacity"
+                        style={{ flexShrink: 0 }}
                       >
-                        <h3 className="font-bold uppercase tracking-tight mb-2 text-base">
-                          {item.name}
-                        </h3>
+                        <div style={{
+                          width: '80px',
+                          height: '106px',
+                          border: '1px solid #000',
+                          padding: '4px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          overflow: 'hidden',
+                          backgroundColor: '#fff'
+                        }}>
+                          <img
+                            src={item.image}
+                            alt={item.name}
+                            style={{ objectFit: 'contain', width: '100%', height: '100%' }}
+                          />
+                        </div>
                       </Link>
-                      
-                      <p className="text-xs mb-2">
-                        Size: {item.size} | Color: {item.color}
-                      </p>
-                      
-                      <p className="mb-3 font-medium">{item.price} Kč</p>
 
-                      <div className="mt-auto flex items-center gap-3">
-                        <div className="flex items-center border border-black">
+                      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                        <Link
+                          href={`/produkty/${item.slug}`}
+                          onClick={onClose}
+                          style={{ textDecoration: 'none', color: '#000' }}
+                          className="hover:opacity-60 transition-opacity"
+                        >
+                          <h3 style={{
+                            fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                            fontSize: '14px',
+                            fontWeight: 700,
+                            textTransform: 'uppercase',
+                            marginBottom: '4px'
+                          }}>
+                            {item.name}
+                          </h3>
+                        </Link>
+                        
+                        <p style={{
+                          fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                          fontSize: '14px',
+                          fontWeight: 400,
+                          marginBottom: '8px'
+                        }}>
+                          {item.price} Kč
+                        </p>
+
+                        <p style={{
+                          fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                          fontSize: '12px',
+                          fontWeight: 400,
+                          marginBottom: '4px'
+                        }}>
+                          Barva: {item.color}
+                        </p>
+
+                        <p style={{
+                          fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                          fontSize: '12px',
+                          fontWeight: 400,
+                          marginBottom: '8px'
+                        }}>
+                          Velikost: {item.size}
+                        </p>
+
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          marginBottom: '4px'
+                        }}>
+                          <span style={{
+                            fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                            fontSize: '12px',
+                            fontWeight: 400
+                          }}>
+                            Množství:
+                          </span>
                           <button
                             onClick={() => updateQuantity(item.productId, item.size, item.quantity - 1)}
-                            className="px-3 py-1 hover:bg-black hover:text-white transition-colors text-xs"
+                            style={{
+                              padding: '2px 8px',
+                              border: 'none',
+                              background: 'none',
+                              cursor: 'pointer',
+                              fontSize: '14px'
+                            }}
                           >
                             −
                           </button>
-                          <span className="px-3 py-1 border-x border-black min-w-[40px] text-center text-xs">
+                          <span style={{
+                            fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                            fontSize: '12px',
+                            fontWeight: 400
+                          }}>
                             {item.quantity}
                           </span>
                           <button
                             onClick={() => updateQuantity(item.productId, item.size, item.quantity + 1)}
-                            className="px-3 py-1 hover:bg-black hover:text-white transition-colors text-xs"
+                            style={{
+                              padding: '2px 8px',
+                              border: 'none',
+                              background: 'none',
+                              cursor: 'pointer',
+                              fontSize: '14px'
+                            }}
                           >
                             +
                           </button>
                         </div>
-                        
-                        <button
-                          onClick={() => removeItem(item.productId, item.size)}
-                          className="text-xs hover:opacity-60 transition-opacity underline uppercase"
-                        >
-                          Remove
-                        </button>
+
+                        {item.quantity < 6 && (
+                          <p style={{
+                            fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                            fontSize: '11px',
+                            fontWeight: 400,
+                            color: '#666',
+                            marginBottom: '8px'
+                          }}>
+                            Poslední kusy na skladě
+                          </p>
+                        )}
+
+                        <div style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          marginTop: 'auto'
+                        }}>
+                          <button
+                            onClick={() => handleSaveForLater(item.productId, item.size)}
+                            style={{
+                              fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                              fontSize: '12px',
+                              fontWeight: 400,
+                              textDecoration: 'underline',
+                              border: 'none',
+                              background: 'none',
+                              cursor: 'pointer',
+                              padding: 0
+                            }}
+                            className="hover:opacity-60 transition-opacity"
+                          >
+                            Uložit na později
+                          </button>
+
+                          <div style={{ display: 'flex', gap: '12px' }}>
+                            <Link
+                              href={`/produkty/${item.slug}`}
+                              onClick={onClose}
+                              style={{
+                                fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                                fontSize: '12px',
+                                fontWeight: 400,
+                                textDecoration: 'underline',
+                                color: '#000'
+                              }}
+                              className="hover:opacity-60 transition-opacity"
+                            >
+                              Upravit
+                            </Link>
+                            <button
+                              onClick={() => removeItem(item.productId, item.size)}
+                              style={{
+                                fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                                fontSize: '12px',
+                                fontWeight: 400,
+                                textDecoration: 'underline',
+                                border: 'none',
+                                background: 'none',
+                                cursor: 'pointer',
+                                padding: 0,
+                                color: '#000'
+                              }}
+                              className="hover:opacity-60 transition-opacity"
+                            >
+                              Smazat
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -320,21 +429,46 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
           </div>
 
           {items.length > 0 && (
-            <div className="border-t border-black px-6 py-6">
-              <div className="mb-6 space-y-1.5 text-xs">
-                <p>• Odesíláme ASAP</p>
-                <p>• Možnost vrácení do 14ti dnů</p>
-              </div>
-
-              <div className="flex items-center justify-center mb-6">
-                <img 
-                  src="/payment-methods.jpg" 
-                  alt="Payment Methods: Visa, Mastercard, GoPay, PayPal, Apple Pay" 
-                  style={{ height: '76.8px', width: 'auto' }}
+            <div style={{ marginTop: 'auto' }}>
+              <div style={{
+                borderTop: '1px solid #000',
+                marginBottom: '4px'
+              }} />
+              
+              <div style={{
+                padding: '4px',
+                display: 'flex',
+                gap: '4px'
+              }}>
+                <AnimatedButton
+                  text={`PŘEJÍT K POKLADNĚ (${items.length})`}
+                  onClick={() => {
+                    onClose();
+                    router.push('/pokladna');
+                  }}
+                  type="button"
+                  style={{
+                    flex: 1,
+                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '12px',
+                    padding: '12px'
+                  }}
+                />
+                <AnimatedButton
+                  text="ZOBRAZIT KOŠÍK"
+                  onClick={() => {
+                    onClose();
+                    router.push('/kosik');
+                  }}
+                  type="button"
+                  style={{
+                    flex: 1,
+                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '12px',
+                    padding: '12px'
+                  }}
                 />
               </div>
-
-              <CheckoutButton total={total} onClose={onClose} />
             </div>
           )}
         </div>
