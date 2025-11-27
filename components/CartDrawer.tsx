@@ -260,7 +260,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                           fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                           fontSize: '14px',
                           fontWeight: 400,
-                          lineHeight: '19.6px',
+                          lineHeight: '17.6px',
                           color: 'rgb(0, 0, 0)',
                           marginBottom: '4px'
                         }}>
@@ -271,7 +271,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                           fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                           fontSize: '14px',
                           fontWeight: 400,
-                          lineHeight: '19.6px',
+                          lineHeight: '17.6px',
                           color: 'rgb(0, 0, 0)',
                           marginBottom: '8px'
                         }}>
@@ -288,7 +288,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                             fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                             fontSize: '14px',
                             fontWeight: 400,
-                            lineHeight: '19.6px',
+                            lineHeight: '17.6px',
                             color: 'rgb(0, 0, 0)'
                           }}>
                             Množství:
@@ -312,7 +312,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                             fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                             fontSize: '14px',
                             fontWeight: 400,
-                            lineHeight: '19.6px',
+                            lineHeight: '17.6px',
                             color: 'rgb(0, 0, 0)'
                           }}>
                             {item.quantity}
@@ -350,7 +350,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         <div style={{
                           display: 'flex',
                           justifyContent: 'space-between',
-                          alignItems: 'center',
+                          alignItems: 'flex-end',
                           marginTop: 'auto'
                         }}>
                           <button
@@ -365,7 +365,8 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                               border: 'none',
                               background: 'none',
                               cursor: 'pointer',
-                              padding: 0
+                              padding: 0,
+                              alignSelf: 'flex-start'
                             }}
                             className="hover:opacity-60 transition-opacity"
                           >
@@ -453,30 +454,102 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
           {items.length > 0 && (
             <div style={{ marginTop: 'auto' }}>
+              {/* First 1px line */}
               <div style={{
-                borderTop: '1px solid #000',
-                marginBottom: '4px'
+                borderTop: '1px solid #000'
               }} />
               
+              {/* Pricing section - 64px height */}
               <div style={{
-                padding: '4px',
+                height: '64px',
+                padding: '12px 16px',
                 display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
                 gap: '4px'
               }}>
-                <AnimatedButton
-                  text={`PŘEJÍT K POKLADNĚ (${items.length})`}
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}>
+                  <span style={{
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '14px',
+                    fontWeight: 400,
+                    lineHeight: '19.6px',
+                    color: 'rgb(0, 0, 0)'
+                  }}>
+                    CENA ZA DOPRAVU
+                  </span>
+                  <span style={{
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '14px',
+                    fontWeight: 400,
+                    lineHeight: '19.6px',
+                    color: 'rgb(0, 0, 0)'
+                  }}>
+                    129 Kč
+                  </span>
+                </div>
+                
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}>
+                  <span style={{
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '14px',
+                    fontWeight: 400,
+                    lineHeight: '19.6px',
+                    color: 'rgb(0, 0, 0)'
+                  }}>
+                    PŘEDPOKLÁDANÁ CENA
+                  </span>
+                  <span style={{
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '14px',
+                    fontWeight: 400,
+                    lineHeight: '19.6px',
+                    color: 'rgb(0, 0, 0)'
+                  }}>
+                    {(total + 129).toFixed(2)} Kč
+                  </span>
+                </div>
+              </div>
+
+              {/* Second 1px line */}
+              <div style={{
+                borderTop: '1px solid #000'
+              }} />
+              
+              {/* Buttons section */}
+              <div style={{
+                padding: '12px',
+                display: 'flex',
+                gap: '8px'
+              }}>
+                <button
                   onClick={() => {
                     onClose();
                     router.push('/pokladna');
                   }}
-                  type="button"
                   style={{
                     flex: 1,
-                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '12px',
-                    padding: '12px'
+                    fontWeight: 400,
+                    padding: '12px',
+                    backgroundColor: '#fff',
+                    border: '1px solid #000',
+                    textTransform: 'uppercase',
+                    cursor: 'pointer'
                   }}
-                />
+                  className="hover:opacity-60 transition-opacity"
+                >
+                  PŘEJÍT K POKLADNĚ ({items.length})
+                </button>
                 <AnimatedButton
                   text="ZOBRAZIT KOŠÍK"
                   onClick={() => {
@@ -486,8 +559,9 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   type="button"
                   style={{
                     flex: 1,
-                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '12px',
+                    fontWeight: 400,
                     padding: '12px'
                   }}
                 />
