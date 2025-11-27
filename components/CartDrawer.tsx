@@ -197,10 +197,12 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     style={{
                       borderBottom: index < items.length - 1 ? '1px solid #000' : 'none',
                       padding: '16px',
-                      position: 'relative'
+                      position: 'relative',
+                      display: 'flex',
+                      flexDirection: 'column'
                     }}
                   >
-                    <div style={{ display: 'flex', gap: '12px' }}>
+                    <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
                       <Link
                         href={`/produkty/${item.slug}`}
                         onClick={onClose}
@@ -342,72 +344,74 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                             fontSize: '14px',
                             fontWeight: 400,
                             lineHeight: '19.6px',
-                            color: '#666',
-                            marginBottom: '8px'
+                            color: '#666'
                           }}>
                             Poslední kusy na skladě
                           </p>
                         )}
+                      </div>
+                    </div>
 
-                        <div style={{
-                          display: 'flex',
-                          justifyContent: 'flex-start',
-                          alignItems: 'flex-end',
-                          gap: '12px',
-                          marginTop: 'auto'
-                        }}>
-                          <button
-                            onClick={() => handleSaveForLater(item.productId, item.size)}
-                            style={{
-                              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                              fontSize: '14px',
-                              fontWeight: 400,
-                              lineHeight: '19.6px',
-                              color: 'rgb(0, 0, 0)',
-                              textDecoration: 'underline',
-                              border: 'none',
-                              background: 'none',
-                              cursor: 'pointer',
-                              padding: 0
-                            }}
-                            className="hover:opacity-60 transition-opacity"
-                          >
-                            Uložit na později
-                          </button>
-                          <Link
-                            href={`/produkty/${item.slug}`}
-                            onClick={onClose}
-                            style={{
-                              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                              fontSize: '14px',
-                              fontWeight: 400,
-                              lineHeight: '19.6px',
-                              color: 'rgb(0, 0, 0)',
-                              textDecoration: 'underline'
-                            }}
-                            className="hover:opacity-60 transition-opacity"
-                          >
-                            Upravit
-                          </Link>
-                          <button
-                            onClick={() => removeItem(item.productId, item.size)}
-                            style={{
-                              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                              fontSize: '14px',
-                              fontWeight: 400,
-                              lineHeight: '19.6px',
-                              color: 'rgb(0, 0, 0)',
-                              textDecoration: 'underline',
-                              border: 'none',
-                              background: 'none',
-                              cursor: 'pointer',
-                              padding: 0
-                            }}
-                            className="hover:opacity-60 transition-opacity"
-                          >
-                            Smazat
-                          </button>
-                        </div>
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'flex-end'
+                    }}>
+                      <button
+                        onClick={() => handleSaveForLater(item.productId, item.size)}
+                        style={{
+                          fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                          fontSize: '14px',
+                          fontWeight: 400,
+                          lineHeight: '19.6px',
+                          color: 'rgb(0, 0, 0)',
+                          textDecoration: 'underline',
+                          border: 'none',
+                          background: 'none',
+                          cursor: 'pointer',
+                          padding: 0
+                        }}
+                        className="hover:opacity-60 transition-opacity"
+                      >
+                        Uložit na později
+                      </button>
+                      <div style={{
+                        display: 'flex',
+                        gap: '16px'
+                      }}>
+                        <Link
+                          href={`/produkty/${item.slug}`}
+                          onClick={onClose}
+                          style={{
+                            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                            fontSize: '14px',
+                            fontWeight: 400,
+                            lineHeight: '19.6px',
+                            color: 'rgb(0, 0, 0)',
+                            textDecoration: 'underline'
+                          }}
+                          className="hover:opacity-60 transition-opacity"
+                        >
+                          Upravit
+                        </Link>
+                        <button
+                          onClick={() => removeItem(item.productId, item.size)}
+                          style={{
+                            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                            fontSize: '14px',
+                            fontWeight: 400,
+                            lineHeight: '19.6px',
+                            color: 'rgb(0, 0, 0)',
+                            textDecoration: 'underline',
+                            border: 'none',
+                            background: 'none',
+                            cursor: 'pointer',
+                            padding: 0
+                          }}
+                          className="hover:opacity-60 transition-opacity"
+                        >
+                          Smazat
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -522,21 +526,21 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   alignItems: 'center'
                 }}>
                   <span style={{
-                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontFamily: 'BB-CondBold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '14px',
                     fontWeight: 700,
-                    lineHeight: '19.6px',
-                    letterSpacing: '0.03em',
+                    lineHeight: '16.1px',
+                    letterSpacing: '0.42px',
                     color: '#000000'
                   }}>
                     PŘEDPOKLÁDANÁ CENA
                   </span>
                   <span style={{
-                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontFamily: 'BB-CondBold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '14px',
                     fontWeight: 700,
-                    lineHeight: '19.6px',
-                    letterSpacing: '0.03em',
+                    lineHeight: '16.1px',
+                    letterSpacing: '0.42px',
                     color: '#000000'
                   }}>
                     {(total + 129).toFixed(2)} Kč
