@@ -241,8 +241,7 @@ export default function CartPage() {
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'flex-end',
-                paddingTop: '8px',
-                borderTop: '1px solid #000'
+                paddingTop: '8px'
               }}>
                 <button
                   onClick={() => removeItem(item.productId, item.size)}
