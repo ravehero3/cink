@@ -44,7 +44,27 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-white flex flex-col relative">
+      {/* Vertical lines at 25% and 75% */}
+      <div style={{
+        position: 'fixed',
+        left: '25%',
+        top: 0,
+        bottom: 0,
+        width: '1px',
+        backgroundColor: '#000',
+        zIndex: 5
+      }} />
+      <div style={{
+        position: 'fixed',
+        right: '25%',
+        top: 0,
+        bottom: 0,
+        width: '1px',
+        backgroundColor: '#000',
+        zIndex: 5
+      }} />
+
       <div className="border-b border-black">
         <div className="mx-auto px-4 py-8" style={{ width: '33.333%', minWidth: '400px', maxWidth: '600px' }}>
           <h1 className="text-center uppercase" style={{
@@ -59,16 +79,16 @@ export default function CartPage() {
       </div>
 
       <div className="flex-1 flex justify-center" style={{ paddingBottom: '80px' }}>
-        <div style={{ width: '33.333%', minWidth: '400px', maxWidth: '600px' }}>
+        <div style={{ width: '33.333%', minWidth: '400px', maxWidth: '600px', position: 'relative' }}>
           {items.map((item, index) => (
             <div
               key={`${item.productId}-${item.size}`}
               style={{
                 borderRight: '1px solid #000',
                 borderLeft: '1px solid #000',
-                borderBottom: index === items.length - 1 ? '1px solid #000' : 'none',
                 borderTop: index === 0 ? '1px solid #000' : 'none',
-                padding: '16px'
+                padding: '16px',
+                paddingBottom: '16px'
               }}
             >
               <div style={{ display: 'flex', gap: '16px', marginBottom: '16px' }}>
@@ -202,25 +222,6 @@ export default function CartPage() {
                       +
                     </button>
                   </div>
-
-                  <button
-                    onClick={() => removeItem(item.productId, item.size)}
-                    style={{
-                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '14px',
-                      fontWeight: 400,
-                      color: '#000',
-                      textDecoration: 'underline',
-                      border: 'none',
-                      background: 'none',
-                      cursor: 'pointer',
-                      padding: 0,
-                      textAlign: 'left'
-                    }}
-                    className="hover:opacity-60 transition-opacity"
-                  >
-                    Smazat
-                  </button>
                 </div>
 
                 <div style={{ textAlign: 'right', flexShrink: 0 }}>
@@ -235,6 +236,57 @@ export default function CartPage() {
                   </p>
                 </div>
               </div>
+
+              {/* Buttons section */}
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-end',
+                paddingTop: '8px',
+                borderTop: '1px solid #000'
+              }}>
+                <button
+                  onClick={() => removeItem(item.productId, item.size)}
+                  style={{
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '14px',
+                    fontWeight: 400,
+                    lineHeight: '19.6px',
+                    color: '#000',
+                    textDecoration: 'underline',
+                    border: 'none',
+                    background: 'none',
+                    cursor: 'pointer',
+                    padding: 0,
+                    textAlign: 'left'
+                  }}
+                  className="hover:opacity-60 transition-opacity"
+                >
+                  Smazat
+                </button>
+                <Link
+                  href={`/produkty/${item.slug}`}
+                  style={{
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '14px',
+                    fontWeight: 400,
+                    lineHeight: '19.6px',
+                    color: '#000',
+                    textDecoration: 'underline'
+                  }}
+                  className="hover:opacity-60 transition-opacity"
+                >
+                  Upravit
+                </Link>
+              </div>
+
+              {/* Horizontal line at bottom */}
+              {index === items.length - 1 && (
+                <div style={{
+                  marginTop: '16px',
+                  borderBottom: '1px solid #000'
+                }} />
+              )}
             </div>
           ))}
         </div>
