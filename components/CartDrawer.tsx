@@ -529,8 +529,9 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '14px',
                     fontWeight: 700,
-                    lineHeight: '16.1px',
-                    letterSpacing: '0.42px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.03em',
+                    fontStretch: 'condensed',
                     color: '#000000'
                   }}>
                     PŘEDPOKLÁDANÁ CENA
@@ -539,8 +540,9 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '14px',
                     fontWeight: 700,
-                    lineHeight: '16.1px',
-                    letterSpacing: '0.42px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.03em',
+                    fontStretch: 'condensed',
                     color: '#000000'
                   }}>
                     {(total + 129).toFixed(2)} Kč
