@@ -9,6 +9,7 @@ import { useRecentlyViewedStore } from '@/lib/recently-viewed-store';
 import { useSavedProductsStore } from '@/lib/saved-products-store';
 import { X } from 'lucide-react';
 import AnimatedButton from './AnimatedButton';
+import DeleteConfirmModal from './DeleteConfirmModal';
 import { useRouter } from 'next/navigation';
 
 function SavedItemsButton({ onClose }: { onClose: () => void }) {
@@ -57,10 +58,31 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   const recentlyViewedProducts = useRecentlyViewedStore((state) => state.products);
   const recentlyViewed = useMemo(() => recentlyViewedProducts.slice(0, 3), [recentlyViewedProducts]);
   const total = useMemo(() => getTotal(), [items]);
+  
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteItemData, setDeleteItemData] = useState<{ productId: string; productName: string; size: string } | null>(null);
 
   const handleSaveForLater = (productId: string, size: string) => {
     saveProduct(productId);
     removeItem(productId, size);
+  };
+
+  const handleOpenDeleteModal = (productId: string, productName: string, size: string) => {
+    setDeleteItemData({ productId, productName, size });
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (deleteItemData) {
+      removeItem(deleteItemData.productId, deleteItemData.size);
+      setIsDeleteModalOpen(false);
+      setDeleteItemData(null);
+    }
+  };
+
+  const handleCloseDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setDeleteItemData(null);
   };
 
   useEffect(() => {
@@ -395,7 +417,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                           Upravit
                         </Link>
                         <button
-                          onClick={() => removeItem(item.productId, item.size)}
+                          onClick={() => handleOpenDeleteModal(item.productId, item.name, item.size)}
                           style={{
                             fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                             fontSize: '14px',
@@ -603,6 +625,14 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
           )}
         </div>
       </div>
+
+      <DeleteConfirmModal
+        isOpen={isDeleteModalOpen}
+        onClose={handleCloseDeleteModal}
+        onConfirm={handleConfirmDelete}
+        productName={deleteItemData?.productName || ''}
+        productSize={deleteItemData?.size || ''}
+      />
     </>
   );
 }
