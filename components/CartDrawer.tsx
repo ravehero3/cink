@@ -201,54 +201,29 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     }}
                   >
                     <div style={{ display: 'flex', gap: '12px' }}>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                        <Link
-                          href={`/produkty/${item.slug}`}
-                          onClick={onClose}
-                          style={{ flexShrink: 0 }}
-                        >
-                          <div style={{
-                            width: '80px',
-                            height: '106px',
-                            border: '1px solid #000',
-                            padding: '4px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            overflow: 'hidden',
-                            backgroundColor: '#fff'
-                          }}>
-                            <img
-                              src={item.image}
-                              alt={item.name}
-                              style={{ objectFit: 'contain', width: '100%', height: '100%' }}
-                            />
-                          </div>
-                        </Link>
-                        <button
-                          onClick={() => handleSaveForLater(item.productId, item.size)}
-                          style={{
-                            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                            fontSize: '14px',
-                            fontWeight: 400,
-                            lineHeight: '19.6px',
-                            color: 'rgb(0, 0, 0)',
-                            textDecoration: 'underline',
-                            border: 'none',
-                            background: 'none',
-                            cursor: 'pointer',
-                            paddingLeft: 0,
-                            paddingRight: 0,
-                            paddingTop: 0,
-                            paddingBottom: '16px',
-                            textAlign: 'left',
-                            marginTop: 'auto'
-                          }}
-                          className="hover:opacity-60 transition-opacity"
-                        >
-                          Uložit na později
-                        </button>
-                      </div>
+                      <Link
+                        href={`/produkty/${item.slug}`}
+                        onClick={onClose}
+                        style={{ flexShrink: 0 }}
+                      >
+                        <div style={{
+                          width: '80px',
+                          height: '106px',
+                          border: '1px solid #000',
+                          padding: '4px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          overflow: 'hidden',
+                          backgroundColor: '#fff'
+                        }}>
+                          <img
+                            src={item.image}
+                            alt={item.name}
+                            style={{ objectFit: 'contain', width: '100%', height: '100%' }}
+                          />
+                        </div>
+                      </Link>
 
                       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                         <Link
@@ -376,11 +351,29 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
                         <div style={{
                           display: 'flex',
-                          justifyContent: 'flex-end',
+                          justifyContent: 'flex-start',
                           alignItems: 'flex-end',
                           gap: '12px',
                           marginTop: 'auto'
                         }}>
+                          <button
+                            onClick={() => handleSaveForLater(item.productId, item.size)}
+                            style={{
+                              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                              fontSize: '14px',
+                              fontWeight: 400,
+                              lineHeight: '19.6px',
+                              color: 'rgb(0, 0, 0)',
+                              textDecoration: 'underline',
+                              border: 'none',
+                              background: 'none',
+                              cursor: 'pointer',
+                              padding: 0
+                            }}
+                            className="hover:opacity-60 transition-opacity"
+                          >
+                            Uložit na později
+                          </button>
                           <Link
                             href={`/produkty/${item.slug}`}
                             onClick={onClose}
@@ -579,7 +572,8 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     border: '1px solid #000',
                     borderRadius: '4px',
                     textTransform: 'uppercase',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    color: '#000'
                   }}
                 />
                 <AnimatedButton
