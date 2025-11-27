@@ -27,8 +27,8 @@ export default function DeleteConfirmModal({
         onClick={onClose}
       />
       
-      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white border border-black" style={{ width: '320px' }}>
-        <div style={{ padding: '16px' }}>
+      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white border border-black" style={{ width: '33.33%' }}>
+        <div className="border-b border-black" style={{ height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#24e053' }}>
           <h2 style={{
             fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
             fontSize: '14px',
@@ -36,34 +36,11 @@ export default function DeleteConfirmModal({
             textTransform: 'uppercase',
             letterSpacing: '0.03em',
             fontStretch: 'condensed',
-            color: '#000000',
-            marginBottom: '4px'
+            color: '#000000'
           }}>
             Odebrat položku z mého košíku
           </h2>
-          <button
-            onClick={onClose}
-            style={{
-              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-              fontSize: '12px',
-              fontWeight: 400,
-              color: '#000000',
-              textDecoration: 'underline',
-              border: 'none',
-              background: 'none',
-              cursor: 'pointer',
-              padding: 0,
-              marginBottom: '12px'
-            }}
-            className="hover:opacity-60 transition-opacity"
-          >
-            Zavřít popup
-          </button>
         </div>
-
-        <div style={{
-          borderTop: '1px solid #000'
-        }} />
 
         <div style={{ padding: '16px' }}>
           <p style={{
