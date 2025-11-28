@@ -305,7 +305,7 @@ export default function SavedProductsPage() {
           style={{
             position: 'fixed',
             left: 'calc(50vw - 350px)',
-            right: 'calc(50vw - 350px)',
+            width: '700px',
             top: `${270 + i * 700}px`,
             height: '1px',
             backgroundColor: '#000',
