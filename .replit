@@ -113,5 +113,6 @@ GOPAY_GOID = "8600284220"
 GOPAY_CLIENT_ID = "1581106802"
 GOPAY_CLIENT_SECRET = "yNW7rtRe"
 GOPAY_ENVIRONMENT = "test"
+DATABASE_URL_UNPOOLED = "postgresql://neondb_owner:npg_YfvpBPyZ91FK@ep-summer-sound-agjq94k0.c-2.eu-central-1.aws.neon.tech/neondb?sslmode=require"
 
 [userenv.development]
