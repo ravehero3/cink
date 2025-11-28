@@ -276,10 +276,10 @@ export default function SavedProductsPage() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col relative">
-      {/* Vertical lines at product edges (995px wide, centered in 50% container) */}
+      {/* Vertical lines at 700px apart (centered) */}
       <div style={{
         position: 'fixed',
-        left: 'calc(50vw - 497.5px)',
+        left: 'calc(50vw - 350px)',
         top: 0,
         bottom: 0,
         width: '1px',
@@ -288,13 +288,29 @@ export default function SavedProductsPage() {
       }} />
       <div style={{
         position: 'fixed',
-        right: 'calc(50vw - 497.5px)',
+        right: 'calc(50vw - 350px)',
         top: 0,
         bottom: 0,
         width: '1px',
         backgroundColor: '#000',
         zIndex: 5
       }} />
+
+      {/* Horizontal lines at 700px intervals */}
+      {[...Array(20)].map((_, i) => (
+        <div
+          key={`h-line-${i}`}
+          style={{
+            position: 'fixed',
+            left: 'calc(50vw - 350px)',
+            right: 'calc(50vw - 350px)',
+            top: `${i * 700}px`,
+            height: '1px',
+            backgroundColor: '#000',
+            zIndex: 5
+          }}
+        />
+      ))}
 
       <div style={{ width: '995px', margin: '0 auto', height: '226px', borderBottom: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
         <h1 className="text-center uppercase" style={{
