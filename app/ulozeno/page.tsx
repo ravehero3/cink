@@ -480,7 +480,7 @@ export default function SavedProductsPage() {
                 text="PŘIHLÁSIT SE"
                 onClick={() => signIn()}
                 variant="black"
-                style={{ borderRadius: '3px' }}
+                style={{ borderRadius: '3px', padding: '8px 48px' }}
               />
             </div>
           )}

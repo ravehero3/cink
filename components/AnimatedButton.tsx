@@ -26,7 +26,7 @@ export default function AnimatedButton({
   const isWhite = variant === 'white';
   const baseClasses = isWhite 
     ? 'bg-white text-black uppercase font-normal border border-black relative overflow-hidden disabled:opacity-50 transition-all duration-300'
-    : 'bg-black text-white uppercase font-bold border border-black relative overflow-hidden disabled:opacity-50 transition-all duration-300';
+    : 'bg-black text-white uppercase font-normal border border-black relative overflow-hidden disabled:opacity-50 transition-all duration-300';
 
   const baseStyles = isWhite
     ? { borderRadius: '4px', padding: '13.8px 25.6px', fontSize: '14px', textAlign: 'center' as const }
