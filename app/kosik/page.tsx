@@ -7,6 +7,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import AnimatedButton from '@/components/AnimatedButton';
+import DeleteConfirmModal from '@/components/DeleteConfirmModal';
 
 function AnimatedLink({ href, text }: { href: string; text: string }) {
   const [isHovered, setIsHovered] = useState(false);
@@ -44,6 +45,8 @@ function AnimatedLink({ href, text }: { href: string; text: string }) {
 export default function CartPage() {
   const [isHydrated, setIsHydrated] = useState(false);
   const [savingItem, setSavingItem] = useState<string | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteItemData, setDeleteItemData] = useState<{ productId: string; productName: string; size: string } | null>(null);
   const router = useRouter();
   const pathname = usePathname();
   const { data: session } = useSession();
@@ -51,6 +54,24 @@ export default function CartPage() {
   const { addProduct } = useSavedProductsStore();
   const cartItemCount = items.length;
   const isKosik = pathname === '/kosik';
+
+  const handleOpenDeleteModal = (productId: string, productName: string, size: string) => {
+    setDeleteItemData({ productId, productName, size });
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (deleteItemData) {
+      removeItem(deleteItemData.productId, deleteItemData.size);
+      setIsDeleteModalOpen(false);
+      setDeleteItemData(null);
+    }
+  };
+
+  const handleCloseDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setDeleteItemData(null);
+  };
 
   const handleSaveForLater = async (item: typeof items[0]) => {
     setSavingItem(item.productId);
@@ -553,7 +574,7 @@ export default function CartPage() {
                     Upravit
                   </Link>
                   <button
-                    onClick={() => removeItem(item.productId, item.size)}
+                    onClick={() => handleOpenDeleteModal(item.productId, item.name, item.size)}
                     style={{
                       fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                       fontSize: '14px',
@@ -611,6 +632,14 @@ export default function CartPage() {
           </div>
         </div>
       </div>
+
+      <DeleteConfirmModal
+        isOpen={isDeleteModalOpen}
+        onClose={handleCloseDeleteModal}
+        onConfirm={handleConfirmDelete}
+        productName={deleteItemData?.productName || ''}
+        productSize={deleteItemData?.size || ''}
+      />
     </div>
   );
 }
