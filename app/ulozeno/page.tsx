@@ -298,15 +298,15 @@ export default function SavedProductsPage() {
         pointerEvents: 'none'
       }} />
 
-      {/* Horizontal lines at 700px intervals (starting after banner) */}
-      {[...Array(20)].map((_, i) => (
+      {/* Horizontal lines at 700px intervals (starting after banner + nav) */}
+      {[...Array(18)].map((_, i) => (
         <div
           key={`h-line-${i}`}
           style={{
             position: 'fixed',
             left: 'calc(50vw - 350px)',
             width: '700px',
-            top: `${270 + i * 700}px`,
+            top: `${1670 + i * 700}px`,
             height: '1px',
             backgroundColor: '#000',
             zIndex: 4,
