@@ -62,8 +62,8 @@ export default function SavedProductsPage() {
   const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
   const [addingToCart, setAddingToCart] = useState<string | null>(null);
-  const { addItem, items } = useCartStore();
-  const cartItemCount = items.length;
+  const { addItem, items, getItemCount } = useCartStore();
+  const cartItemCount = getItemCount();
   const isUlozeno = pathname === '/ulozeno';
 
   useEffect(() => {
