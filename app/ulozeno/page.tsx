@@ -280,20 +280,20 @@ export default function SavedProductsPage() {
     <div className="min-h-screen bg-white flex flex-col relative">
       {/* Vertical lines at 700px apart (centered) - end at footer */}
       <div style={{
-        position: 'fixed',
+        position: 'absolute',
         left: 'calc(50vw - 350px)',
         top: 0,
-        bottom: '60px',
+        bottom: 0,
         width: '1px',
         backgroundColor: '#000',
         zIndex: 5,
         pointerEvents: 'none'
       }} />
       <div style={{
-        position: 'fixed',
+        position: 'absolute',
         right: 'calc(50vw - 350px)',
         top: 0,
-        bottom: '60px',
+        bottom: 0,
         width: '1px',
         backgroundColor: '#000',
         zIndex: 5,
