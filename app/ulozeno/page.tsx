@@ -276,10 +276,10 @@ export default function SavedProductsPage() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col relative">
-      {/* Vertical lines at 25% and 75% */}
+      {/* Vertical lines at product edges (995px wide, centered in 50% container) */}
       <div style={{
         position: 'fixed',
-        left: '25%',
+        left: 'calc(50vw - 497.5px)',
         top: 0,
         bottom: 0,
         width: '1px',
@@ -288,7 +288,7 @@ export default function SavedProductsPage() {
       }} />
       <div style={{
         position: 'fixed',
-        right: '25%',
+        right: 'calc(50vw - 497.5px)',
         top: 0,
         bottom: 0,
         width: '1px',
@@ -296,20 +296,18 @@ export default function SavedProductsPage() {
         zIndex: 5
       }} />
 
-      <div className="flex justify-center">
-        <div style={{ width: '50%', padding: '32px 16px 32px 16px', borderBottom: '1px solid #000' }}>
-          <h1 className="text-center uppercase" style={{
-            fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-            fontSize: '22px',
-            fontWeight: 700,
-            lineHeight: '22px',
-            letterSpacing: '0.03em',
-            fontStretch: 'condensed',
-            margin: 0
-          }}>
-            ULOŽENÉ PRODUKTY
-          </h1>
-        </div>
+      <div style={{ width: '995px', margin: '0 auto', height: '226px', borderBottom: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
+        <h1 className="text-center uppercase" style={{
+          fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+          fontSize: '22px',
+          fontWeight: 700,
+          lineHeight: '22px',
+          letterSpacing: '0.03em',
+          fontStretch: 'condensed',
+          margin: 0
+        }}>
+          ULOŽENÉ PRODUKTY
+        </h1>
       </div>
 
       {/* Navigation Panel */}

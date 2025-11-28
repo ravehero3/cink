@@ -133,7 +133,7 @@ export default function CartPage() {
         zIndex: 5
       }} />
 
-      <div style={{ width: '995px', margin: '0 auto', padding: '32px 16px 32px 16px', borderBottom: '1px solid #000' }}>
+      <div style={{ width: '995px', margin: '0 auto', height: '226px', borderBottom: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
         <h1 className="text-center uppercase" style={{
           fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
           fontSize: '22px',
@@ -362,17 +362,6 @@ export default function CartPage() {
                   </div>
                 </div>
 
-                <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                  <p style={{
-                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
-                    fontWeight: 700,
-                    textTransform: 'uppercase',
-                    color: '#000'
-                  }}>
-                    {item.price * item.quantity} Kč
-                  </p>
-                </div>
               </div>
 
               {/* Buttons section */}
