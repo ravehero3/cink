@@ -383,7 +383,9 @@ export default function CartPage() {
                 paddingTop: '8px'
               }}>
                 <button
-                  onClick={() => removeItem(item.productId, item.size)}
+                  onClick={() => {
+                    // TODO: Add to saved products
+                  }}
                   style={{
                     fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '14px',
@@ -399,22 +401,43 @@ export default function CartPage() {
                   }}
                   className="hover:opacity-60 transition-opacity"
                 >
-                  Smazat
+                  Uložit na později
                 </button>
-                <Link
-                  href={`/produkty/${item.slug}`}
-                  style={{
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
-                    fontWeight: 400,
-                    lineHeight: '19.6px',
-                    color: '#000',
-                    textDecoration: 'underline'
-                  }}
-                  className="hover:opacity-60 transition-opacity"
-                >
-                  Upravit
-                </Link>
+                <div style={{ display: 'flex', gap: '24px', alignItems: 'flex-end' }}>
+                  <Link
+                    href={`/produkty/${item.slug}`}
+                    style={{
+                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontSize: '14px',
+                      fontWeight: 400,
+                      lineHeight: '19.6px',
+                      color: '#000',
+                      textDecoration: 'underline'
+                    }}
+                    className="hover:opacity-60 transition-opacity"
+                  >
+                    Upravit
+                  </Link>
+                  <button
+                    onClick={() => removeItem(item.productId, item.size)}
+                    style={{
+                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontSize: '14px',
+                      fontWeight: 400,
+                      lineHeight: '19.6px',
+                      color: '#000',
+                      textDecoration: 'underline',
+                      border: 'none',
+                      background: 'none',
+                      cursor: 'pointer',
+                      padding: 0,
+                      textAlign: 'right'
+                    }}
+                    className="hover:opacity-60 transition-opacity"
+                  >
+                    Smazat
+                  </button>
+                </div>
               </div>
             </div>
           ))}
