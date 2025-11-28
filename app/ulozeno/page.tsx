@@ -479,7 +479,8 @@ export default function SavedProductsPage() {
               <AnimatedButton
                 text="PŘIHLÁSIT SE"
                 onClick={() => signIn()}
-                variant="white"
+                variant="black"
+                style={{ borderRadius: '3px' }}
               />
             </div>
           )}
