@@ -161,12 +161,19 @@ export default function SavedProductsPage() {
   };
 
   if (loading) {
-    return <div className="min-h-screen bg-white" />;
+    return (
+      <div className="min-h-screen bg-white relative">
+        <div style={{position: 'absolute', left: 'calc(50vw - 350px)', top: 0, bottom: 0, width: '1px', backgroundColor: '#000', zIndex: 5, pointerEvents: 'none'}} />
+        <div style={{position: 'absolute', right: 'calc(50vw - 350px)', top: 0, bottom: 0, width: '1px', backgroundColor: '#000', zIndex: 5, pointerEvents: 'none'}} />
+      </div>
+    );
   }
 
   if (products.length === 0) {
     return (
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-white relative">
+        <div style={{position: 'absolute', left: 'calc(50vw - 350px)', top: 0, bottom: 0, width: '1px', backgroundColor: '#000', zIndex: 5, pointerEvents: 'none'}} />
+        <div style={{position: 'absolute', right: 'calc(50vw - 350px)', top: 0, bottom: 0, width: '1px', backgroundColor: '#000', zIndex: 5, pointerEvents: 'none'}} />
         <div className="flex justify-center">
           <div style={{ width: '50%', padding: '32px 16px 32px 16px', borderBottom: '1px solid #000' }}>
             <h1 className="text-center uppercase" style={{
