@@ -296,7 +296,7 @@ export default function SavedProductsPage() {
         zIndex: 5
       }} />
 
-      {/* Horizontal lines at 700px intervals */}
+      {/* Horizontal lines at 700px intervals (starting after banner) */}
       {[...Array(20)].map((_, i) => (
         <div
           key={`h-line-${i}`}
@@ -304,7 +304,7 @@ export default function SavedProductsPage() {
             position: 'fixed',
             left: 'calc(50vw - 350px)',
             right: 'calc(50vw - 350px)',
-            top: `${i * 700}px`,
+            top: `${270 + i * 700}px`,
             height: '1px',
             backgroundColor: '#000',
             zIndex: 5
@@ -390,7 +390,7 @@ export default function SavedProductsPage() {
         </div>
       </div>
 
-      <div className="flex-1 flex justify-center" style={{ paddingBottom: '80px' }}>
+      <div className="flex-1 flex justify-center">
         <div style={{ width: '700px', position: 'relative' }}>
           {products.map((product, index) => (
             <div
@@ -520,45 +520,6 @@ export default function SavedProductsPage() {
         </div>
       </div>
 
-      {/* Sticky Footer */}
-      <div style={{
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        backgroundColor: '#fff',
-        borderTop: '1px solid #000',
-        zIndex: 10
-      }}>
-        <div style={{
-          display: 'flex',
-          justifyContent: 'center',
-          padding: '12px'
-        }}>
-          <div style={{ width: '50%' }}>
-            <Link
-              href="/kosik"
-              style={{
-                display: 'block',
-                width: '100%',
-                textAlign: 'center',
-                backgroundColor: '#000',
-                color: '#fff',
-                padding: '12px',
-                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '12px',
-                fontWeight: 400,
-                textTransform: 'uppercase',
-                textDecoration: 'none',
-                borderRadius: '4px'
-              }}
-              className="hover:opacity-90 transition-opacity"
-            >
-              PŘEJÍT NA NÁKUPNÍ KOŠÍK
-            </Link>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
