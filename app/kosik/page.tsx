@@ -166,23 +166,23 @@ export default function CartPage() {
         overflow: 'visible',
         zIndex: 10
       }}>
-        {/* Top border - 700px wide */}
+        {/* Top border - 995px wide to extend to vertical lines */}
         <div style={{
           position: 'absolute',
           top: 0,
-          left: 'calc(50% - 350px)',
-          width: '700px',
+          left: 'calc(50% - 497.5px)',
+          width: '995px',
           height: '1px',
           backgroundColor: '#000',
           zIndex: 1
         }} />
         
-        {/* Bottom border - 700px wide */}
+        {/* Bottom border - 995px wide to extend to vertical lines */}
         <div style={{
           position: 'absolute',
           bottom: 0,
-          left: 'calc(50% - 350px)',
-          width: '700px',
+          left: 'calc(50% - 497.5px)',
+          width: '995px',
           height: '1px',
           backgroundColor: '#000',
           zIndex: 1
