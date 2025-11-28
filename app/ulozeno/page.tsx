@@ -19,6 +19,39 @@ interface Product {
   color: string;
 }
 
+function AnimatedLink({ href, text }: { href: string; text: string }) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <Link
+      href={href}
+      className="relative overflow-hidden bg-white text-black font-normal uppercase tracking-tight transition-all border border-black text-sm"
+      style={{ borderRadius: '4px', padding: '11.8px 25.6px' }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <span
+        className="block transition-all duration-200"
+        style={{
+          transform: isHovered ? 'translateY(-150%)' : 'translateY(0)',
+          opacity: isHovered ? 0 : 1,
+        }}
+      >
+        {text}
+      </span>
+      <span
+        className="absolute inset-0 flex items-center justify-center transition-all duration-200"
+        style={{
+          transform: isHovered ? 'translateY(0)' : 'translateY(150%)',
+          opacity: isHovered ? 1 : 0,
+        }}
+      >
+        {text}
+      </span>
+    </Link>
+  );
+}
+
 export default function SavedProductsPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -310,19 +343,7 @@ export default function SavedProductsPage() {
               }}>
                 Nemáte žádné uložené produkty
               </p>
-              <Link
-                href="/"
-                className="bg-black text-white uppercase px-8 py-3 hover:bg-gray-800 transition-colors"
-                style={{
-                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '12px',
-                  fontWeight: 400,
-                  letterSpacing: '0.5px',
-                  textDecoration: 'none'
-                }}
-              >
-                POKRAČOVAT V NÁKUPU
-              </Link>
+              <AnimatedLink href="/" text="POKRAČOVAT V NÁKUPU" />
             </div>
           </div>
         </div>
