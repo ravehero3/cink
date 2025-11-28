@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { useSession, signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -392,6 +392,72 @@ export default function SavedProductsPage() {
 
       <div className="flex-1 flex justify-center">
         <div style={{ width: '700px', position: 'relative' }}>
+          {/* Login Prompt - Only for unauthenticated users */}
+          {status === 'unauthenticated' && (
+            <div
+              style={{
+                borderTop: '1px solid #000',
+                borderBottom: '1px solid #000',
+                padding: '16px',
+                paddingBottom: '16px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                minHeight: '270px'
+              }}
+            >
+              <div>
+                <h3 style={{
+                  fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '14px',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  marginBottom: '16px',
+                  lineHeight: '19.6px',
+                  letterSpacing: '0.03em',
+                  fontStretch: 'condensed',
+                  color: '#000'
+                }}>
+                  Nepřijďte o svůj list
+                </h3>
+                
+                <p style={{
+                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '14px',
+                  fontWeight: 400,
+                  lineHeight: '19.6px',
+                  color: '#000',
+                  marginBottom: '16px'
+                }}>
+                  Přihlaste se nebo si vytvořte účet a uložte si svůj list který můžete prohlížet na jakémkoliv zařízení
+                </p>
+              </div>
+
+              <button
+                onClick={() => signIn()}
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  textAlign: 'center',
+                  backgroundColor: '#000',
+                  color: '#fff',
+                  padding: '12px',
+                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '12px',
+                  fontWeight: 400,
+                  textTransform: 'uppercase',
+                  textDecoration: 'none',
+                  borderRadius: '4px',
+                  border: 'none',
+                  cursor: 'pointer'
+                }}
+                className="hover:opacity-90 transition-opacity"
+              >
+                PŘIHLÁSIT SE
+              </button>
+            </div>
+          )}
+
           {products.map((product, index) => (
             <div
               key={product.id}
