@@ -278,12 +278,12 @@ export default function SavedProductsPage() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col relative">
-      {/* Vertical lines at 700px apart (centered) */}
+      {/* Vertical lines at 700px apart (centered) - end at footer */}
       <div style={{
         position: 'fixed',
         left: 'calc(50vw - 350px)',
         top: 0,
-        bottom: 0,
+        bottom: '60px',
         width: '1px',
         backgroundColor: '#000',
         zIndex: 5,
@@ -293,7 +293,7 @@ export default function SavedProductsPage() {
         position: 'fixed',
         right: 'calc(50vw - 350px)',
         top: 0,
-        bottom: 0,
+        bottom: '60px',
         width: '1px',
         backgroundColor: '#000',
         zIndex: 5,
@@ -346,23 +346,23 @@ export default function SavedProductsPage() {
         overflow: 'visible',
         zIndex: 10
       }}>
-        {/* Top border - 995px wide to extend to vertical lines */}
+        {/* Top border - 700px wide to match vertical lines */}
         <div style={{
           position: 'absolute',
           top: 0,
-          left: 'calc(50% - 497.5px)',
-          width: '995px',
+          left: 'calc(50% - 350px)',
+          width: '700px',
           height: '1px',
           backgroundColor: '#000',
           zIndex: 1
         }} />
         
-        {/* Bottom border - 995px wide to extend to vertical lines */}
+        {/* Bottom border - 700px wide to match vertical lines */}
         <div style={{
           position: 'absolute',
           bottom: 0,
-          left: 'calc(50% - 497.5px)',
-          width: '995px',
+          left: 'calc(50% - 350px)',
+          width: '700px',
           height: '1px',
           backgroundColor: '#000',
           zIndex: 1
@@ -429,7 +429,7 @@ export default function SavedProductsPage() {
             <div
               style={{
                 borderTop: '1px solid #000',
-                borderBottom: 'none',
+                borderBottom: '1px solid #000',
                 padding: '16px',
                 display: 'flex',
                 flexDirection: 'column',
@@ -479,7 +479,7 @@ export default function SavedProductsPage() {
             <div
               key={product.id}
               style={{
-                borderTop: index === 0 && status !== 'unauthenticated' ? '1px solid #000' : 'none',
+                borderTop: 'none',
                 borderBottom: '1px solid #000',
                 padding: '16px',
                 paddingBottom: '16px'
