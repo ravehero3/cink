@@ -183,6 +183,15 @@ export default function SavedProductsPage() {
         color: product.color,
       });
       
+      removeProduct(product.id);
+      setProducts(products.filter(p => p.id !== product.id));
+      
+      if (session?.user) {
+        await fetch(`/api/saved-products?productId=${product.id}`, {
+          method: 'DELETE',
+        });
+      }
+      
       setAddingToCart(null);
       
     } catch (error) {
@@ -526,7 +535,7 @@ export default function SavedProductsPage() {
                   fontStretch: 'condensed',
                   color: '#000'
                 }}>
-                  Nepřijďte o svůj list
+                  Nepřipravte se o svůj seznam přání
                 </h3>
                 
                 <p style={{
@@ -537,7 +546,7 @@ export default function SavedProductsPage() {
                   color: '#000',
                   margin: 0
                 }}>
-                  Přihlaste se nebo si vytvořte účet a uložte si svůj list který můžete prohlížet na jakémkoliv zařízení
+                  Přihlaste se nebo si vytvořte účet a uložte si svůj seznam přání, který můžete prohlížet na jakémkoliv zařízení
                 </p>
               </div>
 
