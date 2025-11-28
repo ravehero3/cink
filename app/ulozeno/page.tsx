@@ -169,9 +169,11 @@ export default function SavedProductsPage() {
           <div style={{ width: '50%', padding: '32px 16px 32px 16px', borderBottom: '1px solid #000' }}>
             <h1 className="text-center uppercase" style={{
               fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-              fontSize: '16px',
+              fontSize: '22px',
               fontWeight: 700,
-              letterSpacing: '0.05em',
+              lineHeight: '22px',
+              letterSpacing: '0.03em',
+              fontStretch: 'condensed',
               margin: 0
             }}>
               ULOŽENÉ PRODUKTY
@@ -281,9 +283,11 @@ export default function SavedProductsPage() {
         <div style={{ width: '50%', padding: '32px 16px 32px 16px', borderBottom: '1px solid #000' }}>
           <h1 className="text-center uppercase" style={{
             fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-            fontSize: '16px',
+            fontSize: '22px',
             fontWeight: 700,
-            letterSpacing: '0.05em',
+            lineHeight: '22px',
+            letterSpacing: '0.03em',
+            fontStretch: 'condensed',
             margin: 0
           }}>
             ULOŽENÉ PRODUKTY
@@ -305,10 +309,12 @@ export default function SavedProductsPage() {
         }}>
           <div
             style={{
-              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-              fontSize: '14px',
-              fontWeight: 400,
-              lineHeight: '19.6px',
+              fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '22px',
+              fontWeight: 700,
+              lineHeight: '22px',
+              letterSpacing: '0.03em',
+              fontStretch: 'condensed',
               color: '#000',
               padding: '6px 12px',
               border: '1px solid #000',

@@ -29,9 +29,11 @@ export default function CartPage() {
           <div style={{ width: '50%', padding: '32px 16px 32px 16px', borderBottom: '1px solid #000' }}>
             <h1 className="text-center uppercase" style={{
               fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-              fontSize: '16px',
+              fontSize: '22px',
               fontWeight: 700,
-              letterSpacing: '0.05em',
+              lineHeight: '22px',
+              letterSpacing: '0.03em',
+              fontStretch: 'condensed',
               margin: 0
             }}>
               NÁKUPNÍ KOŠÍK
@@ -141,9 +143,11 @@ export default function CartPage() {
         <div style={{ width: '50%', padding: '32px 16px 32px 16px', borderBottom: '1px solid #000' }}>
           <h1 className="text-center uppercase" style={{
             fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-            fontSize: '16px',
+            fontSize: '22px',
             fontWeight: 700,
-            letterSpacing: '0.05em',
+            lineHeight: '22px',
+            letterSpacing: '0.03em',
+            fontStretch: 'condensed',
             margin: 0
           }}>
             NÁKUPNÍ KOŠÍK
@@ -204,10 +208,15 @@ export default function CartPage() {
             <div
               key={`${item.productId}-${item.size}`}
               style={{
+                width: '995px',
+                height: '270px',
                 borderTop: index === 0 ? '1px solid #000' : 'none',
                 borderBottom: '1px solid #000',
                 padding: '16px',
-                paddingBottom: '16px'
+                paddingBottom: '16px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between'
               }}
             >
               <div style={{ display: 'flex', gap: '16px', marginBottom: '16px' }}>
