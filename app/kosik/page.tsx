@@ -50,9 +50,9 @@ export default function CartPage() {
   const router = useRouter();
   const pathname = usePathname();
   const { data: session } = useSession();
-  const { items, updateQuantity, removeItem, getTotal } = useCartStore();
+  const { items, updateQuantity, removeItem, getTotal, getItemCount } = useCartStore();
   const { addProduct } = useSavedProductsStore();
-  const cartItemCount = items.length;
+  const cartItemCount = getItemCount();
   const isKosik = pathname === '/kosik';
 
   const handleOpenDeleteModal = (productId: string, productName: string, size: string) => {
@@ -616,7 +616,7 @@ export default function CartPage() {
         }}>
           <div style={{ width: '50%' }}>
             <AnimatedButton
-              text={`PŘEJÍT K POKLADNĚ (${items.length})`}
+              text={`PŘEJÍT K POKLADNĚ (${cartItemCount})`}
               onClick={() => router.push('/pokladna')}
               type="button"
               style={{
