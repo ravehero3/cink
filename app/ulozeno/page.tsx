@@ -399,14 +399,15 @@ export default function SavedProductsPage() {
                 borderTop: '1px solid #000',
                 borderBottom: '1px solid #000',
                 padding: '16px',
-                paddingBottom: '16px',
                 display: 'flex',
                 flexDirection: 'column',
-                justifyContent: 'space-between',
-                minHeight: '270px'
+                justifyContent: 'center',
+                alignItems: 'center',
+                minHeight: '270px',
+                textAlign: 'center'
               }}
             >
-              <div>
+              <div style={{ marginBottom: '16px' }}>
                 <h3 style={{
                   fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontSize: '14px',
@@ -427,7 +428,7 @@ export default function SavedProductsPage() {
                   fontWeight: 400,
                   lineHeight: '19.6px',
                   color: '#000',
-                  marginBottom: '16px'
+                  margin: 0
                 }}>
                   Přihlaste se nebo si vytvořte účet a uložte si svůj list který můžete prohlížet na jakémkoliv zařízení
                 </p>
@@ -436,20 +437,16 @@ export default function SavedProductsPage() {
               <button
                 onClick={() => signIn()}
                 style={{
-                  display: 'block',
-                  width: '100%',
-                  textAlign: 'center',
                   backgroundColor: '#000',
                   color: '#fff',
-                  padding: '12px',
+                  padding: '8px 24px',
                   fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontSize: '12px',
                   fontWeight: 400,
                   textTransform: 'uppercase',
-                  textDecoration: 'none',
-                  borderRadius: '4px',
                   border: 'none',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  borderRadius: '4px'
                 }}
                 className="hover:opacity-90 transition-opacity"
               >
