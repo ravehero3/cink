@@ -10,6 +10,7 @@ export default function CartPage() {
   const [isHydrated, setIsHydrated] = useState(false);
   const router = useRouter();
   const { items, updateQuantity, removeItem, getTotal } = useCartStore();
+  const cartItemCount = items.length;
 
   useEffect(() => {
     setIsHydrated(true);
@@ -24,20 +25,91 @@ export default function CartPage() {
   if (items.length === 0) {
     return (
       <div className="min-h-screen bg-white">
-        <div className="border-b border-black">
-          <div className="max-w-7xl mx-auto px-4 py-8">
-            <h1 className="text-title font-bold text-center uppercase">NÁKUPNÍ KOŠÍK</h1>
+        <div className="flex justify-center">
+          <div style={{ width: '50%', padding: '32px 16px 32px 16px', borderBottom: '1px solid #000' }}>
+            <h1 className="text-center uppercase" style={{
+              fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '16px',
+              fontWeight: 700,
+              letterSpacing: '0.05em',
+              margin: 0
+            }}>
+              NÁKUPNÍ KOŠÍK
+            </h1>
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 py-16 text-center">
-          <p className="text-body mb-8">Váš košík je prázdný</p>
-          <Link
-            href="/"
-            className="inline-block bg-black text-white px-8 py-3 text-body uppercase border border-black hover:bg-white hover:text-black transition-colors"
-          >
-            POKRAČOVAT V NÁKUPU
-          </Link>
+        {/* Navigation Panel */}
+        <div className="flex justify-center">
+          <div style={{
+            width: '50%',
+            height: '44px',
+            borderBottom: '1px solid #000',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '24px',
+            padding: '0 16px'
+          }}>
+            <Link
+              href="/ulozeno"
+              style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '14px',
+                fontWeight: 400,
+                lineHeight: '19.6px',
+                color: '#000',
+                textDecoration: 'none',
+                padding: '6px 12px',
+                border: 'none',
+                borderRadius: '8px',
+                backgroundColor: 'transparent'
+              }}
+            >
+              ULOŽENÉ POLOŽKY
+            </Link>
+            <div
+              style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '14px',
+                fontWeight: 400,
+                lineHeight: '19.6px',
+                color: '#000',
+                padding: '6px 12px',
+                border: '1px solid #000',
+                borderRadius: '8px',
+                backgroundColor: '#fff'
+              }}
+            >
+              KOŠÍK ({cartItemCount})
+            </div>
+          </div>
+        </div>
+
+        <div className="flex justify-center">
+          <div className="flex flex-col items-center justify-center px-8 text-center" style={{ width: '50%', minHeight: '300px' }}>
+            <p style={{
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '14px',
+              fontWeight: 400,
+              marginBottom: '24px'
+            }}>
+              Váš košík je prázdný
+            </p>
+            <Link
+              href="/"
+              className="bg-black text-white uppercase px-8 py-3 hover:bg-gray-800 transition-colors"
+              style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '12px',
+                fontWeight: 400,
+                letterSpacing: '0.5px',
+                textDecoration: 'none'
+              }}
+            >
+              POKRAČOVAT V NÁKUPU
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -66,15 +138,63 @@ export default function CartPage() {
       }} />
 
       <div className="flex justify-center">
-        <div className="mx-auto px-4 py-8" style={{ width: '50%', borderBottom: '1px solid #000' }}>
+        <div style={{ width: '50%', padding: '32px 16px 32px 16px', borderBottom: '1px solid #000' }}>
           <h1 className="text-center uppercase" style={{
             fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
             fontSize: '16px',
             fontWeight: 700,
-            letterSpacing: '0.05em'
+            letterSpacing: '0.05em',
+            margin: 0
           }}>
             NÁKUPNÍ KOŠÍK
           </h1>
+        </div>
+      </div>
+
+      {/* Navigation Panel */}
+      <div className="flex justify-center">
+        <div style={{
+          width: '50%',
+          height: '44px',
+          borderBottom: '1px solid #000',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '24px',
+          padding: '0 16px'
+        }}>
+          <Link
+            href="/ulozeno"
+            style={{
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '14px',
+              fontWeight: 400,
+              lineHeight: '19.6px',
+              color: '#000',
+              textDecoration: 'none',
+              padding: '6px 12px',
+              border: 'none',
+              borderRadius: '8px',
+              backgroundColor: 'transparent'
+            }}
+          >
+            ULOŽENÉ POLOŽKY
+          </Link>
+          <div
+            style={{
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '14px',
+              fontWeight: 400,
+              lineHeight: '19.6px',
+              color: '#000',
+              padding: '6px 12px',
+              border: '1px solid #000',
+              borderRadius: '8px',
+              backgroundColor: '#fff'
+            }}
+          >
+            KOŠÍK ({cartItemCount})
+          </div>
         </div>
       </div>
 

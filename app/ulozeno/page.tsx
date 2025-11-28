@@ -28,7 +28,8 @@ export default function SavedProductsPage() {
   const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
   const [addingToCart, setAddingToCart] = useState<string | null>(null);
-  const { addItem } = useCartStore();
+  const { addItem, items } = useCartStore();
+  const cartItemCount = items.length;
 
   useEffect(() => {
     setMounted(true);
@@ -164,18 +165,64 @@ export default function SavedProductsPage() {
   if (products.length === 0) {
     return (
       <div className="min-h-screen bg-white">
-        <div className="border-b border-black">
-          <div className="flex justify-center">
-            <div className="mx-auto px-4 py-8" style={{ width: '50%', borderBottom: '1px solid #000' }}>
-              <h1 className="text-center uppercase" style={{
-                fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '16px',
-                fontWeight: 700,
-                letterSpacing: '0.05em'
-              }}>
-                ULOŽENÉ PRODUKTY
-              </h1>
+        <div className="flex justify-center">
+          <div style={{ width: '50%', padding: '32px 16px 32px 16px', borderBottom: '1px solid #000' }}>
+            <h1 className="text-center uppercase" style={{
+              fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '16px',
+              fontWeight: 700,
+              letterSpacing: '0.05em',
+              margin: 0
+            }}>
+              ULOŽENÉ PRODUKTY
+            </h1>
+          </div>
+        </div>
+
+        {/* Navigation Panel */}
+        <div className="flex justify-center">
+          <div style={{
+            width: '50%',
+            height: '44px',
+            borderBottom: '1px solid #000',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '24px',
+            padding: '0 16px'
+          }}>
+            <div
+              style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '14px',
+                fontWeight: 400,
+                lineHeight: '19.6px',
+                color: '#000',
+                padding: '6px 12px',
+                border: '1px solid #000',
+                borderRadius: '8px',
+                backgroundColor: '#fff'
+              }}
+            >
+              ULOŽENÉ POLOŽKY
             </div>
+            <Link
+              href="/kosik"
+              style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '14px',
+                fontWeight: 400,
+                lineHeight: '19.6px',
+                color: '#000',
+                textDecoration: 'none',
+                padding: '6px 12px',
+                border: 'none',
+                borderRadius: '8px',
+                backgroundColor: 'transparent'
+              }}
+            >
+              KOŠÍK ({cartItemCount})
+            </Link>
           </div>
         </div>
 
@@ -196,7 +243,8 @@ export default function SavedProductsPage() {
                 fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                 fontSize: '12px',
                 fontWeight: 400,
-                letterSpacing: '0.5px'
+                letterSpacing: '0.5px',
+                textDecoration: 'none'
               }}
             >
               POKRAČOVAT V NÁKUPU
@@ -240,6 +288,53 @@ export default function SavedProductsPage() {
           }}>
             ULOŽENÉ PRODUKTY
           </h1>
+        </div>
+      </div>
+
+      {/* Navigation Panel */}
+      <div className="flex justify-center">
+        <div style={{
+          width: '50%',
+          height: '44px',
+          borderBottom: '1px solid #000',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '24px',
+          padding: '0 16px'
+        }}>
+          <div
+            style={{
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '14px',
+              fontWeight: 400,
+              lineHeight: '19.6px',
+              color: '#000',
+              padding: '6px 12px',
+              border: '1px solid #000',
+              borderRadius: '8px',
+              backgroundColor: '#fff'
+            }}
+          >
+            ULOŽENÉ POLOŽKY
+          </div>
+          <Link
+            href="/kosik"
+            style={{
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '14px',
+              fontWeight: 400,
+              lineHeight: '19.6px',
+              color: '#000',
+              textDecoration: 'none',
+              padding: '6px 12px',
+              border: 'none',
+              borderRadius: '8px',
+              backgroundColor: 'transparent'
+            }}
+          >
+            KOŠÍK ({cartItemCount})
+          </Link>
         </div>
       </div>
 
