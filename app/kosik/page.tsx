@@ -8,6 +8,39 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import AnimatedButton from '@/components/AnimatedButton';
 
+function AnimatedLink({ href, text }: { href: string; text: string }) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <Link
+      href={href}
+      className="relative overflow-hidden bg-white text-black font-normal uppercase tracking-tight transition-all border border-black text-sm"
+      style={{ borderRadius: '4px', padding: '11.8px 25.6px' }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <span
+        className="block transition-all duration-200"
+        style={{
+          transform: isHovered ? 'translateY(-150%)' : 'translateY(0)',
+          opacity: isHovered ? 0 : 1,
+        }}
+      >
+        {text}
+      </span>
+      <span
+        className="absolute inset-0 flex items-center justify-center transition-all duration-200"
+        style={{
+          transform: isHovered ? 'translateY(0)' : 'translateY(150%)',
+          opacity: isHovered ? 1 : 0,
+        }}
+      >
+        {text}
+      </span>
+    </Link>
+  );
+}
+
 export default function CartPage() {
   const [isHydrated, setIsHydrated] = useState(false);
   const [savingItem, setSavingItem] = useState<string | null>(null);
@@ -52,8 +85,29 @@ export default function CartPage() {
 
   if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-white flex flex-col items-center">
-        <div style={{ width: '995px', padding: '32px 16px 32px 16px', borderBottom: '1px solid #000' }}>
+      <div className="min-h-screen bg-white flex flex-col relative">
+        {/* Vertical lines at product edges (995px wide, centered) */}
+        <div style={{
+          position: 'absolute',
+          left: 'calc(50vw - 497.5px)',
+          top: 0,
+          bottom: 0,
+          width: '1px',
+          backgroundColor: '#000',
+          zIndex: 5
+        }} />
+        <div style={{
+          position: 'absolute',
+          right: 'calc(50vw - 497.5px)',
+          top: 0,
+          bottom: 0,
+          width: '1px',
+          backgroundColor: '#000',
+          zIndex: 5
+        }} />
+
+        {/* Header - same as when products exist */}
+        <div style={{ position: 'relative', width: '995px', margin: '0 auto', height: '226px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
           <h1 className="text-center uppercase" style={{
             fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
             fontSize: '22px',
@@ -67,75 +121,110 @@ export default function CartPage() {
           </h1>
         </div>
 
-        {/* Navigation Panel */}
+        {/* Navigation Panel - with 995px wide top and bottom borders */}
         <div style={{
+          position: 'relative',
           width: '995px',
+          margin: '0 auto',
           height: '44px',
-          borderBottom: '1px solid #000',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           gap: '24px',
-          padding: '0 16px'
+          padding: '0 16px',
+          overflow: 'visible',
+          zIndex: 10
         }}>
-          <Link
-            href="/ulozeno"
-            style={{
-              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-              fontSize: '14px',
-              fontWeight: 400,
-              lineHeight: '19.6px',
-              color: '#000',
-              textDecoration: 'none',
-              padding: '6px 12px',
-              border: 'none',
-              borderRadius: '8px',
-              backgroundColor: 'transparent'
-            }}
-          >
-            ULOŽENÉ POLOŽKY
-          </Link>
-          <div
-            style={{
-              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-              fontSize: '14px',
-              fontWeight: 400,
-              lineHeight: '19.6px',
-              color: '#000',
-              padding: '6px 12px',
-              border: '1px solid #000',
-              borderRadius: '8px',
-              backgroundColor: '#fff'
-            }}
-          >
-            KOŠÍK ({cartItemCount})
+          {/* Top border - 995px wide to extend to vertical lines */}
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 'calc(50% - 497.5px)',
+            width: '995px',
+            height: '1px',
+            backgroundColor: '#000',
+            zIndex: 1
+          }} />
+          
+          {/* Bottom border - 995px wide to extend to vertical lines */}
+          <div style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 'calc(50% - 497.5px)',
+            width: '995px',
+            height: '1px',
+            backgroundColor: '#000',
+            zIndex: 1
+          }} />
+          
+          <div className="group" style={{ position: 'relative', zIndex: 2 }}>
+            <Link
+              href="/ulozeno"
+              className="whitespace-nowrap uppercase tracking-tight font-normal text-sm"
+              style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '12px',
+                fontWeight: 400,
+                lineHeight: '19.6px',
+                color: '#000',
+                textDecoration: 'none',
+                padding: '0 8px',
+                display: 'block'
+              }}
+            >
+              ULOŽENÉ POLOŽKY
+            </Link>
+            <div
+              className="absolute pointer-events-none"
+              style={{
+                inset: '-4px',
+                border: '1px solid #000000',
+                borderRadius: '4px',
+                opacity: 0
+              }}
+            />
+          </div>
+          <div className="group" style={{ position: 'relative', zIndex: 2 }}>
+            <div
+              className="whitespace-nowrap uppercase tracking-tight font-normal text-sm"
+              style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '12px',
+                fontWeight: 400,
+                lineHeight: '19.6px',
+                color: '#000',
+                padding: '0 8px',
+                display: 'block'
+              }}
+            >
+              KOŠÍK ({cartItemCount})
+            </div>
+            <div
+              className="absolute pointer-events-none"
+              style={{
+                inset: '-4px',
+                border: '1px solid #000000',
+                borderRadius: '4px',
+                opacity: 1
+              }}
+            />
           </div>
         </div>
 
-        <div style={{ width: '995px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '300px' }}>
-          <p style={{
-            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-            fontSize: '14px',
-            fontWeight: 400,
-            marginBottom: '24px'
-          }}>
-            Váš košík je prázdný
-          </p>
-          <Link
-            href="/"
-            className="bg-black text-white uppercase px-8 py-3 hover:bg-gray-800 transition-colors"
-            style={{
-              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-              fontSize: '12px',
-              fontWeight: 400,
-              letterSpacing: '0.5px',
-              textDecoration: 'none',
-              borderRadius: '4px',
-              display: 'block'
-            }}
-          >
-            POKRAČOVAT V NÁKUPU
-          </Link>
+        <div className="flex-1 flex justify-center">
+          <div style={{ width: '995px', position: 'relative' }}>
+            <div className="flex flex-col items-center justify-center px-8 text-center" style={{ minHeight: '300px' }}>
+              <p style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '14px',
+                fontWeight: 400,
+                marginBottom: '24px'
+              }}>
+                Váš košík je prázdný
+              </p>
+              <AnimatedLink href="/" text="POKRAČOVAT V NÁKUPU" />
+            </div>
+          </div>
         </div>
       </div>
     );
