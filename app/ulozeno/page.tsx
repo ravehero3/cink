@@ -171,43 +171,86 @@ export default function SavedProductsPage() {
 
   if (products.length === 0) {
     return (
-      <div className="min-h-screen bg-white relative">
-        <div style={{position: 'absolute', left: 'calc(50vw - 350px)', top: 0, bottom: 0, width: '1px', backgroundColor: '#000', zIndex: 5, pointerEvents: 'none'}} />
-        <div style={{position: 'absolute', right: 'calc(50vw - 350px)', top: 0, bottom: 0, width: '1px', backgroundColor: '#000', zIndex: 5, pointerEvents: 'none'}} />
-        <div className="flex justify-center">
-          <div style={{ width: '50%', padding: '32px 16px 32px 16px', borderBottom: '1px solid #000' }}>
-            <h1 className="text-center uppercase" style={{
-              fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-              fontSize: '22px',
-              fontWeight: 700,
-              lineHeight: '22px',
-              letterSpacing: '0.03em',
-              fontStretch: 'condensed',
-              margin: 0
-            }}>
-              ULOŽENÉ PRODUKTY
-            </h1>
-          </div>
+      <div className="min-h-screen bg-white flex flex-col relative">
+        {/* Vertical lines at 700px apart (centered) */}
+        <div style={{
+          position: 'absolute',
+          left: 'calc(50vw - 350px)',
+          top: 0,
+          bottom: 0,
+          width: '1px',
+          backgroundColor: '#000',
+          zIndex: 5,
+          pointerEvents: 'none'
+        }} />
+        <div style={{
+          position: 'absolute',
+          right: 'calc(50vw - 350px)',
+          top: 0,
+          bottom: 0,
+          width: '1px',
+          backgroundColor: '#000',
+          zIndex: 5,
+          pointerEvents: 'none'
+        }} />
+
+        {/* Header - same as when products exist */}
+        <div style={{ position: 'relative', width: '995px', margin: '0 auto', height: '226px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
+          <h1 className="text-center uppercase" style={{
+            fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+            fontSize: '22px',
+            fontWeight: 700,
+            lineHeight: '22px',
+            letterSpacing: '0.03em',
+            fontStretch: 'condensed',
+            margin: 0
+          }}>
+            ULOŽENÉ PRODUKTY
+          </h1>
         </div>
 
-        {/* Navigation Panel */}
+        {/* Navigation Panel - with 700px wide top and bottom borders */}
         <div style={{
+          position: 'relative',
           width: '995px',
           margin: '0 auto',
           height: '44px',
-          borderBottom: '1px solid #000',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           gap: '24px',
-          padding: '0 16px'
+          padding: '0 16px',
+          overflow: 'visible',
+          zIndex: 10
         }}>
-          <div className="group" style={{ position: 'relative' }}>
+          {/* Top border - 700px wide to match vertical lines */}
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 'calc(50% - 350px)',
+            width: '700px',
+            height: '1px',
+            backgroundColor: '#000',
+            zIndex: 1
+          }} />
+          
+          {/* Bottom border - 700px wide to match vertical lines */}
+          <div style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 'calc(50% - 350px)',
+            width: '700px',
+            height: '1px',
+            backgroundColor: '#000',
+            zIndex: 1
+          }} />
+          
+          <div className="group" style={{ position: 'relative', zIndex: 2 }}>
             <div
               className="whitespace-nowrap uppercase tracking-tight font-normal text-sm"
               style={{
                 fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '14px',
+                fontSize: '12px',
                 fontWeight: 400,
                 lineHeight: '19.6px',
                 color: '#000',
@@ -218,21 +261,22 @@ export default function SavedProductsPage() {
               ULOŽENÉ POLOŽKY
             </div>
             <div
-              className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+              className="absolute pointer-events-none"
               style={{
                 inset: '-4px',
                 border: '1px solid #000000',
-                borderRadius: '4px'
+                borderRadius: '4px',
+                opacity: 1
               }}
             />
           </div>
-          <div className="group" style={{ position: 'relative' }}>
+          <div className="group" style={{ position: 'relative', zIndex: 2 }}>
             <Link
               href="/kosik"
               className="whitespace-nowrap uppercase tracking-tight font-normal text-sm"
               style={{
                 fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '14px',
+                fontSize: '12px',
                 fontWeight: 400,
                 lineHeight: '19.6px',
                 color: '#000',
@@ -244,39 +288,42 @@ export default function SavedProductsPage() {
               KOŠÍK ({cartItemCount})
             </Link>
             <div
-              className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+              className="absolute pointer-events-none"
               style={{
                 inset: '-4px',
                 border: '1px solid #000000',
-                borderRadius: '4px'
+                borderRadius: '4px',
+                opacity: 0
               }}
             />
           </div>
         </div>
 
-        <div className="flex justify-center">
-          <div className="flex flex-col items-center justify-center px-8 text-center" style={{ width: '50%', minHeight: '300px' }}>
-            <p style={{
-              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-              fontSize: '14px',
-              fontWeight: 400,
-              marginBottom: '24px'
-            }}>
-              Nemáte žádné uložené produkty
-            </p>
-            <Link
-              href="/"
-              className="bg-black text-white uppercase px-8 py-3 hover:bg-gray-800 transition-colors"
-              style={{
+        <div className="flex-1 flex justify-center">
+          <div style={{ width: '700px', position: 'relative' }}>
+            <div className="flex flex-col items-center justify-center px-8 text-center" style={{ minHeight: '300px' }}>
+              <p style={{
                 fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '12px',
+                fontSize: '14px',
                 fontWeight: 400,
-                letterSpacing: '0.5px',
-                textDecoration: 'none'
-              }}
-            >
-              POKRAČOVAT V NÁKUPU
-            </Link>
+                marginBottom: '24px'
+              }}>
+                Nemáte žádné uložené produkty
+              </p>
+              <Link
+                href="/"
+                className="bg-black text-white uppercase px-8 py-3 hover:bg-gray-800 transition-colors"
+                style={{
+                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '12px',
+                  fontWeight: 400,
+                  letterSpacing: '0.5px',
+                  textDecoration: 'none'
+                }}
+              >
+                POKRAČOVAT V NÁKUPU
+              </Link>
+            </div>
           </div>
         </div>
       </div>
