@@ -475,6 +475,7 @@ export default function SavedProductsPage() {
               <AnimatedButton
                 text="PŘIHLÁSIT SE"
                 onClick={() => signIn()}
+                variant="white"
               />
             </div>
           )}

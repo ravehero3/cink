@@ -8,6 +8,7 @@ interface AnimatedButtonProps {
   type?: 'button' | 'submit' | 'reset';
   className?: string;
   style?: React.CSSProperties;
+  variant?: 'black' | 'white';
 }
 
 export default function AnimatedButton({ 
@@ -17,9 +18,19 @@ export default function AnimatedButton({
   onClick,
   type = 'button',
   className = '',
-  style = {}
+  style = {},
+  variant = 'black'
 }: AnimatedButtonProps) {
   const [isHovered, setIsHovered] = useState(false);
+
+  const isWhite = variant === 'white';
+  const baseClasses = isWhite 
+    ? 'bg-white text-black uppercase font-normal border border-black relative overflow-hidden disabled:opacity-50 transition-all duration-300'
+    : 'bg-black text-white uppercase font-bold border border-black relative overflow-hidden disabled:opacity-50 transition-all duration-300';
+
+  const baseStyles = isWhite
+    ? { borderRadius: '4px', padding: '13.8px 25.6px', fontSize: '14px', textAlign: 'center' as const }
+    : { borderRadius: '4px', padding: '8px 0', height: '32px', fontSize: '12px', textAlign: 'center' as const };
 
   return (
     <button
@@ -28,8 +39,8 @@ export default function AnimatedButton({
       onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className={`bg-black text-white uppercase font-bold border border-black relative overflow-hidden disabled:opacity-50 transition-all duration-300 ${className}`}
-      style={{ borderRadius: '4px', padding: '8px 0', height: '32px', fontSize: '12px', textAlign: 'center', ...style }}
+      className={`${baseClasses} ${className}`}
+      style={{ ...baseStyles, ...style }}
     >
       <span
         className="flex items-center justify-center transition-all duration-300"
