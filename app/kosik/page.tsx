@@ -1,6 +1,8 @@
 'use client';
 
 import { useCartStore } from '@/lib/cart-store';
+import { useSavedProductsStore } from '@/lib/saved-products-store';
+import { useSession } from 'next-auth/react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -8,11 +10,35 @@ import AnimatedButton from '@/components/AnimatedButton';
 
 export default function CartPage() {
   const [isHydrated, setIsHydrated] = useState(false);
+  const [savingItem, setSavingItem] = useState<string | null>(null);
   const router = useRouter();
   const pathname = usePathname();
+  const { data: session } = useSession();
   const { items, updateQuantity, removeItem, getTotal } = useCartStore();
+  const { addProduct } = useSavedProductsStore();
   const cartItemCount = items.length;
   const isKosik = pathname === '/kosik';
+
+  const handleSaveForLater = async (item: typeof items[0]) => {
+    setSavingItem(item.productId);
+    try {
+      addProduct(item.productId);
+      
+      if (session?.user) {
+        await fetch('/api/saved-products', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ productId: item.productId }),
+        });
+      }
+      
+      removeItem(item.productId, item.size);
+    } catch (error) {
+      console.error('Error saving product:', error);
+    } finally {
+      setSavingItem(null);
+    }
+  };
 
   useEffect(() => {
     setIsHydrated(true);
@@ -402,9 +428,8 @@ export default function CartPage() {
                 paddingTop: '8px'
               }}>
                 <button
-                  onClick={() => {
-                    // TODO: Add to saved products
-                  }}
+                  onClick={() => handleSaveForLater(item)}
+                  disabled={savingItem === item.productId}
                   style={{
                     fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '14px',
@@ -414,13 +439,14 @@ export default function CartPage() {
                     textDecoration: 'underline',
                     border: 'none',
                     background: 'none',
-                    cursor: 'pointer',
+                    cursor: savingItem === item.productId ? 'not-allowed' : 'pointer',
                     padding: 0,
-                    textAlign: 'left'
+                    textAlign: 'left',
+                    opacity: savingItem === item.productId ? 0.6 : 1
                   }}
                   className="hover:opacity-60 transition-opacity"
                 >
-                  Uložit na později
+                  {savingItem === item.productId ? 'Ukládám...' : 'Uložit na později'}
                 </button>
                 <div style={{ display: 'flex', gap: '24px', alignItems: 'flex-end' }}>
                   <Link
