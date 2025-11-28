@@ -315,7 +315,8 @@ export default function SavedProductsPage() {
         />
       ))}
 
-      <div style={{ width: '995px', margin: '0 auto', height: '226px', borderBottom: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
+      {/* Header with 700px wide bottom border */}
+      <div style={{ position: 'relative', width: '995px', margin: '0 auto', height: '226px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
         <h1 className="text-center uppercase" style={{
           fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
           fontSize: '22px',
@@ -327,6 +328,16 @@ export default function SavedProductsPage() {
         }}>
           ULOŽENÉ PRODUKTY
         </h1>
+        {/* Bottom border - 700px wide */}
+        <div style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 'calc(50% - 350px)',
+          width: '700px',
+          height: '1px',
+          backgroundColor: '#000',
+          zIndex: 1
+        }} />
       </div>
 
       {/* Navigation Panel - with 700px wide top and bottom borders */}
