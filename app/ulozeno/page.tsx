@@ -329,22 +329,43 @@ export default function SavedProductsPage() {
         </h1>
       </div>
 
-      {/* Navigation Panel */}
+      {/* Navigation Panel - with 700px wide top and bottom borders */}
       <div style={{
+        position: 'relative',
         width: '995px',
         margin: '0 auto',
         height: '44px',
-        borderBottom: '1px solid #000',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         gap: '24px',
         padding: '0 16px',
-        overflow: 'hidden',
-        position: 'relative',
+        overflow: 'visible',
         zIndex: 10
       }}>
-        <div className="group" style={{ position: 'relative' }}>
+        {/* Top border - 700px wide */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 'calc(50% - 350px)',
+          width: '700px',
+          height: '1px',
+          backgroundColor: '#000',
+          zIndex: 1
+        }} />
+        
+        {/* Bottom border - 700px wide */}
+        <div style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 'calc(50% - 350px)',
+          width: '700px',
+          height: '1px',
+          backgroundColor: '#000',
+          zIndex: 1
+        }} />
+        
+        <div className="group" style={{ position: 'relative', zIndex: 2 }}>
           <div
             className="whitespace-nowrap uppercase tracking-tight font-normal text-sm"
             style={{
@@ -368,7 +389,7 @@ export default function SavedProductsPage() {
             }}
           />
         </div>
-        <div className="group" style={{ position: 'relative' }}>
+        <div className="group" style={{ position: 'relative', zIndex: 2 }}>
           <Link
             href="/kosik"
             className="whitespace-nowrap uppercase tracking-tight font-normal text-sm"
