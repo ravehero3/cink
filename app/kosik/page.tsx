@@ -159,37 +159,55 @@ export default function CartPage() {
         gap: '24px',
         padding: '0 16px'
       }}>
-        <Link
-          href="/ulozeno"
-          style={{
-            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-            fontSize: '14px',
-            fontWeight: 400,
-            lineHeight: '19.6px',
-            color: '#000',
-            textDecoration: 'none',
-            padding: '6px 12px',
-            border: 'none',
-            borderRadius: '8px',
-            backgroundColor: 'transparent'
-          }}
-        >
-          ULOŽENÉ POLOŽKY
-        </Link>
-        <div
-          style={{
-            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-            fontSize: '14px',
-            fontWeight: 400,
-            lineHeight: '19.6px',
-            color: '#000',
-            padding: '6px 12px',
-            border: '1px solid #000',
-            borderRadius: '8px',
-            backgroundColor: '#fff'
-          }}
-        >
-          KOŠÍK ({cartItemCount})
+        <div className="group" style={{ position: 'relative' }}>
+          <Link
+            href="/ulozeno"
+            className="whitespace-nowrap uppercase tracking-tight font-normal text-sm"
+            style={{
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '14px',
+              fontWeight: 400,
+              lineHeight: '19.6px',
+              color: '#000',
+              textDecoration: 'none',
+              padding: '0 8px',
+              display: 'block'
+            }}
+          >
+            ULOŽENÉ POLOŽKY
+          </Link>
+          <div
+            className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+            style={{
+              inset: '-4px',
+              border: '1px solid #000000',
+              borderRadius: '4px'
+            }}
+          />
+        </div>
+        <div className="group" style={{ position: 'relative' }}>
+          <div
+            className="whitespace-nowrap uppercase tracking-tight font-normal text-sm"
+            style={{
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '14px',
+              fontWeight: 400,
+              lineHeight: '19.6px',
+              color: '#000',
+              padding: '0 8px',
+              display: 'block'
+            }}
+          >
+            KOŠÍK ({cartItemCount})
+          </div>
+          <div
+            className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+            style={{
+              inset: '-4px',
+              border: '1px solid #000000',
+              borderRadius: '4px'
+            }}
+          />
         </div>
       </div>
 
@@ -214,8 +232,8 @@ export default function CartPage() {
               <div style={{ display: 'flex', gap: '16px', marginBottom: '16px' }}>
                 <Link href={`/produkty/${item.slug}`} style={{ flexShrink: 0 }}>
                   <div style={{
-                    width: '80px',
-                    height: '96px',
+                    width: '160px',
+                    height: '192px',
                     border: '1px solid #000',
                     backgroundColor: '#fff',
                     display: 'flex',
@@ -398,14 +416,6 @@ export default function CartPage() {
                   Upravit
                 </Link>
               </div>
-
-              {/* Horizontal line at bottom */}
-              {index === items.length - 1 && (
-                <div style={{
-                  marginTop: '16px',
-                  borderBottom: '1px solid #000'
-                }} />
-              )}
             </div>
           ))}
         </div>
