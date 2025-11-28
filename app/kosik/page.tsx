@@ -119,10 +119,10 @@ export default function CartPage() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col relative">
-      {/* Vertical lines at 25% and 75% */}
+      {/* Vertical lines at product edges (995px wide, centered in 50% container) */}
       <div style={{
         position: 'fixed',
-        left: '25%',
+        left: 'calc(50vw - 497.5px)',
         top: 0,
         bottom: 0,
         width: '1px',
@@ -131,7 +131,7 @@ export default function CartPage() {
       }} />
       <div style={{
         position: 'fixed',
-        right: '25%',
+        right: 'calc(50vw - 497.5px)',
         top: 0,
         bottom: 0,
         width: '1px',
