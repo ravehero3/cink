@@ -373,7 +373,7 @@ export default function SavedProductsPage() {
             className="whitespace-nowrap uppercase tracking-tight font-normal text-sm"
             style={{
               fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-              fontSize: '14px',
+              fontSize: '12px',
               fontWeight: 400,
               lineHeight: '19.6px',
               color: '#000',
@@ -399,7 +399,7 @@ export default function SavedProductsPage() {
             className="whitespace-nowrap uppercase tracking-tight font-normal text-sm"
             style={{
               fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-              fontSize: '14px',
+              fontSize: '12px',
               fontWeight: 400,
               lineHeight: '19.6px',
               color: '#000',
