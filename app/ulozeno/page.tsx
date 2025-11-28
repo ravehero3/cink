@@ -298,22 +298,6 @@ export default function SavedProductsPage() {
         pointerEvents: 'none'
       }} />
 
-      {/* Horizontal lines at 700px intervals (starting after banner + nav) */}
-      {[...Array(18)].map((_, i) => (
-        <div
-          key={`h-line-${i}`}
-          style={{
-            position: 'fixed',
-            left: 'calc(50vw - 350px)',
-            right: 'calc(50vw - 350px)',
-            top: `${1670 + i * 700}px`,
-            height: '1px',
-            backgroundColor: '#000',
-            zIndex: 4,
-            pointerEvents: 'none'
-          }}
-        />
-      ))}
 
       <div style={{ width: '995px', margin: '0 auto', height: '226px', borderBottom: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
         <h1 className="text-center uppercase" style={{
