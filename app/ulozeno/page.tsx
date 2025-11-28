@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useSession, signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useSavedProductsStore } from '@/lib/saved-products-store';
@@ -22,6 +22,7 @@ interface Product {
 export default function SavedProductsPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const pathname = usePathname();
   const removeProduct = useSavedProductsStore((state) => state.removeProduct);
   const savedProductIds = useSavedProductsStore((state) => state.savedIds);
   const [products, setProducts] = useState<Product[]>([]);
@@ -30,6 +31,7 @@ export default function SavedProductsPage() {
   const [addingToCart, setAddingToCart] = useState<string | null>(null);
   const { addItem, items } = useCartStore();
   const cartItemCount = items.length;
+  const isUlozeno = pathname === '/ulozeno';
 
   useEffect(() => {
     setMounted(true);
@@ -392,11 +394,12 @@ export default function SavedProductsPage() {
             ULOŽENÉ POLOŽKY
           </div>
           <div
-            className="absolute opacity-100 pointer-events-none"
+            className="absolute pointer-events-none"
             style={{
               inset: '-4px',
               border: '1px solid #000000',
-              borderRadius: '4px'
+              borderRadius: '4px',
+              opacity: isUlozeno ? 1 : 0
             }}
           />
         </div>
@@ -418,11 +421,12 @@ export default function SavedProductsPage() {
             KOŠÍK ({cartItemCount})
           </Link>
           <div
-            className="absolute opacity-100 pointer-events-none"
+            className="absolute pointer-events-none"
             style={{
               inset: '-4px',
               border: '1px solid #000000',
-              borderRadius: '4px'
+              borderRadius: '4px',
+              opacity: isUlozeno ? 0 : 1
             }}
           />
         </div>
