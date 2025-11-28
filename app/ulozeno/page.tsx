@@ -429,7 +429,7 @@ export default function SavedProductsPage() {
             <div
               style={{
                 borderTop: '1px solid #000',
-                borderBottom: '1px solid #000',
+                borderBottom: 'none',
                 padding: '16px',
                 display: 'flex',
                 flexDirection: 'column',
@@ -479,7 +479,7 @@ export default function SavedProductsPage() {
             <div
               key={product.id}
               style={{
-                borderTop: index === 0 ? '1px solid #000' : 'none',
+                borderTop: index === 0 && status !== 'unauthenticated' ? '1px solid #000' : 'none',
                 borderBottom: '1px solid #000',
                 padding: '16px',
                 paddingBottom: '16px'
