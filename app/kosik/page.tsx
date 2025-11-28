@@ -103,7 +103,9 @@ export default function CartPage() {
               fontSize: '12px',
               fontWeight: 400,
               letterSpacing: '0.5px',
-              textDecoration: 'none'
+              textDecoration: 'none',
+              borderRadius: '4px',
+              display: 'block'
             }}
           >
             POKRAČOVAT V NÁKUPU
