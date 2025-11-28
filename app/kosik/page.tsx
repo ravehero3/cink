@@ -210,6 +210,7 @@ export default function CartPage() {
               style={{
                 width: '995px',
                 height: '270px',
+                margin: '0 auto',
                 borderTop: index === 0 ? '1px solid #000' : 'none',
                 borderBottom: '1px solid #000',
                 padding: '16px',
