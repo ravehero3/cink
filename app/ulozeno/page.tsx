@@ -280,20 +280,22 @@ export default function SavedProductsPage() {
       <div style={{
         position: 'fixed',
         left: 'calc(50vw - 350px)',
-        top: 0,
+        top: '270px',
         bottom: 0,
         width: '1px',
         backgroundColor: '#000',
-        zIndex: 5
+        zIndex: 5,
+        pointerEvents: 'none'
       }} />
       <div style={{
         position: 'fixed',
         right: 'calc(50vw - 350px)',
-        top: 0,
+        top: '270px',
         bottom: 0,
         width: '1px',
         backgroundColor: '#000',
-        zIndex: 5
+        zIndex: 5,
+        pointerEvents: 'none'
       }} />
 
       {/* Horizontal lines at 700px intervals (starting after banner) */}
@@ -307,7 +309,8 @@ export default function SavedProductsPage() {
             top: `${270 + i * 700}px`,
             height: '1px',
             backgroundColor: '#000',
-            zIndex: 5
+            zIndex: 4,
+            pointerEvents: 'none'
           }}
         />
       ))}
@@ -336,7 +339,10 @@ export default function SavedProductsPage() {
         alignItems: 'center',
         justifyContent: 'center',
         gap: '24px',
-        padding: '0 16px'
+        padding: '0 16px',
+        overflow: 'hidden',
+        position: 'relative',
+        zIndex: 10
       }}>
         <div className="group" style={{ position: 'relative' }}>
           <div
@@ -434,24 +440,10 @@ export default function SavedProductsPage() {
                 </p>
               </div>
 
-              <button
+              <AnimatedButton
+                text="PŘIHLÁSIT SE"
                 onClick={() => signIn()}
-                style={{
-                  backgroundColor: '#000',
-                  color: '#fff',
-                  padding: '8px 24px',
-                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '12px',
-                  fontWeight: 400,
-                  textTransform: 'uppercase',
-                  border: 'none',
-                  cursor: 'pointer',
-                  borderRadius: '4px'
-                }}
-                className="hover:opacity-90 transition-opacity"
-              >
-                PŘIHLÁSIT SE
-              </button>
+              />
             </div>
           )}
 
