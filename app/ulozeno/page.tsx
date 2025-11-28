@@ -280,7 +280,7 @@ export default function SavedProductsPage() {
       <div style={{
         position: 'fixed',
         left: 'calc(50vw - 350px)',
-        top: '270px',
+        top: 0,
         bottom: 0,
         width: '1px',
         backgroundColor: '#000',
@@ -290,7 +290,7 @@ export default function SavedProductsPage() {
       <div style={{
         position: 'fixed',
         right: 'calc(50vw - 350px)',
-        top: '270px',
+        top: 0,
         bottom: 0,
         width: '1px',
         backgroundColor: '#000',
