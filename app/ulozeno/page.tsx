@@ -392,7 +392,7 @@ export default function SavedProductsPage() {
             ULOŽENÉ POLOŽKY
           </div>
           <div
-            className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+            className="absolute opacity-100 pointer-events-none"
             style={{
               inset: '-4px',
               border: '1px solid #000000',
