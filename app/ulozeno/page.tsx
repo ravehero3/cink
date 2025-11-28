@@ -391,7 +391,7 @@ export default function SavedProductsPage() {
       </div>
 
       <div className="flex-1 flex justify-center" style={{ paddingBottom: '80px' }}>
-        <div style={{ width: '50%', position: 'relative' }}>
+        <div style={{ width: '700px', position: 'relative' }}>
           {products.map((product, index) => (
             <div
               key={product.id}
