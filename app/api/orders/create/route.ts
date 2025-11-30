@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { createPacketaClient, PacketaAPIError } from '@/lib/packeta-api';
+import { sendOrderConfirmationEmail } from '@/lib/email';
 
 async function generateOrderNumber(): Promise<string> {
   const now = new Date();
@@ -169,6 +170,27 @@ export async function POST(request: NextRequest) {
           },
         });
       }
+    }
+
+    // Send order confirmation email
+    try {
+      await sendOrderConfirmationEmail({
+        orderNumber: order.orderNumber,
+        customerName,
+        customerEmail,
+        items: items.map((item: any) => ({
+          name: item.name,
+          size: item.size,
+          quantity: item.quantity,
+          price: item.price,
+        })),
+        totalPrice: Number(totalPrice),
+        shippingMethod,
+        zasilkovnaName: zasilkovnaName || undefined,
+      });
+      console.log(`Order confirmation email sent for order ${orderNumber}`);
+    } catch (emailError) {
+      console.error('Failed to send order confirmation email:', emailError);
     }
 
     return NextResponse.json(

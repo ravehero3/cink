@@ -1,11 +1,9 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { Resend } from 'resend';
 import crypto from 'crypto';
+import { sendPasswordResetEmail } from '@/lib/email';
 
 export const dynamic = 'force-dynamic';
-
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 const getBaseUrl = () => {
   if (process.env.NEXTAUTH_URL) return process.env.NEXTAUTH_URL;
@@ -52,35 +50,19 @@ export async function POST(request: Request) {
     // Create reset link
     const resetLink = `${getBaseUrl()}/obnovit-heslo?token=${resetToken}&email=${encodeURIComponent(email)}`;
 
-    // Send email
-    console.log('🔵 FORGOT PASSWORD - API KEY:', process.env.RESEND_API_KEY ? `SET (${process.env.RESEND_API_KEY.substring(0, 10)}...)` : 'MISSING');
+    // Send password reset email
     console.log('🔵 FORGOT PASSWORD - Sending to:', email);
     console.log('🔵 FORGOT PASSWORD - Reset link:', resetLink);
     
     try {
-      console.log('🔵 FORGOT PASSWORD - Calling resend.emails.send...');
-      const result = await resend.emails.send({
-        from: 'noreply@ufosport.cz',
-        to: email,
-        subject: 'Obnovení hesla - UFO Sport',
-        html: `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <h2>Obnovení hesla</h2>
-            <p>Obdrželi jsme požadavek na obnovení vašeho hesla.</p>
-            <p>Klikněte na odkaz níže pro obnovení hesla (odkaz je platný 1 hodinu):</p>
-            <a href="${resetLink}" style="background-color: #000; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block;">Obnovit heslo</a>
-            <p>Pokud jste tento požadavek nepodali, ignorujte tento e-mail.</p>
-            <p style="margin-top: 20px; font-size: 12px; color: #666;">
-              © UFO Sport - ufosport.cz
-            </p>
-          </div>
-        `,
-      });
-      console.log('✅ RESEND SUCCESS:', result);
+      const result = await sendPasswordResetEmail(email, resetLink);
+      if (result.success) {
+        console.log('✅ Password reset email sent successfully');
+      } else {
+        console.error('🔴 Failed to send password reset email:', result.error);
+      }
     } catch (emailError) {
-      console.error('🔴 RESEND ERROR:', emailError);
-      console.error('🔴 RESEND ERROR TYPE:', typeof emailError);
-      console.error('🔴 RESEND ERROR JSON:', JSON.stringify(emailError, null, 2));
+      console.error('🔴 FORGOT PASSWORD EMAIL ERROR:', emailError);
     }
 
     return NextResponse.json(

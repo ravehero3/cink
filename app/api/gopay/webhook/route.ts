@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { sendPaymentSuccessEmail } from '@/lib/email';
 
 export const dynamic = 'force-dynamic';
 
@@ -54,6 +55,30 @@ export async function POST(request: NextRequest) {
         updatedAt: new Date(),
       },
     });
+
+    // Send payment success email when payment is confirmed
+    if (state === 'PAID') {
+      try {
+        const items = (order.items as any[]) || [];
+        await sendPaymentSuccessEmail({
+          orderNumber: order.orderNumber,
+          customerName: order.customerName,
+          customerEmail: order.customerEmail,
+          items: items.map((item: any) => ({
+            name: item.name,
+            size: item.size,
+            quantity: item.quantity,
+            price: item.price,
+          })),
+          totalPrice: Number(order.totalPrice),
+          shippingMethod: order.shippingMethod,
+          zasilkovnaName: order.zasilkovnaName || undefined,
+        });
+        console.log(`Payment success email sent for order ${order.orderNumber}`);
+      } catch (emailError) {
+        console.error('Failed to send payment success email:', emailError);
+      }
+    }
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
