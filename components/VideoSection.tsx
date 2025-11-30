@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
-import { Pause, Play, Volume2, VolumeX } from 'lucide-react';
+import { useState, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -31,30 +30,7 @@ interface VideoSectionProps {
 }
 
 export default function VideoSection({ videoUrl, headerText, button1Text, button2Text, button1Link, button2Link, isAdmin, onEdit, onEditCategory, sectionId, showProducts, products = [], isLoading = false }: VideoSectionProps) {
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.play();
-      } else {
-        videoRef.current.pause();
-      }
-    }
-  }, [isPlaying]);
-
-  const togglePlay = () => {
-    setIsPlaying(!isPlaying);
-  };
-
-  const toggleMute = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
-    }
-  };
 
   return (
     <>
@@ -66,7 +42,7 @@ export default function VideoSection({ videoUrl, headerText, button1Text, button
               className="w-full h-full object-cover"
               loop
               autoPlay
-              muted={isMuted}
+              muted
               playsInline
             >
               <source src={videoUrl} type="video/mp4" />
@@ -91,23 +67,6 @@ export default function VideoSection({ videoUrl, headerText, button1Text, button
                   <AnimatedButton text={button2Text} link={button2Link || '#'} />
                 </div>
               )}
-            </div>
-
-            <div className="absolute bottom-4 right-4 flex gap-2">
-              <button
-                onClick={toggleMute}
-                className="w-10 h-10 bg-white/90 hover:bg-white flex items-center justify-center transition-colors"
-                aria-label={isMuted ? "Unmute" : "Mute"}
-              >
-                {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
-              </button>
-              <button
-                onClick={togglePlay}
-                className="w-10 h-10 bg-white/90 hover:bg-white flex items-center justify-center transition-colors"
-                aria-label={isPlaying ? "Pause" : "Play"}
-              >
-                {isPlaying ? <Pause size={20} /> : <Play size={20} />}
-              </button>
             </div>
           </>
         ) : (
