@@ -22,7 +22,10 @@ export default function CloudinaryUploadButton({
   const widgetRef = useRef<any>(null);
 
   useEffect(() => {
-    // Load Cloudinary script
+    // Only run on client side
+    if (typeof window === 'undefined') return;
+    
+    // Check if already loaded
     if ((window as any).cloudinary) {
       cloudinaryRef.current = (window as any).cloudinary;
       return;
@@ -31,73 +34,104 @@ export default function CloudinaryUploadButton({
     const script = document.createElement('script');
     script.src = 'https://upload-widget.cloudinary.com/latest/global/cloudinary-upload-widget.global.js';
     script.async = true;
+    
     script.onload = () => {
-      cloudinaryRef.current = (window as any).cloudinary;
+      try {
+        if ((window as any).cloudinary) {
+          cloudinaryRef.current = (window as any).cloudinary;
+        }
+      } catch (error) {
+        console.error('Failed to initialize Cloudinary:', error);
+      }
     };
+    
+    script.onerror = () => {
+      console.error('Failed to load Cloudinary widget script');
+    };
+    
     document.body.appendChild(script);
+    
+    return () => {
+      // Cleanup: remove script if component unmounts
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+    };
   }, []);
 
   const openUploadWidget = () => {
     if (!cloudinaryRef.current) {
+      console.warn('Cloudinary widget not yet loaded');
       alert('Cloudinary widget se právě načítá, zkuste znovu za chvíli');
       return;
     }
 
-    if (!widgetRef.current) {
-      widgetRef.current = cloudinaryRef.current.createUploadWidget(
-        {
-          cloudName: 'dq0qvtbst',
-          uploadPreset: 'ufosport_unsigned',
-          folder: folderPath,
-          resourceType: resourceType,
-          multiple: false,
-          maxFileSize: maxFileSize,
-          clientAllowedFormats: resourceType === 'video' ? ['mp4', 'webm'] : ['jpg', 'jpeg', 'png', 'webp'],
-          showAdvancedOptions: false,
-          cropping: resourceType === 'image',
-          defaultSource: 'local',
-          styles: {
-            palette: {
-              window: '#ffffff',
-              windowBorder: '#000000',
-              tabIcon: '#000000',
-              menuIcons: '#5a616a',
-              textDark: '#000000',
-              textLight: '#ffffff',
-              link: '#000000',
-              action: '#000000',
-              inactiveTabIcon: '#cccccc',
-              error: '#f44235',
-              inProgress: '#01579b',
-              complete: '#228b22',
-              sourceBg: '#f5f5f5',
-            },
-            fonts: {
-              default: null,
-              "'Helvetica Neue', 'Helvetica', sans-serif": {
-                url: null,
-                active: true,
+    try {
+      if (!widgetRef.current) {
+        widgetRef.current = cloudinaryRef.current.createUploadWidget(
+          {
+            cloudName: 'dq0qvtbst',
+            uploadPreset: 'ufosport_unsigned',
+            folder: folderPath,
+            resourceType: resourceType,
+            multiple: false,
+            maxFileSize: maxFileSize,
+            clientAllowedFormats: resourceType === 'video' ? ['mp4', 'webm'] : ['jpg', 'jpeg', 'png', 'webp'],
+            showAdvancedOptions: false,
+            cropping: resourceType === 'image',
+            defaultSource: 'local',
+            styles: {
+              palette: {
+                window: '#ffffff',
+                windowBorder: '#000000',
+                tabIcon: '#000000',
+                menuIcons: '#5a616a',
+                textDark: '#000000',
+                textLight: '#ffffff',
+                link: '#000000',
+                action: '#000000',
+                inactiveTabIcon: '#cccccc',
+                error: '#f44235',
+                inProgress: '#01579b',
+                complete: '#228b22',
+                sourceBg: '#f5f5f5',
+              },
+              fonts: {
+                default: null,
+                "'Helvetica Neue', 'Helvetica', sans-serif": {
+                  url: null,
+                  active: true,
+                },
               },
             },
           },
-        },
-        (error: any, result: any) => {
-          if (error) {
-            console.error('Cloudinary upload error:', error);
-            alert(`Chyba: ${error.statusText || error.message}`);
-            return;
-          }
+          (error: any, result: any) => {
+            if (error) {
+              console.error('Cloudinary upload error:', error);
+              alert(`Chyba: ${error.statusText || error.message}`);
+              return;
+            }
 
-          if (result && result.event === 'success') {
-            const secureUrl = result.info.secure_url;
-            const publicId = result.info.public_id;
-            onUploadSuccess(secureUrl, publicId);
+            if (result && result.event === 'success') {
+              try {
+                const secureUrl = result.info.secure_url;
+                const publicId = result.info.public_id;
+                onUploadSuccess(secureUrl, publicId);
+              } catch (err) {
+                console.error('Error processing upload result:', err);
+              }
+            }
           }
-        }
-      );
+        );
+      }
+
+      if (widgetRef.current && typeof widgetRef.current.open === 'function') {
+        widgetRef.current.open();
+      }
+    } catch (error) {
+      console.error('Error opening Cloudinary widget:', error);
+      alert('Chyba při otevírání upload widgetu. Zkuste obnovit stránku.');
     }
-
-    widgetRef.current.open();
   };
 
   return (
