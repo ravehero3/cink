@@ -11,10 +11,6 @@ interface CloudinaryUploadButtonProps {
   maxFileSize?: number;
 }
 
-// Global script loading state to prevent race conditions
-let cloudinaryScriptLoading = false;
-let cloudinaryScriptLoaded = false;
-
 export default function CloudinaryUploadButton({
   onUploadSuccess,
   buttonText = 'Nahrát soubor',
@@ -29,52 +25,41 @@ export default function CloudinaryUploadButton({
     // Only run on client side
     if (typeof window === 'undefined') return;
     
-    // If already loaded, use it
+    // Check if script already exists in DOM
+    const existingScript = document.querySelector('script[src*="cloudinary-upload-widget"]');
+    if (existingScript) {
+      // Script is already loaded or loading
+      const checkLoad = setInterval(() => {
+        if ((window as any).cloudinary) {
+          cloudinaryRef.current = (window as any).cloudinary;
+          clearInterval(checkLoad);
+        }
+      }, 50);
+      return () => clearInterval(checkLoad);
+    }
+
+    // If already loaded globally, use it
     if ((window as any).cloudinary) {
       cloudinaryRef.current = (window as any).cloudinary;
-      cloudinaryScriptLoaded = true;
       return;
     }
 
-    // If already loading, wait for it to complete
-    if (cloudinaryScriptLoading) {
-      const checkInterval = setInterval(() => {
-        if ((window as any).cloudinary) {
-          cloudinaryRef.current = (window as any).cloudinary;
-          clearInterval(checkInterval);
-        }
-      }, 100);
-      return () => clearInterval(checkInterval);
-    }
-
-    // Mark as loading to prevent other components from loading it again
-    cloudinaryScriptLoading = true;
-
+    // Load script for first time
     const script = document.createElement('script');
     script.src = 'https://upload-widget.cloudinary.com/latest/global/cloudinary-upload-widget.global.js';
     script.async = true;
     
     script.onload = () => {
-      try {
-        if ((window as any).cloudinary) {
-          cloudinaryRef.current = (window as any).cloudinary;
-          cloudinaryScriptLoading = false;
-          cloudinaryScriptLoaded = true;
-        }
-      } catch (error) {
-        console.error('Failed to initialize Cloudinary:', error);
-        cloudinaryScriptLoading = false;
+      if ((window as any).cloudinary) {
+        cloudinaryRef.current = (window as any).cloudinary;
       }
     };
     
     script.onerror = () => {
       console.error('Failed to load Cloudinary widget script');
-      cloudinaryScriptLoading = false;
     };
     
     document.body.appendChild(script);
-    
-    // NOTE: Not removing script on unmount - it's shared resource used by multiple components
   }, []);
 
   const openUploadWidget = () => {
