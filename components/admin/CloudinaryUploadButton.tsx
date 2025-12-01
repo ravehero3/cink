@@ -11,6 +11,10 @@ interface CloudinaryUploadButtonProps {
   maxFileSize?: number;
 }
 
+// Global script loading state to prevent race conditions
+let cloudinaryScriptLoading = false;
+let cloudinaryScriptLoaded = false;
+
 export default function CloudinaryUploadButton({
   onUploadSuccess,
   buttonText = 'Nahrát soubor',
@@ -25,11 +29,26 @@ export default function CloudinaryUploadButton({
     // Only run on client side
     if (typeof window === 'undefined') return;
     
-    // Check if already loaded
+    // If already loaded, use it
     if ((window as any).cloudinary) {
       cloudinaryRef.current = (window as any).cloudinary;
+      cloudinaryScriptLoaded = true;
       return;
     }
+
+    // If already loading, wait for it to complete
+    if (cloudinaryScriptLoading) {
+      const checkInterval = setInterval(() => {
+        if ((window as any).cloudinary) {
+          cloudinaryRef.current = (window as any).cloudinary;
+          clearInterval(checkInterval);
+        }
+      }, 100);
+      return () => clearInterval(checkInterval);
+    }
+
+    // Mark as loading to prevent other components from loading it again
+    cloudinaryScriptLoading = true;
 
     const script = document.createElement('script');
     script.src = 'https://upload-widget.cloudinary.com/latest/global/cloudinary-upload-widget.global.js';
@@ -39,24 +58,23 @@ export default function CloudinaryUploadButton({
       try {
         if ((window as any).cloudinary) {
           cloudinaryRef.current = (window as any).cloudinary;
+          cloudinaryScriptLoading = false;
+          cloudinaryScriptLoaded = true;
         }
       } catch (error) {
         console.error('Failed to initialize Cloudinary:', error);
+        cloudinaryScriptLoading = false;
       }
     };
     
     script.onerror = () => {
       console.error('Failed to load Cloudinary widget script');
+      cloudinaryScriptLoading = false;
     };
     
     document.body.appendChild(script);
     
-    return () => {
-      // Cleanup: remove script if component unmounts
-      if (script.parentNode) {
-        script.parentNode.removeChild(script);
-      }
-    };
+    // NOTE: Not removing script on unmount - it's shared resource used by multiple components
   }, []);
 
   const openUploadWidget = () => {
