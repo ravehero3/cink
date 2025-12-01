@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import CloudinaryUploadButton from '@/components/admin/CloudinaryUploadButton';
 
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
@@ -214,13 +215,21 @@ export default function NewProductPage() {
 
           <div>
             <label className="block text-body uppercase mb-2">Video URL</label>
-            <input
-              type="url"
-              value={formData.videoUrl}
-              onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
-              className="w-full border border-black p-3 text-body"
-              placeholder="https://..."
-            />
+            <div className="flex gap-2 mb-2">
+              <input
+                type="url"
+                value={formData.videoUrl}
+                onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
+                className="flex-1 border border-black p-3 text-body"
+                placeholder="https://..."
+              />
+              <CloudinaryUploadButton
+                onUploadSuccess={(url) => setFormData({ ...formData, videoUrl: url })}
+                buttonText="Nahrát video"
+                folderPath="ufosport/videos"
+                resourceType="video"
+              />
+            </div>
           </div>
         </div>
 
@@ -278,10 +287,11 @@ export default function NewProductPage() {
         {/* Size Chart Image */}
         <div className="mb-8">
           <label className="block text-body uppercase mb-2">Tabulka velikostí - Obrázek</label>
-          <input
-            type="url"
-            value={formData.sizeChartImage}
-            onChange={(e) => setFormData({ ...formData, sizeChartImage: e.target.value })}
+          <div className="flex gap-2 mb-2">
+            <input
+              type="url"
+              value={formData.sizeChartImage}
+              onChange={(e) => setFormData({ ...formData, sizeChartImage: e.target.value })}
             className="w-full border border-black p-3 text-body mb-2"
             placeholder="URL obrázku tabulky velikostí (16:9 aspect ratio doporučeno)"
           />
