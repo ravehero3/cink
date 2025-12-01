@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import SizeChartEditor from '@/components/admin/SizeChartEditor';
+import CloudinaryUploadButton from '@/components/admin/CloudinaryUploadButton';
 import { SizeChartType, SizeChartData } from '@/components/SizeChart';
 
 const CATEGORIES = ['voodoo808', 'space-love', 'recreation-wellness', 't-shirt-gallery'];
@@ -248,13 +249,21 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
 
           <div>
             <label className="block text-body uppercase mb-2">Video URL</label>
-            <input
-              type="url"
-              value={formData.videoUrl}
-              onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
-              className="w-full border border-black p-3 text-body"
-              placeholder="https://..."
-            />
+            <div className="flex gap-2 mb-2">
+              <input
+                type="url"
+                value={formData.videoUrl}
+                onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
+                className="flex-1 border border-black p-3 text-body"
+                placeholder="https://..."
+              />
+              <CloudinaryUploadButton
+                onUploadSuccess={(url) => setFormData({ ...formData, videoUrl: url })}
+                buttonText="Nahrát video"
+                folderPath="ufosport/videos"
+                resourceType="video"
+              />
+            </div>
           </div>
         </div>
 
@@ -332,6 +341,12 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
                     onChange={(e) => updateImage(index, e.target.value)}
                     className="flex-1 border border-black p-3 text-body"
                     placeholder="URL obrázku"
+                  />
+                  <CloudinaryUploadButton
+                    onUploadSuccess={(url) => updateImage(index, url)}
+                    buttonText="Nahrát"
+                    folderPath="ufosport/products"
+                    resourceType="image"
                   />
                   <button
                     type="button"

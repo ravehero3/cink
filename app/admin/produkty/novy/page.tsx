@@ -292,9 +292,16 @@ export default function NewProductPage() {
               type="url"
               value={formData.sizeChartImage}
               onChange={(e) => setFormData({ ...formData, sizeChartImage: e.target.value })}
-            className="w-full border border-black p-3 text-body mb-2"
-            placeholder="URL obrázku tabulky velikostí (16:9 aspect ratio doporučeno)"
-          />
+              className="flex-1 border border-black p-3 text-body"
+              placeholder="URL obrázku tabulky velikostí (16:9 aspect ratio doporučeno)"
+            />
+            <CloudinaryUploadButton
+              onUploadSuccess={(url) => setFormData({ ...formData, sizeChartImage: url })}
+              buttonText="Nahrát"
+              folderPath="ufosport/sizecharts"
+              resourceType="image"
+            />
+          </div>
           {formData.sizeChartImage && (
             <div className="border border-black p-3 bg-gray-50">
               <img 
@@ -318,7 +325,13 @@ export default function NewProductPage() {
                   value={image}
                   onChange={(e) => updateImage(index, e.target.value)}
                   className="flex-1 border border-black p-3 text-body"
-                  placeholder="URL obrázku (nebo nahrajte soubor níže)"
+                  placeholder="URL obrázku (nebo klikněte pro nahrání)"
+                />
+                <CloudinaryUploadButton
+                  onUploadSuccess={(url) => updateImage(index, url)}
+                  buttonText="Nahrát"
+                  folderPath="ufosport/products"
+                  resourceType="image"
                 />
                 {images.length > 1 && (
                   <button
