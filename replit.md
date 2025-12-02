@@ -3,7 +3,29 @@
 ## Overview
 A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz), designed with a high-fashion, Balenciaga-inspired aesthetic. The project focuses on clean design, enlarged typography, and generous spacing to deliver a premium user experience. It supports a comprehensive e-commerce workflow, from product browsing and selection to secure payment processing and shipping. The platform includes advanced admin features for customer management, email campaigns, SEO optimization, and dynamic pricing rules.
 
-## Recent Changes (November 26, 2025)
+## Recent Changes (December 2, 2025)
+
+**URL Structure Improvements:**
+- Changed category page URLs from `/kategorie/[slug]` to `/[slug]` for cleaner URLs
+- Example: `/kategorie/voodoo808` → `/voodoo808`
+- Added permanent 301 redirects for old URLs to preserve SEO and bookmarks
+- Updated all internal navigation links
+
+**Database Setup:**
+- Connected to Replit PostgreSQL database
+- Seeded database with 4 categories (VOODOO808, SPACE LOVE, RECREATION WELLNESS, T SHIRT GALLERY)
+- Seeded database with 40 sample products
+
+**Files Changed:**
+- `app/[slug]/page.tsx` - New dynamic category route
+- `next.config.js` - Added redirect rules
+- `components/Header1.tsx` - Updated navigation links
+- `store/categorySectionsStore.ts` - Updated default links
+- `prisma/schema.prisma` - Removed directUrl for Replit database compatibility
+
+---
+
+## Previous Changes (November 26, 2025)
 
 **Four Advanced Admin Features Implemented:**
 
