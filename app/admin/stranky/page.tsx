@@ -226,7 +226,7 @@ export default function StrankyPage() {
                 Smazat
               </button>
               <Link
-                href={`/kategorie/${category.slug}`}
+                href={`/${category.slug}`}
                 className="px-4 py-2 border border-black text-black uppercase text-xs font-medium hover:opacity-70 transition-opacity inline-block"
               >
                 Náhled

@@ -56,8 +56,8 @@ export const useHeroSectionsStore = create<HeroSectionsState>()(
         headerText: 'TRIKA',
         button1Text: 'Shop Now',
         button2Text: 'View Collection',
-        button1Link: '/kategorie/voodoo808',
-        button2Link: '/kategorie/space-love',
+        button1Link: '/voodoo808',
+        button2Link: '/space-love',
       },
       section4: {
         videoUrl: '',

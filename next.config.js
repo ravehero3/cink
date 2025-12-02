@@ -39,6 +39,15 @@ const nextConfig = {
       },
     ];
   },
+  redirects: async () => {
+    return [
+      {
+        source: '/kategorie/:slug',
+        destination: '/:slug',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

@@ -98,7 +98,7 @@ export default function EditSectionModal({
                     value={formData.button1Link || ''}
                     onChange={(e) => setFormData({ ...formData, button1Link: e.target.value })}
                     className="w-full px-4 py-2 border-2 border-black"
-                    placeholder="/kategorie/new"
+                    placeholder="/voodoo808"
                   />
                 </div>
               </div>
@@ -121,7 +121,7 @@ export default function EditSectionModal({
                     value={formData.button2Link || ''}
                     onChange={(e) => setFormData({ ...formData, button2Link: e.target.value })}
                     className="w-full px-4 py-2 border-2 border-black"
-                    placeholder="/kategorie/featured"
+                    placeholder="/space-love"
                   />
                 </div>
               </div>
@@ -181,7 +181,7 @@ export default function EditSectionModal({
                     value={formData.button1Link || ''}
                     onChange={(e) => setFormData({ ...formData, button1Link: e.target.value })}
                     className="w-full px-4 py-2 border-2 border-black"
-                    placeholder="/kategorie/new"
+                    placeholder="/voodoo808"
                   />
                 </div>
               </div>
@@ -204,7 +204,7 @@ export default function EditSectionModal({
                     value={formData.button2Link || ''}
                     onChange={(e) => setFormData({ ...formData, button2Link: e.target.value })}
                     className="w-full px-4 py-2 border-2 border-black"
-                    placeholder="/kategorie/featured"
+                    placeholder="/space-love"
                   />
                 </div>
               </div>

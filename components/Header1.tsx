@@ -50,7 +50,7 @@ export default function Header1() {
                   className="group"
                 >
                   <Link
-                    href={`/kategorie/${category.slug}`}
+                    href={`/${category.slug}`}
                     className="whitespace-nowrap uppercase tracking-tight font-normal text-sm"
                     style={{
                       color: 'rgb(0, 0, 0)',

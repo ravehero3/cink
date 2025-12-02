@@ -62,7 +62,7 @@ export default function EditSearchShortcutsModal({
                     setFormData(newData);
                   }}
                   className="w-full px-4 py-2 border-2 border-black"
-                  placeholder="/kategorie/space-love"
+                  placeholder="/space-love"
                 />
               </div>
             </div>
