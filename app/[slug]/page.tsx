@@ -95,10 +95,9 @@ export default function CategoryPage() {
             setSavedProducts(savedIds);
           }
         } catch (error) {
-          console.error('[kategorie] Error fetching saved products:', error);
+          // Silent fail - fallback to Zustand store
         }
       } else if (session === null) {
-        // Only set from Zustand when we're sure not authenticated (status !== loading)
         const zustandSavedIds = useSavedProductsStore.getState().savedIds;
         setSavedProducts(zustandSavedIds);
       }
@@ -122,7 +121,6 @@ export default function CategoryPage() {
         setCategory(found || null);
       }
     } catch (error) {
-      console.error('Error fetching category:', error);
       setCategory(null);
     } finally {
       setIsLoading(false);
@@ -134,12 +132,10 @@ export default function CategoryPage() {
     if (!category) return;
     
     try {
-      const response = await fetch(`/api/products?category=${category.name}&limit=1000`);
+      const response = await fetch(`/api/products?category=${category.name}&limit=100`);
       const data = await response.json();
-      console.log('fetchAllCategoryProducts data:', data);
       setAllCategoryProducts(data.products || []);
     } catch (error) {
-      console.error('Error fetching all category products:', error);
       setAllCategoryProducts([]);
     }
   };
@@ -162,12 +158,10 @@ export default function CategoryPage() {
 
   const fetchProducts = async () => {
     if (!category) {
-      console.log('fetchProducts: no category, returning');
       setIsLoading(false);
       return;
     }
     
-    console.log('fetchProducts called, category:', category.name);
     setIsLoading(true);
     try {
       const params = new URLSearchParams({
@@ -183,36 +177,25 @@ export default function CategoryPage() {
         sizes.forEach(size => params.append('size', size));
       }
 
-      console.log('fetchProducts: about to fetch with URL:', `/api/products?${params.toString()}`);
       const response = await fetch(`/api/products?${params.toString()}`);
-      console.log('fetchProducts: fetch response received, status:', response.status);
       
       if (!response.ok) {
         throw new Error(`API returned status ${response.status}`);
       }
       
       const data = await response.json();
-      console.log('fetchProducts data:', data);
-      
-      console.log('fetchProducts: about to calculate color counts, allCategoryProducts length:', allCategoryProducts.length);
       const productsWithColorCount = calculateColorCounts(data.products || []);
-      console.log('productsWithColorCount:', productsWithColorCount);
-      console.log('fetchProducts: about to set products state');
       setProducts(productsWithColorCount);
       setTotalProducts(data.total || 0);
-      console.log('fetchProducts: state updated, showing', productsWithColorCount.length, 'products');
     } catch (error) {
-      console.error('ERROR in fetchProducts:', error);
       setProducts([]);
       setTotalProducts(0);
     } finally {
-      console.log('fetchProducts: Setting isLoading to false');
       setIsLoading(false);
     }
   };
 
   const handleToggleSave = async (productId: string) => {
-    console.log('[handleToggleSave] Called with:', { productId, authenticated: !!session?.user, userEmail: session?.user?.email });
     const isSaved = savedProducts.includes(productId);
     
     // Update local state immediately for UI feedback
@@ -231,7 +214,6 @@ export default function CategoryPage() {
     
     // If authenticated, sync with database
     if (session?.user) {
-      console.log('[handleToggleSave] User is authenticated, syncing to database...');
       try {
         const url = isSaved 
           ? `/api/saved-products?productId=${productId}`
@@ -239,19 +221,14 @@ export default function CategoryPage() {
         const method = isSaved ? 'DELETE' : 'POST';
         const body = isSaved ? undefined : JSON.stringify({ productId });
         
-        console.log('[handleToggleSave] Making API call:', { url, method, body });
-        const response = await fetch(url, {
+        await fetch(url, {
           method,
           headers: body ? { 'Content-Type': 'application/json' } : {},
           body,
         });
-        const responseText = await response.text();
-        console.log('[handleToggleSave] API response:', { status: response.status, body: responseText });
       } catch (error) {
-        console.error('[handleToggleSave] Error syncing saved product:', error);
+        // Silent fail - local state already updated
       }
-    } else {
-      console.log('[handleToggleSave] User NOT authenticated - skipping database sync');
     }
   };
 
@@ -321,8 +298,39 @@ export default function CategoryPage() {
     return (
       <div>
         <SearchBar />
-        <div className="relative" style={{ paddingTop: '69px', minHeight: '400px' }}>
-          <p className="text-center text-lg mt-20">Kategorie nebyla nalezena</p>
+        <div className="relative flex flex-col items-center justify-center" style={{ paddingTop: '69px', minHeight: '400px' }}>
+          <h1 
+            className="text-center mb-4"
+            style={{
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '24px',
+              fontWeight: 700,
+              textTransform: 'uppercase',
+            }}
+          >
+            404
+          </h1>
+          <p 
+            className="text-center mb-8"
+            style={{
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '14px',
+            }}
+          >
+            Stránka nebyla nalezena
+          </p>
+          <a 
+            href="/"
+            className="border border-black px-6 py-3 hover:bg-black hover:text-white transition-colors"
+            style={{
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '12px',
+              fontWeight: 700,
+              textTransform: 'uppercase',
+            }}
+          >
+            Zpět na hlavní stránku
+          </a>
         </div>
       </div>
     );

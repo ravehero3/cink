@@ -14,8 +14,12 @@ export async function GET(request: Request) {
     const search = searchParams.get('search');
     const ids = searchParams.getAll('id');
     const sort = searchParams.get('sort') || 'newest';
-    const page = parseInt(searchParams.get('page') || '1');
-    const limit = parseInt(searchParams.get('limit') || '20');
+    const rawPage = parseInt(searchParams.get('page') || '1');
+    const rawLimit = parseInt(searchParams.get('limit') || '20');
+    
+    // Validate and clamp parameters to prevent DoS attacks
+    const page = Math.max(1, Math.min(rawPage || 1, 1000)); // Max 1000 pages
+    const limit = Math.max(1, Math.min(rawLimit || 20, 100)); // Max 100 items per page
 
     const where: Prisma.ProductWhereInput = {
       isVisible: true,

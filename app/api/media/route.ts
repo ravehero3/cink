@@ -16,8 +16,12 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const type = searchParams.get('type')
     const category = searchParams.get('category')
-    const limit = parseInt(searchParams.get('limit') || '50')
-    const offset = parseInt(searchParams.get('offset') || '0')
+    const rawLimit = parseInt(searchParams.get('limit') || '50')
+    const rawOffset = parseInt(searchParams.get('offset') || '0')
+    
+    // Validate and clamp parameters to prevent DoS attacks
+    const limit = Math.max(1, Math.min(rawLimit || 50, 100)) // Max 100 items
+    const offset = Math.max(0, Math.min(rawOffset || 0, 10000)) // Max offset 10000
 
     const where: any = { isActive: true }
     

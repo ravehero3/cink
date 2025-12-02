@@ -10,15 +10,24 @@ import { useSession } from 'next-auth/react';
 import CartDrawer from './CartDrawer';
 import Header2 from './Header2';
 
-const categories = [
-  { name: 'VOODOO808', slug: 'voodoo808' },
-  { name: 'SPACE LOVE', slug: 'space-love' },
-  { name: 'RECREATION WELLNESS', slug: 'recreation-wellness' },
-  { name: 'T SHIRT GALLERY', slug: 't-shirt-gallery' },
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  isVisible?: boolean;
+}
+
+// Fallback categories in case API fails
+const fallbackCategories: Category[] = [
+  { id: '1', name: 'VOODOO808', slug: 'voodoo808' },
+  { id: '2', name: 'SPACE LOVE', slug: 'space-love' },
+  { id: '3', name: 'RECREATION WELLNESS', slug: 'recreation-wellness' },
+  { id: '4', name: 'T SHIRT GALLERY', slug: 't-shirt-gallery' },
 ];
 
 export default function Header1() {
   const [isHydrated, setIsHydrated] = useState(false);
+  const [categories, setCategories] = useState<Category[]>(fallbackCategories);
   const { data: session } = useSession();
   const pathname = usePathname();
   const isPokladna = pathname === '/pokladna';
@@ -32,6 +41,25 @@ export default function Header1() {
 
   useEffect(() => {
     setIsHydrated(true);
+    
+    // Fetch categories from database
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('/api/categories');
+        if (response.ok) {
+          const data = await response.json();
+          if (Array.isArray(data) && data.length > 0) {
+            // Filter to only show visible categories
+            const visibleCategories = data.filter((cat: Category) => cat.isVisible !== false);
+            setCategories(visibleCategories);
+          }
+        }
+      } catch (error) {
+        // Keep fallback categories on error
+      }
+    };
+    
+    fetchCategories();
   }, []);
 
   return (
