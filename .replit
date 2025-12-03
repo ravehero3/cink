@@ -110,10 +110,10 @@ NEXT_PUBLIC_ZASILKOVNA_API_KEY = "40feed3e1efff3f6"
 GOPAY_GOID = "8600284220"
 GOPAY_CLIENT_ID = "1581106802"
 GOPAY_CLIENT_SECRET = "yNW7rtRe"
-GOPAY_ENVIRONMENT = "test"
+GOPAY_ENVIRONMENT = "production"
 
 [userenv.development]
 NEXTAUTH_URL = "https://2285bb97-8219-482a-aaaa-0528a077b1ec-00-3rbcec1duqm8r.picard.replit.dev"
 
 [userenv.production]
-NEXTAUTH_URL = "https://ufosport.cz"
+NEXTAUTH_URL = "https://www.ufosport.cz"

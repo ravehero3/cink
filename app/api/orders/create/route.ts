@@ -205,8 +205,9 @@ export async function POST(request: NextRequest) {
     );
   } catch (error) {
     console.error('Error creating order:', error);
+    console.error('Order creation error details:', error instanceof Error ? error.message : 'Unknown error');
     return NextResponse.json(
-      { error: 'Došlo k chybě při vytváření objednávky' },
+      { error: 'Došlo k chybě při vytváření objednávky. Zkuste to prosím znovu.' },
       { status: 500 }
     );
   }

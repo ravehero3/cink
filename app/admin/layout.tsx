@@ -78,6 +78,14 @@ export default function AdminLayout({
             >
               Newsletter
             </Link>
+            <Link
+              href="/admin/media"
+              className={`block text-body uppercase hover:underline py-0.5 ${
+                pathname === '/admin/media' ? 'font-bold' : ''
+              }`}
+            >
+              Média
+            </Link>
             <div className="pt-2 mt-2 border-t border-black">
               <Link
                 href="/"

@@ -95,8 +95,9 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('GoPay create payment error:', error);
+    console.error('GoPay error details:', error instanceof Error ? error.message : 'Unknown error');
     return NextResponse.json(
-      { error: 'Failed to create payment. Please try again.' },
+      { error: 'Nepodařilo se vytvořit platbu. Zkuste to prosím znovu.' },
       { status: 500 }
     );
   }
