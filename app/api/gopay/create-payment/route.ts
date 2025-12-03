@@ -5,7 +5,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { orderNumber, amount, customerName, customerEmail, customerPhone, items } = body;
 
-    if (!process.env.GOPAY_GO_ID || !process.env.GOPAY_CLIENT_ID || !process.env.GOPAY_CLIENT_SECRET) {
+    if (!process.env.GOPAY_GOID || !process.env.GOPAY_CLIENT_ID || !process.env.GOPAY_CLIENT_SECRET) {
       return NextResponse.json(
         { error: 'GoPay not configured. Please set environment variables.' },
         { status: 500 }
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
       },
       target: {
         type: 'ACCOUNT',
-        goid: parseInt(process.env.GOPAY_GO_ID),
+        goid: parseInt(process.env.GOPAY_GOID),
       },
       amount: Math.round(amount * 100),
       currency: 'CZK',
