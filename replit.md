@@ -5,9 +5,20 @@ A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz), d
 
 ## Recent Changes (December 3, 2025)
 
+**Admin Media Library Navigation:**
+- Added "MÉDIA" link to admin sidebar navigation at `/admin/media`
+- Admin can now easily access the Cloudinary-backed media library
+- Media picker already integrated in product editing pages ("Vybrat z knihovny" button)
+
+**GoPay Configuration Updates:**
+- Set GOPAY_ENVIRONMENT to production mode
+- Updated NEXTAUTH_URL for production to use www.ufosport.cz
+- Improved error logging in order creation and payment APIs for debugging
+- **IMPORTANT**: GoPay requires production credentials (GOID, Client ID, Client Secret) to be set on Vercel
+
 **Production Domain Setup:**
-- Configured NEXTAUTH_URL for production deployment to ufosport.cz
-- Separate environment variables: development uses Replit domain, production uses ufosport.cz
+- Configured NEXTAUTH_URL for production deployment to www.ufosport.cz
+- Separate environment variables: development uses Replit domain, production uses www.ufosport.cz
 - GoPay payment callbacks will correctly redirect to the right domain in each environment
 
 **Cloudinary Upload Widget Improvements:**
