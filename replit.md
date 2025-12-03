@@ -5,6 +5,16 @@ A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz), d
 
 ## Recent Changes (December 3, 2025)
 
+**Production Domain Setup:**
+- Configured NEXTAUTH_URL for production deployment to ufosport.cz
+- Separate environment variables: development uses Replit domain, production uses ufosport.cz
+- GoPay payment callbacks will correctly redirect to the right domain in each environment
+
+**Cloudinary Upload Widget Improvements:**
+- Added loading state indicator to upload button (shows spinner while loading)
+- Button is disabled until widget is ready, preventing premature clicks
+- Better error handling and feedback for users
+
 **Cloudinary Media Sync:**
 - Added Cloudinary sync functionality to import files uploaded directly via Cloudinary website
 - New API endpoint: `/api/media/sync-cloudinary` - syncs images and videos from Cloudinary to database
@@ -17,6 +27,7 @@ A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz), d
 - Order creation now works correctly with GoPay payment integration
 
 **Files Changed:**
+- `components/admin/CloudinaryUploadButton.tsx` - Added loading state and better UX
 - `app/api/media/sync-cloudinary/route.ts` - New Cloudinary sync endpoint
 - `app/admin/media/page.tsx` - Added sync button with status feedback
 

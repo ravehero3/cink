@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { Upload } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Upload, Loader2 } from 'lucide-react';
 
 interface CloudinaryUploadButtonProps {
   onUploadSuccess: (url: string, publicId: string) => void;
@@ -20,31 +20,36 @@ export default function CloudinaryUploadButton({
 }: CloudinaryUploadButtonProps) {
   const cloudinaryRef = useRef<any>(null);
   const widgetRef = useRef<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Only run on client side
     if (typeof window === 'undefined') return;
     
-    // Check if script already exists in DOM
+    const checkCloudinary = () => {
+      if ((window as any).cloudinary) {
+        cloudinaryRef.current = (window as any).cloudinary;
+        setIsLoading(false);
+        return true;
+      }
+      return false;
+    };
+
+    if (checkCloudinary()) return;
+
     const existingScript = document.querySelector('script[src*="cloudinary-upload-widget"]');
     if (existingScript) {
-      // Script is already loaded or loading
       const checkLoad = setInterval(() => {
-        if ((window as any).cloudinary) {
-          cloudinaryRef.current = (window as any).cloudinary;
+        if (checkCloudinary()) {
           clearInterval(checkLoad);
         }
-      }, 50);
+      }, 100);
+      setTimeout(() => {
+        clearInterval(checkLoad);
+        if (!cloudinaryRef.current) setIsLoading(false);
+      }, 10000);
       return () => clearInterval(checkLoad);
     }
 
-    // If already loaded globally, use it
-    if ((window as any).cloudinary) {
-      cloudinaryRef.current = (window as any).cloudinary;
-      return;
-    }
-
-    // Load script for first time
     const script = document.createElement('script');
     script.src = 'https://upload-widget.cloudinary.com/latest/global/cloudinary-upload-widget.global.js';
     script.async = true;
@@ -52,11 +57,13 @@ export default function CloudinaryUploadButton({
     script.onload = () => {
       if ((window as any).cloudinary) {
         cloudinaryRef.current = (window as any).cloudinary;
+        setIsLoading(false);
       }
     };
     
     script.onerror = () => {
       console.error('Failed to load Cloudinary widget script');
+      setIsLoading(false);
     };
     
     document.body.appendChild(script);
@@ -64,8 +71,7 @@ export default function CloudinaryUploadButton({
 
   const openUploadWidget = () => {
     if (!cloudinaryRef.current) {
-      console.warn('Cloudinary widget not yet loaded');
-      alert('Cloudinary widget se právě načítá, zkuste znovu za chvíli');
+      alert('Cloudinary widget se nepodařilo načíst. Zkuste obnovit stránku.');
       return;
     }
 
@@ -141,10 +147,24 @@ export default function CloudinaryUploadButton({
     <button
       onClick={openUploadWidget}
       type="button"
-      className="flex items-center gap-2 px-4 py-2 bg-white border border-black text-black uppercase text-sm font-medium hover:bg-black hover:text-white transition-colors"
+      disabled={isLoading}
+      className={`flex items-center gap-2 px-4 py-2 border border-black uppercase text-sm font-medium transition-colors ${
+        isLoading 
+          ? 'bg-gray-100 text-gray-400 cursor-wait' 
+          : 'bg-white text-black hover:bg-black hover:text-white'
+      }`}
     >
-      <Upload size={16} />
-      {buttonText}
+      {isLoading ? (
+        <>
+          <Loader2 size={16} className="animate-spin" />
+          Načítání...
+        </>
+      ) : (
+        <>
+          <Upload size={16} />
+          {buttonText}
+        </>
+      )}
     </button>
   );
 }
