@@ -3,7 +3,26 @@
 ## Overview
 A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz), designed with a high-fashion, Balenciaga-inspired aesthetic. The project focuses on clean design, enlarged typography, and generous spacing to deliver a premium user experience. It supports a comprehensive e-commerce workflow, from product browsing and selection to secure payment processing and shipping. The platform includes advanced admin features for customer management, email campaigns, SEO optimization, and dynamic pricing rules.
 
-## Recent Changes (December 2, 2025)
+## Recent Changes (December 3, 2025)
+
+**Cloudinary Media Sync:**
+- Added Cloudinary sync functionality to import files uploaded directly via Cloudinary website
+- New API endpoint: `/api/media/sync-cloudinary` - syncs images and videos from Cloudinary to database
+- Added "Sync from Cloudinary" button in admin media library (`/admin/media`)
+- Shows sync status with success/error feedback
+
+**Database Fix:**
+- Fixed database tables not existing error
+- Ran Prisma schema push and database seeding
+- Order creation now works correctly with GoPay payment integration
+
+**Files Changed:**
+- `app/api/media/sync-cloudinary/route.ts` - New Cloudinary sync endpoint
+- `app/admin/media/page.tsx` - Added sync button with status feedback
+
+---
+
+## Previous Changes (December 2, 2025)
 
 **URL Structure Improvements:**
 - Changed category page URLs from `/kategorie/[slug]` to `/[slug]` for cleaner URLs
