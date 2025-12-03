@@ -7,6 +7,8 @@ interface SavedProductsStore {
   removeProduct: (id: string) => void;
   isSaved: (id: string) => boolean;
   getCount: () => number;
+  setSavedIds: (ids: string[]) => void;
+  clearAll: () => void;
 }
 
 export const useSavedProductsStore = create<SavedProductsStore>()(
@@ -31,6 +33,14 @@ export const useSavedProductsStore = create<SavedProductsStore>()(
 
       getCount: () => {
         return get().savedIds.length;
+      },
+
+      setSavedIds: (ids) => {
+        set({ savedIds: ids });
+      },
+
+      clearAll: () => {
+        set({ savedIds: [] });
       },
     }),
     {

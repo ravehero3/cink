@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -58,13 +58,23 @@ export default function SavedProductsPage() {
   const pathname = usePathname();
   const removeProduct = useSavedProductsStore((state) => state.removeProduct);
   const savedProductIds = useSavedProductsStore((state) => state.savedIds);
+  const setSavedIds = useSavedProductsStore((state) => state.setSavedIds);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
   const [addingToCart, setAddingToCart] = useState<string | null>(null);
+  const syncInProgressRef = useRef(false);
+  const lastSyncedIdsRef = useRef<string[]>([]);
   const { addItem, items, getItemCount } = useCartStore();
   const cartItemCount = getItemCount();
   const isUlozeno = pathname === '/ulozeno';
+
+  const arraysEqual = useCallback((a: string[], b: string[]) => {
+    if (a.length !== b.length) return false;
+    const sortedA = [...a].sort();
+    const sortedB = [...b].sort();
+    return sortedA.every((val, idx) => val === sortedB[idx]);
+  }, []);
 
   useEffect(() => {
     setMounted(true);
@@ -74,8 +84,13 @@ export default function SavedProductsPage() {
     if (!mounted) return;
 
     if (status === 'authenticated') {
-      console.log('[ULOŽENÉ PRODUKTY] Authenticated user, fetching from database');
-      fetchSavedProducts();
+      const hasNewIds = savedProductIds.some(id => !lastSyncedIdsRef.current.includes(id));
+      const needsInitialSync = lastSyncedIdsRef.current.length === 0;
+      
+      if (!syncInProgressRef.current && (hasNewIds || needsInitialSync)) {
+        console.log('[ULOŽENÉ PRODUKTY] Authenticated user, syncing and fetching from database');
+        syncAndFetchSavedProducts();
+      }
     } 
     else if (status === 'unauthenticated') {
       console.log('[ULOŽENÉ PRODUKTY] Unauthenticated user, using Zustand store. SavedIds:', savedProductIds);
@@ -95,12 +110,119 @@ export default function SavedProductsPage() {
     }
   }, [status, mounted, savedProductIds]);
 
+  const syncAndFetchSavedProducts = async () => {
+    if (syncInProgressRef.current) return;
+    syncInProgressRef.current = true;
+    
+    try {
+      const localIds = useSavedProductsStore.getState().savedIds;
+      console.log('[ULOŽENÉ PRODUKTY] Local saved IDs:', localIds);
+      
+      const response = await fetch('/api/saved-products');
+      if (!response.ok) {
+        console.error('[ULOŽENÉ PRODUKTY] Failed to fetch from database, keeping local IDs');
+        if (localIds.length > 0) {
+          await fetchSavedProductsLocal();
+        } else {
+          setLoading(false);
+        }
+        return;
+      }
+      
+      const data = await response.json();
+      console.log('[ULOŽENÉ PRODUKTY] Fetched from database:', data);
+      const dbProducts = data || [];
+      const dbIds = dbProducts.map((p: Product) => p.id);
+      
+      const idsToSync = localIds.filter((id: string) => !dbIds.includes(id));
+      console.log('[ULOŽENÉ PRODUKTY] IDs to sync to database:', idsToSync);
+      
+      const failedSyncIds: string[] = [];
+      const successSyncIds: string[] = [];
+      
+      if (idsToSync.length > 0) {
+        console.log('[ULOŽENÉ PRODUKTY] Syncing local saved products to database...');
+        for (const productId of idsToSync) {
+          try {
+            const syncResponse = await fetch('/api/saved-products', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ productId }),
+            });
+            if (!syncResponse.ok) {
+              console.error('[ULOŽENÉ PRODUKTY] Failed to sync product:', productId, syncResponse.status);
+              failedSyncIds.push(productId);
+            } else {
+              successSyncIds.push(productId);
+            }
+          } catch (err) {
+            console.error('[ULOŽENÉ PRODUKTY] Error syncing product:', productId, err);
+            failedSyncIds.push(productId);
+          }
+        }
+      }
+      
+      let finalProducts = dbProducts;
+      let finalDbIds = dbIds;
+      
+      if (successSyncIds.length > 0) {
+        const refreshResponse = await fetch('/api/saved-products');
+        if (refreshResponse.ok) {
+          const refreshData = await refreshResponse.json();
+          finalProducts = refreshData || [];
+          finalDbIds = finalProducts.map((p: Product) => p.id);
+        }
+      }
+      
+      const unsyncedIds = localIds.filter((id: string) => !finalDbIds.includes(id));
+      if (unsyncedIds.length > 0) {
+        console.log('[ULOŽENÉ PRODUKTY] Fetching product data for unsynced IDs:', unsyncedIds);
+        const unsyncedProductsData = await fetchProductsByIds(unsyncedIds);
+        finalProducts = [...finalProducts, ...unsyncedProductsData];
+      }
+      
+      const mergedIds = Array.from(new Set([...finalDbIds, ...localIds]));
+      console.log('[ULOŽENÉ PRODUKTY] Final merged IDs:', mergedIds);
+      
+      setSavedIds(mergedIds);
+      setProducts(finalProducts);
+      lastSyncedIdsRef.current = mergedIds;
+      
+      if (failedSyncIds.length > 0) {
+        console.warn('[ULOŽENÉ PRODUKTY] Some products could not be synced to database:', failedSyncIds);
+      }
+    } catch (error) {
+      console.error('Error fetching saved products:', error);
+    } finally {
+      setLoading(false);
+      syncInProgressRef.current = false;
+    }
+  };
+
+  const fetchProductsByIds = async (ids: string[]): Promise<Product[]> => {
+    try {
+      const params = new URLSearchParams();
+      ids.forEach(id => params.append('id', id));
+      const response = await fetch(`/api/products?${params.toString()}`);
+      if (response.ok) {
+        const data = await response.json();
+        return Array.isArray(data) ? data : (data.products || []);
+      }
+    } catch (error) {
+      console.error('[ULOŽENÉ PRODUKTY] Error fetching products by IDs:', error);
+    }
+    return [];
+  };
+
   const fetchSavedProducts = async () => {
     try {
       const response = await fetch('/api/saved-products');
       if (response.ok) {
         const data = await response.json();
         setProducts(data || []);
+        
+        const dbIds = (data || []).map((p: Product) => p.id);
+        setSavedIds(dbIds);
       }
     } catch (error) {
       console.error('Error fetching saved products:', error);
