@@ -12,7 +12,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:5000';
+    const host = request.headers.get('host') || '';
+    const protocol = host.includes('localhost') ? 'http' : 'https';
+    const baseUrl = process.env.NEXTAUTH_URL || `${protocol}://${host}`;
     const isProduction = process.env.GOPAY_ENVIRONMENT === 'production';
     const gopayBaseUrl = isProduction 
       ? 'https://gate.gopay.cz/api'

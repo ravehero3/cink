@@ -1,4 +1,4 @@
-modules = ["nodejs-20", "bash", "web"]
+modules = ["nodejs-20", "bash", "web", "postgresql-16"]
 [agent]
 expertMode = true
 integrations = ["javascript_database:1.0.0", "github:1.0.0"]
@@ -103,7 +103,7 @@ CLOUDINARY_API_KEY = "596126671243338"
 CLOUDINARY_API_SECRET = "-37hpT9LFVDodIVcLf2EKp7meRE"
 VERCEL_TOKEN = "9R5ZI3if5AFLglQSBd1lMx05"
 NEXTAUTH_SECRET = "ufo-sport-secret-key-32-chars-min!"
-NEXTAUTH_URL = "https://cink-sable.vercel.app"
+NEXTAUTH_URL = "https://2285bb97-8219-482a-aaaa-0528a077b1ec-00-3rbcec1duqm8r.picard.replit.dev"
 RESEND_API_KEY = "re_Hxzi2bjv_LpdCUjYTGdm17zPnXu5J8gUP"
 ZASILKOVNA_API_KEY = "40feed3e1efff3f6"
 PACKETA_API_PASSWORD = "40feed3e1efff3f6"
