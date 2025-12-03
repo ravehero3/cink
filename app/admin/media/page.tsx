@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Upload, X, Image as ImageIcon, Video, Search, Filter } from 'lucide-react'
+import { Upload, X, Image as ImageIcon, Video, Search, Filter, RefreshCw } from 'lucide-react'
 
 interface Media {
   id: string
@@ -25,12 +25,46 @@ export default function MediaLibraryPage() {
   const [media, setMedia] = useState<Media[]>([])
   const [loading, setLoading] = useState(true)
   const [uploading, setUploading] = useState(false)
+  const [syncing, setSyncing] = useState(false)
+  const [syncStatus, setSyncStatus] = useState<string | null>(null)
   const [filterType, setFilterType] = useState<'ALL' | 'IMAGE' | 'VIDEO'>('ALL')
   const [selectedMedia, setSelectedMedia] = useState<Media | null>(null)
 
   useEffect(() => {
     fetchMedia()
   }, [filterType])
+
+  const handleSyncCloudinary = async () => {
+    if (syncing) return
+    
+    try {
+      setSyncing(true)
+      setSyncStatus('Syncing from Cloudinary...')
+      
+      const response = await fetch('/api/media/sync-cloudinary', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({}),
+      })
+      
+      const result = await response.json()
+      
+      if (response.ok) {
+        setSyncStatus(`Sync complete: ${result.imported} imported, ${result.skipped} already existed`)
+        fetchMedia()
+      } else {
+        setSyncStatus(`Sync failed: ${result.error || 'Unknown error'}`)
+      }
+      
+      setTimeout(() => setSyncStatus(null), 5000)
+    } catch (error) {
+      console.error('Sync error:', error)
+      setSyncStatus('Sync failed: Network error')
+      setTimeout(() => setSyncStatus(null), 5000)
+    } finally {
+      setSyncing(false)
+    }
+  }
 
   const fetchMedia = async () => {
     try {
@@ -156,21 +190,42 @@ export default function MediaLibraryPage() {
               </button>
             </div>
 
-            <label className="cursor-pointer">
-              <input
-                type="file"
-                multiple
-                accept="image/*,video/*"
-                onChange={handleUpload}
-                className="hidden"
-                disabled={uploading}
-              />
-              <div className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition flex items-center gap-2">
-                <Upload size={16} />
-                {uploading ? 'Uploading...' : 'Upload Files'}
-              </div>
-            </label>
+            <div className="flex gap-2">
+              <button
+                onClick={handleSyncCloudinary}
+                disabled={syncing}
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center gap-2 disabled:opacity-50"
+              >
+                <RefreshCw size={16} className={syncing ? 'animate-spin' : ''} />
+                {syncing ? 'Syncing...' : 'Sync from Cloudinary'}
+              </button>
+              
+              <label className="cursor-pointer">
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*,video/*"
+                  onChange={handleUpload}
+                  className="hidden"
+                  disabled={uploading}
+                />
+                <div className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition flex items-center gap-2">
+                  <Upload size={16} />
+                  {uploading ? 'Uploading...' : 'Upload Files'}
+                </div>
+              </label>
+            </div>
           </div>
+          
+          {syncStatus && (
+            <div className={`mt-4 p-3 rounded-lg ${
+              syncStatus.includes('failed') ? 'bg-red-100 text-red-700' : 
+              syncStatus.includes('complete') ? 'bg-green-100 text-green-700' : 
+              'bg-blue-100 text-blue-700'
+            }`}>
+              {syncStatus}
+            </div>
+          )}
         </div>
 
         {loading ? (
