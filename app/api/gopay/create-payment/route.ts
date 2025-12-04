@@ -32,7 +32,14 @@ export async function POST(request: NextRequest) {
     });
 
     if (!tokenResponse.ok) {
-      throw new Error('Failed to get GoPay access token');
+      const tokenError = await tokenResponse.text();
+      console.error('GoPay OAuth error - Status:', tokenResponse.status);
+      console.error('GoPay OAuth error - Response:', tokenError);
+      console.error('GoPay OAuth error - GOID:', process.env.GOPAY_GOID);
+      console.error('GoPay OAuth error - CLIENT_ID:', process.env.GOPAY_CLIENT_ID);
+      console.error('GoPay OAuth error - Environment:', process.env.GOPAY_ENVIRONMENT);
+      console.error('GoPay OAuth error - URL:', gopayBaseUrl);
+      throw new Error(`Failed to get GoPay access token: ${tokenError}`);
     }
 
     const { access_token } = await tokenResponse.json();

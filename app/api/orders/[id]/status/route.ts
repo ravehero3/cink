@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
+import { prisma, withRetry } from '@/lib/prisma';
 import { sendShippingNotificationEmail } from '@/lib/email';
 
 export const dynamic = 'force-dynamic';
@@ -38,9 +38,9 @@ export async function PUT(
       );
     }
 
-    const order = await prisma.order.findUnique({
+    const order = await withRetry(() => prisma.order.findUnique({
       where: { id: params.id },
-    });
+    }));
 
     if (!order) {
       return NextResponse.json(
@@ -54,10 +54,10 @@ export async function PUT(
       updateData.trackingNumber = trackingNumber;
     }
 
-    const updatedOrder = await prisma.order.update({
+    const updatedOrder = await withRetry(() => prisma.order.update({
       where: { id: params.id },
       data: updateData,
-    });
+    }));
 
     // Send shipping notification email when order is shipped
     if (status === 'SHIPPED' && order.status !== 'SHIPPED') {

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
+import { prisma, withRetry } from '@/lib/prisma';
 
 export const dynamic = 'force-dynamic';
 
@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const orders = await prisma.order.findMany({
+    const orders = await withRetry(() => prisma.order.findMany({
       where: {
         userId: session.user.id,
       },
@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
         zasilkovnaName: true,
         trackingNumber: true,
       },
-    });
+    }));
 
     return NextResponse.json(orders, { status: 200 });
   } catch (error) {
