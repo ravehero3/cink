@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react';
 import { useCartStore } from '@/lib/cart-store';
 import { useSavedProductsStore } from '@/lib/saved-products-store';
 import { useRecentlyViewedStore } from '@/lib/recently-viewed-store';
-import { ChevronDown, Edit2, Save, X } from 'lucide-react';
+import { ChevronDown, ChevronLeft, ChevronRight, Edit2, Save, X } from 'lucide-react';
 import { getDeliveryDateRange } from '@/lib/delivery-date';
 import SizeChart from '@/components/SizeChart';
 import type { SizeChartType } from '@/components/SizeChart';
@@ -256,10 +256,93 @@ export default function ProductDetailPage() {
 
   const sizes = Object.entries(product.sizes || {});
 
+  const goToPreviousImage = () => {
+    setSelectedImage((prev) => (prev === 0 ? product.images.length - 1 : prev - 1));
+  };
+
+  const goToNextImage = () => {
+    setSelectedImage((prev) => (prev === product.images.length - 1 ? 0 : prev + 1));
+  };
+
   return (
     <div className="bg-white">
-      <div className="flex">
-        <div className="w-1/2 border-r border-black">
+      <div className="flex flex-col md:flex-row">
+        {/* Mobile Image Carousel - only visible on mobile */}
+        <div className="block md:hidden w-full relative">
+          <div className="relative aspect-square">
+            <img
+              src={product.images[selectedImage]}
+              alt={`${product.name} ${selectedImage + 1}`}
+              className="w-full h-full object-cover"
+            />
+            
+            {/* Heart icon */}
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setShowHeartAnimation(true);
+                toggleSaved();
+                setTimeout(() => setShowHeartAnimation(false), 600);
+              }}
+              className={`absolute heart-icon-pdp ${showHeartAnimation ? 'liked' : ''}`}
+              style={{ top: '12px', right: '12px', width: '28px', height: '28px' }}
+            >
+              <svg
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill={isSaved(product.id) ? 'black' : 'white'}
+                stroke="black"
+                strokeWidth="1.75"
+              >
+                <path 
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                />
+              </svg>
+            </button>
+
+            {/* Navigation arrows */}
+            {product.images.length > 1 && (
+              <>
+                <button
+                  onClick={goToPreviousImage}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 hover:bg-white flex items-center justify-center transition-colors"
+                  style={{ borderRadius: '50%' }}
+                >
+                  <ChevronLeft size={24} strokeWidth={1.5} />
+                </button>
+                <button
+                  onClick={goToNextImage}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 hover:bg-white flex items-center justify-center transition-colors"
+                  style={{ borderRadius: '50%' }}
+                >
+                  <ChevronRight size={24} strokeWidth={1.5} />
+                </button>
+              </>
+            )}
+
+            {/* Dot indicators */}
+            {product.images.length > 1 && (
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                {product.images.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedImage(index)}
+                    className={`w-2 h-2 rounded-full transition-colors ${
+                      index === selectedImage ? 'bg-black' : 'bg-black/30'
+                    }`}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Desktop Images - hidden on mobile */}
+        <div className="hidden md:block w-1/2 border-r border-black">
           <div className="space-y-2">
             {product.images.map((image, index) => (
               <div key={index} className="w-full relative">
@@ -301,8 +384,8 @@ export default function ProductDetailPage() {
           </div>
         </div>
 
-        <div className="w-1/2 sticky top-[44px] self-start h-screen overflow-y-auto">
-          <div className="flex flex-col justify-center" style={{ paddingLeft: '32px', paddingRight: '48px', paddingTop: '64px' }}>
+        <div className="w-full md:w-1/2 md:sticky md:top-[44px] md:self-start md:h-screen md:overflow-y-auto">
+          <div className="flex flex-col justify-center px-4 pt-6 md:pt-16" style={{ paddingLeft: 'max(16px, min(32px, 4vw))', paddingRight: 'max(16px, min(48px, 6vw))' }}>
             {isAdmin && !isEditMode && (
               <button
                 onClick={handleEditClick}
@@ -484,7 +567,7 @@ export default function ProductDetailPage() {
           )}
 
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-          <div style={{ borderTop: '1px solid #000000', paddingTop: '0', width: '36vw', marginBottom: '0px', marginTop: '4px' }}></div>
+          <div className="w-full md:w-[36vw] border-t border-black mt-1"></div>
 
           {!isEditMode && (
             <>
@@ -492,22 +575,19 @@ export default function ProductDetailPage() {
             const delivery = getDeliveryDateRange();
             return (
               <p
+                className="w-full md:w-[36vw] text-center mt-5 mb-2"
                 style={{
                   fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontSize: '12px',
                   fontWeight: 400,
-                  color: '#666666',
-                  textAlign: 'center',
-                  marginTop: '20px',
-                  marginBottom: '8px',
-                  width: '36vw'
+                  color: '#666666'
                 }}
               >
                 Odhadované datum doručení: {delivery.minDate} - {delivery.maxDate}
               </p>
             );
           })()}
-          <div className="relative" style={{ width: '36vw', marginBottom: '-4px', paddingTop: '12px' }}>
+          <div className="relative w-full md:w-[36vw] pt-3 -mb-1">
             <button
               onClick={() => setIsSizeDropdownOpen(!isSizeDropdownOpen)}
               className="w-full bg-white text-black flex items-center justify-center relative"
@@ -580,7 +660,7 @@ export default function ProductDetailPage() {
 
           <button
             onClick={handleAddToCart}
-            className="bg-black text-white hover:bg-gray-800 transition-colors"
+            className="w-full md:w-[36vw] bg-black text-white hover:bg-gray-800 transition-colors mt-3 mb-4"
             style={{
               fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
               fontSize: '14px',
@@ -588,10 +668,7 @@ export default function ProductDetailPage() {
               letterSpacing: 'tight',
               textTransform: 'uppercase',
               padding: '10.67px 0',
-              width: '36vw',
-              borderRadius: '4px',
-              marginTop: '12px',
-              marginBottom: '16px'
+              borderRadius: '4px'
             }}
           >
             PŘIDAT DO KOŠÍKU
@@ -599,7 +676,7 @@ export default function ProductDetailPage() {
             </>
           )}
 
-          <div style={{ width: '36vw' }}>
+          <div className="w-full md:w-[36vw]">
           <div className="border-t border-black flex flex-col gap-1">
             <div className="border-b border-black">
               <button
