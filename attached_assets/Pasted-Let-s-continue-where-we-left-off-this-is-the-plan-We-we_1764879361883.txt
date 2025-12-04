@@ -1,0 +1,21 @@
+Let’s continue where we left off. this is the plan. We were having problems with showing the order to customer when he clicks on přejít k platbě, so I decided to make a new page that will pop up when user clicks on PŘEJÍT K PLATBĚ. I hope this will make the customer experience work and I hope we can provide everything needed for the customer to be able to pay using gopay or other methods. Im not expert so I need you to figure everything out and dont miss anything please!   here is where we left off in last session:  Create the /platba (payment) page for the UFO Sport e-shop checkout flow. **Page location:** `app/platba/page.tsx` **Design requirements:** - Black and white minimalist design (no grays, no shadows) - Helvetica Neue or similar sans-serif typography - Consistent with the project's Balenciaga-inspired aesthetic - Mobile responsive **Page structure:** 1. **Header section:** - Title: "PLATBA" (uppercase, large) - Order number display: "Objednávka č. {orderNumber}" 2. **Order summary section (left/top on mobile):** - List of cart items with name, size, quantity, price - Subtotal, shipping cost, discount (if any), total - Shipping address summary - Zásilkovna pickup point (if selected) 3. **Payment method selector (right/bottom on mobile):** - Radio button list of payment methods from `lib/payment-methods.ts` - Each option shows icon, name, and description - Default: PAYMENT_CARD selected - Black border on selected option 4. **Action button:** - "ZAPLATIT {total} Kč" - full width black button with white text - Disabled state while processing - On click: call API to initiate payment **Data flow:** - Read order ID from URL query param: `/platba?order={orderId}` - Fetch order details from `/api/orders/{orderId}` - If no order found, redirect to /kosik - Store selected payment method in component state **Loading states:** - Show "Načítám objednávku..." while loading order - Show spinner on button while processing payment **Error handling:** - Show error message if order fetch fails - Show error message if payment initiation fails - Allow retry Use 'use client' directive since this needs interactivity. Import icons from lucide-react. Use the getPaymentMethods function from lib/payment-methods.ts.   I redeployed but got these errors:  Failed to compile.
+./app/platba/page.tsx:36:3
+Type error: Type 'ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>' is not assignable to type 'ComponentType<{ size?: number | undefined; className?: string | undefined; }>'.
+  Type 'ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>' is not assignable to type 'FunctionComponent<{ size?: number | undefined; className?: string | undefined; }>'.
+    Types of property 'propTypes' are incompatible.
+      Type 'WeakValidationMap<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>> | undefined' is not assignable to type 'WeakValidationMap<{ size?: number | undefined; className?: string | undefined; }> | undefined'.
+        Type 'WeakValidationMap<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>' is not assignable to type 'WeakValidationMap<{ size?: number | undefined; className?: string | undefined; }>'.
+          Types of property 'size' are incompatible.
+            Type 'Validator<string | number | null | undefined> | undefined' is not assignable to type 'Validator<number | null | undefined> | undefined'.
+              Type 'Validator<string | number | null | undefined>' is not assignable to type 'Validator<number | null | undefined>'.
+                Type 'string | number | null | undefined' is not assignable to type 'number | null | undefined'.
+                  Type 'string' is not assignable to type 'number'.
+  34 |
+  35 | const iconMap: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
+> 36 |   CreditCard: CreditCard,
+     |   ^
+  37 |   Building2: Building2,
+  38 |   Smartphone: Smartphone,
+  39 | };
+Next.js build worker exited with code: 1 and signal: null
+Error: Command "npm run build" exited with 1
