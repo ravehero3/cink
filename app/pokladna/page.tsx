@@ -138,38 +138,13 @@ export default function CheckoutPage() {
         return;
       }
 
-      // Create GoPay payment
-      const paymentResponse = await fetch('/api/gopay/create-payment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          orderNumber: orderData.orderNumber,
-          amount: total,
-          customerName: formData.name,
-          customerEmail: formData.email,
-          customerPhone: formData.phone,
-          items,
-        }),
-      });
-
-      const paymentData = await paymentResponse.json();
-
-      if (!paymentResponse.ok) {
-        // Even if payment creation fails, order was created, so show confirmation
-        alert('Objednávka byla vytvořena, ale tvorba platby selhala. Přejděte prosím do svého účtu.');
-      }
-
       // Clear cart and cleanup
       clearCart();
       sessionStorage.removeItem('checkoutEmail');
       sessionStorage.removeItem('checkoutData');
 
-      // Redirect to payment or confirmation
-      if (paymentResponse.ok && paymentData.gatewayUrl) {
-        window.location.href = paymentData.gatewayUrl;
-      } else {
-        router.push(`/potvrzeni/${orderData.orderNumber}`);
-      }
+      // Redirect to payment page where customer can review order and select payment method
+      router.push(`/platba?order=${orderData.orderNumber}`);
     } catch (error) {
       alert('Došlo k chybě. Zkuste to prosím znovu.');
       setLoading(false);
