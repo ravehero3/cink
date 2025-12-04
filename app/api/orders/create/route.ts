@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
+import { prisma, withRetry } from '@/lib/prisma';
 import { createPacketaClient, PacketaAPIError } from '@/lib/packeta-api';
 import { sendOrderConfirmationEmail } from '@/lib/email';
 
@@ -16,7 +16,7 @@ async function generateOrderNumber(): Promise<string> {
   const todayEnd = new Date(todayStart);
   todayEnd.setDate(todayEnd.getDate() + 1);
 
-  const todayOrdersCount = await prisma.order.count({
+  const todayOrdersCount = await withRetry(() => prisma.order.count({
     where: {
       orderNumber: {
         startsWith: datePrefix,
@@ -26,7 +26,7 @@ async function generateOrderNumber(): Promise<string> {
         lt: todayEnd,
       },
     },
-  });
+  }));
 
   const sequentialNumber = (todayOrdersCount + 1).toString().padStart(3, '0');
   return `${datePrefix}${sequentialNumber}`;
@@ -72,9 +72,9 @@ export async function POST(request: NextRequest) {
 
     let discountAmount = 0;
     if (promoCode) {
-      const promo = await prisma.promoCode.findUnique({
+      const promo = await withRetry(() => prisma.promoCode.findUnique({
         where: { code: promoCode.toUpperCase() },
-      });
+      }));
 
       if (promo && promo.isActive) {
         const now = new Date();
@@ -89,10 +89,10 @@ export async function POST(request: NextRequest) {
                 discountAmount = Number(promo.discountValue);
               }
 
-              await prisma.promoCode.update({
+              await withRetry(() => prisma.promoCode.update({
                 where: { code: promoCode.toUpperCase() },
                 data: { currentUses: promo.currentUses + 1 },
-              });
+              }));
             }
           }
         }
@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
 
     const orderNumber = await generateOrderNumber();
 
-    const order = await prisma.order.create({
+    const order = await withRetry(() => prisma.order.create({
       data: {
         orderNumber,
         userId: session?.user?.id || null,
@@ -116,7 +116,7 @@ export async function POST(request: NextRequest) {
         status: 'PENDING',
         paymentStatus: 'PENDING',
       },
-    });
+    }));
 
     let packetaPacketId: string | null = null;
 
@@ -142,14 +142,14 @@ export async function POST(request: NextRequest) {
 
         packetaPacketId = packet.id;
 
-        await prisma.order.update({
+        await withRetry(() => prisma.order.update({
           where: { id: order.id },
           data: {
             packetaPacketId: packet.id,
             trackingNumber: packet.barcode,
             packetaError: null,
           },
-        });
+        }));
 
         console.log(`Created Packeta packet ${packet.id} for order ${orderNumber}`);
       } catch (error) {
@@ -163,12 +163,12 @@ export async function POST(request: NextRequest) {
           errorMessage = error.message;
         }
 
-        await prisma.order.update({
+        await withRetry(() => prisma.order.update({
           where: { id: order.id },
           data: {
             packetaError: errorMessage,
           },
-        });
+        }));
       }
     }
 

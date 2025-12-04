@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { prisma, withRetry } from '@/lib/prisma';
 import { sendPaymentSuccessEmail } from '@/lib/email';
 
 export const dynamic = 'force-dynamic';
@@ -16,9 +16,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const order = await prisma.order.findUnique({
+    const order = await withRetry(() => prisma.order.findUnique({
       where: { orderNumber: order_number },
-    });
+    }));
 
     if (!order) {
       return NextResponse.json(
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
         break;
     }
 
-    await prisma.order.update({
+    await withRetry(() => prisma.order.update({
       where: { id: order.id },
       data: {
         paymentStatus: newPaymentStatus,
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
         gopayData: body,
         updatedAt: new Date(),
       },
-    });
+    }));
 
     // Send payment success email when payment is confirmed
     if (state === 'PAID') {
