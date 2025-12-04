@@ -82,10 +82,9 @@ export default function NewsletterWindow({ isOpen, onClose }: NewsletterWindowPr
       />
       
       <div 
-        className={`fixed top-0 right-0 h-full bg-white border-l border-black z-50 transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 right-0 h-full w-full md:w-1/3 bg-white md:border-l border-black z-50 transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
-        style={{ width: 'calc(100vw / 3)' }}
       >
         <div className="h-full flex flex-col">
           <div className="bg-white border-b border-black relative flex items-center justify-center px-6" style={{ height: '44px' }}>

@@ -610,30 +610,13 @@ function PlatbaPageContent() {
               </div>
             )}
 
-            <button
+            <AnimatedButton
+              text={processing ? 'ZPRACOVÁNÍ...' : `ZAPLATIT ${total.toLocaleString('cs-CZ')} Kč`}
               onClick={handlePayment}
+              loading={processing}
               disabled={processing}
-              style={{
-                width: '100%',
-                backgroundColor: processing ? '#666' : '#000',
-                color: '#fff',
-                border: '1px solid #000',
-                padding: '16px',
-                fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '14px',
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                letterSpacing: '0.03em',
-                cursor: processing ? 'not-allowed' : 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px'
-              }}
-            >
-              {processing && <Loader2 className="animate-spin" size={18} />}
-              {processing ? 'ZPRACOVÁNÍ...' : `ZAPLATIT ${total.toLocaleString('cs-CZ')} Kč`}
-            </button>
+              className="w-full"
+            />
 
             <p style={{
               fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',

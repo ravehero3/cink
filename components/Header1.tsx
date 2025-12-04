@@ -131,14 +131,15 @@ export default function Header1() {
           {/* Center: Logo - Always centered */}
           <Link 
             href="/" 
-            className="uppercase whitespace-nowrap absolute left-1/2 transform -translate-x-1/2" 
+            className="uppercase whitespace-nowrap absolute left-1/2 transform -translate-x-1/2 text-black" 
             style={{ 
               fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
               fontSize: '22px',
               fontWeight: 700,
               lineHeight: '22px',
               letterSpacing: '0.03em',
-              fontStretch: 'condensed'
+              fontStretch: 'condensed',
+              color: '#000000'
             }}
           >
             UFO SPORT

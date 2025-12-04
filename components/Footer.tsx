@@ -26,7 +26,7 @@ function FooterAccordionItem({ title, children, isOpen, onToggle }: FooterAccord
     <div className="border-b border-black md:border-b-0">
       <button
         onClick={onToggle}
-        className="w-full flex md:hidden items-center justify-between py-4 px-4 text-left"
+        className="w-full flex md:hidden items-center justify-between py-2 px-4 text-left"
         style={{
           fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
           fontSize: '12px',
@@ -52,7 +52,7 @@ function FooterAccordionItem({ title, children, isOpen, onToggle }: FooterAccord
           transition: 'height 0.3s ease-in-out'
         }}
       >
-        <div ref={contentRef} className="px-4 pb-4">
+        <div ref={contentRef} className="px-4 pb-2">
           {children}
         </div>
       </div>

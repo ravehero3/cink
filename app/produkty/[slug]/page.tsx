@@ -324,16 +324,17 @@ export default function ProductDetailPage() {
               </>
             )}
 
-            {/* Dot indicators */}
+            {/* Dot indicators - 4x smaller and positioned 64px above product title on mobile only */}
             {product.images.length > 1 && (
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+              <div className="absolute left-1/2 -translate-x-1/2 flex gap-[2px]" style={{ bottom: '64px' }}>
                 {product.images.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
-                    className={`w-2 h-2 rounded-full transition-colors ${
+                    className={`rounded-full transition-colors ${
                       index === selectedImage ? 'bg-black' : 'bg-black/30'
                     }`}
+                    style={{ width: '2px', height: '2px' }}
                   />
                 ))}
               </div>
