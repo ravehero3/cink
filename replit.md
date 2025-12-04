@@ -3,7 +3,27 @@
 ## Overview
 A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz), designed with a high-fashion, Balenciaga-inspired aesthetic. The project focuses on clean design, enlarged typography, and generous spacing to deliver a premium user experience. It supports a comprehensive e-commerce workflow, from product browsing and selection to secure payment processing and shipping. The platform includes advanced admin features for customer management, email campaigns, SEO optimization, and dynamic pricing rules.
 
-## Recent Changes (December 3, 2025)
+## Recent Changes (December 4, 2025)
+
+**Payment Page Implementation:**
+- Created new dedicated payment page at `/platba` for better customer experience
+- Checkout now creates order first, then redirects to payment page
+- Payment page shows:
+  - Order summary with product images, sizes, quantities, and prices
+  - Delivery details (customer name, email, phone, shipping point)
+  - Payment method selection (Credit Card, Bank Transfer, Google Pay, Apple Pay)
+  - Total price with shipping and discounts
+- Fixed TypeScript error with LucideIcon types in payment page
+- Improved checkout flow: Cart → Checkout → Payment Page → GoPay Gateway → Confirmation
+
+**Files Changed:**
+- `app/platba/page.tsx` - New payment page with order summary and payment method selection
+- `app/pokladna/page.tsx` - Modified to redirect to /platba after order creation
+- `lib/payment-methods.ts` - Payment methods configuration
+
+---
+
+## Previous Changes (December 3, 2025)
 
 **Admin Media Library Navigation:**
 - Added "MÉDIA" link to admin sidebar navigation at `/admin/media`
