@@ -3,6 +3,32 @@
 ## Overview
 A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz), designed with a high-fashion, Balenciaga-inspired aesthetic. The project focuses on clean design, enlarged typography, and generous spacing to deliver a premium user experience. It supports a comprehensive e-commerce workflow, from product browsing and selection to secure payment processing and shipping. The platform includes advanced admin features for customer management, email campaigns, SEO optimization, and dynamic pricing rules. The business vision is to provide a premium, visually striking online retail experience that stands out in the sport e-commerce market.
 
+## Recent Changes (December 4, 2025)
+
+### Mobile Responsiveness - Phase 2
+**Product Grid Mobile:**
+- 2 products per row on mobile (grid-cols-2)
+- 4 products per row on desktop (lg:grid-cols-4)
+
+**Filter Popup Mobile:**
+- Full-screen width on mobile (w-full md:w-1/3)
+- Same responsive behavior as cart drawer
+
+**Single Product Page Mobile:**
+- Image carousel at top with left/right arrow navigation
+- Dot indicators showing current image position
+- Heart icon for saving products on image
+- Text content (title, price, buttons, accordions) displayed below image
+- Responsive widths: full width on mobile, 36vw on desktop
+- Desktop layout preserved (50/50 split with images left, info right)
+
+**Files Changed:**
+- `components/ProductsGrid.tsx` - 2 columns on mobile
+- `components/FilterWindow.tsx` - Full-screen on mobile
+- `app/produkty/[slug]/page.tsx` - Mobile image carousel and responsive layout
+
+---
+
 ## User Preferences
 I prefer clear, concise explanations.
 I value a systematic and organized approach to development.
