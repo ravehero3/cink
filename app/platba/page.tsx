@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { CreditCard, Building2, Smartphone, Loader2 } from 'lucide-react';
+import { CreditCard, Building2, Smartphone, Loader2, LucideIcon } from 'lucide-react';
 import { getPaymentMethods, PaymentMethod } from '@/lib/payment-methods';
 import AnimatedButton from '@/components/AnimatedButton';
 
@@ -32,10 +32,10 @@ interface Order {
   createdAt: string;
 }
 
-const iconMap: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
-  CreditCard: CreditCard,
-  Building2: Building2,
-  Smartphone: Smartphone,
+const iconMap: Record<string, LucideIcon> = {
+  CreditCard,
+  Building2,
+  Smartphone,
 };
 
 function PlatbaPageContent() {
