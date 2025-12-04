@@ -40,12 +40,19 @@ export default function VideoSection({ videoUrl, headerText, button1Text, button
             <video
               ref={videoRef}
               className="w-full h-full object-cover"
+              style={{
+                WebkitTransform: 'translateZ(0)',
+                transform: 'translateZ(0)',
+                objectFit: 'cover'
+              }}
               loop
               autoPlay
               muted
               playsInline
+              preload="auto"
             >
               <source src={videoUrl} type="video/mp4" />
+              <source src={videoUrl.replace('.mp4', '.webm')} type="video/webm" />
             </video>
             
             <div className="absolute bottom-2 left-0 right-0 flex flex-col items-center px-4">

@@ -34,6 +34,11 @@ export default function ProductShowcaseSection({
             fill
             className="object-cover"
             sizes="100vw"
+            priority
+            style={{
+              WebkitTransform: 'translateZ(0)',
+              transform: 'translateZ(0)'
+            }}
           />
         </div>
       ) : (
