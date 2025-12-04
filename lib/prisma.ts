@@ -16,6 +16,8 @@ if (process.env.NODE_ENV !== 'production') {
   globalForPrisma.prisma = prisma;
 }
 
+const CONNECTION_ERROR_CODES = ['P1000', 'P1001', 'P1002', 'P1008', 'P1017', 'P2024'];
+
 export async function withRetry<T>(
   operation: () => Promise<T>,
   maxRetries: number = 3,
@@ -29,15 +31,20 @@ export async function withRetry<T>(
     } catch (error) {
       lastError = error as Error;
       
-      const isConnectionError = 
-        error instanceof Prisma.PrismaClientKnownRequestError ||
-        error instanceof Prisma.PrismaClientInitializationError ||
-        (error instanceof Error && (
+      let isConnectionError = false;
+      
+      if (error instanceof Prisma.PrismaClientInitializationError) {
+        isConnectionError = true;
+      } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        isConnectionError = CONNECTION_ERROR_CODES.includes(error.code);
+      } else if (error instanceof Error) {
+        isConnectionError = 
           error.message.includes('connection') ||
           error.message.includes('timeout') ||
           error.message.includes('ECONNREFUSED') ||
-          error.message.includes('terminating connection')
-        ));
+          error.message.includes('terminating connection') ||
+          error.message.includes('administrator command');
+      }
       
       if (!isConnectionError || attempt === maxRetries) {
         throw error;
