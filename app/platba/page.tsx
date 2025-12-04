@@ -54,7 +54,8 @@ function PlatbaPageContent() {
 
   useEffect(() => {
     if (!orderId) {
-      router.push('/kosik');
+      // No order ID in URL, redirect to cart
+      window.location.href = '/kosik';
       return;
     }
 
@@ -74,7 +75,7 @@ function PlatbaPageContent() {
     };
 
     fetchOrder();
-  }, [orderId, router]);
+  }, [orderId]);
 
   const handlePayment = async () => {
     if (!order) return;

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useCartStore, useCartHydration } from '@/lib/cart-store';
@@ -15,6 +15,8 @@ export default function CheckoutPage() {
   const hasHydrated = useCartHydration();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  // Flag to prevent empty cart redirect when order is being processed
+  const isNavigatingToPayment = useRef(false);
 
   const [formData, setFormData] = useState({
     email: session?.user?.email || '',
@@ -31,6 +33,9 @@ export default function CheckoutPage() {
   const [showManualZasilkovnaForm, setShowManualZasilkovnaForm] = useState(false);
 
   useEffect(() => {
+    // Don't redirect if we're intentionally navigating to payment page
+    if (isNavigatingToPayment.current) return;
+    
     if (hasHydrated && items.length === 0) {
       router.push('/kosik');
     }
@@ -138,13 +143,16 @@ export default function CheckoutPage() {
         return;
       }
 
+      // Set flag to prevent empty cart redirect
+      isNavigatingToPayment.current = true;
+      
       // Clear cart and cleanup
       clearCart();
       sessionStorage.removeItem('checkoutEmail');
       sessionStorage.removeItem('checkoutData');
 
       // Redirect to payment page where customer can review order and select payment method
-      router.push(`/platba?order=${orderData.orderNumber}`);
+      window.location.href = `/platba?order=${orderData.orderNumber}`;
     } catch (error) {
       alert('Došlo k chybě. Zkuste to prosím znovu.');
       setLoading(false);
