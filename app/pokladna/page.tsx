@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { useCartStore } from '@/lib/cart-store';
+import { useCartStore, useCartHydration } from '@/lib/cart-store';
 import { calculateShippingCost, getShippingLabel, getAmountToFreeShipping } from '@/lib/shipping';
 import Image from 'next/image';
 import AnimatedButton from '@/components/AnimatedButton';
@@ -12,6 +12,7 @@ export default function CheckoutPage() {
   const router = useRouter();
   const { data: session } = useSession();
   const { items, getTotal, clearCart } = useCartStore();
+  const hasHydrated = useCartHydration();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
 
@@ -30,10 +31,10 @@ export default function CheckoutPage() {
   const [showManualZasilkovnaForm, setShowManualZasilkovnaForm] = useState(false);
 
   useEffect(() => {
-    if (items.length === 0) {
+    if (hasHydrated && items.length === 0) {
       router.push('/kosik');
     }
-  }, [items, router]);
+  }, [items, router, hasHydrated]);
 
   useEffect(() => {
     if (session?.user?.email) {
@@ -213,6 +214,16 @@ export default function CheckoutPage() {
     
     openWidget();
   };
+
+  if (!hasHydrated) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-body">Načítám...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (items.length === 0) {
     return null;

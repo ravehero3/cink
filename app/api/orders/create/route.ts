@@ -204,10 +204,32 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
-    console.error('Error creating order:', error);
-    console.error('Order creation error details:', error instanceof Error ? error.message : 'Unknown error');
+    const errorId = `ERR-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    console.error(`[${errorId}] Error creating order:`, error);
+    console.error(`[${errorId}] Error type:`, error?.constructor?.name);
+    console.error(`[${errorId}] Error message:`, error instanceof Error ? error.message : 'Unknown error');
+    
+    if (error && typeof error === 'object') {
+      if ('code' in error) {
+        console.error(`[${errorId}] Prisma error code:`, (error as any).code);
+      }
+      if ('meta' in error) {
+        console.error(`[${errorId}] Prisma error meta:`, JSON.stringify((error as any).meta));
+      }
+      if ('clientVersion' in error) {
+        console.error(`[${errorId}] Prisma client version:`, (error as any).clientVersion);
+      }
+    }
+
+    if (error instanceof Error && error.stack) {
+      console.error(`[${errorId}] Stack trace:`, error.stack);
+    }
+    
     return NextResponse.json(
-      { error: 'Došlo k chybě při vytváření objednávky. Zkuste to prosím znovu.' },
+      { 
+        error: 'Došlo k chybě při vytváření objednávky. Zkuste to prosím znovu.',
+        errorId
+      },
       { status: 500 }
     );
   }

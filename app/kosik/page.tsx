@@ -1,6 +1,6 @@
 'use client';
 
-import { useCartStore } from '@/lib/cart-store';
+import { useCartStore, useCartHydration } from '@/lib/cart-store';
 import { useSavedProductsStore } from '@/lib/saved-products-store';
 import { useSession } from 'next-auth/react';
 import { useRouter, usePathname } from 'next/navigation';
@@ -43,7 +43,7 @@ function AnimatedLink({ href, text }: { href: string; text: string }) {
 }
 
 export default function CartPage() {
-  const [isHydrated, setIsHydrated] = useState(false);
+  const hasHydrated = useCartHydration();
   const [savingItem, setSavingItem] = useState<string | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteItemData, setDeleteItemData] = useState<{ productId: string; productName: string; size: string } | null>(null);
@@ -94,13 +94,9 @@ export default function CartPage() {
     }
   };
 
-  useEffect(() => {
-    setIsHydrated(true);
-  }, []);
-
   const total = getTotal();
 
-  if (!isHydrated) {
+  if (!hasHydrated) {
     return <div className="min-h-screen bg-white" />;
   }
 

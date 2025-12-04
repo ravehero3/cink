@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
 
 export interface CartItem {
   productId: string;
@@ -14,6 +14,8 @@ export interface CartItem {
 
 interface CartStore {
   items: CartItem[];
+  _hasHydrated: boolean;
+  setHasHydrated: (state: boolean) => void;
   addItem: (item: CartItem) => void;
   removeItem: (productId: string, size: string) => void;
   updateQuantity: (productId: string, size: string, quantity: number) => void;
@@ -23,10 +25,52 @@ interface CartStore {
   getItem: (productId: string, size: string) => CartItem | undefined;
 }
 
+const safeStorage: StateStorage = {
+  getItem: (name: string): string | null => {
+    if (typeof window === 'undefined') return null;
+    try {
+      return localStorage.getItem(name);
+    } catch {
+      try {
+        return sessionStorage.getItem(name);
+      } catch {
+        return null;
+      }
+    }
+  },
+  setItem: (name: string, value: string): void => {
+    if (typeof window === 'undefined') return;
+    try {
+      localStorage.setItem(name, value);
+    } catch {
+      try {
+        sessionStorage.setItem(name, value);
+      } catch {
+      }
+    }
+  },
+  removeItem: (name: string): void => {
+    if (typeof window === 'undefined') return;
+    try {
+      localStorage.removeItem(name);
+    } catch {
+      try {
+        sessionStorage.removeItem(name);
+      } catch {
+      }
+    }
+  },
+};
+
 export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
       items: [],
+      _hasHydrated: false,
+
+      setHasHydrated: (state: boolean) => {
+        set({ _hasHydrated: state });
+      },
 
       addItem: (item) => {
         const items = get().items;
@@ -87,6 +131,14 @@ export const useCartStore = create<CartStore>()(
     }),
     {
       name: 'ufo-cart-storage',
+      storage: createJSONStorage(() => safeStorage),
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
+      },
     }
   )
 );
+
+export const useCartHydration = () => {
+  return useCartStore((state) => state._hasHydrated);
+};
