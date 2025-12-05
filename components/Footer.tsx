@@ -33,7 +33,7 @@ function FooterAccordionItem({ title, children, isOpen, onToggle }: FooterAccord
           fontWeight: 400,
           letterSpacing: '0.12px',
           textTransform: 'uppercase',
-          color: '#6b7280'
+          color: '#000000'
         }}
       >
         <span>{title}</span>
