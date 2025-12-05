@@ -5,6 +5,23 @@ A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz), d
 
 ## Recent Changes (December 5, 2025)
 
+### Mobile Responsiveness - Phase 5 (Latest Fixes)
+**Product Grid Mobile:**
+- Reduced gap between product image and text to 8px on mobile (pt-2)
+
+**Info Pages Mobile Width:**
+- All 7 info pages now use full width with 16px padding on mobile
+- Pattern: `w-full px-4 md:w-1/3 md:px-0`
+- Pages fixed: sledování objednávky, FAQ, vrácení zboží, právní informace, ochrana osobních údajů, cookies, nastavení cookies
+
+**Chrome Payment Redirect Fix:**
+- Fixed Chrome-specific issue where payment gateway redirect was being blocked
+- Changed `window.location.href` to `queueMicrotask(() => window.location.assign())`
+- Chrome blocks immediate cross-site navigation from pending fetch promises; microtask wrapper ensures navigation executes after fetch resolution
+- Safari continues to work as before
+
+---
+
 ### Mobile Responsiveness - Phase 4 (Additional Fixes)
 **Return Policy Update:**
 - Changed return policy from 30 days to 14 days in product page accordion
@@ -17,7 +34,7 @@ A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz), d
 - Made "seřadit podle" popup fill whole screen on mobile (w-full md:w-1/3)
 
 **Product Grid Mobile:**
-- Reduced gap between product image and text to 16px on mobile (pt-4)
+- Reduced gap between product image and text to 16px on mobile (pt-4) → Later changed to 8px (pt-2)
 
 **New Doručení Page:**
 - Created app/doruceni/page.tsx with delivery information
