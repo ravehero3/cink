@@ -174,7 +174,7 @@ export default function HomePageContent() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [sectionToDelete, setSectionToDelete] = useState<string | null>(null);
   
-  const [heroSections, setHeroSections] = useState<HeroSectionData[]>([]);
+  const [heroSections, setHeroSections] = useState<HeroSectionData[]>(defaultHeroSectionsArray);
   const [categorySections, setCategorySections] = useState<Record<string, CategorySectionData>>(defaultCategorySections);
 
   const fetchHeroSections = async () => {
