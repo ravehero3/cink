@@ -236,7 +236,7 @@ function PlatbaPageContent() {
         width: '1px',
         backgroundColor: '#000',
         zIndex: 5
-      }} className="hidden lg:block" />
+      }} className="hidden md:block" />
       <div style={{
         position: 'absolute',
         right: 'calc(50vw - 497.5px)',
@@ -245,7 +245,7 @@ function PlatbaPageContent() {
         width: '1px',
         backgroundColor: '#000',
         zIndex: 5
-      }} className="hidden lg:block" />
+      }} className="hidden md:block" />
 
       <div style={{ 
         position: 'relative', 
