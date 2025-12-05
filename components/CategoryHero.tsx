@@ -63,12 +63,11 @@ export default function CategoryHero({ title, imageUrl }: CategoryHeroProps) {
     <div>
       {/* White Title Bar - 4x header height (44px * 4 = 176px) */}
       <div 
-        className="bg-white border-b border-black flex items-center justify-center"
+        className="bg-white border-b border-black grid place-items-center"
         style={{ height: 'calc(4 * 44px)' }}
       >
         <h1 
-          className="text-page-title font-bold text-center uppercase tracking-tighter w-full"
-          style={{ margin: 0 }}
+          className="text-page-title font-bold uppercase tracking-tighter w-full text-center px-0 m-0"
         >
           {title}
         </h1>
