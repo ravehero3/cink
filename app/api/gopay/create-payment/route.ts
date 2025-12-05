@@ -1,13 +1,71 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+function generateErrorId(): string {
+  return `PAY-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+}
+
+function logError(errorId: string, message: string, data?: any): void {
+  const timestamp = new Date().toISOString();
+  console.error(`[${timestamp}] [${errorId}] ${message}`, data !== undefined ? JSON.stringify(data, null, 2) : '');
+}
+
+function logInfo(message: string, data?: any): void {
+  const timestamp = new Date().toISOString();
+  console.log(`[${timestamp}] [GOPAY-PAYMENT] ${message}`, data !== undefined ? JSON.stringify(data, null, 2) : '');
+}
+
 export async function POST(request: NextRequest) {
+  const errorId = generateErrorId();
+  
   try {
-    const body = await request.json();
+    logInfo('GoPay payment creation started', { errorId });
+    
+    let body: any;
+    try {
+      body = await request.json();
+      logInfo('Request body parsed', {
+        orderNumber: body?.orderNumber,
+        amount: body?.amount,
+        amountType: typeof body?.amount,
+        hasItems: !!body?.items,
+        itemCount: body?.items?.length || 0
+      });
+    } catch (parseError) {
+      logError(errorId, 'Failed to parse request body', parseError);
+      return NextResponse.json(
+        { error: 'Neplatná data platby', errorId },
+        { status: 400 }
+      );
+    }
+    
     const { orderNumber, amount, customerName, customerEmail, customerPhone, items } = body;
 
-    if (!process.env.GOPAY_GOID || !process.env.GOPAY_CLIENT_ID || !process.env.GOPAY_CLIENT_SECRET) {
+    // Validate required fields
+    if (!orderNumber || typeof orderNumber !== 'string') {
+      logError(errorId, 'Missing or invalid orderNumber', { orderNumber });
       return NextResponse.json(
-        { error: 'GoPay not configured. Please set environment variables.' },
+        { error: 'Chybí číslo objednávky', errorId },
+        { status: 400 }
+      );
+    }
+
+    const numericAmount = Number(amount);
+    if (isNaN(numericAmount) || numericAmount <= 0) {
+      logError(errorId, 'Invalid amount', { amount, numericAmount });
+      return NextResponse.json(
+        { error: 'Neplatná částka platby', errorId },
+        { status: 400 }
+      );
+    }
+
+    if (!process.env.GOPAY_GOID || !process.env.GOPAY_CLIENT_ID || !process.env.GOPAY_CLIENT_SECRET) {
+      logError(errorId, 'GoPay not configured', {
+        hasGoId: !!process.env.GOPAY_GOID,
+        hasClientId: !!process.env.GOPAY_CLIENT_ID,
+        hasClientSecret: !!process.env.GOPAY_CLIENT_SECRET
+      });
+      return NextResponse.json(
+        { error: 'Platební brána není nakonfigurována. Kontaktujte podporu.', errorId },
         { status: 500 }
       );
     }
@@ -20,55 +78,88 @@ export async function POST(request: NextRequest) {
       ? 'https://gate.gopay.cz/api'
       : 'https://gw.sandbox.gopay.com/api';
 
+    logInfo('GoPay configuration', { 
+      baseUrl, 
+      isProduction, 
+      gopayBaseUrl,
+      goId: process.env.GOPAY_GOID?.substring(0, 4) + '...'
+    });
+
     const auth = Buffer.from(`${process.env.GOPAY_CLIENT_ID}:${process.env.GOPAY_CLIENT_SECRET}`).toString('base64');
 
-    const tokenResponse = await fetch(`${gopayBaseUrl}/oauth2/token`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Basic ${auth}`,
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: 'grant_type=client_credentials&scope=payment-all',
-    });
+    // Step 1: Get OAuth token
+    logInfo('Fetching GoPay OAuth token...');
+    let tokenResponse;
+    try {
+      tokenResponse = await fetch(`${gopayBaseUrl}/oauth2/token`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Basic ${auth}`,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'grant_type=client_credentials&scope=payment-all',
+      });
+    } catch (fetchError) {
+      logError(errorId, 'Failed to fetch OAuth token (network error)', fetchError);
+      return NextResponse.json(
+        { error: 'Nepodařilo se připojit k platební bráně. Zkuste to prosím později.', errorId },
+        { status: 500 }
+      );
+    }
 
     if (!tokenResponse.ok) {
       const tokenError = await tokenResponse.text();
-      console.error('GoPay OAuth error - Status:', tokenResponse.status);
-      console.error('GoPay OAuth error - Response:', tokenError);
-      console.error('GoPay OAuth error - GOID:', process.env.GOPAY_GOID);
-      console.error('GoPay OAuth error - CLIENT_ID:', process.env.GOPAY_CLIENT_ID);
-      console.error('GoPay OAuth error - Environment:', process.env.GOPAY_ENVIRONMENT);
-      console.error('GoPay OAuth error - URL:', gopayBaseUrl);
-      throw new Error(`Failed to get GoPay access token: ${tokenError}`);
+      logError(errorId, 'GoPay OAuth error', {
+        status: tokenResponse.status,
+        response: tokenError,
+        environment: process.env.GOPAY_ENVIRONMENT,
+        gopayUrl: gopayBaseUrl
+      });
+      return NextResponse.json(
+        { error: 'Chyba autorizace platební brány. Zkuste to prosím později.', errorId },
+        { status: 500 }
+      );
     }
 
-    const { access_token } = await tokenResponse.json();
+    const tokenData = await tokenResponse.json();
+    const { access_token } = tokenData;
+    
+    if (!access_token) {
+      logError(errorId, 'No access token in response', { tokenData });
+      return NextResponse.json(
+        { error: 'Neplatná odpověď z platební brány.', errorId },
+        { status: 500 }
+      );
+    }
+    
+    logInfo('OAuth token obtained successfully');
 
-    const [firstName, ...lastNameParts] = customerName.split(' ');
-    const lastName = lastNameParts.join(' ') || firstName;
+    // Step 2: Prepare payment data
+    const [firstName, ...lastNameParts] = (customerName || '').split(' ');
+    const lastName = lastNameParts.join(' ') || firstName || 'Customer';
 
     const paymentData = {
       payer: {
         contact: {
-          first_name: firstName,
+          first_name: firstName || 'Customer',
           last_name: lastName,
-          email: customerEmail,
-          phone_number: customerPhone,
+          email: customerEmail || '',
+          phone_number: customerPhone || '',
         },
       },
       target: {
         type: 'ACCOUNT',
-        goid: parseInt(process.env.GOPAY_GOID),
+        goid: parseInt(process.env.GOPAY_GOID!),
       },
-      amount: Math.round(amount * 100),
+      amount: Math.round(numericAmount * 100),
       currency: 'CZK',
       order_number: orderNumber,
       order_description: `Objednávka ${orderNumber}`,
-      items: items.map((item: any) => ({
+      items: (items || []).map((item: any) => ({
         type: 'ITEM',
-        name: `${item.name} (${item.size})`,
-        amount: Math.round(item.price * 100),
-        count: item.quantity,
+        name: `${item.name || 'Produkt'}${item.size ? ` (${item.size})` : ''}`,
+        amount: Math.round((Number(item.price) || 0) * 100),
+        count: Number(item.quantity) || 1,
       })),
       callback: {
         return_url: `${baseUrl}/potvrzeni/${orderNumber}`,
@@ -77,34 +168,81 @@ export async function POST(request: NextRequest) {
       lang: 'CS',
     };
 
-    const paymentResponse = await fetch(`${gopayBaseUrl}/payments/payment`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${access_token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(paymentData),
+    logInfo('Creating GoPay payment', { 
+      orderNumber, 
+      amount: paymentData.amount,
+      itemCount: paymentData.items.length,
+      returnUrl: paymentData.callback.return_url
     });
 
+    // Step 3: Create payment
+    let paymentResponse;
+    try {
+      paymentResponse = await fetch(`${gopayBaseUrl}/payments/payment`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${access_token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(paymentData),
+      });
+    } catch (fetchError) {
+      logError(errorId, 'Failed to create payment (network error)', fetchError);
+      return NextResponse.json(
+        { error: 'Nepodařilo se vytvořit platbu. Zkuste to prosím později.', errorId },
+        { status: 500 }
+      );
+    }
+
     if (!paymentResponse.ok) {
-      const errorData = await paymentResponse.json();
-      console.error('GoPay payment creation error - Status:', paymentResponse.status);
-      console.error('GoPay payment creation error - Response:', JSON.stringify(errorData, null, 2));
-      console.error('GoPay payment creation error - Request data was:', JSON.stringify(paymentData, null, 2));
-      throw new Error(`GoPay error (${paymentResponse.status}): ${JSON.stringify(errorData)}`);
+      let errorData;
+      try {
+        errorData = await paymentResponse.json();
+      } catch {
+        errorData = await paymentResponse.text();
+      }
+      logError(errorId, 'GoPay payment creation failed', {
+        status: paymentResponse.status,
+        response: errorData,
+        requestData: {
+          orderNumber: paymentData.order_number,
+          amount: paymentData.amount,
+          itemCount: paymentData.items.length
+        }
+      });
+      return NextResponse.json(
+        { error: 'Nepodařilo se vytvořit platbu v platební bráně. Zkuste to prosím znovu.', errorId },
+        { status: 500 }
+      );
     }
 
     const payment = await paymentResponse.json();
+    
+    if (!payment.gw_url) {
+      logError(errorId, 'No gateway URL in payment response', { payment });
+      return NextResponse.json(
+        { error: 'Neplatná odpověď z platební brány.', errorId },
+        { status: 500 }
+      );
+    }
+
+    logInfo('Payment created successfully', { 
+      paymentId: payment.id, 
+      gatewayUrl: payment.gw_url?.substring(0, 50) + '...'
+    });
 
     return NextResponse.json({
       paymentId: payment.id,
       gatewayUrl: payment.gw_url,
     });
-  } catch (error) {
-    console.error('GoPay create payment error:', error);
-    console.error('GoPay error details:', error instanceof Error ? error.message : 'Unknown error');
+  } catch (error: any) {
+    logError(errorId, 'Unexpected error in payment creation', {
+      type: error?.constructor?.name,
+      message: error?.message,
+      stack: error?.stack
+    });
     return NextResponse.json(
-      { error: 'Nepodařilo se vytvořit platbu. Zkuste to prosím znovu.' },
+      { error: 'Došlo k neočekávané chybě. Zkuste to prosím znovu.', errorId },
       { status: 500 }
     );
   }
