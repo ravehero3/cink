@@ -130,7 +130,7 @@ export default function MobileMenu({ isOpen, onClose, categories }: MobileMenuPr
                   color: '#000000'
                 }}
               >
-                ULOZENE POLOZKY
+                ULOŽENÉ POLOŽKY
               </Link>
 
               {isAdmin && (

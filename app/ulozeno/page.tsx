@@ -369,7 +369,7 @@ export default function SavedProductsPage() {
             fontStretch: 'condensed',
             margin: 0
           }}>
-            ULOŽENÉ PRODUKTY
+            ULOŽENÉ POLOŽKY
           </h1>
         </div>
 
@@ -534,7 +534,7 @@ export default function SavedProductsPage() {
           fontStretch: 'condensed',
           margin: 0
         }}>
-          ULOŽENÉ PRODUKTY
+          ULOŽENÉ POLOŽKY
         </h1>
       </div>
 
