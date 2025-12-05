@@ -820,7 +820,7 @@ export default function ProductDetailPage() {
               >
                 <div className="pb-4">
                   <p className="mb-2">Nabízíme bezplatné expresní doručení při objednávce nad 2000 Kč.</p>
-                  <p className="mb-2">Bezplatné vrácení a výměna do 30 dnů od data doručení.</p>
+                  <p className="mb-2">Bezplatné vrácení a výměna do 14 dnů od data doručení.</p>
                   <p>Pro více informací navštivte naše <a href="/faq" className="underline">FAQ</a>.</p>
                 </div>
               </div>

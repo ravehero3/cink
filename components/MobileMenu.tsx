@@ -114,7 +114,7 @@ export default function MobileMenu({ isOpen, onClose, categories }: MobileMenuPr
                   color: '#000000'
                 }}
               >
-                {isLoggedIn ? "MUJ UCET" : "PRIHLASIT SE"}
+                {isLoggedIn ? "MŮJ ÚČET" : "PŘIHLÁSIT SE"}
               </Link>
 
               <Link

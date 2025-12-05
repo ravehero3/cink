@@ -34,7 +34,7 @@ export default function VideoSection({ videoUrl, headerText, button1Text, button
 
   return (
     <>
-      <section className="w-full relative bg-black border-b border-black" style={{ height: '80vh' }}>
+      <section className="w-full relative bg-black border-b border-black min-h-[50vh] md:h-[80vh]">
         {videoUrl ? (
           <>
             <video

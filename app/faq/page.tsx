@@ -23,10 +23,10 @@ export default function FAQPage() {
   return (
     <div className="min-h-screen bg-white relative">
       {/* Left vertical line - starts at top (header padding handled by body) */}
-      <div className="absolute left-1/4 w-px bg-black z-0" style={{ top: 0, bottom: 0 }} />
+      <div className="hidden md:block absolute left-1/4 w-px bg-black z-0" style={{ top: 0, bottom: 0 }} />
       
       {/* Right vertical line - starts at top (header padding handled by body) */}
-      <div className="absolute right-1/4 w-px bg-black z-0" style={{ top: 0, bottom: 0 }} />
+      <div className="hidden md:block absolute right-1/4 w-px bg-black z-0" style={{ top: 0, bottom: 0 }} />
 
       {/* Main content */}
       <div className="relative z-10 flex flex-col items-center" style={{ paddingTop: '64px', paddingBottom: '40px' }}>
