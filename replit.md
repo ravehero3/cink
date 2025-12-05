@@ -5,7 +5,27 @@ A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz), d
 
 ## Recent Changes (December 5, 2025)
 
-### Migration to Replit Environment (Latest)
+### Order Security & Payment Improvements (Latest)
+**GDPR-Compliant Order URLs:**
+- Added `securityToken` (UUID) field to Order model
+- Order URLs now require both orderNumber and token for access
+- Token verification in `/api/orders/[id]` - checks admin, owner, or valid token
+- Payment page (`/platba`) reads token from URL and passes to API
+- Checkout redirects include security token: `/platba?order=UFO251205xxx&token=uuid`
+
+**Account Page Pay Button:**
+- Unpaid orders (status=PENDING, paymentStatus=PENDING) show "ZAPLATIT OBJEDNÁVKU" button
+- Black button with 4px border radius, positioned bottom-right of order panel
+- Entire order panel is clickable for unpaid orders
+- Routes to payment page with security token in URL
+
+**Video Display:**
+- Video sections work correctly - videos will display once uploaded via admin panel
+- HeroSection database stores video URLs (currently empty, needs content upload)
+
+---
+
+### Migration to Replit Environment
 **Database Migration:**
 - Migrated from external Neon database to Replit's internal PostgreSQL
 - Removed DIRECT_URL configuration; now uses single DATABASE_URL
