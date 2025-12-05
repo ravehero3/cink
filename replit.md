@@ -102,3 +102,32 @@ The project is built using Next.js 14 (App Router) and TypeScript, with Tailwind
 **Database Migration Required:**
 - The textColor field was added to the HeroSection model
 - A database migration needs to be run on production: `npx prisma migrate dev` or `npx prisma db push`
+
+### Dynamic Homepage Section Management
+**Admin Section Controls:**
+- Admins can now add, delete, and reorder homepage sections dynamically
+- Each section displays an X button (top-left corner) to delete the section
+- The last section displays a + button (bottom-right corner) to add a new section
+- Delete confirmation modal prevents accidental deletion
+
+**Section Type Toggle:**
+- EditSectionModal now includes VIDEO/IMAGE type toggle
+- Admins can switch any section between video and image types
+- Type change is persisted to the database immediately
+
+**API Changes:**
+- `/api/hero-sections` GET endpoint now returns ordered array instead of object map
+- Added DELETE endpoint that reindexes remaining sections after deletion
+- POST endpoint supports creating new sections with automatic order assignment
+
+**State Initialization Fix:**
+- HomePageContent now initializes heroSections with defaultHeroSectionsArray
+- Prevents blank page on first render before API response arrives
+- Default sections show category titles (VOODOO808, SPACE LOVE, etc.) even without media
+
+### Admin Orders Statistics Update
+**CANCELLED Orders Exclusion:**
+- Admin orders page now filters CANCELLED orders from revenue calculations
+- Sales graph (Recharts LineChart) only shows data from active orders
+- Total revenue and order count statistics exclude cancelled orders
+- Uses `activeOrders` array filtered from all orders
