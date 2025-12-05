@@ -42,7 +42,7 @@ export default function FAQPage() {
           ČASTO KLADENÉ DOTAZY
         </h1>
         
-        <div style={{ width: '33.33%' }}>
+        <div className="w-full px-4 md:w-1/3 md:px-0">
           <Accordion items={faqItems} />
         </div>
       </div>

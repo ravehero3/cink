@@ -105,7 +105,9 @@ function PlatbaPageContent() {
       }
 
       if (data.gatewayUrl) {
-        window.location.href = data.gatewayUrl;
+        queueMicrotask(() => {
+          window.location.assign(data.gatewayUrl);
+        });
       } else {
         router.push(`/potvrzeni/${order.orderNumber}`);
       }

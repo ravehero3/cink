@@ -23,7 +23,7 @@ export default function CookiesPage() {
         </h1>
 
         <div className="w-full flex flex-col items-center">
-          <div style={{ width: '33.33%' }}>
+          <div className="w-full px-4 md:w-1/3 md:px-0">
             <div style={{ marginBottom: '24px' }}>
               <h2 
                 className="uppercase"

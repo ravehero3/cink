@@ -47,7 +47,7 @@ export default function TrackingPage() {
         </p>
 
         <div className="w-full flex flex-col items-center">
-          <form onSubmit={handleSubmit} className="flex flex-col items-center" style={{ width: '33.33%' }}>
+          <form onSubmit={handleSubmit} className="flex flex-col items-center w-full px-4 md:w-1/3 md:px-0">
             <div className="w-full relative" style={{ marginBottom: '8px' }}>
               <label 
                 className="block text-xs mb-[2px]"
@@ -117,10 +117,9 @@ export default function TrackingPage() {
           </form>
 
           <div 
-            className="border border-black p-6 bg-white"
+            className="border border-black p-6 bg-white w-full px-4 md:w-1/3 md:px-0"
             style={{ 
               borderRadius: '4px',
-              width: '33.33%',
               marginTop: '16px'
             }}
           >

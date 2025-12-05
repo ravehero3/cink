@@ -81,7 +81,7 @@ export default function PrivacyPolicyPage() {
 
       {/* Main content */}
       <div className="relative z-10 flex flex-col items-center" style={{ paddingTop: '64px' }}>
-        <div style={{ width: '33.33%' }} className="pb-16">
+        <div className="w-full px-4 md:w-1/3 md:px-0 pb-16">
           <h1 
             className="uppercase text-center mb-8"
             style={{

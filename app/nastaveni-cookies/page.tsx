@@ -91,7 +91,7 @@ export default function CookieSettingsPage() {
           NASTAVENÍ COOKIES
         </h1>
         
-        <div style={{ width: '33.33%' }}>
+        <div className="w-full px-4 md:w-1/3 md:px-0">
           <p 
             className="text-center mb-12"
             style={{

@@ -65,13 +65,12 @@ export default function ReturnsPage() {
         </h1>
 
         <p 
-          className="text-center mb-8"
+          className="text-center mb-8 w-full px-4 md:w-1/3 md:px-0"
           style={{
             fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
             fontSize: '14px',
             fontWeight: 400,
-            lineHeight: '1.6',
-            width: '33.33%'
+            lineHeight: '1.6'
           }}
         >
           Bezplatné vrácení do 30 dnů. Vyplňte formulář níže pro registraci vrácení zboží.
@@ -80,10 +79,9 @@ export default function ReturnsPage() {
         <div className="w-full flex flex-col items-center">
           {submitted && (
             <div 
-              className="mb-6 p-3 text-sm border text-center"
+              className="mb-6 p-3 text-sm border text-center w-full px-4 md:w-1/3 md:px-0"
               style={{
                 fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                width: '33.33%',
                 backgroundColor: '#24e053',
                 color: '#000000',
                 borderColor: '#24e053'
@@ -93,7 +91,7 @@ export default function ReturnsPage() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="flex flex-col items-center" style={{ width: '33.33%' }}>
+          <form onSubmit={handleSubmit} className="flex flex-col items-center w-full px-4 md:w-1/3 md:px-0">
             <div className="w-full relative" style={{ marginBottom: '8px' }}>
               <label 
                 className="block text-xs mb-[2px]"
