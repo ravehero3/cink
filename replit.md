@@ -5,7 +5,25 @@ A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz), d
 
 ## Recent Changes (December 5, 2025)
 
-### Enhanced Error Logging & Validation (Latest Update)
+### Migration to Replit Environment (Latest)
+**Database Migration:**
+- Migrated from external Neon database to Replit's internal PostgreSQL
+- Removed DIRECT_URL configuration; now uses single DATABASE_URL
+- All 12 database tables created: User, Product, Category, Order, PromoCode, Settings, Media, NewsletterSubscriber, EmailCampaign, PricingRule, HeroSection, CategorySection
+
+**Homepage Content Storage:**
+- Added HeroSection and CategorySection database models (previously stored in localStorage)
+- Created API endpoints: `/api/hero-sections` and `/api/category-sections`
+- Videos and images now persist in database, visible to all users (not just admin)
+- Admin needs to re-upload videos/images from the admin panel
+
+**Environment Configuration:**
+- NEXTAUTH_URL set to current Replit domain
+- Google OAuth requires adding Replit callback URL to Google Cloud Console
+
+---
+
+### Enhanced Error Logging & Validation
 **Order Creation Endpoint (`/api/orders/create`):**
 - Added unique error IDs (ORD-xxx format) for correlating user reports with server logs
 - Implemented timestamped logging with logInfo/logError helpers
