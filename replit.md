@@ -47,6 +47,26 @@ The project is built using Next.js 14 (App Router) and TypeScript, with Tailwind
 
 ## Recent Changes (December 5, 2025)
 
+### Mobile Video/Image Display Improvements
+**Fixed Black Bar Issue on Mobile:**
+- VideoSection.tsx: On mobile (screen width < 768px), the section now uses `height: 100vw` to create a perfect square container
+- Videos/images use `object-cover` to fill the square and crop the sides (no more black bars)
+- Desktop maintains `80vh` height for the full-width banner experience
+
+**White Background for Video Sections:**
+- Changed all video section backgrounds from black to white on the main page
+- Updated text colors accordingly (from white to black) for visibility
+- Admin buttons now use consistent black border styling
+
+**Image Sections (ProductShowcaseSection):**
+- Applied same mobile cropping logic: square container (100vw height) with object-cover
+- Images center and crop sides on mobile for a clean square display
+
+**CategoryHero Title Panel:**
+- Reduced title bar height from 6x header height (264px) to 4x header height (176px)
+- Text remains centered vertically and horizontally
+- Hero media section background changed from black to white
+
 ### Category Page Media Upload Fix
 **Fixed "Upravit médium" Button Upload:**
 - Fixed API endpoint path in CategoryClientPage.tsx: changed from non-existent `/api/admin/media/upload` to correct `/api/media/upload`
