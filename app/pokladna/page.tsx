@@ -67,10 +67,12 @@ export default function CheckoutPage() {
     return () => clearInterval(checkInterval);
   }, []);
 
-  const subtotal = getTotal();
+  const rawSubtotal = getTotal();
+  const subtotal = typeof rawSubtotal === 'number' && !isNaN(rawSubtotal) ? rawSubtotal : 0;
   const shippingCost = calculateShippingCost(subtotal);
   const amountToFreeShipping = getAmountToFreeShipping(subtotal);
-  const total = subtotal + shippingCost - discount;
+  const safeDiscount = typeof discount === 'number' && !isNaN(discount) ? discount : 0;
+  const total = Math.max(0, subtotal + shippingCost - safeDiscount);
 
   const handleApplyPromo = async () => {
     if (!formData.promoCode) return;
@@ -118,12 +120,25 @@ export default function CheckoutPage() {
     setLoading(true);
 
     try {
+      const finalTotal = Number(total);
+      if (isNaN(finalTotal) || finalTotal <= 0) {
+        alert('Chyba při výpočtu ceny. Zkuste obnovit stránku.');
+        setLoading(false);
+        return;
+      }
+
+      const orderItems = items.map(item => ({
+        ...item,
+        price: Number(item.price),
+        quantity: Number(item.quantity)
+      }));
+
       // Create order
       const orderResponse = await fetch('/api/orders/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          items,
+          items: orderItems,
           customerEmail: formData.email,
           customerName: formData.name,
           customerPhone: formData.phone,
@@ -131,7 +146,7 @@ export default function CheckoutPage() {
           zasilkovnaId: formData.zasilkovnaId,
           zasilkovnaName: formData.zasilkovnaName,
           promoCode: formData.promoCode,
-          totalPrice: total,
+          totalPrice: finalTotal,
         }),
       });
 

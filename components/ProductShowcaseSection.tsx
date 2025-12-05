@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
 interface ProductShowcaseSectionProps {
   imageUrl: string;
+  mobileImageUrl?: string;
   headerText: string;
   button1Text: string;
   button2Text: string;
@@ -16,6 +17,7 @@ interface ProductShowcaseSectionProps {
 
 export default function ProductShowcaseSection({
   imageUrl,
+  mobileImageUrl,
   headerText,
   button1Text,
   button2Text,
@@ -24,12 +26,25 @@ export default function ProductShowcaseSection({
   isAdmin,
   onEdit
 }: ProductShowcaseSectionProps) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const currentImageUrl = isMobile && mobileImageUrl ? mobileImageUrl : imageUrl;
+
   return (
-    <section className="w-full relative bg-white" style={{ height: '80vh' }}>
-      {imageUrl ? (
+    <section className="w-full relative bg-white min-h-[50vh] md:h-[80vh]">
+      {currentImageUrl ? (
         <div className="w-full h-full relative">
           <Image
-            src={imageUrl}
+            src={currentImageUrl}
             alt="Product Showcase"
             fill
             className="object-cover"

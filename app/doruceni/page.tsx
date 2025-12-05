@@ -23,15 +23,13 @@ export default function DeliveryPage() {
         </h1>
 
         <p 
-          className="text-center px-4 md:px-0"
+          className="text-center px-4 md:px-0 w-full max-w-[90%] md:max-w-[33.33%]"
           style={{
             fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
             fontSize: '14px',
             fontWeight: 400,
             lineHeight: '1.6',
-            marginBottom: '24px',
-            width: '100%',
-            maxWidth: '33.33%'
+            marginBottom: '24px'
           }}
         >
           Nabízíme rychlé a spolehlivé doručení po celé České republice.

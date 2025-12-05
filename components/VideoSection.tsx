@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -15,6 +15,7 @@ interface Product {
 
 interface VideoSectionProps {
   videoUrl: string;
+  mobileVideoUrl?: string;
   headerText?: string;
   button1Text?: string;
   button2Text?: string;
@@ -29,13 +30,40 @@ interface VideoSectionProps {
   isLoading?: boolean;
 }
 
-export default function VideoSection({ videoUrl, headerText, button1Text, button2Text, button1Link, button2Link, isAdmin, onEdit, onEditCategory, sectionId, showProducts, products = [], isLoading = false }: VideoSectionProps) {
+export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, button1Text, button2Text, button1Link, button2Link, isAdmin, onEdit, onEditCategory, sectionId, showProducts, products = [], isLoading = false }: VideoSectionProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoError, setVideoError] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video) {
+      video.load();
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          video.muted = true;
+          video.play().catch(() => setVideoError(true));
+        });
+      }
+    }
+  }, [videoUrl, mobileVideoUrl, isMobile]);
+
+  const currentVideoUrl = isMobile && mobileVideoUrl ? mobileVideoUrl : videoUrl;
 
   return (
     <>
       <section className="w-full relative bg-black border-b border-black min-h-[50vh] md:h-[80vh]">
-        {videoUrl ? (
+        {currentVideoUrl && !videoError ? (
           <>
             <video
               ref={videoRef}
@@ -50,9 +78,14 @@ export default function VideoSection({ videoUrl, headerText, button1Text, button
               muted
               playsInline
               preload="auto"
+              webkit-playsinline="true"
+              onError={() => setVideoError(true)}
             >
-              <source src={videoUrl} type="video/mp4" />
-              <source src={videoUrl.replace('.mp4', '.webm')} type="video/webm" />
+              <source src={currentVideoUrl} type="video/mp4; codecs=avc1.42E01E,mp4a.40.2" />
+              <source src={currentVideoUrl} type="video/mp4" />
+              {currentVideoUrl.includes('.mp4') && (
+                <source src={currentVideoUrl.replace('.mp4', '.webm')} type="video/webm" />
+              )}
             </video>
             
             <div className="absolute bottom-2 left-0 right-0 flex flex-col items-center px-4">

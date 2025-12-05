@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Accordion from '@/components/Accordion';
-import AnimatedButton from '@/components/AnimatedButton';
 
 export default function CookieSettingsPage() {
   const [necessary, setNecessary] = useState(true);
@@ -107,19 +106,22 @@ export default function CookieSettingsPage() {
           <Accordion items={cookieItems} />
 
           <div className="flex gap-4 my-8">
-            <AnimatedButton
-              text="ULOŽIT NASTAVENÍ"
+            <button
               onClick={handleSave}
               type="button"
-              className="flex-1"
+              className="flex-1 bg-black text-white uppercase border border-black hover:bg-gray-800 transition-colors"
               style={{
                 fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                 fontSize: '13px',
                 fontWeight: 400,
                 letterSpacing: '0.05em',
-                padding: '13.8px 25.6px'
+                padding: '13.8px 25.6px',
+                borderRadius: '4px'
               }}
-            />
+            >
+              <span className="md:hidden">ULOŽIT</span>
+              <span className="hidden md:inline">ULOŽIT NASTAVENÍ</span>
+            </button>
             <button
               onClick={() => {
                 setAnalytics(true);

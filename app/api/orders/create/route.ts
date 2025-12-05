@@ -70,6 +70,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const numericTotalPrice = Number(totalPrice);
+    if (isNaN(numericTotalPrice) || numericTotalPrice <= 0) {
+      console.error('Invalid totalPrice received:', totalPrice, 'parsed as:', numericTotalPrice);
+      return NextResponse.json(
+        { error: 'Neplatná celková cena. Zkuste obnovit stránku a opakovat objednávku.' },
+        { status: 400 }
+      );
+    }
+
     let discountAmount = 0;
     if (promoCode) {
       const promo = await withRetry(() => prisma.promoCode.findUnique({
@@ -109,7 +118,7 @@ export async function POST(request: NextRequest) {
         customerName,
         customerPhone,
         items,
-        totalPrice: Number(totalPrice),
+        totalPrice: numericTotalPrice,
         shippingMethod,
         zasilkovnaId: zasilkovnaId || null,
         zasilkovnaName: zasilkovnaName || null,
