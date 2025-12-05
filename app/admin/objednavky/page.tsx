@@ -99,6 +99,8 @@ export default function AdminOrdersPage() {
     }
   };
 
+  const activeOrders = orders.filter((order) => order.status !== 'CANCELLED');
+
   const calculateStatsForPeriod = (period: string) => {
     const now = new Date();
     let startDate = new Date();
@@ -115,7 +117,7 @@ export default function AdminOrdersPage() {
       startDate.setFullYear(now.getFullYear() - 1);
     }
 
-    const periodOrders = orders.filter((order) => new Date(order.createdAt) >= startDate);
+    const periodOrders = activeOrders.filter((order) => new Date(order.createdAt) >= startDate);
     const revenue = periodOrders.reduce((sum, order) => sum + Number(order.totalPrice), 0);
 
     return {
@@ -145,7 +147,7 @@ export default function AdminOrdersPage() {
         const hourEnd = new Date(now);
         hourEnd.setHours(i + 1, 0, 0, 0);
 
-        const hourOrders = orders.filter((o) => {
+        const hourOrders = activeOrders.filter((o) => {
           const date = new Date(o.createdAt);
           return date >= hourStart && date < hourEnd && new Date(o.createdAt).toDateString() === now.toDateString();
         });
@@ -163,7 +165,7 @@ export default function AdminOrdersPage() {
         const hourEnd = new Date(hourStart);
         hourEnd.setHours(hourEnd.getHours() + 1);
 
-        const hourOrders = orders.filter((o) => {
+        const hourOrders = activeOrders.filter((o) => {
           const date = new Date(o.createdAt);
           return date >= hourStart && date < hourEnd;
         });
@@ -183,7 +185,7 @@ export default function AdminOrdersPage() {
         const dayEnd = new Date(dayStart);
         dayEnd.setDate(dayEnd.getDate() + 1);
 
-        const dayOrders = orders.filter((o) => {
+        const dayOrders = activeOrders.filter((o) => {
           const date = new Date(o.createdAt);
           return date >= dayStart && date < dayEnd;
         });
@@ -202,7 +204,7 @@ export default function AdminOrdersPage() {
         const dayEnd = new Date(dayStart);
         dayEnd.setDate(dayEnd.getDate() + 1);
 
-        const dayOrders = orders.filter((o) => {
+        const dayOrders = activeOrders.filter((o) => {
           const date = new Date(o.createdAt);
           return date >= dayStart && date < dayEnd;
         });
@@ -223,7 +225,7 @@ export default function AdminOrdersPage() {
         const monthEnd = new Date(monthStart);
         monthEnd.setMonth(monthEnd.getMonth() + 1);
 
-        const monthOrders = orders.filter((o) => {
+        const monthOrders = activeOrders.filter((o) => {
           const date = new Date(o.createdAt);
           return date >= monthStart && date < monthEnd;
         });
