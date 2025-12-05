@@ -51,10 +51,10 @@ export default function CategoryHero({ title, imageUrl }: CategoryHeroProps) {
 
   return (
     <div>
-      {/* White Title Bar - 6x header height */}
+      {/* White Title Bar - 4x header height */}
       <div 
         className="bg-white border-b border-black flex items-center justify-center"
-        style={{ height: 'calc(6 * 44px)' }}
+        style={{ height: 'calc(4 * 44px)' }}
       >
         <h1 
           className="text-page-title font-bold text-center uppercase tracking-tighter w-full"
@@ -67,33 +67,39 @@ export default function CategoryHero({ title, imageUrl }: CategoryHeroProps) {
       {/* Hero Media - 50vh height */}
       {imageUrl && (
         <div 
-          className="w-full border-b border-black bg-black relative"
+          className="w-full border-b border-black bg-white relative overflow-hidden"
           style={{ height: '50vh' }}
         >
-          {showVideo && (
-            <video
-              ref={videoRef}
-              className="w-full h-full object-cover absolute inset-0"
-              loop
-              autoPlay
-              muted
-              playsInline
-              preload="auto"
-              onError={() => setVideoError(true)}
-              onLoadedData={() => setVideoLoaded(true)}
-              onCanPlay={() => setVideoLoaded(true)}
-            >
-              <source src={imageUrl} />
-            </video>
-          )}
-          {(!showVideo || !videoLoaded) && (
-            <img
-              src={imageUrl}
-              alt={title}
-              className={`w-full h-full object-cover ${showVideo && videoLoaded ? 'hidden' : ''}`}
-              onError={() => {}}
-            />
-          )}
+          <div className="w-full h-full flex items-center justify-center">
+            {showVideo && (
+              <video
+                ref={videoRef}
+                className="h-full object-cover absolute inset-0 w-full md:w-full"
+                style={{
+                  aspectRatio: 'auto',
+                  minWidth: '100%',
+                }}
+                loop
+                autoPlay
+                muted
+                playsInline
+                preload="auto"
+                onError={() => setVideoError(true)}
+                onLoadedData={() => setVideoLoaded(true)}
+                onCanPlay={() => setVideoLoaded(true)}
+              >
+                <source src={imageUrl} />
+              </video>
+            )}
+            {(!showVideo || !videoLoaded) && (
+              <img
+                src={imageUrl}
+                alt={title}
+                className={`w-full h-full object-cover ${showVideo && videoLoaded ? 'hidden' : ''}`}
+                onError={() => {}}
+              />
+            )}
+          </div>
         </div>
       )}
     </div>

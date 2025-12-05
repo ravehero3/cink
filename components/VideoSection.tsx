@@ -64,35 +64,42 @@ export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, but
 
   return (
     <>
-      <section className={`w-full relative border-b border-black min-h-[50vh] md:h-[80vh] ${hasVideo ? 'bg-black' : 'bg-white'}`}>
+      <section 
+        className="w-full relative border-b border-black bg-white overflow-hidden"
+        style={{
+          height: isMobile ? '100vw' : '80vh',
+          maxHeight: isMobile ? '100vw' : 'none',
+        }}
+      >
         {hasVideo ? (
           <>
-            <video
-              ref={videoRef}
-              className="w-full h-full object-cover"
-              style={{
-                WebkitTransform: 'translateZ(0)',
-                transform: 'translateZ(0)',
-                objectFit: 'cover'
-              }}
-              loop
-              autoPlay
-              muted
-              playsInline
-              preload="auto"
-              webkit-playsinline="true"
-              onError={() => setVideoError(true)}
-            >
-              <source src={currentVideoUrl} type="video/mp4; codecs=avc1.42E01E,mp4a.40.2" />
-              <source src={currentVideoUrl} type="video/mp4" />
-              {currentVideoUrl.includes('.mp4') && (
-                <source src={currentVideoUrl.replace('.mp4', '.webm')} type="video/webm" />
-              )}
-            </video>
+            <div className="w-full h-full overflow-hidden">
+              <video
+                ref={videoRef}
+                className="w-full h-full object-cover"
+                style={{
+                  WebkitTransform: 'translateZ(0)',
+                  transform: 'translateZ(0)',
+                }}
+                loop
+                autoPlay
+                muted
+                playsInline
+                preload="auto"
+                webkit-playsinline="true"
+                onError={() => setVideoError(true)}
+              >
+                <source src={currentVideoUrl} type="video/mp4; codecs=avc1.42E01E,mp4a.40.2" />
+                <source src={currentVideoUrl} type="video/mp4" />
+                {currentVideoUrl.includes('.mp4') && (
+                  <source src={currentVideoUrl.replace('.mp4', '.webm')} type="video/webm" />
+                )}
+              </video>
+            </div>
             
             <div className="absolute bottom-2 left-0 right-0 flex flex-col items-center px-4">
               {headerText && (
-                <h2 className="uppercase text-white mb-[8px]" style={{
+                <h2 className="uppercase text-black mb-[8px]" style={{
                   fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontSize: '22px',
                   fontWeight: 700,
@@ -113,8 +120,8 @@ export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, but
           </>
         ) : (
           <>
-            <div className="w-full h-full flex items-center justify-center text-white">
-              <p className="text-xl text-white">No video uploaded</p>
+            <div className="w-full h-full flex items-center justify-center">
+              <p className="text-xl text-black/40">No video uploaded</p>
             </div>
             {headerText && (
               <div className="absolute bottom-2 left-0 right-0 flex flex-col items-center px-4">
@@ -143,14 +150,14 @@ export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, but
           <div className="absolute top-4 right-4 flex gap-2">
             <button
               onClick={onEdit}
-              className={`px-2 py-1 text-xs uppercase transition-colors border ${hasVideo ? 'bg-white text-black border-white hover:bg-black hover:text-white' : 'bg-black text-white border-black hover:bg-white hover:text-black'}`}
+              className="px-2 py-1 text-xs uppercase transition-colors border bg-white text-black border-black hover:bg-black hover:text-white"
             >
               Edit Video
             </button>
             {onEditCategory && (
               <button
                 onClick={onEditCategory}
-                className={`px-2 py-1 text-xs uppercase transition-colors border ${hasVideo ? 'bg-white text-black border-white hover:bg-black hover:text-white' : 'bg-black text-white border-black hover:bg-white hover:text-black'}`}
+                className="px-2 py-1 text-xs uppercase transition-colors border bg-white text-black border-black hover:bg-black hover:text-white"
               >
                 Edit Section
               </button>

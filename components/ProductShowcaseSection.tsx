@@ -40,9 +40,15 @@ export default function ProductShowcaseSection({
   const currentImageUrl = isMobile && mobileImageUrl ? mobileImageUrl : imageUrl;
 
   return (
-    <section className="w-full relative bg-white min-h-[50vh] md:h-[80vh]">
+    <section 
+      className="w-full relative bg-white overflow-hidden"
+      style={{
+        height: isMobile ? '100vw' : '80vh',
+        maxHeight: isMobile ? '100vw' : 'none',
+      }}
+    >
       {currentImageUrl ? (
-        <div className="w-full h-full relative">
+        <div className="w-full h-full relative overflow-hidden">
           <Image
             src={currentImageUrl}
             alt="Product Showcase"
