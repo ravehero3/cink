@@ -83,7 +83,7 @@ export default function ProductShowcaseSection({
         </div>
       )}
 
-      <div className="absolute bottom-2 left-0 right-0 flex flex-col items-center px-4">
+      <div className="absolute inset-0 flex flex-col items-center justify-center px-4">
         <h2 className={`uppercase mb-[8px] ${textColor === 'white' ? 'text-white' : 'text-black'}`} style={{
           fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
           fontSize: '22px',
