@@ -236,7 +236,7 @@ export default function CategoryClientPage({ slug }: CategoryClientPageProps) {
       formData.append('file', selectedFile);
       formData.append('category', category.name);
 
-      const uploadResponse = await fetch('/api/admin/media/upload', {
+      const uploadResponse = await fetch('/api/media/upload', {
         method: 'POST',
         body: formData,
       });
