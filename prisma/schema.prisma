@@ -74,6 +74,7 @@ model Category {
 model Order {
   id                String        @id @default(uuid())
   orderNumber       String        @unique
+  securityToken     String        @default(uuid())
   userId            String?
   user              User?         @relation(fields: [userId], references: [id])
   customerEmail     String
