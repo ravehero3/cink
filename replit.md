@@ -3,6 +3,20 @@
 ## Overview
 A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz), designed with a high-fashion, Balenciaga-inspired aesthetic. The project focuses on clean design, enlarged typography, and generous spacing to deliver a premium user experience. It supports a comprehensive e-commerce workflow, from product browsing and selection to secure payment processing and shipping. The platform includes advanced admin features for customer management, email campaigns, SEO optimization, and dynamic pricing rules. The business vision is to provide a premium, visually striking online retail experience that stands out in the sport e-commerce market.
 
+## Recent Changes (December 5, 2025)
+
+### Mobile Responsiveness - Phase 3 (Verification & Fixes)
+**Vertical Lines Hidden on Mobile:**
+- All pages now consistently use `hidden md:block` for vertical decorative lines
+- Updated `app/platba/page.tsx` from `hidden lg:block` to `hidden md:block` for consistency
+
+**Verified Mobile-Ready Features:**
+- ProductCard: Text positioned below image on mobile (`relative`), overlaid on desktop (`md:absolute`)
+- Single Product Page: Dot indicators at `bottom: 24px` confirmed working
+- košík and uloženo pages: Already have responsive layouts and hidden vertical lines
+
+---
+
 ## Recent Changes (December 4, 2025)
 
 ### Mobile Responsiveness - Phase 2
