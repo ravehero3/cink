@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient, HeroSection } from '@prisma/client';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 
 const prisma = new PrismaClient();
 
@@ -40,8 +42,16 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    const session = await getServerSession(authOptions);
+    
+    if (!session || session.user?.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Unauthorized. Admin access required.' }, { status: 401 });
+    }
+    
     const body = await request.json();
     const { sectionKey, ...data } = body;
+    
+    console.log('Saving hero section:', { sectionKey, data });
     
     if (!sectionKey) {
       return NextResponse.json({ error: 'Section key is required' }, { status: 400 });
@@ -74,9 +84,11 @@ export async function POST(request: Request) {
       },
     });
     
-    return NextResponse.json(section);
+    console.log('Hero section saved successfully:', section);
+    
+    return NextResponse.json({ success: true, section });
   } catch (error) {
     console.error('Error saving hero section:', error);
-    return NextResponse.json({ error: 'Failed to save section' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to save section', details: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 });
   }
 }

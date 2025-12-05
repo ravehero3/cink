@@ -180,15 +180,25 @@ export default function HomePageContent() {
     if (!editingSection) return;
     
     try {
-      await fetch('/api/hero-sections', {
+      const response = await fetch('/api/hero-sections', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ sectionKey: editingSection, ...data }),
       });
       
+      const result = await response.json();
+      
+      if (!response.ok) {
+        console.error('Failed to save section:', result);
+        alert(`Chyba při ukládání: ${result.error || 'Neznámá chyba'}`);
+        return;
+      }
+      
+      console.log('Section saved successfully:', result);
       setHeroSections(prev => ({ ...prev, [editingSection]: data }));
     } catch (error) {
       console.error('Error saving section:', error);
+      alert('Chyba při ukládání sekce. Zkuste to prosím znovu.');
     }
   };
 
@@ -210,15 +220,25 @@ export default function HomePageContent() {
     if (!editingCategory) return;
     
     try {
-      await fetch('/api/category-sections', {
+      const response = await fetch('/api/category-sections', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ sectionKey: editingCategory, ...data }),
       });
       
+      const result = await response.json();
+      
+      if (!response.ok) {
+        console.error('Failed to save category section:', result);
+        alert(`Chyba při ukládání: ${result.error || 'Neznámá chyba'}`);
+        return;
+      }
+      
+      console.log('Category section saved successfully:', result);
       setCategorySections(prev => ({ ...prev, [editingCategory]: data }));
     } catch (error) {
       console.error('Error saving category section:', error);
+      alert('Chyba při ukládání sekce. Zkuste to prosím znovu.');
     }
   };
 
