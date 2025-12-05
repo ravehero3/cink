@@ -111,7 +111,6 @@ GOPAY_GOID = "8476296202"
 GOPAY_CLIENT_ID = "1307637683"
 GOPAY_CLIENT_SECRET = "uJcnLkVF"
 GOPAY_ENVIRONMENT = "production"
-DIRECT_URL = "postgresql://neondb_owner:npg_IZpf0ewqs3NA@ep-flat-bar-ag8urf4t.c-2.eu-central-1.aws.neon.tech/neondb?sslmode=require"
 
 [userenv.development]
 NEXTAUTH_URL = "https://2285bb97-8219-482a-aaaa-0528a077b1ec-00-3rbcec1duqm8r.picard.replit.dev"

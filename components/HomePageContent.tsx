@@ -9,8 +9,6 @@ import ProductShowcaseSection from './ProductShowcaseSection';
 import EditSectionModal from './EditSectionModal';
 import EditCategorySectionModal from './EditCategorySectionModal';
 import { useSession } from 'next-auth/react';
-import { useHeroSectionsStore } from '@/store/heroSectionsStore';
-import { useCategorySectionsStore } from '@/store/categorySectionsStore';
 
 const categories = [
   { name: 'VOODOO808', slug: 'voodoo808', storeKey: 'voodoo808' as const },
@@ -31,6 +29,65 @@ interface Product {
 interface CategoryProducts {
   [key: string]: Product[];
 }
+
+interface HeroSectionData {
+  videoUrl?: string;
+  mobileVideoUrl?: string;
+  imageUrl?: string;
+  mobileImageUrl?: string;
+  headerText?: string;
+  button1Text?: string;
+  button2Text?: string;
+  button1Link?: string;
+  button2Link?: string;
+}
+
+interface CategorySectionData {
+  title: string;
+  button1Text: string;
+  button2Text: string;
+  button1Link: string;
+  button2Link: string;
+}
+
+const defaultCategorySections: Record<string, CategorySectionData> = {
+  voodoo808: {
+    title: 'VOODOO808',
+    button1Text: 'Nakupovat',
+    button2Text: 'Zobrazit vše',
+    button1Link: '/voodoo808',
+    button2Link: '/voodoo808',
+  },
+  spaceLove: {
+    title: 'SPACE LOVE',
+    button1Text: 'Nakupovat',
+    button2Text: 'Zobrazit vše',
+    button1Link: '/space-love',
+    button2Link: '/space-love',
+  },
+  recreationWellness: {
+    title: 'RECREATION WELLNESS',
+    button1Text: 'Nakupovat',
+    button2Text: 'Zobrazit vše',
+    button1Link: '/recreation-wellness',
+    button2Link: '/recreation-wellness',
+  },
+  tShirtGallery: {
+    title: 'T SHIRT GALLERY',
+    button1Text: 'Nakupovat',
+    button2Text: 'Zobrazit vše',
+    button1Link: '/t-shirt-gallery',
+    button2Link: '/t-shirt-gallery',
+  },
+};
+
+const defaultHeroSections: Record<string, HeroSectionData> = {
+  section1: { videoUrl: '', mobileVideoUrl: '', headerText: '', button1Text: '', button2Text: '', button1Link: '', button2Link: '' },
+  section2: { videoUrl: '', mobileVideoUrl: '', headerText: '', button1Text: '', button2Text: '', button1Link: '', button2Link: '' },
+  section3: { imageUrl: '', mobileImageUrl: '', headerText: 'TRIKA', button1Text: 'Shop Now', button2Text: 'View Collection', button1Link: '/voodoo808', button2Link: '/space-love' },
+  section4: { videoUrl: '', mobileVideoUrl: '', headerText: '', button1Text: '', button2Text: '', button1Link: '', button2Link: '' },
+  section5: { imageUrl: '', mobileImageUrl: '', headerText: '', button1Text: '', button2Text: '', button1Link: '', button2Link: '' },
+};
 
 function AnimatedButton({ text, link }: { text: string; link: string }) {
   const [isHovered, setIsHovered] = useState(false);
@@ -76,26 +133,35 @@ export default function HomePageContent() {
   const [categoryEditModalOpen, setCategoryEditModalOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<'voodoo808' | 'spaceLove' | 'recreationWellness' | 'tShirtGallery' | null>(null);
   
-  const { section1, section2, section3, section4, section5, updateSection1, updateSection2, updateSection3, updateSection4, updateSection5 } = useHeroSectionsStore();
-  const categorySections = useCategorySectionsStore();
+  const [heroSections, setHeroSections] = useState<Record<string, HeroSectionData>>(defaultHeroSections);
+  const [categorySections, setCategorySections] = useState<Record<string, CategorySectionData>>(defaultCategorySections);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const productPromises = categories.map(async (category) => {
-          const response = await fetch(`/api/products?category=${encodeURIComponent(category.name)}&limit=10`);
-          const data = await response.json();
-          return { slug: category.slug, products: data.products || [] };
-        });
+        const [heroRes, categoryRes, ...productResults] = await Promise.all([
+          fetch('/api/hero-sections'),
+          fetch('/api/category-sections'),
+          ...categories.map(async (category) => {
+            const response = await fetch(`/api/products?category=${encodeURIComponent(category.name)}&limit=10`);
+            const data = await response.json();
+            return { slug: category.slug, products: data.products || [] };
+          }),
+        ]);
 
-        const results = await Promise.all(productPromises);
+        const heroData = await heroRes.json();
+        const categoryData = await categoryRes.json();
+
+        setHeroSections({ ...defaultHeroSections, ...heroData });
+        setCategorySections({ ...defaultCategorySections, ...categoryData });
+
         const productsMap: CategoryProducts = {};
-        results.forEach(({ slug, products }) => {
+        productResults.forEach(({ slug, products }) => {
           productsMap[slug] = products;
         });
         setCategoryProducts(productsMap);
       } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error('Error fetching data:', error);
       } finally {
         setIsLoading(false);
       }
@@ -109,27 +175,25 @@ export default function HomePageContent() {
     setEditModalOpen(true);
   };
 
-  const handleSaveSection = (data: any) => {
-    if (editingSection === 'section1') {
-      updateSection1(data);
-    } else if (editingSection === 'section2') {
-      updateSection2(data);
-    } else if (editingSection === 'section3') {
-      updateSection3(data);
-    } else if (editingSection === 'section4') {
-      updateSection4(data);
-    } else if (editingSection === 'section5') {
-      updateSection5(data);
+  const handleSaveSection = async (data: any) => {
+    if (!editingSection) return;
+    
+    try {
+      await fetch('/api/hero-sections', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sectionKey: editingSection, ...data }),
+      });
+      
+      setHeroSections(prev => ({ ...prev, [editingSection]: data }));
+    } catch (error) {
+      console.error('Error saving section:', error);
     }
   };
 
   const getCurrentEditData = () => {
-    if (editingSection === 'section1') return section1;
-    if (editingSection === 'section2') return section2;
-    if (editingSection === 'section3') return section3;
-    if (editingSection === 'section4') return section4;
-    if (editingSection === 'section5') return section5;
-    return {};
+    if (!editingSection) return {};
+    return heroSections[editingSection] || {};
   };
 
   const getEditSectionType = (): 'video' | 'product' => {
@@ -141,31 +205,37 @@ export default function HomePageContent() {
     setCategoryEditModalOpen(true);
   };
 
-  const handleSaveCategorySection = (data: any) => {
-    if (editingCategory === 'voodoo808') {
-      categorySections.updateVoodoo808(data);
-    } else if (editingCategory === 'spaceLove') {
-      categorySections.updateSpaceLove(data);
-    } else if (editingCategory === 'recreationWellness') {
-      categorySections.updateRecreationWellness(data);
-    } else if (editingCategory === 'tShirtGallery') {
-      categorySections.updateTShirtGallery(data);
+  const handleSaveCategorySection = async (data: any) => {
+    if (!editingCategory) return;
+    
+    try {
+      await fetch('/api/category-sections', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sectionKey: editingCategory, ...data }),
+      });
+      
+      setCategorySections(prev => ({ ...prev, [editingCategory]: data }));
+    } catch (error) {
+      console.error('Error saving category section:', error);
     }
   };
 
   const getCurrentCategoryEditData = () => {
-    if (editingCategory === 'voodoo808') return categorySections.voodoo808;
-    if (editingCategory === 'spaceLove') return categorySections.spaceLove;
-    if (editingCategory === 'recreationWellness') return categorySections.recreationWellness;
-    if (editingCategory === 'tShirtGallery') return categorySections.tShirtGallery;
-    return {
-      title: '',
-      button1Text: '',
-      button2Text: '',
-      button1Link: '',
-      button2Link: '',
-    };
+    if (!editingCategory) return defaultCategorySections.voodoo808;
+    return categorySections[editingCategory] || defaultCategorySections[editingCategory];
   };
+
+  const section1 = heroSections.section1 || defaultHeroSections.section1;
+  const section2 = heroSections.section2 || defaultHeroSections.section2;
+  const section3 = heroSections.section3 || defaultHeroSections.section3;
+  const section4 = heroSections.section4 || defaultHeroSections.section4;
+  const section5 = heroSections.section5 || defaultHeroSections.section5;
+
+  const voodoo808 = categorySections.voodoo808 || defaultCategorySections.voodoo808;
+  const spaceLove = categorySections.spaceLove || defaultCategorySections.spaceLove;
+  const recreationWellness = categorySections.recreationWellness || defaultCategorySections.recreationWellness;
+  const tShirtGallery = categorySections.tShirtGallery || defaultCategorySections.tShirtGallery;
 
   return (
     <div className="w-full">
@@ -173,12 +243,13 @@ export default function HomePageContent() {
 
       {/* Section 1: Video Section with VOODOO808 */}
       <VideoSection 
-        videoUrl={section1.videoUrl}
-        headerText={categorySections.voodoo808.title}
-        button1Text={categorySections.voodoo808.button1Text}
-        button2Text={categorySections.voodoo808.button2Text}
-        button1Link={categorySections.voodoo808.button1Link}
-        button2Link={categorySections.voodoo808.button2Link}
+        videoUrl={section1.videoUrl || ''}
+        mobileVideoUrl={section1.mobileVideoUrl}
+        headerText={voodoo808.title}
+        button1Text={voodoo808.button1Text}
+        button2Text={voodoo808.button2Text}
+        button1Link={voodoo808.button1Link}
+        button2Link={voodoo808.button2Link}
         isAdmin={isAdmin}
         onEdit={() => handleEditSection('section1')}
         onEditCategory={() => handleEditCategorySection('voodoo808')}
@@ -188,24 +259,26 @@ export default function HomePageContent() {
 
       {/* Section 3: Product Showcase */}
       <ProductShowcaseSection
-        imageUrl={section3.imageUrl}
-        headerText={section3.headerText}
-        button1Text={section3.button1Text}
-        button2Text={section3.button2Text}
-        button1Link={section3.button1Link}
-        button2Link={section3.button2Link}
+        imageUrl={section3.imageUrl || ''}
+        mobileImageUrl={section3.mobileImageUrl}
+        headerText={section3.headerText || ''}
+        button1Text={section3.button1Text || ''}
+        button2Text={section3.button2Text || ''}
+        button1Link={section3.button1Link || ''}
+        button2Link={section3.button2Link || ''}
         isAdmin={isAdmin}
         onEdit={() => handleEditSection('section3')}
       />
 
       {/* Section 2: Video Section with SPACE LOVE */}
       <VideoSection 
-        videoUrl={section2.videoUrl}
-        headerText={categorySections.spaceLove.title}
-        button1Text={categorySections.spaceLove.button1Text}
-        button2Text={categorySections.spaceLove.button2Text}
-        button1Link={categorySections.spaceLove.button1Link}
-        button2Link={categorySections.spaceLove.button2Link}
+        videoUrl={section2.videoUrl || ''}
+        mobileVideoUrl={section2.mobileVideoUrl}
+        headerText={spaceLove.title}
+        button1Text={spaceLove.button1Text}
+        button2Text={spaceLove.button2Text}
+        button1Link={spaceLove.button1Link}
+        button2Link={spaceLove.button2Link}
         isAdmin={isAdmin}
         onEdit={() => handleEditSection('section2')}
         onEditCategory={() => handleEditCategorySection('spaceLove')}
@@ -215,24 +288,26 @@ export default function HomePageContent() {
 
       {/* T SHIRT GALLERY (duplicate) */}
       <ProductShowcaseSection
-        imageUrl={section5.imageUrl}
-        headerText={categorySections.tShirtGallery.title}
-        button1Text={categorySections.tShirtGallery.button1Text}
-        button2Text={categorySections.tShirtGallery.button2Text}
-        button1Link={categorySections.tShirtGallery.button1Link}
-        button2Link={categorySections.tShirtGallery.button2Link}
+        imageUrl={section5.imageUrl || ''}
+        mobileImageUrl={section5.mobileImageUrl}
+        headerText={tShirtGallery.title}
+        button1Text={tShirtGallery.button1Text}
+        button2Text={tShirtGallery.button2Text}
+        button1Link={tShirtGallery.button1Link}
+        button2Link={tShirtGallery.button2Link}
         isAdmin={isAdmin}
         onEdit={() => handleEditSection('section5')}
       />
 
       {/* Section 4: Video Section with RECREATION WELLNESS */}
       <VideoSection 
-        videoUrl={section4.videoUrl}
-        headerText={categorySections.recreationWellness.title}
-        button1Text={categorySections.recreationWellness.button1Text}
-        button2Text={categorySections.recreationWellness.button2Text}
-        button1Link={categorySections.recreationWellness.button1Link}
-        button2Link={categorySections.recreationWellness.button2Link}
+        videoUrl={section4.videoUrl || ''}
+        mobileVideoUrl={section4.mobileVideoUrl}
+        headerText={recreationWellness.title}
+        button1Text={recreationWellness.button1Text}
+        button2Text={recreationWellness.button2Text}
+        button1Link={recreationWellness.button1Link}
+        button2Link={recreationWellness.button2Link}
         isAdmin={isAdmin}
         onEdit={() => handleEditSection('section4')}
         onEditCategory={() => handleEditCategorySection('recreationWellness')}
@@ -242,12 +317,13 @@ export default function HomePageContent() {
 
       {/* Section 5: Product Showcase with T SHIRT GALLERY */}
       <ProductShowcaseSection
-        imageUrl={section5.imageUrl}
-        headerText={categorySections.tShirtGallery.title}
-        button1Text={categorySections.tShirtGallery.button1Text}
-        button2Text={categorySections.tShirtGallery.button2Text}
-        button1Link={categorySections.tShirtGallery.button1Link}
-        button2Link={categorySections.tShirtGallery.button2Link}
+        imageUrl={section5.imageUrl || ''}
+        mobileImageUrl={section5.mobileImageUrl}
+        headerText={tShirtGallery.title}
+        button1Text={tShirtGallery.button1Text}
+        button2Text={tShirtGallery.button2Text}
+        button1Link={tShirtGallery.button1Link}
+        button2Link={tShirtGallery.button2Link}
         isAdmin={isAdmin}
         onEdit={() => handleEditSection('section5')}
       />
