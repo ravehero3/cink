@@ -74,20 +74,31 @@ export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, but
       >
         {hasVideo ? (
           <>
-            <div className="w-full h-full overflow-hidden">
+            <div 
+              className="w-full h-full overflow-hidden absolute inset-0"
+              style={{
+                backgroundColor: 'white',
+              }}
+            >
               <video
                 ref={videoRef}
-                className="w-full h-full object-cover"
+                className="absolute"
                 style={{
-                  WebkitTransform: 'translateZ(0)',
-                  transform: 'translateZ(0)',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%) translateZ(0)',
+                  WebkitTransform: 'translate(-50%, -50%) translateZ(0)',
+                  minWidth: '100%',
+                  minHeight: '100%',
+                  width: isMobile ? 'auto' : '100%',
+                  height: isMobile ? '100%' : 'auto',
+                  objectFit: 'cover',
                 }}
                 loop
                 autoPlay
                 muted
                 playsInline
                 preload="auto"
-                webkit-playsinline="true"
                 onError={() => setVideoError(true)}
               >
                 <source src={currentVideoUrl} type="video/mp4; codecs=avc1.42E01E,mp4a.40.2" />

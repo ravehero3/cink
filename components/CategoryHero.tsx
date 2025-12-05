@@ -25,7 +25,17 @@ export default function CategoryHero({ title, imageUrl }: CategoryHeroProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoError, setVideoError] = useState(false);
   const [videoLoaded, setVideoLoaded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const isVideo = imageUrl ? isVideoUrl(imageUrl) : false;
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     setVideoError(false);
@@ -51,7 +61,7 @@ export default function CategoryHero({ title, imageUrl }: CategoryHeroProps) {
 
   return (
     <div>
-      {/* White Title Bar - 4x header height */}
+      {/* White Title Bar - 4x header height (44px * 4 = 176px) */}
       <div 
         className="bg-white border-b border-black flex items-center justify-center"
         style={{ height: 'calc(4 * 44px)' }}
@@ -64,20 +74,33 @@ export default function CategoryHero({ title, imageUrl }: CategoryHeroProps) {
         </h1>
       </div>
 
-      {/* Hero Media - 50vh height */}
+      {/* Hero Media - square on mobile, 50vh on desktop */}
       {imageUrl && (
         <div 
           className="w-full border-b border-black bg-white relative overflow-hidden"
-          style={{ height: '50vh' }}
+          style={{ 
+            height: isMobile ? '100vw' : '50vh',
+            maxHeight: isMobile ? '100vw' : 'none',
+          }}
         >
-          <div className="w-full h-full flex items-center justify-center">
+          <div 
+            className="absolute inset-0 overflow-hidden"
+            style={{ backgroundColor: 'white' }}
+          >
             {showVideo && (
               <video
                 ref={videoRef}
-                className="h-full object-cover absolute inset-0 w-full md:w-full"
+                className="absolute"
                 style={{
-                  aspectRatio: 'auto',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%) translateZ(0)',
+                  WebkitTransform: 'translate(-50%, -50%) translateZ(0)',
                   minWidth: '100%',
+                  minHeight: '100%',
+                  width: isMobile ? 'auto' : '100%',
+                  height: isMobile ? '100%' : 'auto',
+                  objectFit: 'cover',
                 }}
                 loop
                 autoPlay
@@ -95,7 +118,17 @@ export default function CategoryHero({ title, imageUrl }: CategoryHeroProps) {
               <img
                 src={imageUrl}
                 alt={title}
-                className={`w-full h-full object-cover ${showVideo && videoLoaded ? 'hidden' : ''}`}
+                className={`absolute ${showVideo && videoLoaded ? 'hidden' : ''}`}
+                style={{
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  minWidth: '100%',
+                  minHeight: '100%',
+                  width: isMobile ? 'auto' : '100%',
+                  height: isMobile ? '100%' : 'auto',
+                  objectFit: 'cover',
+                }}
                 onError={() => {}}
               />
             )}

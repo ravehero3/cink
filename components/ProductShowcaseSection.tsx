@@ -41,14 +41,19 @@ export default function ProductShowcaseSection({
 
   return (
     <section 
-      className="w-full relative bg-white overflow-hidden"
+      className="w-full relative bg-white overflow-hidden border-b border-black"
       style={{
         height: isMobile ? '100vw' : '80vh',
         maxHeight: isMobile ? '100vw' : 'none',
       }}
     >
       {currentImageUrl ? (
-        <div className="w-full h-full relative overflow-hidden">
+        <div 
+          className="absolute inset-0 overflow-hidden"
+          style={{
+            backgroundColor: 'white',
+          }}
+        >
           <Image
             src={currentImageUrl}
             alt="Product Showcase"
@@ -58,13 +63,14 @@ export default function ProductShowcaseSection({
             priority
             style={{
               WebkitTransform: 'translateZ(0)',
-              transform: 'translateZ(0)'
+              transform: 'translateZ(0)',
+              objectPosition: 'center center',
             }}
           />
         </div>
       ) : (
         <div className="w-full h-full flex items-center justify-center">
-          <p className="text-xl text-gray-400">No image uploaded</p>
+          <p className="text-xl">No image uploaded</p>
         </div>
       )}
 
