@@ -5,20 +5,42 @@ A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz), d
 
 ## Recent Changes (December 5, 2025)
 
-### Mobile Responsiveness - Phase 5 (Latest Fixes)
+### Cross-Browser & Mobile Fixes (Latest Update)
+**Chrome Order Creation Fix:**
+- Fixed Chrome-specific issue where order creation failed due to NaN totalPrice values
+- Added client-side validation to sanitize numeric values before API submission
+- Added server-side validation to reject and log invalid totalPrice payloads
+- Chrome's locale-sensitive number parsing could cause NaN propagation; now properly guarded
+
+**Safari Video Fix:**
+- Improved video playback compatibility for Safari browsers
+- Added explicit H.264 codec specification for better Safari support
+- Added webkit-playsinline attribute for iOS compatibility
+- Implemented video error handling with graceful fallback
+- Videos now auto-retry playback if initial attempt fails
+
+**Mobile Video/Image Cutout Support:**
+- Added `mobileVideoUrl` prop to VideoSection component for mobile-optimized videos
+- Added `mobileImageUrl` prop to ProductShowcaseSection component for mobile-optimized images
+- Components detect screen size and automatically switch to mobile assets when provided
+- Desktop layouts remain unchanged when mobile assets are not specified
+
+### Mobile Responsiveness - Phase 5 (Additional UI Fixes)
 **Product Grid Mobile:**
-- Reduced gap between product image and text to 8px on mobile (pt-2)
+- Further reduced gap between product image and text to 4px on mobile (pt-1)
 
 **Info Pages Mobile Width:**
 - All 7 info pages now use full width with 16px padding on mobile
 - Pattern: `w-full px-4 md:w-1/3 md:px-0`
 - Pages fixed: sledování objednávky, FAQ, vrácení zboží, právní informace, ochrana osobních údajů, cookies, nastavení cookies
 
-**Chrome Payment Redirect Fix:**
-- Fixed Chrome-specific issue where payment gateway redirect was being blocked
-- Changed `window.location.href` to `queueMicrotask(() => window.location.assign())`
-- Chrome blocks immediate cross-site navigation from pending fetch promises; microtask wrapper ensures navigation executes after fetch resolution
-- Safari continues to work as before
+**Doručení Page Mobile Text:**
+- Fixed text width on mobile - now uses 90% width instead of 33.33%
+- Prevents excessive text wrapping on narrow screens
+
+**Cookie Settings Button:**
+- Mobile: Shows "ULOŽIT" (shorter text fits better)
+- Desktop: Shows "ULOŽIT NASTAVENÍ" (full text)
 
 ---
 
