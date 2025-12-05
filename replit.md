@@ -5,7 +5,32 @@ A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz), d
 
 ## Recent Changes (December 5, 2025)
 
-### Cross-Browser & Mobile Fixes (Latest Update)
+### Enhanced Error Logging & Validation (Latest Update)
+**Order Creation Endpoint (`/api/orders/create`):**
+- Added unique error IDs (ORD-xxx format) for correlating user reports with server logs
+- Implemented timestamped logging with logInfo/logError helpers
+- Step-by-step logging covers: body parsing, validation, promo codes, order creation, Packeta shipment, email, payment
+- Comprehensive validation: empty carts, invalid emails, missing fields, NaN prices
+- Specific Prisma error code handling (P2002, P1001, P1002) with user-friendly messages
+- Isolated external service failures (Packeta, Resend) to prevent cascading failures
+- All error messages in Czech for end users
+
+**GoPay Payment Endpoint (`/api/gopay/create-payment`):**
+- Added unique error IDs (PAY-xxx format) for tracking
+- Step-by-step logging: OAuth token fetch, payment creation
+- Input validation: orderNumber, amount (rejects NaN values)
+- Network error handling with graceful fallbacks
+- Input sanitization with fallback values
+- Clear Czech error messages
+
+**Technical Notes:**
+- Error IDs follow format: `ORD-{timestamp}-{random}` or `PAY-{timestamp}-{random}`
+- Sensitive data protected: only partial GoPay ID logged, no secrets exposed
+- Non-critical failures (promo codes, email, Packeta) don't block order creation
+
+---
+
+### Cross-Browser & Mobile Fixes
 **Chrome Order Creation Fix:**
 - Fixed Chrome-specific issue where order creation failed due to NaN totalPrice values
 - Added client-side validation to sanitize numeric values before API submission
