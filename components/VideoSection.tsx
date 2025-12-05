@@ -60,10 +60,12 @@ export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, but
 
   const currentVideoUrl = isMobile && mobileVideoUrl ? mobileVideoUrl : videoUrl;
 
+  const hasVideo = currentVideoUrl && !videoError;
+
   return (
     <>
-      <section className="w-full relative bg-black border-b border-black min-h-[50vh] md:h-[80vh]">
-        {currentVideoUrl && !videoError ? (
+      <section className={`w-full relative border-b border-black min-h-[50vh] md:h-[80vh] ${hasVideo ? 'bg-black' : 'bg-white'}`}>
+        {hasVideo ? (
           <>
             <video
               ref={videoRef}
@@ -112,11 +114,11 @@ export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, but
         ) : (
           <>
             <div className="w-full h-full flex items-center justify-center text-white">
-              <p className="text-xl">No video uploaded</p>
+              <p className="text-xl text-white">No video uploaded</p>
             </div>
             {headerText && (
               <div className="absolute bottom-2 left-0 right-0 flex flex-col items-center px-4">
-                <h2 className="uppercase text-white mb-[8px]" style={{
+                <h2 className="uppercase text-black mb-[8px]" style={{
                   fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontSize: '22px',
                   fontWeight: 700,
@@ -141,14 +143,14 @@ export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, but
           <div className="absolute top-4 right-4 flex gap-2">
             <button
               onClick={onEdit}
-              className="px-2 py-1 bg-white text-black text-xs uppercase hover:bg-black hover:text-white transition-colors border border-white"
+              className={`px-2 py-1 text-xs uppercase transition-colors border ${hasVideo ? 'bg-white text-black border-white hover:bg-black hover:text-white' : 'bg-black text-white border-black hover:bg-white hover:text-black'}`}
             >
               Edit Video
             </button>
             {onEditCategory && (
               <button
                 onClick={onEditCategory}
-                className="px-2 py-1 bg-white text-black text-xs uppercase hover:bg-black hover:text-white transition-colors border border-white"
+                className={`px-2 py-1 text-xs uppercase transition-colors border ${hasVideo ? 'bg-white text-black border-white hover:bg-black hover:text-white' : 'bg-black text-white border-black hover:bg-white hover:text-black'}`}
               >
                 Edit Section
               </button>
