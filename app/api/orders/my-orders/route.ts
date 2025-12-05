@@ -26,6 +26,7 @@ export async function GET(request: NextRequest) {
       select: {
         id: true,
         orderNumber: true,
+        securityToken: true,
         createdAt: true,
         totalPrice: true,
         status: true,

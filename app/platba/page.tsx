@@ -42,6 +42,7 @@ function PlatbaPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const orderId = searchParams.get('order');
+  const token = searchParams.get('token');
 
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
@@ -54,16 +55,17 @@ function PlatbaPageContent() {
 
   useEffect(() => {
     if (!orderId) {
-      // No order ID in URL, redirect to cart
       window.location.href = '/kosik';
       return;
     }
 
     const fetchOrder = async () => {
       try {
-        const response = await fetch(`/api/orders/${orderId}`);
+        const tokenParam = token ? `?token=${token}` : '';
+        const response = await fetch(`/api/orders/${orderId}${tokenParam}`);
         if (!response.ok) {
-          throw new Error('Objednávka nebyla nalezena');
+          const data = await response.json();
+          throw new Error(data.error || 'Objednávka nebyla nalezena');
         }
         const data = await response.json();
         setOrder(data);
@@ -75,7 +77,7 @@ function PlatbaPageContent() {
     };
 
     fetchOrder();
-  }, [orderId]);
+  }, [orderId, token]);
 
   const handlePayment = async () => {
     if (!order) return;

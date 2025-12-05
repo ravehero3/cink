@@ -167,7 +167,7 @@ export default function CheckoutPage() {
       sessionStorage.removeItem('checkoutData');
 
       // Redirect to payment page where customer can review order and select payment method
-      window.location.href = `/platba?order=${orderData.orderNumber}`;
+      window.location.href = `/platba?order=${orderData.orderNumber}&token=${orderData.securityToken}`;
     } catch (error) {
       alert('Došlo k chybě. Zkuste to prosím znovu.');
       setLoading(false);

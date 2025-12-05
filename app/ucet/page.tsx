@@ -9,9 +9,11 @@ import Image from 'next/image';
 interface Order {
   id: string;
   orderNumber: string;
+  securityToken: string;
   createdAt: string;
   totalPrice: number;
   status: string;
+  paymentStatus: string;
   items: any[];
 }
 
@@ -145,34 +147,61 @@ export default function AccountPage() {
               </div>
             ) : (
               <div className="space-y-6">
-                {orders.map((order) => (
-                  <div key={order.id} className="border border-black p-6">
-                    <div className="flex justify-between mb-4">
-                      <div>
-                        <p className="text-product-name font-bold mb-1">
-                          Objednávka #{order.orderNumber}
-                        </p>
-                        <p className="text-body">
-                          {new Date(order.createdAt).toLocaleDateString('cs-CZ')}
-                        </p>
+                {orders.map((order) => {
+                  const isPending = order.status === 'PENDING' && order.paymentStatus === 'PENDING';
+                  const paymentUrl = `/platba?order=${order.orderNumber}&token=${order.securityToken}`;
+                  
+                  return (
+                    <div 
+                      key={order.id} 
+                      className={`border border-black p-6 ${isPending ? 'cursor-pointer hover:bg-gray-50 transition-colors' : ''}`}
+                      onClick={() => {
+                        if (isPending) {
+                          router.push(paymentUrl);
+                        }
+                      }}
+                    >
+                      <div className="flex justify-between mb-4">
+                        <div>
+                          <p className="text-product-name font-bold mb-1">
+                            Objednávka #{order.orderNumber}
+                          </p>
+                          <p className="text-body">
+                            {new Date(order.createdAt).toLocaleDateString('cs-CZ')}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-product-name font-bold mb-1">{order.totalPrice} Kč</p>
+                          <p className="text-body">{statusLabels[order.status] || order.status}</p>
+                        </div>
                       </div>
-                      <div className="text-right">
-                        <p className="text-product-name font-bold mb-1">{order.totalPrice} Kč</p>
-                        <p className="text-body">{statusLabels[order.status] || order.status}</p>
+                      <div className="border-t border-black pt-4">
+                        {order.items.slice(0, 3).map((item: any, idx: number) => (
+                          <p key={idx} className="text-body">
+                            {item.name} - {item.size} ({item.quantity}x)
+                          </p>
+                        ))}
+                        {order.items.length > 3 && (
+                          <p className="text-body">+ {order.items.length - 3} další produkty</p>
+                        )}
                       </div>
-                    </div>
-                    <div className="border-t border-black pt-4">
-                      {order.items.slice(0, 3).map((item: any, idx: number) => (
-                        <p key={idx} className="text-body">
-                          {item.name} - {item.size} ({item.quantity}x)
-                        </p>
-                      ))}
-                      {order.items.length > 3 && (
-                        <p className="text-body">+ {order.items.length - 3} další produkty</p>
+                      {isPending && (
+                        <div className="flex justify-end mt-4">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              router.push(paymentUrl);
+                            }}
+                            className="bg-black text-white px-6 py-2 text-body uppercase hover:bg-gray-800 transition-colors"
+                            style={{ borderRadius: '4px' }}
+                          >
+                            ZAPLATIT OBJEDNÁVKU
+                          </button>
+                        </div>
                       )}
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>

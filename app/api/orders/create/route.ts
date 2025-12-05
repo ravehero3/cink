@@ -356,6 +356,7 @@ export async function POST(request: NextRequest) {
         success: true,
         orderId: order.id,
         orderNumber: order.orderNumber,
+        securityToken: order.securityToken,
         packetaPacketId,
         message: 'Objednávka byla úspěšně vytvořena',
       },
