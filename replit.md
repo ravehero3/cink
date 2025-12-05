@@ -44,3 +44,20 @@ The project is built using Next.js 14 (App Router) and TypeScript, with Tailwind
 - **Shipping Integration**: Zásilkovna (Packeta) API
 - **Email Service**: Resend API
 - **File Storage**: Cloudinary / Vercel Blob
+
+## Recent Changes (December 5, 2025)
+
+### Category Page Media Upload Fix
+**Fixed "Upravit médium" Button Upload:**
+- Fixed API endpoint path in CategoryClientPage.tsx: changed from non-existent `/api/admin/media/upload` to correct `/api/media/upload`
+- CategoryHero.tsx now supports both video and image display (previously only showed images)
+- Video detection uses file extension matching (.mp4, .webm, .mov, .m4v) or Cloudinary video path
+- Safe fallback: shows image while video loads, falls back to image if video fails
+- Works for all category pages: VOODOO808, SPACE LOVE, RECREATION WELLNESS, T SHIRT GALLERY
+
+**Removed Grayscale Filter:**
+- Removed `filter: grayscale(1) contrast(1.2)` from CategoryHero.tsx - banners now display in full color
+
+**Technical Notes:**
+- All media APIs (`/api/hero-sections`, `/api/category-sections`, `/api/categories`) are public - no admin authentication required
+- Admin-only content is limited to "Edit" buttons, not the media itself

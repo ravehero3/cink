@@ -91,9 +91,6 @@ export default function CategoryHero({ title, imageUrl }: CategoryHeroProps) {
               src={imageUrl}
               alt={title}
               className={`w-full h-full object-cover ${showVideo && videoLoaded ? 'hidden' : ''}`}
-              style={{ 
-                filter: 'grayscale(1) contrast(1.2)',
-              }}
               onError={() => {}}
             />
           )}
