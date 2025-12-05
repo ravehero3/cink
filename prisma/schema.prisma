@@ -74,7 +74,7 @@ model Category {
 model Order {
   id                String        @id @default(uuid())
   orderNumber       String        @unique
-  securityToken     String        @default(uuid())
+  securityToken     String        @default(dbgenerated("gen_random_uuid()"))
   userId            String?
   user              User?         @relation(fields: [userId], references: [id])
   customerEmail     String
