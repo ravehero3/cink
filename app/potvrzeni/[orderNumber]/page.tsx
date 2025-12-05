@@ -94,7 +94,7 @@ export default function OrderConfirmationPage() {
       <div className="max-w-2xl mx-auto px-8 py-16">
         <div className="border border-black p-8 bg-white">
           <h1 className="text-title font-bold text-center mb-8">
-            {isPaid ? 'DĚKUJEME ZA OBJEDNÁVKU!' : 'VAŠE OBJEDNÁVKA JE PŘIPRAVENA'}
+            {isPaid ? 'DĚKUJEME ZA OBJEDNÁVKU!' : 'PŘIPRAVUJEME VAŠÍ OBJEDNÁVKU'}
           </h1>
 
           <div className="text-center mb-8">

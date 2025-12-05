@@ -103,8 +103,8 @@ export default function CartPage() {
   if (items.length === 0) {
     return (
       <div className="min-h-screen bg-white flex flex-col relative">
-        {/* Vertical lines at product edges (995px wide, centered) */}
-        <div style={{
+        {/* Vertical lines at product edges (995px wide, centered) - hidden on mobile */}
+        <div className="hidden md:block" style={{
           position: 'absolute',
           left: 'calc(50vw - 497.5px)',
           top: 0,
@@ -113,7 +113,7 @@ export default function CartPage() {
           backgroundColor: '#000',
           zIndex: 5
         }} />
-        <div style={{
+        <div className="hidden md:block" style={{
           position: 'absolute',
           right: 'calc(50vw - 497.5px)',
           top: 0,
@@ -124,7 +124,7 @@ export default function CartPage() {
         }} />
 
         {/* Header - same as when products exist */}
-        <div style={{ position: 'relative', width: '995px', margin: '0 auto', height: '226px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
+        <div className="w-full md:w-[995px]" style={{ position: 'relative', margin: '0 auto', height: '226px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
           <h1 className="text-center uppercase" style={{
             fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
             fontSize: '22px',
@@ -139,9 +139,8 @@ export default function CartPage() {
         </div>
 
         {/* Navigation Panel - with 995px wide top and bottom borders */}
-        <div style={{
+        <div className="w-full md:w-[995px]" style={{
           position: 'relative',
-          width: '995px',
           margin: '0 auto',
           height: '44px',
           display: 'flex',
@@ -249,8 +248,8 @@ export default function CartPage() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col relative">
-      {/* Vertical lines at product edges (995px wide, centered in 50% container) - end at footer */}
-      <div style={{
+      {/* Vertical lines at product edges (995px wide, centered in 50% container) - hidden on mobile */}
+      <div className="hidden md:block" style={{
         position: 'absolute',
         left: 'calc(50vw - 497.5px)',
         top: 0,
@@ -259,7 +258,7 @@ export default function CartPage() {
         backgroundColor: '#000',
         zIndex: 5
       }} />
-      <div style={{
+      <div className="hidden md:block" style={{
         position: 'absolute',
         right: 'calc(50vw - 497.5px)',
         top: 0,
@@ -270,7 +269,7 @@ export default function CartPage() {
       }} />
 
       {/* Header - border handled by navigation panel */}
-      <div style={{ position: 'relative', width: '995px', margin: '0 auto', height: '226px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
+      <div className="w-full md:w-[995px]" style={{ position: 'relative', margin: '0 auto', height: '226px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
         <h1 className="text-center uppercase" style={{
           fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
           fontSize: '22px',
@@ -284,10 +283,9 @@ export default function CartPage() {
         </h1>
       </div>
 
-      {/* Navigation Panel - with 700px wide top and bottom borders */}
-      <div style={{
+      {/* Navigation Panel - with 995px wide top and bottom borders */}
+      <div className="w-full md:w-[995px]" style={{
         position: 'relative',
-        width: '995px',
         margin: '0 auto',
         height: '44px',
         display: 'flex',
@@ -299,22 +297,22 @@ export default function CartPage() {
         zIndex: 10
       }}>
         {/* Top border - 995px wide to extend to vertical lines */}
-        <div style={{
+        <div className="w-full md:w-[995px]" style={{
           position: 'absolute',
           top: 0,
-          left: 'calc(50% - 497.5px)',
-          width: '995px',
+          left: '50%',
+          transform: 'translateX(-50%)',
           height: '1px',
           backgroundColor: '#000',
           zIndex: 1
         }} />
         
         {/* Bottom border - 995px wide to extend to vertical lines */}
-        <div style={{
+        <div className="w-full md:w-[995px]" style={{
           position: 'absolute',
           bottom: 0,
-          left: 'calc(50% - 497.5px)',
-          width: '995px',
+          left: '50%',
+          transform: 'translateX(-50%)',
           height: '1px',
           backgroundColor: '#000',
           zIndex: 1
@@ -374,13 +372,12 @@ export default function CartPage() {
       </div>
 
       <div className="flex-1 flex justify-center" style={{ paddingBottom: '80px' }}>
-        <div style={{ width: '995px', position: 'relative' }}>
+        <div className="w-full md:w-[995px]" style={{ position: 'relative' }}>
           {items.map((item, index) => (
             <div
               key={`${item.productId}-${item.size}`}
+              className="w-full md:w-[995px] h-auto md:h-[270px]"
               style={{
-                width: '995px',
-                height: '270px',
                 margin: '0 auto',
                 borderTop: index === 0 ? '1px solid #000' : 'none',
                 borderBottom: '1px solid #000',
@@ -391,11 +388,9 @@ export default function CartPage() {
                 justifyContent: 'space-between'
               }}
             >
-              <div style={{ display: 'flex', gap: '16px', marginBottom: '16px' }}>
+              <div className="flex flex-col md:flex-row gap-4 mb-4">
                 <Link href={`/produkty/${item.slug}`} style={{ flexShrink: 0 }}>
-                  <div style={{
-                    width: '160px',
-                    height: '192px',
+                  <div className="w-full md:w-[160px] h-[200px] md:h-[192px]" style={{
                     border: '1px solid #000',
                     backgroundColor: '#fff',
                     display: 'flex',

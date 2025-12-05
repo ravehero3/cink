@@ -324,9 +324,9 @@ export default function ProductDetailPage() {
               </>
             )}
 
-            {/* Dot indicators - 4x smaller and positioned 64px above product title on mobile only */}
+            {/* Dot indicators - 4x smaller and positioned 24px above product title on mobile only */}
             {product.images.length > 1 && (
-              <div className="absolute left-1/2 -translate-x-1/2 flex gap-[2px]" style={{ bottom: '64px' }}>
+              <div className="absolute left-1/2 -translate-x-1/2 flex gap-[2px]" style={{ bottom: '24px' }}>
                 {product.images.map((_, index) => (
                   <button
                     key={index}

@@ -327,8 +327,8 @@ export default function SavedProductsPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-white relative">
-        <div style={{position: 'absolute', left: 'calc(50vw - 350px)', top: 0, bottom: 0, width: '1px', backgroundColor: '#000', zIndex: 5, pointerEvents: 'none'}} />
-        <div style={{position: 'absolute', right: 'calc(50vw - 350px)', top: 0, bottom: 0, width: '1px', backgroundColor: '#000', zIndex: 5, pointerEvents: 'none'}} />
+        <div className="hidden md:block" style={{position: 'absolute', left: 'calc(50vw - 350px)', top: 0, bottom: 0, width: '1px', backgroundColor: '#000', zIndex: 5, pointerEvents: 'none'}} />
+        <div className="hidden md:block" style={{position: 'absolute', right: 'calc(50vw - 350px)', top: 0, bottom: 0, width: '1px', backgroundColor: '#000', zIndex: 5, pointerEvents: 'none'}} />
       </div>
     );
   }
@@ -336,8 +336,8 @@ export default function SavedProductsPage() {
   if (products.length === 0) {
     return (
       <div className="min-h-screen bg-white flex flex-col relative">
-        {/* Vertical lines at 700px apart (centered) */}
-        <div style={{
+        {/* Vertical lines at 700px apart (centered) - hidden on mobile */}
+        <div className="hidden md:block" style={{
           position: 'absolute',
           left: 'calc(50vw - 350px)',
           top: 0,
@@ -347,7 +347,7 @@ export default function SavedProductsPage() {
           zIndex: 5,
           pointerEvents: 'none'
         }} />
-        <div style={{
+        <div className="hidden md:block" style={{
           position: 'absolute',
           right: 'calc(50vw - 350px)',
           top: 0,
@@ -359,7 +359,7 @@ export default function SavedProductsPage() {
         }} />
 
         {/* Header - same as when products exist */}
-        <div style={{ position: 'relative', width: '995px', margin: '0 auto', height: '226px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
+        <div className="w-full md:w-[995px]" style={{ position: 'relative', margin: '0 auto', height: '226px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
           <h1 className="text-center uppercase" style={{
             fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
             fontSize: '22px',
@@ -374,9 +374,8 @@ export default function SavedProductsPage() {
         </div>
 
         {/* Navigation Panel - with 700px wide top and bottom borders */}
-        <div style={{
+        <div className="w-full md:w-[995px]" style={{
           position: 'relative',
-          width: '995px',
           margin: '0 auto',
           height: '44px',
           display: 'flex',
@@ -388,22 +387,22 @@ export default function SavedProductsPage() {
           zIndex: 10
         }}>
           {/* Top border - 700px wide to match vertical lines */}
-          <div style={{
+          <div className="w-full md:w-[700px]" style={{
             position: 'absolute',
             top: 0,
-            left: 'calc(50% - 350px)',
-            width: '700px',
+            left: '50%',
+            transform: 'translateX(-50%)',
             height: '1px',
             backgroundColor: '#000',
             zIndex: 1
           }} />
           
           {/* Bottom border - 700px wide to match vertical lines */}
-          <div style={{
+          <div className="w-full md:w-[700px]" style={{
             position: 'absolute',
             bottom: 0,
-            left: 'calc(50% - 350px)',
-            width: '700px',
+            left: '50%',
+            transform: 'translateX(-50%)',
             height: '1px',
             backgroundColor: '#000',
             zIndex: 1
@@ -464,7 +463,7 @@ export default function SavedProductsPage() {
         </div>
 
         <div className="flex-1 flex justify-center">
-          <div style={{ width: '700px', position: 'relative' }}>
+          <div className="w-full md:w-[700px] px-4 md:px-0" style={{ position: 'relative' }}>
             <div className="flex flex-col items-center justify-center px-8 text-center" style={{ minHeight: '300px' }}>
               <p style={{
                 fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -484,8 +483,8 @@ export default function SavedProductsPage() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col relative">
-      {/* Vertical lines at 700px apart (centered) - end at footer */}
-      <div style={{
+      {/* Vertical lines at 700px apart (centered) - hidden on mobile */}
+      <div className="hidden md:block" style={{
         position: 'absolute',
         left: 'calc(50vw - 350px)',
         top: 0,
@@ -495,7 +494,7 @@ export default function SavedProductsPage() {
         zIndex: 5,
         pointerEvents: 'none'
       }} />
-      <div style={{
+      <div className="hidden md:block" style={{
         position: 'absolute',
         right: 'calc(50vw - 350px)',
         top: 0,
@@ -506,10 +505,11 @@ export default function SavedProductsPage() {
         pointerEvents: 'none'
       }} />
 
-      {/* Horizontal lines at 700px intervals (starting after banner + nav) */}
+      {/* Horizontal lines at 700px intervals (starting after banner + nav) - hidden on mobile */}
       {[...Array(18)].map((_, i) => (
         <div
           key={`h-line-${i}`}
+          className="hidden md:block"
           style={{
             position: 'fixed',
             left: 'calc(50vw - 350px)',
@@ -524,7 +524,7 @@ export default function SavedProductsPage() {
       ))}
 
       {/* Header - border handled by navigation panel */}
-      <div style={{ position: 'relative', width: '995px', margin: '0 auto', height: '226px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
+      <div className="w-full md:w-[995px]" style={{ position: 'relative', margin: '0 auto', height: '226px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
         <h1 className="text-center uppercase" style={{
           fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
           fontSize: '22px',
@@ -539,9 +539,8 @@ export default function SavedProductsPage() {
       </div>
 
       {/* Navigation Panel - with 700px wide top and bottom borders */}
-      <div style={{
+      <div className="w-full md:w-[995px]" style={{
         position: 'relative',
-        width: '995px',
         margin: '0 auto',
         height: '44px',
         display: 'flex',
@@ -553,22 +552,22 @@ export default function SavedProductsPage() {
         zIndex: 10
       }}>
         {/* Top border - 700px wide to match vertical lines */}
-        <div style={{
+        <div className="w-full md:w-[700px]" style={{
           position: 'absolute',
           top: 0,
-          left: 'calc(50% - 350px)',
-          width: '700px',
+          left: '50%',
+          transform: 'translateX(-50%)',
           height: '1px',
           backgroundColor: '#000',
           zIndex: 1
         }} />
         
         {/* Bottom border - 700px wide to match vertical lines */}
-        <div style={{
+        <div className="w-full md:w-[700px]" style={{
           position: 'absolute',
           bottom: 0,
-          left: 'calc(50% - 350px)',
-          width: '700px',
+          left: '50%',
+          transform: 'translateX(-50%)',
           height: '1px',
           backgroundColor: '#000',
           zIndex: 1
@@ -629,7 +628,7 @@ export default function SavedProductsPage() {
       </div>
 
       <div className="flex-1 flex justify-center">
-        <div style={{ width: '700px', position: 'relative' }}>
+        <div className="w-full md:w-[700px] px-4 md:px-0" style={{ position: 'relative' }}>
           {/* Login Prompt - Only for unauthenticated users */}
           {status === 'unauthenticated' && (
             <div
@@ -691,11 +690,9 @@ export default function SavedProductsPage() {
                 paddingBottom: '16px'
               }}
             >
-              <div style={{ display: 'flex', gap: '16px', marginBottom: '16px' }}>
+              <div className="flex flex-col md:flex-row gap-4 mb-4">
                 <Link href={`/produkty/${product.slug}`} style={{ flexShrink: 0 }}>
-                  <div style={{
-                    width: '160px',
-                    height: '192px',
+                  <div className="w-full md:w-[160px] h-[200px] md:h-[192px]" style={{
                     border: '1px solid #000',
                     backgroundColor: '#fff',
                     display: 'flex',

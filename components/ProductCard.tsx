@@ -156,7 +156,7 @@ export default function ProductCard({
         )}
       </div>
       
-      <div className="text-center" style={{ position: 'absolute', bottom: '64px', left: 0, right: 0 }}>
+      <div className="text-center relative md:absolute md:bottom-16 md:left-0 md:right-0 py-2 md:py-0">
         {/* Title or Dot Indicators */}
         {isHovered && maxImages > 1 ? (
           <div 
