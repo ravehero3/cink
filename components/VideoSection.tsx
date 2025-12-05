@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { X, Plus } from 'lucide-react';
 
 interface Product {
   id: string;
@@ -25,13 +26,16 @@ interface VideoSectionProps {
   isAdmin?: boolean;
   onEdit?: () => void;
   onEditCategory?: () => void;
+  onDelete?: () => void;
+  onAdd?: () => void;
+  isLastSection?: boolean;
   sectionId: string;
   showProducts?: boolean;
   products?: Product[];
   isLoading?: boolean;
 }
 
-export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, button1Text, button2Text, button1Link, button2Link, textColor = 'black', isAdmin, onEdit, onEditCategory, sectionId, showProducts, products = [], isLoading = false }: VideoSectionProps) {
+export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, button1Text, button2Text, button1Link, button2Link, textColor = 'black', isAdmin, onEdit, onEditCategory, onDelete, onAdd, isLastSection, sectionId, showProducts, products = [], isLoading = false }: VideoSectionProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoError, setVideoError] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -155,6 +159,16 @@ export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, but
           </>
         )}
 
+        {isAdmin && onDelete && (
+          <button
+            onClick={onDelete}
+            className="absolute top-4 left-4 w-8 h-8 flex items-center justify-center bg-white text-black border border-black hover:bg-black hover:text-white transition-colors z-10"
+            title="Delete section"
+          >
+            <X size={16} />
+          </button>
+        )}
+
         {isAdmin && (
           <div className="absolute top-4 right-4 flex gap-2">
             <button
@@ -172,6 +186,16 @@ export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, but
               </button>
             )}
           </div>
+        )}
+
+        {isAdmin && onAdd && isLastSection && (
+          <button
+            onClick={onAdd}
+            className="absolute bottom-4 right-4 w-8 h-8 flex items-center justify-center bg-white text-black border border-black hover:bg-black hover:text-white transition-colors z-10"
+            title="Add new section"
+          >
+            <Plus size={16} />
+          </button>
         )}
       </section>
       

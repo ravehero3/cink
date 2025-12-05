@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X, Image as ImageIcon } from 'lucide-react';
 import MediaSelector from './MediaSelector';
 
@@ -10,6 +10,7 @@ interface EditSectionModalProps {
   sectionType: 'video' | 'product';
   currentData: any;
   onSave: (data: any) => void;
+  onTypeChange?: (newType: 'VIDEO' | 'IMAGE') => void;
 }
 
 export default function EditSectionModal({
@@ -17,10 +18,17 @@ export default function EditSectionModal({
   onClose,
   sectionType,
   currentData,
-  onSave
+  onSave,
+  onTypeChange
 }: EditSectionModalProps) {
   const [formData, setFormData] = useState(currentData);
   const [showMediaSelector, setShowMediaSelector] = useState(false);
+  const [localSectionType, setLocalSectionType] = useState<'video' | 'product'>(sectionType);
+
+  useEffect(() => {
+    setFormData(currentData);
+    setLocalSectionType(sectionType);
+  }, [currentData, sectionType, isOpen]);
 
   if (!isOpen) return null;
 
@@ -30,12 +38,19 @@ export default function EditSectionModal({
     onClose();
   };
 
+  const handleTypeToggle = (newType: 'video' | 'product') => {
+    setLocalSectionType(newType);
+    if (onTypeChange) {
+      onTypeChange(newType === 'video' ? 'VIDEO' : 'IMAGE');
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-white max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-white border-b border-black p-4 flex justify-between items-center">
           <h2 className="text-2xl font-bold uppercase">
-            Edit {sectionType === 'video' ? 'Video' : 'Product Showcase'} Section
+            Edit {localSectionType === 'video' ? 'Video' : 'Image'} Section
           </h2>
           <button onClick={onClose} className="p-2 hover:bg-gray-100">
             <X size={24} />
@@ -43,7 +58,40 @@ export default function EditSectionModal({
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
-          {sectionType === 'video' ? (
+          {onTypeChange && (
+            <div>
+              <label className="block text-sm font-bold mb-2">Section Type</label>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => handleTypeToggle('video')}
+                  className={`flex-1 px-4 py-2 border-2 font-bold uppercase transition-colors ${
+                    localSectionType === 'video'
+                      ? 'bg-black text-white border-black'
+                      : 'bg-white text-black border-black hover:bg-gray-100'
+                  }`}
+                >
+                  Video
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleTypeToggle('product')}
+                  className={`flex-1 px-4 py-2 border-2 font-bold uppercase transition-colors ${
+                    localSectionType === 'product'
+                      ? 'bg-black text-white border-black'
+                      : 'bg-white text-black border-black hover:bg-gray-100'
+                  }`}
+                >
+                  Image
+                </button>
+              </div>
+              <p className="text-xs text-gray-600 mt-1">
+                Toggle between video and image section type
+              </p>
+            </div>
+          )}
+
+          {localSectionType === 'video' ? (
             <>
               <div>
                 <label className="block text-sm font-bold mb-2">Video URL</label>
@@ -67,6 +115,17 @@ export default function EditSectionModal({
                 <p className="text-xs text-gray-600 mt-1">
                   Enter a URL or select from your uploaded media
                 </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold mb-2">Mobile Video URL (Optional)</label>
+                <input
+                  type="url"
+                  value={formData.mobileVideoUrl || ''}
+                  onChange={(e) => setFormData({ ...formData, mobileVideoUrl: e.target.value })}
+                  className="w-full px-4 py-2 border-2 border-black"
+                  placeholder="https://example.com/video-mobile.mp4"
+                />
               </div>
 
               <div>
@@ -166,7 +225,7 @@ export default function EditSectionModal({
           ) : (
             <>
               <div>
-                <label className="block text-sm font-bold mb-2">Product Image URL</label>
+                <label className="block text-sm font-bold mb-2">Image URL</label>
                 <div className="flex gap-2">
                   <input
                     type="url"
@@ -187,6 +246,17 @@ export default function EditSectionModal({
                 <p className="text-xs text-gray-600 mt-1">
                   Enter a URL or select from your uploaded media
                 </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold mb-2">Mobile Image URL (Optional)</label>
+                <input
+                  type="url"
+                  value={formData.mobileImageUrl || ''}
+                  onChange={(e) => setFormData({ ...formData, mobileImageUrl: e.target.value })}
+                  className="w-full px-4 py-2 border-2 border-black"
+                  placeholder="https://example.com/image-mobile.jpg"
+                />
               </div>
 
               <div>
@@ -245,6 +315,43 @@ export default function EditSectionModal({
                   />
                 </div>
               </div>
+
+              <div>
+                <label className="block text-sm font-bold mb-2">Text Color</label>
+                <div className="flex gap-4">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="textColor"
+                      value="black"
+                      checked={formData.textColor !== 'white'}
+                      onChange={() => setFormData({ ...formData, textColor: 'black' })}
+                      className="w-4 h-4"
+                    />
+                    <span className="flex items-center gap-2">
+                      <span className="w-6 h-6 bg-black border border-black"></span>
+                      Black
+                    </span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="textColor"
+                      value="white"
+                      checked={formData.textColor === 'white'}
+                      onChange={() => setFormData({ ...formData, textColor: 'white' })}
+                      className="w-4 h-4"
+                    />
+                    <span className="flex items-center gap-2">
+                      <span className="w-6 h-6 bg-white border border-black"></span>
+                      White
+                    </span>
+                  </label>
+                </div>
+                <p className="text-xs text-gray-600 mt-1">
+                  Choose text color based on video/image background
+                </p>
+              </div>
             </>
           )}
 
@@ -268,9 +375,9 @@ export default function EditSectionModal({
 
       {showMediaSelector && (
         <MediaSelector
-          type={sectionType === 'video' ? 'VIDEO' : 'IMAGE'}
+          type={localSectionType === 'video' ? 'VIDEO' : 'IMAGE'}
           onSelect={(media: any) => {
-            if (sectionType === 'video') {
+            if (localSectionType === 'video') {
               setFormData({ ...formData, videoUrl: media.url });
             } else {
               setFormData({ ...formData, imageUrl: media.url });

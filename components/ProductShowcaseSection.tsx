@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { X, Plus } from 'lucide-react';
 
 interface ProductShowcaseSectionProps {
   imageUrl: string;
@@ -11,8 +12,12 @@ interface ProductShowcaseSectionProps {
   button2Text: string;
   button1Link: string;
   button2Link: string;
+  textColor?: 'black' | 'white';
   isAdmin?: boolean;
   onEdit?: () => void;
+  onDelete?: () => void;
+  onAdd?: () => void;
+  isLastSection?: boolean;
 }
 
 export default function ProductShowcaseSection({
@@ -23,8 +28,12 @@ export default function ProductShowcaseSection({
   button2Text,
   button1Link,
   button2Link,
+  textColor = 'black',
   isAdmin,
-  onEdit
+  onEdit,
+  onDelete,
+  onAdd,
+  isLastSection
 }: ProductShowcaseSectionProps) {
   const [isMobile, setIsMobile] = useState(false);
 
@@ -75,7 +84,7 @@ export default function ProductShowcaseSection({
       )}
 
       <div className="absolute bottom-2 left-0 right-0 flex flex-col items-center px-4">
-        <h2 className="uppercase text-black mb-[8px]" style={{
+        <h2 className={`uppercase mb-[8px] ${textColor === 'white' ? 'text-white' : 'text-black'}`} style={{
           fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
           fontSize: '22px',
           fontWeight: 700,
@@ -86,10 +95,20 @@ export default function ProductShowcaseSection({
           {headerText}
         </h2>
         <div className="flex gap-1">
-          <AnimatedButton text={button1Text} link={button1Link} />
-          <AnimatedButton text={button2Text} link={button2Link} />
+          <AnimatedButton text={button1Text} link={button1Link} textColor={textColor} />
+          <AnimatedButton text={button2Text} link={button2Link} textColor={textColor} />
         </div>
       </div>
+
+      {isAdmin && onDelete && (
+        <button
+          onClick={onDelete}
+          className="absolute top-4 left-4 w-8 h-8 flex items-center justify-center bg-white text-black border border-black hover:bg-black hover:text-white transition-colors z-10"
+          title="Delete section"
+        >
+          <X size={16} />
+        </button>
+      )}
 
       {isAdmin && (
         <div className="absolute top-4 right-4">
@@ -101,17 +120,31 @@ export default function ProductShowcaseSection({
           </button>
         </div>
       )}
+
+      {isAdmin && onAdd && isLastSection && (
+        <button
+          onClick={onAdd}
+          className="absolute bottom-4 right-4 w-8 h-8 flex items-center justify-center bg-white text-black border border-black hover:bg-black hover:text-white transition-colors z-10"
+          title="Add new section"
+        >
+          <Plus size={16} />
+        </button>
+      )}
     </section>
   );
 }
 
-function AnimatedButton({ text, link }: { text: string; link: string }) {
+function AnimatedButton({ text, link, textColor = 'black' }: { text: string; link: string; textColor?: 'black' | 'white' }) {
   const [isHovered, setIsHovered] = useState(false);
+
+  const buttonClasses = textColor === 'white' 
+    ? "relative overflow-hidden bg-white text-black font-normal uppercase tracking-tight transition-all border border-white text-sm"
+    : "relative overflow-hidden bg-white text-black font-normal uppercase tracking-tight transition-all border border-black text-sm";
 
   return (
     <a
       href={link}
-      className="relative overflow-hidden bg-white text-black font-normal uppercase tracking-tight transition-all border border-black text-sm"
+      className={buttonClasses}
       style={{ borderRadius: '4px', padding: '11.8px 25.6px' }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
