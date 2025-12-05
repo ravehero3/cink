@@ -188,7 +188,8 @@ export default function ProductCard({
               letterSpacing: '0.03em',
               fontStretch: 'condensed',
               lineHeight: '1.4',
-              marginBottom: '2px'
+              marginBottom: '2px',
+              textShadow: '-1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white'
             }}
           >
             {name}
@@ -235,7 +236,7 @@ export default function ProductCard({
         ) : !isHovered ? (
           <p 
             className="text-small"
-            style={{ marginBottom: '2px' }}
+            style={{ marginBottom: '2px', textShadow: '-1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white' }}
           >
             {colorCount} {getCzechColorPlural(colorCount)}
           </p>
@@ -258,7 +259,7 @@ export default function ProductCard({
             ))}
           </div>
         ) : (
-          <p className="text-small">{price} Kč</p>
+          <p className="text-small" style={{ textShadow: '-1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white' }}>{price} Kč</p>
         )}
       </div>
     </Link>
