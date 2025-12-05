@@ -21,6 +21,7 @@ interface VideoSectionProps {
   button2Text?: string;
   button1Link?: string;
   button2Link?: string;
+  textColor?: 'black' | 'white';
   isAdmin?: boolean;
   onEdit?: () => void;
   onEditCategory?: () => void;
@@ -30,7 +31,7 @@ interface VideoSectionProps {
   isLoading?: boolean;
 }
 
-export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, button1Text, button2Text, button1Link, button2Link, isAdmin, onEdit, onEditCategory, sectionId, showProducts, products = [], isLoading = false }: VideoSectionProps) {
+export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, button1Text, button2Text, button1Link, button2Link, textColor = 'black', isAdmin, onEdit, onEditCategory, sectionId, showProducts, products = [], isLoading = false }: VideoSectionProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoError, setVideoError] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -99,7 +100,7 @@ export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, but
             
             <div className="absolute bottom-2 left-0 right-0 flex flex-col items-center px-4">
               {headerText && (
-                <h2 className="uppercase text-black mb-[8px]" style={{
+                <h2 className={`uppercase mb-[8px] ${textColor === 'white' ? 'text-white' : 'text-black'}`} style={{
                   fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontSize: '22px',
                   fontWeight: 700,
@@ -112,20 +113,17 @@ export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, but
               )}
               {button1Text && button2Text && (
                 <div className="flex gap-1">
-                  <AnimatedButton text={button1Text} link={button1Link || '#'} />
-                  <AnimatedButton text={button2Text} link={button2Link || '#'} />
+                  <AnimatedButton text={button1Text} link={button1Link || '#'} textColor={textColor} />
+                  <AnimatedButton text={button2Text} link={button2Link || '#'} textColor={textColor} />
                 </div>
               )}
             </div>
           </>
         ) : (
           <>
-            <div className="w-full h-full flex items-center justify-center">
-              <p className="text-xl text-black/40">No video uploaded</p>
-            </div>
             {headerText && (
               <div className="absolute bottom-2 left-0 right-0 flex flex-col items-center px-4">
-                <h2 className="uppercase text-black mb-[8px]" style={{
+                <h2 className={`uppercase mb-[8px] ${textColor === 'white' ? 'text-white' : 'text-black'}`} style={{
                   fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontSize: '22px',
                   fontWeight: 700,
@@ -137,8 +135,8 @@ export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, but
                 </h2>
                 {button1Text && button2Text && (
                   <div className="flex gap-1">
-                    <AnimatedButton text={button1Text} link={button1Link || '#'} />
-                    <AnimatedButton text={button2Text} link={button2Link || '#'} />
+                    <AnimatedButton text={button1Text} link={button1Link || '#'} textColor={textColor} />
+                    <AnimatedButton text={button2Text} link={button2Link || '#'} textColor={textColor} />
                   </div>
                 )}
               </div>
@@ -213,13 +211,17 @@ export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, but
   );
 }
 
-function AnimatedButton({ text, link }: { text: string; link: string }) {
+function AnimatedButton({ text, link, textColor = 'black' }: { text: string; link: string; textColor?: 'black' | 'white' }) {
   const [isHovered, setIsHovered] = useState(false);
+  
+  const buttonClasses = textColor === 'white' 
+    ? "relative overflow-hidden bg-white text-black font-normal uppercase tracking-tight transition-all border border-white text-sm"
+    : "relative overflow-hidden bg-white text-black font-normal uppercase tracking-tight transition-all border border-black text-sm";
 
   return (
     <a
       href={link}
-      className="relative overflow-hidden bg-white text-black font-normal uppercase tracking-tight transition-all border border-black text-sm"
+      className={buttonClasses}
       style={{ borderRadius: '4px', padding: '11.8px 25.6px' }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}

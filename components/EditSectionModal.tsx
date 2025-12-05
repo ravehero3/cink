@@ -125,6 +125,43 @@ export default function EditSectionModal({
                   />
                 </div>
               </div>
+
+              <div>
+                <label className="block text-sm font-bold mb-2">Text Color</label>
+                <div className="flex gap-4">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="textColor"
+                      value="black"
+                      checked={formData.textColor !== 'white'}
+                      onChange={() => setFormData({ ...formData, textColor: 'black' })}
+                      className="w-4 h-4"
+                    />
+                    <span className="flex items-center gap-2">
+                      <span className="w-6 h-6 bg-black border border-black"></span>
+                      Black
+                    </span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="textColor"
+                      value="white"
+                      checked={formData.textColor === 'white'}
+                      onChange={() => setFormData({ ...formData, textColor: 'white' })}
+                      className="w-4 h-4"
+                    />
+                    <span className="flex items-center gap-2">
+                      <span className="w-6 h-6 bg-white border border-black"></span>
+                      White
+                    </span>
+                  </label>
+                </div>
+                <p className="text-xs text-gray-600 mt-1">
+                  Choose text color based on video/image background
+                </p>
+              </div>
             </>
           ) : (
             <>

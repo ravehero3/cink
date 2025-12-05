@@ -218,6 +218,7 @@ model HeroSection {
   button2Text     String?
   button1Link     String?
   button2Link     String?
+  textColor       String   @default("black")
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }

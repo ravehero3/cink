@@ -40,6 +40,7 @@ interface HeroSectionData {
   button2Text?: string;
   button1Link?: string;
   button2Link?: string;
+  textColor?: 'black' | 'white';
 }
 
 interface CategorySectionData {
@@ -82,11 +83,11 @@ const defaultCategorySections: Record<string, CategorySectionData> = {
 };
 
 const defaultHeroSections: Record<string, HeroSectionData> = {
-  section1: { videoUrl: '', mobileVideoUrl: '', headerText: '', button1Text: '', button2Text: '', button1Link: '', button2Link: '' },
-  section2: { videoUrl: '', mobileVideoUrl: '', headerText: '', button1Text: '', button2Text: '', button1Link: '', button2Link: '' },
-  section3: { imageUrl: '', mobileImageUrl: '', headerText: 'TRIKA', button1Text: 'Shop Now', button2Text: 'View Collection', button1Link: '/voodoo808', button2Link: '/space-love' },
-  section4: { videoUrl: '', mobileVideoUrl: '', headerText: '', button1Text: '', button2Text: '', button1Link: '', button2Link: '' },
-  section5: { imageUrl: '', mobileImageUrl: '', headerText: '', button1Text: '', button2Text: '', button1Link: '', button2Link: '' },
+  section1: { videoUrl: '', mobileVideoUrl: '', headerText: '', button1Text: '', button2Text: '', button1Link: '', button2Link: '', textColor: 'black' },
+  section2: { videoUrl: '', mobileVideoUrl: '', headerText: '', button1Text: '', button2Text: '', button1Link: '', button2Link: '', textColor: 'black' },
+  section3: { imageUrl: '', mobileImageUrl: '', headerText: 'TRIKA', button1Text: 'Shop Now', button2Text: 'View Collection', button1Link: '/voodoo808', button2Link: '/space-love', textColor: 'black' },
+  section4: { videoUrl: '', mobileVideoUrl: '', headerText: '', button1Text: '', button2Text: '', button1Link: '', button2Link: '', textColor: 'black' },
+  section5: { imageUrl: '', mobileImageUrl: '', headerText: '', button1Text: '', button2Text: '', button1Link: '', button2Link: '', textColor: 'black' },
 };
 
 function AnimatedButton({ text, link }: { text: string; link: string }) {
@@ -271,6 +272,7 @@ export default function HomePageContent() {
         button2Text={voodoo808.button2Text}
         button1Link={voodoo808.button1Link}
         button2Link={voodoo808.button2Link}
+        textColor={section1.textColor || 'black'}
         isAdmin={isAdmin}
         onEdit={() => handleEditSection('section1')}
         onEditCategory={() => handleEditCategorySection('voodoo808')}
@@ -300,6 +302,7 @@ export default function HomePageContent() {
         button2Text={spaceLove.button2Text}
         button1Link={spaceLove.button1Link}
         button2Link={spaceLove.button2Link}
+        textColor={section2.textColor || 'black'}
         isAdmin={isAdmin}
         onEdit={() => handleEditSection('section2')}
         onEditCategory={() => handleEditCategorySection('spaceLove')}
@@ -329,6 +332,7 @@ export default function HomePageContent() {
         button2Text={recreationWellness.button2Text}
         button1Link={recreationWellness.button1Link}
         button2Link={recreationWellness.button2Link}
+        textColor={section4.textColor || 'black'}
         isAdmin={isAdmin}
         onEdit={() => handleEditSection('section4')}
         onEditCategory={() => handleEditCategorySection('recreationWellness')}

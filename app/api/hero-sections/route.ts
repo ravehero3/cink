@@ -24,6 +24,7 @@ export async function GET() {
         button2Text: section.button2Text || '',
         button1Link: section.button1Link || '',
         button2Link: section.button2Link || '',
+        textColor: section.textColor || 'black',
       };
     });
     
@@ -69,6 +70,7 @@ export async function POST(request: Request) {
         button2Text: data.button2Text || null,
         button1Link: data.button1Link || null,
         button2Link: data.button2Link || null,
+        textColor: data.textColor || 'black',
       },
       create: {
         sectionKey,
@@ -81,6 +83,7 @@ export async function POST(request: Request) {
         button2Text: data.button2Text || null,
         button1Link: data.button1Link || null,
         button2Link: data.button2Link || null,
+        textColor: data.textColor || 'black',
       },
     });
     

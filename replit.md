@@ -81,3 +81,24 @@ The project is built using Next.js 14 (App Router) and TypeScript, with Tailwind
 **Technical Notes:**
 - All media APIs (`/api/hero-sections`, `/api/category-sections`, `/api/categories`) are public - no admin authentication required
 - Admin-only content is limited to "Edit" buttons, not the media itself
+
+### Czech Text Diacritics Updates
+- Mobile menu: Changed "ULOZENE POLOZKY" to "ULOŽENÉ POLOŽKY" (proper Czech diacritics)
+- Saved items page (/ulozeno): Changed page title from "ULOŽENÉ PRODUKTY" to "ULOŽENÉ POLOŽKY"
+
+### Video Section Improvements
+**Removed Placeholder Text:**
+- Removed "No video uploaded" placeholder text from VideoSection.tsx - looks more professional when no video is set
+- Section now displays cleanly with just the title and buttons when no video is uploaded
+
+**Admin Text Color Control:**
+- Added `textColor` field to HeroSection database model (prisma/schema.prisma)
+- Admins can now select black or white text color for video sections via the Edit Video modal
+- Text color option appears as radio buttons with visual color swatches
+- Applies to both header text and button borders
+- Default is black text; white option available for dark video backgrounds
+- Files updated: VideoSection.tsx, HomePageContent.tsx, EditSectionModal.tsx, app/api/hero-sections/route.ts
+
+**Database Migration Required:**
+- The textColor field was added to the HeroSection model
+- A database migration needs to be run on production: `npx prisma migrate dev` or `npx prisma db push`
