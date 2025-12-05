@@ -5,6 +5,33 @@ A minimalistic black-and-white e-commerce website for UFO Sport (ufosport.cz), d
 
 ## Recent Changes (December 5, 2025)
 
+### Mobile Responsiveness - Phase 4 (Additional Fixes)
+**Return Policy Update:**
+- Changed return policy from 30 days to 14 days in product page accordion
+
+**Mobile Menu Czech Characters:**
+- Fixed "PRIHLASIT SE" → "PŘIHLÁSIT SE"
+- Fixed "MUJ UCET" → "MŮJ ÚČET"
+
+**Sort Panel Mobile:**
+- Made "seřadit podle" popup fill whole screen on mobile (w-full md:w-1/3)
+
+**Product Grid Mobile:**
+- Reduced gap between product image and text to 16px on mobile (pt-4)
+
+**New Doručení Page:**
+- Created app/doruceni/page.tsx with delivery information
+- Includes free shipping info, delivery times, Zásilkovna details
+
+**Video Section Mobile:**
+- Made video section responsive with min-h-[50vh] md:h-[80vh]
+
+**Vertical Lines Hidden on Mobile (Additional Pages):**
+- FAQ, sledování objednávky, vrácení objednávky, pravní informace
+- ochrana osobních údajů, cookies, nastavení cookies, doručení
+
+---
+
 ### Mobile Responsiveness - Phase 3 (Verification & Fixes)
 **Vertical Lines Hidden on Mobile:**
 - All pages now consistently use `hidden md:block` for vertical decorative lines
