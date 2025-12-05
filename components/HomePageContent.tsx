@@ -139,11 +139,12 @@ export default function HomePageContent() {
   useEffect(() => {
     async function fetchData() {
       try {
+        const timestamp = Date.now();
         const [heroRes, categoryRes, ...productResults] = await Promise.all([
-          fetch('/api/hero-sections'),
-          fetch('/api/category-sections'),
+          fetch(`/api/hero-sections?_t=${timestamp}`, { cache: 'no-store' }),
+          fetch(`/api/category-sections?_t=${timestamp}`, { cache: 'no-store' }),
           ...categories.map(async (category) => {
-            const response = await fetch(`/api/products?category=${encodeURIComponent(category.name)}&limit=10`);
+            const response = await fetch(`/api/products?category=${encodeURIComponent(category.name)}&limit=10&_t=${timestamp}`, { cache: 'no-store' });
             const data = await response.json();
             return { slug: category.slug, products: data.products || [] };
           }),

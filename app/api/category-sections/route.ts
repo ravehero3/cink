@@ -3,6 +3,9 @@ import { PrismaClient, CategorySection } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function GET() {
   try {
     const sections = await prisma.categorySection.findMany();
@@ -18,7 +21,13 @@ export async function GET() {
       };
     });
     
-    return NextResponse.json(sectionsMap);
+    return NextResponse.json(sectionsMap, {
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+      },
+    });
   } catch (error) {
     console.error('Error fetching category sections:', error);
     return NextResponse.json({}, { status: 500 });

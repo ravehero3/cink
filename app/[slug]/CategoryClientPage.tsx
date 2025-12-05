@@ -110,7 +110,9 @@ export default function CategoryClientPage({ slug }: CategoryClientPageProps) {
 
   const fetchCategory = async () => {
     try {
-      const response = await fetch('/api/categories');
+      const response = await fetch(`/api/categories?_t=${Date.now()}`, {
+        cache: 'no-store',
+      });
       const categories = await response.json();
       if (Array.isArray(categories)) {
         const found = categories.find((cat: Category) => cat.slug === slug);
