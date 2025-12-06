@@ -156,7 +156,7 @@ export default function ProductCard({
         )}
       </div>
       
-      <div className="text-center relative md:absolute md:bottom-16 md:left-0 md:right-0 pt-1 md:pt-0 md:py-0">
+      <div className="product-info-container text-center relative md:absolute md:bottom-16 md:left-0 md:right-0 pt-1 md:pt-0 md:py-0">
         {/* Title or Dot Indicators */}
         {isHovered && maxImages > 1 ? (
           <div 
@@ -287,6 +287,16 @@ export default function ProductCard({
 
       .heart-icon path {
         transition: fill 0.2s ease;
+      }
+
+      .product-info-container {
+        margin-top: -32px;
+      }
+
+      @media (min-width: 768px) {
+        .product-info-container {
+          margin-top: 0;
+        }
       }
     `}</style>
     </>

@@ -63,11 +63,20 @@ export default function CategoryHero({ title, imageUrl }: CategoryHeroProps) {
     <div>
       {/* White Title Bar - 4x header height (44px * 4 = 176px) */}
       <div 
-        className="bg-white border-b border-black grid place-items-center"
+        className="bg-white border-b border-black flex items-center justify-center"
         style={{ height: 'calc(4 * 44px)' }}
       >
         <h1 
-          className="text-page-title font-bold uppercase tracking-tighter w-full text-center px-0 m-0"
+          className="uppercase text-center m-0 p-0"
+          style={{ 
+            fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+            fontSize: '22px',
+            fontWeight: 700,
+            lineHeight: '22px',
+            letterSpacing: '0.03em',
+            fontStretch: 'condensed',
+            color: '#000000'
+          }}
         >
           {title}
         </h1>

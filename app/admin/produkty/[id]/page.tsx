@@ -6,7 +6,6 @@ import SizeChartEditor from '@/components/admin/SizeChartEditor';
 import CloudinaryUploadButton from '@/components/admin/CloudinaryUploadButton';
 import { SizeChartType, SizeChartData } from '@/components/SizeChart';
 
-const CATEGORIES = ['voodoo808', 'space-love', 'recreation-wellness', 't-shirt-gallery'];
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
 interface Media {
@@ -19,12 +18,13 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [categories, setCategories] = useState<{name: string, slug: string}[]>([]);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
     shortDescription: '',
     price: '',
-    category: CATEGORIES[0],
+    category: '',
     color: '',
     videoUrl: '',
     isVisible: true,
@@ -45,7 +45,60 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
 
   useEffect(() => {
-    fetchProduct();
+    const fetchData = async () => {
+      try {
+        const catResponse = await fetch('/api/categories-admin');
+        let categoryData: {name: string, slug: string}[] = [];
+        if (catResponse.ok) {
+          categoryData = await catResponse.json();
+          setCategories(categoryData);
+        }
+        
+        const prodResponse = await fetch(`/api/admin/products/${params.id}`);
+        if (prodResponse.ok) {
+          const product = await prodResponse.json();
+          
+          let categoryName = product.category;
+          const matchedCategory = categoryData.find(
+            (cat) => cat.slug === product.category || 
+                     cat.slug.toLowerCase() === product.category.toLowerCase() ||
+                     cat.name === product.category ||
+                     cat.name.toLowerCase() === product.category.toLowerCase()
+          );
+          if (matchedCategory) {
+            categoryName = matchedCategory.name;
+          }
+          
+          setFormData({
+            name: product.name,
+            description: product.description,
+            shortDescription: product.shortDescription || '',
+            price: product.price.toString(),
+            category: categoryName,
+            color: product.color || '',
+            videoUrl: product.videoUrl || '',
+            isVisible: product.isVisible,
+            productInfo: product.productInfo || '',
+            sizeFit: product.sizeFit || '',
+            shippingInfo: product.shippingInfo || '',
+            careInfo: product.careInfo || '',
+          });
+          setImages(product.images.length > 0 ? product.images : ['']);
+          setSizes(product.sizes || SIZES.reduce((acc, size) => ({ ...acc, [size]: 0 }), {}));
+          setSizeChartType(product.sizeChartType || null);
+          setSizeChartData(product.sizeChartData || null);
+        } else {
+          alert('Produkt nenalezen');
+          router.push('/admin/produkty');
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        alert('Došlo k chybě při načítání produktu');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
   }, [params.id]);
 
   const fetchProduct = async () => {
@@ -227,9 +280,9 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                 className="w-full border border-black p-3 text-body"
               >
-                {CATEGORIES.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat.toUpperCase()}
+                {categories.map((cat) => (
+                  <option key={cat.name} value={cat.name}>
+                    {cat.name.toUpperCase()}
                   </option>
                 ))}
               </select>

@@ -31,10 +31,10 @@ export default function NewProductPage() {
         const response = await fetch('/api/categories-admin');
         if (response.ok) {
           const data = await response.json();
-          const slugs = data.map((cat: any) => cat.slug);
-          setCategories(slugs);
-          if (slugs.length > 0) {
-            setFormData(prev => ({ ...prev, category: slugs[0] }));
+          const names = data.map((cat: any) => cat.name);
+          setCategories(names);
+          if (names.length > 0) {
+            setFormData(prev => ({ ...prev, category: names[0] }));
           }
         }
       } catch (error) {
