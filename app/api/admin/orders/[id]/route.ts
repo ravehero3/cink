@@ -24,7 +24,17 @@ export async function GET(
       return NextResponse.json({ error: 'Order not found' }, { status: 404 });
     }
 
-    return NextResponse.json(order);
+    // Transform items to include productName for admin display
+    const orderItems = order.items as any[];
+    const transformedItems = orderItems.map((item: any) => ({
+      ...item,
+      productName: item.productName || item.name || 'Unknown Product',
+    }));
+
+    return NextResponse.json({
+      ...order,
+      items: transformedItems,
+    });
   } catch (error) {
     console.error('Error fetching order:', error);
     return NextResponse.json({ error: 'Failed to fetch order' }, { status: 500 });

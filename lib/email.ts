@@ -1,9 +1,17 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
+
+if (!RESEND_API_KEY) {
+  console.warn('WARNING: RESEND_API_KEY is not set. Email sending will fail.');
+}
+
+const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
 
 const FROM_EMAIL = 'UFO Sport <noreply@ufosport.cz>';
 const WEBSITE_URL = process.env.NEXTAUTH_URL || 'https://www.ufosport.cz';
+
+const LOGO_URL = `${process.env.NEXTAUTH_URL || 'https://www.ufosport.cz'}/logo.png`;
 
 const emailWrapper = (content: string) => `
 <!DOCTYPE html>
@@ -17,9 +25,10 @@ const emailWrapper = (content: string) => `
     <tr>
       <td align="center" style="padding: 40px 20px;">
         <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="max-width: 600px; width: 100%;">
-          <!-- Header -->
+          <!-- Header with Logo -->
           <tr>
             <td style="text-align: center; padding-bottom: 32px; border-bottom: 2px solid #000000;">
+              <img src="${LOGO_URL}" alt="UFO Sport" width="120" height="120" style="display: block; margin: 0 auto 16px auto; max-width: 120px; height: auto;" />
               <h1 style="margin: 0; font-size: 28px; font-weight: 700; letter-spacing: 0.1em; color: #000000; text-transform: uppercase;">
                 UFO SPORT
               </h1>
@@ -99,6 +108,11 @@ interface OrderEmailData {
 }
 
 export async function sendOrderConfirmationEmail(data: OrderEmailData) {
+  if (!resend) {
+    console.error('Cannot send order confirmation email: RESEND_API_KEY is not configured');
+    return { success: false, error: 'Email service not configured' };
+  }
+
   const itemsHtml = data.items.map(item => `
     <tr>
       <td style="padding: 12px 0; border-bottom: 1px solid #e5e5e5;">
@@ -190,6 +204,11 @@ export async function sendOrderConfirmationEmail(data: OrderEmailData) {
 }
 
 export async function sendPaymentSuccessEmail(data: OrderEmailData) {
+  if (!resend) {
+    console.error('Cannot send payment success email: RESEND_API_KEY is not configured');
+    return { success: false, error: 'Email service not configured' };
+  }
+
   const itemsHtml = data.items.map(item => `
     <tr>
       <td style="padding: 8px 0; border-bottom: 1px solid #e5e5e5;">
@@ -266,6 +285,11 @@ interface ShippingEmailData {
 }
 
 export async function sendShippingNotificationEmail(data: ShippingEmailData) {
+  if (!resend) {
+    console.error('Cannot send shipping notification email: RESEND_API_KEY is not configured');
+    return { success: false, error: 'Email service not configured' };
+  }
+
   const trackingInfo = data.trackingNumber
     ? `
       <div style="background-color: #f8f8f8; padding: 20px; margin-bottom: 24px; text-align: center;">
@@ -332,6 +356,11 @@ export async function sendShippingNotificationEmail(data: ShippingEmailData) {
 }
 
 export async function sendNewsletterWelcomeEmail(email: string) {
+  if (!resend) {
+    console.error('Cannot send newsletter welcome email: RESEND_API_KEY is not configured');
+    return { success: false, error: 'Email service not configured' };
+  }
+
   const content = `
     <div style="text-align: center; margin-bottom: 32px;">
       <h2 style="margin: 0; font-size: 24px; font-weight: 600; color: #000000; text-transform: uppercase; letter-spacing: 0.02em;">
@@ -384,6 +413,11 @@ export async function sendNewsletterWelcomeEmail(email: string) {
 }
 
 export async function sendPasswordResetEmail(email: string, resetLink: string) {
+  if (!resend) {
+    console.error('Cannot send password reset email: RESEND_API_KEY is not configured');
+    return { success: false, error: 'Email service not configured' };
+  }
+
   const content = `
     <h2 style="margin: 0 0 24px 0; font-size: 24px; font-weight: 600; color: #000000; text-transform: uppercase; letter-spacing: 0.02em; text-align: center;">
       Obnoveni hesla
