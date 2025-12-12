@@ -131,3 +131,34 @@ The project is built using Next.js 14 (App Router) and TypeScript, with Tailwind
 - Sales graph (Recharts LineChart) only shows data from active orders
 - Total revenue and order count statistics exclude cancelled orders
 - Uses `activeOrders` array filtered from all orders
+
+## Recent Changes (December 12, 2025)
+
+### Order Details Display Fix
+**Admin Order Detail View:**
+- Fixed issue where product names and sizes weren't displaying in admin order detail view
+- The API now transforms order items to include `productName` field for compatibility with admin UI
+- Order items stored with `name` field are now correctly mapped to `productName`
+- Files updated: `app/api/admin/orders/[id]/route.ts`
+
+### Email Template Improvements
+**UFO Sport Logo in Emails:**
+- Added UFO Sport logo (192x192) to all customer email templates
+- Logo displays prominently in email header above "UFO SPORT" text
+- Logo uses dynamic URL based on NEXTAUTH_URL for environment compatibility
+- Logo file added to `/public/logo.png`
+
+**Email Service Robustness:**
+- Added null checks for RESEND_API_KEY in all email sending functions
+- Graceful error handling when email service is not configured
+- Console warnings when RESEND_API_KEY is missing
+- Prevents application crashes due to missing email configuration
+- Files updated: `lib/email.ts`
+
+### Email Types Affected
+All customer-facing emails now include the UFO Sport logo:
+- Order confirmation emails
+- Payment success emails
+- Shipping notification emails
+- Newsletter welcome emails
+- Password reset emails
