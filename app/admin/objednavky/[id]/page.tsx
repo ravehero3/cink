@@ -9,6 +9,8 @@ interface OrderItem {
   size: string;
   quantity: number;
   price: number;
+  image?: string;
+  color?: string;
 }
 
 interface Order {
@@ -320,16 +322,30 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
             <h2 className="text-header font-bold mb-4">POLOŽKY OBJEDNÁVKY</h2>
             <div className="space-y-4">
               {order.items.map((item, index) => (
-                <div key={index} className="border-b border-black last:border-b-0 pb-4 last:pb-0">
-                  <div className="text-body font-bold">{item.productName}</div>
-                  <div className="text-body">
-                    Velikost: {item.size} | Množství: {item.quantity}x
-                  </div>
-                  <div className="text-body">
-                    Cena: {Number(item.price).toFixed(2)} Kč / ks
-                  </div>
-                  <div className="text-body font-bold mt-1">
-                    Celkem: {(Number(item.price) * item.quantity).toFixed(2)} Kč
+                <div key={index} className="border-b border-black last:border-b-0 pb-4 last:pb-0 flex gap-4">
+                  {item.image && (
+                    <div className="flex-shrink-0">
+                      <img 
+                        src={item.image} 
+                        alt={item.productName}
+                        className="w-20 h-20 object-cover border border-black"
+                      />
+                    </div>
+                  )}
+                  <div className="flex-1">
+                    <div className="text-body font-bold">{item.productName}</div>
+                    <div className="text-body">
+                      Velikost: {item.size} | Množství: {item.quantity}x
+                    </div>
+                    {item.color && (
+                      <div className="text-body">Barva: {item.color}</div>
+                    )}
+                    <div className="text-body">
+                      Cena: {Number(item.price).toFixed(2)} Kč / ks
+                    </div>
+                    <div className="text-body font-bold mt-1">
+                      Celkem: {(Number(item.price) * item.quantity).toFixed(2)} Kč
+                    </div>
                   </div>
                 </div>
               ))}
