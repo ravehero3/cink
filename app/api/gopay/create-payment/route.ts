@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
 
 function generateErrorId(): string {
   return `PAY-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -230,6 +231,16 @@ export async function POST(request: NextRequest) {
       paymentId: payment.id, 
       gatewayUrl: payment.gw_url?.substring(0, 50) + '...'
     });
+
+    try {
+      await prisma.order.update({
+        where: { orderNumber },
+        data: { paymentId: String(payment.id) },
+      });
+      logInfo('Payment ID saved to order', { orderNumber, paymentId: payment.id });
+    } catch (dbError) {
+      logError(errorId, 'Failed to save payment ID to order (non-critical)', dbError);
+    }
 
     return NextResponse.json({
       paymentId: payment.id,

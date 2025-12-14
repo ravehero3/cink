@@ -44,6 +44,7 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
   const [loading, setLoading] = useState(true);
   const [trackingNumber, setTrackingNumber] = useState('');
   const [nextOrderId, setNextOrderId] = useState<string | null>(null);
+  const [checkingPayment, setCheckingPayment] = useState(false);
 
   useEffect(() => {
     fetchOrder();
@@ -153,6 +154,34 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
       alert('Došlo k chybě při vytváření zásilky');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const checkPaymentStatus = async () => {
+    if (!order?.paymentId) {
+      alert('Tato objednávka nemá přiřazené ID platby v GoPay');
+      return;
+    }
+
+    setCheckingPayment(true);
+    try {
+      const response = await fetch(`/api/admin/orders/${params.id}/check-payment`, {
+        method: 'POST',
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert(data.message || 'Status platby byl aktualizován');
+        fetchOrder();
+      } else {
+        alert(`Chyba: ${data.error || 'Nepodařilo se zkontrolovat status platby'}`);
+      }
+    } catch (error) {
+      console.error('Failed to check payment status:', error);
+      alert('Došlo k chybě při kontrole stavu platby');
+    } finally {
+      setCheckingPayment(false);
     }
   };
 
@@ -283,6 +312,22 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
               <div className="mt-4">
                 <strong>Celková cena:</strong> {Number(order.totalPrice).toFixed(2)} Kč
               </div>
+              {order.paymentId && (
+                <div className="mt-4">
+                  <button
+                    onClick={checkPaymentStatus}
+                    disabled={checkingPayment}
+                    className="px-4 py-2 bg-black text-white text-body uppercase hover:bg-white hover:text-black border border-black disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {checkingPayment ? 'Kontroluji...' : 'Obnovit stav platby'}
+                  </button>
+                </div>
+              )}
+              {!order.paymentId && (
+                <div className="mt-4 p-2 bg-gray-100 border border-gray-300 text-small text-gray-600">
+                  Objednávka nemá přiřazené ID platby z GoPay
+                </div>
+              )}
             </div>
           </div>
         </div>

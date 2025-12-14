@@ -26,13 +26,89 @@ export interface PacketaResponse {
   };
 }
 
+export type PacketaErrorCode = 
+  | 'INCORRECT_API_PASSWORD'
+  | 'INVALID_ATTRIBUTES'
+  | 'CONNECTION_ERROR'
+  | 'UNKNOWN_ERROR';
+
+function logPacketaInfo(message: string, data?: any): void {
+  const timestamp = new Date().toISOString();
+  console.log(`[${timestamp}] [PACKETA-API] ${message}`, data !== undefined ? JSON.stringify(data, null, 2) : '');
+}
+
+function logPacketaError(message: string, data?: any): void {
+  const timestamp = new Date().toISOString();
+  console.error(`[${timestamp}] [PACKETA-API] ERROR: ${message}`, data !== undefined ? JSON.stringify(data, null, 2) : '');
+}
+
 export class PacketaAPIError extends Error {
+  public errorCode: PacketaErrorCode;
+  public userFriendlyMessage: string;
+
   constructor(
     message: string,
-    public detail?: any
+    public detail?: any,
+    errorCode?: PacketaErrorCode
   ) {
     super(message);
     this.name = 'PacketaAPIError';
+    this.errorCode = errorCode || this.detectErrorCode(message, detail);
+    this.userFriendlyMessage = this.getUserFriendlyMessage(this.errorCode);
+    
+    logPacketaError(`PacketaAPIError created`, {
+      technicalMessage: message,
+      errorCode: this.errorCode,
+      userFriendlyMessage: this.userFriendlyMessage,
+      detail: detail
+    });
+  }
+
+  private detectErrorCode(message: string, detail?: any): PacketaErrorCode {
+    const lowerMessage = message.toLowerCase();
+    const detailString = detail ? JSON.stringify(detail).toLowerCase() : '';
+    
+    if (lowerMessage.includes('incorrect api password') || 
+        lowerMessage.includes('špatné api heslo') ||
+        lowerMessage.includes('neplatné api heslo') ||
+        detailString.includes('incorrect api password') ||
+        detailString.includes('špatné api heslo') ||
+        detailString.includes('neplatné api heslo')) {
+      return 'INCORRECT_API_PASSWORD';
+    }
+    
+    if (lowerMessage.includes('invalid') || 
+        lowerMessage.includes('attribute') ||
+        lowerMessage.includes('neplatný') ||
+        detailString.includes('invalid') ||
+        detailString.includes('attribute')) {
+      return 'INVALID_ATTRIBUTES';
+    }
+    
+    if (lowerMessage.includes('connection') || 
+        lowerMessage.includes('network') ||
+        lowerMessage.includes('timeout') ||
+        lowerMessage.includes('fetch') ||
+        lowerMessage.includes('econnrefused') ||
+        lowerMessage.includes('enotfound')) {
+      return 'CONNECTION_ERROR';
+    }
+    
+    return 'UNKNOWN_ERROR';
+  }
+
+  private getUserFriendlyMessage(errorCode: PacketaErrorCode): string {
+    switch (errorCode) {
+      case 'INCORRECT_API_PASSWORD':
+        return 'Zásilkovna API heslo není správně nakonfigurováno. Kontaktujte podporu. (Poznámka: REST API heslo je odlišné od Widget API klíče)';
+      case 'INVALID_ATTRIBUTES':
+        return 'Neplatné údaje pro vytvoření zásilky. Zkontrolujte prosím zadané informace.';
+      case 'CONNECTION_ERROR':
+        return 'Chyba při komunikaci se Zásilkovnou. Zkuste to prosím znovu.';
+      case 'UNKNOWN_ERROR':
+      default:
+        return 'Chyba při komunikaci se Zásilkovnou. Zkuste to prosím znovu.';
+    }
   }
 }
 
@@ -59,6 +135,11 @@ export class PacketaAPI {
     };
 
     const xml = builder.buildObject(requestBody);
+    
+    logPacketaInfo(`Calling Packeta API method: ${method}`, {
+      method,
+      dataKeys: Object.keys(data)
+    });
 
     try {
       const response = await fetch(this.apiUrl, {
@@ -70,11 +151,24 @@ export class PacketaAPI {
       });
 
       const responseText = await response.text();
+      
+      logPacketaInfo(`Packeta API response received`, {
+        method,
+        status: response.status,
+        statusText: response.statusText,
+        responseLength: responseText.length
+      });
 
       if (!response.ok) {
+        logPacketaError(`Packeta API HTTP error`, {
+          method,
+          status: response.status,
+          statusText: response.statusText,
+          responseBody: responseText.substring(0, 500)
+        });
         throw new PacketaAPIError(
           `API request failed with status ${response.status}`,
-          responseText
+          { status: response.status, responseText: responseText.substring(0, 500) }
         );
       }
 
@@ -87,20 +181,39 @@ export class PacketaAPI {
       const result = parsedResponse[rootKey];
 
       if (result.fault || result.string) {
-        throw new PacketaAPIError(
-          result.string || 'API returned an error',
-          result
-        );
+        const errorMessage = result.string || result.fault?.string || 'API returned an error';
+        const errorDetail = result.fault?.detail || result;
+        
+        logPacketaError(`Packeta API returned error`, {
+          method,
+          errorMessage,
+          fault: result.fault,
+          fullResponse: result
+        });
+        
+        throw new PacketaAPIError(errorMessage, errorDetail);
       }
+      
+      logPacketaInfo(`Packeta API call successful`, { method, resultKeys: Object.keys(result) });
 
       return result;
     } catch (error) {
       if (error instanceof PacketaAPIError) {
         throw error;
       }
+      
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      logPacketaError(`Packeta API call failed with unexpected error`, {
+        method,
+        errorType: error?.constructor?.name,
+        errorMessage,
+        error: error instanceof Error ? { name: error.name, message: error.message, stack: error.stack } : error
+      });
+      
       throw new PacketaAPIError(
-        `Failed to call Packeta API: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        error
+        `Failed to call Packeta API: ${errorMessage}`,
+        error,
+        'CONNECTION_ERROR'
       );
     }
   }

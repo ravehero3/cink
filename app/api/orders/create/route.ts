@@ -295,12 +295,20 @@ export async function POST(request: NextRequest) {
 
         logInfo('Packeta packet created', { packetId: packet.id, barcode: packet.barcode });
       } catch (error) {
-        let errorMessage = 'Unknown error';
+        let userFriendlyMessage = 'Chyba při komunikaci se Zásilkovnou. Zkuste to prosím znovu.';
+        
         if (error instanceof PacketaAPIError) {
-          errorMessage = error.message;
-          logError(errorId, 'Packeta API error (non-critical)', { message: error.message, detail: error.detail });
+          userFriendlyMessage = error.userFriendlyMessage;
+          logError(errorId, 'Packeta API error (non-critical)', { 
+            technicalMessage: error.message, 
+            errorCode: error.errorCode,
+            userFriendlyMessage: error.userFriendlyMessage,
+            detail: error.detail 
+          });
         } else if (error instanceof Error) {
-          errorMessage = error.message;
+          if (error.message.includes('Packeta API password not configured')) {
+            userFriendlyMessage = 'Zásilkovna API heslo není správně nakonfigurováno. Kontaktujte podporu.';
+          }
           logError(errorId, 'Packeta error (non-critical)', { message: error.message });
         }
 
@@ -308,7 +316,7 @@ export async function POST(request: NextRequest) {
           await withRetry(() => prisma.order.update({
             where: { id: order.id },
             data: {
-              packetaError: errorMessage,
+              packetaError: userFriendlyMessage,
             },
           }));
         } catch (updateError) {
