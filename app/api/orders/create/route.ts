@@ -22,31 +22,26 @@ function logInfo(message: string, data?: any): void {
 async function generateOrderNumber(): Promise<string> {
   const now = new Date();
   const year = now.getFullYear().toString().slice(-2);
-  const month = (now.getMonth() + 1).toString().padStart(2, '0');
-  const day = now.getDate().toString().padStart(2, '0');
-  const datePrefix = `UFO${year}${month}${day}`;
+  const yearPrefix = `UFO${year}`;
 
-  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const todayEnd = new Date(todayStart);
-  todayEnd.setDate(todayEnd.getDate() + 1);
+  const yearStart = new Date(now.getFullYear(), 0, 1);
 
-  logInfo('Generating order number', { datePrefix, todayStart, todayEnd });
+  logInfo('Generating order number', { yearPrefix, yearStart });
 
-  const todayOrdersCount = await withRetry(() => prisma.order.count({
+  const yearOrdersCount = await withRetry(() => prisma.order.count({
     where: {
       orderNumber: {
-        startsWith: datePrefix,
+        startsWith: yearPrefix,
       },
       createdAt: {
-        gte: todayStart,
-        lt: todayEnd,
+        gte: yearStart,
       },
     },
   }));
 
-  const sequentialNumber = (todayOrdersCount + 1).toString().padStart(3, '0');
-  const orderNumber = `${datePrefix}${sequentialNumber}`;
-  logInfo('Order number generated', { orderNumber, todayOrdersCount });
+  const sequentialNumber = (yearOrdersCount + 1).toString().padStart(3, '0');
+  const orderNumber = `${yearPrefix}${sequentialNumber}`;
+  logInfo('Order number generated', { orderNumber, yearOrdersCount });
   return orderNumber;
 }
 

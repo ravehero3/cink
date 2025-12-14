@@ -19,43 +19,79 @@ const emailWrapper = (content: string) => `
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>UFO Sport</title>
 </head>
-<body style="margin: 0; padding: 0; background-color: #ffffff; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
-  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #ffffff;">
+<body style="margin: 0; padding: 0; background-color: #f5f5f7; font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #f5f5f7;">
     <tr>
-      <td align="center" style="padding: 40px 20px;">
-        <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="max-width: 600px; width: 100%;">
-          <!-- Header with Logo -->
+      <td align="center" style="padding: 48px 24px;">
+        <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="max-width: 600px; width: 100%; background-color: #ffffff;">
+          
+          <!-- Header -->
           <tr>
-            <td style="text-align: center; padding-bottom: 32px; border-bottom: 2px solid #000000;">
-              <img src="${LOGO_URL}" alt="UFO Sport" width="120" height="120" style="display: block; margin: 0 auto 16px auto; max-width: 120px; height: auto;" />
-              <h1 style="margin: 0; font-size: 28px; font-weight: 700; letter-spacing: 0.1em; color: #000000; text-transform: uppercase;">
-                UFO SPORT
-              </h1>
+            <td style="padding: 40px 48px 32px 48px; text-align: center;">
+              <a href="${WEBSITE_URL}" style="display: inline-block;">
+                <img src="${LOGO_URL}" alt="UFO Sport" width="64" height="64" style="display: block; margin: 0 auto; max-width: 64px; height: auto;" />
+              </a>
             </td>
           </tr>
           
           <!-- Content -->
           <tr>
-            <td style="padding: 32px 0;">
+            <td style="padding: 0 48px 48px 48px;">
               ${content}
             </td>
           </tr>
           
           <!-- Footer -->
           <tr>
-            <td style="border-top: 1px solid #e5e5e5; padding-top: 24px; text-align: center;">
-              <p style="margin: 0 0 8px 0; font-size: 12px; color: #666666;">
-                UFO Sport | Sportovni obleceni
+            <td style="padding: 32px 48px; background-color: #fafafa; border-top: 1px solid #f0f0f0;">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td style="text-align: center;">
+                    <p style="margin: 0 0 12px 0; font-size: 13px; font-weight: 500; color: #1d1d1f; letter-spacing: -0.01em;">
+                      UFO Sport
+                    </p>
+                    <p style="margin: 0 0 16px 0; font-size: 12px; color: #86868b; line-height: 1.5;">
+                      Sportovni obleceni pro kazdy den
+                    </p>
+                    <p style="margin: 0 0 8px 0;">
+                      <a href="${WEBSITE_URL}" style="font-size: 12px; color: #1d1d1f; text-decoration: none;">www.ufosport.cz</a>
+                    </p>
+                    <table role="presentation" cellspacing="0" cellpadding="0" style="margin: 16px auto 0 auto;">
+                      <tr>
+                        <td style="padding: 0 8px;">
+                          <a href="${WEBSITE_URL}/produkty" style="font-size: 11px; color: #86868b; text-decoration: none;">Produkty</a>
+                        </td>
+                        <td style="color: #d2d2d7; font-size: 11px;">|</td>
+                        <td style="padding: 0 8px;">
+                          <a href="${WEBSITE_URL}/sledovani-objednavky" style="font-size: 11px; color: #86868b; text-decoration: none;">Sledovani objednavky</a>
+                        </td>
+                        <td style="color: #d2d2d7; font-size: 11px;">|</td>
+                        <td style="padding: 0 8px;">
+                          <a href="${WEBSITE_URL}/faq" style="font-size: 11px; color: #86868b; text-decoration: none;">Pomoc</a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          
+          <!-- Legal Footer -->
+          <tr>
+            <td style="padding: 24px 48px; text-align: center;">
+              <p style="margin: 0; font-size: 11px; color: #86868b; line-height: 1.6;">
+                Tento e-mail byl odeslan automaticky z adresy noreply@ufosport.cz.
               </p>
-              <p style="margin: 0 0 8px 0; font-size: 12px; color: #666666;">
-                <a href="${WEBSITE_URL}" style="color: #000000; text-decoration: underline;">www.ufosport.cz</a>
-              </p>
-              <p style="margin: 0; font-size: 11px; color: #999999;">
-                Tento e-mail byl odeslan automaticky. Prosim neodpovidejte na nej.
+              <p style="margin: 8px 0 0 0; font-size: 11px; color: #86868b;">
+                &copy; ${new Date().getFullYear()} UFO Sport. Vsechna prava vyhrazena.
               </p>
             </td>
           </tr>
+          
         </table>
       </td>
     </tr>
@@ -66,28 +102,28 @@ const emailWrapper = (content: string) => `
 
 const buttonStyle = `
   display: inline-block;
-  background-color: #000000;
+  background-color: #1d1d1f;
   color: #ffffff;
-  padding: 14px 32px;
+  padding: 16px 40px;
   text-decoration: none;
   font-size: 14px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  border: 2px solid #000000;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  border-radius: 980px;
+  mso-padding-alt: 0;
 `;
 
 const secondaryButtonStyle = `
   display: inline-block;
-  background-color: #ffffff;
-  color: #000000;
-  padding: 14px 32px;
+  background-color: transparent;
+  color: #1d1d1f;
+  padding: 14px 38px;
   text-decoration: none;
   font-size: 14px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  border: 2px solid #000000;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  border-radius: 980px;
+  border: 1px solid #1d1d1f;
 `;
 
 interface OrderItem {
@@ -113,79 +149,111 @@ export async function sendOrderConfirmationEmail(data: OrderEmailData) {
     return { success: false, error: 'Email service not configured' };
   }
 
-  const itemsHtml = data.items.map(item => `
+  const itemsHtml = data.items.map((item, index) => `
     <tr>
-      <td style="padding: 12px 0; border-bottom: 1px solid #e5e5e5;">
-        <p style="margin: 0; font-size: 14px; color: #000000; font-weight: 500;">${item.name}</p>
-        ${item.size ? `<p style="margin: 4px 0 0 0; font-size: 12px; color: #666666;">Velikost: ${item.size}</p>` : ''}
-      </td>
-      <td style="padding: 12px 0; border-bottom: 1px solid #e5e5e5; text-align: center; width: 60px;">
-        <p style="margin: 0; font-size: 14px; color: #666666;">${item.quantity}x</p>
-      </td>
-      <td style="padding: 12px 0; border-bottom: 1px solid #e5e5e5; text-align: right; width: 100px;">
-        <p style="margin: 0; font-size: 14px; color: #000000; font-weight: 500;">${item.price.toLocaleString('cs-CZ')} Kc</p>
+      <td style="padding: 20px 0; ${index < data.items.length - 1 ? 'border-bottom: 1px solid #f0f0f0;' : ''}">
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+          <tr>
+            <td style="vertical-align: top;">
+              <p style="margin: 0 0 4px 0; font-size: 15px; font-weight: 500; color: #1d1d1f; line-height: 1.4;">${item.name}</p>
+              ${item.size ? `<p style="margin: 0; font-size: 13px; color: #86868b;">Velikost: ${item.size}</p>` : ''}
+              <p style="margin: 4px 0 0 0; font-size: 13px; color: #86868b;">Pocet: ${item.quantity}</p>
+            </td>
+            <td style="vertical-align: top; text-align: right; width: 100px;">
+              <p style="margin: 0; font-size: 15px; font-weight: 500; color: #1d1d1f;">${item.price.toLocaleString('cs-CZ')} Kc</p>
+            </td>
+          </tr>
+        </table>
       </td>
     </tr>
   `).join('');
 
   const shippingInfo = data.shippingMethod === 'zasilkovna' && data.zasilkovnaName
-    ? `<p style="margin: 0; font-size: 14px; color: #666666;">Vydejna: ${data.zasilkovnaName}</p>`
+    ? `
+      <tr>
+        <td style="padding: 16px 0;">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <p style="margin: 0; font-size: 13px; color: #86868b;">Misto vyzvednuti</p>
+              </td>
+              <td style="text-align: right;">
+                <p style="margin: 0; font-size: 13px; color: #1d1d1f;">${data.zasilkovnaName}</p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    `
     : '';
 
   const content = `
-    <h2 style="margin: 0 0 24px 0; font-size: 24px; font-weight: 600; color: #000000; text-transform: uppercase; letter-spacing: 0.02em;">
-      Dekujeme za vasi objednavku!
-    </h2>
-    
-    <p style="margin: 0 0 24px 0; font-size: 16px; line-height: 1.6; color: #333333;">
-      Vazeny/a ${data.customerName},<br><br>
-      Dekujeme za vasi objednavku. Nize naleznete prehled vasi objednavky.
-    </p>
-    
-    <div style="background-color: #f8f8f8; padding: 20px; margin-bottom: 24px;">
-      <p style="margin: 0 0 8px 0; font-size: 12px; color: #666666; text-transform: uppercase; letter-spacing: 0.05em;">Cislo objednavky</p>
-      <p style="margin: 0; font-size: 20px; font-weight: 700; color: #000000; letter-spacing: 0.02em;">${data.orderNumber}</p>
+    <div style="text-align: center; margin-bottom: 40px;">
+      <h1 style="margin: 0 0 12px 0; font-size: 28px; font-weight: 600; color: #1d1d1f; letter-spacing: -0.02em; line-height: 1.2;">
+        Dekujeme za objednavku
+      </h1>
+      <p style="margin: 0; font-size: 17px; color: #86868b; line-height: 1.5;">
+        Obdrzeli jsme vasi objednavku a brzy ji zpracujeme.
+      </p>
     </div>
     
-    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom: 24px;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom: 32px; background-color: #f5f5f7; border-radius: 12px;">
       <tr>
-        <td style="padding: 12px 0; border-bottom: 2px solid #000000;">
-          <p style="margin: 0; font-size: 12px; color: #666666; text-transform: uppercase; letter-spacing: 0.05em;">Produkt</p>
-        </td>
-        <td style="padding: 12px 0; border-bottom: 2px solid #000000; text-align: center; width: 60px;">
-          <p style="margin: 0; font-size: 12px; color: #666666; text-transform: uppercase; letter-spacing: 0.05em;">Ks</p>
-        </td>
-        <td style="padding: 12px 0; border-bottom: 2px solid #000000; text-align: right; width: 100px;">
-          <p style="margin: 0; font-size: 12px; color: #666666; text-transform: uppercase; letter-spacing: 0.05em;">Cena</p>
-        </td>
-      </tr>
-      ${itemsHtml}
-      <tr>
-        <td colspan="2" style="padding: 16px 0 0 0;">
-          <p style="margin: 0; font-size: 16px; font-weight: 700; color: #000000; text-transform: uppercase;">Celkem</p>
-        </td>
-        <td style="padding: 16px 0 0 0; text-align: right;">
-          <p style="margin: 0; font-size: 18px; font-weight: 700; color: #000000;">${data.totalPrice.toLocaleString('cs-CZ')} Kc</p>
+        <td style="padding: 24px;">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <p style="margin: 0 0 4px 0; font-size: 13px; color: #86868b;">Cislo objednavky</p>
+                <p style="margin: 0; font-size: 17px; font-weight: 600; color: #1d1d1f; letter-spacing: -0.01em;">${data.orderNumber}</p>
+              </td>
+              <td style="text-align: right;">
+                <a href="${WEBSITE_URL}/sledovani-objednavky" style="font-size: 13px; color: #1d1d1f; text-decoration: none; font-weight: 500;">Sledovat &rarr;</a>
+              </td>
+            </tr>
+          </table>
         </td>
       </tr>
     </table>
     
-    ${shippingInfo ? `
-    <div style="margin-bottom: 24px;">
-      <p style="margin: 0 0 8px 0; font-size: 12px; color: #666666; text-transform: uppercase; letter-spacing: 0.05em;">Zpusob doruceni</p>
-      ${shippingInfo}
+    <div style="margin-bottom: 32px;">
+      <p style="margin: 0 0 16px 0; font-size: 13px; font-weight: 600; color: #1d1d1f; text-transform: uppercase; letter-spacing: 0.05em;">
+        Vase polozky
+      </p>
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+        ${itemsHtml}
+      </table>
     </div>
-    ` : ''}
     
-    <p style="margin: 0 0 24px 0; font-size: 14px; line-height: 1.6; color: #666666;">
-      Nyni prosim dokoncete platbu. Po prijeti platby vam zasleme potvrzeni a informace o odeslani.
-    </p>
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom: 32px; border-top: 1px solid #f0f0f0;">
+      ${shippingInfo}
+      <tr>
+        <td style="padding: 20px 0 0 0;">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>
+                <p style="margin: 0; font-size: 17px; font-weight: 600; color: #1d1d1f;">Celkem</p>
+              </td>
+              <td style="text-align: right;">
+                <p style="margin: 0; font-size: 20px; font-weight: 600; color: #1d1d1f;">${data.totalPrice.toLocaleString('cs-CZ')} Kc</p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
     
-    <div style="text-align: center;">
+    <div style="text-align: center; padding: 24px 0; background-color: #f5f5f7; border-radius: 12px; margin-bottom: 24px;">
+      <p style="margin: 0 0 16px 0; font-size: 15px; color: #1d1d1f; line-height: 1.5;">
+        Nyni prosim dokoncete platbu pro expedici objednavky.
+      </p>
       <a href="${WEBSITE_URL}/sledovani-objednavky" style="${buttonStyle}">
         Sledovat objednavku
       </a>
     </div>
+    
+    <p style="margin: 0; font-size: 13px; color: #86868b; text-align: center; line-height: 1.6;">
+      Mate otazky? Kontaktujte nas na <a href="mailto:info@ufosport.cz" style="color: #1d1d1f; text-decoration: none;">info@ufosport.cz</a>
+    </p>
   `;
 
   try {
@@ -209,51 +277,72 @@ export async function sendPaymentSuccessEmail(data: OrderEmailData) {
     return { success: false, error: 'Email service not configured' };
   }
 
-  const itemsHtml = data.items.map(item => `
+  const itemsHtml = data.items.map((item, index) => `
     <tr>
-      <td style="padding: 8px 0; border-bottom: 1px solid #e5e5e5;">
-        <p style="margin: 0; font-size: 14px; color: #000000;">${item.name}${item.size ? ` (${item.size})` : ''}</p>
-      </td>
-      <td style="padding: 8px 0; border-bottom: 1px solid #e5e5e5; text-align: right;">
-        <p style="margin: 0; font-size: 14px; color: #666666;">${item.quantity}x ${item.price.toLocaleString('cs-CZ')} Kc</p>
+      <td style="padding: 16px 0; ${index < data.items.length - 1 ? 'border-bottom: 1px solid #f0f0f0;' : ''}">
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+          <tr>
+            <td>
+              <p style="margin: 0; font-size: 14px; color: #1d1d1f;">${item.name}${item.size ? ` <span style="color: #86868b;">(${item.size})</span>` : ''}</p>
+            </td>
+            <td style="text-align: right; white-space: nowrap;">
+              <p style="margin: 0; font-size: 14px; color: #1d1d1f;">${item.quantity} x ${item.price.toLocaleString('cs-CZ')} Kc</p>
+            </td>
+          </tr>
+        </table>
       </td>
     </tr>
   `).join('');
 
   const content = `
-    <div style="text-align: center; margin-bottom: 32px;">
-      <div style="display: inline-block; width: 64px; height: 64px; background-color: #000000; border-radius: 50%; margin-bottom: 16px;">
-        <span style="font-size: 32px; line-height: 64px; color: #ffffff;">&#10003;</span>
+    <div style="text-align: center; margin-bottom: 40px;">
+      <div style="display: inline-block; width: 56px; height: 56px; background-color: #1d1d1f; border-radius: 50%; margin-bottom: 20px; line-height: 56px;">
+        <span style="font-size: 24px; color: #ffffff;">&#10003;</span>
       </div>
-      <h2 style="margin: 0; font-size: 24px; font-weight: 600; color: #000000; text-transform: uppercase; letter-spacing: 0.02em;">
-        Platba prijata!
-      </h2>
+      <h1 style="margin: 0 0 12px 0; font-size: 28px; font-weight: 600; color: #1d1d1f; letter-spacing: -0.02em; line-height: 1.2;">
+        Platba prijata
+      </h1>
+      <p style="margin: 0; font-size: 17px; color: #86868b; line-height: 1.5;">
+        Dekujeme, ${data.customerName}. Vase platba byla uspesne zpracovana.
+      </p>
     </div>
     
-    <p style="margin: 0 0 24px 0; font-size: 16px; line-height: 1.6; color: #333333; text-align: center;">
-      Vazeny/a ${data.customerName},<br><br>
-      Vase platba byla uspesne zpracovana. Dekujeme!
-    </p>
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom: 32px; background-color: #f5f5f7; border-radius: 12px;">
+      <tr>
+        <td style="padding: 28px;">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+            <tr>
+              <td style="text-align: center; padding-bottom: 16px; border-bottom: 1px solid #e5e5e5;">
+                <p style="margin: 0 0 4px 0; font-size: 13px; color: #86868b;">Cislo objednavky</p>
+                <p style="margin: 0; font-size: 20px; font-weight: 600; color: #1d1d1f; letter-spacing: -0.01em;">${data.orderNumber}</p>
+              </td>
+            </tr>
+            <tr>
+              <td style="text-align: center; padding-top: 16px;">
+                <p style="margin: 0 0 4px 0; font-size: 13px; color: #86868b;">Celkova castka</p>
+                <p style="margin: 0; font-size: 28px; font-weight: 600; color: #1d1d1f; letter-spacing: -0.02em;">${data.totalPrice.toLocaleString('cs-CZ')} Kc</p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
     
-    <div style="background-color: #f8f8f8; padding: 20px; margin-bottom: 24px; text-align: center;">
-      <p style="margin: 0 0 8px 0; font-size: 12px; color: #666666; text-transform: uppercase; letter-spacing: 0.05em;">Cislo objednavky</p>
-      <p style="margin: 0 0 16px 0; font-size: 20px; font-weight: 700; color: #000000; letter-spacing: 0.02em;">${data.orderNumber}</p>
-      <p style="margin: 0 0 4px 0; font-size: 12px; color: #666666; text-transform: uppercase; letter-spacing: 0.05em;">Celkova castka</p>
-      <p style="margin: 0; font-size: 24px; font-weight: 700; color: #000000;">${data.totalPrice.toLocaleString('cs-CZ')} Kc</p>
-    </div>
-    
-    <div style="margin-bottom: 24px;">
-      <p style="margin: 0 0 12px 0; font-size: 12px; color: #666666; text-transform: uppercase; letter-spacing: 0.05em;">Souhrn objednavky</p>
+    <div style="margin-bottom: 32px;">
+      <p style="margin: 0 0 16px 0; font-size: 13px; font-weight: 600; color: #1d1d1f; text-transform: uppercase; letter-spacing: 0.05em;">
+        Souhrn objednavky
+      </p>
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
         ${itemsHtml}
       </table>
     </div>
     
-    <p style="margin: 0 0 24px 0; font-size: 14px; line-height: 1.6; color: #666666; text-align: center;">
-      Vasi objednavku nyni zpracovavame a brzy vam zasleme informace o odeslani.
-    </p>
-    
-    <div style="text-align: center;">
+    <div style="text-align: center; padding: 24px; background-color: #f5f5f7; border-radius: 12px; margin-bottom: 24px;">
+      <p style="margin: 0 0 8px 0; font-size: 15px; font-weight: 500; color: #1d1d1f;">Co bude dal?</p>
+      <p style="margin: 0 0 20px 0; font-size: 14px; color: #86868b; line-height: 1.5;">
+        Vasi objednavku nyni pripravujeme k odeslani.<br>
+        Jakmile ji predame prepravci, dame vam vedet.
+      </p>
       <a href="${WEBSITE_URL}/sledovani-objednavky" style="${buttonStyle}">
         Sledovat objednavku
       </a>
@@ -292,52 +381,69 @@ export async function sendShippingNotificationEmail(data: ShippingEmailData) {
 
   const trackingInfo = data.trackingNumber
     ? `
-      <div style="background-color: #f8f8f8; padding: 20px; margin-bottom: 24px; text-align: center;">
-        <p style="margin: 0 0 8px 0; font-size: 12px; color: #666666; text-transform: uppercase; letter-spacing: 0.05em;">Sledovaci cislo</p>
-        <p style="margin: 0; font-size: 20px; font-weight: 700; color: #000000; letter-spacing: 0.02em;">${data.trackingNumber}</p>
-      </div>
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom: 24px; background-color: #f5f5f7; border-radius: 12px;">
+        <tr>
+          <td style="padding: 24px; text-align: center;">
+            <p style="margin: 0 0 8px 0; font-size: 13px; color: #86868b;">Sledovaci cislo</p>
+            <p style="margin: 0; font-size: 20px; font-weight: 600; color: #1d1d1f; letter-spacing: 0.02em; font-family: 'SF Mono', Monaco, 'Courier New', monospace;">${data.trackingNumber}</p>
+          </td>
+        </tr>
+      </table>
     `
     : '';
 
   const pickupInfo = data.shippingMethod === 'zasilkovna' && data.zasilkovnaName
     ? `
-      <div style="background-color: #f8f8f8; padding: 20px; margin-bottom: 24px;">
-        <p style="margin: 0 0 8px 0; font-size: 12px; color: #666666; text-transform: uppercase; letter-spacing: 0.05em;">Vydejni misto</p>
-        <p style="margin: 0; font-size: 16px; font-weight: 500; color: #000000;">${data.zasilkovnaName}</p>
-        <p style="margin: 8px 0 0 0; font-size: 14px; color: #666666;">
-          Jakmile bude balik pripraven k vyzvednuti, obdrzite SMS nebo e-mail od Zasilkovny.
-        </p>
-      </div>
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom: 24px; background-color: #f5f5f7; border-radius: 12px;">
+        <tr>
+          <td style="padding: 24px;">
+            <p style="margin: 0 0 8px 0; font-size: 13px; color: #86868b;">Misto vyzvednuti</p>
+            <p style="margin: 0 0 12px 0; font-size: 17px; font-weight: 500; color: #1d1d1f;">${data.zasilkovnaName}</p>
+            <p style="margin: 0; font-size: 13px; color: #86868b; line-height: 1.5;">
+              Jakmile bude balik pripraven k vyzvednuti, obdrzite SMS nebo e-mail od Zasilkovny.
+            </p>
+          </td>
+        </tr>
+      </table>
     `
     : '';
 
   const content = `
-    <div style="text-align: center; margin-bottom: 32px;">
-      <div style="display: inline-block; width: 64px; height: 64px; background-color: #000000; border-radius: 50%; margin-bottom: 16px;">
-        <span style="font-size: 28px; line-height: 64px; color: #ffffff;">&#128230;</span>
+    <div style="text-align: center; margin-bottom: 40px;">
+      <div style="display: inline-block; width: 56px; height: 56px; background-color: #1d1d1f; border-radius: 50%; margin-bottom: 20px; line-height: 56px;">
+        <span style="font-size: 24px; color: #ffffff;">&#10003;</span>
       </div>
-      <h2 style="margin: 0; font-size: 24px; font-weight: 600; color: #000000; text-transform: uppercase; letter-spacing: 0.02em;">
-        Vase objednavka byla odeslana!
-      </h2>
+      <h1 style="margin: 0 0 12px 0; font-size: 28px; font-weight: 600; color: #1d1d1f; letter-spacing: -0.02em; line-height: 1.2;">
+        Vase objednavka je na ceste
+      </h1>
+      <p style="margin: 0; font-size: 17px; color: #86868b; line-height: 1.5;">
+        Objednavka <strong style="color: #1d1d1f;">${data.orderNumber}</strong> byla odeslana.
+      </p>
     </div>
-    
-    <p style="margin: 0 0 24px 0; font-size: 16px; line-height: 1.6; color: #333333; text-align: center;">
-      Vazeny/a ${data.customerName},<br><br>
-      Skvela zprava! Vase objednavka <strong>${data.orderNumber}</strong> byla prave odeslana.
-    </p>
     
     ${trackingInfo}
     ${pickupInfo}
     
-    <p style="margin: 0 0 24px 0; font-size: 14px; line-height: 1.6; color: #666666; text-align: center;">
-      Doruceni obvykle trva 1-3 pracovni dny. Dekujeme za nakup u UFO Sport!
-    </p>
-    
-    <div style="text-align: center;">
+    <div style="text-align: center; padding: 24px; background-color: #f5f5f7; border-radius: 12px; margin-bottom: 24px;">
+      <table role="presentation" cellspacing="0" cellpadding="0" style="margin: 0 auto 20px auto;">
+        <tr>
+          <td style="padding: 0 16px; text-align: center;">
+            <p style="margin: 0 0 4px 0; font-size: 24px; font-weight: 600; color: #1d1d1f;">1-3</p>
+            <p style="margin: 0; font-size: 12px; color: #86868b;">pracovni dny</p>
+          </td>
+        </tr>
+      </table>
+      <p style="margin: 0 0 20px 0; font-size: 14px; color: #86868b; line-height: 1.5;">
+        Ocekavana doba doruceni
+      </p>
       <a href="${WEBSITE_URL}/sledovani-objednavky" style="${buttonStyle}">
         Sledovat zasilku
       </a>
     </div>
+    
+    <p style="margin: 0; font-size: 13px; color: #86868b; text-align: center; line-height: 1.6;">
+      Dekujeme za nakup u UFO Sport!
+    </p>
   `;
 
   try {
@@ -362,38 +468,77 @@ export async function sendNewsletterWelcomeEmail(email: string) {
   }
 
   const content = `
+    <div style="text-align: center; margin-bottom: 40px;">
+      <h1 style="margin: 0 0 12px 0; font-size: 28px; font-weight: 600; color: #1d1d1f; letter-spacing: -0.02em; line-height: 1.2;">
+        Vitejte v UFO Sport
+      </h1>
+      <p style="margin: 0; font-size: 17px; color: #86868b; line-height: 1.5;">
+        Dekujeme za prihlaseni k odberu novinek.
+      </p>
+    </div>
+    
+    <div style="margin-bottom: 40px;">
+      <p style="margin: 0 0 24px 0; font-size: 15px; color: #1d1d1f; text-align: center; line-height: 1.6;">
+        Od ted budete jako prvni vedet o vsem novem.
+      </p>
+      
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+        <tr>
+          <td style="padding: 20px 0; border-bottom: 1px solid #f0f0f0;">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+              <tr>
+                <td style="width: 40px; vertical-align: top;">
+                  <div style="width: 32px; height: 32px; background-color: #f5f5f7; border-radius: 8px; text-align: center; line-height: 32px; font-size: 16px;">&#9733;</div>
+                </td>
+                <td style="vertical-align: top; padding-left: 12px;">
+                  <p style="margin: 0 0 4px 0; font-size: 15px; font-weight: 500; color: #1d1d1f;">Novinky v kolekci</p>
+                  <p style="margin: 0; font-size: 13px; color: #86868b;">Budete prvni, kdo uvidi nove produkty.</p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 20px 0; border-bottom: 1px solid #f0f0f0;">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+              <tr>
+                <td style="width: 40px; vertical-align: top;">
+                  <div style="width: 32px; height: 32px; background-color: #f5f5f7; border-radius: 8px; text-align: center; line-height: 32px; font-size: 16px;">%</div>
+                </td>
+                <td style="vertical-align: top; padding-left: 12px;">
+                  <p style="margin: 0 0 4px 0; font-size: 15px; font-weight: 500; color: #1d1d1f;">Exkluzivni slevy</p>
+                  <p style="margin: 0; font-size: 13px; color: #86868b;">Specialni nabidky jen pro odberatele.</p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 20px 0;">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+              <tr>
+                <td style="width: 40px; vertical-align: top;">
+                  <div style="width: 32px; height: 32px; background-color: #f5f5f7; border-radius: 8px; text-align: center; line-height: 32px; font-size: 16px;">&#9889;</div>
+                </td>
+                <td style="vertical-align: top; padding-left: 12px;">
+                  <p style="margin: 0 0 4px 0; font-size: 15px; font-weight: 500; color: #1d1d1f;">Limitovane edice</p>
+                  <p style="margin: 0; font-size: 13px; color: #86868b;">Pristup k limitovanym kolekcim.</p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </div>
+    
     <div style="text-align: center; margin-bottom: 32px;">
-      <h2 style="margin: 0; font-size: 24px; font-weight: 600; color: #000000; text-transform: uppercase; letter-spacing: 0.02em;">
-        Vitejte v UFO Sport!
-      </h2>
-    </div>
-    
-    <p style="margin: 0 0 24px 0; font-size: 16px; line-height: 1.6; color: #333333; text-align: center;">
-      Dekujeme za prihlaseni k odberu nasich novinek!<br><br>
-      Nyni budete jako prvni vedet o:
-    </p>
-    
-    <div style="background-color: #f8f8f8; padding: 24px; margin-bottom: 24px;">
-      <ul style="margin: 0; padding: 0 0 0 20px; font-size: 14px; line-height: 2; color: #333333;">
-        <li>Novinkach v nasi kolekci</li>
-        <li>Exkluzivnich slevach a promocich</li>
-        <li>Limitovanych edicich</li>
-        <li>Specialnich akcich jen pro odberatele</li>
-      </ul>
-    </div>
-    
-    <p style="margin: 0 0 24px 0; font-size: 14px; line-height: 1.6; color: #666666; text-align: center;">
-      Tesime se na vas!
-    </p>
-    
-    <div style="text-align: center; margin-bottom: 16px;">
       <a href="${WEBSITE_URL}" style="${buttonStyle}">
         Prozkoumat kolekci
       </a>
     </div>
     
-    <p style="margin: 24px 0 0 0; font-size: 11px; color: #999999; text-align: center;">
-      Pokud jste se k odberu neprihlasili, muzete tento e-mail ignorovat.
+    <p style="margin: 0; font-size: 12px; color: #86868b; text-align: center; line-height: 1.6;">
+      Pokud jste se k odberu neprihlasili vy, muzete tento e-mail ignorovat.
     </p>
   `;
 
@@ -401,7 +546,7 @@ export async function sendNewsletterWelcomeEmail(email: string) {
     const result = await resend.emails.send({
       from: FROM_EMAIL,
       to: email,
-      subject: 'Vitejte v UFO Sport! Dekujeme za prihlaseni k odberu',
+      subject: 'Vitejte v UFO Sport',
       html: emailWrapper(content),
     });
     console.log('Newsletter welcome email sent:', result);
@@ -419,29 +564,36 @@ export async function sendPasswordResetEmail(email: string, resetLink: string) {
   }
 
   const content = `
-    <h2 style="margin: 0 0 24px 0; font-size: 24px; font-weight: 600; color: #000000; text-transform: uppercase; letter-spacing: 0.02em; text-align: center;">
-      Obnoveni hesla
-    </h2>
+    <div style="text-align: center; margin-bottom: 40px;">
+      <div style="display: inline-block; width: 56px; height: 56px; background-color: #f5f5f7; border-radius: 50%; margin-bottom: 20px; line-height: 56px;">
+        <span style="font-size: 24px; color: #1d1d1f;">&#128274;</span>
+      </div>
+      <h1 style="margin: 0 0 12px 0; font-size: 28px; font-weight: 600; color: #1d1d1f; letter-spacing: -0.02em; line-height: 1.2;">
+        Obnoveni hesla
+      </h1>
+      <p style="margin: 0; font-size: 17px; color: #86868b; line-height: 1.5;">
+        Obdrzeli jsme zadost o obnoveni vaseho hesla.
+      </p>
+    </div>
     
-    <p style="margin: 0 0 24px 0; font-size: 16px; line-height: 1.6; color: #333333; text-align: center;">
-      Obdrzeli jsme zadost o obnoveni vaseho hesla.<br>
-      Kliknete na tlacitko nize pro nastaveni noveho hesla.
-    </p>
-    
-    <div style="text-align: center; margin-bottom: 24px;">
+    <div style="text-align: center; padding: 32px; background-color: #f5f5f7; border-radius: 12px; margin-bottom: 32px;">
+      <p style="margin: 0 0 24px 0; font-size: 15px; color: #1d1d1f; line-height: 1.6;">
+        Kliknete na tlacitko nize pro nastaveni noveho hesla.
+      </p>
       <a href="${resetLink}" style="${buttonStyle}">
         Obnovit heslo
       </a>
+      <p style="margin: 24px 0 0 0; font-size: 13px; color: #86868b;">
+        Odkaz je platny po dobu 1 hodiny.
+      </p>
     </div>
     
-    <p style="margin: 0 0 16px 0; font-size: 14px; line-height: 1.6; color: #666666; text-align: center;">
-      Odkaz je platny po dobu 1 hodiny.
-    </p>
-    
-    <p style="margin: 0; font-size: 12px; color: #999999; text-align: center;">
-      Pokud jste o obnoveni hesla nezadali, tento e-mail prosim ignorujte.<br>
-      Vase heslo zustane nezmeneno.
-    </p>
+    <div style="padding: 20px; border: 1px solid #f0f0f0; border-radius: 12px; margin-bottom: 24px;">
+      <p style="margin: 0 0 8px 0; font-size: 13px; font-weight: 500; color: #1d1d1f;">Nezadali jste o zmenu hesla?</p>
+      <p style="margin: 0; font-size: 13px; color: #86868b; line-height: 1.5;">
+        Pokud jste o obnoveni hesla nezadali, tento e-mail prosim ignorujte. Vase heslo zustane nezmeneno.
+      </p>
+    </div>
   `;
 
   try {

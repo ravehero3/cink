@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
@@ -32,6 +33,7 @@ const STATUS_TRANSLATIONS: Record<string, string> = {
 const TIME_PERIODS = ['Dnes', '24 hodin', 'Týden', 'Měsíc', 'Rok'];
 
 export default function AdminOrdersPage() {
+  const router = useRouter();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [updatingOrderId, setUpdatingOrderId] = useState<string | null>(null);
@@ -40,6 +42,10 @@ export default function AdminOrdersPage() {
   const [mounted, setMounted] = useState(false);
   const [sortBy, setSortBy] = useState<'paymentStatus' | 'status' | 'createdAt' | null>(null);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+
+  const handleRowClick = (orderId: string) => {
+    router.push(`/admin/objednavky/${orderId}`);
+  };
 
   useEffect(() => {
     fetchOrders();
@@ -424,7 +430,11 @@ export default function AdminOrdersPage() {
           </thead>
           <tbody>
             {displayedOrders.map((order) => (
-              <tr key={order.id} className="border-b border-black last:border-b-0">
+              <tr 
+                key={order.id} 
+                className="border-b border-black last:border-b-0 cursor-pointer transition-all duration-200 ease-out hover:scale-[1.02] hover:bg-gray-50 hover:shadow-md origin-center"
+                onClick={() => handleRowClick(order.id)}
+              >
                 <td className="p-4 text-body font-bold">{order.orderNumber}</td>
                 <td className="p-4 text-body">{order.customerName}</td>
                 <td className="p-4 text-body">{order.customerEmail}</td>
@@ -442,6 +452,7 @@ export default function AdminOrdersPage() {
                   <select
                     value={order.status}
                     onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
                     disabled={updatingOrderId === order.id}
                     className={`px-3 py-1 text-body uppercase border border-black bg-white cursor-pointer hover:bg-gray-50 ${
                       updatingOrderId === order.id ? 'opacity-50 cursor-not-allowed' : ''
@@ -461,6 +472,7 @@ export default function AdminOrdersPage() {
                 <td className="p-4">
                   <Link
                     href={`/admin/objednavky/${order.id}`}
+                    onClick={(e) => e.stopPropagation()}
                     className="px-3 py-1 text-body uppercase border border-black hover:bg-black hover:text-white inline-block"
                   >
                     Detail

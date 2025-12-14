@@ -107,11 +107,11 @@ function LoginContent() {
       {/* Horizontal line at 50% */}
       <div className="absolute top-1/2 left-0 right-0 h-px bg-black z-0" />
       
-      {/* Left vertical line - starts at top (header padding handled by body) */}
-      <div className="absolute left-1/4 w-px bg-black z-0" style={{ top: 0, bottom: 0 }} />
+      {/* Left vertical line - starts at top (header padding handled by body) - hidden on mobile */}
+      <div className="hidden md:block absolute left-1/4 w-px bg-black z-0" style={{ top: 0, bottom: 0 }} />
       
-      {/* Right vertical line - starts at top (header padding handled by body) */}
-      <div className="absolute right-1/4 w-px bg-black z-0" style={{ top: 0, bottom: 0 }} />
+      {/* Right vertical line - starts at top (header padding handled by body) - hidden on mobile */}
+      <div className="hidden md:block absolute right-1/4 w-px bg-black z-0" style={{ top: 0, bottom: 0 }} />
 
       {/* Main content above the line */}
       <div className="relative z-10 flex flex-col items-center pt-12">
@@ -128,20 +128,20 @@ function LoginContent() {
           Login
         </h1>
 
-        <div className="w-full flex flex-col items-center">
+        <div className="w-full flex flex-col items-center px-4 md:px-0">
           {showRegisteredMessage && (
-            <div className="mb-6 p-3 text-sm border text-center" style={{ width: '33.33%', backgroundColor: '#24e053', color: '#000000', borderColor: '#24e053' }}>
+            <div className="mb-6 p-3 text-sm border text-center w-full md:w-1/3" style={{ backgroundColor: '#24e053', color: '#000000', borderColor: '#24e053' }}>
               Registrace byla úspěšná! Nyní se můžete přihlásit.
             </div>
           )}
 
           {error && (
-            <div className="mb-6 p-3 bg-red-50 text-red-800 text-sm border border-red-200 text-center" style={{ width: '33.33%' }}>
+            <div className="mb-6 p-3 bg-red-50 text-red-800 text-sm border border-red-200 text-center w-full md:w-1/3">
               {error}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="flex flex-col items-center" style={{ width: '33.33%' }}>
+          <form onSubmit={handleSubmit} className="flex flex-col items-center w-full md:w-1/3">
             <div className="w-full relative" style={{ marginBottom: '8px' }}>
               <label 
                 className="block text-xs mb-[2px]"
@@ -213,7 +213,7 @@ function LoginContent() {
 
           {hasGoogleProvider && (
             <>
-              <div className="flex items-center" style={{ marginBottom: '8px', width: '33.33%' }}>
+              <div className="flex items-center w-full md:w-1/3" style={{ marginBottom: '8px' }}>
                 <div className="flex-1 h-px bg-black" />
                 <span 
                   className="mx-4 text-xs"
@@ -228,15 +228,14 @@ function LoginContent() {
 
               <button
                 onClick={handleGoogleLogin}
-                className="border border-black bg-white text-black hover:bg-black hover:text-white transition-colors flex items-center justify-center gap-3"
+                className="border border-black bg-white text-black hover:bg-black hover:text-white transition-colors flex items-center justify-center gap-3 w-full md:w-1/3"
                 style={{
                   fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontSize: '13px',
                   padding: '13.8px 25.6px',
                   borderRadius: '4px',
                   letterSpacing: '0.05em',
-                  marginBottom: '8px',
-                  width: '33.33%'
+                  marginBottom: '8px'
                 }}
               >
                 <svg width="18" height="18" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
