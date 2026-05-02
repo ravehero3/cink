@@ -2,6 +2,7 @@ modules = ["nodejs-20", "bash", "web"]
 [agent]
 expertMode = true
 integrations = ["javascript_database:1.0.0", "github:1.0.0"]
+stack = "BEST_EFFORT_FALLBACK"
 
 [nix]
 channel = "stable-25_05"
@@ -53,7 +54,7 @@ GOPAY_CLIENT_SECRET = "uJcnLkVF"
 GOPAY_ENVIRONMENT = "production"
 
 [userenv.development]
-NEXTAUTH_URL = "https://3017b1cd-f889-40a3-9d8b-7850068704c3-00-3ehqejqi4ar3t.kirk.replit.dev"
+NEXTAUTH_URL = "https://d4329f7c-472c-4653-9eda-d23198bd0a59-00-20lspgawdahlb.picard.replit.dev"
 
 [userenv.production]
 NEXTAUTH_URL = "https://www.ufosport.cz"
