@@ -43,7 +43,7 @@ The project is built using Next.js 14 (App Router) and TypeScript, with Tailwind
 - **Payment Gateway**: GoPay
 - **Shipping Integration**: Zásilkovna (Packeta) API
 - **Email Service**: Resend API
-- **File Storage**: Cloudinary / Vercel Blob
+- **File Storage**: UploadThing (product images); Cloudinary kept only for video uploads via CloudinaryUploadButton
 
 ## Recent Changes (December 5, 2025)
 

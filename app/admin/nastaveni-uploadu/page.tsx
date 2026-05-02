@@ -13,14 +13,10 @@ interface DiagResult {
 interface Diagnostics {
   allOk: boolean;
   config: {
-    cloudName: string;
-    apiKeySet: boolean;
-    apiSecretSet: boolean;
-    uploadPreset: string;
+    tokenSet: boolean;
   };
   tests: {
-    unsignedUpload?: DiagResult;
-    signedApi?: DiagResult;
+    uploadthingApi?: DiagResult;
   };
 }
 
@@ -42,16 +38,6 @@ function TestRow({ label, result }: { label: string; result?: DiagResult }) {
           <p className="text-xs text-red-500 mt-1 font-mono bg-red-100 px-2 py-1 border border-red-200">
             {result.error}
           </p>
-        )}
-        {result.url && (
-          <a
-            href={result.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs text-green-700 underline mt-1 inline-block"
-          >
-            Zobrazit testovací obrázek →
-          </a>
         )}
       </div>
     </div>
@@ -100,7 +86,7 @@ export default function UploadDiagnosticsPage() {
       {loading && !data && (
         <div className="flex items-center gap-3 p-6 border border-black">
           <Loader2 size={20} className="animate-spin" />
-          <p className="text-body">Testuji připojení k Cloudinary…</p>
+          <p className="text-body">Testuji připojení k UploadThing…</p>
         </div>
       )}
 
@@ -127,25 +113,18 @@ export default function UploadDiagnosticsPage() {
           <div className="border border-black p-4 space-y-2">
             <h2 className="font-bold text-sm uppercase mb-3">Konfigurace</h2>
             <div className="grid grid-cols-2 gap-2 text-sm">
-              <span className="text-gray-600">Cloud Name</span>
-              <span className="font-mono">{data.config.cloudName}</span>
-              <span className="text-gray-600">API Key</span>
-              <span className={data.config.apiKeySet ? 'text-green-600' : 'text-red-600'}>
-                {data.config.apiKeySet ? '✓ Nastaven' : '✗ Chybí'}
+              <span className="text-gray-600">Služba</span>
+              <span className="font-medium">UploadThing</span>
+              <span className="text-gray-600">API Token</span>
+              <span className={data.config.tokenSet ? 'text-green-600' : 'text-red-600'}>
+                {data.config.tokenSet ? '✓ Nastaven' : '✗ Chybí UPLOADTHING_TOKEN'}
               </span>
-              <span className="text-gray-600">API Secret</span>
-              <span className={data.config.apiSecretSet ? 'text-green-600' : 'text-red-600'}>
-                {data.config.apiSecretSet ? '✓ Nastaven' : '✗ Chybí'}
-              </span>
-              <span className="text-gray-600">Upload Preset</span>
-              <span className="font-mono">{data.config.uploadPreset}</span>
             </div>
           </div>
 
           <div className="space-y-3">
             <h2 className="font-bold text-sm uppercase">Testy</h2>
-            <TestRow label="Unsigned upload (přímý upload bez autentizace)" result={data.tests.unsignedUpload} />
-            <TestRow label="Signed API (server-side upload)" result={data.tests.signedApi} />
+            <TestRow label="UploadThing API (připojení a autentizace)" result={data.tests.uploadthingApi} />
           </div>
 
           {!data.allOk && (
@@ -153,24 +132,17 @@ export default function UploadDiagnosticsPage() {
               <h3 className="font-bold text-sm uppercase mb-3">Jak opravit</h3>
               <ol className="text-sm space-y-2 list-decimal list-inside text-gray-700">
                 <li>
-                  Vytvořte si <strong>bezplatný účet na Cloudinary</strong>:{' '}
-                  <a href="https://cloudinary.com/users/register/free" target="_blank" rel="noopener noreferrer" className="underline">
-                    cloudinary.com/users/register/free
-                  </a>
+                  Přihlaste se na{' '}
+                  <a href="https://uploadthing.com" target="_blank" rel="noopener noreferrer" className="underline">
+                    uploadthing.com
+                  </a>{' '}
+                  a vytvořte nový projekt
                 </li>
+                <li>Jděte do Dashboard → API Keys a zkopírujte token</li>
                 <li>
-                  V Cloudinary dashboardu jděte do <strong>Settings → Upload → Upload presets</strong> a vytvořte preset
-                  s názvem <code className="bg-gray-200 px-1">ufosport_unsigned</code> (Signing Mode: Unsigned)
-                </li>
-                <li>
-                  Zkopírujte <strong>Cloud Name, API Key a API Secret</strong> z Dashboard → API Keys
-                </li>
-                <li>
-                  Nastavte tyto hodnoty jako environment variables:{' '}
-                  <code className="bg-gray-200 px-1">CLOUDINARY_CLOUD_NAME</code>,{' '}
-                  <code className="bg-gray-200 px-1">CLOUDINARY_API_KEY</code>,{' '}
-                  <code className="bg-gray-200 px-1">CLOUDINARY_API_SECRET</code>,{' '}
-                  <code className="bg-gray-200 px-1">NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME</code>
+                  Nastavte proměnnou{' '}
+                  <code className="bg-gray-200 px-1">UPLOADTHING_TOKEN</code>{' '}
+                  v Replit Secrets
                 </li>
                 <li>Spusťte tuto diagnostiku znovu pro ověření.</li>
               </ol>
