@@ -218,7 +218,7 @@ export default function NewProductPage() {
           <ImageUploader
             images={images}
             onChange={setImages}
-            folder="ufosport/products"
+
             maxImages={10}
           />
         </div>

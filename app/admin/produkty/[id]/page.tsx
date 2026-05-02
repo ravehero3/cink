@@ -297,7 +297,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
           <ImageUploader
             images={images}
             onChange={setImages}
-            folder="ufosport/products"
+
             maxImages={10}
           />
         </div>
