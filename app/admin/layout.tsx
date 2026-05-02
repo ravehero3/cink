@@ -86,6 +86,14 @@ export default function AdminLayout({
             >
               Média
             </Link>
+            <Link
+              href="/admin/nastaveni-uploadu"
+              className={`block text-body uppercase hover:underline py-0.5 ${
+                pathname === '/admin/nastaveni-uploadu' ? 'font-bold' : ''
+              }`}
+            >
+              Diagnostika uploadu
+            </Link>
             <div className="pt-2 mt-2 border-t border-black">
               <Link
                 href="/"

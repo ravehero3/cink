@@ -52,6 +52,8 @@ GOPAY_GOID = "8476296202"
 GOPAY_CLIENT_ID = "1307637683"
 GOPAY_CLIENT_SECRET = "uJcnLkVF"
 GOPAY_ENVIRONMENT = "production"
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME = "dq0qvtbst"
+NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET = "ufosport_unsigned"
 
 [userenv.development]
 NEXTAUTH_URL = "https://d4329f7c-472c-4653-9eda-d23198bd0a59-00-20lspgawdahlb.picard.replit.dev"

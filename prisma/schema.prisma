@@ -52,6 +52,7 @@ model Product {
   sizeChartImage     String?
   sizeChartType      String?
   sizeChartData      Json?
+  productType        String?
   seoTitle           String?
   seoDescription     String?
   seoKeywords        String?

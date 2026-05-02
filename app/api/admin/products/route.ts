@@ -66,6 +66,7 @@ export async function POST(request: NextRequest) {
         careInfo: data.careInfo || null,
         sizeChartType: data.sizeChartType || null,
         sizeChartData: data.sizeChartData || null,
+        productType: data.productType || null,
       },
     });
 
