@@ -17,71 +17,159 @@ interface ImageUploaderProps {
   maxImages?: number;
 }
 
+function extractErrorMessage(error: unknown): string {
+  if (!error) return 'Neznámá chyba.';
+  if (typeof error === 'string') return error;
+  if (error instanceof Error) {
+    const msg = error.message || '';
+    if (msg.toLowerCase().includes('unauthorized') || msg.includes('401')) {
+      return 'Přístup odepřen — ujistěte se, že jste přihlášeni jako admin.';
+    }
+    if (msg.toLowerCase().includes('file size') || msg.includes('too large')) {
+      return 'Soubor je příliš velký. Maximum je 16 MB.';
+    }
+    if (msg.toLowerCase().includes('file type') || msg.includes('not allowed')) {
+      return 'Nepodporovaný formát souboru. Použijte JPG, PNG nebo WebP.';
+    }
+    if (msg.toLowerCase().includes('network') || msg.toLowerCase().includes('fetch')) {
+      return 'Chyba sítě — zkontrolujte připojení a zkuste znovu.';
+    }
+    return msg || 'Upload selhal.';
+  }
+  try {
+    const obj = error as any;
+    return obj?.message || obj?.error || JSON.stringify(error);
+  } catch {
+    return 'Upload selhal.';
+  }
+}
+
 export default function ImageUploader({
   images,
   onChange,
   maxImages = 10,
 }: ImageUploaderProps) {
   const [uploadItems, setUploadItems] = useState<UploadItem[]>([]);
+  const [globalError, setGlobalError] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { startUpload, isUploading } = useUploadThing('productImageUploader', {
     onUploadBegin(fileName) {
-      setUploadItems((prev) => [
-        ...prev,
-        { id: fileName, name: fileName, status: 'uploading' },
-      ]);
+      setUploadItems((prev) =>
+        prev.map((item) =>
+          item.name === fileName && item.status === 'uploading'
+            ? item
+            : item
+        )
+      );
     },
     onClientUploadComplete(res) {
       if (!res) return;
       const newUrls = res.map((f) => f.ufsUrl);
       onChange([...images, ...newUrls]);
+
+      const completedNames = new Set(res.map((f) => f.name));
       setUploadItems((prev) =>
         prev.map((item) =>
-          res.some((f) => f.name === item.id)
+          completedNames.has(item.name)
             ? { ...item, status: 'done' }
             : item
         )
       );
+
       setTimeout(() => {
         setUploadItems((prev) => prev.filter((u) => u.status === 'error'));
-      }, 2500);
+      }, 3000);
     },
     onUploadError(error) {
+      const msg = extractErrorMessage(error);
+      console.error('[ImageUploader] Upload error:', error);
+
       setUploadItems((prev) =>
         prev.map((item) =>
           item.status === 'uploading'
-            ? { ...item, status: 'error', error: error.message }
+            ? { ...item, status: 'error', error: msg }
             : item
         )
       );
+
+      const hasUploadingItems = uploadItems.some((u) => u.status === 'uploading');
+      if (!hasUploadingItems) {
+        setGlobalError(msg);
+      }
     },
   });
 
   const handleFiles = useCallback(
     async (files: FileList | File[]) => {
+      setGlobalError(null);
       const arr = Array.from(files);
       const remaining = maxImages - images.length;
-      const toUpload = arr.slice(0, remaining);
-      if (toUpload.length === 0) return;
 
-      const ALLOWED = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-      const invalid = toUpload.filter((f) => !ALLOWED.includes(f.type));
-      if (invalid.length > 0) {
-        setUploadItems((prev) => [
-          ...prev,
-          ...invalid.map((f) => ({
-            id: f.name,
-            name: f.name,
-            status: 'error' as const,
-            error: `Nepodporovaný formát. Použijte JPG, PNG nebo WebP.`,
-          })),
-        ]);
+      if (remaining <= 0) {
+        setGlobalError(`Dosažen maximální počet obrázků (${maxImages}).`);
         return;
       }
 
-      await startUpload(toUpload);
+      const toUpload = arr.slice(0, remaining);
+      const skipped = arr.length - toUpload.length;
+      if (skipped > 0) {
+        setGlobalError(
+          `Lze nahrát maximálně ${maxImages} obrázků. ${skipped} soubor${skipped > 1 ? 'y' : ''} byl${skipped > 1 ? 'y' : ''} přeskočen${skipped > 1 ? 'y' : ''}.`
+        );
+      }
+
+      const ALLOWED = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+      const invalid = toUpload.filter((f) => !ALLOWED.includes(f.type));
+      const valid = toUpload.filter((f) => ALLOWED.includes(f.type));
+
+      const now = Date.now();
+      const newItems: UploadItem[] = [
+        ...invalid.map((f, i) => ({
+          id: `${now}-inv-${i}`,
+          name: f.name,
+          status: 'error' as const,
+          error: `Nepodporovaný formát "${f.type || 'neznámý'}". Použijte JPG, PNG nebo WebP.`,
+        })),
+        ...valid.map((f, i) => ({
+          id: `${now}-${i}`,
+          name: f.name,
+          status: 'uploading' as const,
+        })),
+      ];
+
+      setUploadItems((prev) => [...prev, ...newItems]);
+
+      if (valid.length === 0) return;
+
+      try {
+        const result = await startUpload(valid);
+        if (!result || result.length === 0) {
+          setUploadItems((prev) =>
+            prev.map((item) =>
+              item.status === 'uploading'
+                ? {
+                    ...item,
+                    status: 'error',
+                    error: 'Upload se nepodařil — server nevrátil žádný výsledek. Zkuste to znovu.',
+                  }
+                : item
+            )
+          );
+        }
+      } catch (err) {
+        const msg = extractErrorMessage(err);
+        console.error('[ImageUploader] startUpload threw:', err);
+        setUploadItems((prev) =>
+          prev.map((item) =>
+            item.status === 'uploading'
+              ? { ...item, status: 'error', error: msg }
+              : item
+          )
+        );
+        setGlobalError(msg);
+      }
     },
     [images, onChange, maxImages, startUpload]
   );
@@ -96,7 +184,7 @@ export default function ImageUploader({
   );
 
   const removeImage = (url: string) => onChange(images.filter((img) => img !== url));
-  const dismissError = (id: string) =>
+  const dismissItem = (id: string) =>
     setUploadItems((prev) => prev.filter((u) => u.id !== id));
 
   const moveImage = (from: number, to: number) => {
@@ -110,6 +198,23 @@ export default function ImageUploader({
 
   return (
     <div className="space-y-4">
+      {globalError && (
+        <div className="flex items-start gap-3 p-3 border border-red-500 bg-red-50 text-red-700 text-sm">
+          <AlertCircle size={16} className="shrink-0 mt-0.5" />
+          <div className="flex-1">
+            <p className="font-medium">Chyba uploadu</p>
+            <p className="mt-0.5">{globalError}</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setGlobalError(null)}
+            className="shrink-0 hover:text-red-900"
+          >
+            <X size={16} />
+          </button>
+        </div>
+      )}
+
       {images.length > 0 && (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
           {images.map((url, idx) => (
@@ -174,6 +279,8 @@ export default function ImageUploader({
               className={`flex items-center gap-3 p-3 border text-sm ${
                 u.status === 'error'
                   ? 'border-red-400 bg-red-50 text-red-700'
+                  : u.status === 'done'
+                  ? 'border-green-400 bg-green-50 text-green-800'
                   : 'border-gray-300 bg-gray-50 text-black'
               }`}
             >
@@ -190,21 +297,21 @@ export default function ImageUploader({
               <div className="flex-1 min-w-0">
                 <p className="font-medium truncate">{u.name}</p>
                 {u.status === 'uploading' && (
-                  <p className="text-xs text-gray-500">Nahrávám…</p>
+                  <p className="text-xs text-gray-500">Nahrávám na server…</p>
                 )}
                 {u.status === 'done' && (
-                  <p className="text-xs text-green-600">Nahráno úspěšně</p>
+                  <p className="text-xs text-green-700">Nahráno úspěšně</p>
                 )}
-                {u.status === 'error' && (
-                  <p className="text-xs text-red-600 mt-0.5">{u.error}</p>
+                {u.status === 'error' && u.error && (
+                  <p className="text-xs text-red-600 mt-0.5 break-words">{u.error}</p>
                 )}
               </div>
 
-              {u.status === 'error' && (
+              {(u.status === 'error' || u.status === 'done') && (
                 <button
                   type="button"
-                  onClick={() => dismissError(u.id)}
-                  className="shrink-0 hover:text-black"
+                  onClick={() => dismissItem(u.id)}
+                  className="shrink-0 hover:opacity-70"
                 >
                   <X size={16} />
                 </button>
