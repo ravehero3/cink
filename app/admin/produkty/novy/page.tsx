@@ -91,8 +91,14 @@ export default function NewProductPage() {
     }
   };
 
+  const isCD = formData.productType === 'CD';
+
   const updateSize = (size: string, value: string) => {
     setSizes({ ...sizes, [size]: parseInt(value) || 0 });
+  };
+
+  const updateCDStock = (value: string) => {
+    setSizes({ ONE_SIZE: parseInt(value) || 0 });
   };
 
   const totalStock = Object.values(sizes).reduce((sum, val) => sum + val, 0);
@@ -249,6 +255,7 @@ export default function NewProductPage() {
                 placeholder="Detailní informace o produktu, materiály, vlastnosti..."
               />
             </div>
+            {!isCD && (
             <div>
               <label className="block text-body uppercase mb-2">Size & Fit</label>
               <textarea
@@ -259,6 +266,7 @@ export default function NewProductPage() {
                 placeholder="Informace o velikostech a střihu produktu..."
               />
             </div>
+            )}
             <div>
               <label className="block text-body uppercase mb-2">Doprava a vrácení</label>
               <textarea
@@ -269,6 +277,7 @@ export default function NewProductPage() {
                 placeholder="Informace o dopravě a vrácení zboží..."
               />
             </div>
+            {!isCD && (
             <div>
               <label className="block text-body uppercase mb-2">Péče o produkt</label>
               <textarea
@@ -279,29 +288,51 @@ export default function NewProductPage() {
                 placeholder="Pokyny pro péči o produkt, praní, údržba..."
               />
             </div>
+            )}
           </div>
         </div>
 
         {/* Sizes and Stock */}
         <div className="mb-8 border border-black p-6">
-          <h2 className="text-header font-bold mb-4 uppercase">Velikosti a sklad</h2>
-          <div className="grid grid-cols-3 sm:grid-cols-6 gap-4 mb-3">
-            {SIZES.map((size) => (
-              <div key={size}>
-                <label className="block text-body mb-1 text-center font-bold">{size}</label>
+          {isCD ? (
+            <>
+              <h2 className="text-header font-bold mb-4 uppercase">Sklad</h2>
+              <div className="max-w-xs">
+                <label className="block text-body mb-1 font-bold">Množství na skladě</label>
                 <input
                   type="number"
                   min="0"
-                  value={sizes[size]}
-                  onChange={(e) => updateSize(size, e.target.value)}
+                  value={sizes['ONE_SIZE'] || 0}
+                  onChange={(e) => updateCDStock(e.target.value)}
                   className="w-full border border-black p-2 text-body text-center"
                 />
               </div>
-            ))}
-          </div>
-          <p className={`text-body font-medium ${totalStock === 0 ? 'text-red-600' : ''}`}>
-            Celkem skladem: {totalStock} ks {totalStock === 0 && '⚠ Produkt bude bez skladu'}
-          </p>
+              <p className={`text-body font-medium mt-3 ${(sizes['ONE_SIZE'] || 0) === 0 ? 'text-red-600' : ''}`}>
+                Celkem skladem: {sizes['ONE_SIZE'] || 0} ks {(sizes['ONE_SIZE'] || 0) === 0 && '⚠ Produkt bude bez skladu'}
+              </p>
+            </>
+          ) : (
+            <>
+              <h2 className="text-header font-bold mb-4 uppercase">Velikosti a sklad</h2>
+              <div className="grid grid-cols-3 sm:grid-cols-6 gap-4 mb-3">
+                {SIZES.map((size) => (
+                  <div key={size}>
+                    <label className="block text-body mb-1 text-center font-bold">{size}</label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={sizes[size]}
+                      onChange={(e) => updateSize(size, e.target.value)}
+                      className="w-full border border-black p-2 text-body text-center"
+                    />
+                  </div>
+                ))}
+              </div>
+              <p className={`text-body font-medium ${totalStock === 0 ? 'text-red-600' : ''}`}>
+                Celkem skladem: {totalStock} ks {totalStock === 0 && '⚠ Produkt bude bez skladu'}
+              </p>
+            </>
+          )}
         </div>
 
         {/* Visibility */}
