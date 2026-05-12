@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma, withRetry } from '@/lib/prisma';
 import { createPacketaClient, PacketaAPIError } from '@/lib/packeta-api';
-import { sendOrderConfirmationEmail } from '@/lib/email';
+import { sendOrderConfirmationEmail, sendAdminOrderNotificationEmail } from '@/lib/email';
 
 function generateErrorId(): string {
   return `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -327,24 +327,36 @@ export async function POST(request: NextRequest) {
 
     // Step 9: Send order confirmation email
     logInfo('Sending order confirmation email', { customerEmail, orderNumber });
+    const orderEmailData = {
+      orderNumber: order.orderNumber,
+      customerName,
+      customerEmail,
+      customerPhone,
+      items: items.map((item: any) => ({
+        name: item.name,
+        size: item.size,
+        quantity: item.quantity,
+        price: item.price,
+      })),
+      totalPrice: Number(totalPrice),
+      shippingMethod,
+      zasilkovnaName: zasilkovnaName || undefined,
+    };
+
     try {
-      await sendOrderConfirmationEmail({
-        orderNumber: order.orderNumber,
-        customerName,
-        customerEmail,
-        items: items.map((item: any) => ({
-          name: item.name,
-          size: item.size,
-          quantity: item.quantity,
-          price: item.price,
-        })),
-        totalPrice: Number(totalPrice),
-        shippingMethod,
-        zasilkovnaName: zasilkovnaName || undefined,
-      });
+      await sendOrderConfirmationEmail(orderEmailData);
       logInfo('Order confirmation email sent', { orderNumber });
     } catch (emailError) {
       logError(errorId, 'Failed to send order confirmation email (non-critical)', emailError);
+    }
+
+    // Step 9b: Send admin notification email
+    logInfo('Sending admin order notification email', { orderNumber });
+    try {
+      await sendAdminOrderNotificationEmail(orderEmailData);
+      logInfo('Admin order notification email sent', { orderNumber });
+    } catch (emailError) {
+      logError(errorId, 'Failed to send admin order notification email (non-critical)', emailError);
     }
 
     // Step 10: Return success response

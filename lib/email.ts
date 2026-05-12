@@ -557,6 +557,105 @@ export async function sendNewsletterWelcomeEmail(email: string) {
   }
 }
 
+const ADMIN_NOTIFICATION_EMAIL = 'andrea.gasi@seznam.cz';
+
+export async function sendAdminOrderNotificationEmail(data: OrderEmailData & { customerPhone?: string }) {
+  if (!resend) {
+    console.error('Cannot send admin order notification email: RESEND_API_KEY is not configured');
+    return { success: false, error: 'Email service not configured' };
+  }
+
+  const itemsHtml = data.items.map((item, index) => `
+    <tr>
+      <td style="padding: 12px 0; ${index < data.items.length - 1 ? 'border-bottom: 1px solid #f0f0f0;' : ''}">
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+          <tr>
+            <td style="vertical-align: top;">
+              <p style="margin: 0 0 2px 0; font-size: 14px; font-weight: 500; color: #1d1d1f;">${item.name}</p>
+              ${item.size ? `<p style="margin: 0; font-size: 13px; color: #86868b;">Velikost: ${item.size}</p>` : ''}
+              <p style="margin: 2px 0 0 0; font-size: 13px; color: #86868b;">Počet: ${item.quantity}</p>
+            </td>
+            <td style="vertical-align: top; text-align: right; width: 100px;">
+              <p style="margin: 0; font-size: 14px; font-weight: 500; color: #1d1d1f;">${(item.price * item.quantity).toLocaleString('cs-CZ')} Kč</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  `).join('');
+
+  const shippingLabel = data.shippingMethod === 'zasilkovna'
+    ? `Zásilkovna${data.zasilkovnaName ? ` – ${data.zasilkovnaName}` : ''}`
+    : data.shippingMethod === 'ppl' ? 'PPL doručení domů' : data.shippingMethod || '—';
+
+  const content = `
+    <div style="margin-bottom: 32px;">
+      <h1 style="margin: 0 0 8px 0; font-size: 22px; font-weight: 600; color: #1d1d1f; letter-spacing: -0.02em;">
+        Nová objednávka: ${data.orderNumber}
+      </h1>
+      <p style="margin: 0; font-size: 14px; color: #86868b;">${new Date().toLocaleString('cs-CZ', { dateStyle: 'long', timeStyle: 'short' })}</p>
+    </div>
+
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom: 24px; background-color: #f5f5f7; border-radius: 12px;">
+      <tr>
+        <td style="padding: 24px;">
+          <p style="margin: 0 0 12px 0; font-size: 11px; font-weight: 600; color: #86868b; text-transform: uppercase; letter-spacing: 0.08em;">Zákazník</p>
+          <p style="margin: 0 0 4px 0; font-size: 16px; font-weight: 600; color: #1d1d1f;">${data.customerName}</p>
+          <p style="margin: 0 0 4px 0; font-size: 14px; color: #1d1d1f;">${data.customerEmail}</p>
+          ${data.customerPhone ? `<p style="margin: 0; font-size: 14px; color: #1d1d1f;">${data.customerPhone}</p>` : ''}
+        </td>
+      </tr>
+    </table>
+
+    <div style="margin-bottom: 24px;">
+      <p style="margin: 0 0 12px 0; font-size: 11px; font-weight: 600; color: #86868b; text-transform: uppercase; letter-spacing: 0.08em;">Položky</p>
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+        ${itemsHtml}
+      </table>
+    </div>
+
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom: 24px; border-top: 2px solid #1d1d1f; border-bottom: 2px solid #1d1d1f; padding: 16px 0;">
+      <tr>
+        <td>
+          <p style="margin: 0; font-size: 16px; font-weight: 700; color: #1d1d1f;">CELKEM</p>
+        </td>
+        <td style="text-align: right;">
+          <p style="margin: 0; font-size: 20px; font-weight: 700; color: #1d1d1f;">${data.totalPrice.toLocaleString('cs-CZ')} Kč</p>
+        </td>
+      </tr>
+    </table>
+
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom: 24px;">
+      <tr>
+        <td>
+          <p style="margin: 0 0 4px 0; font-size: 11px; font-weight: 600; color: #86868b; text-transform: uppercase; letter-spacing: 0.08em;">Doprava</p>
+          <p style="margin: 0; font-size: 14px; color: #1d1d1f;">${shippingLabel}</p>
+        </td>
+      </tr>
+    </table>
+
+    <div style="text-align: center; padding: 16px; background-color: #1d1d1f; border-radius: 8px;">
+      <a href="${WEBSITE_URL}/admin/orders" style="font-size: 14px; font-weight: 600; color: #ffffff; text-decoration: none; letter-spacing: 0.02em;">
+        Zobrazit v adminu →
+      </a>
+    </div>
+  `;
+
+  try {
+    const result = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: ADMIN_NOTIFICATION_EMAIL,
+      subject: `[UFO Sport] Nová objednávka ${data.orderNumber} – ${data.totalPrice.toLocaleString('cs-CZ')} Kč`,
+      html: emailWrapper(content),
+    });
+    console.log('Admin order notification email sent:', result);
+    return { success: true, result };
+  } catch (error) {
+    console.error('Failed to send admin order notification email:', error);
+    return { success: false, error };
+  }
+}
+
 export async function sendPasswordResetEmail(email: string, resetLink: string) {
   if (!resend) {
     console.error('Cannot send password reset email: RESEND_API_KEY is not configured');
