@@ -72,6 +72,33 @@ export default function CheckoutPage() {
     return () => clearInterval(checkInterval);
   }, []);
 
+  useEffect(() => {
+    // PPL Widget selection listener
+    const handlePplSelect = (event: any) => {
+      const point = event.detail;
+      if (point) {
+        setFormData(prev => ({
+          ...prev,
+          pplId: point.code,
+          pplName: `${point.name}, ${point.street} ${point.houseNumber}, ${point.zipCode} ${point.city}`,
+        }));
+      }
+    };
+
+    document.addEventListener('ppl-accesspointwidget-select', handlePplSelect);
+    return () => document.removeEventListener('ppl-accesspointwidget-select', handlePplSelect);
+  }, []);
+
+  const openPplWidget = () => {
+    const widget = document.querySelector('ppl-access-point-widget') as any;
+    if (widget && typeof widget.open === 'function') {
+      widget.open();
+    } else {
+      console.error('PPL widget not found or not initialized');
+      alert('PPL widget se nepodařilo načíst. Zkuste to prosím znovu.');
+    }
+  };
+
   const rawSubtotal = getTotal();
   const subtotal = typeof rawSubtotal === 'number' && !isNaN(rawSubtotal) ? rawSubtotal : 0;
   const shippingCost = calculateShippingCost(subtotal, formData.shippingMethod);
@@ -421,14 +448,14 @@ export default function CheckoutPage() {
                       className="w-full border border-black px-2 py-1 text-body focus:outline-none"
                       style={{ borderRadius: '4px' }}
                     />
-                    <div className="flex gap-2">
+                    <div className="flex flex-col sm:flex-row gap-2">
                       <input
                         type="text"
                         placeholder="Město *"
                         required={formData.shippingMethod === 'ppl_address'}
                         value={formData.shippingCity}
                         onChange={(e) => setFormData({ ...formData, shippingCity: e.target.value })}
-                        className="flex-1 border border-black px-2 py-1 text-body focus:outline-none"
+                        className="w-full sm:flex-1 border border-black px-2 py-1 text-body focus:outline-none"
                         style={{ borderRadius: '4px' }}
                       />
                       <input
@@ -437,7 +464,7 @@ export default function CheckoutPage() {
                         required={formData.shippingMethod === 'ppl_address'}
                         value={formData.shippingZip}
                         onChange={(e) => setFormData({ ...formData, shippingZip: e.target.value })}
-                        className="w-24 border border-black px-2 py-1 text-body focus:outline-none"
+                        className="w-full sm:w-24 border border-black px-2 py-1 text-body focus:outline-none"
                         style={{ borderRadius: '4px' }}
                       />
                     </div>
@@ -466,19 +493,21 @@ export default function CheckoutPage() {
                 </label>
 
                 {formData.shippingMethod === 'ppl_parcelshop' && (
-                  <div className="mt-2 text-center p-4 border border-black rounded-md bg-white">
-                    <p className="text-xs italic mb-2">Výběr výdejního místa PPL se připravuje.</p>
-                    <input
-                      type="text"
-                      placeholder="Název nebo ID ParcelShopu *"
-                      required={formData.shippingMethod === 'ppl_parcelshop'}
-                      value={formData.pplName}
-                      onChange={(e) => setFormData({ ...formData, pplName: e.target.value, pplId: e.target.value })}
-                      className="w-full border border-black px-2 py-1 text-body focus:outline-none"
-                      style={{ borderRadius: '4px' }}
-                    />
-                  </div>
+                  <button
+                    type="button"
+                    onClick={openPplWidget}
+                    className="w-full border border-black bg-white text-black px-4 py-2 text-body uppercase hover:bg-gray-100 transition-colors mb-4"
+                    style={{ borderRadius: '4px', marginTop: '4px', borderWidth: '1px' }}
+                  >
+                    {formData.pplName ? `Změnit: ${formData.pplName}` : 'VYBRAT VÝDEJNÍ MÍSTO PPL'}
+                  </button>
                 )}
+
+                {/* PPL Widget Web Component */}
+                <div style={{ display: 'none' }}>
+                  {/* @ts-ignore */}
+                  <ppl-access-point-widget api-key={process.env.NEXT_PUBLIC_PPL_API_KEY || 'demo'}></ppl-access-point-widget>
+                </div>
               </div>
 
               <div className="mt-4">

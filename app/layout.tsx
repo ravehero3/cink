@@ -36,6 +36,18 @@ export default function RootLayout({
     script.onload = () => console.log('Zasilkovna widget loaded');
     script.onerror = () => console.error('Failed to load Zasilkovna widget');
     document.head.appendChild(script);
+
+    // Load PPL widget script
+    if (!document.getElementById('ppl-widget-script')) {
+      const pplScript = document.createElement('script');
+      pplScript.id = 'ppl-widget-script';
+      pplScript.type = 'module';
+      pplScript.src = 'https://widget.ppl.cz/PplAccessPointWidget.js';
+      pplScript.async = true;
+      pplScript.onload = () => console.log('PPL widget loaded');
+      pplScript.onerror = () => console.error('Failed to load PPL widget');
+      document.head.appendChild(pplScript);
+    }
   }, []);
 
   return (

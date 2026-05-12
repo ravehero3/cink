@@ -64,6 +64,16 @@ export default function ProductDetailPage() {
   const { addProduct: addRecentlyViewed } = useRecentlyViewedStore();
 
   const isAdmin = session?.user?.role === 'ADMIN';
+  const isCD = product?.category?.toUpperCase() === 'CD';
+
+  useEffect(() => {
+    if (product && isCD) {
+      const sizes = Object.entries(product.sizes);
+      if (sizes.length > 0) {
+        setSelectedSize(sizes[0][0]);
+      }
+    }
+  }, [product, isCD]);
 
   useEffect(() => {
     fetchProduct();
@@ -588,76 +598,78 @@ export default function ProductDetailPage() {
               </p>
             );
           })()}
-          <div className="relative w-full md:w-[36vw] pt-3 -mb-1">
-            <button
-              onClick={() => setIsSizeDropdownOpen(!isSizeDropdownOpen)}
-              className="w-full bg-white text-black flex items-center justify-center relative"
-              style={{
-                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '14px',
-                fontWeight: 400,
-                letterSpacing: 'tight',
-                textTransform: 'uppercase',
-                padding: '10.67px 0',
-                textAlign: 'center',
-                border: '1px solid #000',
-                borderRadius: '4px'
-              }}
-            >
-              {selectedSize ? selectedSize.toUpperCase() : 'VYBERTE VELIKOST'}
-              <ChevronDown 
-                className="absolute right-3"
-                size={16}
-                strokeWidth={1}
-              />
-            </button>
+          {!isCD && (
+            <div className="relative w-full md:w-[36vw] pt-3 -mb-1">
+              <button
+                onClick={() => setIsSizeDropdownOpen(!isSizeDropdownOpen)}
+                className="w-full bg-white text-black flex items-center justify-center relative"
+                style={{
+                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '14px',
+                  fontWeight: 400,
+                  letterSpacing: 'tight',
+                  textTransform: 'uppercase',
+                  padding: '10.67px 0',
+                  textAlign: 'center',
+                  border: '1px solid #000',
+                  borderRadius: '4px'
+                }}
+              >
+                {selectedSize ? selectedSize.toUpperCase() : 'VYBERTE VELIKOST'}
+                <ChevronDown 
+                  className="absolute right-3"
+                  size={16}
+                  strokeWidth={1}
+                />
+              </button>
 
-            {isSizeDropdownOpen && (
+              {isSizeDropdownOpen && (
+                <div
+                  className="fixed inset-0 bg-black z-40 transition-opacity duration-300"
+                  style={{ opacity: 0.5 }}
+                  onClick={() => setIsSizeDropdownOpen(false)}
+                />
+              )}
               <div
-                className="fixed inset-0 bg-black z-40 transition-opacity duration-300"
-                style={{ opacity: 0.5 }}
-                onClick={() => setIsSizeDropdownOpen(false)}
-              />
-            )}
-            <div
-              className="absolute left-0 right-0 bg-white border border-black z-50 transform transition-transform duration-300 ease-in-out origin-top overflow-hidden"
-              style={{ 
-                borderRadius: '2px',
-                top: '100%',
-                transform: isSizeDropdownOpen ? 'scaleY(1)' : 'scaleY(0)',
-                transformOrigin: 'top'
-              }}
-            >
-              {sizes.map(([size, stock]) => {
-                const isAvailable = stock > 0;
-                return (
-                  <button
-                    key={size}
-                    onClick={() => {
-                      if (isAvailable) {
-                        setSelectedSize(size);
-                        setQuantity(1);
-                        setIsSizeDropdownOpen(false);
-                      }
-                    }}
-                    disabled={!isAvailable}
-                    className={`w-full py-3 border-b border-black last:border-b-0 transition-colors ${
-                      isAvailable
-                        ? 'hover:bg-black hover:text-white'
-                        : 'text-gray-400 cursor-not-allowed'
-                    }`}
-                    style={{
-                      fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '13px',
-                      fontWeight: 400
-                    }}
-                  >
-                    {size}{!isAvailable && ' (Vyprodáno)'}
-                  </button>
-                );
-              })}
+                className="absolute left-0 right-0 bg-white border border-black z-50 transform transition-transform duration-300 ease-in-out origin-top overflow-hidden"
+                style={{ 
+                  borderRadius: '2px',
+                  top: '100%',
+                  transform: isSizeDropdownOpen ? 'scaleY(1)' : 'scaleY(0)',
+                  transformOrigin: 'top'
+                }}
+              >
+                {sizes.map(([size, stock]) => {
+                  const isAvailable = stock > 0;
+                  return (
+                    <button
+                      key={size}
+                      onClick={() => {
+                        if (isAvailable) {
+                          setSelectedSize(size);
+                          setQuantity(1);
+                          setIsSizeDropdownOpen(false);
+                        }
+                      }}
+                      disabled={!isAvailable}
+                      className={`w-full py-3 border-b border-black last:border-b-0 transition-colors ${
+                        isAvailable
+                          ? 'hover:bg-black hover:text-white'
+                          : 'text-gray-400 cursor-not-allowed'
+                      }`}
+                      style={{
+                        fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                        fontSize: '13px',
+                        fontWeight: 400
+                      }}
+                    >
+                      {size}{!isAvailable && ' (Vyprodáno)'}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          )}
 
           <button
             onClick={handleAddToCart}
