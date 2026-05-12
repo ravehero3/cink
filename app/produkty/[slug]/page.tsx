@@ -67,10 +67,10 @@ export default function ProductDetailPage() {
   const isAdmin = session?.user?.role === 'ADMIN';
   // Extremely robust check for CD category/type/name
   const isCD = 
-    product?.category?.toUpperCase().includes('CD') || 
-    product?.productType?.toUpperCase().includes('CD') ||
-    product?.name?.toUpperCase().includes(' CD') ||
-    product?.name?.toUpperCase().endsWith(' CD') ||
+    /\bcd\b/i.test(product?.category || '') || 
+    /\bcd\b/i.test(product?.productType || '') ||
+    /\bcd\b/i.test(product?.name || '') ||
+    /\bcd\b/i.test(product?.slug || '') ||
     (Object.keys(product?.sizes || {}).length === 1 && Object.keys(product?.sizes || {})[0].toUpperCase() === 'ONE SIZE');
   
   // Debug log for production verification

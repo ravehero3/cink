@@ -36,6 +36,7 @@ export default function CheckoutPage() {
   const [discount, setDiscount] = useState(0);
   const [promoError, setPromoError] = useState('');
   const [showManualZasilkovnaForm, setShowManualZasilkovnaForm] = useState(false);
+  const [isPplModalOpen, setIsPplModalOpen] = useState(false);
 
   useEffect(() => {
     // Don't redirect if we're intentionally navigating to payment page
@@ -73,41 +74,26 @@ export default function CheckoutPage() {
   }, []);
 
   useEffect(() => {
-    // PPL Widget selection listener
+    // PPL Widget selection listener (Older version)
     const handlePplSelect = (event: any) => {
+      console.log('PPL select event received:', event.detail);
       const point = event.detail;
       if (point) {
         setFormData(prev => ({
           ...prev,
-          pplId: point.code,
-          pplName: `${point.name}, ${point.street} ${point.houseNumber}, ${point.zipCode} ${point.city}`,
+          pplId: point.code || point.id,
+          pplName: `${point.name}, ${point.address || (point.street + ' ' + point.city)}`,
         }));
+        setIsPplModalOpen(false);
       }
     };
 
-    document.addEventListener('ppl-accesspointwidget-select', handlePplSelect);
-    return () => document.removeEventListener('ppl-accesspointwidget-select', handlePplSelect);
+    document.addEventListener('ppl-parcelshop-map', handlePplSelect);
+    return () => document.removeEventListener('ppl-parcelshop-map', handlePplSelect);
   }, []);
 
-  const openPplWidget = async () => {
-    // Wait for custom element to be registered if needed
-    if (typeof window !== 'undefined' && 'customElements' in window) {
-      await window.customElements.whenDefined('ppl-access-point-widget');
-    }
-
-    const widget = document.querySelector('ppl-access-point-widget') as any;
-    if (widget && typeof widget.open === 'function') {
-      widget.open();
-    } else {
-      console.error('PPL widget not found or not initialized');
-      // Try a secondary check for the element
-      const retryWidget = document.getElementsByTagName('ppl-access-point-widget')[0] as any;
-      if (retryWidget && typeof retryWidget.open === 'function') {
-        retryWidget.open();
-      } else {
-        alert('PPL widget se stále načítá. Počkejte prosím chvilku a zkuste to znovu.');
-      }
-    }
+  const openPplWidget = () => {
+    setIsPplModalOpen(true);
   };
 
   const rawSubtotal = getTotal();
@@ -515,14 +501,23 @@ export default function CheckoutPage() {
                 )}
               </div>
 
-              {/* PPL Widget Web Component - Always present but hidden */}
-              <div style={{ display: 'none' }}>
-                <ppl-access-point-widget 
-                  api-key={process.env.NEXT_PUBLIC_PPL_API_KEY || 'demo'}
-                  language="cs"
-                  view-mode="modal"
-                ></ppl-access-point-widget>
-              </div>
+              {/* PPL Widget - Old version div */}
+              {isPplModalOpen && (
+                <div className="fixed inset-0 z-[100] bg-white flex flex-col">
+                  <div className="flex justify-between items-center p-4 border-b border-black bg-black text-white">
+                    <h2 className="font-bold uppercase text-sm tracking-widest">Vyberte výdejní místo PPL</h2>
+                    <button 
+                      onClick={() => setIsPplModalOpen(false)} 
+                      className="px-4 py-2 border border-white uppercase text-xs hover:bg-white hover:text-black transition-colors"
+                    >
+                      Zavřít
+                    </button>
+                  </div>
+                  <div className="flex-1 relative bg-gray-100">
+                    <div id="ppl-parcelshop-map" data-language="cs" style={{ height: '100%', width: '100%' }}></div>
+                  </div>
+                </div>
+              )}
 
               <div className="mt-4">
                 <AnimatedButton 
