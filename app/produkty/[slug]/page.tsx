@@ -29,6 +29,7 @@ interface Product {
   careInfo?: string;
   sizeChartType?: SizeChartType;
   sizeChartData?: any;
+  productType?: string;
 }
 
 export default function ProductDetailPage() {
