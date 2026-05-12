@@ -1,0 +1,1878 @@
+
+> workspace@1.0.0 dev
+> next dev -H 0.0.0.0 -p 5000
+
+[1G[0K  [1m[38;2;173;127;168m▲ Next.js 14.2.35[39m[22m
+  - Local:        http://localhost:5000
+  - Network:      http://0.0.0.0:5000
+
+ [32m[1m✓[22m[39m Starting...
+[35m[1mAttention[22m[39m: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+[36mhttps://nextjs.org/telemetry[39m
+
+ [32m[1m✓[22m[39m Ready in 4.3s
+ [37m[1m○[22m[39m Compiling / ...
+ [32m[1m✓[22m[39m Compiled / in 5.1s (729 modules)
+ GET / [32m200[39m in 5426ms
+ GET / [32m200[39m in 5663ms
+ [32m[1m✓[22m[39m Compiled in 530ms (357 modules)
+ [37m[1m○[22m[39m Compiling /api/products ...
+ [32m[1m✓[22m[39m Compiled /api/products in 3s (404 modules)
+ [33m[1m⚠[22m[39m Cross origin request detected from 697b0e7d-1306-4e35-85fa-2d9d8a40d084-00-4j7enkm2xtc4.worf.replit.dev to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ [32m[1m✓[22m[39m Compiled (669 modules)
+[31mprisma:error[39m 
+Invalid `prisma.category.findMany()` invocation:
+
+
+The table `public.Category` does not exist in the current database.
+Error fetching categories: PrismaClientKnownRequestError: 
+Invalid `prisma.category.findMany()` invocation:
+
+
+The table `public.Category` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async GET (webpack-internal:///(rsc)/./app/api/categories/route.ts:15:28)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'Category'[39m, table: [32m'public.Category'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+[31mprisma:error[39m 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+Error fetching products: PrismaClientKnownRequestError: 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async Promise.all (index 1)
+    at async GET (webpack-internal:///(rsc)/./app/api/products/route.ts:116:35)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'Product'[39m, table: [32m'public.Product'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/products?category=SPACE%20LOVE&limit=10&_t=1778581114571 [31m500[39m in 2418ms
+[31mprisma:error[39m 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+Error fetching products: PrismaClientKnownRequestError: 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async Promise.all (index 0)
+    at async GET (webpack-internal:///(rsc)/./app/api/products/route.ts:116:35)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'Product'[39m, table: [32m'public.Product'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/products?category=VOODOO808&limit=10&_t=1778581114571 [31m500[39m in 2417ms
+[31mprisma:error[39m 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+Error fetching products: PrismaClientKnownRequestError: 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async Promise.all (index 0)
+    at async GET (webpack-internal:///(rsc)/./app/api/products/route.ts:116:35)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'Product'[39m, table: [32m'public.Product'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/products?category=RECREATION%20WELLNESS&limit=10&_t=1778581114571 [31m500[39m in 2393ms
+Error fetching hero sections: PrismaClientKnownRequestError: 
+Invalid `prisma.heroSection.findMany()` invocation:
+
+
+The table `public.HeroSection` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async GET (webpack-internal:///(rsc)/./app/api/hero-sections/route.ts:24:26)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'HeroSection'[39m, table: [32m'public.HeroSection'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/hero-sections?_t=1778581114571 [31m500[39m in 2449ms
+Error fetching category sections: PrismaClientKnownRequestError: 
+Invalid `prisma.categorySection.findMany()` invocation:
+
+
+The table `public.CategorySection` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async GET (webpack-internal:///(rsc)/./app/api/category-sections/route.ts:23:26)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'CategorySection'[39m, table: [32m'public.CategorySection'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+[31mprisma:error[39m 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+Error fetching products: PrismaClientKnownRequestError: 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async Promise.all (index 0)
+    at async GET (webpack-internal:///(rsc)/./app/api/products/route.ts:116:35)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'Product'[39m, table: [32m'public.Product'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+[31mprisma:error[39m 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+[31mprisma:error[39m 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+Error fetching hero sections: PrismaClientKnownRequestError: 
+Invalid `prisma.heroSection.findMany()` invocation:
+
+
+The table `public.HeroSection` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async GET (webpack-internal:///(rsc)/./app/api/hero-sections/route.ts:24:26)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'HeroSection'[39m, table: [32m'public.HeroSection'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+Error fetching category sections: PrismaClientKnownRequestError: 
+Invalid `prisma.categorySection.findMany()` invocation:
+
+
+The table `public.CategorySection` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async GET (webpack-internal:///(rsc)/./app/api/category-sections/route.ts:23:26)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'CategorySection'[39m, table: [32m'public.CategorySection'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/category-sections?_t=1778581114571 [31m500[39m in 2548ms
+[31mprisma:error[39m 
+Invalid `prisma.category.findMany()` invocation:
+
+
+The table `public.Category` does not exist in the current database.
+Error fetching categories: PrismaClientKnownRequestError: 
+Invalid `prisma.category.findMany()` invocation:
+
+
+The table `public.Category` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async GET (webpack-internal:///(rsc)/./app/api/categories/route.ts:15:28)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'Category'[39m, table: [32m'public.Category'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/categories [31m500[39m in 2560ms
+[31mprisma:error[39m 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+[31mprisma:error[39m 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+Error fetching products: PrismaClientKnownRequestError: 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async Promise.all (index 1)
+    at async GET (webpack-internal:///(rsc)/./app/api/products/route.ts:116:35)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'Product'[39m, table: [32m'public.Product'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+[31mprisma:error[39m 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+[31mprisma:error[39m 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+[31mprisma:error[39m 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+Error fetching products: PrismaClientKnownRequestError: 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async Promise.all (index 0)
+    at async GET (webpack-internal:///(rsc)/./app/api/products/route.ts:116:35)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'Product'[39m, table: [32m'public.Product'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/products?category=T%20SHIRT%20GALLERY&limit=10&_t=1778581114571 [31m500[39m in 33ms
+[31mprisma:error[39m 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+ [32m[1m✓[22m[39m Compiled /api/auth/[...nextauth] in 145ms (671 modules)
+ [32m[1m✓[22m[39m Compiled in 1ms (671 modules)
+ [32m[1m✓[22m[39m Compiled in 0ms (671 modules)
+Error fetching hero sections: PrismaClientKnownRequestError: 
+Invalid `prisma.heroSection.findMany()` invocation:
+
+
+The table `public.HeroSection` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async GET (webpack-internal:///(rsc)/./app/api/hero-sections/route.ts:24:26)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'HeroSection'[39m, table: [32m'public.HeroSection'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/hero-sections?_t=1778581114576 [31m500[39m in 474ms
+[31mprisma:error[39m 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+Error fetching products: PrismaClientKnownRequestError: 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async Promise.all (index 0)
+    at async GET (webpack-internal:///(rsc)/./app/api/products/route.ts:116:35)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'Product'[39m, table: [32m'public.Product'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/products?category=VOODOO808&limit=10&_t=1778581114576 [31m500[39m in 333ms
+[31mprisma:error[39m 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+[31mprisma:error[39m 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+Error fetching products: PrismaClientKnownRequestError: 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async Promise.all (index 0)
+    at async GET (webpack-internal:///(rsc)/./app/api/products/route.ts:116:35)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'Product'[39m, table: [32m'public.Product'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/products?category=SPACE%20LOVE&limit=10&_t=1778581114576 [31m500[39m in 333ms
+[31mprisma:error[39m 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+ [32m[1m✓[22m[39m Compiled in 0ms (671 modules)
+ [32m[1m✓[22m[39m Compiled in 1ms (671 modules)
+Error fetching category sections: PrismaClientKnownRequestError: 
+Invalid `prisma.categorySection.findMany()` invocation:
+
+
+The table `public.CategorySection` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async GET (webpack-internal:///(rsc)/./app/api/category-sections/route.ts:23:26)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'CategorySection'[39m, table: [32m'public.CategorySection'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/category-sections?_t=1778581114576 [31m500[39m in 787ms
+[31mprisma:error[39m 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+Error fetching products: PrismaClientKnownRequestError: 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async Promise.all (index 0)
+    at async GET (webpack-internal:///(rsc)/./app/api/products/route.ts:116:35)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'Product'[39m, table: [32m'public.Product'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/products?category=RECREATION%20WELLNESS&limit=10&_t=1778581114576 [31m500[39m in 614ms
+[31mprisma:error[39m 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+ [32m[1m✓[22m[39m Compiled in 1ms (671 modules)
+ [32m[1m✓[22m[39m Compiled in 0ms (671 modules)
+[31mprisma:error[39m 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+Error fetching products: PrismaClientKnownRequestError: 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async Promise.all (index 0)
+    at async GET (webpack-internal:///(rsc)/./app/api/products/route.ts:116:35)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'Product'[39m, table: [32m'public.Product'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/products?category=T%20SHIRT%20GALLERY&limit=10&_t=1778581114576 [31m500[39m in 434ms
+[31mprisma:error[39m 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+ GET /api/auth/session [32m200[39m in 1092ms
+[31mprisma:error[39m 
+Invalid `prisma.category.findMany()` invocation:
+
+
+The table `public.Category` does not exist in the current database.
+Error fetching categories: PrismaClientKnownRequestError: 
+Invalid `prisma.category.findMany()` invocation:
+
+
+The table `public.Category` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async GET (webpack-internal:///(rsc)/./app/api/categories/route.ts:15:28)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'Category'[39m, table: [32m'public.Category'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/categories [31m500[39m in 552ms
+ GET /api/auth/session [32m200[39m in 40ms
+ [32m[1m✓[22m[39m Compiled in 505ms (357 modules)
+ [32m[1m✓[22m[39m Compiled in 237ms (357 modules)
+ [33m[1m⚠[22m[39m Found a change in next.config.js. Restarting the server to apply the changes...
+  [1m[38;2;173;127;168m▲ Next.js 14.2.35[39m[22m
+  - Local:        http://localhost:5000
+  - Network:      http://0.0.0.0:5000
+
+ [32m[1m✓[22m[39m Starting...
+ [32m[1m✓[22m[39m Ready in 2.7s
+ [37m[1m○[22m[39m Compiling / ...
+ [32m[1m✓[22m[39m Compiled / in 6.3s (729 modules)
+ GET / [32m200[39m in 6674ms
+ [32m[1m✓[22m[39m Compiled in 598ms (357 modules)
+ [33m[1m⚠[22m[39m Cross origin request detected from 697b0e7d-1306-4e35-85fa-2d9d8a40d084-00-4j7enkm2xtc4.worf.replit.dev to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ [37m[1m○[22m[39m Compiling /api/hero-sections ...
+ [32m[1m✓[22m[39m Compiled /api/hero-sections in 1058ms (634 modules)
+ [32m[1m✓[22m[39m Compiled (640 modules)
+[31mprisma:error[39m 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+Error fetching products: PrismaClientKnownRequestError: 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async Promise.all (index 0)
+    at async GET (webpack-internal:///(rsc)/./app/api/products/route.ts:116:35)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'Product'[39m, table: [32m'public.Product'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/products?category=VOODOO808&limit=10&_t=1778581340312 [31m500[39m in 1580ms
+[31mprisma:error[39m 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+Error fetching products: PrismaClientKnownRequestError: 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async Promise.all (index 1)
+    at async GET (webpack-internal:///(rsc)/./app/api/products/route.ts:116:35)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'Product'[39m, table: [32m'public.Product'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/products?category=SPACE%20LOVE&limit=10&_t=1778581340312 [31m500[39m in 1581ms
+[31mprisma:error[39m 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+[31mprisma:error[39m 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+[31mprisma:error[39m 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+Error fetching products: PrismaClientKnownRequestError: 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async Promise.all (index 0)
+    at async GET (webpack-internal:///(rsc)/./app/api/products/route.ts:116:35)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'Product'[39m, table: [32m'public.Product'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/products?category=RECREATION%20WELLNESS&limit=10&_t=1778581340312 [31m500[39m in 1616ms
+[31mprisma:error[39m 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+[31mprisma:error[39m 
+Invalid `prisma.category.findMany()` invocation:
+
+
+The table `public.Category` does not exist in the current database.
+Error fetching categories: PrismaClientKnownRequestError: 
+Invalid `prisma.category.findMany()` invocation:
+
+
+The table `public.Category` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async GET (webpack-internal:///(rsc)/./app/api/categories/route.ts:15:28)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'Category'[39m, table: [32m'public.Category'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/categories [31m500[39m in 1629ms
+Error fetching category sections: PrismaClientKnownRequestError: 
+Invalid `prisma.categorySection.findMany()` invocation:
+
+
+The table `public.CategorySection` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async GET (webpack-internal:///(rsc)/./app/api/category-sections/route.ts:23:26)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'CategorySection'[39m, table: [32m'public.CategorySection'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/category-sections?_t=1778581340312 [31m500[39m in 1639ms
+Error fetching hero sections: PrismaClientKnownRequestError: 
+Invalid `prisma.heroSection.findMany()` invocation:
+
+
+The table `public.HeroSection` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async GET (webpack-internal:///(rsc)/./app/api/hero-sections/route.ts:24:26)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'HeroSection'[39m, table: [32m'public.HeroSection'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/hero-sections?_t=1778581340312 [31m500[39m in 1640ms
+[31mprisma:error[39m 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+Error fetching products: PrismaClientKnownRequestError: 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async Promise.all (index 1)
+    at async GET (webpack-internal:///(rsc)/./app/api/products/route.ts:116:35)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'Product'[39m, table: [32m'public.Product'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/products?category=T%20SHIRT%20GALLERY&limit=10&_t=1778581340312 [31m500[39m in 34ms
+[31mprisma:error[39m 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+ [32m[1m✓[22m[39m Compiled /api/auth/[...nextauth] in 163ms (642 modules)
+[31mprisma:error[39m 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+Error fetching products: PrismaClientKnownRequestError: 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async Promise.all (index 0)
+    at async GET (webpack-internal:///(rsc)/./app/api/products/route.ts:116:35)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'Product'[39m, table: [32m'public.Product'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/products?category=SPACE%20LOVE&limit=10&_t=1778581340316 [31m500[39m in 215ms
+[31mprisma:error[39m 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+[31mprisma:error[39m 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+Error fetching products: PrismaClientKnownRequestError: 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async Promise.all (index 0)
+    at async GET (webpack-internal:///(rsc)/./app/api/products/route.ts:116:35)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'Product'[39m, table: [32m'public.Product'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/products?category=VOODOO808&limit=10&_t=1778581340316 [31m500[39m in 220ms
+[31mprisma:error[39m 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+[31mprisma:error[39m 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+Error fetching products: PrismaClientKnownRequestError: 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async Promise.all (index 1)
+    at async GET (webpack-internal:///(rsc)/./app/api/products/route.ts:116:35)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'Product'[39m, table: [32m'public.Product'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/products?category=RECREATION%20WELLNESS&limit=10&_t=1778581340316 [31m500[39m in 207ms
+[31mprisma:error[39m 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+Error fetching category sections: PrismaClientKnownRequestError: 
+Invalid `prisma.categorySection.findMany()` invocation:
+
+
+The table `public.CategorySection` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async GET (webpack-internal:///(rsc)/./app/api/category-sections/route.ts:23:26)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'CategorySection'[39m, table: [32m'public.CategorySection'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/category-sections?_t=1778581340316 [31m500[39m in 295ms
+Error fetching hero sections: PrismaClientKnownRequestError: 
+Invalid `prisma.heroSection.findMany()` invocation:
+
+
+The table `public.HeroSection` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async GET (webpack-internal:///(rsc)/./app/api/hero-sections/route.ts:24:26)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'HeroSection'[39m, table: [32m'public.HeroSection'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/hero-sections?_t=1778581340316 [31m500[39m in 304ms
+[31mprisma:error[39m 
+Invalid `prisma.category.findMany()` invocation:
+
+
+The table `public.Category` does not exist in the current database.
+Error fetching categories: PrismaClientKnownRequestError: 
+Invalid `prisma.category.findMany()` invocation:
+
+
+The table `public.Category` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async GET (webpack-internal:///(rsc)/./app/api/categories/route.ts:15:28)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'Category'[39m, table: [32m'public.Category'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/categories [31m500[39m in 27ms
+[31mprisma:error[39m 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+Error fetching products: PrismaClientKnownRequestError: 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async Promise.all (index 0)
+    at async GET (webpack-internal:///(rsc)/./app/api/products/route.ts:116:35)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'Product'[39m, table: [32m'public.Product'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/products?category=T%20SHIRT%20GALLERY&limit=10&_t=1778581340316 [31m500[39m in 32ms
+[31mprisma:error[39m 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+ GET /api/auth/session [32m200[39m in 780ms
+ GET /api/auth/session [32m200[39m in 42ms
+ [32m[1m✓[22m[39m Compiled in 1158ms (731 modules)
+[31mprisma:error[39m 
+Invalid `prisma.heroSection.findMany()` invocation:
+
+
+The table `public.HeroSection` does not exist in the current database.
+ [32m[1m✓[22m[39m Compiled in 1343ms (731 modules)
+[31mprisma:error[39m 
+Invalid `prisma.heroSection.findMany()` invocation:
+
+
+The table `public.HeroSection` does not exist in the current database.
+ [32m[1m✓[22m[39m Compiled /api/category-sections in 306ms (634 modules)
+ [32m[1m✓[22m[39m Compiled (638 modules)
+[31mprisma:error[39m 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+Error fetching products: PrismaClientKnownRequestError: 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async Promise.all (index 0)
+    at async GET (webpack-internal:///(rsc)/./app/api/products/route.ts:116:35)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'Product'[39m, table: [32m'public.Product'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/products?category=SPACE%20LOVE&limit=10&_t=1778581538651 [31m500[39m in 569ms
+[31mprisma:error[39m 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+[31mprisma:error[39m 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+Error fetching products: PrismaClientKnownRequestError: 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async Promise.all (index 0)
+    at async GET (webpack-internal:///(rsc)/./app/api/products/route.ts:116:35)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'Product'[39m, table: [32m'public.Product'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/products?category=VOODOO808&limit=10&_t=1778581538651 [31m500[39m in 570ms
+[31mprisma:error[39m 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+[31mprisma:error[39m 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+Error fetching products: PrismaClientKnownRequestError: 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async Promise.all (index 0)
+    at async GET (webpack-internal:///(rsc)/./app/api/products/route.ts:116:35)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'Product'[39m, table: [32m'public.Product'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/products?category=T%20SHIRT%20GALLERY&limit=10&_t=1778581538651 [31m500[39m in 569ms
+[31mprisma:error[39m 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+[31mprisma:error[39m 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+Error fetching products: PrismaClientKnownRequestError: 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async Promise.all (index 0)
+    at async GET (webpack-internal:///(rsc)/./app/api/products/route.ts:116:35)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'Product'[39m, table: [32m'public.Product'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/products?category=RECREATION%20WELLNESS&limit=10&_t=1778581538651 [31m500[39m in 570ms
+[31mprisma:error[39m 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+Error fetching hero sections: PrismaClientKnownRequestError: 
+Invalid `prisma.heroSection.findMany()` invocation:
+
+
+The table `public.HeroSection` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async GET (webpack-internal:///(rsc)/./app/api/hero-sections/route.ts:24:26)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'HeroSection'[39m, table: [32m'public.HeroSection'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/hero-sections?_t=1778581538651 [31m500[39m in 635ms
+Error fetching category sections: PrismaClientKnownRequestError: 
+Invalid `prisma.categorySection.findMany()` invocation:
+
+
+The table `public.CategorySection` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async GET (webpack-internal:///(rsc)/./app/api/category-sections/route.ts:23:26)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'CategorySection'[39m, table: [32m'public.CategorySection'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/category-sections?_t=1778581538651 [31m500[39m in 626ms
+Error fetching hero sections: PrismaClientKnownRequestError: 
+Invalid `prisma.heroSection.findMany()` invocation:
+
+
+The table `public.HeroSection` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async GET (webpack-internal:///(rsc)/./app/api/hero-sections/route.ts:24:26)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'HeroSection'[39m, table: [32m'public.HeroSection'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/hero-sections?_t=1778581538652 [31m500[39m in 50ms
+[31mprisma:error[39m 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+Error fetching products: PrismaClientKnownRequestError: 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async Promise.all (index 0)
+    at async GET (webpack-internal:///(rsc)/./app/api/products/route.ts:116:35)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'Product'[39m, table: [32m'public.Product'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/products?category=VOODOO808&limit=10&_t=1778581538652 [31m500[39m in 47ms
+[31mprisma:error[39m 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+[31mprisma:error[39m 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+Error fetching products: PrismaClientKnownRequestError: 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async Promise.all (index 0)
+    at async GET (webpack-internal:///(rsc)/./app/api/products/route.ts:116:35)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'Product'[39m, table: [32m'public.Product'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/products?category=SPACE%20LOVE&limit=10&_t=1778581538652 [31m500[39m in 37ms
+[31mprisma:error[39m 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+Error fetching category sections: PrismaClientKnownRequestError: 
+Invalid `prisma.categorySection.findMany()` invocation:
+
+
+The table `public.CategorySection` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async GET (webpack-internal:///(rsc)/./app/api/category-sections/route.ts:23:26)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'CategorySection'[39m, table: [32m'public.CategorySection'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/category-sections?_t=1778581538652 [31m500[39m in 64ms
+[31mprisma:error[39m 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+Error fetching products: PrismaClientKnownRequestError: 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async Promise.all (index 1)
+    at async GET (webpack-internal:///(rsc)/./app/api/products/route.ts:116:35)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'Product'[39m, table: [32m'public.Product'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/products?category=RECREATION%20WELLNESS&limit=10&_t=1778581538652 [31m500[39m in 23ms
+[31mprisma:error[39m 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+Error fetching products: PrismaClientKnownRequestError: 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+    at ei.handleRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:7268[90m)[39m
+    at ei.handleAndLogRequestError [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6593[90m)[39m
+    at ei.request [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6300[90m)[39m
+    at async a [90m(/home/runner/workspace/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9551[90m)[39m
+    at async Promise.all (index 0)
+    at async GET (webpack-internal:///(rsc)/./app/api/products/route.ts:116:35)
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:46851[90m)[39m
+    at async eT.handle [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/compiled/next-server/app-route.runtime.dev.js:6:58760[90m)[39m
+    at async doRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1366:42[90m)[39m
+    at async cacheEntry.responseCache.get.routeKind [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1588:28[90m)[39m
+    at async DevServer.renderToResponseWithComponentsImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1496:28[90m)[39m
+    at async DevServer.renderPageComponent [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1924:24[90m)[39m
+    at async DevServer.renderToResponseImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:1962:32[90m)[39m
+    at async DevServer.pipeImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:922:25[90m)[39m
+    at async NextNodeServer.handleCatchallRenderRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/next-server.js:272:17[90m)[39m
+    at async DevServer.handleRequestImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/base-server.js:818:17[90m)[39m
+    at async [90m/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/trace/trace.js:154:20[90m)[39m
+    at async DevServer.handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/dev/next-dev-server.js:336:24[90m)[39m
+    at async invokeRender [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:179:21[90m)[39m
+    at async handleRequest [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:359:24[90m)[39m
+    at async requestHandlerImpl [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/router-server.js:383:13[90m)[39m
+    at async Server.requestListener [90m(/home/runner/workspace/[39mnode_modules/[4mnext[24m/dist/server/lib/start-server.js:141:13[90m)[39m {
+  code: [32m'P2021'[39m,
+  meta: { modelName: [32m'Product'[39m, table: [32m'public.Product'[39m },
+  clientVersion: [32m'6.19.3'[39m
+}
+ GET /api/products?category=T%20SHIRT%20GALLERY&limit=10&_t=1778581538652 [31m500[39m in 25ms
+[31mprisma:error[39m 
+Invalid `prisma.product.count()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+[31mprisma:error[39m 
+Invalid `prisma.product.findMany()` invocation:
+
+
+The table `public.Product` does not exist in the current database.
+ [32m[1m✓[22m[39m Compiled in 876ms (995 modules)
+[31mprisma:error[39m 
+Invalid `prisma.heroSection.findMany()` invocation:
+
+
+The table `public.HeroSection` does not exist in the current database.
+ [32m[1m✓[22m[39m Compiled in 1253ms (995 modules)
+[31mprisma:error[39m 
+Invalid `prisma.heroSection.findMany()` invocation:
+
+
+The table `public.HeroSection` does not exist in the current database.
+ [32m[1m✓[22m[39m Compiled in 482ms (731 modules)
+[31mprisma:error[39m 
+Invalid `prisma.heroSection.findMany()` invocation:
+
+
+The table `public.HeroSection` does not exist in the current database.

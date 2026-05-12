@@ -27,6 +27,11 @@ interface Order {
   shippingMethod: string;
   zasilkovnaId: string | null;
   zasilkovnaName: string | null;
+  pplId: string | null;
+  pplName: string | null;
+  shippingStreet: string | null;
+  shippingCity: string | null;
+  shippingZip: string | null;
   packetaPacketId: string | null;
   packetaError: string | null;
   trackingNumber: string | null;
@@ -233,10 +238,23 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
             <h2 className="text-header font-bold mb-4">DOPRAVA</h2>
             <div className="space-y-2 text-body">
               <div><strong>Metoda:</strong> {order.shippingMethod.toUpperCase()}</div>
-              {order.zasilkovnaId && (
+              {order.shippingMethod === 'zasilkovna' && order.zasilkovnaId && (
                 <>
                   <div><strong>Pobočka ID:</strong> {order.zasilkovnaId}</div>
                   <div><strong>Název pobočky:</strong> {order.zasilkovnaName}</div>
+                </>
+              )}
+              {order.shippingMethod === 'ppl_address' && (
+                <>
+                  <div><strong>Ulice:</strong> {order.shippingStreet}</div>
+                  <div><strong>Město:</strong> {order.shippingCity}</div>
+                  <div><strong>PSČ:</strong> {order.shippingZip}</div>
+                </>
+              )}
+              {order.shippingMethod === 'ppl_parcelshop' && (
+                <>
+                  <div><strong>ParcelShop ID:</strong> {order.pplId}</div>
+                  <div><strong>Název ParcelShopu:</strong> {order.pplName}</div>
                 </>
               )}
               {order.packetaPacketId && (

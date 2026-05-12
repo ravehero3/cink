@@ -3,7 +3,7 @@
 ## Current Status
 ✅ Development environment is running successfully
 ✅ Database created and seeded with test data
-✅ Test deployment on Vercel: https://alienshop-7cfqq31v1-voodoo808s-projects.vercel.app/
+✅ Test deployment on Vercel: https://cink-7cfqq31v1-voodoo808s-projects.vercel.app/
 
 ## Production Deployment Steps
 
@@ -37,7 +37,7 @@ vercel domains add www.ufosport.cz --token "9R5ZI3if5AFLglQSBd1lMx05"
 #### Option B: Using Vercel Dashboard
 
 1. Go to https://vercel.com/dashboard
-2. Select your project (alienshop or similar)
+2. Select your project (cink or similar)
 3. Go to **Settings** → **Domains**
 4. Click **Add Domain**
 5. Enter `ufosport.cz`

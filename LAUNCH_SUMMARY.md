@@ -4,7 +4,7 @@
 
 ✅ **Development Environment**: Running successfully at Replit
 ✅ **Database**: Created and seeded with test data (40 products, admin user)
-✅ **Test Deployment**: Live at https://alienshop-7cfqq31v1-voodoo808s-projects.vercel.app/
+✅ **Test Deployment**: Live at https://cink-7cfqq31v1-voodoo808s-projects.vercel.app/
 ✅ **Environment Variables**: Configured (Cloudinary, NextAuth, Database)
 ✅ **Deployment Scripts**: Ready to use
 

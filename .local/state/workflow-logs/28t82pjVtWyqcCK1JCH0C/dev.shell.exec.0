@@ -1,0 +1,40 @@
+[1G[0K⠙[1G[0K
+> workspace@1.0.0 dev
+> next dev -H 0.0.0.0 -p 5000
+
+[1G[0K⠙[1G[0K  [1m[38;2;173;127;168m▲ Next.js 14.2.33[39m[22m
+  - Local:        http://localhost:5000
+  - Network:      http://0.0.0.0:5000
+
+ [32m[1m✓[22m[39m Starting...
+ [32m[1m✓[22m[39m Ready in 4.2s
+ [37m[1m○[22m[39m Compiling / ...
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+Browserslist: browsers data (caniuse-lite) is 7 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m[1m✓[22m[39m Compiled / in 3.2s (729 modules)
+ GET / [32m200[39m in 3500ms
+ [32m[1m✓[22m[39m Compiled in 452ms (357 modules)
+ [37m[1m○[22m[39m Compiling /api/categories ...
+ [33m[1m⚠[22m[39m Cross origin request detected from d4329f7c-472c-4653-9eda-d23198bd0a59-00-20lspgawdahlb.picard.replit.dev to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ [32m[1m✓[22m[39m Compiled /api/categories in 679ms (634 modules)
+ [32m[1m✓[22m[39m Compiled (640 modules)
+ GET /api/category-sections?_t=1777707887133 [32m200[39m in 2045ms
+ GET /api/hero-sections?_t=1777707887133 [32m200[39m in 2039ms
+ GET /api/products?category=VOODOO808&limit=10&_t=1777707887133 [32m200[39m in 2046ms
+ GET /api/products?category=SPACE%20LOVE&limit=10&_t=1777707887133 [32m200[39m in 2048ms
+ GET /api/products?category=RECREATION%20WELLNESS&limit=10&_t=1777707887133 [32m200[39m in 2047ms
+ GET /api/categories [32m200[39m in 2052ms
+ [32m[1m✓[22m[39m Compiled /api/auth/[...nextauth] in 111ms (642 modules)
+ GET /api/products?category=VOODOO808&limit=10&_t=1777707887141 [32m200[39m in 277ms
+ GET /api/products?category=T%20SHIRT%20GALLERY&limit=10&_t=1777707887133 [32m200[39m in 283ms
+ GET /api/products?category=SPACE%20LOVE&limit=10&_t=1777707887141 [32m200[39m in 176ms
+ GET /api/hero-sections?_t=1777707887141 [32m200[39m in 331ms
+ GET /api/category-sections?_t=1777707887141 [32m200[39m in 340ms
+ GET /api/products?category=RECREATION%20WELLNESS&limit=10&_t=1777707887141 [32m200[39m in 14ms
+ GET /api/products?category=T%20SHIRT%20GALLERY&limit=10&_t=1777707887141 [32m200[39m in 23ms
+ GET /api/categories [32m200[39m in 25ms
+ GET /api/auth/session [32m200[39m in 669ms
+ GET /api/auth/session [32m200[39m in 16ms

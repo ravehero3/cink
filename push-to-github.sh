@@ -1,13 +1,13 @@
 #!/bin/bash
 
-echo "🚀 Pushing code to GitHub repository: alienshop"
+echo "🚀 Pushing code to GitHub repository: cink"
 echo ""
 
 # Remove old origin if it exists
 git remote remove origin 2>/dev/null || true
 
 # Add new origin
-git remote add origin https://github.com/ravehero3/alienshop.git
+git remote add origin https://github.com/ravehero3/cink.git
 
 # Show current branch
 echo "Current branch:"
@@ -37,4 +37,4 @@ echo "Pushing to GitHub..."
 git push -u origin main --force
 
 echo ""
-echo "✅ Code pushed successfully to: https://github.com/ravehero3/alienshop"
+echo "✅ Code pushed successfully to: https://github.com/ravehero3/cink"

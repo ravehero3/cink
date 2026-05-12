@@ -1,0 +1,54 @@
+
+> workspace@1.0.0 dev
+> next dev -H 0.0.0.0 -p 5000
+
+[1G[0K  [1m[38;2;173;127;168m▲ Next.js 14.2.33[39m[22m
+  - Local:        http://localhost:5000
+  - Network:      http://0.0.0.0:5000
+
+ [32m[1m✓[22m[39m Starting...
+ [32m[1m✓[22m[39m Ready in 2.8s
+ [37m[1m○[22m[39m Compiling / ...
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+Browserslist: browsers data (caniuse-lite) is 7 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m[1m✓[22m[39m Compiled / in 5.1s (729 modules)
+ GET / [32m200[39m in 5452ms
+ GET / [32m200[39m in 5660ms
+ [32m[1m✓[22m[39m Compiled in 512ms (357 modules)
+ [37m[1m○[22m[39m Compiling /favicon.ico ...
+ [32m[1m✓[22m[39m Compiled /favicon.ico in 2.2s (404 modules)
+ GET /favicon.ico [32m200[39m in 2333ms
+ [37m[1m○[22m[39m Compiling /[slug] ...
+ [32m[1m✓[22m[39m Compiled /[slug] in 516ms (784 modules)
+ GET /produkty [32m200[39m in 1044ms
+ GET /favicon.ico [32m200[39m in 25ms
+ [33m[1m⚠[22m[39m Cross origin request detected from d4329f7c-472c-4653-9eda-d23198bd0a59-00-20lspgawdahlb.picard.replit.dev to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ [32m[1m✓[22m[39m Compiled /api/auth/[...nextauth] in 199ms (451 modules)
+ [32m[1m✓[22m[39m Compiled (685 modules)
+ GET /api/categories?_t=1777704542495 [32m200[39m in 1230ms
+ GET /api/categories?_t=1777704542489 [32m200[39m in 1266ms
+ GET /api/categories [32m200[39m in 1276ms
+ GET /api/categories [32m200[39m in 15ms
+ GET /api/categories [32m200[39m in 44ms
+ [32m[1m✓[22m[39m Compiled /api/products in 130ms (687 modules)
+ GET /api/auth/session [32m200[39m in 1587ms
+ [32m[1m✓[22m[39m Compiled (691 modules)
+ GET /api/products?category=VOODOO808&limit=10&_t=1777704543763 [32m200[39m in 397ms
+ GET /api/products?category=SPACE%20LOVE&limit=10&_t=1777704543763 [32m200[39m in 415ms
+ GET /api/products?category=T%20SHIRT%20GALLERY&limit=10&_t=1777704543763 [32m200[39m in 233ms
+ GET /api/products?category=RECREATION%20WELLNESS&limit=10&_t=1777704543763 [32m200[39m in 424ms
+ GET /api/auth/session [32m200[39m in 153ms
+ GET /api/category-sections?_t=1777704543763 [32m200[39m in 465ms
+ GET /api/hero-sections?_t=1777704543763 [32m200[39m in 474ms
+ GET /api/auth/session [32m200[39m in 36ms
+ GET /api/category-sections?_t=1777704543770 [32m200[39m in 46ms
+ GET /api/hero-sections?_t=1777704543770 [32m200[39m in 52ms
+ GET /api/products?category=VOODOO808&limit=10&_t=1777704543770 [32m200[39m in 52ms
+ GET /api/products?category=SPACE%20LOVE&limit=10&_t=1777704543770 [32m200[39m in 49ms
+ GET /api/products?category=RECREATION%20WELLNESS&limit=10&_t=1777704543770 [32m200[39m in 50ms
+ GET /api/categories [32m200[39m in 23ms
+ GET /api/products?category=T%20SHIRT%20GALLERY&limit=10&_t=1777704543770 [32m200[39m in 31ms
+ GET /api/auth/session [32m200[39m in 38ms

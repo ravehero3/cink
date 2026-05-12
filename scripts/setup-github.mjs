@@ -50,7 +50,7 @@ async function createRepository() {
 
     try {
       const { data: repo } = await octokit.rest.repos.createForAuthenticatedUser({
-        name: 'alienshop',
+        name: 'cink',
         description: 'UFO Sport e-commerce website - Next.js, Prisma, Cloudinary',
         private: false,
         auto_init: false
@@ -64,10 +64,10 @@ async function createRepository() {
       return repo;
     } catch (error) {
       if (error.status === 422 && error.message.includes('already exists')) {
-        console.log(`✓ Repository 'alienshop' already exists`);
+        console.log(`✓ Repository 'cink' already exists`);
         const { data: repo } = await octokit.rest.repos.get({
           owner: user.login,
-          repo: 'alienshop'
+          repo: 'cink'
         });
         console.log(`  Repository URL: ${repo.html_url}`);
         return repo;

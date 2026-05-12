@@ -29,6 +29,11 @@ interface Order {
   shippingMethod: string;
   zasilkovnaId: string | null;
   zasilkovnaName: string | null;
+  pplId: string | null;
+  pplName: string | null;
+  shippingStreet: string | null;
+  shippingCity: string | null;
+  shippingZip: string | null;
   createdAt: string;
 }
 
@@ -125,8 +130,15 @@ function PlatbaPageContent() {
   };
 
   const getShippingCost = () => {
+    if (!order) return 0;
     const subtotal = getSubtotal();
-    return subtotal >= 2000 ? 0 : 79;
+    if (subtotal >= 2000) return 0;
+    
+    // We can infer shipping cost from totalPrice - subtotal + discount
+    // But since we want to be explicit:
+    if (order.shippingMethod === 'ppl_address') return 99;
+    if (order.shippingMethod === 'ppl_parcelshop') return 89;
+    return 79; // Zasilkovna default
   };
 
   const getDiscount = () => {
@@ -488,7 +500,7 @@ function PlatbaPageContent() {
               }}>
                 {order.customerPhone}
               </p>
-              {order.zasilkovnaName && (
+              {order.shippingMethod === 'zasilkovna' && order.zasilkovnaName && (
                 <>
                   <h3 style={{
                     fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -505,6 +517,47 @@ function PlatbaPageContent() {
                     fontWeight: 400
                   }}>
                     {order.zasilkovnaName}
+                  </p>
+                </>
+              )}
+              {order.shippingMethod === 'ppl_address' && order.shippingStreet && (
+                <>
+                  <h3 style={{
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    marginBottom: '8px'
+                  }}>
+                    DORUČOVACÍ ADRESA (PPL)
+                  </h3>
+                  <p style={{
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '14px',
+                    fontWeight: 400
+                  }}>
+                    {order.shippingStreet}<br />
+                    {order.shippingZip} {order.shippingCity}
+                  </p>
+                </>
+              )}
+              {order.shippingMethod === 'ppl_parcelshop' && order.pplName && (
+                <>
+                  <h3 style={{
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    marginBottom: '8px'
+                  }}>
+                    VÝDEJNÍ MÍSTO PPL PARCELSHOP
+                  </h3>
+                  <p style={{
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '14px',
+                    fontWeight: 400
+                  }}>
+                    {order.pplName}
                   </p>
                 </>
               )}

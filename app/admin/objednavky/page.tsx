@@ -15,7 +15,12 @@ interface Order {
   status: string;
   paymentStatus: string;
   createdAt: string;
+  shippingMethod: string;
   zasilkovnaName: string | null;
+  pplName: string | null;
+  shippingStreet: string | null;
+  shippingCity: string | null;
+  shippingZip: string | null;
 }
 
 const STATUS_OPTIONS = ['PENDING', 'PAID', 'PROCESSING', 'SHIPPED', 'COMPLETED', 'CANCELLED'];
@@ -440,7 +445,9 @@ export default function AdminOrdersPage() {
                 <td className="p-4 text-body">{order.customerEmail}</td>
                 <td className="p-4 text-body">{order.customerPhone}</td>
                 <td className="p-4 text-body text-small">
-                  {order.zasilkovnaName ? order.zasilkovnaName : '—'}
+                  {order.shippingMethod === 'zasilkovna' ? (order.zasilkovnaName || '—') : 
+                   order.shippingMethod === 'ppl_address' ? `${order.shippingStreet}, ${order.shippingCity}` :
+                   order.shippingMethod === 'ppl_parcelshop' ? (order.pplName || '—') : '—'}
                 </td>
                 <td className="p-4 text-body">{Number(order.totalPrice).toFixed(2)} Kč</td>
                 <td className="p-4">

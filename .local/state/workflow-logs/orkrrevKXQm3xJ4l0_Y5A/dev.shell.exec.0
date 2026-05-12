@@ -1,0 +1,99 @@
+
+> workspace@1.0.0 dev
+> next dev -H 0.0.0.0 -p 5000
+
+[1G[0K  [1m[38;2;173;127;168m▲ Next.js 14.2.33[39m[22m
+  - Local:        http://localhost:5000
+  - Network:      http://0.0.0.0:5000
+
+ [32m[1m✓[22m[39m Starting...
+ [32m[1m✓[22m[39m Ready in 1808ms
+ [37m[1m○[22m[39m Compiling / ...
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+Browserslist: browsers data (caniuse-lite) is 7 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m[1m✓[22m[39m Compiled / in 4s (729 modules)
+ GET / [32m200[39m in 4270ms
+ [32m[1m✓[22m[39m Compiled in 416ms (357 modules)
+ [37m[1m○[22m[39m Compiling /admin/produkty/novy ...
+ [32m[1m✓[22m[39m Compiled /admin/produkty/novy in 3.5s (912 modules)
+ GET /admin/produkty/novy [32m200[39m in 3728ms
+ [32m[1m✓[22m[39m Compiled /api/hero-sections in 224ms (502 modules)
+ [33m[1m⚠[22m[39m Cross origin request detected from d4329f7c-472c-4653-9eda-d23198bd0a59-00-20lspgawdahlb.picard.replit.dev to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ [32m[1m✓[22m[39m Compiled /api/auth/[...nextauth] in 0ms (740 modules)
+ [32m[1m✓[22m[39m Compiled in 1ms (771 modules)
+ [32m[1m✓[22m[39m Compiled in 0ms (771 modules)
+ GET /api/categories [32m200[39m in 1047ms
+ [32m[1m✓[22m[39m Compiled in 0ms (771 modules)
+ GET /api/categories [32m200[39m in 1601ms
+ GET /favicon.ico [32m200[39m in 1186ms
+ GET /api/auth/session [32m200[39m in 1127ms
+ GET /api/products?category=VOODOO808&limit=10&_t=1777709389445 [32m200[39m in 1592ms
+ GET /api/products?category=SPACE%20LOVE&limit=10&_t=1777709389445 [32m200[39m in 1600ms
+ GET /api/products?category=RECREATION%20WELLNESS&limit=10&_t=1777709389445 [32m200[39m in 1608ms
+ GET /api/hero-sections?_t=1777709389445 [32m200[39m in 1632ms
+ GET /api/category-sections?_t=1777709389445 [32m200[39m in 1657ms
+ GET /api/products?category=VOODOO808&limit=10&_t=1777709389451 [32m200[39m in 33ms
+ GET /api/products?category=SPACE%20LOVE&limit=10&_t=1777709389451 [32m200[39m in 36ms
+ GET /api/products?category=T%20SHIRT%20GALLERY&limit=10&_t=1777709389445 [32m200[39m in 52ms
+ [37m[1m○[22m[39m Compiling /api/uploadthing ...
+ [32m[1m✓[22m[39m Compiled /api/uploadthing in 3.7s (1624 modules)
+ GET /api/auth/session [32m200[39m in 3985ms
+timestamp=2026-05-02T08:09:56.016Z level=WARN fiber=#8 message="Executing an Effect versioned 3.18.4 with a Runtime of version 3.17.7, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service"
+timestamp=2026-05-02T08:09:56.017Z level=WARN fiber=#8 message="Executing an Effect versioned 3.18.4 with a Runtime of version 3.17.7, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service"
+timestamp=2026-05-02T08:09:56.017Z level=WARN fiber=#8 message="Executing an Effect versioned 3.18.4 with a Runtime of version 3.17.7, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service"
+timestamp=2026-05-02T08:09:56.017Z level=WARN fiber=#8 message="Executing an Effect versioned 3.18.4 with a Runtime of version 3.17.7, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service"
+timestamp=2026-05-02T08:09:56.018Z level=WARN fiber=#8 message="Executing an Effect versioned 3.18.4 with a Runtime of version 3.17.7, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service"
+timestamp=2026-05-02T08:09:56.018Z level=WARN fiber=#8 message="Executing an Effect versioned 3.18.4 with a Runtime of version 3.17.7, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service"
+timestamp=2026-05-02T08:09:56.018Z level=WARN fiber=#8 message="Executing an Effect versioned 3.18.4 with a Runtime of version 3.17.7, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service"
+timestamp=2026-05-02T08:09:56.018Z level=WARN fiber=#8 message="Executing an Effect versioned 3.18.4 with a Runtime of version 3.17.7, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service"
+[37m[08:09:56.037][0m [33mWARN[0m (#13): [1m[36mExecuting an Effect versioned 3.17.7 with a Runtime of version 3.18.4, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service[0m
+[37m[08:09:56.038][0m [33mWARN[0m (#13): [1m[36mExecuting an Effect versioned 3.17.7 with a Runtime of version 3.18.4, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service[0m
+[37m[08:09:56.038][0m [33mWARN[0m (#13): [1m[36mExecuting an Effect versioned 3.17.7 with a Runtime of version 3.18.4, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service[0m
+[37m[08:09:56.038][0m [33mWARN[0m (#13): [1m[36mExecuting an Effect versioned 3.17.7 with a Runtime of version 3.18.4, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service[0m
+[37m[08:09:56.039][0m [33mWARN[0m (#13): [1m[36mExecuting an Effect versioned 3.17.7 with a Runtime of version 3.18.4, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service[0m
+[37m[08:09:56.039][0m [33mWARN[0m (#13): [1m[36mExecuting an Effect versioned 3.17.7 with a Runtime of version 3.18.4, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service[0m
+[37m[08:09:56.039][0m [33mWARN[0m (#13): [1m[36mExecuting an Effect versioned 3.17.7 with a Runtime of version 3.18.4, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service[0m
+[37m[08:09:56.039][0m [33mWARN[0m (#13): [1m[36mExecuting an Effect versioned 3.17.7 with a Runtime of version 3.18.4, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service[0m
+[37m[08:09:56.039][0m [33mWARN[0m (#13): [1m[36mExecuting an Effect versioned 3.17.7 with a Runtime of version 3.18.4, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service[0m
+[37m[08:09:56.040][0m [33mWARN[0m (#13): [1m[36mExecuting an Effect versioned 3.17.7 with a Runtime of version 3.18.4, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service[0m
+[37m[08:09:56.040][0m [33mWARN[0m (#13): [1m[36mExecuting an Effect versioned 3.17.7 with a Runtime of version 3.18.4, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service[0m
+[37m[08:09:56.040][0m [33mWARN[0m (#13): [1m[36mExecuting an Effect versioned 3.17.7 with a Runtime of version 3.18.4, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service[0m
+[37m[08:09:56.040][0m [33mWARN[0m (#13): [1m[36mExecuting an Effect versioned 3.17.7 with a Runtime of version 3.18.4, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service[0m
+[37m[08:09:56.040][0m [33mWARN[0m (#13): [1m[36mExecuting an Effect versioned 3.17.7 with a Runtime of version 3.18.4, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service[0m
+[37m[08:09:56.040][0m [33mWARN[0m (#13): [1m[36mExecuting an Effect versioned 3.17.7 with a Runtime of version 3.18.4, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service[0m
+[37m[08:09:56.041][0m [33mWARN[0m (#13): [1m[36mExecuting an Effect versioned 3.17.7 with a Runtime of version 3.18.4, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service[0m
+[37m[08:09:56.041][0m [33mWARN[0m (#13): [1m[36mExecuting an Effect versioned 3.17.7 with a Runtime of version 3.18.4, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service[0m
+[37m[08:09:56.041][0m [33mWARN[0m (#13): [1m[36mExecuting an Effect versioned 3.17.7 with a Runtime of version 3.18.4, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service[0m
+[37m[08:09:56.041][0m [33mWARN[0m (#13): [1m[36mExecuting an Effect versioned 3.17.7 with a Runtime of version 3.18.4, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service[0m
+[37m[08:09:56.043][0m [33mWARN[0m (#13): [1m[36mExecuting an Effect versioned 3.17.7 with a Runtime of version 3.18.4, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service[0m
+[37m[08:09:56.043][0m [33mWARN[0m (#13): [1m[36mExecuting an Effect versioned 3.17.7 with a Runtime of version 3.18.4, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service[0m
+[37m[08:09:56.043][0m [33mWARN[0m (#13): [1m[36mExecuting an Effect versioned 3.17.7 with a Runtime of version 3.18.4, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service[0m
+[37m[08:09:56.044][0m [33mWARN[0m (#13): [1m[36mExecuting an Effect versioned 3.17.7 with a Runtime of version 3.18.4, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service[0m
+[37m[08:09:56.044][0m [33mWARN[0m (#13): [1m[36mExecuting an Effect versioned 3.17.7 with a Runtime of version 3.18.4, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service[0m
+[37m[08:09:56.044][0m [33mWARN[0m (#13): [1m[36mExecuting an Effect versioned 3.17.7 with a Runtime of version 3.18.4, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service[0m
+[37m[08:09:56.044][0m [33mWARN[0m (#13): [1m[36mExecuting an Effect versioned 3.17.7 with a Runtime of version 3.18.4, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service[0m
+[37m[08:09:56.044][0m [33mWARN[0m (#13): [1m[36mExecuting an Effect versioned 3.17.7 with a Runtime of version 3.18.4, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service[0m
+[37m[08:09:56.044][0m [33mWARN[0m (#13): [1m[36mExecuting an Effect versioned 3.17.7 with a Runtime of version 3.18.4, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service[0m
+[37m[08:09:56.044][0m [33mWARN[0m (#13): [1m[36mExecuting an Effect versioned 3.17.7 with a Runtime of version 3.18.4, you may want to dedupe the effect dependencies, you can use the language service plugin to detect this at compile time: https://github.com/Effect-TS/language-service[0m
+ GET /api/uploadthing [32m200[39m in 4639ms
+ GET /api/products?category=RECREATION%20WELLNESS&limit=10&_t=1777709389451 [32m200[39m in 4224ms
+ GET /api/products?category=T%20SHIRT%20GALLERY&limit=10&_t=1777709389451 [32m200[39m in 4210ms
+ GET /api/categories [32m200[39m in 4236ms
+ GET /api/hero-sections?_t=1777709389451 [32m200[39m in 4658ms
+ GET /api/category-sections?_t=1777709389451 [32m200[39m in 4656ms
+ GET /api/auth/session [32m200[39m in 28ms
+ [37m[1m○[22m[39m Compiling /prihlaseni ...
+ [32m[1m✓[22m[39m Compiled /prihlaseni in 757ms (2070 modules)
+ GET /prihlaseni [32m200[39m in 935ms
+ GET /favicon.ico [32m200[39m in 20ms
+ GET /api/categories [32m200[39m in 35ms
+ GET /api/auth/session [32m200[39m in 56ms
+ GET /api/auth/providers [32m200[39m in 57ms
+ GET /api/auth/session [32m200[39m in 28ms
+ GET /api/categories [32m200[39m in 36ms
+ GET /api/auth/providers [32m200[39m in 25ms
+ [32m[1m✓[22m[39m Compiled in 278ms (456 modules)
+ [32m[1m✓[22m[39m Compiled in 171ms (456 modules)

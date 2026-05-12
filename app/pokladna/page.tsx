@@ -25,6 +25,11 @@ export default function CheckoutPage() {
     shippingMethod: 'zasilkovna',
     zasilkovnaId: '',
     zasilkovnaName: '',
+    pplId: '',
+    pplName: '',
+    shippingStreet: '',
+    shippingCity: '',
+    shippingZip: '',
     promoCode: '',
   });
 
@@ -69,7 +74,7 @@ export default function CheckoutPage() {
 
   const rawSubtotal = getTotal();
   const subtotal = typeof rawSubtotal === 'number' && !isNaN(rawSubtotal) ? rawSubtotal : 0;
-  const shippingCost = calculateShippingCost(subtotal);
+  const shippingCost = calculateShippingCost(subtotal, formData.shippingMethod);
   const amountToFreeShipping = getAmountToFreeShipping(subtotal);
   const safeDiscount = typeof discount === 'number' && !isNaN(discount) ? discount : 0;
   const total = Math.max(0, subtotal + shippingCost - safeDiscount);
@@ -117,6 +122,16 @@ export default function CheckoutPage() {
       return;
     }
 
+    if (formData.shippingMethod === 'ppl_address' && (!formData.shippingStreet || !formData.shippingCity || !formData.shippingZip)) {
+      alert('Vyplňte prosím doručovací adresu');
+      return;
+    }
+
+    if (formData.shippingMethod === 'ppl_parcelshop' && !formData.pplId) {
+      alert('Vyberte prosím výdejní místo PPL ParcelShop');
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -145,6 +160,11 @@ export default function CheckoutPage() {
           shippingMethod: formData.shippingMethod,
           zasilkovnaId: formData.zasilkovnaId,
           zasilkovnaName: formData.zasilkovnaName,
+          pplId: formData.pplId,
+          pplName: formData.pplName,
+          shippingStreet: formData.shippingStreet,
+          shippingCity: formData.shippingCity,
+          shippingZip: formData.shippingZip,
           promoCode: formData.promoCode,
           totalPrice: finalTotal,
         }),
@@ -336,7 +356,8 @@ export default function CheckoutPage() {
               </h2>
 
               <div className="mb-4">
-                <label className="flex items-start p-4 cursor-pointer">
+                {/* Zásilkovna Option */}
+                <label className={`flex items-start p-4 cursor-pointer border rounded-md mb-2 ${formData.shippingMethod === 'zasilkovna' ? 'border-black bg-gray-50' : 'border-gray-200'}`}>
                   <input
                     type="radio"
                     name="shipping"
@@ -347,10 +368,10 @@ export default function CheckoutPage() {
                   />
                   <div className="flex-1">
                     <p className="text-body font-bold">Zásilkovna</p>
-                    <p className="text-body">Doručení na výdejní místo</p>
+                    <p className="text-body text-sm">Doručení na výdejní místo</p>
                   </div>
-                  <p className="text-body font-bold" style={{ color: shippingCost === 0 ? '#24e053' : 'inherit' }}>
-                    {shippingCost === 0 ? 'ZDARMA' : `${shippingCost} Kč`}
+                  <p className="text-body font-bold" style={{ color: calculateShippingCost(subtotal, 'zasilkovna') === 0 ? '#24e053' : 'inherit' }}>
+                    {calculateShippingCost(subtotal, 'zasilkovna') === 0 ? 'ZDARMA' : `${calculateShippingCost(subtotal, 'zasilkovna')} Kč`}
                   </p>
                 </label>
 
@@ -358,11 +379,99 @@ export default function CheckoutPage() {
                   <button
                     type="button"
                     onClick={openZasilkovnaWidget}
-                    className="w-full border border-black bg-white text-black px-4 py-2 text-body uppercase hover:bg-gray-100 transition-colors"
+                    className="w-full border border-black bg-white text-black px-4 py-2 text-body uppercase hover:bg-gray-100 transition-colors mb-4"
                     style={{ borderRadius: '4px', marginTop: '4px', borderWidth: '1px' }}
                   >
-                    {formData.zasilkovnaName ? `Změnit: ${formData.zasilkovnaName}` : 'VYBRAT VÝDEJNÍ MÍSTO'}
+                    {formData.zasilkovnaName ? `Změnit: ${formData.zasilkovnaName}` : 'VYBRAT VÝDEJNÍ MÍSTO ZÁSILKOVNY'}
                   </button>
+                )}
+
+                {/* PPL Home Delivery Option */}
+                <label className={`flex items-start p-4 cursor-pointer border rounded-md mb-2 ${formData.shippingMethod === 'ppl_address' ? 'border-black bg-gray-50' : 'border-gray-200'}`}>
+                  <input
+                    type="radio"
+                    name="shipping"
+                    value="ppl_address"
+                    checked={formData.shippingMethod === 'ppl_address'}
+                    onChange={(e) => setFormData({ ...formData, shippingMethod: e.target.value })}
+                    className="mr-4 mt-1"
+                  />
+                  <div className="flex-1">
+                    <p className="text-body font-bold">PPL - Doručení na adresu</p>
+                    <p className="text-body text-sm">Kurýr doručí zásilku až k vám domů</p>
+                  </div>
+                  <p className="text-body font-bold" style={{ color: calculateShippingCost(subtotal, 'ppl_address') === 0 ? '#24e053' : 'inherit' }}>
+                    {calculateShippingCost(subtotal, 'ppl_address') === 0 ? 'ZDARMA' : `${calculateShippingCost(subtotal, 'ppl_address')} Kč`}
+                  </p>
+                </label>
+
+                {formData.shippingMethod === 'ppl_address' && (
+                  <div className="space-y-2 mt-2 p-4 border border-black rounded-md bg-white">
+                    <p className="text-xs font-bold uppercase mb-2">Doručovací adresa</p>
+                    <input
+                      type="text"
+                      placeholder="Ulice a číslo popisné *"
+                      required={formData.shippingMethod === 'ppl_address'}
+                      value={formData.shippingStreet}
+                      onChange={(e) => setFormData({ ...formData, shippingStreet: e.target.value })}
+                      className="w-full border border-black px-2 py-1 text-body focus:outline-none"
+                      style={{ borderRadius: '4px' }}
+                    />
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        placeholder="Město *"
+                        required={formData.shippingMethod === 'ppl_address'}
+                        value={formData.shippingCity}
+                        onChange={(e) => setFormData({ ...formData, shippingCity: e.target.value })}
+                        className="flex-1 border border-black px-2 py-1 text-body focus:outline-none"
+                        style={{ borderRadius: '4px' }}
+                      />
+                      <input
+                        type="text"
+                        placeholder="PSČ *"
+                        required={formData.shippingMethod === 'ppl_address'}
+                        value={formData.shippingZip}
+                        onChange={(e) => setFormData({ ...formData, shippingZip: e.target.value })}
+                        className="w-24 border border-black px-2 py-1 text-body focus:outline-none"
+                        style={{ borderRadius: '4px' }}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* PPL ParcelShop Option (Placeholder for widget) */}
+                <label className={`flex items-start p-4 cursor-pointer border rounded-md mb-2 ${formData.shippingMethod === 'ppl_parcelshop' ? 'border-black bg-gray-50' : 'border-gray-200'}`}>
+                  <input
+                    type="radio"
+                    name="shipping"
+                    value="ppl_parcelshop"
+                    checked={formData.shippingMethod === 'ppl_parcelshop'}
+                    onChange={(e) => setFormData({ ...formData, shippingMethod: e.target.value })}
+                    className="mr-4 mt-1"
+                  />
+                  <div className="flex-1">
+                    <p className="text-body font-bold">PPL ParcelShop</p>
+                    <p className="text-body text-sm">Vyzvednutí na výdejním místě PPL</p>
+                  </div>
+                  <p className="text-body font-bold" style={{ color: calculateShippingCost(subtotal, 'ppl_parcelshop') === 0 ? '#24e053' : 'inherit' }}>
+                    {calculateShippingCost(subtotal, 'ppl_parcelshop') === 0 ? 'ZDARMA' : `${calculateShippingCost(subtotal, 'ppl_parcelshop')} Kč`}
+                  </p>
+                </label>
+
+                {formData.shippingMethod === 'ppl_parcelshop' && (
+                  <div className="mt-2 text-center p-4 border border-black rounded-md bg-white">
+                    <p className="text-xs italic mb-2">Výběr výdejního místa PPL se připravuje.</p>
+                    <input
+                      type="text"
+                      placeholder="Název nebo ID ParcelShopu *"
+                      required={formData.shippingMethod === 'ppl_parcelshop'}
+                      value={formData.pplName}
+                      onChange={(e) => setFormData({ ...formData, pplName: e.target.value, pplId: e.target.value })}
+                      className="w-full border border-black px-2 py-1 text-body focus:outline-none"
+                      style={{ borderRadius: '4px' }}
+                    />
+                  </div>
                 )}
               </div>
 
@@ -370,7 +479,14 @@ export default function CheckoutPage() {
                 <AnimatedButton 
                   text="PŘEJÍT K PLATBĚ" 
                   loading={loading}
-                  disabled={!formData.email || !formData.name || !formData.phone || (formData.shippingMethod === 'zasilkovna' && !formData.zasilkovnaId)}
+                  disabled={
+                    !formData.email || 
+                    !formData.name || 
+                    !formData.phone || 
+                    (formData.shippingMethod === 'zasilkovna' && !formData.zasilkovnaId) ||
+                    (formData.shippingMethod === 'ppl_address' && (!formData.shippingStreet || !formData.shippingCity || !formData.shippingZip)) ||
+                    (formData.shippingMethod === 'ppl_parcelshop' && !formData.pplId)
+                  }
                   type="submit"
                   className="w-full"
                 />

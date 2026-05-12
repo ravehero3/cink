@@ -1,0 +1,86 @@
+
+> workspace@1.0.0 dev
+> next dev -H 0.0.0.0 -p 5000
+
+[1G[0K  [1m[38;2;173;127;168m▲ Next.js 14.2.33[39m[22m
+  - Local:        http://localhost:5000
+  - Network:      http://0.0.0.0:5000
+
+ [32m[1m✓[22m[39m Starting...
+[35m[1mAttention[22m[39m: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+[36mhttps://nextjs.org/telemetry[39m
+
+ [32m[1m✓[22m[39m Ready in 1628ms
+ [37m[1m○[22m[39m Compiling / ...
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+Browserslist: browsers data (caniuse-lite) is 7 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m[1m✓[22m[39m Compiled / in 3.9s (729 modules)
+ GET / [32m200[39m in 4273ms
+ GET / [32m200[39m in 4378ms
+ [32m[1m✓[22m[39m Compiled in 471ms (357 modules)
+ [37m[1m○[22m[39m Compiling /favicon.ico ...
+ [32m[1m✓[22m[39m Compiled /favicon.ico in 2.5s (404 modules)
+ [33m[1m⚠[22m[39m Cross origin request detected from d4329f7c-472c-4653-9eda-d23198bd0a59-00-20lspgawdahlb.picard.replit.dev to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ [37m[1m○[22m[39m Compiling /api/products ...
+ [32m[1m✓[22m[39m Compiled /api/products in 849ms (663 modules)
+ [32m[1m✓[22m[39m Compiled (669 modules)
+ GET /api/category-sections?_t=1777704468171 [32m200[39m in 1283ms
+ GET /api/categories [32m200[39m in 1289ms
+ GET /api/products?category=VOODOO808&limit=10&_t=1777704468171 [32m200[39m in 1293ms
+ GET /api/products?category=SPACE%20LOVE&limit=10&_t=1777704468171 [32m200[39m in 1297ms
+ GET /api/hero-sections?_t=1777704468171 [32m200[39m in 1319ms
+ GET /api/products?category=RECREATION%20WELLNESS&limit=10&_t=1777704468171 [32m200[39m in 1308ms
+ GET /api/products?category=T%20SHIRT%20GALLERY&limit=10&_t=1777704468171 [32m200[39m in 15ms
+ [32m[1m✓[22m[39m Compiled /api/auth/[...nextauth] in 133ms (671 modules)
+ GET /api/products?category=VOODOO808&limit=10&_t=1777704468178 [32m200[39m in 351ms
+ GET /api/products?category=SPACE%20LOVE&limit=10&_t=1777704468178 [32m200[39m in 344ms
+ GET /api/products?category=RECREATION%20WELLNESS&limit=10&_t=1777704468178 [32m200[39m in 142ms
+ GET /api/hero-sections?_t=1777704468178 [32m200[39m in 404ms
+ GET /api/category-sections?_t=1777704468178 [32m200[39m in 413ms
+ GET /api/products?category=T%20SHIRT%20GALLERY&limit=10&_t=1777704468178 [32m200[39m in 16ms
+ GET /api/categories [32m200[39m in 18ms
+ GET /api/auth/session [32m200[39m in 757ms
+ GET /api/auth/session [32m200[39m in 29ms
+ GET / [32m200[39m in 154ms
+ GET /favicon.ico [32m200[39m in 25ms
+ GET /api/category-sections?_t=1777704474425 [32m200[39m in 32ms
+ GET /api/categories [32m200[39m in 36ms
+ GET /api/hero-sections?_t=1777704474425 [32m200[39m in 39ms
+ GET /api/products?category=VOODOO808&limit=10&_t=1777704474425 [32m200[39m in 39ms
+ GET /api/products?category=SPACE%20LOVE&limit=10&_t=1777704474425 [32m200[39m in 40ms
+ GET /api/products?category=RECREATION%20WELLNESS&limit=10&_t=1777704474425 [32m200[39m in 41ms
+ GET /api/auth/session [32m200[39m in 48ms
+ GET /api/products?category=T%20SHIRT%20GALLERY&limit=10&_t=1777704474425 [32m200[39m in 60ms
+ GET /api/products?category=VOODOO808&limit=10&_t=1777704474438 [32m200[39m in 58ms
+ GET /api/products?category=SPACE%20LOVE&limit=10&_t=1777704474438 [32m200[39m in 59ms
+ GET /api/hero-sections?_t=1777704474438 [32m200[39m in 60ms
+ GET /api/category-sections?_t=1777704474438 [32m200[39m in 75ms
+ GET /api/products?category=T%20SHIRT%20GALLERY&limit=10&_t=1777704474438 [32m200[39m in 28ms
+ GET /api/products?category=RECREATION%20WELLNESS&limit=10&_t=1777704474438 [32m200[39m in 38ms
+ GET /api/auth/session [32m200[39m in 27ms
+ GET /api/categories [32m200[39m in 45ms
+ [37m[1m○[22m[39m Compiling /prihlaseni ...
+ [32m[1m✓[22m[39m Compiled /prihlaseni in 590ms (1020 modules)
+ GET /prihlaseni [32m200[39m in 753ms
+ GET /favicon.ico [32m200[39m in 19ms
+ GET /api/auth/session [32m200[39m in 45ms
+ GET /api/categories [32m200[39m in 52ms
+ GET /api/auth/providers [32m200[39m in 46ms
+ GET /api/categories [32m200[39m in 39ms
+ GET /api/auth/session [32m200[39m in 44ms
+ GET /api/auth/providers [32m200[39m in 32ms
+ [32m[1m✓[22m[39m Compiled /admin in 236ms (1031 modules)
+ GET /admin [32m200[39m in 382ms
+ GET /favicon.ico [32m200[39m in 16ms
+ GET /api/categories [32m200[39m in 29ms
+ GET /api/auth/session [32m200[39m in 45ms
+ GET /api/auth/session [32m200[39m in 28ms
+ GET /api/categories [32m200[39m in 34ms
+ GET /favicon.ico [32m200[39m in 25ms
+ GET /api/auth/providers [32m200[39m in 17ms
+ GET /api/auth/providers [32m200[39m in 12ms

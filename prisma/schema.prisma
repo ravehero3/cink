@@ -89,6 +89,11 @@ model Order {
   shippingMethod    String        @default("zasilkovna")
   zasilkovnaId      String?
   zasilkovnaName    String?
+  pplId             String?
+  pplName           String?
+  shippingStreet    String?
+  shippingCity      String?
+  shippingZip       String?
   packetaPacketId   String?
   packetaError      String?       @db.Text
   trackingNumber    String?

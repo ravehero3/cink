@@ -141,6 +141,10 @@ interface OrderEmailData {
   totalPrice: number;
   shippingMethod?: string;
   zasilkovnaName?: string;
+  pplName?: string;
+  shippingStreet?: string;
+  shippingCity?: string;
+  shippingZip?: string;
 }
 
 export async function sendOrderConfirmationEmail(data: OrderEmailData) {
@@ -168,24 +172,51 @@ export async function sendOrderConfirmationEmail(data: OrderEmailData) {
     </tr>
   `).join('');
 
-  const shippingInfo = data.shippingMethod === 'zasilkovna' && data.zasilkovnaName
-    ? `
+  let shippingInfoHtml = '';
+  
+  if (data.shippingMethod === 'zasilkovna' && data.zasilkovnaName) {
+    shippingInfoHtml = `
       <tr>
         <td style="padding: 16px 0;">
           <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
             <tr>
-              <td>
-                <p style="margin: 0; font-size: 13px; color: #86868b;">Misto vyzvednuti</p>
-              </td>
+              <td><p style="margin: 0; font-size: 13px; color: #86868b;">Misto vyzvednuti (Zasilkovna)</p></td>
+              <td style="text-align: right;"><p style="margin: 0; font-size: 13px; color: #1d1d1f;">${data.zasilkovnaName}</p></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    `;
+  } else if (data.shippingMethod === 'ppl_address' && data.shippingStreet) {
+    shippingInfoHtml = `
+      <tr>
+        <td style="padding: 16px 0;">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+            <tr>
+              <td><p style="margin: 0; font-size: 13px; color: #86868b;">Dorucovaci adresa (PPL)</p></td>
               <td style="text-align: right;">
-                <p style="margin: 0; font-size: 13px; color: #1d1d1f;">${data.zasilkovnaName}</p>
+                <p style="margin: 0; font-size: 13px; color: #1d1d1f;">${data.shippingStreet}</p>
+                <p style="margin: 0; font-size: 13px; color: #1d1d1f;">${data.shippingZip} ${data.shippingCity}</p>
               </td>
             </tr>
           </table>
         </td>
       </tr>
-    `
-    : '';
+    `;
+  } else if (data.shippingMethod === 'ppl_parcelshop' && data.pplName) {
+    shippingInfoHtml = `
+      <tr>
+        <td style="padding: 16px 0;">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+            <tr>
+              <td><p style="margin: 0; font-size: 13px; color: #86868b;">Vydejni misto (PPL ParcelShop)</p></td>
+              <td style="text-align: right;"><p style="margin: 0; font-size: 13px; color: #1d1d1f;">${data.pplName}</p></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    `;
+  }
 
   const content = `
     <div style="text-align: center; margin-bottom: 40px;">
@@ -225,7 +256,7 @@ export async function sendOrderConfirmationEmail(data: OrderEmailData) {
     </div>
     
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom: 32px; border-top: 1px solid #f0f0f0;">
-      ${shippingInfo}
+      ${shippingInfoHtml}
       <tr>
         <td style="padding: 20px 0 0 0;">
           <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
@@ -584,9 +615,16 @@ export async function sendAdminOrderNotificationEmail(data: OrderEmailData & { c
     </tr>
   `).join('');
 
-  const shippingLabel = data.shippingMethod === 'zasilkovna'
-    ? `Zásilkovna${data.zasilkovnaName ? ` – ${data.zasilkovnaName}` : ''}`
-    : data.shippingMethod === 'ppl' ? 'PPL doručení domů' : data.shippingMethod || '—';
+  let shippingLabel = '—';
+  if (data.shippingMethod === 'zasilkovna') {
+    shippingLabel = `Zásilkovna${data.zasilkovnaName ? ` – ${data.zasilkovnaName}` : ''}`;
+  } else if (data.shippingMethod === 'ppl_address') {
+    shippingLabel = `PPL – Doručení na adresu (${data.shippingStreet}, ${data.shippingZip} ${data.shippingCity})`;
+  } else if (data.shippingMethod === 'ppl_parcelshop') {
+    shippingLabel = `PPL ParcelShop – ${data.pplName}`;
+  } else if (data.shippingMethod) {
+    shippingLabel = data.shippingMethod;
+  }
 
   const content = `
     <div style="margin-bottom: 32px;">

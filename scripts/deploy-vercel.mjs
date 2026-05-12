@@ -1,7 +1,7 @@
 import https from 'https';
 
 const VERCEL_TOKEN = process.env.VERCEL_TOKEN;
-const PROJECT_NAME = 'alienshop';
+const PROJECT_NAME = 'cink';
 
 function makeRequest(method, path, data = null) {
   return new Promise((resolve, reject) => {

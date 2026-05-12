@@ -91,6 +91,11 @@ export async function POST(request: NextRequest) {
       shippingMethod,
       zasilkovnaId,
       zasilkovnaName,
+      pplId,
+      pplName,
+      shippingStreet,
+      shippingCity,
+      shippingZip,
       promoCode,
       totalPrice,
     } = body;
@@ -144,6 +149,22 @@ export async function POST(request: NextRequest) {
       logError(errorId, 'Validation failed: missing zasilkovna', { shippingMethod, zasilkovnaId });
       return NextResponse.json(
         { error: 'Vyberte prosím výdejní místo Zásilkovny', errorId },
+        { status: 400 }
+      );
+    }
+
+    if (shippingMethod === 'ppl_address' && (!shippingStreet || !shippingCity || !shippingZip)) {
+      logError(errorId, 'Validation failed: missing address for PPL', { shippingMethod, shippingStreet, shippingCity, shippingZip });
+      return NextResponse.json(
+        { error: 'Vyplňte prosím kompletní doručovací adresu', errorId },
+        { status: 400 }
+      );
+    }
+
+    if (shippingMethod === 'ppl_parcelshop' && !pplId) {
+      logError(errorId, 'Validation failed: missing ppl parcelshop', { shippingMethod, pplId });
+      return NextResponse.json(
+        { error: 'Vyberte prosím výdejní místo PPL ParcelShop', errorId },
         { status: 400 }
       );
     }
@@ -231,6 +252,11 @@ export async function POST(request: NextRequest) {
           shippingMethod,
           zasilkovnaId: zasilkovnaId || null,
           zasilkovnaName: zasilkovnaName || null,
+          pplId: pplId || null,
+          pplName: pplName || null,
+          shippingStreet: shippingStreet || null,
+          shippingCity: shippingCity || null,
+          shippingZip: shippingZip || null,
           status: 'PENDING',
           paymentStatus: 'PENDING',
         },
@@ -341,6 +367,10 @@ export async function POST(request: NextRequest) {
       totalPrice: Number(totalPrice),
       shippingMethod,
       zasilkovnaName: zasilkovnaName || undefined,
+      pplName: pplName || undefined,
+      shippingStreet: shippingStreet || undefined,
+      shippingCity: shippingCity || undefined,
+      shippingZip: shippingZip || undefined,
     };
 
     try {
