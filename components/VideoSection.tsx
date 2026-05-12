@@ -76,20 +76,20 @@ export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, but
     return () => observer.disconnect();
   }, [lazy]);
 
+  // Rely on autoPlay, muted, and playsInline attributes for more reliable cross-browser playback
+  // Safari in particular is very sensitive to manual .play() calls after .load()
   useEffect(() => {
-    if (!shouldLoad) return;
-    const video = videoRef.current;
-    if (video) {
-      video.load();
-      const playPromise = video.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          video.muted = true;
-          video.play().catch(() => setVideoError(true));
-        });
-      }
+    if (shouldLoad && videoRef.current) {
+      // Small timeout to ensure the DOM element is fully ready for Safari
+      const timer = setTimeout(() => {
+        if (videoRef.current) {
+          videoRef.current.defaultMuted = true;
+          videoRef.current.muted = true;
+        }
+      }, 0);
+      return () => clearTimeout(timer);
     }
-  }, [videoUrl, mobileVideoUrl, isMobile, shouldLoad]);
+  }, [shouldLoad]);
 
   const currentVideoUrl = isMobile && mobileVideoUrl ? mobileVideoUrl : videoUrl;
 
@@ -115,6 +115,7 @@ export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, but
             >
               {shouldLoad && (
                 <video
+                  key={currentVideoUrl}
                   ref={videoRef}
                   className="absolute"
                   style={{
@@ -135,7 +136,6 @@ export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, but
                   preload={lazy ? 'none' : 'auto'}
                   onError={() => setVideoError(true)}
                 >
-                  <source src={currentVideoUrl} type="video/mp4; codecs=avc1.42E01E,mp4a.40.2" />
                   <source src={currentVideoUrl} type="video/mp4" />
                   {currentVideoUrl.includes('.mp4') && (
                     <source src={currentVideoUrl.replace('.mp4', '.webm')} type="video/webm" />

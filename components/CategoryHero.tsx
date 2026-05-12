@@ -43,19 +43,16 @@ export default function CategoryHero({ title, imageUrl }: CategoryHeroProps) {
   }, [imageUrl]);
 
   useEffect(() => {
-    if (isVideo && videoRef.current && !videoError) {
-      videoRef.current.load();
-      const playPromise = videoRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          if (videoRef.current) {
-            videoRef.current.muted = true;
-            videoRef.current.play().catch(() => setVideoError(true));
-          }
-        });
-      }
+    if (isVideo && videoRef.current) {
+      const timer = setTimeout(() => {
+        if (videoRef.current) {
+          videoRef.current.defaultMuted = true;
+          videoRef.current.muted = true;
+        }
+      }, 0);
+      return () => clearTimeout(timer);
     }
-  }, [imageUrl, isVideo, videoError]);
+  }, [imageUrl, isVideo]);
 
   const showVideo = isVideo && !videoError;
 
@@ -97,6 +94,7 @@ export default function CategoryHero({ title, imageUrl }: CategoryHeroProps) {
           >
             {showVideo && (
               <video
+                key={imageUrl}
                 ref={videoRef}
                 className="absolute"
                 style={{
