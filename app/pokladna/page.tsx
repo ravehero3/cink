@@ -252,7 +252,7 @@ export default function CheckoutPage() {
       <div className="max-w-7xl mx-auto px-4 flex-1">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 h-full border-b border-black">
           <div className="lg:col-span-2 h-full flex flex-col">
-            <form onSubmit={handleSubmit} className="border-l border-black p-8 flex flex-col h-full">
+            <form onSubmit={handleSubmit} className="lg:border-l border-black p-4 lg:p-8 flex flex-col h-full">
               <h2 
                 className="font-bold mb-4 uppercase"
                 style={{
@@ -357,22 +357,24 @@ export default function CheckoutPage() {
 
               <div className="mb-4">
                 {/* Zásilkovna Option */}
-                <label className={`flex items-start p-4 cursor-pointer border rounded-md mb-2 ${formData.shippingMethod === 'zasilkovna' ? 'border-black bg-gray-50' : 'border-gray-200'}`}>
+                <label className={`flex items-start p-3 sm:p-4 cursor-pointer border rounded-md mb-2 ${formData.shippingMethod === 'zasilkovna' ? 'border-black bg-gray-50' : 'border-gray-200'}`}>
                   <input
                     type="radio"
                     name="shipping"
                     value="zasilkovna"
                     checked={formData.shippingMethod === 'zasilkovna'}
                     onChange={(e) => setFormData({ ...formData, shippingMethod: e.target.value })}
-                    className="mr-4 mt-1"
+                    className="mr-3 sm:mr-4 mt-1"
                   />
-                  <div className="flex-1">
-                    <p className="text-body font-bold">Zásilkovna</p>
-                    <p className="text-body text-sm">Doručení na výdejní místo</p>
+                  <div className="flex-1 flex justify-between items-start gap-2">
+                    <div>
+                      <p className="text-body font-bold leading-tight">Zásilkovna</p>
+                      <p className="text-body text-xs sm:text-sm">Doručení na výdejní místo</p>
+                    </div>
+                    <p className="text-body font-bold whitespace-nowrap" style={{ color: calculateShippingCost(subtotal, 'zasilkovna') === 0 ? '#24e053' : 'inherit' }}>
+                      {calculateShippingCost(subtotal, 'zasilkovna') === 0 ? 'ZDARMA' : `${calculateShippingCost(subtotal, 'zasilkovna')} Kč`}
+                    </p>
                   </div>
-                  <p className="text-body font-bold" style={{ color: calculateShippingCost(subtotal, 'zasilkovna') === 0 ? '#24e053' : 'inherit' }}>
-                    {calculateShippingCost(subtotal, 'zasilkovna') === 0 ? 'ZDARMA' : `${calculateShippingCost(subtotal, 'zasilkovna')} Kč`}
-                  </p>
                 </label>
 
                 {formData.shippingMethod === 'zasilkovna' && (
@@ -387,22 +389,24 @@ export default function CheckoutPage() {
                 )}
 
                 {/* PPL Home Delivery Option */}
-                <label className={`flex items-start p-4 cursor-pointer border rounded-md mb-2 ${formData.shippingMethod === 'ppl_address' ? 'border-black bg-gray-50' : 'border-gray-200'}`}>
+                <label className={`flex items-start p-3 sm:p-4 cursor-pointer border rounded-md mb-2 ${formData.shippingMethod === 'ppl_address' ? 'border-black bg-gray-50' : 'border-gray-200'}`}>
                   <input
                     type="radio"
                     name="shipping"
                     value="ppl_address"
                     checked={formData.shippingMethod === 'ppl_address'}
                     onChange={(e) => setFormData({ ...formData, shippingMethod: e.target.value })}
-                    className="mr-4 mt-1"
+                    className="mr-3 sm:mr-4 mt-1"
                   />
-                  <div className="flex-1">
-                    <p className="text-body font-bold">PPL - Doručení na adresu</p>
-                    <p className="text-body text-sm">Kurýr doručí zásilku až k vám domů</p>
+                  <div className="flex-1 flex justify-between items-start gap-2">
+                    <div>
+                      <p className="text-body font-bold leading-tight">PPL - Doručení na adresu</p>
+                      <p className="text-body text-xs sm:text-sm">Kurýr doručí zásilku až k vám domů</p>
+                    </div>
+                    <p className="text-body font-bold whitespace-nowrap" style={{ color: calculateShippingCost(subtotal, 'ppl_address') === 0 ? '#24e053' : 'inherit' }}>
+                      {calculateShippingCost(subtotal, 'ppl_address') === 0 ? 'ZDARMA' : `${calculateShippingCost(subtotal, 'ppl_address')} Kč`}
+                    </p>
                   </div>
-                  <p className="text-body font-bold" style={{ color: calculateShippingCost(subtotal, 'ppl_address') === 0 ? '#24e053' : 'inherit' }}>
-                    {calculateShippingCost(subtotal, 'ppl_address') === 0 ? 'ZDARMA' : `${calculateShippingCost(subtotal, 'ppl_address')} Kč`}
-                  </p>
                 </label>
 
                 {formData.shippingMethod === 'ppl_address' && (
@@ -441,22 +445,24 @@ export default function CheckoutPage() {
                 )}
 
                 {/* PPL ParcelShop Option (Placeholder for widget) */}
-                <label className={`flex items-start p-4 cursor-pointer border rounded-md mb-2 ${formData.shippingMethod === 'ppl_parcelshop' ? 'border-black bg-gray-50' : 'border-gray-200'}`}>
+                <label className={`flex items-start p-3 sm:p-4 cursor-pointer border rounded-md mb-2 ${formData.shippingMethod === 'ppl_parcelshop' ? 'border-black bg-gray-50' : 'border-gray-200'}`}>
                   <input
                     type="radio"
                     name="shipping"
                     value="ppl_parcelshop"
                     checked={formData.shippingMethod === 'ppl_parcelshop'}
                     onChange={(e) => setFormData({ ...formData, shippingMethod: e.target.value })}
-                    className="mr-4 mt-1"
+                    className="mr-3 sm:mr-4 mt-1"
                   />
-                  <div className="flex-1">
-                    <p className="text-body font-bold">PPL ParcelShop</p>
-                    <p className="text-body text-sm">Vyzvednutí na výdejním místě PPL</p>
+                  <div className="flex-1 flex justify-between items-start gap-2">
+                    <div>
+                      <p className="text-body font-bold leading-tight">PPL ParcelShop</p>
+                      <p className="text-body text-xs sm:text-sm">Vyzvednutí na výdejním místě PPL</p>
+                    </div>
+                    <p className="text-body font-bold whitespace-nowrap" style={{ color: calculateShippingCost(subtotal, 'ppl_parcelshop') === 0 ? '#24e053' : 'inherit' }}>
+                      {calculateShippingCost(subtotal, 'ppl_parcelshop') === 0 ? 'ZDARMA' : `${calculateShippingCost(subtotal, 'ppl_parcelshop')} Kč`}
+                    </p>
                   </div>
-                  <p className="text-body font-bold" style={{ color: calculateShippingCost(subtotal, 'ppl_parcelshop') === 0 ? '#24e053' : 'inherit' }}>
-                    {calculateShippingCost(subtotal, 'ppl_parcelshop') === 0 ? 'ZDARMA' : `${calculateShippingCost(subtotal, 'ppl_parcelshop')} Kč`}
-                  </p>
                 </label>
 
                 {formData.shippingMethod === 'ppl_parcelshop' && (
@@ -495,7 +501,7 @@ export default function CheckoutPage() {
           </div>
 
           <div className="lg:col-span-1 h-full">
-            <div className="border-l border-r border-black h-full flex flex-col">
+            <div className="lg:border-l lg:border-r border-black h-full flex flex-col">
               <div className="h-header flex items-center justify-center px-6">
                 <h2 
                   className="font-bold uppercase"

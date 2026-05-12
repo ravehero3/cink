@@ -305,7 +305,7 @@ function PlatbaPageContent() {
 
       <div className="flex-1" style={{ width: '995px', maxWidth: '100%', margin: '0 auto' }}>
         <div className="grid grid-cols-1 lg:grid-cols-2">
-          <div className="p-6 lg:p-8" style={{ borderRight: '1px solid #000' }}>
+          <div className="p-6 lg:p-8 lg:border-r border-black">
             <h2 style={{
               fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
               fontSize: '14px',
