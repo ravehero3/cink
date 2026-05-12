@@ -1,4 +1,5 @@
 import { Resend } from 'resend';
+import prisma from './prisma';
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 
@@ -147,6 +148,29 @@ interface OrderEmailData {
   shippingZip?: string;
 }
 
+async function getTemplate(type: string, defaultSubject: string, defaultBody: string, variables: Record<string, any>) {
+  try {
+    const template = await prisma.emailTemplate.findUnique({
+      where: { type }
+    });
+
+    let subject = template?.subject || defaultSubject;
+    let body = template?.body || defaultBody;
+
+    // Replace variables {{varName}}
+    Object.entries(variables).forEach(([key, value]) => {
+      const regex = new RegExp(`{{${key}}}`, 'g');
+      subject = subject.replace(regex, String(value));
+      body = body.replace(regex, String(value));
+    });
+
+    return { subject, body };
+  } catch (error) {
+    console.error(`Error fetching email template ${type}:`, error);
+    return { subject: defaultSubject, body: defaultBody };
+  }
+}
+
 export async function sendOrderConfirmationEmail(data: OrderEmailData) {
   if (!resend) {
     console.error('Cannot send order confirmation email: RESEND_API_KEY is not configured');
@@ -218,7 +242,7 @@ export async function sendOrderConfirmationEmail(data: OrderEmailData) {
     `;
   }
 
-  const content = `
+  const defaultContent = `
     <div style="text-align: center; margin-bottom: 40px;">
       <h1 style="margin: 0 0 12px 0; font-size: 28px; font-weight: 600; color: #1d1d1f; letter-spacing: -0.02em; line-height: 1.2;">
         Dekujeme za objednavku
@@ -235,10 +259,10 @@ export async function sendOrderConfirmationEmail(data: OrderEmailData) {
             <tr>
               <td>
                 <p style="margin: 0 0 4px 0; font-size: 13px; color: #86868b;">Cislo objednavky</p>
-                <p style="margin: 0; font-size: 17px; font-weight: 600; color: #1d1d1f; letter-spacing: -0.01em;">${data.orderNumber}</p>
+                <p style="margin: 0; font-size: 17px; font-weight: 600; color: #1d1d1f; letter-spacing: -0.01em;">{{orderNumber}}</p>
               </td>
               <td style="text-align: right;">
-                <a href="${WEBSITE_URL}/sledovani-objednavky" style="font-size: 13px; color: #1d1d1f; text-decoration: none; font-weight: 500;">Sledovat &rarr;</a>
+                <a href="{{websiteUrl}}/sledovani-objednavky" style="font-size: 13px; color: #1d1d1f; text-decoration: none; font-weight: 500;">Sledovat &rarr;</a>
               </td>
             </tr>
           </table>
@@ -251,12 +275,12 @@ export async function sendOrderConfirmationEmail(data: OrderEmailData) {
         Vase polozky
       </p>
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
-        ${itemsHtml}
+        {{itemsHtml}}
       </table>
     </div>
     
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom: 32px; border-top: 1px solid #f0f0f0;">
-      ${shippingInfoHtml}
+      {{shippingInfoHtml}}
       <tr>
         <td style="padding: 20px 0 0 0;">
           <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
@@ -265,7 +289,7 @@ export async function sendOrderConfirmationEmail(data: OrderEmailData) {
                 <p style="margin: 0; font-size: 17px; font-weight: 600; color: #1d1d1f;">Celkem</p>
               </td>
               <td style="text-align: right;">
-                <p style="margin: 0; font-size: 20px; font-weight: 600; color: #1d1d1f;">${data.totalPrice.toLocaleString('cs-CZ')} Kc</p>
+                <p style="margin: 0; font-size: 20px; font-weight: 600; color: #1d1d1f;">{{totalPrice}} Kc</p>
               </td>
             </tr>
           </table>
@@ -277,7 +301,7 @@ export async function sendOrderConfirmationEmail(data: OrderEmailData) {
       <p style="margin: 0 0 16px 0; font-size: 15px; color: #1d1d1f; line-height: 1.5;">
         Nyni prosim dokoncete platbu pro expedici objednavky.
       </p>
-      <a href="${WEBSITE_URL}/sledovani-objednavky" style="${buttonStyle}">
+      <a href="{{websiteUrl}}/sledovani-objednavky" style="{{buttonStyle}}">
         Sledovat objednavku
       </a>
     </div>
@@ -287,12 +311,27 @@ export async function sendOrderConfirmationEmail(data: OrderEmailData) {
     </p>
   `;
 
+  const { subject, body } = await getTemplate(
+    'ORDER_CONFIRMATION',
+    `Objednavka ${data.orderNumber} - UFO Sport`,
+    defaultContent,
+    {
+      orderNumber: data.orderNumber,
+      customerName: data.customerName,
+      totalPrice: data.totalPrice.toLocaleString('cs-CZ'),
+      itemsHtml: itemsHtml,
+      shippingInfoHtml: shippingInfoHtml,
+      websiteUrl: WEBSITE_URL,
+      buttonStyle: buttonStyle
+    }
+  );
+
   try {
     const result = await resend.emails.send({
       from: FROM_EMAIL,
       to: data.customerEmail,
-      subject: `Objednavka ${data.orderNumber} - UFO Sport`,
-      html: emailWrapper(content),
+      subject: subject,
+      html: emailWrapper(body),
     });
     console.log('Order confirmation email sent:', result);
     return { success: true, result };
@@ -744,6 +783,73 @@ export async function sendPasswordResetEmail(email: string, resetLink: string) {
     return { success: true, result };
   } catch (error) {
     console.error('Failed to send password reset email:', error);
+    return { success: false, error };
+  }
+}
+
+export async function sendAbandonedCartEmail(email: string, items: any[]) {
+  if (!resend) {
+    return { success: false, error: 'Resend not configured' };
+  }
+
+  const itemsHtml = items.map(item => `
+    <tr>
+      <td style="padding: 12px 0; border-bottom: 1px solid #f0f0f0;">
+        <p style="margin: 0; font-size: 15px; font-weight: 500; color: #1d1d1f;">${item.name}</p>
+        <p style="margin: 4px 0 0 0; font-size: 13px; color: #86868b;">Velikost: ${item.size}</p>
+      </td>
+      <td style="padding: 12px 0; border-bottom: 1px solid #f0f0f0; text-align: right;">
+        <p style="margin: 0; font-size: 15px; color: #1d1d1f;">${item.quantity}x</p>
+      </td>
+    </tr>
+  `).join('');
+
+  const defaultContent = `
+    <div style="text-align: center; margin-bottom: 40px;">
+      <h1 style="margin: 0 0 12px 0; font-size: 28px; font-weight: 600; color: #1d1d1f; letter-spacing: -0.02em; line-height: 1.2;">
+        Zapomněli jste něco v košíku?
+      </h1>
+      <p style="margin: 0; font-size: 17px; color: #86868b; line-height: 1.5;">
+        Vaše vybrané kousky na vás stále čekají. Dokončete svou objednávku dříve, než se vyprodají!
+      </p>
+    </div>
+    
+    <div style="margin-bottom: 32px;">
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+        ${itemsHtml}
+      </table>
+    </div>
+    
+    <div style="text-align: center; padding: 24px 0; background-color: #f5f5f7; border-radius: 12px; margin-bottom: 24px;">
+      <a href="${WEBSITE_URL}/kosik" style="display: inline-block; background-color: #000; color: #fff; padding: 16px 32px; border-radius: 8px; text-decoration: none; font-size: 15px; font-weight: 600;">
+        Vrátit se do košíku
+      </a>
+    </div>
+    
+    <p style="margin: 0; font-size: 13px; color: #86868b; text-align: center; line-height: 1.6;">
+      Pokud jste již objednávku dokončili, ignorujte prosím tento e-mail.
+    </p>
+  `;
+
+  const { subject, body } = await getTemplate(
+    'ABANDONED_CART',
+    'Zapomněli jste něco v košíku? - UFO Sport',
+    defaultContent,
+    {
+      websiteUrl: WEBSITE_URL,
+    }
+  );
+
+  try {
+    const result = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: email,
+      subject: subject,
+      html: emailWrapper(body),
+    });
+    return { success: true, result };
+  } catch (error) {
+    console.error('Error sending abandoned cart email:', error);
     return { success: false, error };
   }
 }

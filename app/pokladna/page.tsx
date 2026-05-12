@@ -53,6 +53,28 @@ export default function CheckoutPage() {
     }
   }, [session?.user?.email]);
 
+  // Abandoned Cart Tracking
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      if (formData.email && formData.email.includes('@') && items.length > 0) {
+        try {
+          await fetch('/api/abandoned-cart/track', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: formData.email,
+              items: items
+            })
+          });
+        } catch (error) {
+          console.error('Error tracking abandoned cart:', error);
+        }
+      }
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [formData.email, items]);
+
   useEffect(() => {
     // Script is loaded globally in layout.tsx
     // Just verify it's available

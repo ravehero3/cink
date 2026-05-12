@@ -1,5 +1,5 @@
 export const FREE_SHIPPING_THRESHOLD = 2000;
-export const ZASILKOVNA_COST = 79;
+export const ZASILKOVNA_COST = 89;
 export const PPL_ADDRESS_COST = 99;
 export const PPL_PARCELSHOP_COST = 89;
 

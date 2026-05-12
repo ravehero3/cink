@@ -94,6 +94,22 @@ export default function AdminLayout({
             >
               Diagnostika uploadu
             </Link>
+            <Link
+              href="/admin/emaily"
+              className={`block text-body uppercase hover:underline py-0.5 ${
+                pathname === '/admin/emaily' ? 'font-bold' : ''
+              }`}
+            >
+              Emaily
+            </Link>
+            <Link
+              href="/admin/live-nabidky"
+              className={`block text-body uppercase hover:underline py-0.5 ${
+                pathname === '/admin/live-nabidky' ? 'font-bold' : ''
+              }`}
+            >
+              Live Nabídky
+            </Link>
             <div className="pt-2 mt-2 border-t border-black">
               <Link
                 href="/"

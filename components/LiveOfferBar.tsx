@@ -1,0 +1,135 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
+
+export default function LiveOfferBar({ onVisibilityChange }: { onVisibilityChange: (visible: boolean) => void }) {
+  const [offer, setOffer] = useState<any>(null);
+  const [timeLeft, setTimeLeft] = useState<number | null>(null);
+  const [promoCode, setPromoCode] = useState<string | null>(null);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const fetchOffer = async () => {
+      try {
+        const response = await fetch('/api/admin/live-offer');
+        const data = await response.json();
+        if (data.isActive) {
+          // Check if it should appear on this page
+          const isTargetPage = data.targetPages.some((p: string) => 
+            p === '*' || pathname === p || (p !== '/' && pathname.startsWith(p))
+          );
+
+          if (isTargetPage) {
+            setOffer(data);
+            handleUserWindow(data);
+            onVisibilityChange(true);
+          } else {
+            setOffer(null);
+            onVisibilityChange(false);
+          }
+        } else {
+          setOffer(null);
+          onVisibilityChange(false);
+        }
+      } catch (error) {
+        console.error('Error fetching live offer:', error);
+        onVisibilityChange(false);
+      }
+    };
+
+    fetchOffer();
+  }, [pathname]);
+
+  const handleUserWindow = async (data: any) => {
+    const offerKey = `live_offer_${data.id}`;
+    let startTime = localStorage.getItem(`${offerKey}_start`);
+    let code = localStorage.getItem(`${offerKey}_code`);
+
+    if (!startTime) {
+      startTime = Date.now().toString();
+      localStorage.setItem(`${offerKey}_start`, startTime);
+      
+      // Generate unique code
+      const uniqueCode = `UFO-${data.percentage}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+      localStorage.setItem(`${offerKey}_code`, uniqueCode);
+      code = uniqueCode;
+
+      // Register code in DB
+      try {
+        await fetch('/api/promo-codes/create-temporary', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            code: uniqueCode,
+            discountValue: data.percentage,
+            durationMin: data.durationMin
+          })
+        });
+      } catch (error) {
+        console.error('Error creating temporary code:', error);
+      }
+    }
+
+    setPromoCode(code);
+    
+    const durationMs = data.durationMin * 60 * 1000;
+    const elapsed = Date.now() - parseInt(startTime);
+    const remaining = Math.max(0, durationMs - elapsed);
+
+    if (remaining > 0) {
+      setTimeLeft(remaining);
+    } else {
+      setOffer(null);
+      onVisibilityChange(false);
+    }
+  };
+
+  useEffect(() => {
+    if (timeLeft === null || timeLeft <= 0) return;
+
+    const timer = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev && prev > 1000) return prev - 1000;
+        clearInterval(timer);
+        setOffer(null);
+        onVisibilityChange(false);
+        return 0;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timeLeft]);
+
+  if (!offer || !timeLeft || timeLeft <= 0) return null;
+
+  const minutes = Math.floor(timeLeft / 60000);
+  const seconds = Math.floor((timeLeft % 60000) / 1000);
+
+  return (
+    <div className="bg-black text-white py-3 px-4 flex flex-col sm:flex-row items-center justify-center gap-2 text-center overflow-hidden animate-slide-in">
+      <div className="text-xs sm:text-sm font-bold tracking-tight uppercase">
+        {offer.text.replace('10', offer.percentage)} 
+        <span className="mx-2 bg-white text-black px-2 py-0.5 rounded text-sm select-all">
+          {promoCode}
+        </span>
+      </div>
+      <div className="text-xs sm:text-sm font-medium flex items-center gap-1 opacity-90">
+        Máte na to ještě: 
+        <span className="font-mono bg-white/10 px-1.5 py-0.5 rounded tabular-nums">
+          {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+        </span>
+      </div>
+      
+      <style jsx>{`
+        @keyframes slide-in {
+          from { transform: translateY(-100%); }
+          to { transform: translateY(0); }
+        }
+        .animate-slide-in {
+          animation: slide-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+      `}</style>
+    </div>
+  );
+}
