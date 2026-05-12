@@ -145,7 +145,7 @@ export default function EmailTemplatesPage() {
                     className="w-full border border-black p-2 text-sm font-mono h-[300px] focus:outline-none disabled:bg-gray-50"
                   />
                   <div className="mt-2 p-2 bg-gray-50 border border-black/5 text-[10px] uppercase tracking-tighter text-gray-500">
-                    Dostupné proměnné: {{orderNumber}}, {{customerName}}, {{totalPrice}}, {{itemsHtml}}, {{shippingInfoHtml}}, {{websiteUrl}}
+                    Dostupné proměnné: {"{{orderNumber}}, {{customerName}}, {{totalPrice}}, {{itemsHtml}}, {{shippingInfoHtml}}, {{websiteUrl}}"}
                   </div>
                 </div>
 
