@@ -161,7 +161,11 @@ function ConfirmDeleteModal({ isOpen, onClose, onConfirm, sectionKey }: { isOpen
   );
 }
 
-export default function HomePageContent() {
+interface HomePageContentProps {
+  initialSections?: HeroSectionData[];
+}
+
+export default function HomePageContent({ initialSections }: HomePageContentProps) {
   const { data: session } = useSession();
   const isAdmin = session?.user?.role === 'ADMIN';
   const [categoryProducts, setCategoryProducts] = useState<CategoryProducts>({});
@@ -173,8 +177,10 @@ export default function HomePageContent() {
   const [editingCategory, setEditingCategory] = useState<'voodoo808' | 'spaceLove' | 'recreationWellness' | 'tShirtGallery' | null>(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [sectionToDelete, setSectionToDelete] = useState<string | null>(null);
-  
-  const [heroSections, setHeroSections] = useState<HeroSectionData[]>(defaultHeroSectionsArray);
+
+  const [heroSections, setHeroSections] = useState<HeroSectionData[]>(
+    initialSections && initialSections.length > 0 ? initialSections : defaultHeroSectionsArray
+  );
   const [categorySections, setCategorySections] = useState<Record<string, CategorySectionData>>(defaultCategorySections);
 
   const fetchHeroSections = async () => {
@@ -220,36 +226,44 @@ export default function HomePageContent() {
     async function fetchData() {
       try {
         const timestamp = Date.now();
-        const [heroRes, categoryRes, ...productResults] = await Promise.all([
-          fetch(`/api/hero-sections?_t=${timestamp}`, { cache: 'no-store' }),
+        const hasServerSections = initialSections && initialSections.length > 0;
+
+        const fetches: Promise<any>[] = [
+          ...(hasServerSections ? [] : [fetch(`/api/hero-sections?_t=${timestamp}`, { cache: 'no-store' })]),
           fetch(`/api/category-sections?_t=${timestamp}`, { cache: 'no-store' }),
           ...categories.map(async (category) => {
             const response = await fetch(`/api/products?category=${encodeURIComponent(category.name)}&limit=10&_t=${timestamp}`, { cache: 'no-store' });
             const data = await response.json();
             return { slug: category.slug, products: data.products || [] };
           }),
-        ]);
+        ];
 
-        const heroData = await heroRes.json();
-        const categoryData = await categoryRes.json();
+        const results = await Promise.all(fetches);
 
-        if (Array.isArray(heroData) && heroData.length > 0) {
-          const sortedSections = heroData.sort((a: HeroSectionData, b: HeroSectionData) => a.order - b.order);
-          setHeroSections(sortedSections);
-        } else {
-          setHeroSections(defaultHeroSectionsArray);
+        let resultIndex = 0;
+
+        if (!hasServerSections) {
+          const heroData = await results[resultIndex++].json();
+          if (Array.isArray(heroData) && heroData.length > 0) {
+            setHeroSections(heroData.sort((a: HeroSectionData, b: HeroSectionData) => a.order - b.order));
+          } else {
+            setHeroSections(defaultHeroSectionsArray);
+          }
         }
 
+        const categoryData = await results[resultIndex++].json();
         setCategorySections({ ...defaultCategorySections, ...categoryData });
 
         const productsMap: CategoryProducts = {};
-        productResults.forEach(({ slug, products }) => {
+        results.slice(resultIndex).forEach(({ slug, products }: { slug: string; products: Product[] }) => {
           productsMap[slug] = products;
         });
         setCategoryProducts(productsMap);
       } catch (error) {
         console.error('Error fetching data:', error);
-        setHeroSections(defaultHeroSectionsArray);
+        if (!(initialSections && initialSections.length > 0)) {
+          setHeroSections(defaultHeroSectionsArray);
+        }
       } finally {
         setIsLoading(false);
       }
@@ -501,6 +515,7 @@ export default function HomePageContent() {
               isLastSection={isLastSection}
               sectionId={section.sectionKey}
               showProducts={false}
+              lazy={index > 0}
             />
           );
         } else {

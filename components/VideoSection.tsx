@@ -33,12 +33,15 @@ interface VideoSectionProps {
   showProducts?: boolean;
   products?: Product[];
   isLoading?: boolean;
+  lazy?: boolean;
 }
 
-export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, button1Text, button2Text, button1Link, button2Link, textColor = 'black', isAdmin, onEdit, onEditCategory, onDelete, onAdd, isLastSection, sectionId, showProducts, products = [], isLoading = false }: VideoSectionProps) {
+export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, button1Text, button2Text, button1Link, button2Link, textColor = 'black', isAdmin, onEdit, onEditCategory, onDelete, onAdd, isLastSection, sectionId, showProducts, products = [], isLoading = false, lazy = true }: VideoSectionProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const [videoError, setVideoError] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [shouldLoad, setShouldLoad] = useState(!lazy);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -49,7 +52,32 @@ export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, but
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  // Intersection Observer: start loading video when section is near the viewport
   useEffect(() => {
+    if (!lazy) {
+      setShouldLoad(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setShouldLoad(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '400px' }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [lazy]);
+
+  useEffect(() => {
+    if (!shouldLoad) return;
     const video = videoRef.current;
     if (video) {
       video.load();
@@ -61,7 +89,7 @@ export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, but
         });
       }
     }
-  }, [videoUrl, mobileVideoUrl, isMobile]);
+  }, [videoUrl, mobileVideoUrl, isMobile, shouldLoad]);
 
   const currentVideoUrl = isMobile && mobileVideoUrl ? mobileVideoUrl : videoUrl;
 
@@ -70,6 +98,7 @@ export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, but
   return (
     <>
       <section 
+        ref={sectionRef}
         className="w-full relative border-b border-black bg-white overflow-hidden"
         style={{
           height: isMobile ? '100vw' : '80vh',
@@ -84,33 +113,35 @@ export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, but
                 backgroundColor: 'white',
               }}
             >
-              <video
-                ref={videoRef}
-                className="absolute"
-                style={{
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%) translateZ(0)',
-                  WebkitTransform: 'translate(-50%, -50%) translateZ(0)',
-                  minWidth: '100%',
-                  minHeight: '100%',
-                  width: isMobile ? 'auto' : '100%',
-                  height: isMobile ? '100%' : 'auto',
-                  objectFit: 'cover',
-                }}
-                loop
-                autoPlay
-                muted
-                playsInline
-                preload="auto"
-                onError={() => setVideoError(true)}
-              >
-                <source src={currentVideoUrl} type="video/mp4; codecs=avc1.42E01E,mp4a.40.2" />
-                <source src={currentVideoUrl} type="video/mp4" />
-                {currentVideoUrl.includes('.mp4') && (
-                  <source src={currentVideoUrl.replace('.mp4', '.webm')} type="video/webm" />
-                )}
-              </video>
+              {shouldLoad && (
+                <video
+                  ref={videoRef}
+                  className="absolute"
+                  style={{
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%) translateZ(0)',
+                    WebkitTransform: 'translate(-50%, -50%) translateZ(0)',
+                    minWidth: '100%',
+                    minHeight: '100%',
+                    width: isMobile ? 'auto' : '100%',
+                    height: isMobile ? '100%' : 'auto',
+                    objectFit: 'cover',
+                  }}
+                  loop
+                  autoPlay
+                  muted
+                  playsInline
+                  preload={lazy ? 'none' : 'auto'}
+                  onError={() => setVideoError(true)}
+                >
+                  <source src={currentVideoUrl} type="video/mp4; codecs=avc1.42E01E,mp4a.40.2" />
+                  <source src={currentVideoUrl} type="video/mp4" />
+                  {currentVideoUrl.includes('.mp4') && (
+                    <source src={currentVideoUrl.replace('.mp4', '.webm')} type="video/webm" />
+                  )}
+                </video>
+              )}
             </div>
             
             <div className="absolute bottom-2 left-0 right-0 flex flex-col items-center px-4">
