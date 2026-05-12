@@ -501,23 +501,30 @@ export default function CheckoutPage() {
                 )}
               </div>
 
-              {/* PPL Widget - Old version div */}
-              {isPplModalOpen && (
-                <div className="fixed inset-0 z-[100] bg-white flex flex-col">
-                  <div className="flex justify-between items-center p-4 border-b border-black bg-black text-white">
-                    <h2 className="font-bold uppercase text-sm tracking-widest">Vyberte výdejní místo PPL</h2>
-                    <button 
-                      onClick={() => setIsPplModalOpen(false)} 
-                      className="px-4 py-2 border border-white uppercase text-xs hover:bg-white hover:text-black transition-colors"
-                    >
-                      Zavřít
-                    </button>
-                  </div>
-                  <div className="flex-1 relative bg-gray-100">
-                    <div id="ppl-parcelshop-map" data-language="cs" style={{ height: '100%', width: '100%' }}></div>
-                  </div>
+              {/* PPL Widget - Always present in DOM for the script to find it on load */}
+              <div 
+                className={`fixed inset-0 z-[100] bg-white flex flex-col transition-all duration-300 ${
+                  isPplModalOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+                }`}
+              >
+                <div className="flex justify-between items-center p-4 border-b border-black bg-black text-white">
+                  <h2 className="font-bold uppercase text-sm tracking-widest">Vyberte výdejní místo PPL</h2>
+                  <button 
+                    onClick={() => setIsPplModalOpen(false)} 
+                    className="px-4 py-2 border border-white uppercase text-xs hover:bg-white hover:text-black transition-colors"
+                  >
+                    Zavřít
+                  </button>
                 </div>
-              )}
+                <div className="flex-1 relative bg-gray-100">
+                  <div 
+                    id="ppl-parcelshop-map" 
+                    data-language="cs" 
+                    data-mode="default"
+                    style={{ height: '100%', width: '100%', minHeight: '500px' }}
+                  ></div>
+                </div>
+              </div>
 
               <div className="mt-4">
                 <AnimatedButton 
