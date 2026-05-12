@@ -1,23 +1,89 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 
-interface EmailTemplate {
-  id: string;
-  type: string;
-  subject: string;
-  body: string;
-  variables: any;
-}
+const DEFAULT_TEMPLATES = {
+  ORDER_CONFIRMATION: {
+    name: 'Potvrzení objednávky',
+    subject: 'Vaše objednávka {{orderNumber}} byla přijata - UFO Sport',
+    body: `<div style="text-align: center; margin-bottom: 40px;">
+  <h1 style="margin: 0; font-size: 28px; font-weight: 600; color: #1d1d1f;">Děkujeme za vaši objednávku!</h1>
+  <p style="margin: 8px 0 0 0; font-size: 17px; color: #86868b;">Právě jsme ji přijali a brzy se pustíme do jejího zpracování.</p>
+</div>
+
+<div style="background-color: #f5f5f7; border-radius: 12px; padding: 24px; margin-bottom: 32px;">
+  <h2 style="margin: 0 0 16px 0; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #86868b;">Shrnutí objednávky {{orderNumber}}</h2>
+  {{itemsHtml}}
+  <div style="border-top: 1px solid #d2d2d7; margin: 16px 0; padding-top: 16px; display: flex; justify-content: space-between; font-weight: 600; font-size: 17px; color: #1d1d1f;">
+    <span>Celkem:</span>
+    <span>{{totalPrice}} Kč</span>
+  </div>
+</div>
+
+<div style="margin-bottom: 32px; padding: 0 24px;">
+  <h2 style="margin: 0 0 12px 0; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #86868b;">Doprava a doručení</h2>
+  {{shippingInfoHtml}}
+</div>
+
+<p style="font-size: 15px; color: #1d1d1f; line-height: 1.5; text-align: center;">O dalším průběhu vás budeme informovat e-mailem.</p>`
+  },
+  PAYMENT_SUCCESS: {
+    name: 'Platba přijata',
+    subject: 'Platba k objednávce {{orderNumber}} byla úspěšně přijata - UFO Sport',
+    body: `<div style="text-align: center; margin-bottom: 40px;">
+  <div style="display: inline-block; width: 64px; height: 64px; background-color: #000; border-radius: 50%; margin-bottom: 24px; line-height: 64px; font-size: 24px; color: white;">✓</div>
+  <h1 style="margin: 0; font-size: 28px; font-weight: 600; color: #1d1d1f;">Platba přijata</h1>
+  <p style="margin: 8px 0 0 0; font-size: 17px; color: #86868b;">Děkujeme za vaši platbu k objednávce {{orderNumber}}.</p>
+</div>
+
+<p style="font-size: 15px; color: #1d1d1f; line-height: 1.6; text-align: center; max-width: 400px; margin: 0 auto;">
+  Vše je v pořádku. Nyní začínáme s přípravou vašich produktů. O odeslání zásilky vás budeme informovat v dalším e-mailu.
+</p>`
+  },
+  SHIPPING_NOTIFICATION: {
+    name: 'Zásilka na cestě',
+    subject: 'Vaše objednávka {{orderNumber}} je na cestě k vám! - UFO Sport',
+    body: `<div style="text-align: center; margin-bottom: 40px;">
+  <h1 style="margin: 0; font-size: 28px; font-weight: 600; color: #1d1d1f;">Zásilka je na cestě</h1>
+  <p style="margin: 8px 0 0 0; font-size: 17px; color: #86868b;">Váš balíček k objednávce {{orderNumber}} jsme právě předali dopravci.</p>
+</div>
+
+<div style="text-align: center; margin-bottom: 32px; padding: 32px; background-color: #f5f5f7; border-radius: 12px;">
+  <p style="font-size: 15px; color: #1d1d1f; margin-bottom: 24px; font-weight: 500;">Svoji zásilku můžete sledovat online:</p>
+  <a href="{{trackingUrl}}" style="display: inline-block; background-color: #000; color: #fff; padding: 18px 36px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;">Sledovat zásilku</a>
+</div>
+
+<p style="font-size: 13px; color: #86868b; line-height: 1.5; text-align: center;">
+  Děkujeme, že nakupujete u UFO Sport. Doufáme, že budete s produkty spokojeni.
+</p>`
+  },
+  ABANDONED_CART: {
+    name: 'Zapomenutý košík',
+    subject: 'Nezapomněli jste něco v košíku? - UFO Sport',
+    body: `<div style="text-align: center; margin-bottom: 40px;">
+  <h1 style="margin: 0; font-size: 28px; font-weight: 600; color: #1d1d1f;">Váš košík na vás čeká</h1>
+  <p style="margin: 8px 0 0 0; font-size: 17px; color: #86868b;">Všimli jsme si, že jste u nás nechali rozpracovaný výběr.</p>
+</div>
+
+<div style="margin-bottom: 32px; border: 1px solid #e5e5e5; border-radius: 12px; padding: 20px;">
+  {{itemsHtml}}
+</div>
+
+<div style="text-align: center; padding: 32px; background-color: #000; color: #fff; border-radius: 12px;">
+  <p style="font-size: 16px; margin-bottom: 24px; font-weight: 400; line-height: 1.5;">
+    Dokončete svoji objednávku dříve, než se vybrané kousky vyprodají!
+  </p>
+  <a href="{{websiteUrl}}/kosik" style="display: inline-block; background-color: #fff; color: #000; padding: 18px 36px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Vrátit se do košíku</a>
+</div>`
+  }
+};
 
 export default function EmailTemplatesPage() {
-  const [templates, setTemplates] = useState<EmailTemplate[]>([]);
+  const [templates, setTemplates] = useState<any[]>([]);
+  const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
-  const router = useRouter();
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     fetchTemplates();
@@ -35,144 +101,146 @@ export default function EmailTemplatesPage() {
     }
   };
 
-  const handleUpdate = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedTemplate) return;
+  const handleSelectTemplate = (type: string) => {
+    const existing = templates.find(t => t.type === type);
+    if (existing) {
+      setSelectedTemplate({ ...existing });
+    } else {
+      // Create from default
+      setSelectedTemplate({
+        type,
+        name: DEFAULT_TEMPLATES[type as keyof typeof DEFAULT_TEMPLATES].name,
+        subject: DEFAULT_TEMPLATES[type as keyof typeof DEFAULT_TEMPLATES].subject,
+        body: DEFAULT_TEMPLATES[type as keyof typeof DEFAULT_TEMPLATES].body
+      });
+    }
+    setIsEditing(true);
+  };
 
+  const handleSave = async () => {
     setSaving(true);
     try {
-      const response = await fetch(`/api/admin/email-templates/${selectedTemplate.id}`, {
-        method: 'PATCH',
+      const method = selectedTemplate.id ? 'PATCH' : 'POST';
+      const url = selectedTemplate.id 
+        ? `/api/admin/email-templates/${selectedTemplate.id}`
+        : '/api/admin/email-templates';
+
+      const response = await fetch(url, {
+        method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          subject: selectedTemplate.subject,
-          body: selectedTemplate.body,
-        }),
+        body: JSON.stringify(selectedTemplate),
       });
 
       if (response.ok) {
+        await fetchTemplates();
         setIsEditing(false);
-        fetchTemplates();
+        setSelectedTemplate(null);
+        alert('Šablona byla uložena');
       }
     } catch (error) {
-      console.error('Error updating template:', error);
+      console.error('Error saving template:', error);
+      alert('Chyba při ukládání');
     } finally {
       setSaving(false);
     }
   };
 
-  const templateTypes = [
-    { value: 'ORDER_CONFIRMATION', label: 'Potvrzení objednávky' },
-    { value: 'PAYMENT_SUCCESS', label: 'Platba přijata' },
-    { value: 'SHIPPING_NOTIFICATION', label: 'Objednávka odeslána' },
-    { value: 'NEWSLETTER_WELCOME', label: 'Uvítání v newsletteru' },
-    { value: 'ADMIN_ORDER_NOTIFICATION', label: 'Notifikace pro admina' },
-    { value: 'PASSWORD_RESET', label: 'Obnovení hesla' },
-    { value: 'ABANDONED_CART', label: 'Opuštěný košík' },
-  ];
+  const handleResetToDefault = () => {
+    if (!selectedTemplate) return;
+    const defaults = DEFAULT_TEMPLATES[selectedTemplate.type as keyof typeof DEFAULT_TEMPLATES];
+    if (defaults) {
+      setSelectedTemplate({
+        ...selectedTemplate,
+        subject: defaults.subject,
+        body: defaults.body
+      });
+    }
+  };
 
-  if (loading) return <div className="p-8">Načítání...</div>;
+  if (loading) return <div className="p-8 tracking-widest uppercase text-xs">Načítání...</div>;
 
   return (
     <div className="p-8 max-w-6xl mx-auto">
-      <h1 className="text-2xl font-bold mb-8 uppercase tracking-widest">Správa e-mailových šablon</h1>
+      <h1 className="text-2xl font-bold mb-8 uppercase tracking-widest">E-mailové Šablony</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="md:col-span-1 space-y-2">
-          {templateTypes.map(type => {
-            const template = templates.find(t => t.type === type.value);
-            return (
-              <button
-                key={type.value}
-                onClick={() => {
-                  if (template) {
-                    setSelectedTemplate(template);
-                    setIsEditing(false);
-                  } else {
-                    // Create if not exists
-                    setSelectedTemplate({
-                      id: '',
-                      type: type.value,
-                      subject: '',
-                      body: '',
-                      variables: {}
-                    });
-                    setIsEditing(true);
-                  }
-                }}
-                className={`w-full text-left p-4 border border-black uppercase text-xs tracking-widest transition-colors ${
-                  selectedTemplate?.type === type.value ? 'bg-black text-white' : 'hover:bg-gray-100'
-                }`}
-              >
-                {type.label}
-                {!template && <span className="ml-2 text-[10px] opacity-50">(Nenastaveno)</span>}
-              </button>
-            );
-          })}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Sidebar */}
+        <div className="space-y-2">
+          {Object.keys(DEFAULT_TEMPLATES).map((type) => (
+            <button
+              key={type}
+              onClick={() => handleSelectTemplate(type)}
+              className={`w-full text-left p-4 border border-black uppercase text-[10px] font-bold tracking-widest transition-colors ${
+                selectedTemplate?.type === type ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-50'
+              }`}
+            >
+              {DEFAULT_TEMPLATES[type as keyof typeof DEFAULT_TEMPLATES].name}
+              {templates.find(t => t.type === type) && (
+                <span className="ml-2 opacity-50 font-normal">(Upraveno)</span>
+              )}
+            </button>
+          ))}
         </div>
 
-        <div className="md:col-span-2 border border-black p-6 bg-white min-h-[400px]">
-          {selectedTemplate ? (
-            <div>
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-lg font-bold uppercase">{templateTypes.find(t => t.value === selectedTemplate.type)?.label}</h2>
-                <button
-                  onClick={() => setIsEditing(!isEditing)}
-                  className="px-4 py-2 border border-black text-xs uppercase hover:bg-black hover:text-white transition-colors"
+        {/* Editor */}
+        <div className="lg:col-span-2">
+          {isEditing ? (
+            <div className="bg-white border border-black p-8 space-y-6">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="font-bold uppercase text-sm tracking-widest">{selectedTemplate.name}</h2>
+                <button 
+                  onClick={handleResetToDefault}
+                  className="text-[10px] uppercase underline tracking-tighter hover:opacity-60"
                 >
-                  {isEditing ? 'Zrušit' : 'Upravit'}
+                  Obnovit profesionální vzor
                 </button>
               </div>
 
-              <form onSubmit={handleUpdate} className="space-y-4">
+              <div className="space-y-4">
                 <div>
                   <label className="block text-[10px] uppercase font-bold mb-1">Předmět e-mailu</label>
                   <input
                     type="text"
-                    disabled={!isEditing}
                     value={selectedTemplate.subject}
                     onChange={e => setSelectedTemplate({ ...selectedTemplate, subject: e.target.value })}
-                    className="w-full border border-black p-2 text-sm focus:outline-none disabled:bg-gray-50"
+                    className="w-full border border-black p-2 text-sm focus:outline-none"
                   />
                 </div>
 
                 <div>
                   <label className="block text-[10px] uppercase font-bold mb-1">Obsah (HTML)</label>
                   <textarea
-                    disabled={!isEditing}
                     value={selectedTemplate.body}
                     onChange={e => setSelectedTemplate({ ...selectedTemplate, body: e.target.value })}
-                    className="w-full border border-black p-2 text-sm font-mono h-[300px] focus:outline-none disabled:bg-gray-50"
+                    className="w-full border border-black p-2 text-sm font-mono h-[400px] focus:outline-none"
                   />
                   <div className="mt-2 p-2 bg-gray-50 border border-black/5 text-[10px] uppercase tracking-tighter text-gray-500">
-                    Dostupné proměnné: {"{{orderNumber}}, {{customerName}}, {{totalPrice}}, {{itemsHtml}}, {{shippingInfoHtml}}, {{websiteUrl}}"}
+                    Dostupné proměnné: {"{{orderNumber}}, {{customerName}}, {{totalPrice}}, {{itemsHtml}}, {{shippingInfoHtml}}, {{websiteUrl}}, {{trackingUrl}}"}
                   </div>
                 </div>
 
-                {isEditing && (
+                <div className="flex gap-4 pt-4">
                   <button
-                    type="submit"
+                    onClick={handleSave}
                     disabled={saving}
-                    className="w-full bg-black text-white p-3 text-xs uppercase tracking-widest hover:opacity-90 disabled:opacity-50"
+                    className="flex-1 bg-black text-white p-4 text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition-opacity disabled:opacity-50"
                   >
                     {saving ? 'Ukládání...' : 'Uložit šablonu'}
                   </button>
-                )}
-              </form>
-
-              {!isEditing && selectedTemplate.body && (
-                <div className="mt-8 pt-6 border-t border-gray-100">
-                  <h3 className="text-[10px] uppercase font-bold mb-2 opacity-50">Náhled (Bez stylu obálky)</h3>
-                  <div 
-                    className="border border-gray-200 p-4 rounded bg-gray-50 text-sm overflow-auto"
-                    dangerouslySetInnerHTML={{ __html: selectedTemplate.body.replace(/{{[a-zA-Z0-9]+}}/g, '...') }}
-                  />
+                  <button
+                    onClick={() => { setIsEditing(false); setSelectedTemplate(null); }}
+                    className="px-8 border border-black p-4 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 transition-colors"
+                  >
+                    Zrušit
+                  </button>
                 </div>
-              )}
+              </div>
             </div>
           ) : (
-            <div className="flex items-center justify-center h-full text-xs uppercase opacity-50">
-              Vyberte šablonu pro úpravu
+            <div className="bg-gray-50 border border-black border-dashed h-full flex items-center justify-center p-12 text-center">
+              <p className="text-[10px] uppercase tracking-widest text-gray-400">
+                Vyberte šablonu vlevo pro úpravu
+              </p>
             </div>
           )}
         </div>
