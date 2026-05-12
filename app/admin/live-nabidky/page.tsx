@@ -59,17 +59,27 @@ export default function LiveOfferAdminPage() {
       <h1 className="text-2xl font-bold mb-8 uppercase tracking-widest">Správa Live Nabídek</h1>
 
       <form onSubmit={handleSave} className="space-y-8 bg-white border border-black p-8">
-        <div className="flex items-center justify-between p-4 bg-gray-50 border border-black/10">
-          <div>
+        <div className="flex items-center justify-between p-6 bg-gray-50 border border-black/10">
+          <div className="pr-4">
             <h2 className="font-bold uppercase text-sm">Aktivní stav</h2>
             <p className="text-[10px] text-gray-500 uppercase">Zapnout/vypnout zobrazení lišty na webu</p>
           </div>
           <button
             type="button"
-            onClick={() => setOffer({ ...offer, isActive: !offer.isActive })}
-            className={`w-14 h-7 rounded-full p-1 transition-colors duration-300 ${offer.isActive ? 'bg-green-500' : 'bg-gray-300'}`}
+            onClick={(e) => {
+              e.preventDefault();
+              setOffer({ ...offer, isActive: !offer.isActive });
+            }}
+            className={`relative inline-flex h-8 w-16 items-center rounded-full transition-colors focus:outline-none border border-black/10 ${
+              offer.isActive ? 'bg-black' : 'bg-gray-200'
+            }`}
+            style={{ cursor: 'pointer', zIndex: 10 }}
           >
-            <div className={`w-5 h-5 bg-white rounded-full transition-transform duration-300 ${offer.isActive ? 'translate-x-7' : 'translate-x-0'}`} />
+            <span
+              className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform ${
+                offer.isActive ? 'translate-x-9' : 'translate-x-1'
+              }`}
+            />
           </button>
         </div>
 
