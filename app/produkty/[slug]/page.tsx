@@ -64,13 +64,18 @@ export default function ProductDetailPage() {
   const { addProduct: addRecentlyViewed } = useRecentlyViewedStore();
 
   const isAdmin = session?.user?.role === 'ADMIN';
-  // Robust check for CD category (matches 'CD', 'CDS', 'Music CD', etc.)
-  const isCD = product?.category?.toUpperCase().includes('CD');
+  // Extremely robust check for CD category/type/name
+  const isCD = 
+    product?.category?.toUpperCase().includes('CD') || 
+    product?.productType?.toUpperCase().includes('CD') ||
+    product?.name?.toUpperCase().includes(' CD') ||
+    product?.name?.toUpperCase().endsWith(' CD') ||
+    (Object.keys(product?.sizes || {}).length === 1 && Object.keys(product?.sizes || {})[0].toUpperCase() === 'ONE SIZE');
   
   // Debug log for production verification
   useEffect(() => {
     if (product) {
-      console.log(`Product: ${product.name}, Category: ${product.category}, isCD: ${isCD}`);
+      console.log(`Product: ${product.name}, Category: ${product.category}, Type: ${product.productType}, isCD: ${isCD}`);
     }
   }, [product, isCD]);
 

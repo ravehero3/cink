@@ -89,13 +89,24 @@ export default function CheckoutPage() {
     return () => document.removeEventListener('ppl-accesspointwidget-select', handlePplSelect);
   }, []);
 
-  const openPplWidget = () => {
+  const openPplWidget = async () => {
+    // Wait for custom element to be registered if needed
+    if (typeof window !== 'undefined' && 'customElements' in window) {
+      await window.customElements.whenDefined('ppl-access-point-widget');
+    }
+
     const widget = document.querySelector('ppl-access-point-widget') as any;
     if (widget && typeof widget.open === 'function') {
       widget.open();
     } else {
       console.error('PPL widget not found or not initialized');
-      alert('PPL widget se nepodařilo načíst. Zkuste to prosím znovu.');
+      // Try a secondary check for the element
+      const retryWidget = document.getElementsByTagName('ppl-access-point-widget')[0] as any;
+      if (retryWidget && typeof retryWidget.open === 'function') {
+        retryWidget.open();
+      } else {
+        alert('PPL widget se stále načítá. Počkejte prosím chvilku a zkuste to znovu.');
+      }
     }
   };
 
@@ -502,12 +513,16 @@ export default function CheckoutPage() {
                     {formData.pplName ? `Změnit: ${formData.pplName}` : 'VYBRAT VÝDEJNÍ MÍSTO PPL'}
                   </button>
                 )}
+              </div>
 
-                {/* PPL Widget Web Component */}
-                <div style={{ display: 'none' }}>
-                  {/* @ts-ignore */}
-                  <ppl-access-point-widget api-key={process.env.NEXT_PUBLIC_PPL_API_KEY || 'demo'}></ppl-access-point-widget>
-                </div>
+              {/* PPL Widget Web Component - Always present but hidden */}
+              <div style={{ display: 'none' }}>
+                {/* @ts-ignore */}
+                <ppl-access-point-widget 
+                  api-key={process.env.NEXT_PUBLIC_PPL_API_KEY || 'demo'}
+                  language="cs"
+                  view-mode="modal"
+                ></ppl-access-point-widget>
               </div>
 
               <div className="mt-4">
