@@ -517,7 +517,6 @@ export default function CheckoutPage() {
 
               {/* PPL Widget Web Component - Always present but hidden */}
               <div style={{ display: 'none' }}>
-                {/* @ts-ignore */}
                 <ppl-access-point-widget 
                   api-key={process.env.NEXT_PUBLIC_PPL_API_KEY || 'demo'}
                   language="cs"
