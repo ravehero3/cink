@@ -5,9 +5,9 @@ import { useState, useEffect } from 'react';
 export default function LiveOfferAdminPage() {
   const [offer, setOffer] = useState<any>({
     isActive: false,
-    text: 'VYUŽIJTE LIMITOVANÝ SLEVOVÝ KUPÓN -10 PROCENT NA VŠE!',
-    percentage: 10,
-    durationMin: 10,
+    text: 'Sleva 15 % na vše',
+    percentage: 15,
+    durationMin: 45,
     targetPages: ['*'],
   });
   const [loading, setLoading] = useState(true);
@@ -158,14 +158,11 @@ export default function LiveOfferAdminPage() {
       <div className="mt-12">
         <h3 className="text-[10px] uppercase font-bold mb-4 opacity-50 tracking-[0.1em]">Náhled lišty</h3>
         <div className="bg-black text-white py-3 px-4 flex flex-col sm:flex-row items-center justify-center gap-2 text-center overflow-hidden border border-white/20">
-          <div className="text-xs sm:text-sm font-bold tracking-tight uppercase">
-            {offer.text.replace('10', offer.percentage)} 
-            <span className="mx-2 bg-white text-black px-2 py-0.5 rounded text-sm">
-              UFO-{offer.percentage}-XXXXX
-            </span>
+          <div className="text-xs sm:text-sm font-bold tracking-tight">
+            {offer.text.replace('15', offer.percentage)} (UFO-{offer.percentage}-XXXXX) Váš unikátní kód vyprší za: 
           </div>
           <div className="text-xs sm:text-sm font-medium flex items-center gap-1 opacity-90">
-            Máte na to ještě: <span className="font-mono bg-white/10 px-1.5 py-0.5 rounded">{offer.durationMin}:00</span>
+            <span className="font-mono bg-white/10 px-1.5 py-0.5 rounded">{offer.durationMin}:00</span>
           </div>
         </div>
       </div>

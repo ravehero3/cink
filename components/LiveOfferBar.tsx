@@ -108,14 +108,10 @@ export default function LiveOfferBar({ onVisibilityChange }: { onVisibilityChang
 
   return (
     <div className="bg-black text-white py-3 px-4 flex flex-col sm:flex-row items-center justify-center gap-2 text-center overflow-hidden animate-slide-in">
-      <div className="text-xs sm:text-sm font-bold tracking-tight uppercase">
-        {offer.text.replace('10', offer.percentage)} 
-        <span className="mx-2 bg-white text-black px-2 py-0.5 rounded text-sm select-all">
-          {promoCode}
-        </span>
+      <div className="text-xs sm:text-sm font-bold tracking-tight">
+        {offer.text.replace('15', offer.percentage)} ({promoCode}) Váš unikátní kód vyprší za: 
       </div>
       <div className="text-xs sm:text-sm font-medium flex items-center gap-1 opacity-90">
-        Máte na to ještě: 
         <span className="font-mono bg-white/10 px-1.5 py-0.5 rounded tabular-nums">
           {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
         </span>
