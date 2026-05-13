@@ -159,7 +159,11 @@ export default function LiveOfferAdminPage() {
         <h3 className="text-[10px] uppercase font-bold mb-4 opacity-50 tracking-[0.1em]">Náhled lišty</h3>
         <div className="bg-black text-white py-3 px-4 flex flex-col sm:flex-row items-center justify-center gap-2 text-center overflow-hidden border border-white/20">
           <div className="text-xs sm:text-sm font-bold tracking-tight">
-            {offer.text.replace('15', offer.percentage)} (UFO-{offer.percentage}-XXXXX) Váš unikátní kód vyprší za: 
+            {offer.text.replace('15', offer.percentage)} 
+            <span className="mx-2 bg-white text-black px-2.5 py-0.5 rounded-full text-[11px] font-black tracking-normal">
+              UFO{offer.percentage}XXXXX
+            </span>
+            Váš unikátní kód vyprší za: 
           </div>
           <div className="text-xs sm:text-sm font-medium flex items-center gap-1 opacity-90">
             <span className="font-mono bg-white/10 px-1.5 py-0.5 rounded">{offer.durationMin}:00</span>

@@ -51,7 +51,7 @@ export default function LiveOfferBar({ onVisibilityChange }: { onVisibilityChang
       localStorage.setItem(`${offerKey}_start`, startTime);
       
       // Generate unique code
-      const uniqueCode = `UFO-${data.percentage}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+      const uniqueCode = `UFO${data.percentage}${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
       localStorage.setItem(`${offerKey}_code`, uniqueCode);
       code = uniqueCode;
 
@@ -109,7 +109,11 @@ export default function LiveOfferBar({ onVisibilityChange }: { onVisibilityChang
   return (
     <div className="bg-black text-white py-3 px-4 flex flex-col sm:flex-row items-center justify-center gap-2 text-center overflow-hidden animate-slide-in">
       <div className="text-xs sm:text-sm font-bold tracking-tight">
-        {offer.text.replace('15', offer.percentage)} ({promoCode}) Váš unikátní kód vyprší za: 
+        {offer.text.replace('15', offer.percentage)} 
+        <span className="mx-2 bg-white text-black px-2.5 py-0.5 rounded-full text-[11px] font-black select-all tracking-normal">
+          {promoCode}
+        </span>
+        Váš unikátní kód vyprší za: 
       </div>
       <div className="text-xs sm:text-sm font-medium flex items-center gap-1 opacity-90">
         <span className="font-mono bg-white/10 px-1.5 py-0.5 rounded tabular-nums">
