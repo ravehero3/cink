@@ -171,7 +171,7 @@ export default function AllProductsClientPage() {
     <div>
       <SearchBar />
       <div className="relative">
-        <CategoryHero title="ZOBRAZIT VŠE" imageUrl="" />
+        <CategoryHero title="VŠECHNY PRODUKTY" imageUrl="" />
       </div>
       <ControlBar
         productCount={totalProducts}
