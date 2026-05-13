@@ -111,6 +111,7 @@ export default function LiveOfferBar({ onVisibilityChange }: { onVisibilityChang
         if (prev && prev > 1000) return prev - 1000;
         clearInterval(timer);
         setOffer(null);
+        setTimeLeft(0);
         onVisibilityChange(false);
         return 0;
       });
@@ -126,10 +127,11 @@ export default function LiveOfferBar({ onVisibilityChange }: { onVisibilityChang
 
   return (
     <div 
-      className="fixed left-0 right-0 z-20 bg-white text-black h-header px-3 flex items-center justify-center gap-3 text-center overflow-hidden animate-slide-in border-b border-black"
+      className="fixed left-0 right-0 z-[15] bg-white text-black h-header px-3 flex items-center justify-center gap-3 text-center overflow-hidden animate-slide-in border-b border-black"
       style={{ 
         top: isSearchOpen ? '88px' : '44px',
-        transition: 'top 0.4s ease-in-out'
+        transition: 'top 0.4s ease-in-out',
+        display: (!offer || !timeLeft || timeLeft <= 0) ? 'none' : 'flex'
       }}
     >
       <div 

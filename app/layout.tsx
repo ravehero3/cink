@@ -18,6 +18,20 @@ export default function RootLayout({
   const isPokladna = pathname === '/pokladna';
   const isAdmin = pathname.startsWith('/admin');
   const [hasOffer, setHasOffer] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  useEffect(() => {
+    const handleOffer = (e: any) => setHasOffer(e.detail);
+    const handleSearch = (e: any) => setIsSearchOpen(e.detail);
+    
+    window.addEventListener('live-offer-status', handleOffer);
+    window.addEventListener('search-bar-status', handleSearch);
+    
+    return () => {
+      window.removeEventListener('live-offer-status', handleOffer);
+      window.removeEventListener('search-bar-status', handleSearch);
+    };
+  }, []);
 
   useEffect(() => {
     // Load Zasilkovna widget script
@@ -60,7 +74,7 @@ export default function RootLayout({
     <html lang="cs">
       <body 
         className="min-h-screen flex flex-col transition-[padding-top] duration-500" 
-        style={{paddingTop: isAdmin ? '0' : (hasOffer ? '88px' : '44px')}}
+        style={{paddingTop: isAdmin ? '0' : `${44 + (isSearchOpen ? 44 : 0) + (hasOffer ? 44 : 0)}px`}}
       >
         <SessionProvider>
           <Header1 />
