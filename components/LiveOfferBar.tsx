@@ -7,7 +7,14 @@ export default function LiveOfferBar({ onVisibilityChange }: { onVisibilityChang
   const [offer, setOffer] = useState<any>(null);
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
   const [promoCode, setPromoCode] = useState<string | null>(null);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const pathname = usePathname();
+
+  useEffect(() => {
+    const handleSearch = (e: any) => setIsSearchOpen(e.detail);
+    window.addEventListener('search-bar-status', handleSearch);
+    return () => window.removeEventListener('search-bar-status', handleSearch);
+  }, []);
 
   useEffect(() => {
     const fetchOffer = async () => {
@@ -118,7 +125,13 @@ export default function LiveOfferBar({ onVisibilityChange }: { onVisibilityChang
   const seconds = Math.floor((timeLeft % 60000) / 1000);
 
   return (
-    <div className="fixed top-header left-0 right-0 z-20 bg-white text-black h-header px-3 flex items-center justify-center gap-3 text-center overflow-hidden animate-slide-in border-b border-black">
+    <div 
+      className="fixed left-0 right-0 z-20 bg-white text-black h-header px-3 flex items-center justify-center gap-3 text-center overflow-hidden animate-slide-in border-b border-black"
+      style={{ 
+        top: isSearchOpen ? '88px' : '44px',
+        transition: 'top 0.4s ease-in-out'
+      }}
+    >
       <div 
         className="whitespace-nowrap uppercase flex items-center"
         style={{

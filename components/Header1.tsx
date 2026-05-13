@@ -68,6 +68,10 @@ export default function Header1() {
     fetchCategories();
   }, []);
 
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent('search-bar-status', { detail: showSearch }));
+  }, [showSearch]);
+
   return (
     <>
       <header className="h-header border-b border-black bg-white fixed top-0 left-0 right-0 z-30">
