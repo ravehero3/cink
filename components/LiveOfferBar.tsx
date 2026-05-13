@@ -136,13 +136,13 @@ export default function LiveOfferBar({ onVisibilityChange }: { onVisibilityChang
         className="whitespace-nowrap uppercase flex items-center"
         style={{
           fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-          fontSize: '12px',
+          fontSize: 'clamp(9px, 2.8vw, 12px)',
           fontWeight: 400,
-          letterSpacing: '0.42px'
+          letterSpacing: '0.03em'
         }}
       >
         {offer.text.replace('15', offer.percentage)} 
-        <span className="mx-2 bg-black text-white px-2.5 py-0.5 rounded-full text-[12px] font-bold select-all tracking-normal inline-block align-middle leading-none">
+        <span className="mx-1.5 bg-black text-white px-2 py-0.5 rounded-full font-bold select-all tracking-normal inline-block align-middle leading-none" style={{ fontSize: 'inherit' }}>
           {promoCode}
         </span>
         Váš unikátní kód vyprší za: 
@@ -151,9 +151,9 @@ export default function LiveOfferBar({ onVisibilityChange }: { onVisibilityChang
         className="whitespace-nowrap uppercase flex items-center"
         style={{
           fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-          fontSize: '12px',
+          fontSize: 'clamp(9px, 2.8vw, 12px)',
           fontWeight: 400,
-          letterSpacing: '0.42px'
+          letterSpacing: '0.03em'
         }}
       >
         <span className="font-mono bg-black/5 px-1 py-0.5 rounded tabular-nums leading-none">
