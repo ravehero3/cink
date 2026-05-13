@@ -64,6 +64,22 @@ export default function LiveOfferAdminPage() {
     setOffer((prev: any) => ({ ...prev, isActive: !prev.isActive }));
   };
 
+  const resetTestState = () => {
+    // Find all live offer keys in localStorage and remove them
+    const keysToRemove = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith('live_offer_')) {
+        keysToRemove.push(key);
+      }
+    }
+    keysToRemove.forEach(key => localStorage.removeItem(key));
+    
+    // Trigger re-check in LiveOfferBar if it's currently rendered anywhere
+    window.dispatchEvent(new CustomEvent('check-live-offer'));
+    alert('Váš osobní testovací stav byl restartován. Nyní uvidíte nabídku znovu na webu (pokud je aktivní).');
+  };
+
   if (loading) return <div className="p-8 tracking-widest uppercase text-xs">Načítání...</div>;
 
   return (
@@ -153,6 +169,18 @@ export default function LiveOfferAdminPage() {
         >
           {saving ? 'Ukládání...' : 'Uložit nastavení nabídky'}
         </button>
+
+        <div className="pt-4 border-t border-black/5">
+          <button
+            onClick={resetTestState}
+            className="w-full border border-black text-black p-3 text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-gray-50 transition-colors"
+          >
+            Restartovat nabídku pro můj prohlížeč (Testování)
+          </button>
+          <p className="text-[9px] mt-2 text-gray-400 uppercase text-center">
+            Smaže vaše lokální data o odpočtu, abyste mohli nabídku vidět a otestovat znovu.
+          </p>
+        </div>
       </div>
 
       <div className="mt-12">
