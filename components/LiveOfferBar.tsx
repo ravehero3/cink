@@ -142,7 +142,7 @@ export default function LiveOfferBar({ onVisibilityChange }: { onVisibilityChang
         }}
       >
         {offer.text.replace('15', offer.percentage)} 
-        <span className="mx-1.5 bg-black text-white p-0.5 rounded-full font-bold select-all tracking-normal inline-block align-middle leading-none" style={{ fontSize: 'inherit' }}>
+        <span className="mx-1.5 bg-black text-white px-3 py-0.5 rounded-full font-bold select-all tracking-normal inline-block align-middle leading-none" style={{ fontSize: 'inherit' }}>
           {promoCode}
         </span>
         Váš unikátní kód vyprší za: 
