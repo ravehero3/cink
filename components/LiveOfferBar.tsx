@@ -42,7 +42,7 @@ export default function LiveOfferBar({ onVisibilityChange }: { onVisibilityChang
   }, [pathname]);
 
   const handleUserWindow = async (data: any) => {
-    const offerKey = `live_offer_${data.id}`;
+    const offerKey = `live_offer_${data.id}_${data.percentage}`;
     let startTime = localStorage.getItem(`${offerKey}_start`);
     let code = localStorage.getItem(`${offerKey}_code`);
 
@@ -110,7 +110,7 @@ export default function LiveOfferBar({ onVisibilityChange }: { onVisibilityChang
     <div className="bg-black text-white py-3 px-4 flex flex-col sm:flex-row items-center justify-center gap-2 text-center overflow-hidden animate-slide-in">
       <div className="text-xs sm:text-sm font-bold tracking-tight">
         {offer.text.replace('15', offer.percentage)} 
-        <span className="mx-2 bg-white text-black px-2.5 py-0.5 rounded-full text-[11px] font-black select-all tracking-normal">
+        <span className="mx-2 bg-white text-black px-4 py-1 rounded-full text-[11px] font-black select-all tracking-tight inline-block align-middle">
           {promoCode}
         </span>
         Váš unikátní kód vyprší za: 

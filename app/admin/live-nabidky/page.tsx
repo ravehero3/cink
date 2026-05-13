@@ -160,7 +160,7 @@ export default function LiveOfferAdminPage() {
         <div className="bg-black text-white py-3 px-4 flex flex-col sm:flex-row items-center justify-center gap-2 text-center overflow-hidden border border-white/20">
           <div className="text-xs sm:text-sm font-bold tracking-tight">
             {offer.text.replace('15', offer.percentage)} 
-            <span className="mx-2 bg-white text-black px-2.5 py-0.5 rounded-full text-[11px] font-black tracking-normal">
+            <span className="mx-2 bg-white text-black px-4 py-1 rounded-full text-[11px] font-black tracking-tight inline-block align-middle">
               UFO{offer.percentage}XXXXX
             </span>
             Váš unikátní kód vyprší za: 
