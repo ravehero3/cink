@@ -40,6 +40,14 @@ export default function Header1() {
   const [isCartBadgeHovered, setIsCartBadgeHovered] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
+  const [hasOffer, setHasOffer] = useState(false);
+
+  useEffect(() => {
+    const handleStatus = (e: any) => setHasOffer(e.detail);
+    window.addEventListener('live-offer-status', handleStatus);
+    return () => window.removeEventListener('live-offer-status', handleStatus);
+  }, []);
+
   useEffect(() => {
     setIsHydrated(true);
     
@@ -330,7 +338,7 @@ export default function Header1() {
       <div 
         className={`fixed inset-0 bg-black transition-opacity duration-300 pointer-events-none`}
         style={{ 
-          top: '88px',
+          top: hasOffer ? '132px' : '88px',
           opacity: showSearch ? 0.5 : 0,
           zIndex: 10
         }}

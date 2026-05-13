@@ -67,14 +67,23 @@ export default function Header2({ isOpen, onClose }: Header2Props) {
     onClose();
   };
 
+  const [hasOffer, setHasOffer] = useState(false);
+
+  useEffect(() => {
+    const handleStatus = (e: any) => setHasOffer(e.detail);
+    window.addEventListener('live-offer-status', handleStatus);
+    return () => window.removeEventListener('live-offer-status', handleStatus);
+  }, []);
+
   return (
     <>
       <div 
-        className="fixed top-header left-0 right-0 z-20 bg-white"
+        className="fixed left-0 right-0 z-20 bg-white"
         style={{ 
+          top: hasOffer ? '88px' : '44px',
           maxHeight: isOpen ? '500px' : '0',
           overflow: 'hidden',
-          transition: 'max-height 0.4s ease-in-out'
+          transition: 'max-height 0.4s ease-in-out, top 0.4s ease-in-out'
         }}
       >
         <div 

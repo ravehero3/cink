@@ -39,7 +39,17 @@ export default function LiveOfferBar({ onVisibilityChange }: { onVisibilityChang
     };
 
     fetchOffer();
+    
+    const handleCheck = () => {
+      fetchOffer();
+    };
+    window.addEventListener('check-live-offer', handleCheck);
+    return () => window.removeEventListener('check-live-offer', handleCheck);
   }, [pathname]);
+
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent('live-offer-status', { detail: !!offer }));
+  }, [offer]);
 
   const handleUserWindow = async (data: any) => {
     const offerKey = `live_offer_${data.id}_${data.percentage}`;
@@ -107,7 +117,7 @@ export default function LiveOfferBar({ onVisibilityChange }: { onVisibilityChang
   const seconds = Math.floor((timeLeft % 60000) / 1000);
 
   return (
-    <div className="bg-white text-black h-header px-3 flex items-center justify-center gap-3 text-center overflow-hidden animate-slide-in border-b border-black">
+    <div className="fixed top-header left-0 right-0 z-20 bg-white text-black h-header px-3 flex items-center justify-center gap-3 text-center overflow-hidden animate-slide-in border-b border-black">
       <div 
         className="whitespace-nowrap uppercase flex items-center"
         style={{
