@@ -84,6 +84,45 @@ export default function EmailTemplatesPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [previewMode, setPreviewMode] = useState<'EDIT' | 'PREVIEW'>('EDIT');
+
+  const replaceVariables = (html: string) => {
+    if (!html) return '';
+    return html
+      .replace(/{{orderNumber}}/g, 'UFO20240001')
+      .replace(/{{customerName}}/g, 'Jan Novák')
+      .replace(/{{totalPrice}}/g, '1 250')
+      .replace(/{{itemsHtml}}/g, `
+        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 15px; border-bottom: 1px solid #eee; padding-bottom: 12px;">
+          <div style="display: flex; gap: 12px;">
+            <div style="width: 50px; height: 50px; background: #eee; border-radius: 4px;"></div>
+            <div>
+              <div style="font-weight: 600;">UFO Oversized T-Shirt</div>
+              <div style="font-size: 13px; color: #86868b;">Velikost: L | Barva: Černá</div>
+            </div>
+          </div>
+          <div style="font-weight: 600;">850 Kč</div>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 15px;">
+          <div style="display: flex; gap: 12px;">
+            <div style="width: 50px; height: 50px; background: #eee; border-radius: 4px;"></div>
+            <div>
+              <div style="font-weight: 600;">UFO Socks</div>
+              <div style="font-size: 13px; color: #86868b;">Velikost: UNI</div>
+            </div>
+          </div>
+          <div style="font-weight: 600;">400 Kč</div>
+        </div>
+      `)
+      .replace(/{{shippingInfoHtml}}/g, `
+        <div style="font-size: 15px; color: #1d1d1f; line-height: 1.5; background: #fff; padding: 16px; border-radius: 8px; border: 1px solid #eee;">
+          <div style="font-weight: 600; margin-bottom: 4px;">Doručení na adresu:</div>
+          <div>Vodičkova 123, 110 00 Praha 1</div>
+        </div>
+      `)
+      .replace(/{{websiteUrl}}/g, 'https://ufosport.cz')
+      .replace(/{{trackingUrl}}/g, 'https://tracking.packeta.com/cs/UFO123456789');
+  };
 
   useEffect(() => {
     fetchTemplates();
@@ -196,28 +235,82 @@ export default function EmailTemplatesPage() {
                 </button>
               </div>
 
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-[10px] uppercase font-bold mb-1">Předmět e-mailu</label>
-                  <input
-                    type="text"
-                    value={selectedTemplate.subject}
-                    onChange={e => setSelectedTemplate({ ...selectedTemplate, subject: e.target.value })}
-                    className="w-full border border-black p-2 text-sm focus:outline-none"
-                  />
-                </div>
+              <div className="flex border-b border-black">
+                <button
+                  onClick={() => setPreviewMode('EDIT')}
+                  className={`flex-1 p-3 text-[10px] uppercase font-bold tracking-widest transition-colors ${previewMode === 'EDIT' ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-50'}`}
+                >
+                  Editor
+                </button>
+                <button
+                  onClick={() => setPreviewMode('PREVIEW')}
+                  className={`flex-1 p-3 text-[10px] uppercase font-bold tracking-widest transition-colors ${previewMode === 'PREVIEW' ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-50'}`}
+                >
+                  Náhled
+                </button>
+              </div>
 
-                <div>
-                  <label className="block text-[10px] uppercase font-bold mb-1">Obsah (HTML)</label>
-                  <textarea
-                    value={selectedTemplate.body}
-                    onChange={e => setSelectedTemplate({ ...selectedTemplate, body: e.target.value })}
-                    className="w-full border border-black p-2 text-sm font-mono h-[400px] focus:outline-none"
-                  />
-                  <div className="mt-2 p-2 bg-gray-50 border border-black/5 text-[10px] uppercase tracking-tighter text-gray-500">
-                    Dostupné proměnné: {"{{orderNumber}}, {{customerName}}, {{totalPrice}}, {{itemsHtml}}, {{shippingInfoHtml}}, {{websiteUrl}}, {{trackingUrl}}"}
+              <div className="space-y-4">
+                {previewMode === 'EDIT' ? (
+                  <>
+                    <div>
+                      <label className="block text-[10px] uppercase font-bold mb-1">Předmět e-mailu</label>
+                      <input
+                        type="text"
+                        value={selectedTemplate.subject}
+                        onChange={e => setSelectedTemplate({ ...selectedTemplate, subject: e.target.value })}
+                        className="w-full border border-black p-2 text-sm focus:outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[10px] uppercase font-bold mb-1">Obsah (HTML)</label>
+                      <textarea
+                        value={selectedTemplate.body}
+                        onChange={e => setSelectedTemplate({ ...selectedTemplate, body: e.target.value })}
+                        className="w-full border border-black p-2 text-sm font-mono h-[450px] focus:outline-none"
+                      />
+                      <div className="mt-2 p-2 bg-gray-50 border border-black/5 text-[10px] uppercase tracking-tighter text-gray-500">
+                        Dostupné proměnné: {"{{orderNumber}}, {{customerName}}, {{totalPrice}}, {{itemsHtml}}, {{shippingInfoHtml}}, {{websiteUrl}}, {{trackingUrl}}"}
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div className="space-y-6">
+                    <div>
+                      <label className="block text-[10px] uppercase font-bold mb-1">Předmět e-mailu (Náhled)</label>
+                      <div className="p-3 border border-black bg-gray-50 text-sm font-medium">
+                        {selectedTemplate.subject.replace('{{orderNumber}}', 'UFO20240001')}
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-[10px] uppercase font-bold mb-1">Obsah e-mailu (Náhled)</label>
+                      <div 
+                        className="border border-black bg-white overflow-hidden rounded-sm"
+                        style={{ minHeight: '600px' }}
+                      >
+                        {/* Apple-style Email Shell */}
+                        <div className="p-4 sm:p-8 md:p-12 bg-gray-50" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>
+                          <div style={{ maxWidth: '600px', margin: '0 auto', background: 'white', padding: '40px', borderRadius: '12px', boxShadow: '0 4px 24px rgba(0,0,0,0.05)' }}>
+                            <div style={{ padding: '0 0 40px 0', textAlign: 'center' }}>
+                              <span style={{ fontSize: '24px', fontWeight: '800', letterSpacing: '0.1em', color: '#000' }}>UFO SPORT</span>
+                            </div>
+                            <div dangerouslySetInnerHTML={{ __html: replaceVariables(selectedTemplate.body) }} />
+                            <div style={{ padding: '40px 0 0 0', borderTop: '1px solid #d2d2d7', marginTop: '40px', textAlign: 'center' }}>
+                              <p style={{ margin: '0', fontSize: '12px', color: '#86868b' }}>
+                                &copy; {new Date().getFullYear()} UFO Sport. Všechna práva vyhrazena.
+                              </p>
+                              <div style={{ marginTop: '16px' }}>
+                                <a href="#" style={{ color: '#0066cc', textDecoration: 'none', fontSize: '12px', margin: '0 8px' }}>Podmínky užití</a>
+                                <a href="#" style={{ color: '#0066cc', textDecoration: 'none', fontSize: '12px', margin: '0 8px' }}>Ochrana soukromí</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                )}
 
                 <div className="flex gap-4 pt-4">
                   <button
