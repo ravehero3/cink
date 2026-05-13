@@ -21,6 +21,7 @@ interface Order {
   shippingStreet: string | null;
   shippingCity: string | null;
   shippingZip: string | null;
+  items: any[];
 }
 
 const STATUS_OPTIONS = ['PENDING', 'PAID', 'PROCESSING', 'SHIPPED', 'COMPLETED', 'CANCELLED'];
@@ -47,6 +48,8 @@ export default function AdminOrdersPage() {
   const [mounted, setMounted] = useState(false);
   const [sortBy, setSortBy] = useState<'paymentStatus' | 'status' | 'createdAt' | null>(null);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [hoveredOrder, setHoveredOrder] = useState<Order | null>(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   const handleRowClick = (orderId: string) => {
     router.push(`/admin/objednavky/${orderId}`);
@@ -290,7 +293,69 @@ export default function AdminOrdersPage() {
   }
 
   return (
-    <div>
+    <div className="relative">
+      {/* Floating Preview */}
+      {hoveredOrder && (
+        <div 
+          className="fixed z-[100] bg-white border-2 border-black p-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] pointer-events-none w-[400px]"
+          style={{ 
+            left: `${Math.min(mousePos.x + 20, typeof window !== 'undefined' ? window.innerWidth - 420 : 0)}px`, 
+            top: `${Math.min(mousePos.y + 20, typeof window !== 'undefined' ? window.innerHeight - 300 : 0)}px` 
+          }}
+        >
+          <div className="flex justify-between items-start border-b border-black pb-2 mb-3">
+            <div>
+              <div className="text-[10px] uppercase text-gray-500">Objednávka</div>
+              <div className="font-bold text-lg">{hoveredOrder.orderNumber}</div>
+            </div>
+            <div className="text-right">
+              <div className="text-[10px] uppercase text-gray-500">Celkem</div>
+              <div className="font-bold">{Number(hoveredOrder.totalPrice).toFixed(2)} Kč</div>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            {Array.isArray(hoveredOrder.items) && hoveredOrder.items.map((item: any, i: number) => (
+              <div key={i} className="flex gap-3 items-center">
+                {item.image && (
+                  <div className="w-12 h-12 border border-black relative flex-shrink-0">
+                    <img src={item.image} alt="" className="w-full h-full object-cover" />
+                  </div>
+                )}
+                <div className="flex-1 min-w-0">
+                  <div className="text-xs font-bold uppercase truncate">{item.name}</div>
+                  <div className="text-[10px] text-gray-600 uppercase">
+                    {item.size} {item.color ? `| ${item.color}` : ''} | {item.quantity} ks
+                  </div>
+                </div>
+                <div className="text-xs font-bold whitespace-nowrap">
+                  {item.price} Kč
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-4 pt-3 border-t border-black grid grid-cols-2 gap-4">
+            <div>
+              <div className="text-[10px] uppercase text-gray-500">Zákazník</div>
+              <div className="text-xs font-bold uppercase">{hoveredOrder.customerName}</div>
+              <div className="text-[10px]">{hoveredOrder.customerPhone}</div>
+            </div>
+            <div>
+              <div className="text-[10px] uppercase text-gray-500">Doprava</div>
+              <div className="text-xs font-bold uppercase">
+                {hoveredOrder.shippingMethod === 'zasilkovna' ? 'Zásilkovna' : 
+                 hoveredOrder.shippingMethod.startsWith('ppl') ? 'PPL' : hoveredOrder.shippingMethod}
+              </div>
+              <div className="text-[10px] truncate text-[10px]">
+                {hoveredOrder.shippingMethod === 'zasilkovna' ? hoveredOrder.zasilkovnaName : 
+                 hoveredOrder.shippingMethod === 'ppl_address' ? `${hoveredOrder.shippingStreet}, ${hoveredOrder.shippingCity}` :
+                 hoveredOrder.shippingMethod === 'ppl_parcelshop' ? hoveredOrder.pplName : ''}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       {/* Order Dashboard */}
       <div style={{ 
         fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -437,8 +502,11 @@ export default function AdminOrdersPage() {
             {displayedOrders.map((order) => (
               <tr 
                 key={order.id} 
-                className="border-b border-black last:border-b-0 cursor-pointer transition-all duration-200 ease-out hover:scale-[1.02] hover:bg-gray-50 hover:shadow-md origin-center"
+                className="border-b border-black last:border-b-0 cursor-pointer transition-all duration-200 ease-out hover:scale-[1.01] hover:bg-gray-50 hover:shadow-md origin-center"
                 onClick={() => handleRowClick(order.id)}
+                onMouseEnter={() => setHoveredOrder(order)}
+                onMouseLeave={() => setHoveredOrder(null)}
+                onMouseMove={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
               >
                 <td className="p-4 text-body font-bold">{order.orderNumber}</td>
                 <td className="p-4 text-body">{order.customerName}</td>
