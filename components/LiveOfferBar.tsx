@@ -30,18 +30,15 @@ export default function LiveOfferBar({ onVisibilityChange }: { onVisibilityChang
           if (isTargetPage) {
             setOffer(data);
             handleUserWindow(data);
-            onVisibilityChange(true);
           } else {
             setOffer(null);
-            onVisibilityChange(false);
           }
         } else {
           setOffer(null);
-          onVisibilityChange(false);
         }
       } catch (error) {
         console.error('Error fetching live offer:', error);
-        onVisibilityChange(false);
+        setOffer(null);
       }
     };
 
@@ -54,9 +51,12 @@ export default function LiveOfferBar({ onVisibilityChange }: { onVisibilityChang
     return () => window.removeEventListener('check-live-offer', handleCheck);
   }, [pathname]);
 
+  const isVisible = !!offer && !!timeLeft && timeLeft > 0;
+
   useEffect(() => {
-    window.dispatchEvent(new CustomEvent('live-offer-status', { detail: !!offer }));
-  }, [offer]);
+    onVisibilityChange(isVisible);
+    window.dispatchEvent(new CustomEvent('live-offer-status', { detail: isVisible }));
+  }, [isVisible, onVisibilityChange]);
 
   const handleUserWindow = async (data: any) => {
     const offerKey = `live_offer_${data.id}_${data.percentage}`;
@@ -93,13 +93,23 @@ export default function LiveOfferBar({ onVisibilityChange }: { onVisibilityChang
     
     const durationMs = data.durationMin * 60 * 1000;
     const elapsed = Date.now() - parseInt(startTime);
+    
+    // Rule: If more than 7 days passed, reset the offer for the user
+    if (elapsed > 7 * 24 * 60 * 60 * 1000) {
+      localStorage.removeItem(`${offerKey}_start`);
+      localStorage.removeItem(`${offerKey}_code`);
+      // Re-run handleUserWindow to generate fresh start time/code
+      handleUserWindow(data);
+      return;
+    }
+
     const remaining = Math.max(0, durationMs - elapsed);
 
     if (remaining > 0) {
       setTimeLeft(remaining);
     } else {
       setOffer(null);
-      onVisibilityChange(false);
+      setTimeLeft(0);
     }
   };
 
@@ -112,7 +122,6 @@ export default function LiveOfferBar({ onVisibilityChange }: { onVisibilityChang
         clearInterval(timer);
         setOffer(null);
         setTimeLeft(0);
-        onVisibilityChange(false);
         return 0;
       });
     }, 1000);
@@ -120,7 +129,7 @@ export default function LiveOfferBar({ onVisibilityChange }: { onVisibilityChang
     return () => clearInterval(timer);
   }, [timeLeft]);
 
-  if (!offer || !timeLeft || timeLeft <= 0) return null;
+  if (!isVisible) return null;
 
   const minutes = Math.floor(timeLeft / 60000);
   const seconds = Math.floor((timeLeft % 60000) / 1000);
