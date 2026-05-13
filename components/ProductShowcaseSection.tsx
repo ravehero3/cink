@@ -90,7 +90,9 @@ export default function ProductShowcaseSection({
           fontWeight: 700,
           lineHeight: '22px',
           letterSpacing: '0.03em',
-          fontStretch: 'condensed'
+          fontStretch: 'condensed',
+          WebkitTextStroke: textColor === 'black' ? '1px white' : 'none',
+          paintOrder: 'stroke fill'
         }}>
           {headerText}
         </h2>
@@ -144,8 +146,14 @@ function AnimatedButton({ text, link, textColor = 'black' }: { text: string; lin
   return (
     <a
       href={link}
-      className={buttonClasses}
-      style={{ borderRadius: '4px', padding: '11.8px 25.6px' }}
+      className={`${buttonClasses} whitespace-nowrap`}
+      style={{ 
+        borderRadius: '4px', 
+        padding: '11.8px 25.6px',
+        fontSize: 'clamp(10px, 3vw, 12px)',
+        paddingLeft: 'clamp(12px, 4vw, 25.6px)',
+        paddingRight: 'clamp(12px, 4vw, 25.6px)'
+      }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

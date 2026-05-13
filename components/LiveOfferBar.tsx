@@ -60,8 +60,9 @@ export default function LiveOfferBar({ onVisibilityChange }: { onVisibilityChang
       startTime = Date.now().toString();
       localStorage.setItem(`${offerKey}_start`, startTime);
       
-      // Generate unique code
-      const uniqueCode = `UFO${data.percentage}${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+      // Generate unique code (UFO + 4 random digits)
+      const randomDigits = Math.floor(1000 + Math.random() * 9000).toString();
+      const uniqueCode = `UFO${randomDigits}`;
       localStorage.setItem(`${offerKey}_code`, uniqueCode);
       code = uniqueCode;
 
