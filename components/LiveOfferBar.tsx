@@ -8,6 +8,7 @@ export default function LiveOfferBar({ onVisibilityChange }: { onVisibilityChang
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
   const [promoCode, setPromoCode] = useState<string | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isAllowedOnPage, setIsAllowedOnPage] = useState(true);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -49,9 +50,17 @@ export default function LiveOfferBar({ onVisibilityChange }: { onVisibilityChang
     };
     window.addEventListener('check-live-offer', handleCheck);
     return () => window.removeEventListener('check-live-offer', handleCheck);
-  }, [pathname]);
+  }, []); // Only fetch once to prevent flickering
 
-  const isVisible = !!offer && !!timeLeft && timeLeft > 0;
+  useEffect(() => {
+    if (!offer) return;
+    const allowed = offer.targetPages.some((p: string) => 
+      p === '*' || pathname === p || (p !== '/' && pathname.startsWith(p))
+    );
+    setIsAllowedOnPage(allowed);
+  }, [pathname, offer]);
+
+  const isVisible = !!offer && !!timeLeft && timeLeft > 0 && isAllowedOnPage;
 
   useEffect(() => {
     onVisibilityChange(isVisible);
@@ -136,28 +145,36 @@ export default function LiveOfferBar({ onVisibilityChange }: { onVisibilityChang
 
   return (
     <div 
-      className="fixed left-0 right-0 z-[15] bg-white text-black h-header px-3 flex items-center justify-center gap-3 text-center overflow-hidden animate-slide-in border-b border-black"
+      className="fixed left-0 right-0 z-[15] bg-white text-black min-h-[40px] md:h-header px-2 md:px-3 flex flex-wrap md:flex-nowrap items-center justify-center gap-1 md:gap-3 text-center overflow-hidden animate-slide-in border-b border-black"
       style={{ 
         top: isSearchOpen ? '88px' : '44px',
         transition: 'top 0.4s ease-in-out',
-        display: (!offer || !timeLeft || timeLeft <= 0) ? 'none' : 'flex'
+        display: !isVisible ? 'none' : 'flex',
+        paddingTop: '2px',
+        paddingBottom: '2px'
       }}
     >
       <div 
-        className="whitespace-nowrap uppercase flex items-center"
+        className="uppercase flex items-center justify-center flex-wrap shrink-0"
         style={{
           fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-          fontSize: 'clamp(9px, 2.8vw, 12px)',
+          fontSize: 'clamp(8px, 2.5vw, 12px)',
           fontWeight: 400,
-          letterSpacing: '0.03em'
+          letterSpacing: '0.02em',
+          lineHeight: '1.2'
         }}
       >
-        {offer.text.replace('15', offer.percentage)} 
-        <span className="mx-1.5 bg-black text-white px-3 py-0.5 rounded-full font-bold select-all tracking-normal inline-block align-middle leading-none" style={{ fontSize: 'inherit' }}>
+        <span>{offer.text.replace('15', offer.percentage)}</span>
+        <span className="mx-1 bg-black text-white px-[12px] py-[2px] rounded-full font-bold select-all tracking-normal inline-block align-middle leading-none" style={{ fontSize: 'inherit' }}>
           {promoCode}
         </span>
-        Váš unikátní kód vyprší za: 
+        <span className="xs-hidden-helper">VÁŠ UNIKÁTNÍ KÓD VYPRŠÍ ZA:</span>
       </div>
+      <style jsx>{`
+        @media (max-width: 450px) {
+          .xs-hidden-helper { display: none; }
+        }
+      `}</style>
       <div 
         className="whitespace-nowrap uppercase flex items-center"
         style={{
