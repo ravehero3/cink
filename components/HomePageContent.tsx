@@ -61,28 +61,28 @@ const defaultCategorySections: Record<string, CategorySectionData> = {
     button1Text: 'Nakupovat',
     button2Text: 'Zobrazit vše',
     button1Link: '/voodoo808',
-    button2Link: '/voodoo808',
+    button2Link: '/produkty/zobrazit-vse',
   },
   spaceLove: {
     title: 'SPACE LOVE',
     button1Text: 'Nakupovat',
     button2Text: 'Zobrazit vše',
     button1Link: '/space-love',
-    button2Link: '/space-love',
+    button2Link: '/produkty/zobrazit-vse',
   },
   recreationWellness: {
     title: 'RECREATION WELLNESS',
     button1Text: 'Nakupovat',
     button2Text: 'Zobrazit vše',
     button1Link: '/recreation-wellness',
-    button2Link: '/recreation-wellness',
+    button2Link: '/produkty/zobrazit-vse',
   },
   tShirtGallery: {
     title: 'T SHIRT GALLERY',
     button1Text: 'Nakupovat',
     button2Text: 'Zobrazit vše',
     button1Link: '/t-shirt-gallery',
-    button2Link: '/t-shirt-gallery',
+    button2Link: '/produkty/zobrazit-vse',
   },
 };
 
