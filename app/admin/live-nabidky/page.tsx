@@ -61,7 +61,7 @@ export default function LiveOfferAdminPage() {
   };
 
   const toggleActive = () => {
-    setOffer(prev => ({ ...prev, isActive: !prev.isActive }));
+    setOffer((prev: any) => ({ ...prev, isActive: !prev.isActive }));
   };
 
   if (loading) return <div className="p-8 tracking-widest uppercase text-xs">Načítání...</div>;
