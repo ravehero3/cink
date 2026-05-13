@@ -98,6 +98,7 @@ export async function POST(request: NextRequest) {
       shippingZip,
       promoCode,
       totalPrice,
+      newsletterSubscribed,
     } = body;
 
     // Step 3: Validate required fields
@@ -262,6 +263,34 @@ export async function POST(request: NextRequest) {
         },
       }));
       logInfo('Order created successfully', { orderId: order.id, orderNumber: order.orderNumber });
+
+      // Handle Newsletter Subscription
+      if (newsletterSubscribed) {
+        logInfo('Processing newsletter subscription from checkout', { customerEmail });
+        try {
+          const emailLower = customerEmail.toLowerCase();
+          const existing = await prisma.newsletterSubscriber.findUnique({
+            where: { email: emailLower }
+          });
+          
+          if (!existing) {
+            await prisma.newsletterSubscriber.create({
+              data: { email: emailLower }
+            });
+            logInfo('Newsletter subscriber created from checkout', { customerEmail });
+            
+            // Optionally send welcome email
+            try {
+              const { sendNewsletterWelcomeEmail } = await import('@/lib/email');
+              await sendNewsletterWelcomeEmail(emailLower);
+            } catch (e) {
+              logError(errorId, 'Failed to send welcome email from checkout', e);
+            }
+          }
+        } catch (subError) {
+          logError(errorId, 'Failed to handle newsletter subscription during checkout', subError);
+        }
+      }
     } catch (dbError: any) {
       logError(errorId, 'Database error creating order', {
         message: dbError?.message,

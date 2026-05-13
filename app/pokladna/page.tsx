@@ -31,6 +31,7 @@ export default function CheckoutPage() {
     shippingCity: '',
     shippingZip: '',
     promoCode: '',
+    newsletterSubscribed: true,
   });
 
   const [discount, setDiscount] = useState(0);
@@ -213,6 +214,7 @@ export default function CheckoutPage() {
           shippingZip: formData.shippingZip,
           promoCode: formData.promoCode,
           totalPrice: finalTotal,
+          newsletterSubscribed: formData.newsletterSubscribed,
         }),
       });
 
@@ -387,6 +389,40 @@ export default function CheckoutPage() {
                   className="w-full border border-black px-2 py-1 text-body focus:outline-none"
                   style={{ borderRadius: '4px' }}
                 />
+              </div>
+
+              <div className="mb-4 mt-2">
+                <label className="flex items-center cursor-pointer group">
+                  <div className="relative flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={formData.newsletterSubscribed}
+                      onChange={(e) => setFormData({ ...formData, newsletterSubscribed: e.target.checked })}
+                      className="peer h-5 w-5 cursor-pointer appearance-none border border-black rounded transition-all checked:bg-black"
+                    />
+                    <svg
+                      className="absolute w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={3}
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <span 
+                    className="ml-3 select-none"
+                    style={{
+                      fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontSize: '11px',
+                      fontWeight: 400,
+                      lineHeight: '14px',
+                      color: '#000'
+                    }}
+                  >
+                    Chci dostávat informace o novinkách, slevách a akcích e-mailem.
+                  </span>
+                </label>
               </div>
 
               <h2 
