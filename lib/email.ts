@@ -22,8 +22,14 @@ const emailWrapper = (content: string) => `
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>UFO Sport</title>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" type="text/css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&display=swap');
+    body, td, p, a, li { font-family: 'Roboto', Arial, Helvetica, sans-serif !important; }
+    h1, h2, h3, h4 { font-family: 'Figtree', 'Roboto', Arial, Helvetica, sans-serif !important; }
+  </style>
 </head>
-<body style="margin: 0; padding: 0; background-color: #f5f5f7; font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;">
+<body style="margin: 0; padding: 0; background-color: #f5f5f7; font-family: 'Roboto', Arial, Helvetica, sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;">
   <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #f5f5f7;">
     <tr>
       <td align="center" style="padding: 48px 24px;">
@@ -109,6 +115,7 @@ const buttonStyle = `
   text-decoration: none;
   font-size: 14px;
   font-weight: 500;
+  font-family: 'Roboto', Arial, Helvetica, sans-serif;
   letter-spacing: -0.01em;
   border-radius: 980px;
   mso-padding-alt: 0;
@@ -122,6 +129,7 @@ const secondaryButtonStyle = `
   text-decoration: none;
   font-size: 14px;
   font-weight: 500;
+  font-family: 'Roboto', Arial, Helvetica, sans-serif;
   letter-spacing: -0.01em;
   border-radius: 980px;
   border: 1px solid #1d1d1f;

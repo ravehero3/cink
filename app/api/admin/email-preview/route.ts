@@ -5,7 +5,7 @@ import { authOptions } from '@/lib/auth';
 const WEBSITE_URL = process.env.NEXTAUTH_URL || 'https://www.ufosport.cz';
 const LOGO_URL = `${WEBSITE_URL}/logo.png`;
 
-const buttonStyle = `display:inline-block;background-color:#1d1d1f;color:#ffffff;padding:16px 40px;text-decoration:none;font-size:14px;font-weight:500;letter-spacing:-0.01em;border-radius:980px;`;
+const buttonStyle = `display:inline-block;background-color:#1d1d1f;color:#ffffff;padding:16px 40px;text-decoration:none;font-size:14px;font-weight:500;font-family:'Roboto',Arial,Helvetica,sans-serif;letter-spacing:-0.01em;border-radius:980px;`;
 
 const emailWrapper = (content: string) => `<!DOCTYPE html>
 <html lang="cs">
@@ -13,8 +13,14 @@ const emailWrapper = (content: string) => `<!DOCTYPE html>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>UFO Sport</title>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" type="text/css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&display=swap');
+    body, td, p, a, li { font-family: 'Roboto', Arial, Helvetica, sans-serif !important; }
+    h1, h2, h3, h4 { font-family: 'Figtree', 'Roboto', Arial, Helvetica, sans-serif !important; }
+  </style>
 </head>
-<body style="margin:0;padding:0;background-color:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',Helvetica,Arial,sans-serif;">
+<body style="margin:0;padding:0;background-color:#f5f5f7;font-family:'Roboto',Arial,Helvetica,sans-serif;">
   <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color:#f5f5f7;">
     <tr>
       <td align="center" style="padding:48px 24px;">
