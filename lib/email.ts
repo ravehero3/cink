@@ -1,5 +1,6 @@
 import { Resend } from 'resend';
 import { prisma } from './prisma';
+import { createHash } from 'crypto';
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 
@@ -14,7 +15,13 @@ const WEBSITE_URL = process.env.NEXTAUTH_URL || 'https://www.ufosport.cz';
 
 const LOGO_URL = `${process.env.NEXTAUTH_URL || 'https://www.ufosport.cz'}/logo.png`;
 
-const emailWrapper = (content: string) => `
+function buildUnsubscribeUrl(email: string): string {
+  const secret = process.env.NEXTAUTH_SECRET || 'fallback-secret';
+  const token = createHash('sha256').update(email.toLowerCase() + secret).digest('hex').slice(0, 32);
+  return `${WEBSITE_URL}/api/newsletter/unsubscribe?email=${encodeURIComponent(email)}&token=${token}`;
+}
+
+const emailWrapper = (content: string, unsubscribeUrl?: string) => `
 <!DOCTYPE html>
 <html lang="cs">
 <head>
@@ -91,11 +98,12 @@ const emailWrapper = (content: string) => `
           <tr>
             <td style="padding: 24px 48px; text-align: center;">
               <p style="margin: 0; font-size: 11px; color: #86868b; line-height: 1.6;">
-                Tento e-mail byl odeslan automaticky z adresy noreply@ufosport.cz.
+                Tento e-mail byl odeslán automaticky z adresy noreply@ufosport.cz.
               </p>
               <p style="margin: 8px 0 0 0; font-size: 11px; color: #86868b;">
-                &copy; ${new Date().getFullYear()} UFO Sport. Vsechna prava vyhrazena.
+                &copy; ${new Date().getFullYear()} UFO Sport. Všechna práva vyhrazena.
               </p>
+              ${unsubscribeUrl ? `<p style="margin: 8px 0 0 0; font-size: 11px; color: #86868b;"><a href="${unsubscribeUrl}" style="color: #86868b; text-decoration: underline;">Odhlásit odběr novinek</a></p>` : ''}
             </td>
           </tr>
           
@@ -624,8 +632,8 @@ export async function sendNewsletterWelcomeEmail(email: string) {
     const result = await resend.emails.send({
       from: FROM_EMAIL,
       to: email,
-      subject: 'Vitejte v UFO Sport',
-      html: emailWrapper(content),
+      subject: 'Vítejte v UFO Sport',
+      html: emailWrapper(content, buildUnsubscribeUrl(email)),
     });
     console.log('Newsletter welcome email sent:', result);
     return { success: true, result };
@@ -853,7 +861,7 @@ export async function sendAbandonedCartEmail(email: string, items: any[]) {
       from: FROM_EMAIL,
       to: email,
       subject: subject,
-      html: emailWrapper(body),
+      html: emailWrapper(body, buildUnsubscribeUrl(email)),
     });
     return { success: true, result };
   } catch (error) {
