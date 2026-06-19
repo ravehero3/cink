@@ -1,341 +1,288 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
-const DEFAULT_TEMPLATES = {
-  ORDER_CONFIRMATION: {
-    name: 'Potvrzení objednávky',
-    subject: 'Vaše objednávka {{orderNumber}} byla přijata - UFO Sport',
-    body: `<div style="text-align: center; margin-bottom: 40px;">
-  <h1 style="margin: 0; font-size: 28px; font-weight: 600; color: #1d1d1f;">Děkujeme za vaši objednávku!</h1>
-  <p style="margin: 8px 0 0 0; font-size: 17px; color: #86868b;">Právě jsme ji přijali a brzy se pustíme do jejího zpracování.</p>
-</div>
-
-<div style="background-color: #f5f5f7; border-radius: 12px; padding: 24px; margin-bottom: 32px;">
-  <h2 style="margin: 0 0 16px 0; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #86868b;">Shrnutí objednávky {{orderNumber}}</h2>
-  {{itemsHtml}}
-  <div style="border-top: 1px solid #d2d2d7; margin: 16px 0; padding-top: 16px; display: flex; justify-content: space-between; font-weight: 600; font-size: 17px; color: #1d1d1f;">
-    <span>Celkem:</span>
-    <span>{{totalPrice}} Kč</span>
-  </div>
-</div>
-
-<div style="margin-bottom: 32px; padding: 0 24px;">
-  <h2 style="margin: 0 0 12px 0; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #86868b;">Doprava a doručení</h2>
-  {{shippingInfoHtml}}
-</div>
-
-<p style="font-size: 15px; color: #1d1d1f; line-height: 1.5; text-align: center;">O dalším průběhu vás budeme informovat e-mailem.</p>`
+const EMAIL_TYPES = [
+  {
+    id: 'ORDER_CONFIRMATION',
+    label: 'Potvrzeni objednavky',
+    description: 'Odesila se zakaznikovi ihned po vytvoreni objednavky.',
+    trigger: 'Automaticky — po odeslani objednavky',
   },
-  PAYMENT_SUCCESS: {
-    name: 'Platba přijata',
-    subject: 'Platba k objednávce {{orderNumber}} byla úspěšně přijata - UFO Sport',
-    body: `<div style="text-align: center; margin-bottom: 40px;">
-  <div style="display: inline-block; width: 64px; height: 64px; background-color: #000; border-radius: 50%; margin-bottom: 24px; line-height: 64px; font-size: 24px; color: white;">✓</div>
-  <h1 style="margin: 0; font-size: 28px; font-weight: 600; color: #1d1d1f;">Platba přijata</h1>
-  <p style="margin: 8px 0 0 0; font-size: 17px; color: #86868b;">Děkujeme za vaši platbu k objednávce {{orderNumber}}.</p>
-</div>
-
-<p style="font-size: 15px; color: #1d1d1f; line-height: 1.6; text-align: center; max-width: 400px; margin: 0 auto;">
-  Vše je v pořádku. Nyní začínáme s přípravou vašich produktů. O odeslání zásilky vás budeme informovat v dalším e-mailu.
-</p>`
+  {
+    id: 'PAYMENT_SUCCESS',
+    label: 'Platba prijata',
+    description: 'Odesila se po uspesnem potvrzeni platby pres GoPay.',
+    trigger: 'Automaticky — po potvrzeni platby (GoPay webhook)',
   },
-  SHIPPING_NOTIFICATION: {
-    name: 'Zásilka na cestě',
-    subject: 'Vaše objednávka {{orderNumber}} je na cestě k vám! - UFO Sport',
-    body: `<div style="text-align: center; margin-bottom: 40px;">
-  <h1 style="margin: 0; font-size: 28px; font-weight: 600; color: #1d1d1f;">Zásilka je na cestě</h1>
-  <p style="margin: 8px 0 0 0; font-size: 17px; color: #86868b;">Váš balíček k objednávce {{orderNumber}} jsme právě předali dopravci.</p>
-</div>
-
-<div style="text-align: center; margin-bottom: 32px; padding: 32px; background-color: #f5f5f7; border-radius: 12px;">
-  <p style="font-size: 15px; color: #1d1d1f; margin-bottom: 24px; font-weight: 500;">Svoji zásilku můžete sledovat online:</p>
-  <a href="{{trackingUrl}}" style="display: inline-block; background-color: #000; color: #fff; padding: 18px 36px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;">Sledovat zásilku</a>
-</div>
-
-<p style="font-size: 13px; color: #86868b; line-height: 1.5; text-align: center;">
-  Děkujeme, že nakupujete u UFO Sport. Doufáme, že budete s produkty spokojeni.
-</p>`
+  {
+    id: 'SHIPPING_NOTIFICATION',
+    label: 'Zasilka na ceste',
+    description: 'Odesila se zakaznikovi pri zmene stavu objednavky na "Odeslano".',
+    trigger: 'Manualne — zmenou stavu objednavky',
   },
-  ABANDONED_CART: {
-    name: 'Zapomenutý košík',
-    subject: 'Nezapomněli jste něco v košíku? - UFO Sport',
-    body: `<div style="text-align: center; margin-bottom: 40px;">
-  <h1 style="margin: 0; font-size: 28px; font-weight: 600; color: #1d1d1f;">Váš košík na vás čeká</h1>
-  <p style="margin: 8px 0 0 0; font-size: 17px; color: #86868b;">Všimli jsme si, že jste u nás nechali rozpracovaný výběr.</p>
-</div>
+  {
+    id: 'NEWSLETTER_WELCOME',
+    label: 'Uvitaci newsletter',
+    description: 'Odesila se pri prihlaseni k odberu novinek.',
+    trigger: 'Automaticky — pri prihlaseni k newsletteru',
+  },
+  {
+    id: 'PASSWORD_RESET',
+    label: 'Obnoveni hesla',
+    description: 'Odesila se pri zadosti o reset hesla zakaznika.',
+    trigger: 'Automaticky — pri zadosti o reset hesla',
+  },
+  {
+    id: 'ABANDONED_CART',
+    label: 'Zapomnety kosik',
+    description: 'Odesila se zakaznikum, kteri nedokoncili objednavku.',
+    trigger: 'Automaticky — po urcite dobe neaktivity',
+  },
+  {
+    id: 'ADMIN_ORDER_NOTIFICATION',
+    label: 'Notifikace adminu',
+    description: 'Interna notifikace o nove objednavce odesila se na andrea.gasi@seznam.cz.',
+    trigger: 'Automaticky — po odeslani objednavky',
+  },
+];
 
-<div style="margin-bottom: 32px; border: 1px solid #e5e5e5; border-radius: 12px; padding: 20px;">
-  {{itemsHtml}}
-</div>
+export default function EmailAdminPage() {
+  const [selectedType, setSelectedType] = useState(EMAIL_TYPES[0].id);
+  const [previewLoading, setPreviewLoading] = useState(true);
+  const [testEmail, setTestEmail] = useState('');
+  const [sendingTest, setSendingTest] = useState(false);
+  const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
+  const [showTestForm, setShowTestForm] = useState(false);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
-<div style="text-align: center; padding: 32px; background-color: #000; color: #fff; border-radius: 12px;">
-  <p style="font-size: 16px; margin-bottom: 24px; font-weight: 400; line-height: 1.5;">
-    Dokončete svoji objednávku dříve, než se vybrané kousky vyprodají!
-  </p>
-  <a href="{{websiteUrl}}/kosik" style="display: inline-block; background-color: #fff; color: #000; padding: 18px 36px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Vrátit se do košíku</a>
-</div>`
-  }
-};
+  const selectedTypeInfo = EMAIL_TYPES.find((t) => t.id === selectedType);
 
-export default function EmailTemplatesPage() {
-  const [templates, setTemplates] = useState<any[]>([]);
-  const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [previewMode, setPreviewMode] = useState<'EDIT' | 'PREVIEW'>('EDIT');
-
-  const replaceVariables = (html: string) => {
-    if (!html) return '';
-    return html
-      .replace(/{{orderNumber}}/g, 'UFO20240001')
-      .replace(/{{customerName}}/g, 'Jan Novák')
-      .replace(/{{totalPrice}}/g, '1 250')
-      .replace(/{{itemsHtml}}/g, `
-        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 15px; border-bottom: 1px solid #eee; padding-bottom: 12px;">
-          <div style="display: flex; gap: 12px;">
-            <div style="width: 50px; height: 50px; background: #eee; border-radius: 4px;"></div>
-            <div>
-              <div style="font-weight: 600;">UFO Oversized T-Shirt</div>
-              <div style="font-size: 13px; color: #86868b;">Velikost: L | Barva: Černá</div>
-            </div>
-          </div>
-          <div style="font-weight: 600;">850 Kč</div>
-        </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 15px;">
-          <div style="display: flex; gap: 12px;">
-            <div style="width: 50px; height: 50px; background: #eee; border-radius: 4px;"></div>
-            <div>
-              <div style="font-weight: 600;">UFO Socks</div>
-              <div style="font-size: 13px; color: #86868b;">Velikost: UNI</div>
-            </div>
-          </div>
-          <div style="font-weight: 600;">400 Kč</div>
-        </div>
-      `)
-      .replace(/{{shippingInfoHtml}}/g, `
-        <div style="font-size: 15px; color: #1d1d1f; line-height: 1.5; background: #fff; padding: 16px; border-radius: 8px; border: 1px solid #eee;">
-          <div style="font-weight: 600; margin-bottom: 4px;">Doručení na adresu:</div>
-          <div>Vodičkova 123, 110 00 Praha 1</div>
-        </div>
-      `)
-      .replace(/{{websiteUrl}}/g, 'https://ufosport.cz')
-      .replace(/{{trackingUrl}}/g, 'https://tracking.packeta.com/cs/UFO123456789');
+  const handleSelectType = (type: string) => {
+    setSelectedType(type);
+    setPreviewLoading(true);
+    setTestResult(null);
+    setShowTestForm(false);
   };
 
-  useEffect(() => {
-    fetchTemplates();
-  }, []);
+  const handleIframeLoad = () => {
+    setPreviewLoading(false);
+  };
 
-  const fetchTemplates = async () => {
-    try {
-      const response = await fetch('/api/admin/email-templates');
-      const data = await response.json();
-      setTemplates(data);
-    } catch (error) {
-      console.error('Error fetching templates:', error);
-    } finally {
-      setLoading(false);
+  const handleSendTest = async () => {
+    if (!testEmail.trim() || !testEmail.includes('@')) {
+      setTestResult({ success: false, message: 'Zadejte platnou e-mailovou adresu.' });
+      return;
     }
-  };
 
-  const handleSelectTemplate = (type: string) => {
-    const existing = templates.find(t => t.type === type);
-    if (existing) {
-      setSelectedTemplate({ ...existing });
-    } else {
-      // Create from default
-      setSelectedTemplate({
-        type,
-        name: DEFAULT_TEMPLATES[type as keyof typeof DEFAULT_TEMPLATES].name,
-        subject: DEFAULT_TEMPLATES[type as keyof typeof DEFAULT_TEMPLATES].subject,
-        body: DEFAULT_TEMPLATES[type as keyof typeof DEFAULT_TEMPLATES].body
-      });
-    }
-    setIsEditing(true);
-  };
+    setSendingTest(true);
+    setTestResult(null);
 
-  const handleSave = async () => {
-    setSaving(true);
     try {
-      const method = selectedTemplate.id ? 'PATCH' : 'POST';
-      const url = selectedTemplate.id 
-        ? `/api/admin/email-templates/${selectedTemplate.id}`
-        : '/api/admin/email-templates';
-
-      const response = await fetch(url, {
-        method,
+      const res = await fetch('/api/admin/email-test', {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(selectedTemplate),
+        body: JSON.stringify({ email: testEmail.trim(), type: selectedType }),
       });
 
-      if (response.ok) {
-        await fetchTemplates();
-        setIsEditing(false);
-        setSelectedTemplate(null);
-        alert('Šablona byla uložena');
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        setTestResult({ success: true, message: `Testovaci e-mail byl odeslan na ${testEmail}.` });
+        setTestEmail('');
+        setShowTestForm(false);
+      } else {
+        setTestResult({ success: false, message: data.error || 'Odeslani selhalo.' });
       }
-    } catch (error) {
-      console.error('Error saving template:', error);
-      alert('Chyba při ukládání');
+    } catch {
+      setTestResult({ success: false, message: 'Chyba sitoveho pripojeni. Zkuste to znovu.' });
     } finally {
-      setSaving(false);
+      setSendingTest(false);
     }
   };
-
-  const handleResetToDefault = () => {
-    if (!selectedTemplate) return;
-    const defaults = DEFAULT_TEMPLATES[selectedTemplate.type as keyof typeof DEFAULT_TEMPLATES];
-    if (defaults) {
-      setSelectedTemplate({
-        ...selectedTemplate,
-        subject: defaults.subject,
-        body: defaults.body
-      });
-    }
-  };
-
-  if (loading) return <div className="p-8 tracking-widest uppercase text-xs">Načítání...</div>;
 
   return (
-    <div className="p-8 max-w-6xl mx-auto">
-      <h1 className="text-2xl font-bold mb-8 uppercase tracking-widest">E-mailové Šablony</h1>
+    <div>
+      {/* Page Header */}
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-gray-900">E-maily</h1>
+        <p className="mt-1 text-sm text-gray-500">Nahled vsech automatickych e-mailu a moznost odeslat testovaci zpravy.</p>
+      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Sidebar */}
-        <div className="space-y-2">
-          {Object.keys(DEFAULT_TEMPLATES).map((type) => (
-            <button
-              key={type}
-              onClick={() => handleSelectTemplate(type)}
-              className={`w-full text-left p-4 border border-black uppercase text-[10px] font-bold tracking-widest transition-colors ${
-                selectedTemplate?.type === type ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-50'
-              }`}
-            >
-              {DEFAULT_TEMPLATES[type as keyof typeof DEFAULT_TEMPLATES].name}
-              {templates.find(t => t.type === type) && (
-                <span className="ml-2 opacity-50 font-normal">(Upraveno)</span>
-              )}
-            </button>
-          ))}
+      <div className="grid grid-cols-12 gap-6">
+        {/* Left column — email type list */}
+        <div className="col-span-3">
+          <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden" style={{ boxShadow: '0 1px 3px 0 rgba(0,0,0,0.07), 0 1px 2px -1px rgba(0,0,0,0.07)' }}>
+            <div className="px-4 py-3 border-b border-gray-100">
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Typy e-mailu</p>
+            </div>
+            <div className="p-2">
+              {EMAIL_TYPES.map((type) => (
+                <button
+                  key={type.id}
+                  onClick={() => handleSelectType(type.id)}
+                  className={`w-full text-left px-3 py-3 rounded-xl transition-all duration-150 mb-0.5 last:mb-0 ${
+                    selectedType === type.id
+                      ? 'bg-gray-900 text-white'
+                      : 'text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  <p className={`text-sm font-medium leading-tight ${selectedType === type.id ? 'text-white' : 'text-gray-800'}`}>
+                    {type.label}
+                  </p>
+                  <p className={`text-xs mt-0.5 leading-snug line-clamp-2 ${selectedType === type.id ? 'text-gray-300' : 'text-gray-400'}`}>
+                    {type.description}
+                  </p>
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
-        {/* Editor */}
-        <div className="lg:col-span-2">
-          {isEditing ? (
-            <div className="bg-white border border-black p-8 space-y-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="font-bold uppercase text-sm tracking-widest">{selectedTemplate.name}</h2>
-                <button 
-                  onClick={handleResetToDefault}
-                  className="text-[10px] uppercase underline tracking-tighter hover:opacity-60"
-                >
-                  Obnovit profesionální vzor
-                </button>
-              </div>
-
-              <div className="flex border-b border-black">
-                <button
-                  onClick={() => setPreviewMode('EDIT')}
-                  className={`flex-1 p-3 text-[10px] uppercase font-bold tracking-widest transition-colors ${previewMode === 'EDIT' ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-50'}`}
-                >
-                  Editor
-                </button>
-                <button
-                  onClick={() => setPreviewMode('PREVIEW')}
-                  className={`flex-1 p-3 text-[10px] uppercase font-bold tracking-widest transition-colors ${previewMode === 'PREVIEW' ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-50'}`}
-                >
-                  Náhled
-                </button>
-              </div>
-
-              <div className="space-y-4">
-                {previewMode === 'EDIT' ? (
-                  <>
-                    <div>
-                      <label className="block text-[10px] uppercase font-bold mb-1">Předmět e-mailu</label>
-                      <input
-                        type="text"
-                        value={selectedTemplate.subject}
-                        onChange={e => setSelectedTemplate({ ...selectedTemplate, subject: e.target.value })}
-                        className="w-full border border-black p-2 text-sm focus:outline-none"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-[10px] uppercase font-bold mb-1">Obsah (HTML)</label>
-                      <textarea
-                        value={selectedTemplate.body}
-                        onChange={e => setSelectedTemplate({ ...selectedTemplate, body: e.target.value })}
-                        className="w-full border border-black p-2 text-sm font-mono h-[450px] focus:outline-none"
-                      />
-                      <div className="mt-2 p-2 bg-gray-50 border border-black/5 text-[10px] uppercase tracking-tighter text-gray-500">
-                        Dostupné proměnné: {"{{orderNumber}}, {{customerName}}, {{totalPrice}}, {{itemsHtml}}, {{shippingInfoHtml}}, {{websiteUrl}}, {{trackingUrl}}"}
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  <div className="space-y-6">
-                    <div>
-                      <label className="block text-[10px] uppercase font-bold mb-1">Předmět e-mailu (Náhled)</label>
-                      <div className="p-3 border border-black bg-gray-50 text-sm font-medium">
-                        {selectedTemplate.subject.replace('{{orderNumber}}', 'UFO20240001')}
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-[10px] uppercase font-bold mb-1">Obsah e-mailu (Náhled)</label>
-                      <div 
-                        className="border border-black bg-white overflow-hidden rounded-sm"
-                        style={{ minHeight: '600px' }}
-                      >
-                        {/* Apple-style Email Shell */}
-                        <div className="p-4 sm:p-8 md:p-12 bg-gray-50" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>
-                          <div style={{ maxWidth: '600px', margin: '0 auto', background: 'white', padding: '40px', borderRadius: '12px', boxShadow: '0 4px 24px rgba(0,0,0,0.05)' }}>
-                            <div style={{ padding: '0 0 40px 0', textAlign: 'center' }}>
-                              <span style={{ fontSize: '24px', fontWeight: '800', letterSpacing: '0.1em', color: '#000' }}>UFO SPORT</span>
-                            </div>
-                            <div dangerouslySetInnerHTML={{ __html: replaceVariables(selectedTemplate.body) }} />
-                            <div style={{ padding: '40px 0 0 0', borderTop: '1px solid #d2d2d7', marginTop: '40px', textAlign: 'center' }}>
-                              <p style={{ margin: '0', fontSize: '12px', color: '#86868b' }}>
-                                &copy; {new Date().getFullYear()} UFO Sport. Všechna práva vyhrazena.
-                              </p>
-                              <div style={{ marginTop: '16px' }}>
-                                <a href="#" style={{ color: '#0066cc', textDecoration: 'none', fontSize: '12px', margin: '0 8px' }}>Podmínky užití</a>
-                                <a href="#" style={{ color: '#0066cc', textDecoration: 'none', fontSize: '12px', margin: '0 8px' }}>Ochrana soukromí</a>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                <div className="flex gap-4 pt-4">
-                  <button
-                    onClick={handleSave}
-                    disabled={saving}
-                    className="flex-1 bg-black text-white p-4 text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition-opacity disabled:opacity-50"
-                  >
-                    {saving ? 'Ukládání...' : 'Uložit šablonu'}
-                  </button>
-                  <button
-                    onClick={() => { setIsEditing(false); setSelectedTemplate(null); }}
-                    className="px-8 border border-black p-4 text-[10px] font-bold uppercase tracking-widest hover:bg-gray-50 transition-colors"
-                  >
-                    Zrušit
-                  </button>
+        {/* Right column — preview + actions */}
+        <div className="col-span-9 flex flex-col gap-5">
+          {/* Info card */}
+          <div className="bg-white rounded-2xl border border-gray-200 p-5" style={{ boxShadow: '0 1px 3px 0 rgba(0,0,0,0.07), 0 1px 2px -1px rgba(0,0,0,0.07)' }}>
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex-1">
+                <h2 className="text-base font-semibold text-gray-900">{selectedTypeInfo?.label}</h2>
+                <p className="mt-1 text-sm text-gray-500">{selectedTypeInfo?.description}</p>
+                <div className="mt-3 flex items-center gap-2">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-gray-100 text-xs font-medium text-gray-600">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                    </svg>
+                    {selectedTypeInfo?.trigger}
+                  </span>
                 </div>
               </div>
+
+              {/* Test send area */}
+              <div className="flex-shrink-0">
+                {!showTestForm ? (
+                  <button
+                    onClick={() => { setShowTestForm(true); setTestResult(null); }}
+                    className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-xl hover:bg-gray-700 transition-colors"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z" />
+                    </svg>
+                    Odeslat test
+                  </button>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="email"
+                      value={testEmail}
+                      onChange={(e) => setTestEmail(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && handleSendTest()}
+                      placeholder="email@example.com"
+                      autoFocus
+                      className="w-52 px-3 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent bg-white"
+                    />
+                    <button
+                      onClick={handleSendTest}
+                      disabled={sendingTest}
+                      className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-xl hover:bg-gray-700 transition-colors disabled:opacity-50"
+                    >
+                      {sendingTest ? (
+                        <>
+                          <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          Odesilam...
+                        </>
+                      ) : (
+                        'Odeslat'
+                      )}
+                    </button>
+                    <button
+                      onClick={() => { setShowTestForm(false); setTestResult(null); }}
+                      className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
+                    >
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M18 6L6 18M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
-          ) : (
-            <div className="bg-gray-50 border border-black border-dashed h-full flex items-center justify-center p-12 text-center">
-              <p className="text-[10px] uppercase tracking-widest text-gray-400">
-                Vyberte šablonu vlevo pro úpravu
-              </p>
+
+            {/* Result message */}
+            {testResult && (
+              <div className={`mt-4 flex items-start gap-2 px-4 py-3 rounded-xl text-sm ${
+                testResult.success
+                  ? 'bg-green-50 text-green-800 border border-green-200'
+                  : 'bg-red-50 text-red-800 border border-red-200'
+              }`}>
+                {testResult.success ? (
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 flex-shrink-0">
+                    <path d="M20 6L9 17l-5-5" />
+                  </svg>
+                ) : (
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 flex-shrink-0">
+                    <circle cx="12" cy="12" r="10" /><path d="M12 8v4M12 16h.01" />
+                  </svg>
+                )}
+                <span>{testResult.message}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Email preview card */}
+          <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden flex flex-col" style={{ boxShadow: '0 1px 3px 0 rgba(0,0,0,0.07), 0 1px 2px -1px rgba(0,0,0,0.07)', minHeight: '700px' }}>
+            <div className="px-5 py-3.5 border-b border-gray-100 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full bg-red-400" />
+                <div className="w-3 h-3 rounded-full bg-yellow-400" />
+                <div className="w-3 h-3 rounded-full bg-green-400" />
+              </div>
+              <p className="text-xs font-medium text-gray-400">Nahled e-mailu — {selectedTypeInfo?.label}</p>
+              <div className="w-16" />
             </div>
-          )}
+
+            {/* Loading state */}
+            {previewLoading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-white z-10 rounded-b-2xl">
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-900 rounded-full animate-spin" />
+                  <span className="text-sm text-gray-400">Nacitam nahled...</span>
+                </div>
+              </div>
+            )}
+
+            <div className="relative flex-1">
+              <iframe
+                ref={iframeRef}
+                key={selectedType}
+                src={`/api/admin/email-preview?type=${selectedType}`}
+                onLoad={handleIframeLoad}
+                className="w-full border-0"
+                style={{ height: '700px' }}
+                title={`Nahled e-mailu: ${selectedTypeInfo?.label}`}
+                sandbox="allow-same-origin"
+              />
+            </div>
+          </div>
+
+          {/* Help card */}
+          <div className="bg-blue-50 rounded-2xl border border-blue-100 p-5">
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10" /><path d="M12 8v4M12 16h.01" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-blue-900">Informace o odesilani e-mailu</p>
+                <ul className="mt-2 space-y-1.5 text-xs text-blue-700 leading-relaxed">
+                  <li>E-maily jsou odesilany pres sluzbu Resend z adresy <strong>noreply@ufosport.cz</strong>.</li>
+                  <li>Pro spravnou funkci je nutne mit overenu domenu <strong>ufosport.cz</strong> v Resend dashboardu.</li>
+                  <li>Testovaci e-maily jsou oznaceny predponou <strong>[TEST]</strong> v predmetu.</li>
+                  <li>Loga a obrazky v e-mailech jsou nacitany z <strong>www.ufosport.cz/logo.png</strong>.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -15,18 +15,49 @@ interface Stats {
   lowStockProducts: number;
 }
 
+const StatCard = ({
+  label,
+  value,
+  href,
+  accent,
+}: {
+  label: string;
+  value: string | number;
+  href?: string;
+  accent?: 'red' | 'green' | 'default';
+}) => {
+  const bg =
+    accent === 'red'
+      ? 'bg-red-50 border-red-200'
+      : accent === 'green'
+      ? 'bg-green-50 border-green-200'
+      : 'bg-white border-gray-200';
+
+  const valueColor =
+    accent === 'red' ? 'text-red-700' : accent === 'green' ? 'text-green-700' : 'text-gray-900';
+
+  const card = (
+    <div
+      className={`rounded-2xl border p-6 ${bg} transition-shadow hover:shadow-md`}
+      style={{ boxShadow: '0 1px 3px 0 rgba(0,0,0,0.07), 0 1px 2px -1px rgba(0,0,0,0.07)' }}
+    >
+      <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">{label}</p>
+      <p className={`text-3xl font-bold ${valueColor}`}>{value}</p>
+    </div>
+  );
+
+  if (href) {
+    return <Link href={href}>{card}</Link>;
+  }
+  return card;
+};
+
 export default function AdminDashboard() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Redirect to orders page on mount
-  useEffect(() => {
-    router.push('/admin/objednavky');
-  }, [router]);
-
-  // Check if admin on mount
   useEffect(() => {
     if (status === 'unauthenticated' || (session && session.user?.role !== 'ADMIN')) {
       router.push('/');
@@ -54,75 +85,98 @@ export default function AdminDashboard() {
   };
 
   if (loading) {
-    return <div className="text-body">Načítání statistik...</div>;
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="flex items-center gap-3">
+          <div className="w-5 h-5 border-2 border-gray-300 border-t-gray-900 rounded-full animate-spin" />
+          <span className="text-sm text-gray-500">Nacitam statistiky...</span>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div>
-      {/* Statistics Grid */}
-      <div className="grid grid-cols-3 gap-6 mb-12">
-        <div className="border border-black p-6">
-          <div className="text-body uppercase mb-2">Celkem objednávek</div>
-          <div className="text-title font-bold">{stats?.totalOrders || 0}</div>
-        </div>
-        <div className="border border-black p-6">
-          <div className="text-body uppercase mb-2">Nevyřízené objednávky</div>
-          <div className="text-title font-bold">{stats?.pendingOrders || 0}</div>
-        </div>
-        <div className="border border-black p-6">
-          <div className="text-body uppercase mb-2">Celkový příjem</div>
-          <div className="text-title font-bold">{stats?.totalRevenue?.toFixed(2) || '0.00'} Kč</div>
-        </div>
-        <div className="border border-black p-6">
-          <div className="text-body uppercase mb-2">Počet produktů</div>
-          <div className="text-title font-bold">{stats?.productsCount || 0}</div>
-        </div>
-        <div className="border border-black p-6">
-          <div className="text-body uppercase mb-2">Aktivní promo kódy</div>
-          <div className="text-title font-bold">{stats?.promoCodesCount || 0}</div>
-        </div>
-        <div className="border border-black p-6">
-          <div className="text-body uppercase mb-2">Newsletter odběratelé</div>
-          <div className="text-title font-bold">{stats?.newsletterCount || 0}</div>
-        </div>
-        {stats?.lowStockProducts !== undefined && (
-          <div className={`border-2 p-6 ${stats.lowStockProducts > 0 ? 'border-red-600 bg-red-50' : 'border-black'}`}>
-            <div className="text-body uppercase mb-2">⚠️ Nízký sklad</div>
-            <div className={`text-title font-bold ${stats.lowStockProducts > 0 ? 'text-red-600' : ''}`}>
-              {stats.lowStockProducts}
-            </div>
-          </div>
+      {/* Header */}
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-gray-900">Prehled</h1>
+        <p className="mt-1 text-sm text-gray-500">Vitejte zpet. Zde je aktualni stav vasehoo obchodu.</p>
+      </div>
+
+      {/* Stats Grid */}
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
+        <StatCard
+          label="Celkem objednavek"
+          value={stats?.totalOrders ?? 0}
+          href="/admin/objednavky"
+        />
+        <StatCard
+          label="Nevyrizene objednavky"
+          value={stats?.pendingOrders ?? 0}
+          href="/admin/objednavky"
+          accent={stats && stats.pendingOrders > 0 ? 'red' : 'default'}
+        />
+        <StatCard
+          label="Celkovy prijem"
+          value={stats ? `${stats.totalRevenue.toLocaleString('cs-CZ')} Kc` : '— Kc'}
+        />
+        <StatCard
+          label="Pocet produktu"
+          value={stats?.productsCount ?? 0}
+          href="/admin/produkty"
+        />
+        <StatCard
+          label="Aktivni promo kody"
+          value={stats?.promoCodesCount ?? 0}
+          href="/admin/promo-kody"
+        />
+        <StatCard
+          label="Odberatele newsletteru"
+          value={stats?.newsletterCount ?? 0}
+          href="/admin/newsletter"
+        />
+        {stats !== null && (
+          <StatCard
+            label="Nizky sklad"
+            value={stats.lowStockProducts}
+            href="/admin/produkty"
+            accent={stats.lowStockProducts > 0 ? 'red' : 'green'}
+          />
         )}
       </div>
 
-      {/* Quick Links */}
+      {/* Quick actions */}
       <div>
-        <h2 className="text-header font-bold mb-6">RYCHLÉ ODKAZY</h2>
-        <div className="grid grid-cols-2 gap-6">
-          <Link
-            href="/admin/produkty/novy"
-            className="border border-black p-6 hover:bg-black hover:text-white transition-colors"
-          >
-            <div className="text-body uppercase font-bold">+ Přidat nový produkt</div>
-          </Link>
-          <Link
-            href="/admin/objednavky"
-            className="border border-black p-6 hover:bg-black hover:text-white transition-colors"
-          >
-            <div className="text-body uppercase font-bold">Zobrazit objednávky</div>
-          </Link>
-          <Link
-            href="/admin/promo-kody"
-            className="border border-black p-6 hover:bg-black hover:text-white transition-colors"
-          >
-            <div className="text-body uppercase font-bold">Spravovat promo kódy</div>
-          </Link>
-          <Link
-            href="/admin/newsletter"
-            className="border border-black p-6 hover:bg-black hover:text-white transition-colors"
-          >
-            <div className="text-body uppercase font-bold">Newsletter odběratelé</div>
-          </Link>
+        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-widest mb-4">Rychle akce</h2>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {[
+            { href: '/admin/produkty/novy', label: 'Pridat produkt' },
+            { href: '/admin/objednavky', label: 'Zobrazit objednavky' },
+            { href: '/admin/promo-kody', label: 'Spravovat promo kody' },
+            { href: '/admin/emaily', label: 'Spravovat e-maily' },
+          ].map((action) => (
+            <Link
+              key={action.href}
+              href={action.href}
+              className="bg-white rounded-2xl border border-gray-200 p-5 flex items-center justify-between group hover:border-gray-900 transition-all"
+              style={{ boxShadow: '0 1px 3px 0 rgba(0,0,0,0.07)' }}
+            >
+              <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900">{action.label}</span>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-gray-400 group-hover:text-gray-900 transition-colors"
+              >
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </Link>
+          ))}
         </div>
       </div>
     </div>
