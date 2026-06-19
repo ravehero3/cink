@@ -29,6 +29,14 @@ const nextConfig = {
   },
   experimental: {
     serverComponentsExternalPackages: ['@react-pdf/renderer'],
+    serverActions: {
+      allowedOrigins: [
+        'ufosport.cz',
+        'www.ufosport.cz',
+        'localhost:5000',
+        '0.0.0.0:5000',
+      ],
+    },
   },
   onDemandEntries: {
     maxInactiveAge: 60 * 1000,

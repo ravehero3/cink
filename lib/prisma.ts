@@ -7,14 +7,17 @@ const globalForPrisma = globalThis as unknown as {
 function createPrismaClient() {
   return new PrismaClient({
     log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
+    datasources: {
+      db: {
+        url: process.env.DATABASE_URL,
+      },
+    },
   });
 }
 
 export const prisma = globalForPrisma.prisma ?? createPrismaClient();
 
-if (process.env.NODE_ENV !== 'production') {
-  globalForPrisma.prisma = prisma;
-}
+globalForPrisma.prisma = prisma;
 
 const CONNECTION_ERROR_CODES = ['P1000', 'P1001', 'P1002', 'P1008', 'P1017', 'P2024'];
 
@@ -43,7 +46,8 @@ export async function withRetry<T>(
           error.message.includes('timeout') ||
           error.message.includes('ECONNREFUSED') ||
           error.message.includes('terminating connection') ||
-          error.message.includes('administrator command');
+          error.message.includes('administrator command') ||
+          error.message.includes('Closed');
       }
       
       if (!isConnectionError || attempt === maxRetries) {

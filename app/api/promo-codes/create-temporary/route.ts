@@ -11,16 +11,25 @@ export async function POST(request: Request) {
 
     const validUntil = new Date(Date.now() + durationMin * 60 * 1000);
 
-    // Create a temporary promo code
-    await prisma.promoCode.create({
-      data: {
+    await prisma.promoCode.upsert({
+      where: { code },
+      update: {
+        discountValue,
+        validFrom: new Date(),
+        validUntil,
+        isActive: true,
+        maxUses: 1,
+        usedCount: 0,
+        minOrderAmount: 0,
+      },
+      create: {
         code,
         discountType: 'PERCENTAGE',
         discountValue,
         validFrom: new Date(),
         validUntil,
         isActive: true,
-        maxUses: 1, // Only usable once by this user
+        maxUses: 1,
         minOrderAmount: 0,
       },
     });
