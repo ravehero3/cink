@@ -29,6 +29,22 @@ export async function GET() {
       button1Link: section.button1Link || '',
       button2Link: section.button2Link || '',
       textColor: section.textColor || 'black',
+      quadImage1: (section as any).quadImage1 || '',
+      quadImage1Hover: (section as any).quadImage1Hover || '',
+      quadImage1Text: (section as any).quadImage1Text || '',
+      quadImage1Link: (section as any).quadImage1Link || '',
+      quadImage2: (section as any).quadImage2 || '',
+      quadImage2Hover: (section as any).quadImage2Hover || '',
+      quadImage2Text: (section as any).quadImage2Text || '',
+      quadImage2Link: (section as any).quadImage2Link || '',
+      quadImage3: (section as any).quadImage3 || '',
+      quadImage3Hover: (section as any).quadImage3Hover || '',
+      quadImage3Text: (section as any).quadImage3Text || '',
+      quadImage3Link: (section as any).quadImage3Link || '',
+      quadImage4: (section as any).quadImage4 || '',
+      quadImage4Hover: (section as any).quadImage4Hover || '',
+      quadImage4Text: (section as any).quadImage4Text || '',
+      quadImage4Link: (section as any).quadImage4Link || '',
     }));
     
     return NextResponse.json(sectionsArray, {
@@ -61,6 +77,25 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Section key is required' }, { status: 400 });
     }
     
+    const quadFields = {
+      quadImage1: data.quadImage1 || null,
+      quadImage1Hover: data.quadImage1Hover || null,
+      quadImage1Text: data.quadImage1Text || null,
+      quadImage1Link: data.quadImage1Link || null,
+      quadImage2: data.quadImage2 || null,
+      quadImage2Hover: data.quadImage2Hover || null,
+      quadImage2Text: data.quadImage2Text || null,
+      quadImage2Link: data.quadImage2Link || null,
+      quadImage3: data.quadImage3 || null,
+      quadImage3Hover: data.quadImage3Hover || null,
+      quadImage3Text: data.quadImage3Text || null,
+      quadImage3Link: data.quadImage3Link || null,
+      quadImage4: data.quadImage4 || null,
+      quadImage4Hover: data.quadImage4Hover || null,
+      quadImage4Text: data.quadImage4Text || null,
+      quadImage4Link: data.quadImage4Link || null,
+    };
+
     const section = await prisma.heroSection.upsert({
       where: { sectionKey },
       update: {
@@ -76,6 +111,7 @@ export async function POST(request: Request) {
         button1Link: data.button1Link || null,
         button2Link: data.button2Link || null,
         textColor: data.textColor || 'black',
+        ...quadFields,
       },
       create: {
         sectionKey,
@@ -91,6 +127,7 @@ export async function POST(request: Request) {
         button1Link: data.button1Link || null,
         button2Link: data.button2Link || null,
         textColor: data.textColor || 'black',
+        ...quadFields,
       },
     });
     

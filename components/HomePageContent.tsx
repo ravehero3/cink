@@ -6,9 +6,11 @@ import Image from 'next/image';
 import VideoPromo from './VideoPromo';
 import VideoSection from './VideoSection';
 import ProductShowcaseSection from './ProductShowcaseSection';
+import QuadImageSection from './QuadImageSection';
 import EditSectionModal from './EditSectionModal';
 import EditCategorySectionModal from './EditCategorySectionModal';
 import { useSession } from 'next-auth/react';
+import { X } from 'lucide-react';
 
 const categories = [
   { name: 'VOODOO808', slug: 'voodoo808', storeKey: 'voodoo808' as const },
@@ -33,7 +35,7 @@ interface CategoryProducts {
 interface HeroSectionData {
   id?: string;
   sectionKey: string;
-  sectionType: 'VIDEO' | 'IMAGE';
+  sectionType: 'VIDEO' | 'IMAGE' | 'QUAD_IMAGE';
   order: number;
   videoUrl?: string;
   mobileVideoUrl?: string;
@@ -45,6 +47,22 @@ interface HeroSectionData {
   button1Link?: string;
   button2Link?: string;
   textColor?: 'black' | 'white';
+  quadImage1?: string;
+  quadImage1Hover?: string;
+  quadImage1Text?: string;
+  quadImage1Link?: string;
+  quadImage2?: string;
+  quadImage2Hover?: string;
+  quadImage2Text?: string;
+  quadImage2Link?: string;
+  quadImage3?: string;
+  quadImage3Hover?: string;
+  quadImage3Text?: string;
+  quadImage3Link?: string;
+  quadImage4?: string;
+  quadImage4Hover?: string;
+  quadImage4Text?: string;
+  quadImage4Link?: string;
 }
 
 interface CategorySectionData {
@@ -132,26 +150,34 @@ function ConfirmDeleteModal({ isOpen, onClose, onConfirm, sectionKey }: { isOpen
 
   return (
     <>
-      <div className="fixed inset-0 bg-black z-40 opacity-50" onClick={onClose} />
-      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white border border-black w-96 max-w-[90vw]">
-        <div className="border-b border-black p-4 text-center">
-          <h2 className="text-sm font-bold uppercase tracking-wide">Smazat sekci</h2>
-        </div>
-        <div className="p-4">
-          <p className="text-sm text-center mb-4">
-            Opravdu chcete smazat sekci <strong>{sectionKey}</strong>? Tuto akci nelze vrátit zpět.
-          </p>
-        </div>
-        <div className="border-t border-black p-3 flex gap-2">
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" onClick={onClose} />
+      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white border border-black w-96 max-w-[90vw] shadow-2xl">
+        <div className="border-b border-black p-4 flex items-center justify-between">
+          <h2 className="text-xs font-bold uppercase tracking-widest">Smazat sekci</h2>
           <button
             onClick={onClose}
-            className="flex-1 px-4 py-2 text-sm uppercase border border-black bg-white hover:bg-gray-100 transition-colors"
+            className="w-7 h-7 flex items-center justify-center border border-black hover:bg-black hover:text-white transition-all duration-200"
+            aria-label="Zavřít"
+          >
+            <X size={14} strokeWidth={1.5} />
+          </button>
+        </div>
+        <div className="p-6">
+          <p className="text-sm text-center mb-6 leading-relaxed">
+            Opravdu chcete smazat sekci <strong>{sectionKey}</strong>?<br />
+            <span className="text-gray-500 text-xs">Tuto akci nelze vrátit zpět.</span>
+          </p>
+        </div>
+        <div className="border-t border-black p-4 flex gap-2">
+          <button
+            onClick={onClose}
+            className="flex-1 px-4 py-2 text-xs uppercase tracking-wide border border-black bg-white hover:bg-gray-50 transition-colors"
           >
             Zrušit
           </button>
           <button
             onClick={onConfirm}
-            className="flex-1 px-4 py-2 text-sm uppercase bg-black text-white hover:bg-gray-800 transition-colors"
+            className="flex-1 px-4 py-2 text-xs uppercase tracking-wide bg-black text-white hover:bg-gray-900 transition-colors"
           >
             Smazat
           </button>
@@ -177,6 +203,8 @@ export default function HomePageContent({ initialSections }: HomePageContentProp
   const [editingCategory, setEditingCategory] = useState<'voodoo808' | 'spaceLove' | 'recreationWellness' | 'tShirtGallery' | null>(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [sectionToDelete, setSectionToDelete] = useState<string | null>(null);
+
+  const isAnyModalOpen = editModalOpen || categoryEditModalOpen || deleteModalOpen;
 
   const [heroSections, setHeroSections] = useState<HeroSectionData[]>(
     initialSections && initialSections.length > 0 ? initialSections : defaultHeroSectionsArray
@@ -300,7 +328,6 @@ export default function HomePageContent({ initialSections }: HomePageContentProp
         return;
       }
       
-      console.log('Section saved successfully:', result);
       setHeroSections(prev => prev.map(s => 
         s.sectionKey === editingSection.sectionKey 
           ? { ...s, ...data, sectionType: editingSection.sectionType }
@@ -312,7 +339,7 @@ export default function HomePageContent({ initialSections }: HomePageContentProp
     }
   };
 
-  const handleTypeChange = async (newType: 'VIDEO' | 'IMAGE') => {
+  const handleTypeChange = async (newType: 'VIDEO' | 'IMAGE' | 'QUAD_IMAGE') => {
     if (!editingSection) return;
     
     try {
@@ -424,8 +451,9 @@ export default function HomePageContent({ initialSections }: HomePageContentProp
     return editingSection;
   };
 
-  const getEditSectionType = (): 'video' | 'product' => {
+  const getEditSectionType = (): 'video' | 'product' | 'quad' => {
     if (!editingSection) return 'video';
+    if (editingSection.sectionType === 'QUAD_IMAGE') return 'quad';
     return editingSection.sectionType === 'IMAGE' ? 'product' : 'video';
   };
 
@@ -452,7 +480,6 @@ export default function HomePageContent({ initialSections }: HomePageContentProp
         return;
       }
       
-      console.log('Category section saved successfully:', result);
       setCategorySections(prev => ({ ...prev, [editingCategory]: data }));
     } catch (error) {
       console.error('Error saving category section:', error);
@@ -490,10 +517,38 @@ export default function HomePageContent({ initialSections }: HomePageContentProp
     <div className="w-full">
       <VideoPromo videoUrl={videoUrl} />
 
+      {/* Blur overlay when any admin modal is open */}
+      {isAdmin && isAnyModalOpen && (
+        <div
+          className="fixed inset-0 z-[55] pointer-events-none"
+          style={{ backdropFilter: 'blur(4px)', backgroundColor: 'rgba(0,0,0,0.35)' }}
+        />
+      )}
+
       {heroSections.map((section, index) => {
         const isLastSection = index === heroSections.length - 1;
         const categoryData = categoryMapping[index] || null;
         const categoryKey = categoryKeyMapping[index] || null;
+
+        if (section.sectionType === 'QUAD_IMAGE') {
+          const quadItems = [
+            { image: section.quadImage1 || '', hoverImage: section.quadImage1Hover || '', text: section.quadImage1Text || '', link: section.quadImage1Link || '' },
+            { image: section.quadImage2 || '', hoverImage: section.quadImage2Hover || '', text: section.quadImage2Text || '', link: section.quadImage2Link || '' },
+            { image: section.quadImage3 || '', hoverImage: section.quadImage3Hover || '', text: section.quadImage3Text || '', link: section.quadImage3Link || '' },
+            { image: section.quadImage4 || '', hoverImage: section.quadImage4Hover || '', text: section.quadImage4Text || '', link: section.quadImage4Link || '' },
+          ];
+          return (
+            <QuadImageSection
+              key={section.sectionKey}
+              items={quadItems}
+              isAdmin={isAdmin}
+              onEdit={() => handleEditSection(section)}
+              onDelete={() => handleDeleteSection(section.sectionKey)}
+              onAdd={handleAddSection}
+              isLastSection={isLastSection}
+            />
+          );
+        }
 
         if (section.sectionType === 'VIDEO') {
           return (
@@ -518,26 +573,26 @@ export default function HomePageContent({ initialSections }: HomePageContentProp
               lazy={index > 0}
             />
           );
-        } else {
-          return (
-            <ProductShowcaseSection
-              key={section.sectionKey}
-              imageUrl={section.imageUrl || ''}
-              mobileImageUrl={section.mobileImageUrl}
-              headerText={categoryData?.title || section.headerText || ''}
-              button1Text={categoryData?.button1Text || section.button1Text || ''}
-              button2Text={categoryData?.button2Text || section.button2Text || ''}
-              button1Link={categoryData?.button1Link || section.button1Link || ''}
-              button2Link={categoryData?.button2Link || section.button2Link || ''}
-              textColor={section.textColor || 'black'}
-              isAdmin={isAdmin}
-              onEdit={() => handleEditSection(section)}
-              onDelete={() => handleDeleteSection(section.sectionKey)}
-              onAdd={handleAddSection}
-              isLastSection={isLastSection}
-            />
-          );
         }
+
+        return (
+          <ProductShowcaseSection
+            key={section.sectionKey}
+            imageUrl={section.imageUrl || ''}
+            mobileImageUrl={section.mobileImageUrl}
+            headerText={categoryData?.title || section.headerText || ''}
+            button1Text={categoryData?.button1Text || section.button1Text || ''}
+            button2Text={categoryData?.button2Text || section.button2Text || ''}
+            button1Link={categoryData?.button1Link || section.button1Link || ''}
+            button2Link={categoryData?.button2Link || section.button2Link || ''}
+            textColor={section.textColor || 'black'}
+            isAdmin={isAdmin}
+            onEdit={() => handleEditSection(section)}
+            onDelete={() => handleDeleteSection(section.sectionKey)}
+            onAdd={handleAddSection}
+            isLastSection={isLastSection}
+          />
+        );
       })}
 
       {editingSection && (

@@ -794,7 +794,9 @@ export default function ProductDetailPage() {
               >
                 <div className="pb-4">
                   <p className="mb-2">Oversize fit</p>
-                  <p className="mb-4">Konzultujte naši tabulku velikostí pro více informací.</p>
+                  {!isCD && (
+                    <p className="mb-4">Nenašli jste svou velikost skladem? Napište nám – můžeme ji pro vás vyrobit.</p>
+                  )}
                   {product.sizeChartType && (
                     <button
                       onClick={() => setShowSizeChart(true)}
@@ -845,7 +847,7 @@ export default function ProductDetailPage() {
                 }}
               >
                 <div className="pb-4">
-                  <p className="mb-2">Nabízíme bezplatné expresní doručení při objednávce nad 2000 Kč.</p>
+                  <p className="mb-2">Nabízíme bezplatné doručení při objednávce nad 2000 Kč.</p>
                   <p className="mb-2">Bezplatné vrácení a výměna do 14 dnů od data doručení.</p>
                   <p>Pro více informací navštivte naše <a href="/faq" className="underline">FAQ</a>.</p>
                 </div>

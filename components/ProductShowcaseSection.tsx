@@ -102,34 +102,36 @@ export default function ProductShowcaseSection({
         </div>
       </div>
 
-      {isAdmin && onDelete && (
-        <button
-          onClick={onDelete}
-          className="absolute top-4 left-4 w-8 h-8 flex items-center justify-center bg-white text-black border border-black hover:bg-black hover:text-white transition-colors z-10"
-          title="Delete section"
-        >
-          <X size={16} />
-        </button>
-      )}
-
       {isAdmin && (
-        <div className="absolute top-4 right-4">
-          <button
-            onClick={onEdit}
-            className="px-2 py-1 bg-white text-black text-xs uppercase hover:bg-black hover:text-white transition-colors border border-black"
-          >
-            Edit Section
-          </button>
+        <div className="absolute top-3 right-3 flex items-center gap-2 z-10">
+          {onEdit && (
+            <button
+              onClick={onEdit}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-black text-black text-xs uppercase tracking-wide hover:bg-black hover:text-white transition-all duration-200"
+              style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '10px', letterSpacing: '0.08em' }}
+            >
+              Upravit
+            </button>
+          )}
+          {onDelete && (
+            <button
+              onClick={onDelete}
+              className="flex items-center justify-center w-7 h-7 bg-white border border-black text-black hover:bg-black hover:text-white transition-all duration-200"
+              aria-label="Smazat sekci"
+            >
+              <X size={14} strokeWidth={1.5} />
+            </button>
+          )}
         </div>
       )}
 
       {isAdmin && onAdd && isLastSection && (
         <button
           onClick={onAdd}
-          className="absolute bottom-4 right-4 w-8 h-8 flex items-center justify-center bg-white text-black border border-black hover:bg-black hover:text-white transition-colors z-10"
-          title="Add new section"
+          className="absolute bottom-3 right-3 flex items-center gap-1.5 px-3 py-1.5 bg-black text-white text-xs uppercase tracking-wide hover:bg-gray-800 transition-all duration-200 z-10"
+          style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '10px', letterSpacing: '0.08em' }}
         >
-          <Plus size={16} />
+          + Přidat sekci
         </button>
       )}
     </section>

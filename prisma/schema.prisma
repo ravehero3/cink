@@ -227,6 +227,22 @@ model HeroSection {
   button1Link     String?
   button2Link     String?
   textColor       String          @default("black")
+  quadImage1      String?
+  quadImage1Hover String?
+  quadImage1Text  String?
+  quadImage1Link  String?
+  quadImage2      String?
+  quadImage2Hover String?
+  quadImage2Text  String?
+  quadImage2Link  String?
+  quadImage3      String?
+  quadImage3Hover String?
+  quadImage3Text  String?
+  quadImage3Link  String?
+  quadImage4      String?
+  quadImage4Hover String?
+  quadImage4Text  String?
+  quadImage4Link  String?
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
 }
@@ -234,6 +250,7 @@ model HeroSection {
 enum SectionType {
   VIDEO
   IMAGE
+  QUAD_IMAGE
 }
 
 model CategorySection {
