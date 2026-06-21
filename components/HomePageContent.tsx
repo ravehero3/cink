@@ -187,6 +187,53 @@ function ConfirmDeleteModal({ isOpen, onClose, onConfirm, sectionKey }: { isOpen
   );
 }
 
+function AddSectionPickerModal({ isOpen, onClose, onPick }: { isOpen: boolean; onClose: () => void; onPick: (type: 'VIDEO' | 'IMAGE' | 'QUAD_IMAGE') => void }) {
+  if (!isOpen) return null;
+
+  const options: { type: 'VIDEO' | 'IMAGE' | 'QUAD_IMAGE'; label: string; desc: string }[] = [
+    { type: 'VIDEO', label: 'VIDEO', desc: 'Sekce s videem nebo obrázkem na celou šířku + tlačítka' },
+    { type: 'IMAGE', label: 'OBRÁZEK', desc: 'Sekce s obrázkem na celou šířku + tlačítka' },
+    { type: 'QUAD_IMAGE', label: '4 OBRÁZKY', desc: 'Čtyři obrázky vedle sebe s hovery, textem a odkazem' },
+  ];
+
+  return (
+    <>
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" onClick={onClose} />
+      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white border border-black w-[480px] max-w-[92vw] shadow-2xl">
+        <div className="border-b border-black p-4 flex items-center justify-between">
+          <h2 className="text-xs font-bold uppercase tracking-widest">Přidat novou sekci</h2>
+          <button
+            onClick={onClose}
+            className="w-7 h-7 flex items-center justify-center border border-black hover:bg-black hover:text-white transition-all duration-200"
+            aria-label="Zavřít"
+          >
+            <X size={14} strokeWidth={1.5} />
+          </button>
+        </div>
+        <div className="p-6 flex flex-col gap-3">
+          {options.map((opt) => (
+            <button
+              key={opt.type}
+              onClick={() => onPick(opt.type)}
+              className="flex items-start gap-4 p-4 border border-black text-left hover:bg-black hover:text-white transition-all duration-200 group"
+            >
+              <div className="w-10 h-10 border border-current flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:border-white">
+                {opt.type === 'VIDEO' && <span className="text-xs font-bold">▶</span>}
+                {opt.type === 'IMAGE' && <span className="text-xs font-bold">◼</span>}
+                {opt.type === 'QUAD_IMAGE' && <span className="text-[10px] font-bold leading-tight text-center">⊞</span>}
+              </div>
+              <div>
+                <div className="text-xs font-bold uppercase tracking-widest mb-1">{opt.label}</div>
+                <div className="text-xs opacity-60 group-hover:opacity-80 leading-snug">{opt.desc}</div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+
 interface HomePageContentProps {
   initialSections?: HeroSectionData[];
 }
@@ -203,8 +250,9 @@ export default function HomePageContent({ initialSections }: HomePageContentProp
   const [editingCategory, setEditingCategory] = useState<'voodoo808' | 'spaceLove' | 'recreationWellness' | 'tShirtGallery' | null>(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [sectionToDelete, setSectionToDelete] = useState<string | null>(null);
+  const [addPickerOpen, setAddPickerOpen] = useState(false);
 
-  const isAnyModalOpen = editModalOpen || categoryEditModalOpen || deleteModalOpen;
+  const isAnyModalOpen = editModalOpen || categoryEditModalOpen || deleteModalOpen || addPickerOpen;
 
   const [heroSections, setHeroSections] = useState<HeroSectionData[]>(
     initialSections && initialSections.length > 0 ? initialSections : defaultHeroSectionsArray
@@ -404,38 +452,43 @@ export default function HomePageContent({ initialSections }: HomePageContentProp
     }
   };
 
-  const handleAddSection = async () => {
-    if (heroSections.length === 0) return;
-    
-    const firstSection = heroSections[0];
+  const handleAddSection = () => {
+    setAddPickerOpen(true);
+  };
+
+  const handleAddSectionWithType = async (type: 'VIDEO' | 'IMAGE' | 'QUAD_IMAGE') => {
+    setAddPickerOpen(false);
     const newSectionKey = `section_${Date.now()}`;
     const newOrder = heroSections.length;
-    
+
     const newSection: HeroSectionData = {
       sectionKey: newSectionKey,
-      sectionType: firstSection.sectionType,
+      sectionType: type,
       order: newOrder,
-      videoUrl: firstSection.videoUrl || '',
-      mobileVideoUrl: firstSection.mobileVideoUrl || '',
-      imageUrl: firstSection.imageUrl || '',
-      mobileImageUrl: firstSection.mobileImageUrl || '',
-      headerText: firstSection.headerText || '',
-      button1Text: firstSection.button1Text || '',
-      button2Text: firstSection.button2Text || '',
-      button1Link: firstSection.button1Link || '',
-      button2Link: firstSection.button2Link || '',
-      textColor: firstSection.textColor || 'black',
+      videoUrl: '',
+      mobileVideoUrl: '',
+      imageUrl: '',
+      mobileImageUrl: '',
+      headerText: '',
+      button1Text: 'NAKUPOVAT',
+      button2Text: 'ZOBRAZIT VŠE',
+      button1Link: '/',
+      button2Link: '/',
+      textColor: 'black',
     };
-    
+
     try {
       const response = await fetch('/api/hero-sections', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newSection),
       });
-      
+
       if (response.ok) {
         await fetchHeroSections();
+        // Immediately open the edit modal so admin can fill in the new section
+        setEditingSection(newSection);
+        setEditModalOpen(true);
       } else {
         const result = await response.json();
         alert(`Chyba při vytváření: ${result.error || 'Neznámá chyba'}`);
@@ -629,6 +682,12 @@ export default function HomePageContent({ initialSections }: HomePageContentProp
         }}
         onConfirm={confirmDeleteSection}
         sectionKey={sectionToDelete || ''}
+      />
+
+      <AddSectionPickerModal
+        isOpen={addPickerOpen}
+        onClose={() => setAddPickerOpen(false)}
+        onPick={handleAddSectionWithType}
       />
     </div>
   );
