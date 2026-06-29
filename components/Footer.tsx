@@ -63,31 +63,6 @@ function FooterAccordionItem({ title, children, isOpen, onToggle }: FooterAccord
 export default function Footer() {
   const [isNewsletterOpen, setIsNewsletterOpen] = useState(false);
   const [openSection, setOpenSection] = useState<string | null>(null);
-  const [email, setEmail] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
-
-  const handleSubscribe = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-    setLoading(true);
-    try {
-      const res = await fetch('/api/newsletter/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
-      if (res.ok) {
-        setMessage('Děkujeme!');
-        setEmail('');
-        setTimeout(() => setMessage(null), 3000);
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const toggleSection = (section: string) => {
     setOpenSection(openSection === section ? null : section);
@@ -114,27 +89,13 @@ export default function Footer() {
           }}
         >
           <div style={{ paddingTop: '16px', paddingLeft: '12px', paddingRight: '16px', paddingBottom: '48px' }}>
-            <h3 className="uppercase mb-3 text-gray-500" style={{ fontSize: '12px', lineHeight: '23.6px', letterSpacing: '0.12px', margin: '0px 0px 12px 0px', padding: '0px' }}>ODBĚR NOVINEK</h3>
-            <form onSubmit={handleSubscribe} className="space-y-2 max-w-[200px]">
-              <div className="relative">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="VÁŠ E-MAIL"
-                  required
-                  className="w-full bg-transparent border-b border-black/30 py-1 text-[10px] focus:border-black focus:outline-none placeholder:text-black/30"
-                  style={{ letterSpacing: '0.1em' }}
-                />
-              </div>
-              <button
-                type="submit"
-                disabled={loading}
-                className="text-black text-[10px] font-bold uppercase tracking-widest hover:opacity-70 transition-opacity"
-              >
-                {loading ? '...' : (message || 'PŘIHLÁSIT')}
-              </button>
-            </form>
+            <h3
+              className="uppercase mb-3 text-gray-500 cursor-pointer hover:text-black transition-colors"
+              style={{ fontSize: '12px', lineHeight: '23.6px', letterSpacing: '0.12px', margin: '0px 0px 12px 0px', padding: '0px' }}
+              onClick={() => setIsNewsletterOpen(true)}
+            >
+              ODBĚR NOVINEK
+            </h3>
           </div>
 
           <div style={{ paddingTop: '16px', paddingLeft: '12px', paddingRight: '16px', paddingBottom: '48px' }}>
@@ -196,29 +157,22 @@ export default function Footer() {
             letterSpacing: '0.12px'
           }}
         >
-          <FooterAccordionItem 
-            title="ODBĚR NOVINEK" 
-            isOpen={openSection === 'newsletter'} 
-            onToggle={() => toggleSection('newsletter')}
-          >
-            <form onSubmit={handleSubscribe} className="space-y-3 pb-4">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="VÁŠ E-MAIL"
-                required
-                className="w-full bg-transparent border-b border-black/30 py-2 text-[11px] focus:border-black focus:outline-none placeholder:text-black/30 uppercase tracking-widest"
-              />
-              <button
-                type="submit"
-                disabled={loading}
-                className="text-black text-[11px] font-bold uppercase tracking-widest"
-              >
-                {loading ? '...' : (message || 'PŘIHLÁSIT SE')}
-              </button>
-            </form>
-          </FooterAccordionItem>
+          <div className="border-b border-black">
+            <button
+              onClick={() => setIsNewsletterOpen(true)}
+              className="w-full flex items-center justify-between py-2 px-4 text-left"
+              style={{
+                fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '12px',
+                fontWeight: 400,
+                letterSpacing: '0.12px',
+                textTransform: 'uppercase',
+                color: '#000000'
+              }}
+            >
+              ODBĚR NOVINEK
+            </button>
+          </div>
 
           <FooterAccordionItem 
             title="ZÁKAZNICKÝ SERVIS" 
