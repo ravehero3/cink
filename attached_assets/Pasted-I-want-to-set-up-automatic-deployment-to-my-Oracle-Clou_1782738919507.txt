@@ -1,0 +1,47 @@
+I want to set up automatic deployment to my Oracle Cloud VPS for this repository. Here is exactly how it works on another repo I already have set up, and I want the same thing done here.
+The setup:
+* I have an Oracle Cloud VPS running Ubuntu 24.04
+* All services run via Docker Compose at ~/apps/docker-compose.yml on the VPS
+* This repo's app is one of the services in that docker-compose file
+* The VPS has a folder (e.g. ~/apps/SERVICENAME/) which is a git clone of this GitHub repo
+* The docker-compose service uses build: context: ./SERVICENAME (builds from local source, not Docker Hub)
+What I want: Every time I push to the main branch on GitHub, a GitHub Actions workflow should automatically:
+1. SSH into my VPS
+2. Run git pull inside the repo folder
+3. Run docker compose build SERVICENAME
+4. Run docker compose up -d SERVICENAME
+5. Run docker image prune -f to clean up old images
+The workflow file to create is .github/workflows/main.yml:
+name: Deploy
+
+on:
+push:
+branches: [main]
+
+jobs:
+deploy:
+runs-on: ubuntu-latest
+steps:
+- name: Deploy to Oracle Cloud VPS
+uses: appleboy/ssh-action@v1.2.0
+with:
+host: ${{ secrets.ORACLE_HOST }}
+username: ${{ secrets.ORACLE_USER }}
+key: ${{ secrets.ORACLE_SSH_KEY }}
+script: |
+set -e
+cd ~/apps/SERVICENAME
+git pull
+cd ~/apps
+docker compose build SERVICENAME
+docker compose up -d SERVICENAME
+docker image prune -f
+echo "Deploy complete"
+
+Replace SERVICENAME with the actual service/folder name for this repo.
+GitHub Secrets needed (added at: GitHub repo → Settings → Secrets and variables → Actions):
+* ORACLE_HOST = 130.61.26.156
+* ORACLE_USER = ubuntu
+* ORACLE_SSH_KEY = the full private key (I'll paste it — I copy it with cat ~/Downloads/oracle-keys/ssh-key-2026-06-16.key | pbcopy on my Mac)
+Known quirk: if git pull fails with Permission denied on .git/FETCH_HEAD, fix it with sudo chown -R ubuntu:ubuntu ~/apps/SERVICENAME on the VPS.
+Please create the workflow file, tell me what SERVICENAME to use (ask me which docker-compose service this repo maps to), and remind me to add the 3 GitHub secrets.
