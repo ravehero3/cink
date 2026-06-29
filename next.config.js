@@ -22,6 +22,14 @@ const nextConfig = {
         protocol: 'https',
         hostname: '*.ufs.sh',
       },
+      {
+        protocol: 'https',
+        hostname: '*.replit.dev',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.replit.app',
+      },
     ],
   },
   devIndicators: {
@@ -35,6 +43,8 @@ const nextConfig = {
         'www.ufosport.cz',
         'localhost:5000',
         '0.0.0.0:5000',
+        '*.replit.dev',
+        '*.replit.app',
       ],
     },
   },
