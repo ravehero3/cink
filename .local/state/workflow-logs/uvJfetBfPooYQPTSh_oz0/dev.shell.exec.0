@@ -1,0 +1,49 @@
+
+> workspace@1.0.0 dev
+> next dev -H 0.0.0.0 -p 5000
+
+[1G[0K  [1m[38;2;173;127;168m▲ Next.js 14.2.35[39m[22m
+  - Local:        http://localhost:5000
+  - Network:      http://0.0.0.0:5000
+
+ [32m[1m✓[22m[39m Starting...
+ [33m[1m⚠[22m[39m Invalid next.config.js options detected: 
+ [33m[1m⚠[22m[39m     Unrecognized key(s) in object: 'allowedDevOrigins' at "experimental"
+ [33m[1m⚠[22m[39m See more info here: https://nextjs.org/docs/messages/invalid-next-config
+ [33m[1m⚠[22m[39m Disabling SWC Minifer will not be an option in the next major version. Please report any issues you may be experiencing to https://github.com/vercel/next.js/issues
+ [37m[1m [22m[39m Disabled SWC as replacement for Babel because of custom Babel configuration ".babelrc" https://nextjs.org/docs/messages/swc-disabled
+ [32m[1m✓[22m[39m Ready in 5.6s
+ [37m[1m [22m[39m Using external babel configuration from /home/runner/workspace/.babelrc
+ [33m[1m⚠[22m[39m It looks like there is a custom Babel configuration that can be removed.
+ [37m[1m○[22m[39m Compiling / ...
+ [32m[1m✓[22m[39m Compiled / in 19.7s (792 modules)
+ [32m[1m✓[22m[39m Compiled in 725ms (412 modules)
+ GET / [32m200[39m in 20604ms
+ [33m[1m⚠[22m[39m Cross origin request detected from fcb2c11a-4c50-48da-996f-9e91eddc102e-00-1q1uje0wgxnmn.picard.replit.dev to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ [37m[1m○[22m[39m Compiling /api/hero-sections ...
+ [32m[1m✓[22m[39m Compiled /api/hero-sections in 1422ms (408 modules)
+ [32m[1m✓[22m[39m Compiled (648 modules)
+ GET /api/products?category=VOODOO808&limit=10&_t=1782741677889 [32m200[39m in 4990ms
+ GET /api/products?category=SPACE%20LOVE&limit=10&_t=1782741677889 [32m200[39m in 4960ms
+ GET /api/admin/live-offer [32m200[39m in 5006ms
+ GET /api/categories [32m200[39m in 5146ms
+ GET /api/hero-sections?_t=1782741677889 [32m200[39m in 5106ms
+ GET /api/category-sections?_t=1782741677889 [32m200[39m in 5162ms
+ GET /api/products?category=RECREATION%20WELLNESS&limit=10&_t=1782741677889 [32m200[39m in 80ms
+ GET /api/products?category=T%20SHIRT%20GALLERY&limit=10&_t=1782741677889 [32m200[39m in 96ms
+ [32m[1m✓[22m[39m Compiled /api/auth/[...nextauth] in 295ms (650 modules)
+ GET /api/products?category=VOODOO808&limit=10&_t=1782741677893 [32m200[39m in 219ms
+ GET /api/products?category=SPACE%20LOVE&limit=10&_t=1782741677893 [32m200[39m in 221ms
+ GET /api/products?category=RECREATION%20WELLNESS&limit=10&_t=1782741677893 [32m200[39m in 225ms
+ GET /api/hero-sections?_t=1782741677893 [32m200[39m in 442ms
+ GET /api/category-sections?_t=1782741677893 [32m200[39m in 469ms
+ GET /api/admin/live-offer [32m200[39m in 116ms
+ GET /api/products?category=T%20SHIRT%20GALLERY&limit=10&_t=1782741677893 [32m200[39m in 131ms
+ GET /api/categories [32m200[39m in 130ms
+[next-auth][warn][NO_SECRET] 
+https://next-auth.js.org/warnings#no_secret
+ GET /api/auth/session [32m200[39m in 1558ms
+ GET /api/auth/session [32m200[39m in 26ms
+ [37m[1m○[22m[39m Compiling /cookies ...
+ [32m[1m✓[22m[39m Compiled /cookies in 949ms (1052 modules)
