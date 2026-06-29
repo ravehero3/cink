@@ -83,8 +83,8 @@ export default function CookieBanner() {
         }
         .cb-enter { animation: cb-in 0.35s cubic-bezier(0.22,1,0.36,1) forwards; }
         .cb-exit  { animation: cb-out 0.35s cubic-bezier(0.55,0,1,0.45) forwards; }
-        .cb-btn-accept:hover  { background: rgb(255,255,255) !important; }
-        .cb-btn-ghost:hover   { background: rgba(255,255,255,0.1) !important; }
+        .cb-btn-accept:hover  { background: rgb(30,30,30) !important; }
+        .cb-btn-ghost:hover   { background: rgba(0,0,0,0.06) !important; }
       `}</style>
 
       <div
@@ -95,12 +95,12 @@ export default function CookieBanner() {
           left: 20,
           width: 'calc(100vw - 40px)',
           maxWidth: 340,
-          background: 'rgba(10,10,10,0.96)',
+          background: '#f0f0f0',
           backdropFilter: 'blur(18px)',
           WebkitBackdropFilter: 'blur(18px)',
-          border: '1px solid rgba(255,255,255,0.09)',
+          border: '1px solid rgba(0,0,0,0.08)',
           borderRadius: 12,
-          boxShadow: '0 8px 40px rgba(0,0,0,0.6)',
+          boxShadow: '0 8px 40px rgba(0,0,0,0.12)',
           zIndex: 9999,
           padding: '14px 16px 16px',
           display: 'flex',
@@ -110,11 +110,11 @@ export default function CookieBanner() {
         role="dialog"
         aria-label="Cookie consent"
       >
-        <p style={{ margin: 0, fontSize: 12, lineHeight: 1.55, color: 'rgba(255,255,255,0.55)' }}>
+        <p style={{ margin: 0, fontSize: 12, lineHeight: 1.55, color: 'rgba(0,0,0,0.55)' }}>
           {t.text}{' '}
           <Link
             href="/cookies"
-            style={{ color: 'rgba(255,255,255,0.55)', textDecoration: 'underline', textUnderlineOffset: 2 }}
+            style={{ color: 'rgba(0,0,0,0.55)', textDecoration: 'underline', textUnderlineOffset: 2 }}
           >
             {t.more}
           </Link>
@@ -132,8 +132,8 @@ export default function CookieBanner() {
               border: 'none',
               cursor: 'pointer',
               padding: '8px 0',
-              background: 'rgba(255,255,255,0.92)',
-              color: '#000',
+              background: '#111',
+              color: '#fff',
               transition: 'background 0.18s',
             }}
           >
@@ -148,11 +148,11 @@ export default function CookieBanner() {
               fontSize: 11.5,
               fontWeight: 500,
               borderRadius: 7,
-              border: '1px solid rgba(255,255,255,0.18)',
+              border: '1px solid rgba(0,0,0,0.18)',
               cursor: 'pointer',
               padding: '8px 0',
               background: 'transparent',
-              color: 'rgba(255,255,255,0.5)',
+              color: 'rgba(0,0,0,0.5)',
               transition: 'background 0.18s',
             }}
           >
