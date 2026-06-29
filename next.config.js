@@ -32,6 +32,7 @@ const nextConfig = {
       },
     ],
   },
+  swcMinify: false,
   devIndicators: {
     buildActivity: false,
   },
@@ -47,6 +48,10 @@ const nextConfig = {
         '*.replit.app',
       ],
     },
+    allowedDevOrigins: [
+      '*.replit.dev',
+      '*.replit.app',
+    ],
   },
   onDemandEntries: {
     maxInactiveAge: 60 * 1000,

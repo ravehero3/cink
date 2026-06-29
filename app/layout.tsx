@@ -7,6 +7,7 @@ import Header1 from "@/components/Header1";
 import Footer from "@/components/Footer";
 import SessionProvider from "@/components/SessionProvider";
 import LiveOfferBar from "@/components/LiveOfferBar";
+import CookieBanner from "@/components/CookieBanner";
 import { useEffect, useState } from "react";
 
 export default function RootLayout({
@@ -81,6 +82,7 @@ export default function RootLayout({
           {!isAdmin && <LiveOfferBar onVisibilityChange={setHasOffer} />}
           <main className="flex-1">{children}</main>
           {!isPokladna && !isAdmin && <Footer />}
+          <CookieBanner />
         </SessionProvider>
       </body>
     </html>
