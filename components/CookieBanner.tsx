@@ -63,8 +63,8 @@ export default function CookieBanner() {
         }
         .cb-enter { animation: cb-in 0.35s cubic-bezier(0.22,1,0.36,1) forwards; }
         .cb-exit  { animation: cb-out 0.35s cubic-bezier(0.55,0,1,0.45) forwards; }
-        .cb-btn-accept:hover  { background: rgb(30,30,30) !important; }
-        .cb-btn-ghost:hover   { background: rgba(0,0,0,0.06) !important; }
+        .cb-btn-accept:hover  { background: rgba(30,30,30,0.92) !important; }
+        .cb-btn-ghost:hover   { background: rgba(0,0,0,0.08) !important; }
       `}</style>
 
       <div
@@ -75,12 +75,12 @@ export default function CookieBanner() {
           left: 20,
           width: 'calc(100vw - 40px)',
           maxWidth: 340,
-          background: '#f0f0f0',
-          backdropFilter: 'blur(18px)',
-          WebkitBackdropFilter: 'blur(18px)',
-          border: '1px solid rgba(0,0,0,0.08)',
-          borderRadius: 12,
-          boxShadow: '0 8px 40px rgba(0,0,0,0.12)',
+          background: 'rgba(255,255,255,0.55)',
+          backdropFilter: 'blur(24px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+          border: '1px solid rgba(255,255,255,0.45)',
+          borderRadius: 16,
+          boxShadow: '0 4px 6px rgba(0,0,0,0.04), 0 12px 40px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.8)',
           zIndex: 9999,
           padding: '14px 16px 16px',
           display: 'flex',
@@ -91,11 +91,11 @@ export default function CookieBanner() {
         aria-label="Souhlas s cookies"
         aria-modal="true"
       >
-        <p style={{ margin: 0, fontSize: 12, lineHeight: 1.55, color: 'rgba(0,0,0,0.55)' }}>
+        <p style={{ margin: 0, fontSize: 12, lineHeight: 1.55, color: 'rgba(0,0,0,0.65)' }}>
           {copy.text}{' '}
           <Link
             href="/cookies"
-            style={{ color: 'rgba(0,0,0,0.55)', textDecoration: 'underline', textUnderlineOffset: 2 }}
+            style={{ color: 'rgba(0,0,0,0.65)', textDecoration: 'underline', textUnderlineOffset: 2 }}
           >
             {copy.more}
           </Link>
