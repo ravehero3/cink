@@ -6,7 +6,7 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm ci --legacy-peer-deps --ignore-scripts
+RUN npm config set registry https://registry.npmjs.org && npm ci --legacy-peer-deps --ignore-scripts
 
 COPY . .
 
