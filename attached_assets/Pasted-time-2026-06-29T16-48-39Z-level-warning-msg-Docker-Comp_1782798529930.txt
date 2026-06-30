@@ -1,0 +1,113 @@
+time="2026-06-29T16:48:39Z" level=warning msg="Docker Compose is configured to build using Bake, but buildx isn't installed"
+time="2026-06-29T16:48:39Z" level=warning msg="current commit information was not captured by the build" error="failed to read current commit information with git rev-parse --is-inside-work-tree"
+failed to solve: process "/bin/sh -c npm ci" did not complete successfully: exit code: 1
+
+#0 building with "default" instance using docker driver
+
+#1 [cink internal] load build definition from Dockerfile
+#1 transferring dockerfile: 333B done
+#1 DONE 0.0s
+
+#2 [cink internal] load metadata for docker.io/library/node:20-slim
+#2 DONE 0.0s
+
+#3 [cink internal] load .dockerignore
+#3 transferring context: 53B done
+#3 DONE 0.0s
+
+#4 [cink 1/7] FROM docker.io/library/node:20-slim@sha256:2cf067cfed83d5ea958367df9f966191a942351a2df77d6f0193e162b5febfc0
+#4 resolve docker.io/library/node:20-slim@sha256:2cf067cfed83d5ea958367df9f966191a942351a2df77d6f0193e162b5febfc0 0.0s done
+#4 CACHED
+
+#5 [cink internal] load build context
+#5 transferring context: 4.37MB 0.2s done
+#5 DONE 0.2s
+
+#6 [cink 2/7] RUN npm install -g npm@9.8.1
+#6 10.99 
+#6 10.99 removed 17 packages, and changed 91 packages in 11s
+#6 10.99 
+#6 10.99 28 packages are looking for funding
+#6 10.99   run `npm fund` for details
+#6 DONE 11.2s
+
+#7 [cink 3/7] RUN apt-get update -y && apt-get install -y openssl
+#7 0.209 Get:1 http://deb.debian.org/debian bookworm InRelease [151 kB]
+#7 0.219 Get:2 http://deb.debian.org/debian bookworm-updates InRelease [55.4 kB]
+#7 0.219 Get:3 http://deb.debian.org/debian-security bookworm-security InRelease [48.0 kB]
+#7 0.285 Get:4 http://deb.debian.org/debian bookworm/main arm64 Packages [8690 kB]
+#7 0.365 Get:5 http://deb.debian.org/debian bookworm-updates/main arm64 Packages [6936 B]
+#7 0.418 Get:6 http://deb.debian.org/debian-security bookworm-security/main arm64 Packages [310 kB]
+#7 1.181 Fetched 9261 kB in 1s (9438 kB/s)
+#7 1.181 Reading package lists...
+#7 1.761 Reading package lists...
+#7 2.340 Building dependency tree...
+#7 2.526 Reading state information...
+#7 2.767 The following additional packages will be installed:
+#7 2.768   libssl3
+#7 2.770 Suggested packages:
+#7 2.770   ca-certificates
+#7 2.805 The following NEW packages will be installed:
+#7 2.805   libssl3 openssl
+#7 2.828 0 upgraded, 2 newly installed, 0 to remove and 12 not upgraded.
+#7 2.828 Need to get 3229 kB of archives.
+#7 2.828 After this operation, 8535 kB of additional disk space will be used.
+#7 2.828 Get:1 http://deb.debian.org/debian-security bookworm-security/main arm64 libssl3 arm64 3.0.20-1~deb12u2 [1824 kB]
+#7 2.842 Get:2 http://deb.debian.org/debian-security bookworm-security/main arm64 openssl arm64 3.0.20-1~deb12u2 [1405 kB]
+#7 2.975 debconf: delaying package configuration, since apt-utils is not installed
+#7 3.014 Fetched 3229 kB in 0s (105 MB/s)
+#7 3.045 Selecting previously unselected package libssl3:arm64.
+#7 3.045 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 6090 files and directories currently installed.)
+#7 3.050 Preparing to unpack .../libssl3_3.0.20-1~deb12u2_arm64.deb ...
+#7 3.058 Unpacking libssl3:arm64 (3.0.20-1~deb12u2) ...
+#7 3.189 Selecting previously unselected package openssl.
+#7 3.190 Preparing to unpack .../openssl_3.0.20-1~deb12u2_arm64.deb ...
+#7 3.195 Unpacking openssl (3.0.20-1~deb12u2) ...
+#7 3.299 Setting up libssl3:arm64 (3.0.20-1~deb12u2) ...
+#7 3.310 Setting up openssl (3.0.20-1~deb12u2) ...
+#7 3.325 Processing triggers for libc-bin (2.36-9+deb12u13) ...
+#7 DONE 3.5s
+
+#8 [cink 4/7] WORKDIR /app
+#8 DONE 0.1s
+
+#9 [cink 5/7] COPY . .
+#9 DONE 0.3s
+
+#10 [cink 6/7] RUN npm ci
+#10 7.100 npm WARN deprecated querystring@0.2.1: The querystring API is considered Legacy. new code should use the URLSearchParams API instead.
+#10 74.40 npm notice 
+#10 74.41 npm notice New major version of npm available! 9.8.1 -> 11.18.0
+#10 74.41 npm notice Changelog: <https://github.com/npm/cli/releases/tag/v11.18.0>
+#10 74.41 npm notice Run `npm install -g npm@11.18.0` to update!
+#10 74.41 npm notice 
+#10 74.41 npm ERR! code ENOTFOUND
+#10 74.41 npm ERR! syscall getaddrinfo
+#10 74.41 npm ERR! errno ENOTFOUND
+#10 74.41 npm ERR! network request to http://package-firewall.replit.local/npm/zustand/-/zustand-5.0.14.tgz failed, reason: getaddrinfo ENOTFOUND package-firewall.replit.local
+#10 74.41 npm ERR! network This is a problem related to network connectivity.
+#10 74.41 npm ERR! network In most cases you are behind a proxy or have bad network settings.
+#10 74.41 npm ERR! network 
+#10 74.41 npm ERR! network If you are behind a proxy, please make sure that the
+#10 74.41 npm ERR! network 'proxy' config is set properly.  See: 'npm help config'
+#10 74.41 
+#10 74.41 npm ERR! A complete log of this run can be found in: /root/.npm/_logs/2026-06-29T16_48_54_803Z-debug-0.log
+#10 ERROR: process "/bin/sh -c npm ci" did not complete successfully: exit code: 1
+------
+ > [cink 6/7] RUN npm ci:
+74.41 npm ERR! syscall getaddrinfo
+74.41 npm ERR! errno ENOTFOUND
+74.41 npm ERR! network request to http://package-firewall.replit.local/npm/zustand/-/zustand-5.0.14.tgz failed, reason: getaddrinfo ENOTFOUND package-firewall.replit.local
+74.41 npm ERR! network This is a problem related to network connectivity.
+74.41 npm ERR! network In most cases you are behind a proxy or have bad network settings.
+74.41 npm ERR! network 
+74.41 npm ERR! network If you are behind a proxy, please make sure that the
+74.41 npm ERR! network 'proxy' config is set properly.  See: 'npm help config'
+74.41 
+74.41 npm ERR! A complete log of this run can be found in: /root/.npm/_logs/2026-06-29T16_48_54_803Z-debug-0.log
+------
+
+Command failed: docker compose -p apps -f /workspace/docker-compose.yml build cink
+time="2026-06-29T16:48:39Z" level=warning msg="Docker Compose is configured to build using Bake, but buildx isn't installed"
+time="2026-06-29T16:48:39Z" level=warning msg="current commit information was not captured by the build" error="failed to read current commit information with git rev-parse --is-inside-work-tree"
+failed to solve: process "/bin/sh -c npm ci" did not complete successfully: exit code: 1
