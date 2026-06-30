@@ -15,36 +15,20 @@ export function setConsent(value: 'accepted' | 'essential-only'): void {
   localStorage.setItem(STORAGE_KEY, value);
 }
 
-function isCzech(): boolean {
-  if (typeof navigator === 'undefined') return false;
-  const lang = navigator.language || '';
-  return lang.toLowerCase().startsWith('cs') || lang.toLowerCase().startsWith('sk');
-}
-
 const copy = {
-  cs: {
-    text: 'Tento web používá soubory cookie pro analýzu a správnou funkci.',
-    more: 'Více informací',
-    accept: 'Povolit vše',
-    essential: 'Pouze nezbytné',
-  },
-  en: {
-    text: 'This site uses cookies for analytics and functionality.',
-    more: 'More info',
-    accept: 'Allow all',
-    essential: 'Essential only',
-  },
+  text: 'Tento web používá soubory cookie pro analýzu a správnou funkci webu.',
+  more: 'Více informací',
+  accept: 'Povolit vše',
+  essential: 'Pouze nezbytné',
 };
 
 type Phase = 'hidden' | 'entering' | 'visible' | 'exiting';
 
 export default function CookieBanner() {
   const [phase, setPhase] = useState<Phase>('hidden');
-  const [lang, setLang] = useState<'cs' | 'en'>('cs');
 
   useEffect(() => {
     if (getConsent()) return;
-    setLang(isCzech() ? 'cs' : 'en');
 
     const timer = setTimeout(() => {
       setPhase('entering');
@@ -64,11 +48,7 @@ export default function CookieBanner() {
 
   if (phase === 'hidden') return null;
 
-  const t = copy[lang];
-
-  const isEntering = phase === 'entering';
   const isExiting = phase === 'exiting';
-  const isVisible = phase === 'visible';
 
   return (
     <>
@@ -108,15 +88,16 @@ export default function CookieBanner() {
           gap: 12,
         }}
         role="dialog"
-        aria-label="Cookie consent"
+        aria-label="Souhlas s cookies"
+        aria-modal="true"
       >
         <p style={{ margin: 0, fontSize: 12, lineHeight: 1.55, color: 'rgba(0,0,0,0.55)' }}>
-          {t.text}{' '}
+          {copy.text}{' '}
           <Link
             href="/cookies"
             style={{ color: 'rgba(0,0,0,0.55)', textDecoration: 'underline', textUnderlineOffset: 2 }}
           >
-            {t.more}
+            {copy.more}
           </Link>
         </p>
 
@@ -137,7 +118,7 @@ export default function CookieBanner() {
               transition: 'background 0.18s',
             }}
           >
-            {t.accept}
+            {copy.accept}
           </button>
 
           <button
@@ -156,7 +137,7 @@ export default function CookieBanner() {
               transition: 'background 0.18s',
             }}
           >
-            {t.essential}
+            {copy.essential}
           </button>
         </div>
       </div>

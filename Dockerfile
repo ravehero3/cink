@@ -12,7 +12,7 @@ COPY . .
 
 RUN npx prisma generate
 
-RUN npm run build
+RUN npx next build
 
 ENV NODE_OPTIONS="--max-old-space-size=2048"
 
