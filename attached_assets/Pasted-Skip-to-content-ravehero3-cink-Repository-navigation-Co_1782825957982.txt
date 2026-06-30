@@ -1,0 +1,136 @@
+Skip to content
+ravehero3
+cink
+Repository navigation
+Code
+Issues
+Pull requests
+Agents
+Actions
+Projects
+Wiki
+Security and quality
+2
+ (2)
+Insights
+Settings
+Deploy
+Update promo code logic and remove invalid configuration #17
+All jobs
+Run details
+Annotations
+1 error
+deploy
+failed 37 minutes ago in 5m 39s
+Search logs
+1s
+5m 35s
+#15 137.7 ├ ƒ /api/admin/email-status               0 B                0 B
+#15 137.7 ├ ƒ /api/admin/email-templates            0 B                0 B
+#15 137.7 ├ ƒ /api/admin/email-templates/[id]       0 B                0 B
+#15 137.7 ├ ƒ /api/admin/email-test                 0 B                0 B
+#15 137.7 ├ ƒ /api/admin/live-offer                 0 B                0 B
+#15 137.7 ├ ƒ /api/admin/newsletter                 0 B                0 B
+#15 137.7 ├ ƒ /api/admin/newsletter/[id]            0 B                0 B
+#15 137.7 ├ ƒ /api/admin/newsletter/export          0 B                0 B
+#15 137.7 ├ ƒ /api/admin/orders                     0 B                0 B
+#15 137.7 ├ ƒ /api/admin/orders/[id]                0 B                0 B
+#15 137.7 ├ ƒ /api/admin/orders/[id]/check-payment  0 B                0 B
+#15 137.7 ├ ƒ /api/admin/orders/[id]/create-packet  0 B                0 B
+#15 137.7 ├ ƒ /api/admin/pricing-rules              0 B                0 B
+#15 137.7 ├ ƒ /api/admin/pricing-rules/[id]         0 B                0 B
+#15 137.7 ├ ƒ /api/admin/products                   0 B                0 B
+#15 137.7 ├ ƒ /api/admin/products/[id]              0 B                0 B
+#15 137.7 ├ ƒ /api/admin/products/bulk              0 B                0 B
+#15 137.7 ├ ƒ /api/admin/products/duplicate         0 B                0 B
+#15 137.7 ├ ƒ /api/admin/promo-codes                0 B                0 B
+#15 137.7 ├ ƒ /api/admin/promo-codes/[id]           0 B                0 B
+#15 137.7 ├ ƒ /api/admin/stats                      0 B                0 B
+#15 137.7 ├ ƒ /api/admin/upload-diagnostics         0 B                0 B
+#15 137.7 ├ ƒ /api/auth/[...nextauth]               0 B                0 B
+#15 137.7 ├ ƒ /api/auth/forgot-password             0 B                0 B
+#15 137.7 ├ ƒ /api/auth/register                    0 B                0 B
+#15 137.7 ├ ƒ /api/auth/reset-password              0 B                0 B
+#15 137.7 ├ ƒ /api/categories                       0 B                0 B
+#15 137.7 ├ ƒ /api/categories-admin                 0 B                0 B
+#15 137.7 ├ ƒ /api/category-sections                0 B                0 B
+#15 137.7 ├ ƒ /api/check-env                        0 B                0 B
+#15 137.7 ├ ƒ /api/gopay/create-payment             0 B                0 B
+#15 137.7 ├ ƒ /api/gopay/webhook                    0 B                0 B
+#15 137.7 ├ ƒ /api/health                           0 B                0 B
+#15 137.7 ├ ƒ /api/hero-sections                    0 B                0 B
+#15 137.7 ├ ƒ /api/media                            0 B                0 B
+#15 137.7 ├ ƒ /api/media/sync-cloudinary            0 B                0 B
+#15 137.7 ├ ƒ /api/media/upload                     0 B                0 B
+#15 137.7 ├ ƒ /api/newsletter                       0 B                0 B
+#15 137.7 ├ ƒ /api/newsletter/subscribe             0 B                0 B
+#15 137.7 ├ ƒ /api/newsletter/unsubscribe           0 B                0 B
+#15 137.7 ├ ƒ /api/orders/[id]                      0 B                0 B
+#15 137.7 ├ ƒ /api/orders/[id]/status               0 B                0 B
+#15 137.7 ├ ƒ /api/orders/create                    0 B                0 B
+#15 137.7 ├ ƒ /api/orders/my-orders                 0 B                0 B
+#15 137.7 ├ ƒ /api/products                         0 B                0 B
+#15 137.7 ├ ƒ /api/products/[slug]                  0 B                0 B
+#15 137.7 ├ ƒ /api/promo-codes                      0 B                0 B
+#15 137.7 ├ ƒ /api/promo-codes/[id]                 0 B                0 B
+#15 137.7 ├ ƒ /api/promo-codes/create-temporary     0 B                0 B
+#15 137.7 ├ ƒ /api/promo-codes/validate             0 B                0 B
+#15 137.7 ├ ƒ /api/saved-products                   0 B                0 B
+#15 137.7 ├ ƒ /api/upload                           0 B                0 B
+#15 137.7 ├ ƒ /api/uploadthing                      0 B                0 B
+#15 137.7 ├ ○ /apple-icon.png                       0 B                0 B
+#15 137.7 ├ ○ /cookies                              163 B          88.3 kB
+#15 137.7 ├ ○ /doruceni                             163 B          88.3 kB
+#15 137.7 ├ ○ /faq                                  1.54 kB        89.7 kB
+#15 137.7 ├ ○ /hledat                               5.32 kB         105 kB
+#15 137.7 ├ ○ /icon.png                             0 B                0 B
+#15 137.7 ├ ○ /kosik                                5.2 kB          112 kB
+#15 137.7 ├ ○ /nastaveni-cookies                    2.66 kB        90.8 kB
+#15 137.7 ├ ○ /obnovit-heslo                        1.89 kB        98.8 kB
+#15 137.7 ├ ○ /ochrana-osobnich-udaju               1.54 kB        89.7 kB
+#15 137.7 ├ ƒ /odhlasit                             190 B          97.1 kB
+#15 137.7 ├ ○ /platba                               4.67 kB        92.8 kB
+#15 137.7 ├ ○ /pokladna                             6.81 kB         105 kB
+#15 137.7 ├ ƒ /potvrzeni/[orderNumber]              1.84 kB        98.8 kB
+#15 137.7 ├ ○ /pravni-informace                     1.54 kB        89.7 kB
+#15 137.7 ├ ○ /prihlaseni                           2.86 kB         110 kB
+#15 137.7 ├ ƒ /produkty/[slug]                      12.6 kB         111 kB
+#15 137.7 ├ ƒ /produkty/zobrazit-vse                1.36 kB         119 kB
+#15 137.7 ├ ○ /registrace                           2 kB           98.9 kB
+#15 137.7 ├ ○ /reklamacni-rad                       163 B          88.3 kB
+#15 137.7 ├ ○ /sledovani-objednavky                 1.21 kB        89.3 kB
+#15 137.7 ├ ○ /ucet                                 2.09 kB         114 kB
+#15 137.7 ├ ○ /ulozeno                              6 kB            113 kB
+#15 137.7 └ ○ /vraceni-zbozi                        1.46 kB        89.6 kB
+#15 137.7 + First Load JS shared by all             88.1 kB
+#15 137.7   ├ chunks/2117-dc22ed73084055cf.js       32.2 kB
+#15 137.7   ├ chunks/fd9d1056-91e5a11fcc4d0b0d.js   54 kB
+#15 137.7   └ other shared chunks (total)           1.99 kB
+#15 137.7 
+#15 137.7 
+#15 137.7 ○  (Static)   prerendered as static content
+#15 137.7 ƒ  (Dynamic)  server-rendered on demand
+#15 137.7 
+#15 DONE 138.0s
+#16 exporting to image
+#16 exporting layers
+#16 exporting layers 53.2s done
+#16 exporting manifest sha256:f61f2bab347f7fb7aa31f983c2209f9a154b70d2208759164503584fe7b81ec1
+#16 exporting manifest sha256:f61f2bab347f7fb7aa31f983c2209f9a154b70d2208759164503584fe7b81ec1 0.0s done
+#16 exporting config sha256:16b6c7dc4b7ea77a48f2b97ca7247338d697f6dad8569e019a816de8cb87f5b6 0.0s done
+#16 exporting attestation manifest sha256:b971c71d17d960bc64a9ef5fb1a915cfc1f15cf65a9336cf7aa742e25077dfae 0.1s done
+#16 exporting manifest list sha256:c8d81202e9b2836f9bc6d54da3f61ce64023ade1f03d7966db867e7c92e22bd3
+#16 exporting manifest list sha256:c8d81202e9b2836f9bc6d54da3f61ce64023ade1f03d7966db867e7c92e22bd3 0.0s done
+#16 naming to docker.io/library/apps-cink:latest done
+#16 unpacking to docker.io/library/apps-cink:latest
+#16 unpacking to docker.io/library/apps-cink:latest 39.4s done
+#16 DONE 93.3s
+#17 resolving provenance for metadata file
+#17 DONE 0.0s
+ Image apps-cink Built 
+ Container apps-cink-1 Recreate 
+ Container apps-cink-1 Error response from daemon: Conflict. The container name "/17b4733de30a_apps-cink-1" is already in use by container "3bc4ef8425a46e4e664aec8c0a4f8ca7b14fbbb4638331865f013a19d016798f". You have to remove (or rename) that container to be able to reuse that name. 
+Error response from daemon: Conflict. The container name "/17b4733de30a_apps-cink-1" is already in use by container "3bc4ef8425a46e4e664aec8c0a4f8ca7b14fbbb4638331865f013a19d016798f". You have to remove (or rename) that container to be able to reuse that name.
+2026/06/30 12:47:12 Process exited with status 1
+Error: Process completed with exit code 1.
+0s
