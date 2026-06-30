@@ -9,6 +9,7 @@ import ProductShowcaseSection from './ProductShowcaseSection';
 import QuadImageSection from './QuadImageSection';
 import EditSectionModal from './EditSectionModal';
 import EditCategorySectionModal from './EditCategorySectionModal';
+import InlineSectionEditor, { SectionLayoutType } from './InlineSectionEditor';
 import { useSession } from 'next-auth/react';
 import { X } from 'lucide-react';
 
@@ -250,9 +251,9 @@ export default function HomePageContent({ initialSections }: HomePageContentProp
   const [editingCategory, setEditingCategory] = useState<'voodoo808' | 'spaceLove' | 'recreationWellness' | 'tShirtGallery' | null>(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [sectionToDelete, setSectionToDelete] = useState<string | null>(null);
-  const [addPickerOpen, setAddPickerOpen] = useState(false);
+  const [inlineEditorOpen, setInlineEditorOpen] = useState(false);
 
-  const isAnyModalOpen = editModalOpen || categoryEditModalOpen || deleteModalOpen || addPickerOpen;
+  const isAnyModalOpen = editModalOpen || categoryEditModalOpen || deleteModalOpen;
 
   const [heroSections, setHeroSections] = useState<HeroSectionData[]>(
     initialSections && initialSections.length > 0 ? initialSections : defaultHeroSectionsArray
@@ -453,11 +454,11 @@ export default function HomePageContent({ initialSections }: HomePageContentProp
   };
 
   const handleAddSection = () => {
-    setAddPickerOpen(true);
+    setInlineEditorOpen(true);
   };
 
-  const handleAddSectionWithType = async (type: 'VIDEO' | 'IMAGE' | 'QUAD_IMAGE') => {
-    setAddPickerOpen(false);
+  const handleAddSectionWithType = async (type: SectionLayoutType, data: Record<string, any>) => {
+    setInlineEditorOpen(false);
     const newSectionKey = `section_${Date.now()}`;
     const newOrder = heroSections.length;
 
@@ -465,16 +466,26 @@ export default function HomePageContent({ initialSections }: HomePageContentProp
       sectionKey: newSectionKey,
       sectionType: type,
       order: newOrder,
-      videoUrl: '',
-      mobileVideoUrl: '',
-      imageUrl: '',
-      mobileImageUrl: '',
-      headerText: '',
-      button1Text: 'NAKUPOVAT',
-      button2Text: 'ZOBRAZIT VŠE',
-      button1Link: '/',
-      button2Link: '/',
-      textColor: 'black',
+      videoUrl: data.videoUrl || '',
+      mobileVideoUrl: data.mobileVideoUrl || '',
+      imageUrl: data.imageUrl || '',
+      mobileImageUrl: data.mobileImageUrl || '',
+      headerText: data.headerText || '',
+      button1Text: data.button1Text || 'NAKUPOVAT',
+      button2Text: data.button2Text || 'ZOBRAZIT VŠE',
+      button1Link: data.button1Link || '/',
+      button2Link: data.button2Link || '/',
+      textColor: data.textColor || 'black',
+      ...( type === 'QUAD_IMAGE' ? {
+        quadImage1: data.quadImage1, quadImage1Hover: data.quadImage1Hover,
+        quadImage1Text: data.quadImage1Text, quadImage1Link: data.quadImage1Link,
+        quadImage2: data.quadImage2, quadImage2Hover: data.quadImage2Hover,
+        quadImage2Text: data.quadImage2Text, quadImage2Link: data.quadImage2Link,
+        quadImage3: data.quadImage3, quadImage3Hover: data.quadImage3Hover,
+        quadImage3Text: data.quadImage3Text, quadImage3Link: data.quadImage3Link,
+        quadImage4: data.quadImage4, quadImage4Hover: data.quadImage4Hover,
+        quadImage4Text: data.quadImage4Text, quadImage4Link: data.quadImage4Link,
+      } : {} ),
     };
 
     try {
@@ -486,9 +497,6 @@ export default function HomePageContent({ initialSections }: HomePageContentProp
 
       if (response.ok) {
         await fetchHeroSections();
-        // Immediately open the edit modal so admin can fill in the new section
-        setEditingSection(newSection);
-        setEditModalOpen(true);
       } else {
         const result = await response.json();
         alert(`Chyba při vytváření: ${result.error || 'Neznámá chyba'}`);
@@ -684,10 +692,10 @@ export default function HomePageContent({ initialSections }: HomePageContentProp
         sectionKey={sectionToDelete || ''}
       />
 
-      <AddSectionPickerModal
-        isOpen={addPickerOpen}
-        onClose={() => setAddPickerOpen(false)}
-        onPick={handleAddSectionWithType}
+      <InlineSectionEditor
+        isOpen={inlineEditorOpen}
+        onClose={() => setInlineEditorOpen(false)}
+        onSave={handleAddSectionWithType}
       />
     </div>
   );
