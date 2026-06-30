@@ -1,4 +1,4 @@
-modules = ["nodejs-20", "bash", "web", "nix"]
+modules = ["nodejs-20", "bash", "web"]
 [agent]
 expertMode = true
 integrations = ["javascript_database:1.0.0", "github:1.0.0"]
@@ -56,7 +56,7 @@ NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME = "dq0qvtbst"
 NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET = "ufosport_unsigned"
 
 [userenv.development]
-NEXTAUTH_URL = "https://d4329f7c-472c-4653-9eda-d23198bd0a59-00-20lspgawdahlb.picard.replit.dev"
+NEXTAUTH_URL = "https://5b95dd15-b729-44bb-a806-e1cde032b34f-00-2lkzvy6hr71k6.spock.replit.dev"
 
 [userenv.production]
 NEXTAUTH_URL = "https://www.ufosport.cz"
