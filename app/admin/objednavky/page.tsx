@@ -288,285 +288,247 @@ export default function AdminOrdersPage() {
     }
   });
 
+  const paymentBadge = (status: string) => {
+    const map: Record<string, string> = {
+      PAID: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+      PENDING: 'bg-amber-50 text-amber-700 border-amber-200',
+      FAILED: 'bg-red-50 text-red-600 border-red-200',
+      REFUNDED: 'bg-gray-100 text-gray-600 border-gray-200',
+    };
+    return map[status] ?? 'bg-gray-100 text-gray-500 border-gray-200';
+  };
+
   if (loading) {
-    return <div className="text-body">Načítání objednávek...</div>;
+    return (
+      <div className="flex items-center justify-center h-60">
+        <div className="flex items-center gap-2.5">
+          <div className="w-4 h-4 border-2 border-gray-200 border-t-gray-700 rounded-full animate-spin" />
+          <span className="text-sm text-gray-400">Načítám objednávky…</span>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="relative">
-      {/* Floating Preview */}
+    <div className="space-y-6">
+
+      {/* Floating order preview */}
       {hoveredOrder && (
-        <div 
-          className="fixed z-[100] bg-white border-2 border-black p-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] pointer-events-none w-[400px]"
-          style={{ 
-            left: `${Math.min(mousePos.x + 20, typeof window !== 'undefined' ? window.innerWidth - 420 : 0)}px`, 
-            top: `${Math.min(mousePos.y + 20, typeof window !== 'undefined' ? window.innerHeight - 300 : 0)}px` 
+        <div
+          className="fixed z-[100] pointer-events-none w-[380px] bg-white rounded-2xl border border-gray-100 shadow-2xl overflow-hidden"
+          style={{
+            left: `${Math.min(mousePos.x + 20, typeof window !== 'undefined' ? window.innerWidth - 400 : 0)}px`,
+            top: `${Math.min(mousePos.y + 20, typeof window !== 'undefined' ? window.innerHeight - 320 : 0)}px`,
           }}
         >
-          <div className="flex justify-between items-start border-b border-black pb-2 mb-3">
+          <div className="flex justify-between items-start px-5 py-4 border-b border-gray-100 bg-gray-50">
             <div>
-              <div className="text-[10px] uppercase text-gray-500">Objednávka</div>
-              <div className="font-bold text-lg">{hoveredOrder.orderNumber}</div>
+              <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Objednávka</p>
+              <p className="font-bold text-gray-900 mt-0.5">{hoveredOrder.orderNumber}</p>
             </div>
             <div className="text-right">
-              <div className="text-[10px] uppercase text-gray-500">Celkem</div>
-              <div className="font-bold">{Number(hoveredOrder.totalPrice).toFixed(2)} Kč</div>
+              <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Celkem</p>
+              <p className="font-bold text-gray-900 mt-0.5">{Number(hoveredOrder.totalPrice).toFixed(2)} Kč</p>
             </div>
           </div>
-
-          <div className="space-y-3">
+          <div className="px-5 py-3 space-y-2.5">
             {Array.isArray(hoveredOrder.items) && hoveredOrder.items.map((item: any, i: number) => (
               <div key={i} className="flex gap-3 items-center">
                 {item.image && (
-                  <div className="w-12 h-12 border border-black relative flex-shrink-0">
-                    <img src={item.image} alt="" className="w-full h-full object-cover" />
-                  </div>
+                  <img src={item.image} alt="" className="w-11 h-11 rounded-lg object-cover border border-gray-100 shrink-0" />
                 )}
                 <div className="flex-1 min-w-0">
-                  <div className="text-xs font-bold uppercase truncate">{item.name}</div>
-                  <div className="text-[10px] text-gray-600 uppercase">
-                    {item.size} {item.color ? `| ${item.color}` : ''} | {item.quantity} ks
-                  </div>
+                  <p className="text-xs font-semibold text-gray-800 truncate">{item.name}</p>
+                  <p className="text-[10px] text-gray-400">{item.size}{item.color ? ` · ${item.color}` : ''} · {item.quantity} ks</p>
                 </div>
-                <div className="text-xs font-bold whitespace-nowrap">
-                  {item.price} Kč
-                </div>
+                <p className="text-xs font-semibold text-gray-700 whitespace-nowrap">{item.price} Kč</p>
               </div>
             ))}
           </div>
-
-          <div className="mt-4 pt-3 border-t border-black grid grid-cols-2 gap-4">
+          <div className="px-5 py-3 border-t border-gray-100 bg-gray-50 grid grid-cols-2 gap-4">
             <div>
-              <div className="text-[10px] uppercase text-gray-500">Zákazník</div>
-              <div className="text-xs font-bold uppercase">{hoveredOrder.customerName}</div>
-              <div className="text-[10px]">{hoveredOrder.customerPhone}</div>
+              <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-0.5">Zákazník</p>
+              <p className="text-xs font-semibold text-gray-800">{hoveredOrder.customerName}</p>
+              <p className="text-[10px] text-gray-400">{hoveredOrder.customerPhone}</p>
             </div>
             <div>
-              <div className="text-[10px] uppercase text-gray-500">Doprava</div>
-              <div className="text-xs font-bold uppercase">
-                {hoveredOrder.shippingMethod === 'zasilkovna' ? 'Zásilkovna' : 
+              <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-0.5">Doprava</p>
+              <p className="text-xs font-semibold text-gray-800">
+                {hoveredOrder.shippingMethod === 'zasilkovna' ? 'Zásilkovna' :
                  hoveredOrder.shippingMethod.startsWith('ppl') ? 'PPL' : hoveredOrder.shippingMethod}
-              </div>
-              <div className="text-[10px] truncate text-[10px]">
-                {hoveredOrder.shippingMethod === 'zasilkovna' ? hoveredOrder.zasilkovnaName : 
+              </p>
+              <p className="text-[10px] text-gray-400 truncate">
+                {hoveredOrder.shippingMethod === 'zasilkovna' ? hoveredOrder.zasilkovnaName :
                  hoveredOrder.shippingMethod === 'ppl_address' ? `${hoveredOrder.shippingStreet}, ${hoveredOrder.shippingCity}` :
                  hoveredOrder.shippingMethod === 'ppl_parcelshop' ? hoveredOrder.pplName : ''}
-              </div>
+              </p>
             </div>
           </div>
         </div>
       )}
-      {/* Order Dashboard */}
-      <div style={{ 
-        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-        background: 'white',
-        marginBottom: '32px'
-      }}>
-        <div style={{ 
-          display: 'grid',
-          gridTemplateColumns: 'repeat(5, 1fr)',
-          gap: '1px',
-          background: 'black',
-          border: '1px solid black',
-          marginBottom: '32px'
-        }}>
-          {getTimeFrames().map((frame, idx) => (
-            <div 
-              key={idx} 
+
+      {/* Page header */}
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Objednávky</h1>
+        <p className="mt-1 text-sm text-gray-400">{orders.length} celkem · klikněte na řádek pro detail</p>
+      </div>
+
+      {/* Period selector cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+        {getTimeFrames().map((frame, idx) => {
+          const active = selectedPeriod === frame.label;
+          return (
+            <button
+              key={idx}
               onClick={() => setSelectedPeriod(frame.label)}
-              style={{ 
-                background: selectedPeriod === frame.label ? '#f5f5f5' : 'white',
-                padding: '20px',
-                textAlign: 'center',
-                cursor: 'pointer',
-                transition: 'background 0.2s'
-              }}>
-              <div style={{ 
-                fontSize: '11px', 
-                color: '#666',
-                marginBottom: '12px',
-                textTransform: 'uppercase',
-                letterSpacing: '0.5px'
-              }}>
+              className={`text-left rounded-2xl border p-4 transition-all duration-150 ${
+                active
+                  ? 'bg-gray-900 border-gray-900 text-white shadow-md'
+                  : 'bg-white border-gray-100 text-gray-700 hover:border-gray-200 hover:shadow-sm'
+              }`}
+            >
+              <p className={`text-[10px] font-semibold uppercase tracking-widest mb-2 ${active ? 'text-white/60' : 'text-gray-400'}`}>
                 {frame.label}
-              </div>
-              <div style={{ 
-                fontSize: '20px', 
-                fontWeight: selectedPeriod === frame.label ? '500' : '400',
-                marginBottom: '6px'
-              }}>
+              </p>
+              <p className={`text-lg font-bold leading-tight ${active ? 'text-white' : 'text-gray-900'}`}>
                 {frame.revenue} Kč
-              </div>
-              <div style={{ 
-                fontSize: '12px', 
-                color: '#666'
-              }}>
-                {frame.countLabel}
-              </div>
-            </div>
-          ))}
-        </div>
+              </p>
+              <p className={`text-xs mt-1 ${active ? 'text-white/60' : 'text-gray-400'}`}>
+                {frame.orders} objednávek
+              </p>
+            </button>
+          );
+        })}
+      </div>
 
-        <div style={{ 
-          border: '1px solid black',
-          padding: '32px',
-          marginBottom: '32px'
-        }}>
-          <div style={{ 
-            fontSize: '11px', 
-            marginBottom: '24px',
-            color: '#666',
-            textTransform: 'uppercase',
-            letterSpacing: '0.5px'
-          }}>
-            Graf prodeje - {selectedPeriod}
-          </div>
-          <div style={{ height: '400px' }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={chartData}>
-                <CartesianGrid strokeDasharray="0" stroke="#000" strokeWidth={0.5} />
-                <XAxis 
-                  dataKey="name" 
-                  stroke="#000"
-                  style={{ fontSize: '11px', fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}
-                />
-                <YAxis 
-                  stroke="#000"
-                  style={{ fontSize: '11px', fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}
-                />
-                <Tooltip 
-                  contentStyle={{ 
-                    border: '1px solid black', 
-                    background: 'white',
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '12px'
-                  }}
-                />
-                <Line 
-                  type="monotone" 
-                  dataKey="revenue" 
-                  stroke="#000" 
-                  strokeWidth={2}
-                  dot={{ fill: '#000', r: 3 }}
-                  name="Prodej (Kč)"
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
+      {/* Chart */}
+      <div className="bg-white rounded-2xl border border-gray-100 p-6">
+        <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-6">
+          Graf prodeje · {selectedPeriod}
+        </p>
+        <div style={{ height: 280 }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={chartData} margin={{ top: 4, right: 4, left: -16, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+              <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#9ca3af' }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fontSize: 11, fill: '#9ca3af' }} axisLine={false} tickLine={false} />
+              <Tooltip
+                contentStyle={{
+                  border: '1px solid #e5e7eb',
+                  borderRadius: 12,
+                  background: 'white',
+                  boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
+                  fontSize: 12,
+                }}
+              />
+              <Line
+                type="monotone"
+                dataKey="revenue"
+                stroke="#111827"
+                strokeWidth={2}
+                dot={false}
+                activeDot={{ r: 4, fill: '#111827' }}
+                name="Prodej (Kč)"
+              />
+            </LineChart>
+          </ResponsiveContainer>
         </div>
       </div>
 
-
-      {/* Orders Table */}
-      <div className="border border-black overflow-x-auto">
-        <table className="w-full">
-          <thead>
-            <tr className="border-b border-black">
-              <th className="text-left p-4 text-body uppercase">Číslo objednávky</th>
-              <th className="text-left p-4 text-body uppercase">Zákazník</th>
-              <th className="text-left p-4 text-body uppercase">Email</th>
-              <th className="text-left p-4 text-body uppercase">Telefon</th>
-              <th className="text-left p-4 text-body uppercase">Adresa</th>
-              <th className="text-left p-4 text-body uppercase">Cena</th>
-              <th 
-                className="text-left p-4 text-body uppercase cursor-pointer hover:bg-gray-100 transition-colors group relative whitespace-nowrap"
-                onClick={() => handleSort('paymentStatus')}
-              >
-                Status platby
-                <span className={`ml-1 inline-block transition-opacity ${sortBy === 'paymentStatus' ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
-                  ↓
-                </span>
-              </th>
-              <th 
-                className="text-left p-4 text-body uppercase cursor-pointer hover:bg-gray-100 transition-colors group relative whitespace-nowrap"
-                onClick={() => handleSort('status')}
-              >
-                Status objednávky
-                <span className={`ml-1 inline-block transition-opacity ${sortBy === 'status' ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
-                  ↓
-                </span>
-              </th>
-              <th 
-                className="text-left p-4 text-body uppercase cursor-pointer hover:bg-gray-100 transition-colors group relative whitespace-nowrap"
-                onClick={() => handleSort('createdAt')}
-              >
-                Datum
-                <span className={`ml-1 inline-block transition-opacity ${sortBy === 'createdAt' ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
-                  ↓
-                </span>
-              </th>
-              <th className="text-left p-4 text-body uppercase">Akce</th>
-            </tr>
-          </thead>
-          <tbody>
-            {displayedOrders.map((order) => (
-              <tr 
-                key={order.id} 
-                className="border-b border-black last:border-b-0 cursor-pointer transition-all duration-200 ease-out hover:scale-[1.01] hover:bg-gray-50 hover:shadow-md origin-center"
-                onClick={() => handleRowClick(order.id)}
-                onMouseEnter={() => setHoveredOrder(order)}
-                onMouseLeave={() => setHoveredOrder(null)}
-                onMouseMove={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
-              >
-                <td className="p-4 text-body font-bold">{order.orderNumber}</td>
-                <td className="p-4 text-body">{order.customerName}</td>
-                <td className="p-4 text-body">{order.customerEmail}</td>
-                <td className="p-4 text-body">{order.customerPhone}</td>
-                <td className="p-4 text-body text-small">
-                  {order.shippingMethod === 'zasilkovna' ? (order.zasilkovnaName || '—') : 
-                   order.shippingMethod === 'ppl_address' ? `${order.shippingStreet}, ${order.shippingCity}` :
-                   order.shippingMethod === 'ppl_parcelshop' ? (order.pplName || '—') : '—'}
-                </td>
-                <td className="p-4 text-body">{Number(order.totalPrice).toFixed(2)} Kč</td>
-                <td className="p-4">
-                  <span className="px-3 py-1 text-body uppercase border border-black">
-                    {order.paymentStatus}
-                  </span>
-                </td>
-                <td className="p-4">
-                  <select
-                    value={order.status}
-                    onChange={(e) => handleStatusChange(order.id, e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    disabled={updatingOrderId === order.id}
-                    className={`px-3 py-1 text-body uppercase border border-black bg-white cursor-pointer hover:bg-gray-50 ${
-                      updatingOrderId === order.id ? 'opacity-50 cursor-not-allowed' : ''
+      {/* Orders table */}
+      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100">
+                {[
+                  { label: 'Číslo', key: null },
+                  { label: 'Zákazník', key: null },
+                  { label: 'Email', key: null },
+                  { label: 'Telefon', key: null },
+                  { label: 'Adresa', key: null },
+                  { label: 'Cena', key: null },
+                  { label: 'Platba', key: 'paymentStatus' as const },
+                  { label: 'Stav', key: 'status' as const },
+                  { label: 'Datum', key: 'createdAt' as const },
+                  { label: '', key: null },
+                ].map((col, i) => (
+                  <th
+                    key={i}
+                    onClick={() => col.key && handleSort(col.key)}
+                    className={`text-left px-4 py-3 text-[10px] font-semibold text-gray-400 uppercase tracking-widest whitespace-nowrap ${
+                      col.key ? 'cursor-pointer hover:text-gray-600 select-none' : ''
                     }`}
-                    style={{ minWidth: '160px' }}
                   >
-                    {STATUS_OPTIONS.map((status) => (
-                      <option key={status} value={status}>
-                        {STATUS_TRANSLATIONS[status] || status}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-                <td className="p-4 text-body">
-                  {new Date(order.createdAt).toLocaleDateString('cs-CZ')}
-                </td>
-                <td className="p-4">
-                  <Link
-                    href={`/admin/objednavky/${order.id}`}
-                    onClick={(e) => e.stopPropagation()}
-                    className="px-3 py-1 text-body uppercase border border-black hover:bg-black hover:text-white inline-block"
-                  >
-                    Detail
-                  </Link>
-                </td>
+                    {col.label}
+                    {col.key && (
+                      <span className={`ml-1 ${sortBy === col.key ? 'text-gray-700' : 'opacity-0 group-hover:opacity-100'}`}>
+                        {sortBy === col.key && sortOrder === 'desc' ? '↑' : '↓'}
+                      </span>
+                    )}
+                  </th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {displayedOrders.length === 0 && (
-        <div className="text-center py-12 text-body">
-          Žádné objednávky nebyly nalezeny.
+            </thead>
+            <tbody className="divide-y divide-gray-50">
+              {displayedOrders.map((order) => (
+                <tr
+                  key={order.id}
+                  className="hover:bg-gray-50 cursor-pointer transition-colors"
+                  onClick={() => handleRowClick(order.id)}
+                  onMouseEnter={() => setHoveredOrder(order)}
+                  onMouseLeave={() => setHoveredOrder(null)}
+                  onMouseMove={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
+                >
+                  <td className="px-4 py-3 font-semibold text-gray-900 whitespace-nowrap">{order.orderNumber}</td>
+                  <td className="px-4 py-3 text-gray-700 whitespace-nowrap">{order.customerName}</td>
+                  <td className="px-4 py-3 text-gray-500 whitespace-nowrap">{order.customerEmail}</td>
+                  <td className="px-4 py-3 text-gray-500 whitespace-nowrap">{order.customerPhone}</td>
+                  <td className="px-4 py-3 text-gray-500 max-w-[160px] truncate">
+                    {order.shippingMethod === 'zasilkovna' ? (order.zasilkovnaName || '—') :
+                     order.shippingMethod === 'ppl_address' ? `${order.shippingStreet}, ${order.shippingCity}` :
+                     order.shippingMethod === 'ppl_parcelshop' ? (order.pplName || '—') : '—'}
+                  </td>
+                  <td className="px-4 py-3 font-semibold text-gray-900 whitespace-nowrap">{Number(order.totalPrice).toFixed(0)} Kč</td>
+                  <td className="px-4 py-3">
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold border ${paymentBadge(order.paymentStatus)}`}>
+                      {order.paymentStatus}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
+                    <select
+                      value={order.status}
+                      onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                      disabled={updatingOrderId === order.id}
+                      className="text-xs font-medium text-gray-700 bg-gray-50 border border-gray-200 rounded-lg px-2 py-1.5 cursor-pointer hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200 disabled:opacity-50"
+                    >
+                      {STATUS_OPTIONS.map((s) => (
+                        <option key={s} value={s}>{STATUS_TRANSLATIONS[s] ?? s}</option>
+                      ))}
+                    </select>
+                  </td>
+                  <td className="px-4 py-3 text-gray-400 whitespace-nowrap text-xs">
+                    {new Date(order.createdAt).toLocaleDateString('cs-CZ')}
+                  </td>
+                  <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
+                    <Link
+                      href={`/admin/objednavky/${order.id}`}
+                      className="text-xs font-medium text-gray-500 hover:text-gray-900 hover:underline whitespace-nowrap"
+                    >
+                      Detail →
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      )}
-
-      <div className="mt-6 text-body">
-        Zobrazeno: {displayedOrders.length} z {orders.length} objednávek
+        {displayedOrders.length === 0 && (
+          <div className="text-center py-16 text-sm text-gray-400">Žádné objednávky nebyly nalezeny.</div>
+        )}
+        <div className="px-4 py-3 border-t border-gray-100 text-xs text-gray-400">
+          Zobrazeno {displayedOrders.length} z {orders.length} objednávek
+        </div>
       </div>
     </div>
   );

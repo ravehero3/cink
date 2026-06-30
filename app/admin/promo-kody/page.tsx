@@ -155,50 +155,74 @@ export default function AdminPromoCodesPage() {
     }
   };
 
+  const inputCls = "w-full text-sm bg-white border border-gray-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all placeholder:text-gray-300";
+  const labelCls = "block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5";
+
   if (loading) {
-    return <div className="text-body">Načítání promo kódů...</div>;
+    return (
+      <div className="flex items-center justify-center h-60">
+        <div className="flex items-center gap-2.5">
+          <div className="w-4 h-4 border-2 border-gray-200 border-t-gray-700 rounded-full animate-spin" />
+          <span className="text-sm text-gray-400">Načítám promo kódy…</span>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-title font-bold">PROMO KÓDY</h1>
+    <div className="space-y-6">
+
+      {/* Header */}
+      <div className="flex items-center justify-between gap-4 flex-wrap">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Promo kódy</h1>
+          <p className="mt-1 text-sm text-gray-400">{promoCodes.length} kódů celkem</p>
+        </div>
         {!showForm && (
           <button
             onClick={() => setShowForm(true)}
-            className="bg-black text-white px-6 py-3 text-body uppercase hover:bg-white hover:text-black border border-black transition-colors"
+            className="inline-flex items-center gap-2 bg-gray-900 text-white text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-gray-700 transition-colors"
           >
-            + Přidat promo kód
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Přidat promo kód
           </button>
         )}
       </div>
 
       {/* Form */}
       {showForm && (
-        <div className="border border-black p-6 mb-8">
-          <h2 className="text-header font-bold mb-6">
-            {editingId ? 'UPRAVIT PROMO KÓD' : 'NOVÝ PROMO KÓD'}
-          </h2>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-2 gap-6">
+        <div className="bg-white rounded-2xl border border-gray-100 p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-base font-bold text-gray-900">
+              {editingId ? 'Upravit promo kód' : 'Nový promo kód'}
+            </h2>
+            <button onClick={resetForm} className="text-gray-400 hover:text-gray-600 transition-colors">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+          </div>
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-body uppercase mb-2">Kód *</label>
+                <label className={labelCls}>Kód *</label>
                 <input
                   type="text"
                   required
                   value={formData.code}
                   onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
-                  className="w-full border border-black p-3 text-body uppercase"
+                  className={inputCls + " font-mono uppercase tracking-widest"}
                   placeholder="např. SLEVA20"
                 />
               </div>
-
               <div>
-                <label className="block text-body uppercase mb-2">Typ slevy *</label>
+                <label className={labelCls}>Typ slevy *</label>
                 <select
                   value={formData.discountType}
                   onChange={(e) => setFormData({ ...formData, discountType: e.target.value })}
-                  className="w-full border border-black p-3 text-body"
+                  className={inputCls}
                 >
                   <option value="percentage">Procenta (%)</option>
                   <option value="fixed">Pevná částka (Kč)</option>
@@ -206,93 +230,59 @@ export default function AdminPromoCodesPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label className="block text-body uppercase mb-2">
-                  Hodnota slevy * {formData.discountType === 'percentage' ? '(%)' : '(Kč)'}
-                </label>
-                <input
-                  type="number"
-                  required
-                  step="0.01"
-                  value={formData.discountValue}
+                <label className={labelCls}>Hodnota {formData.discountType === 'percentage' ? '(%)' : '(Kč)'} *</label>
+                <input type="number" required step="0.01" value={formData.discountValue}
                   onChange={(e) => setFormData({ ...formData, discountValue: e.target.value })}
-                  className="w-full border border-black p-3 text-body"
-                />
+                  className={inputCls} />
               </div>
-
               <div>
-                <label className="block text-body uppercase mb-2">Min. částka objednávky (Kč)</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  value={formData.minOrderAmount}
+                <label className={labelCls}>Min. částka (Kč)</label>
+                <input type="number" step="0.01" value={formData.minOrderAmount}
                   onChange={(e) => setFormData({ ...formData, minOrderAmount: e.target.value })}
-                  className="w-full border border-black p-3 text-body"
-                  placeholder="Nepovinné"
-                />
+                  className={inputCls} placeholder="Nepovinné" />
               </div>
-
               <div>
-                <label className="block text-body uppercase mb-2">Max. počet použití</label>
-                <input
-                  type="number"
-                  value={formData.maxUses}
+                <label className={labelCls}>Max. použití</label>
+                <input type="number" value={formData.maxUses}
                   onChange={(e) => setFormData({ ...formData, maxUses: e.target.value })}
-                  className="w-full border border-black p-3 text-body"
-                  placeholder="Neomezeno"
-                />
+                  className={inputCls} placeholder="Neomezeno" />
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-body uppercase mb-2">Platnost od *</label>
-                <input
-                  type="date"
-                  required
-                  value={formData.validFrom}
+                <label className={labelCls}>Platnost od *</label>
+                <input type="date" required value={formData.validFrom}
                   onChange={(e) => setFormData({ ...formData, validFrom: e.target.value })}
-                  className="w-full border border-black p-3 text-body"
-                />
+                  className={inputCls} />
               </div>
-
               <div>
-                <label className="block text-body uppercase mb-2">Platnost do *</label>
-                <input
-                  type="date"
-                  required
-                  value={formData.validUntil}
+                <label className={labelCls}>Platnost do *</label>
+                <input type="date" required value={formData.validUntil}
                   onChange={(e) => setFormData({ ...formData, validUntil: e.target.value })}
-                  className="w-full border border-black p-3 text-body"
-                />
+                  className={inputCls} />
               </div>
             </div>
 
-            <div>
-              <label className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={formData.isActive}
-                  onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-                  className="w-4 h-4"
-                />
-                <span className="text-body uppercase">Kód je aktivní</span>
-              </label>
-            </div>
+            <label className="flex items-center gap-2.5 cursor-pointer group">
+              <input
+                type="checkbox"
+                checked={formData.isActive}
+                onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
+                className="w-4 h-4 rounded accent-gray-900"
+              />
+              <span className="text-sm font-medium text-gray-700">Kód je aktivní</span>
+            </label>
 
-            <div className="flex gap-4">
-              <button
-                type="submit"
-                className="bg-black text-white px-8 py-3 text-body uppercase hover:bg-white hover:text-black border border-black transition-colors"
-              >
+            <div className="flex gap-3 pt-1">
+              <button type="submit"
+                className="bg-gray-900 text-white text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-gray-700 transition-colors">
                 {editingId ? 'Uložit změny' : 'Vytvořit kód'}
               </button>
-              <button
-                type="button"
-                onClick={resetForm}
-                className="px-8 py-3 text-body uppercase border border-black hover:bg-black hover:text-white transition-colors"
-              >
+              <button type="button" onClick={resetForm}
+                className="text-sm font-semibold text-gray-500 px-5 py-2.5 rounded-xl border border-gray-200 hover:border-gray-300 hover:text-gray-700 transition-colors">
                 Zrušit
               </button>
             </div>
@@ -300,81 +290,68 @@ export default function AdminPromoCodesPage() {
         </div>
       )}
 
-      {/* Promo Codes Table */}
-      <div className="border border-black">
-        <table className="w-full">
-          <thead>
-            <tr className="border-b border-black">
-              <th className="text-left p-4 text-body uppercase">Kód</th>
-              <th className="text-left p-4 text-body uppercase">Sleva</th>
-              <th className="text-left p-4 text-body uppercase">Použití</th>
-              <th className="text-left p-4 text-body uppercase">Platnost od</th>
-              <th className="text-left p-4 text-body uppercase">Platnost do</th>
-              <th className="text-left p-4 text-body uppercase">Status</th>
-              <th className="text-left p-4 text-body uppercase">Akce</th>
-            </tr>
-          </thead>
-          <tbody>
-            {promoCodes.map((promoCode) => (
-              <tr key={promoCode.id} className="border-b border-black last:border-b-0">
-                <td className="p-4 text-body font-bold">{promoCode.code}</td>
-                <td className="p-4 text-body">
-                  {promoCode.discountType === 'percentage'
-                    ? `${promoCode.discountValue}%`
-                    : `${promoCode.discountValue} Kč`}
-                  {promoCode.minOrderAmount && (
-                    <div className="text-[12px]">
-                      Min: {promoCode.minOrderAmount} Kč
-                    </div>
-                  )}
-                </td>
-                <td className="p-4 text-body">
-                  {promoCode.currentUses}
-                  {promoCode.maxUses ? ` / ${promoCode.maxUses}` : ' / ∞'}
-                </td>
-                <td className="p-4 text-body">
-                  {new Date(promoCode.validFrom).toLocaleDateString('cs-CZ')}
-                </td>
-                <td className="p-4 text-body">
-                  {new Date(promoCode.validUntil).toLocaleDateString('cs-CZ')}
-                </td>
-                <td className="p-4">
-                  <button
-                    onClick={() => toggleActive(promoCode.id, promoCode.isActive)}
-                    className={`px-3 py-1 text-body uppercase border border-black ${
-                      promoCode.isActive ? 'bg-black text-white' : 'bg-white text-black'
-                    }`}
-                  >
-                    {promoCode.isActive ? 'Aktivní' : 'Neaktivní'}
-                  </button>
-                </td>
-                <td className="p-4">
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => handleEdit(promoCode)}
-                      className="px-3 py-1 text-body uppercase border border-black hover:bg-black hover:text-white"
-                    >
-                      Upravit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(promoCode.id, promoCode.code)}
-                      className="px-3 py-1 text-body uppercase border border-black hover:bg-black hover:text-white"
-                    >
-                      Smazat
-                    </button>
-                  </div>
-                </td>
+      {/* Table */}
+      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100">
+                {['Kód', 'Sleva', 'Použití', 'Platnost od', 'Platnost do', 'Status', 'Akce'].map((h) => (
+                  <th key={h} className="text-left px-4 py-3 text-[10px] font-semibold text-gray-400 uppercase tracking-widest whitespace-nowrap">{h}</th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {promoCodes.length === 0 && (
-        <div className="text-center py-12 text-body">
-          Žádné promo kódy nebyly nalezeny.
+            </thead>
+            <tbody className="divide-y divide-gray-50">
+              {promoCodes.map((pc) => (
+                <tr key={pc.id} className="hover:bg-gray-50 transition-colors">
+                  <td className="px-4 py-3 font-mono font-bold text-gray-900 tracking-widest text-xs">{pc.code}</td>
+                  <td className="px-4 py-3 text-gray-700">
+                    <span className="font-semibold">
+                      {pc.discountType === 'percentage' ? `${pc.discountValue}%` : `${pc.discountValue} Kč`}
+                    </span>
+                    {pc.minOrderAmount && (
+                      <p className="text-[10px] text-gray-400 mt-0.5">min. {pc.minOrderAmount} Kč</p>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 text-gray-600">
+                    <span className="font-semibold">{pc.currentUses}</span>
+                    <span className="text-gray-400">{pc.maxUses ? ` / ${pc.maxUses}` : ' / ∞'}</span>
+                  </td>
+                  <td className="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">{new Date(pc.validFrom).toLocaleDateString('cs-CZ')}</td>
+                  <td className="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">{new Date(pc.validUntil).toLocaleDateString('cs-CZ')}</td>
+                  <td className="px-4 py-3">
+                    <button
+                      onClick={() => toggleActive(pc.id, pc.isActive)}
+                      className={`text-xs font-semibold px-2.5 py-1 rounded-lg border transition-colors ${
+                        pc.isActive
+                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
+                          : 'bg-gray-100 text-gray-500 border-gray-200 hover:bg-gray-200'
+                      }`}
+                    >
+                      {pc.isActive ? 'Aktivní' : 'Neaktivní'}
+                    </button>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-1.5">
+                      <button onClick={() => handleEdit(pc)}
+                        className="text-xs font-medium text-gray-500 hover:text-gray-900 px-2 py-1 rounded-lg hover:bg-gray-100 transition-colors">
+                        Upravit
+                      </button>
+                      <button onClick={() => handleDelete(pc.id, pc.code)}
+                        className="text-xs font-medium text-red-400 hover:text-red-600 px-2 py-1 rounded-lg hover:bg-red-50 transition-colors">
+                        Smazat
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      )}
+        {promoCodes.length === 0 && (
+          <div className="text-center py-16 text-sm text-gray-400">Žádné promo kódy nebyly nalezeny.</div>
+        )}
+      </div>
     </div>
   );
 }

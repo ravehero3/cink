@@ -1,0 +1,63 @@
+Skip to content
+ravehero3
+cink
+Repository navigation
+Code
+Issues
+Pull requests
+Agents
+Deploy
+Apply glassmorphism to cookie banner and fix deployment errors #18
+Annotations
+1 error
+deploy
+failed 1 minute ago in 1m 17s
+1s
+1m 13s
+#5 DONE 3.6s
+#6 [3/8] WORKDIR /app
+#6 DONE 0.0s
+#7 [internal] load .dockerignore
+#7 transferring context: 2B done
+#7 DONE 0.0s
+#8 [internal] load build context
+#8 transferring context: 3.75MB 1.7s done
+#8 DONE 1.7s
+#9 [4/8] COPY package*.json ./
+#9 DONE 0.3s
+#10 [5/8] RUN npm ci --legacy-peer-deps --ignore-scripts
+#10 3.211 npm warn deprecated querystring@0.2.1: The querystring API is considered Legacy. new code should use the URLSearchParams API instead.
+#10 6.762 npm warn deprecated uuid@8.3.2: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
+#10 74.86 npm error code ENOTFOUND
+#10 74.86 npm error syscall getaddrinfo
+#10 74.86 npm error errno ENOTFOUND
+#10 74.86 npm error network request to http://package-firewall.replit.local/npm/react-is/-/react-is-19.2.7.tgz failed, reason: getaddrinfo ENOTFOUND package-firewall.replit.local
+#10 74.86 npm error network This is a problem related to network connectivity.
+#10 74.86 npm error network In most cases you are behind a proxy or have bad network settings.
+#10 74.86 npm error network
+#10 74.86 npm error network If you are behind a proxy, please make sure that the
+#10 74.86 npm error network 'proxy' config is set properly.  See: 'npm help config'
+#10 74.86 npm notice
+#10 74.86 npm notice New major version of npm available! 10.8.2 -> 11.18.0
+#10 74.86 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.18.0
+#10 74.86 npm notice To update run: npm install -g npm@11.18.0
+#10 74.86 npm notice
+#10 74.86 npm error A complete log of this run can be found in: /root/.npm/_logs/2026-06-30T13_36_12_813Z-debug-0.log
+#10 ERROR: process "/bin/sh -c npm ci --legacy-peer-deps --ignore-scripts" did not complete successfully: exit code: 1
+failed to solve: process "/bin/sh -c npm ci --legacy-peer-deps --ignore-scripts" did not complete successfully: exit code: 1
+------
+ > [5/8] RUN npm ci --legacy-peer-deps --ignore-scripts:
+74.86 npm error network In most cases you are behind a proxy or have bad network settings.
+74.86 npm error network
+74.86 npm error network If you are behind a proxy, please make sure that the
+74.86 npm error network 'proxy' config is set properly.  See: 'npm help config'
+74.86 npm notice
+74.86 npm notice New major version of npm available! 10.8.2 -> 11.18.0
+74.86 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.18.0
+74.86 npm notice To update run: npm install -g npm@11.18.0
+74.86 npm notice
+74.86 npm error A complete log of this run can be found in: /root/.npm/_logs/2026-06-30T13_36_12_813Z-debug-0.log
+------
+2026/06/30 13:37:27 Process exited with status 1
+Error: Process completed with exit code 1.
+0s

@@ -190,245 +190,250 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
     }
   };
 
+  const STATUS_LABELS: Record<string, string> = {
+    PENDING: 'Čeká', PAID: 'Zaplaceno', PROCESSING: 'Zpracovává se',
+    SHIPPED: 'Odesláno', COMPLETED: 'Dokončeno', CANCELLED: 'Zrušeno',
+  };
+  const STATUS_COLORS: Record<string, string> = {
+    PENDING: 'bg-amber-50 text-amber-700 border-amber-200',
+    PAID: 'bg-blue-50 text-blue-700 border-blue-200',
+    PROCESSING: 'bg-purple-50 text-purple-700 border-purple-200',
+    SHIPPED: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+    COMPLETED: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+    CANCELLED: 'bg-gray-100 text-gray-500 border-gray-200',
+  };
+
   if (loading) {
-    return <div className="text-body">Načítání objednávky...</div>;
+    return (
+      <div className="flex items-center justify-center h-60">
+        <div className="flex items-center gap-2.5">
+          <div className="w-4 h-4 border-2 border-gray-200 border-t-gray-700 rounded-full animate-spin" />
+          <span className="text-sm text-gray-400">Načítám objednávku…</span>
+        </div>
+      </div>
+    );
   }
 
   if (!order) {
-    return <div className="text-body">Objednávka nenalezena</div>;
+    return <div className="text-sm text-gray-500 py-16 text-center">Objednávka nenalezena.</div>;
   }
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-title font-bold">OBJEDNÁVKA #{order.orderNumber}</h1>
-        <div className="flex gap-4">
-          {nextOrderId && (
-            <button
-              onClick={() => router.push(`/admin/objednavky/${nextOrderId}`)}
-              className="px-6 py-2 text-body uppercase border border-black hover:bg-black hover:text-white"
-            >
-              Další Objednávka →
-            </button>
-          )}
-          <button
-            onClick={() => router.back()}
-            className="px-6 py-2 text-body uppercase border border-black hover:bg-black hover:text-white"
-          >
-            ← Zpět
+    <div className="space-y-6">
+
+      {/* Header */}
+      <div className="flex items-center justify-between gap-4 flex-wrap">
+        <div className="flex items-center gap-3">
+          <button onClick={() => router.back()} className="flex items-center justify-center w-8 h-8 rounded-lg bg-white border border-gray-200 text-gray-500 hover:text-gray-900 hover:border-gray-300 transition-all">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
           </button>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 tracking-tight">#{order.orderNumber}</h1>
+            <div className="flex items-center gap-2 mt-0.5">
+              <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${STATUS_COLORS[order.status] ?? 'bg-gray-100 text-gray-500 border-gray-200'}`}>
+                {STATUS_LABELS[order.status] ?? order.status}
+              </span>
+              <span className="text-xs text-gray-400">{new Date(order.createdAt).toLocaleString('cs-CZ')}</span>
+            </div>
+          </div>
         </div>
+        {nextOrderId && (
+          <button onClick={() => router.push(`/admin/objednavky/${nextOrderId}`)}
+            className="text-sm font-medium text-gray-500 hover:text-gray-900 flex items-center gap-1.5 transition-colors">
+            Další objednávka
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        )}
       </div>
 
-      <div className="grid grid-cols-2 gap-8">
-        {/* Left Column */}
-        <div className="space-y-6">
-          {/* Customer Info */}
-          <div className="border border-black p-6">
-            <h2 className="text-header font-bold mb-4">INFORMACE O ZÁKAZNÍKOVI</h2>
-            <div className="space-y-2 text-body">
-              <div><strong>Jméno:</strong> {order.customerName}</div>
-              <div><strong>Email:</strong> {order.customerEmail}</div>
-              <div><strong>Telefon:</strong> {order.customerPhone}</div>
-            </div>
-          </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
 
-          {/* Shipping Info */}
-          <div className="border border-black p-6">
-            <h2 className="text-header font-bold mb-4">DOPRAVA</h2>
-            <div className="space-y-2 text-body">
-              <div><strong>Metoda:</strong> {order.shippingMethod.toUpperCase()}</div>
-              {order.shippingMethod === 'zasilkovna' && order.zasilkovnaId && (
-                <>
-                  <div><strong>Pobočka ID:</strong> {order.zasilkovnaId}</div>
-                  <div><strong>Název pobočky:</strong> {order.zasilkovnaName}</div>
-                </>
-              )}
-              {order.shippingMethod === 'ppl_address' && (
-                <>
-                  <div><strong>Ulice:</strong> {order.shippingStreet}</div>
-                  <div><strong>Město:</strong> {order.shippingCity}</div>
-                  <div><strong>PSČ:</strong> {order.shippingZip}</div>
-                </>
-              )}
-              {order.shippingMethod === 'ppl_parcelshop' && (
-                <>
-                  <div><strong>ParcelShop ID:</strong> {order.pplId}</div>
-                  <div><strong>Název ParcelShopu:</strong> {order.pplName}</div>
-                </>
-              )}
-              {order.packetaPacketId && (
-                <div className="mt-2 p-2 bg-gray-50 border border-black">
-                  <strong>Packeta Packet ID:</strong> {order.packetaPacketId}
-                  <div className="text-small mt-1">
-                    ✓ Zásilka vytvořena v systému Zásilkovny
-                  </div>
-                </div>
-              )}
-              {order.packetaError && !order.packetaPacketId && order.shippingMethod === 'zasilkovna' && (
-                <div className="mt-2 p-3 bg-red-50 border border-red-300">
-                  <strong className="text-red-700">Chyba při vytváření zásilky:</strong>
-                  <div className="text-small mt-1 text-red-600">{order.packetaError}</div>
-                  <button
-                    onClick={retryPacketaCreation}
-                    className="mt-2 px-4 py-2 bg-red-600 text-white text-small uppercase hover:bg-red-700"
-                    disabled={loading}
-                  >
-                    {loading ? 'Zkouším...' : 'Zkusit znovu'}
-                  </button>
-                </div>
-              )}
-              {!order.packetaPacketId && !order.packetaError && order.shippingMethod === 'zasilkovna' && order.zasilkovnaId && (
-                <div className="mt-2 p-3 bg-yellow-50 border border-yellow-300">
-                  <strong className="text-yellow-700">Zásilka nebyla vytvořena</strong>
-                  <div className="text-small mt-1 text-yellow-600">
-                    Zásilka v systému Zásilkovny zatím nebyla vytvořena
-                  </div>
-                  <button
-                    onClick={retryPacketaCreation}
-                    className="mt-2 px-4 py-2 bg-yellow-600 text-white text-small uppercase hover:bg-yellow-700"
-                    disabled={loading}
-                  >
-                    {loading ? 'Vytvářím...' : 'Vytvořit zásilku'}
-                  </button>
-                </div>
-              )}
-              <div className="mt-4">
-                <label className="block mb-2"><strong>Číslo zásilky (Tracking):</strong></label>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={trackingNumber}
-                    onChange={(e) => setTrackingNumber(e.target.value)}
-                    className="flex-1 border border-black p-2 text-body"
-                    placeholder="Zadejte číslo zásilky"
-                  />
-                  <button
-                    onClick={updateTrackingNumber}
-                    className="px-4 py-2 bg-black text-white text-body uppercase hover:bg-white hover:text-black border border-black"
-                  >
-                    Uložit
-                  </button>
-                </div>
-                {order.packetaPacketId && !trackingNumber && (
-                  <div className="text-small mt-1 text-gray-600">
-                    Číslo zásilky bylo automaticky vytvořeno v Zásilkovně
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+        {/* Left column */}
+        <div className="space-y-5">
 
-          {/* Payment Info */}
-          <div className="border border-black p-6">
-            <h2 className="text-header font-bold mb-4">PLATBA</h2>
-            <div className="space-y-2 text-body">
-              <div><strong>Status platby:</strong> {order.paymentStatus}</div>
-              {order.paymentId && (
-                <div><strong>ID platby:</strong> {order.paymentId}</div>
-              )}
-              <div className="mt-4">
-                <strong>Celková cena:</strong> {Number(order.totalPrice).toFixed(2)} Kč
-              </div>
-              {order.paymentId && (
-                <div className="mt-4">
-                  <button
-                    onClick={checkPaymentStatus}
-                    disabled={checkingPayment}
-                    className="px-4 py-2 bg-black text-white text-body uppercase hover:bg-white hover:text-black border border-black disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {checkingPayment ? 'Kontroluji...' : 'Obnovit stav platby'}
-                  </button>
-                </div>
-              )}
-              {!order.paymentId && (
-                <div className="mt-4 p-2 bg-gray-100 border border-gray-300 text-small text-gray-600">
-                  Objednávka nemá přiřazené ID platby z GoPay
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Right Column */}
-        <div className="space-y-6">
-          {/* Order Status */}
-          <div className="border border-black p-6">
-            <h2 className="text-header font-bold mb-4">STATUS OBJEDNÁVKY</h2>
-            <div className="mb-4">
-              <div className="text-body mb-2">Aktuální status:</div>
-              <div className="text-header font-bold">{order.status}</div>
-            </div>
-            <div>
-              <div className="text-body mb-2">Změnit status na:</div>
-              <div className="grid grid-cols-2 gap-2">
-                {STATUS_OPTIONS.map((status) => (
-                  <button
-                    key={status}
-                    onClick={() => updateStatus(status)}
-                    disabled={status === order.status}
-                    className={`px-4 py-2 text-body uppercase border border-black ${
-                      status === order.status
-                        ? 'bg-black text-white cursor-not-allowed'
-                        : 'bg-white text-black hover:bg-black hover:text-white'
-                    }`}
-                  >
-                    {status}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Order Items */}
-          <div className="border border-black p-6">
-            <h2 className="text-header font-bold mb-4">POLOŽKY OBJEDNÁVKY</h2>
-            <div className="space-y-4">
-              {order.items.map((item, index) => (
-                <div key={index} className="border-b border-black last:border-b-0 pb-4 last:pb-0 flex gap-4">
-                  {item.image && (
-                    <div className="flex-shrink-0">
-                      <img 
-                        src={item.image} 
-                        alt={item.productName}
-                        className="w-20 h-20 object-cover border border-black"
-                      />
-                    </div>
-                  )}
-                  <div className="flex-1">
-                    <div className="text-body font-bold">{item.productName}</div>
-                    <div className="text-body">
-                      Velikost: {item.size} | Množství: {item.quantity}x
-                    </div>
-                    {item.color && (
-                      <div className="text-body">Barva: {item.color}</div>
-                    )}
-                    <div className="text-body">
-                      Cena: {Number(item.price).toFixed(2)} Kč / ks
-                    </div>
-                    <div className="text-body font-bold mt-1">
-                      Celkem: {(Number(item.price) * item.quantity).toFixed(2)} Kč
-                    </div>
-                  </div>
+          {/* Customer */}
+          <div className="bg-white rounded-2xl border border-gray-100 p-5">
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">Zákazník</p>
+            <div className="space-y-2.5">
+              {[
+                { label: 'Jméno', value: order.customerName },
+                { label: 'Email', value: order.customerEmail },
+                { label: 'Telefon', value: order.customerPhone },
+              ].map(({ label, value }) => (
+                <div key={label} className="flex items-baseline gap-3">
+                  <span className="text-xs text-gray-400 w-14 shrink-0">{label}</span>
+                  <span className="text-sm font-medium text-gray-800">{value}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Timestamps */}
-          <div className="border border-black p-6">
-            <h2 className="text-header font-bold mb-4">ČASOVÉ ÚDAJE</h2>
-            <div className="space-y-2 text-body">
-              <div>
-                <strong>Vytvořeno:</strong>{' '}
-                {new Date(order.createdAt).toLocaleString('cs-CZ')}
+          {/* Shipping */}
+          <div className="bg-white rounded-2xl border border-gray-100 p-5">
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">Doprava</p>
+            <div className="space-y-2.5 text-sm">
+              <div className="flex items-baseline gap-3">
+                <span className="text-xs text-gray-400 w-14 shrink-0">Metoda</span>
+                <span className="font-semibold text-gray-800 uppercase text-xs tracking-wide">{order.shippingMethod}</span>
               </div>
-              <div>
-                <strong>Poslední aktualizace:</strong>{' '}
-                {new Date(order.updatedAt).toLocaleString('cs-CZ')}
+              {order.shippingMethod === 'zasilkovna' && order.zasilkovnaId && (
+                <>
+                  <div className="flex items-baseline gap-3"><span className="text-xs text-gray-400 w-14 shrink-0">ID pobočky</span><span className="font-medium text-gray-700">{order.zasilkovnaId}</span></div>
+                  <div className="flex items-baseline gap-3"><span className="text-xs text-gray-400 w-14 shrink-0">Pobočka</span><span className="font-medium text-gray-700">{order.zasilkovnaName}</span></div>
+                </>
+              )}
+              {order.shippingMethod === 'ppl_address' && (
+                <>
+                  <div className="flex items-baseline gap-3"><span className="text-xs text-gray-400 w-14 shrink-0">Ulice</span><span className="font-medium text-gray-700">{order.shippingStreet}</span></div>
+                  <div className="flex items-baseline gap-3"><span className="text-xs text-gray-400 w-14 shrink-0">Město</span><span className="font-medium text-gray-700">{order.shippingCity}</span></div>
+                  <div className="flex items-baseline gap-3"><span className="text-xs text-gray-400 w-14 shrink-0">PSČ</span><span className="font-medium text-gray-700">{order.shippingZip}</span></div>
+                </>
+              )}
+              {order.shippingMethod === 'ppl_parcelshop' && (
+                <>
+                  <div className="flex items-baseline gap-3"><span className="text-xs text-gray-400 w-14 shrink-0">ParcelShop</span><span className="font-medium text-gray-700">{order.pplId}</span></div>
+                  <div className="flex items-baseline gap-3"><span className="text-xs text-gray-400 w-14 shrink-0">Název</span><span className="font-medium text-gray-700">{order.pplName}</span></div>
+                </>
+              )}
+            </div>
+            {order.packetaPacketId && (
+              <div className="mt-4 flex items-center gap-2 text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-xl px-3 py-2">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Zásilka vytvořena · ID {order.packetaPacketId}
+              </div>
+            )}
+            {order.packetaError && !order.packetaPacketId && order.shippingMethod === 'zasilkovna' && (
+              <div className="mt-4 rounded-xl bg-red-50 border border-red-200 p-3">
+                <p className="text-xs font-semibold text-red-700 mb-1">Chyba zásilkovny</p>
+                <p className="text-xs text-red-600 mb-2">{order.packetaError}</p>
+                <button onClick={retryPacketaCreation} disabled={loading}
+                  className="text-xs font-semibold bg-red-600 text-white px-3 py-1.5 rounded-lg hover:bg-red-700 disabled:opacity-50 transition-colors">
+                  {loading ? 'Zkouším…' : 'Zkusit znovu'}
+                </button>
+              </div>
+            )}
+            {!order.packetaPacketId && !order.packetaError && order.shippingMethod === 'zasilkovna' && order.zasilkovnaId && (
+              <div className="mt-4 rounded-xl bg-amber-50 border border-amber-200 p-3">
+                <p className="text-xs font-semibold text-amber-700 mb-1">Zásilka nevytvořena</p>
+                <p className="text-xs text-amber-600 mb-2">Zásilka v systému Zásilkovny zatím nebyla vytvořena.</p>
+                <button onClick={retryPacketaCreation} disabled={loading}
+                  className="text-xs font-semibold bg-amber-600 text-white px-3 py-1.5 rounded-lg hover:bg-amber-700 disabled:opacity-50 transition-colors">
+                  {loading ? 'Vytvářím…' : 'Vytvořit zásilku'}
+                </button>
+              </div>
+            )}
+            <div className="mt-4">
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">Číslo zásilky (tracking)</p>
+              <div className="flex gap-2">
+                <input type="text" value={trackingNumber} onChange={(e) => setTrackingNumber(e.target.value)}
+                  className="flex-1 text-sm bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:bg-white transition-all"
+                  placeholder="Zadejte číslo zásilky" />
+                <button onClick={updateTrackingNumber}
+                  className="text-sm font-semibold bg-gray-900 text-white px-4 py-2 rounded-xl hover:bg-gray-700 transition-colors whitespace-nowrap">
+                  Uložit
+                </button>
               </div>
             </div>
           </div>
+
+          {/* Payment */}
+          <div className="bg-white rounded-2xl border border-gray-100 p-5">
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">Platba</p>
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-sm text-gray-500">Celková cena</span>
+              <span className="text-xl font-bold text-gray-900">{Number(order.totalPrice).toFixed(0)} Kč</span>
+            </div>
+            <div className="flex items-baseline gap-3 mb-4">
+              <span className="text-xs text-gray-400 w-20 shrink-0">Status platby</span>
+              <span className="text-sm font-semibold text-gray-800">{order.paymentStatus}</span>
+            </div>
+            {order.paymentId && (
+              <div className="flex items-baseline gap-3 mb-4">
+                <span className="text-xs text-gray-400 w-20 shrink-0">ID platby</span>
+                <span className="text-xs font-mono text-gray-600">{order.paymentId}</span>
+              </div>
+            )}
+            {order.paymentId ? (
+              <button onClick={checkPaymentStatus} disabled={checkingPayment}
+                className="w-full text-sm font-semibold bg-gray-50 border border-gray-200 text-gray-700 px-4 py-2.5 rounded-xl hover:border-gray-300 hover:bg-gray-100 disabled:opacity-50 transition-colors">
+                {checkingPayment ? 'Kontroluji…' : 'Obnovit stav platby'}
+              </button>
+            ) : (
+              <p className="text-xs text-gray-400 bg-gray-50 rounded-xl px-3 py-2">Objednávka nemá přiřazené ID platby z GoPay.</p>
+            )}
+          </div>
+        </div>
+
+        {/* Right column */}
+        <div className="space-y-5">
+
+          {/* Status manager */}
+          <div className="bg-white rounded-2xl border border-gray-100 p-5">
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">Status objednávky</p>
+            <p className="text-xs text-gray-400 mb-3">Aktuální stav</p>
+            <span className={`inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-xl border mb-4 ${STATUS_COLORS[order.status] ?? 'bg-gray-100 text-gray-500 border-gray-200'}`}>
+              {STATUS_LABELS[order.status] ?? order.status}
+            </span>
+            <p className="text-xs text-gray-400 mb-2">Změnit na</p>
+            <div className="grid grid-cols-2 gap-2">
+              {STATUS_OPTIONS.map((status) => (
+                <button key={status} onClick={() => updateStatus(status)} disabled={status === order.status}
+                  className={`text-xs font-semibold px-3 py-2 rounded-xl border transition-all ${
+                    status === order.status
+                      ? `${STATUS_COLORS[status]} cursor-default opacity-80`
+                      : 'bg-gray-50 border-gray-200 text-gray-600 hover:border-gray-900 hover:text-gray-900 hover:bg-white'
+                  }`}>
+                  {STATUS_LABELS[status] ?? status}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Order items */}
+          <div className="bg-white rounded-2xl border border-gray-100 p-5">
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">
+              Položky · {order.items.length}
+            </p>
+            <div className="space-y-3">
+              {order.items.map((item, i) => (
+                <div key={i} className="flex gap-3 items-start pb-3 last:pb-0 border-b border-gray-50 last:border-0">
+                  {item.image && (
+                    <img src={item.image} alt={item.productName} className="w-14 h-14 rounded-xl object-cover border border-gray-100 shrink-0" />
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-gray-900 truncate">{item.productName}</p>
+                    <p className="text-xs text-gray-400 mt-0.5">
+                      {item.size}{item.color ? ` · ${item.color}` : ''} · {item.quantity}×
+                    </p>
+                    <div className="flex items-center justify-between mt-1.5">
+                      <span className="text-xs text-gray-500">{Number(item.price).toFixed(0)} Kč / ks</span>
+                      <span className="text-sm font-bold text-gray-900">{(Number(item.price) * item.quantity).toFixed(0)} Kč</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="flex items-center justify-between pt-3 border-t border-gray-100 mt-1">
+              <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Celkem</span>
+              <span className="text-lg font-bold text-gray-900">{Number(order.totalPrice).toFixed(0)} Kč</span>
+            </div>
+          </div>
+
+          {/* Timestamps */}
+          <div className="bg-white rounded-2xl border border-gray-100 p-5">
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">Časové údaje</p>
+            <div className="space-y-2">
+              <div className="flex items-baseline gap-3">
+                <span className="text-xs text-gray-400 w-28 shrink-0">Vytvořeno</span>
+                <span className="text-sm text-gray-700">{new Date(order.createdAt).toLocaleString('cs-CZ')}</span>
+              </div>
+              <div className="flex items-baseline gap-3">
+                <span className="text-xs text-gray-400 w-28 shrink-0">Poslední aktualizace</span>
+                <span className="text-sm text-gray-700">{new Date(order.updatedAt).toLocaleString('cs-CZ')}</span>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
