@@ -11,6 +11,10 @@ import CloudinaryUploadButton from '@/components/admin/CloudinaryUploadButton';
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 const PRODUCT_TYPES = ['TRIKO', 'MIKINA', 'KRAŤASY', 'KALHOTY', 'CD'] as const;
 
+const inputCls = "w-full text-sm bg-white border border-gray-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all placeholder:text-gray-300";
+const labelCls = "block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5";
+const textareaCls = "w-full text-sm bg-white border border-gray-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all placeholder:text-gray-300 resize-none";
+
 export default function EditProductPage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -100,7 +104,6 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
     e.preventDefault();
     setSaving(true);
     setStatus(null);
-
     try {
       const response = await fetch(`/api/admin/products/${params.id}`, {
         method: 'PATCH',
@@ -138,311 +141,335 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
   };
 
   const isCD = formData.productType === 'CD';
-
-  const updateSize = (size: string, value: string) => {
-    setSizes({ ...sizes, [size]: parseInt(value) || 0 });
-  };
-
-  const updateCDStock = (value: string) => {
-    setSizes({ ONE_SIZE: parseInt(value) || 0 });
-  };
-
+  const updateSize = (size: string, value: string) => setSizes({ ...sizes, [size]: parseInt(value) || 0 });
+  const updateCDStock = (value: string) => setSizes({ ONE_SIZE: parseInt(value) || 0 });
   const totalStock = Object.values(sizes).reduce((sum, val) => sum + val, 0);
 
   if (loading) {
-    return <div className="text-body">Načítání produktu…</div>;
+    return (
+      <div className="flex items-center justify-center h-60">
+        <div className="flex items-center gap-2.5">
+          <div className="w-4 h-4 border-2 border-gray-200 border-t-gray-700 rounded-full animate-spin" />
+          <span className="text-sm text-gray-400">Načítám produkt…</span>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div>
-      <h1 className="text-title font-bold mb-8">UPRAVIT PRODUKT</h1>
+    <div className="space-y-6">
+
+      {/* Header */}
+      <div className="flex items-center gap-3">
+        <button
+          type="button"
+          onClick={() => router.back()}
+          className="flex items-center justify-center w-8 h-8 rounded-lg bg-white border border-gray-200 text-gray-500 hover:text-gray-900 hover:border-gray-300 transition-all"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+        </button>
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Upravit produkt</h1>
+          <p className="mt-0.5 text-sm text-gray-400 truncate max-w-md">{formData.name}</p>
+        </div>
+      </div>
 
       {status && (
-        <StatusMessage
-          type={status.type}
-          message={status.message}
-          onDismiss={() => setStatus(null)}
-        />
+        <StatusMessage type={status.type} message={status.message} onDismiss={() => setStatus(null)} />
       )}
 
-      <form onSubmit={handleSubmit} className="max-w-4xl">
+      <form onSubmit={handleSubmit}>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
 
-        {/* Basic Info */}
-        <div className="space-y-6 mb-8">
-          <div>
-            <label className="block text-body uppercase mb-2">Název *</label>
-            <input
-              type="text"
-              required
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full border border-black p-3 text-body"
-            />
-          </div>
+          {/* Left column (2/3) */}
+          <div className="lg:col-span-2 space-y-5">
 
-          <div>
-            <label className="block text-body uppercase mb-2">Krátký popis</label>
-            <textarea
-              rows={2}
-              value={formData.shortDescription}
-              onChange={(e) => setFormData({ ...formData, shortDescription: e.target.value })}
-              className="w-full border border-black p-3 text-body"
-              placeholder="Stručný popis pro seznamy produktů"
-            />
-          </div>
+            {/* Basic info */}
+            <div className="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Základní informace</p>
 
-          <div>
-            <label className="block text-body uppercase mb-2">Popis *</label>
-            <textarea
-              required
-              rows={5}
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="w-full border border-black p-3 text-body"
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-6">
-            <div>
-              <label className="block text-body uppercase mb-2">Cena (Kč) *</label>
-              <input
-                type="number"
-                required
-                step="0.01"
-                min="0"
-                value={formData.price}
-                onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                className="w-full border border-black p-3 text-body"
-              />
-            </div>
-            <div>
-              <label className="block text-body uppercase mb-2">Kategorie *</label>
-              <select
-                value={formData.category}
-                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className="w-full border border-black p-3 text-body"
-              >
-                {categories.map((cat) => (
-                  <option key={cat.name} value={cat.name}>
-                    {cat.name.toUpperCase()}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          {/* Product Type */}
-          <div>
-            <label className="block text-body uppercase mb-2">Typ produktu</label>
-            <div className="flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={() => setFormData({ ...formData, productType: '' })}
-                className={`px-4 py-2 border text-body uppercase text-sm transition-colors ${
-                  formData.productType === ''
-                    ? 'bg-black text-white border-black'
-                    : 'bg-white text-black border-black hover:bg-gray-100'
-                }`}
-              >
-                Neurčeno
-              </button>
-              {PRODUCT_TYPES.map((type) => (
-                <button
-                  key={type}
-                  type="button"
-                  onClick={() => setFormData({ ...formData, productType: type })}
-                  className={`px-4 py-2 border text-body uppercase text-sm transition-colors ${
-                    formData.productType === type
-                      ? 'bg-black text-white border-black'
-                      : 'bg-white text-black border-black hover:bg-gray-100'
-                  }`}
-                >
-                  {type}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-body uppercase mb-2">Barva</label>
-            <input
-              type="text"
-              value={formData.color}
-              onChange={(e) => setFormData({ ...formData, color: e.target.value })}
-              className="w-full border border-black p-3 text-body"
-              placeholder="např. Černá, Bílá"
-            />
-          </div>
-
-          <div>
-            <label className="block text-body uppercase mb-2">Video URL</label>
-            <div className="flex gap-2">
-              <input
-                type="url"
-                value={formData.videoUrl}
-                onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
-                className="flex-1 border border-black p-3 text-body"
-                placeholder="https://res.cloudinary.com/..."
-              />
-              <CloudinaryUploadButton
-                onUploadSuccess={(url) => setFormData({ ...formData, videoUrl: url })}
-                buttonText="Nahrát video"
-                folderPath="ufosport/videos"
-                resourceType="video"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Images */}
-        <div className="mb-8 border border-black p-6">
-          <h2 className="text-header font-bold mb-2 uppercase">Obrázky produktu</h2>
-          <p className="text-sm text-gray-500 mb-4">
-            První obrázek bude zobrazen jako hlavní. Pomocí šipek lze měnit pořadí.
-          </p>
-          <ImageUploader
-            images={images}
-            onChange={setImages}
-
-            maxImages={10}
-          />
-        </div>
-
-        {/* Product Detail Sections */}
-        <div className="mb-8 border border-black p-6">
-          <h2 className="text-header font-bold mb-6 uppercase">Detailní informace produktu</h2>
-          <div className="space-y-6">
-            <div>
-              <label className="block text-body uppercase mb-2">Informace o produktu</label>
-              <textarea
-                rows={4}
-                value={formData.productInfo}
-                onChange={(e) => setFormData({ ...formData, productInfo: e.target.value })}
-                className="w-full border border-black p-3 text-body"
-                placeholder="Detailní informace o produktu, materiály, vlastnosti..."
-              />
-            </div>
-            {!isCD && (
-            <div>
-              <label className="block text-body uppercase mb-2">Size & Fit</label>
-              <textarea
-                rows={4}
-                value={formData.sizeFit}
-                onChange={(e) => setFormData({ ...formData, sizeFit: e.target.value })}
-                className="w-full border border-black p-3 text-body"
-                placeholder="Informace o velikostech a střihu produktu..."
-              />
-            </div>
-            )}
-            <div>
-              <label className="block text-body uppercase mb-2">Doprava a vrácení</label>
-              <textarea
-                rows={4}
-                value={formData.shippingInfo}
-                onChange={(e) => setFormData({ ...formData, shippingInfo: e.target.value })}
-                className="w-full border border-black p-3 text-body"
-                placeholder="Informace o dopravě a vrácení zboží..."
-              />
-            </div>
-            {!isCD && (
-            <div>
-              <label className="block text-body uppercase mb-2">Péče o produkt</label>
-              <textarea
-                rows={4}
-                value={formData.careInfo}
-                onChange={(e) => setFormData({ ...formData, careInfo: e.target.value })}
-                className="w-full border border-black p-3 text-body"
-                placeholder="Pokyny pro péči o produkt, praní, údržba..."
-              />
-            </div>
-            )}
-          </div>
-        </div>
-
-        {/* Size Chart Editor — hidden for CD */}
-        {!isCD && (
-          <SizeChartEditor
-            sizeChartType={sizeChartType}
-            sizeChartData={sizeChartData}
-            onChange={(type, data) => {
-              setSizeChartType(type);
-              setSizeChartData(data);
-            }}
-          />
-        )}
-
-        {/* Sizes and Stock */}
-        <div className="mb-8 border border-black p-6">
-          {isCD ? (
-            <>
-              <h2 className="text-header font-bold mb-4 uppercase">Sklad</h2>
-              <div className="max-w-xs">
-                <label className="block text-body mb-1 font-bold">Množství na skladě</label>
+              <div>
+                <label className={labelCls}>Název *</label>
                 <input
-                  type="number"
-                  min="0"
-                  value={sizes['ONE_SIZE'] || 0}
-                  onChange={(e) => updateCDStock(e.target.value)}
-                  className="w-full border border-black p-2 text-body text-center"
+                  type="text"
+                  required
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className={inputCls}
                 />
               </div>
-              <p className={`text-body font-medium mt-3 ${(sizes['ONE_SIZE'] || 0) === 0 ? 'text-red-600' : ''}`}>
-                Celkem skladem: {sizes['ONE_SIZE'] || 0} ks {(sizes['ONE_SIZE'] || 0) === 0 && '⚠ Produkt bude bez skladu'}
-              </p>
-            </>
-          ) : (
-            <>
-              <h2 className="text-header font-bold mb-4 uppercase">Velikosti a sklad</h2>
-              <div className="grid grid-cols-3 sm:grid-cols-6 gap-4 mb-3">
-                {SIZES.map((size) => (
-                  <div key={size}>
-                    <label className="block text-body mb-1 text-center font-bold">{size}</label>
-                    <input
-                      type="number"
-                      min="0"
-                      value={sizes[size] || 0}
-                      onChange={(e) => updateSize(size, e.target.value)}
-                      className="w-full border border-black p-2 text-body text-center"
-                    />
-                  </div>
-                ))}
+
+              <div>
+                <label className={labelCls}>Krátký popis</label>
+                <textarea
+                  rows={2}
+                  value={formData.shortDescription}
+                  onChange={(e) => setFormData({ ...formData, shortDescription: e.target.value })}
+                  className={textareaCls}
+                  placeholder="Stručný popis pro seznamy produktů"
+                />
               </div>
-              <p className={`text-body font-medium ${totalStock === 0 ? 'text-red-600' : ''}`}>
-                Celkem skladem: {totalStock} ks {totalStock === 0 && '⚠ Produkt bude bez skladu'}
+
+              <div>
+                <label className={labelCls}>Popis *</label>
+                <textarea
+                  required
+                  rows={4}
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  className={textareaCls}
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className={labelCls}>Cena (Kč) *</label>
+                  <input
+                    type="number"
+                    required
+                    step="0.01"
+                    min="0"
+                    value={formData.price}
+                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                    className={inputCls}
+                  />
+                </div>
+                <div>
+                  <label className={labelCls}>Kategorie *</label>
+                  <select
+                    value={formData.category}
+                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                    className={inputCls}
+                  >
+                    {categories.map((cat) => (
+                      <option key={cat.name} value={cat.name}>{cat.name}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Product type */}
+              <div>
+                <label className={labelCls}>Typ produktu</label>
+                <div className="flex flex-wrap gap-2">
+                  {(['', ...PRODUCT_TYPES] as string[]).map((type) => (
+                    <button
+                      key={type}
+                      type="button"
+                      onClick={() => setFormData({ ...formData, productType: type })}
+                      className={`px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all ${
+                        formData.productType === type
+                          ? 'bg-gray-900 text-white border-gray-900'
+                          : 'bg-white text-gray-600 border-gray-200 hover:border-gray-400'
+                      }`}
+                    >
+                      {type === '' ? 'Neurčeno' : type}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className={labelCls}>Barva</label>
+                <input
+                  type="text"
+                  value={formData.color}
+                  onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+                  className={inputCls}
+                  placeholder="např. Černá, Bílá"
+                />
+              </div>
+            </div>
+
+            {/* Images */}
+            <div className="bg-white rounded-2xl border border-gray-100 p-6">
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-1">Obrázky produktu</p>
+              <p className="text-xs text-gray-400 mb-4">První obrázek bude zobrazen jako hlavní. Pomocí šipek lze měnit pořadí.</p>
+              <ImageUploader images={images} onChange={setImages} maxImages={10} />
+            </div>
+
+            {/* Video */}
+            <div className="bg-white rounded-2xl border border-gray-100 p-6">
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">Video</p>
+              <label className={labelCls}>Video URL (volitelné)</label>
+              <div className="flex gap-2">
+                <input
+                  type="url"
+                  value={formData.videoUrl}
+                  onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
+                  className={inputCls}
+                  placeholder="https://res.cloudinary.com/…"
+                />
+                <CloudinaryUploadButton
+                  onUploadSuccess={(url) => setFormData({ ...formData, videoUrl: url })}
+                  buttonText="Nahrát"
+                  folderPath="ufosport/videos"
+                  resourceType="video"
+                />
+              </div>
+            </div>
+
+            {/* Product detail sections */}
+            <div className="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Detailní informace</p>
+
+              <div>
+                <label className={labelCls}>Informace o produktu</label>
+                <textarea
+                  rows={3}
+                  value={formData.productInfo}
+                  onChange={(e) => setFormData({ ...formData, productInfo: e.target.value })}
+                  className={textareaCls}
+                  placeholder="Materiály, vlastnosti, certifikace…"
+                />
+              </div>
+
+              {!isCD && (
+                <div>
+                  <label className={labelCls}>Size & Fit</label>
+                  <textarea
+                    rows={3}
+                    value={formData.sizeFit}
+                    onChange={(e) => setFormData({ ...formData, sizeFit: e.target.value })}
+                    className={textareaCls}
+                    placeholder="Informace o velikostech a střihu…"
+                  />
+                </div>
+              )}
+
+              <div>
+                <label className={labelCls}>Doprava a vrácení</label>
+                <textarea
+                  rows={3}
+                  value={formData.shippingInfo}
+                  onChange={(e) => setFormData({ ...formData, shippingInfo: e.target.value })}
+                  className={textareaCls}
+                  placeholder="Informace o dopravě a vrácení zboží…"
+                />
+              </div>
+
+              {!isCD && (
+                <div>
+                  <label className={labelCls}>Péče o produkt</label>
+                  <textarea
+                    rows={3}
+                    value={formData.careInfo}
+                    onChange={(e) => setFormData({ ...formData, careInfo: e.target.value })}
+                    className={textareaCls}
+                    placeholder="Pokyny pro praní a údržbu…"
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Size Chart Editor */}
+            {!isCD && (
+              <div className="bg-white rounded-2xl border border-gray-100 p-6">
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">Tabulka velikostí</p>
+                <SizeChartEditor
+                  sizeChartType={sizeChartType}
+                  sizeChartData={sizeChartData}
+                  onChange={(type, data) => {
+                    setSizeChartType(type);
+                    setSizeChartData(data);
+                  }}
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Right column (1/3) */}
+          <div className="space-y-5">
+
+            {/* Stock */}
+            <div className="bg-white rounded-2xl border border-gray-100 p-6">
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">
+                {isCD ? 'Sklad' : 'Velikosti a sklad'}
               </p>
-            </>
-          )}
-        </div>
 
-        {/* Visibility */}
-        <div className="mb-8">
-          <label className="flex items-center gap-3 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={formData.isVisible}
-              onChange={(e) => setFormData({ ...formData, isVisible: e.target.checked })}
-              className="w-4 h-4"
-            />
-            <span className="text-body uppercase">Produkt je viditelný na e-shopu</span>
-          </label>
-        </div>
+              {isCD ? (
+                <div>
+                  <label className={labelCls}>Množství na skladě</label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={sizes['ONE_SIZE'] || 0}
+                    onChange={(e) => updateCDStock(e.target.value)}
+                    className={inputCls + " text-center"}
+                  />
+                  <p className={`text-xs font-medium mt-2 ${(sizes['ONE_SIZE'] || 0) === 0 ? 'text-red-500' : 'text-gray-400'}`}>
+                    {(sizes['ONE_SIZE'] || 0) === 0 ? '⚠ Produkt bude bez skladu' : `${sizes['ONE_SIZE'] || 0} ks celkem`}
+                  </p>
+                </div>
+              ) : (
+                <div>
+                  <div className="grid grid-cols-3 gap-2 mb-3">
+                    {SIZES.map((size) => (
+                      <div key={size}>
+                        <label className="block text-[10px] font-bold text-gray-500 text-center mb-1 uppercase">{size}</label>
+                        <input
+                          type="number"
+                          min="0"
+                          value={sizes[size] || 0}
+                          onChange={(e) => updateSize(size, e.target.value)}
+                          className="w-full text-sm bg-gray-50 border border-gray-200 rounded-lg py-2 text-center focus:outline-none focus:ring-2 focus:ring-gray-900 focus:bg-white transition-all"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <div className={`text-xs font-medium px-3 py-2 rounded-lg border ${
+                    totalStock === 0
+                      ? 'bg-red-50 border-red-200 text-red-600'
+                      : 'bg-gray-50 border-gray-100 text-gray-500'
+                  }`}>
+                    {totalStock === 0 ? '⚠ Produkt bude bez skladu' : `Celkem: ${totalStock} ks`}
+                  </div>
+                </div>
+              )}
+            </div>
 
-        {/* Actions */}
-        <div className="flex gap-4">
-          <button
-            type="submit"
-            disabled={saving}
-            className="bg-black text-white px-8 py-3 text-body uppercase hover:bg-white hover:text-black border border-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {saving ? 'Ukládání…' : 'Uložit změny'}
-          </button>
-          <button
-            type="button"
-            onClick={() => router.back()}
-            className="px-8 py-3 text-body uppercase border border-black hover:bg-black hover:text-white transition-colors"
-          >
-            Zrušit
-          </button>
+            {/* Visibility */}
+            <div className="bg-white rounded-2xl border border-gray-100 p-5">
+              <label className="flex items-center justify-between cursor-pointer">
+                <div>
+                  <p className="text-sm font-semibold text-gray-800">Viditelný na e-shopu</p>
+                  <p className="text-xs text-gray-400 mt-0.5">Zákazníci uvidí tento produkt</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, isVisible: !formData.isVisible })}
+                  className={`relative w-10 h-6 rounded-full transition-all duration-200 ${formData.isVisible ? 'bg-gray-900' : 'bg-gray-200'}`}
+                >
+                  <span className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-all duration-200 ${formData.isVisible ? 'left-5' : 'left-1'}`} />
+                </button>
+              </label>
+            </div>
+
+            {/* Submit */}
+            <div className="space-y-2">
+              <button
+                type="submit"
+                disabled={saving}
+                className="w-full bg-gray-900 text-white text-sm font-semibold py-3 rounded-xl hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                {saving ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    Ukládám…
+                  </span>
+                ) : 'Uložit změny'}
+              </button>
+              <button
+                type="button"
+                onClick={() => router.back()}
+                className="w-full text-sm font-semibold text-gray-500 py-3 rounded-xl border border-gray-200 hover:border-gray-300 hover:text-gray-700 transition-colors"
+              >
+                Zpět
+              </button>
+            </div>
+          </div>
         </div>
       </form>
     </div>
