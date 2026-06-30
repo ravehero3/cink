@@ -1,0 +1,215 @@
+Skip to content
+ravehero3
+cink
+Repository navigation
+Code
+Issues
+Pull requests
+Agents
+Actions
+Projects
+Wiki
+Security and quality
+2
+ (2)
+Insights
+Settings
+Deploy
+Fix Docker build by delaying Prisma schema generation #16
+All jobs
+Run details
+Annotations
+1 error
+deploy
+failed 1 minute ago in 3m 21s
+Search logs
+1s
+3m 17s
+Run appleboy/ssh-action@v1.2.0
+Run echo "$GITHUB_ACTION_PATH" >> $GITHUB_PATH
+Run entrypoint.sh
+Will download drone-ssh-1.8.0-linux-amd64 from https://github.com/appleboy/drone-ssh/releases/download/v1.8.0
+======= CLI Version =======
+Drone SSH version 1.8.0
+===========================
+From https://github.com/ravehero3/cink
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+ Image apps-cink Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 482B done
+#1 DONE 0.0s
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 366B done
+#2 DONE 0.0s
+#3 [1/8] FROM docker.io/library/node:20-slim@sha256:2cf067cfed83d5ea958367df9f966191a942351a2df77d6f0193e162b5febfc0
+#3 resolve docker.io/library/node:20-slim@sha256:2cf067cfed83d5ea958367df9f966191a942351a2df77d6f0193e162b5febfc0 0.0s done
+#3 CACHED
+#4 [2/8] RUN apt-get update -y && apt-get install -y openssl
+#4 0.263 Get:1 http://deb.debian.org/debian bookworm InRelease [151 kB]
+#4 0.276 Get:2 http://deb.debian.org/debian bookworm-updates InRelease [55.4 kB]
+#4 0.276 Get:3 http://deb.debian.org/debian-security bookworm-security InRelease [48.0 kB]
+#4 0.359 Get:4 http://deb.debian.org/debian bookworm/main arm64 Packages [8690 kB]
+#4 0.486 Get:5 http://deb.debian.org/debian bookworm-updates/main arm64 Packages [6936 B]
+#4 0.570 Get:6 http://deb.debian.org/debian-security bookworm-security/main arm64 Packages [310 kB]
+#4 1.319 Fetched 9261 kB in 1s (8729 kB/s)
+#4 1.319 Reading package lists...
+#4 1.921 Reading package lists...
+#4 2.508 Building dependency tree...
+#4 2.698 Reading state information...
+#4 2.953 The following additional packages will be installed:
+#4 2.954   libssl3
+#4 2.957 Suggested packages:
+#4 2.957   ca-certificates
+#4 2.994 The following NEW packages will be installed:
+#4 2.995   libssl3 openssl
+#4 3.023 0 upgraded, 2 newly installed, 0 to remove and 12 not upgraded.
+#4 3.023 Need to get 3229 kB of archives.
+#4 3.023 After this operation, 8535 kB of additional disk space will be used.
+#4 3.023 Get:1 http://deb.debian.org/debian-security bookworm-security/main arm64 libssl3 arm64 3.0.20-1~deb12u2 [1824 kB]
+#4 3.035 Get:2 http://deb.debian.org/debian-security bookworm-security/main arm64 openssl arm64 3.0.20-1~deb12u2 [1405 kB]
+#4 3.229 debconf: delaying package configuration, since apt-utils is not installed
+#4 3.291 Fetched 3229 kB in 0s (99.8 MB/s)
+#4 3.338 Selecting previously unselected package libssl3:arm64.
+#4 3.338 (Reading database ... 
+(Reading database ... 5%
+(Reading database ... 10%
+(Reading database ... 15%
+(Reading database ... 20%
+(Reading database ... 25%
+(Reading database ... 30%
+(Reading database ... 35%
+(Reading database ... 40%
+(Reading database ... 45%
+(Reading database ... 50%
+(Reading database ... 55%
+(Reading database ... 60%
+(Reading database ... 65%
+(Reading database ... 70%
+(Reading database ... 75%
+(Reading database ... 80%
+(Reading database ... 85%
+(Reading database ... 90%
+(Reading database ... 95%
+(Reading database ... 100%
+(Reading database ... 6090 files and directories currently installed.)
+#4 3.348 Preparing to unpack .../libssl3_3.0.20-1~deb12u2_arm64.deb ...
+#4 3.355 Unpacking libssl3:arm64 (3.0.20-1~deb12u2) ...
+#4 3.543 Selecting previously unselected package openssl.
+#4 3.543 Preparing to unpack .../openssl_3.0.20-1~deb12u2_arm64.deb ...
+#4 3.551 Unpacking openssl (3.0.20-1~deb12u2) ...
+#4 3.717 Setting up libssl3:arm64 (3.0.20-1~deb12u2) ...
+#4 3.726 Setting up openssl (3.0.20-1~deb12u2) ...
+#4 3.753 Processing triggers for libc-bin (2.36-9+deb12u13) ...
+#4 DONE 4.0s
+#5 [3/8] WORKDIR /app
+#5 DONE 0.1s
+#6 [internal] load metadata for docker.io/library/node:20-slim
+#6 DONE 0.0s
+#7 [internal] load .dockerignore
+#7 transferring context: 2B done
+#7 DONE 0.0s
+#8 [internal] load build context
+#8 transferring context: 3.45MB 1.5s done
+#8 DONE 1.6s
+#9 [4/8] COPY package*.json ./
+#9 DONE 0.4s
+#10 [5/8] RUN npm ci --legacy-peer-deps --ignore-scripts
+#10 3.823 npm warn deprecated querystring@0.2.1: The querystring API is considered Legacy. new code should use the URLSearchParams API instead.
+#10 8.270 npm warn deprecated uuid@8.3.2: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
+#10 27.94 
+#10 27.94 added 449 packages, and audited 450 packages in 28s
+#10 27.94 
+#10 27.94 71 packages are looking for funding
+#10 27.94   run `npm fund` for details
+#10 28.13 
+#10 28.13 20 vulnerabilities (1 low, 5 moderate, 14 high)
+#10 28.13 
+#10 28.13 To address issues that do not require attention, run:
+#10 28.13   npm audit fix
+#10 28.13 
+#10 28.13 To address all issues possible (including breaking changes), run:
+#10 28.13   npm audit fix --force
+#10 28.13 
+#10 28.13 Some issues need review, and may require choosing
+#10 28.13 a different dependency.
+#10 28.13 
+#10 28.13 Run `npm audit` for details.
+#10 28.14 npm notice
+#10 28.14 npm notice New major version of npm available! 10.8.2 -> 11.18.0
+#10 28.14 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.18.0
+#10 28.14 npm notice To update run: npm install -g npm@11.18.0
+#10 28.14 npm notice
+#10 DONE 31.0s
+#11 [4/8] COPY package*.json ./
+#11 CACHED
+#12 [5/8] RUN npm ci --legacy-peer-deps --ignore-scripts
+#12 CACHED
+#13 [6/8] COPY . .
+#13 DONE 39.3s
+#14 [7/8] RUN npx prisma generate
+#14 2.955 Environment variables loaded from .env
+#14 2.957 Prisma schema loaded from prisma/schema.prisma
+#14 3.755 
+#14 3.755 ✔ Generated Prisma Client (v6.19.3) to ./node_modules/@prisma/client in 393ms
+#14 3.755 
+#14 3.755 Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+#14 3.755 
+#14 3.755 Tip: Interested in query caching in just a few lines of code? Try Accelerate today! https://pris.ly/tip-3-accelerate
+#14 3.755 
+#14 DONE 4.0s
+#15 [8/8] RUN npx next build
+#15 1.499  ⚠ Invalid next.config.js options detected: 
+#15 1.499  ⚠     Unrecognized key(s) in object: 'allowedDevOrigins' at "experimental"
+#15 1.499  ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+#15 1.500  ⚠ Disabling SWC Minifer will not be an option in the next major version. Please report any issues you may be experiencing to https://github.com/vercel/next.js/issues
+#15 1.512 Attention: Next.js now collects completely anonymous telemetry regarding usage.
+#15 1.513 This information is used to shape Next.js' roadmap and prioritize features.
+#15 1.513 You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+#15 1.514 https://nextjs.org/telemetry
+#15 1.514 
+#15 1.590   ▲ Next.js 14.2.35
+#15 1.591   - Environments: .env
+#15 1.591 
+#15 1.719    Creating an optimized production build ...
+#15 100.6  ✓ Compiled successfully
+#15 100.6    Linting and checking validity of types ...
+#15 122.7 Failed to compile.
+#15 122.7 
+#15 122.7 ./app/api/promo-codes/create-temporary/route.ts:22:9
+#15 122.7 Type error: Object literal may only specify known properties, and 'usedCount' does not exist in type '(Without<PromoCodeUpdateInput, PromoCodeUncheckedUpdateInput> & PromoCodeUncheckedUpdateInput) | (Without<...> & PromoCodeUpdateInput)'.
+#15 122.7 
+#15 122.7   20 |         isActive: true,
+#15 122.7   21 |         maxUses: 1,
+#15 122.7 > 22 |         usedCount: 0,
+#15 122.7      |         ^
+#15 122.7   23 |         minOrderAmount: 0,
+#15 122.7   24 |       },
+#15 122.7   25 |       create: {
+#15 122.7 Next.js build worker exited with code: 1 and signal: null
+#15 ERROR: process "/bin/sh -c npx next build" did not complete successfully: exit code: 1
+------
+ > [8/8] RUN npx next build:
+122.7 Type error: Object literal may only specify known properties, and 'usedCount' does not exist in type '(Without<PromoCodeUpdateInput, PromoCodeUncheckedUpdateInput> & PromoCodeUncheckedUpdateInput) | (Without<...> & PromoCodeUpdateInput)'.
+122.7 
+122.7   20 |         isActive: true,
+122.7   21 |         maxUses: 1,
+122.7 > 22 |         usedCount: 0,
+122.7      |         ^
+122.7   23 |         minOrderAmount: 0,
+122.7   24 |       },
+122.7   25 |       create: {
+122.7 Next.js build worker exited with code: 1 and signal: null
+------
+Dockerfile:15
+--------------------
+  13 |     RUN npx prisma generate
+  14 |     
+  15 | >>> RUN npx next build
+  16 |     
+  17 |     ENV NODE_OPTIONS="--max-old-space-size=2048"
+--------------------
+failed to solve: process "/bin/sh -c npx next build" did not complete successfully: exit code: 1
+2026/06/30 12:37:06 Process exited with status 1
+Error: Process completed with exit code 1.
+0s

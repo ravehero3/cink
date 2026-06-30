@@ -19,7 +19,7 @@ export async function POST(request: Request) {
         validUntil,
         isActive: true,
         maxUses: 1,
-        usedCount: 0,
+        currentUses: 0,
         minOrderAmount: 0,
       },
       create: {
