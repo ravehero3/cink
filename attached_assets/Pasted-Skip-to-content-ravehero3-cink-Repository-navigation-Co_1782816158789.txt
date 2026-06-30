@@ -1,0 +1,138 @@
+Skip to content
+ravehero3
+cink
+Repository navigation
+Code
+Issues
+Pull requests
+Agents
+Actions
+Projects
+Wiki
+Security and quality
+2
+ (2)
+Insights
+Settings
+Deploy
+Fix production deployment issues and improve cookie banner accessibility #15
+All jobs
+Run details
+deploy
+failed 1 minute ago in 1m 12s
+Search logs
+0s
+1m 10s
+#5 0.861 Get:6 http://deb.debian.org/debian-security bookworm-security/main arm64 Packages [310 kB]
+#5 1.920 Fetched 9261 kB in 2s (5860 kB/s)
+#5 1.920 Reading package lists...
+#5 2.644 Reading package lists...
+#5 3.364 Building dependency tree...
+#5 3.618 Reading state information...
+#5 3.995 The following additional packages will be installed:
+#5 3.997   libssl3
+#5 4.000 Suggested packages:
+#5 4.000   ca-certificates
+#5 4.093 The following NEW packages will be installed:
+#5 4.093   libssl3 openssl
+#5 4.118 0 upgraded, 2 newly installed, 0 to remove and 12 not upgraded.
+#5 4.118 Need to get 3229 kB of archives.
+#5 4.118 After this operation, 8535 kB of additional disk space will be used.
+#5 4.118 Get:1 http://deb.debian.org/debian-security bookworm-security/main arm64 libssl3 arm64 3.0.20-1~deb12u2 [1824 kB]
+#5 4.131 Get:2 http://deb.debian.org/debian-security bookworm-security/main arm64 openssl arm64 3.0.20-1~deb12u2 [1405 kB]
+#5 4.356 debconf: delaying package configuration, since apt-utils is not installed
+#5 4.418 Fetched 3229 kB in 0s (104 MB/s)
+#5 4.481 Selecting previously unselected package libssl3:arm64.
+#5 4.481 (Reading database ... 
+(Reading database ... 5%
+(Reading database ... 10%
+(Reading database ... 15%
+(Reading database ... 20%
+(Reading database ... 25%
+(Reading database ... 30%
+(Reading database ... 35%
+(Reading database ... 40%
+(Reading database ... 45%
+(Reading database ... 50%
+(Reading database ... 55%
+(Reading database ... 60%
+(Reading database ... 65%
+(Reading database ... 70%
+(Reading database ... 75%
+(Reading database ... 80%
+(Reading database ... 85%
+(Reading database ... 90%
+(Reading database ... 95%
+(Reading database ... 100%
+(Reading database ... 6090 files and directories currently installed.)
+#5 4.498 Preparing to unpack .../libssl3_3.0.20-1~deb12u2_arm64.deb ...
+#5 4.516 Unpacking libssl3:arm64 (3.0.20-1~deb12u2) ...
+#5 4.726 Selecting previously unselected package openssl.
+#5 4.728 Preparing to unpack .../openssl_3.0.20-1~deb12u2_arm64.deb ...
+#5 4.734 Unpacking openssl (3.0.20-1~deb12u2) ...
+#5 4.928 Setting up libssl3:arm64 (3.0.20-1~deb12u2) ...
+#5 4.954 Setting up openssl (3.0.20-1~deb12u2) ...
+#5 4.983 Processing triggers for libc-bin (2.36-9+deb12u13) ...
+#5 DONE 9.5s
+#6 [internal] load .dockerignore
+#6 transferring context: 2B done
+#6 DONE 0.1s
+#7 [internal] load build context
+#7 ...
+#8 [3/8] WORKDIR /app
+#8 DONE 0.5s
+#7 [internal] load build context
+#7 transferring context: 498.90MB 5.0s
+#7 transferring context: 673.32MB 10.0s
+#7 transferring context: 756.18MB 15.1s
+#7 transferring context: 854.07MB 20.2s
+#7 transferring context: 858.20MB 21.5s done
+#7 DONE 22.2s
+#9 [4/8] COPY package*.json ./
+#9 DONE 5.2s
+#10 [5/8] RUN npm ci --legacy-peer-deps
+#10 3.334 npm warn deprecated querystring@0.2.1: The querystring API is considered Legacy. new code should use the URLSearchParams API instead.
+#10 6.603 npm warn deprecated uuid@8.3.2: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
+#10 31.34 
+#10 31.34 > workspace@1.0.0 postinstall
+#10 31.34 > prisma generate
+#10 31.34 
+#10 32.46 Error: Could not find Prisma Schema that is required for this command.
+#10 32.46 You can either provide it with `--schema` argument,
+#10 32.46 set it in your Prisma Config file (e.g., `prisma.config.ts`),
+#10 32.46 set it as `prisma.schema` in your package.json,
+#10 32.46 or put it into the default location (`./prisma/schema.prisma`, or `./schema.prisma`.
+#10 32.46 Checked following paths:
+#10 32.46 
+#10 32.46 schema.prisma: file not found
+#10 32.46 prisma/schema.prisma: file not found
+#10 32.46 
+#10 32.46 See also https://pris.ly/d/prisma-schema-location
+#10 32.48 npm error code 1
+#10 32.48 npm error path /app
+#10 32.48 npm error command failed
+#10 32.48 npm error command sh -c prisma generate
+#10 32.48 npm notice
+#10 32.48 npm notice New major version of npm available! 10.8.2 -> 11.18.0
+#10 32.48 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.18.0
+#10 32.48 npm notice To update run: npm install -g npm@11.18.0
+#10 32.48 npm notice
+#10 32.48 npm error A complete log of this run can be found in: /root/.npm/_logs/2026-06-30T10_40_32_450Z-debug-0.log
+#10 ERROR: process "/bin/sh -c npm ci --legacy-peer-deps" did not complete successfully: exit code: 1
+------
+ > [5/8] RUN npm ci --legacy-peer-deps:
+32.48 npm error code 1
+32.48 npm error path /app
+32.48 npm error command failed
+32.48 npm error command sh -c prisma generate
+32.48 npm notice
+32.48 npm notice New major version of npm available! 10.8.2 -> 11.18.0
+32.48 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.18.0
+32.48 npm notice To update run: npm install -g npm@11.18.0
+32.48 npm notice
+32.48 npm error A complete log of this run can be found in: /root/.npm/_logs/2026-06-30T10_40_32_450Z-debug-0.log
+------
+failed to solve: process "/bin/sh -c npm ci --legacy-peer-deps" did not complete successfully: exit code: 1
+2026/06/30 10:41:10 Process exited with status 1
+Error: Process completed with exit code 1.
+0s
