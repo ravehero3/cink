@@ -1,0 +1,22 @@
+# Dev dependencies and build artifacts
+node_modules
+.next
+
+# Replit-specific folders — never needed inside the Docker image
+attached_assets
+.local
+.agents
+.cache
+.upm
+
+# Git history
+.git
+
+# Local env overrides (prod env vars are injected at runtime)
+.env.local
+.env.development.local
+.env.test.local
+
+# Logs
+*.log
+npm-debug.log*

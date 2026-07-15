@@ -1,0 +1,180 @@
+Run appleboy/ssh-action@v1.2.0
+Run echo "$GITHUB_ACTION_PATH" >> $GITHUB_PATH
+Run entrypoint.sh
+Will download drone-ssh-1.8.0-linux-amd64 from https://github.com/appleboy/drone-ssh/releases/download/v1.8.0
+======= CLI Version =======
+Drone SSH version 1.8.0
+===========================
+From https://github.com/ravehero3/cink
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+ Image apps-cink Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 482B done
+#1 DONE 0.0s
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 420B done
+#2 DONE 0.1s
+#3 [internal] load metadata for docker.io/library/node:20-slim
+#3 DONE 0.1s
+#4 [1/8] FROM docker.io/library/node:20-slim@sha256:2cf067cfed83d5ea958367df9f966191a942351a2df77d6f0193e162b5febfc0
+#4 resolve docker.io/library/node:20-slim@sha256:2cf067cfed83d5ea958367df9f966191a942351a2df77d6f0193e162b5febfc0 0.0s done
+#4 CACHED
+#5 [2/8] RUN apt-get update -y && apt-get install -y openssl
+#5 0.384 Get:1 http://deb.debian.org/debian bookworm InRelease [151 kB]
+#5 0.396 Get:2 http://deb.debian.org/debian bookworm-updates InRelease [55.4 kB]
+#5 0.396 Get:3 http://deb.debian.org/debian-security bookworm-security InRelease [34.8 kB]
+#5 0.604 Get:4 http://deb.debian.org/debian bookworm/main arm64 Packages [8689 kB]
+#5 0.733 Get:5 http://deb.debian.org/debian bookworm-updates/main arm64 Packages [6936 B]
+#5 0.883 Get:6 http://deb.debian.org/debian-security bookworm-security/main arm64 Packages [313 kB]
+#5 1.746 Fetched 9251 kB in 1s (6848 kB/s)
+#5 1.746 Reading package lists...
+#5 2.604 Reading package lists...
+#5 3.377 Building dependency tree...
+#5 3.659 Reading state information...
+#5 4.168 The following additional packages will be installed:
+#5 4.168   libssl3
+#5 4.177 Suggested packages:
+#5 4.177   ca-certificates
+#5 4.309 The following NEW packages will be installed:
+#5 4.316   libssl3 openssl
+#5 4.378 0 upgraded, 2 newly installed, 0 to remove and 13 not upgraded.
+#5 4.378 Need to get 3229 kB of archives.
+#5 4.378 After this operation, 8535 kB of additional disk space will be used.
+#5 4.378 Get:1 http://deb.debian.org/debian bookworm/main arm64 libssl3 arm64 3.0.20-1~deb12u2 [1824 kB]
+#5 4.401 Get:2 http://deb.debian.org/debian bookworm/main arm64 openssl arm64 3.0.20-1~deb12u2 [1405 kB]
+#5 5.215 debconf: delaying package configuration, since apt-utils is not installed
+#5 5.284 Fetched 3229 kB in 0s (43.4 MB/s)
+#5 5.413 Selecting previously unselected package libssl3:arm64.
+#5 5.413 (Reading database ... 
+(Reading database ... 5%
+(Reading database ... 10%
+(Reading database ... 15%
+(Reading database ... 20%
+(Reading database ... 25%
+(Reading database ... 30%
+(Reading database ... 35%
+(Reading database ... 40%
+(Reading database ... 45%
+(Reading database ... 50%
+(Reading database ... 55%
+(Reading database ... 60%
+(Reading database ... 65%
+(Reading database ... 70%
+(Reading database ... 75%
+(Reading database ... 80%
+(Reading database ... 85%
+(Reading database ... 90%
+(Reading database ... 95%
+(Reading database ... 100%
+(Reading database ... 6090 files and directories currently installed.)
+#5 5.413 Preparing to unpack .../libssl3_3.0.20-1~deb12u2_arm64.deb ...
+#5 5.423 Unpacking libssl3:arm64 (3.0.20-1~deb12u2) ...
+#5 5.651 Selecting previously unselected package openssl.
+#5 5.661 Preparing to unpack .../openssl_3.0.20-1~deb12u2_arm64.deb ...
+#5 5.661 Unpacking openssl (3.0.20-1~deb12u2) ...
+#5 5.850 Setting up libssl3:arm64 (3.0.20-1~deb12u2) ...
+#5 5.867 Setting up openssl (3.0.20-1~deb12u2) ...
+#5 5.900 Processing triggers for libc-bin (2.36-9+deb12u13) ...
+#5 DONE 13.1s
+#6 [3/8] WORKDIR /app
+#6 DONE 0.2s
+#7 [internal] load .dockerignore
+#7 transferring context: 2B done
+#7 DONE 0.0s
+#8 [internal] load build context
+#8 transferring context: 385.73MB 5.0s
+#8 transferring context: 632.96MB 10.0s
+#8 transferring context: 850.13MB 15.0s
+#8 transferring context: 868.15MB 17.1s done
+#8 DONE 17.9s
+#9 [4/8] COPY package*.json ./
+#9 DONE 11.1s
+#10 [5/8] RUN npm config set registry https://registry.npmjs.org && npm ci --legacy-peer-deps --ignore-scripts
+#10 3.630 npm warn deprecated querystring@0.2.1: The querystring API is considered Legacy. new code should use the URLSearchParams API instead.
+#10 6.625 npm warn deprecated uuid@8.3.2: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
+#10 24.49 
+#10 24.49 added 450 packages, and audited 451 packages in 24s
+#10 24.49 
+#10 24.49 71 packages are looking for funding
+#10 24.49   run `npm fund` for details
+#10 24.69 
+#10 24.69 20 vulnerabilities (1 low, 5 moderate, 14 high)
+#10 24.69 
+#10 24.69 To address issues that do not require attention, run:
+#10 24.69   npm audit fix
+#10 24.69 
+#10 24.69 To address all issues possible (including breaking changes), run:
+#10 24.69   npm audit fix --force
+#10 24.69 
+#10 24.69 Some issues need review, and may require choosing
+#10 24.69 a different dependency.
+#10 24.69 
+#10 24.69 Run `npm audit` for details.
+#10 DONE 27.4s
+#11 [4/8] COPY package*.json ./
+#11 CACHED
+#12 [5/8] RUN npm config set registry https://registry.npmjs.org && npm ci --legacy-peer-deps --ignore-scripts
+#12 CACHED
+#13 [6/8] COPY . .
+#13 DONE 70.2s
+#14 [7/8] RUN npx prisma generate
+#14 1.941 Environment variables loaded from .env
+#14 1.942 Prisma schema loaded from prisma/schema.prisma
+#14 2.662 
+#14 2.662 ✔ Generated Prisma Client (v6.19.3) to ./node_modules/@prisma/client in 396ms
+#14 2.662 
+#14 2.662 Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+#14 2.662 
+#14 2.662 Tip: Want to turn off tips and other hints? https://pris.ly/tip-4-nohints
+#14 2.662 
+#14 DONE 2.8s
+#15 [8/8] RUN npx next build
+#15 1.276  ⚠ Disabling SWC Minifer will not be an option in the next major version. Please report any issues you may be experiencing to https://github.com/vercel/next.js/issues
+#15 1.293 Attention: Next.js now collects completely anonymous telemetry regarding usage.
+#15 1.293 This information is used to shape Next.js' roadmap and prioritize features.
+#15 1.293 You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+#15 1.293 https://nextjs.org/telemetry
+#15 1.293 
+#15 1.369   ▲ Next.js 14.2.35
+#15 1.369   - Environments: .env
+#15 1.369 
+#15 1.488    Creating an optimized production build ...
+#15 76.45  ✓ Compiled successfully
+#15 76.45    Linting and checking validity of types ...
+#15 95.50 Failed to compile.
+#15 95.50 
+#15 95.50 ./attached_assets/upload_1782828425481.ts:1:43
+#15 95.50 Type error: Cannot find module 'express' or its corresponding type declarations.
+#15 95.50 
+#15 95.50 > 1 | import { Router, Request, Response } from "express";
+#15 95.50     |                                           ^
+#15 95.50   2 | import multer from "multer";
+#15 95.50   3 | import { v4 as uuidv4 } from "uuid";
+#15 95.50   4 | import fs from "fs";
+#15 95.58 Next.js build worker exited with code: 1 and signal: null
+#15 ERROR: process "/bin/sh -c npx next build" did not complete successfully: exit code: 1
+------
+ > [8/8] RUN npx next build:
+95.50 
+95.50 ./attached_assets/upload_1782828425481.ts:1:43
+Dockerfile:15
+95.50 Type error: Cannot find module 'express' or its corresponding type declarations.
+95.50 
+95.50 > 1 | import { Router, Request, Response } from "express";
+95.50     |                                           ^
+95.50   2 | import multer from "multer";
+95.50   3 | import { v4 as uuidv4 } from "uuid";
+95.50   4 | import fs from "fs";
+95.58 Next.js build worker exited with code: 1 and signal: null
+------
+--------------------
+  13 |     RUN npx prisma generate
+  14 |     
+  15 | >>> RUN npx next build
+  16 |     
+  17 |     ENV NODE_OPTIONS="--max-old-space-size=2048"
+--------------------
+failed to solve: process "/bin/sh -c npx next build" did not complete successfully: exit code: 1
+2026/07/15 17:20:18 Process exited with status 1
+Error: Process completed with exit code 1.
