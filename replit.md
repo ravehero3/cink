@@ -43,7 +43,7 @@ The project is built using Next.js 14 (App Router) and TypeScript, with Tailwind
 - **Payment Gateway**: GoPay
 - **Shipping Integration**: Zásilkovna (Packeta) API
 - **Email Service**: Resend API
-- **File Storage**: UploadThing (product images); Cloudinary kept only for video uploads via CloudinaryUploadButton
+- **File Storage**: Local filesystem (`public/uploads/images/`) served statically by Next.js — files are stored directly on the Oracle VPS. Cloudinary kept only for video uploads via CloudinaryUploadButton. UploadThing removed from product image flow.
 
 ## Recent Changes (December 5, 2025)
 

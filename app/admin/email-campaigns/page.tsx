@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Trash2, Edit } from 'lucide-react';
+import { Trash2, Edit, Mail } from 'lucide-react';
 
 interface EmailCampaign {
   id: string;
@@ -16,23 +16,30 @@ interface EmailCampaign {
   createdAt: string;
 }
 
+const STATUS_LABELS: Record<string, string> = {
+  draft: 'Koncept',
+  scheduled: 'Naplánováno',
+  sent: 'Odesláno',
+};
+
+const STATUS_STYLES: Record<string, string> = {
+  sent: 'bg-emerald-50 text-emerald-700',
+  scheduled: 'bg-blue-50 text-blue-700',
+  draft: 'bg-gray-100 text-gray-500',
+};
+
 export default function EmailCampaignsPage() {
   const [campaigns, setCampaigns] = useState<EmailCampaign[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchCampaigns();
-  }, []);
+  useEffect(() => { fetchCampaigns(); }, []);
 
   const fetchCampaigns = async () => {
     try {
-      const response = await fetch('/api/admin/email-campaigns');
-      if (response.ok) {
-        const data = await response.json();
-        setCampaigns(data);
-      }
-    } catch (error) {
-      console.error('Failed to fetch campaigns:', error);
+      const res = await fetch('/api/admin/email-campaigns');
+      if (res.ok) setCampaigns(await res.json());
+    } catch (e) {
+      console.error(e);
     } finally {
       setLoading(false);
     }
@@ -41,98 +48,111 @@ export default function EmailCampaignsPage() {
   const deleteCampaign = async (id: string) => {
     if (!confirm('Opravdu chcete odstranit tuto kampaň?')) return;
     try {
-      const response = await fetch(`/api/admin/email-campaigns/${id}`, { method: 'DELETE' });
-      if (response.ok) {
-        setCampaigns(campaigns.filter(c => c.id !== id));
-      }
-    } catch (error) {
-      console.error('Failed to delete campaign:', error);
+      const res = await fetch(`/api/admin/email-campaigns/${id}`, { method: 'DELETE' });
+      if (res.ok) setCampaigns((prev) => prev.filter((c) => c.id !== id));
+    } catch (e) {
+      console.error(e);
     }
   };
 
-  const getStatusBadge = (status: string) => {
-    switch(status) {
-      case 'sent': return 'bg-black text-white';
-      case 'scheduled': return 'bg-gray-100 text-black border border-black';
-      case 'draft': return 'bg-white text-black border border-black';
-      default: return 'bg-white text-black border border-black';
-    }
-  };
-
-  const statusLabels: Record<string, string> = {
-    draft: 'Koncept',
-    scheduled: 'Naplánováno',
-    sent: 'Odesláno'
-  };
-
-  if (loading) return <div className="p-8">Načítání...</div>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-60">
+        <div className="flex items-center gap-2.5">
+          <div className="w-4 h-4 border-2 border-gray-200 border-t-gray-700 rounded-full animate-spin" />
+          <span className="text-sm text-gray-400">Načítám kampaně…</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="bg-white min-h-screen p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-start mb-8">
-          <h1 
-            className="uppercase"
-            style={{
-              fontFamily: 'BB-CondBold, "Helvetica Neue", Helvetica, Arial, sans-serif',
-              fontSize: '32px',
-              letterSpacing: '0.02em',
-            }}
-          >
-            Emailové kampaně
-          </h1>
-          <Link 
+    <div className="space-y-6">
+
+      {/* Header */}
+      <div className="flex items-center justify-between gap-4 flex-wrap">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">E-mailové kampaně</h1>
+          <p className="mt-0.5 text-sm text-gray-400">{campaigns.length} kampaní celkem</p>
+        </div>
+        <Link
+          href="/admin/email-campaigns/new"
+          className="flex items-center gap-2 px-4 py-2.5 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-gray-700 transition-colors"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Nová kampaň
+        </Link>
+      </div>
+
+      {/* List */}
+      {campaigns.length === 0 ? (
+        <div className="bg-white rounded-2xl border border-gray-100 p-16 flex flex-col items-center gap-4 text-center">
+          <Mail size={40} className="text-gray-300" />
+          <div>
+            <p className="text-base font-semibold text-gray-700">Zatím žádné kampaně</p>
+            <p className="text-sm text-gray-400 mt-1">Vytvořte svoji první e-mailovou kampaň.</p>
+          </div>
+          <Link
             href="/admin/email-campaigns/new"
-            className="px-6 py-3 border border-black bg-black text-white uppercase text-sm hover:bg-white hover:text-black transition-colors"
+            className="mt-2 px-5 py-2.5 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-gray-700 transition-colors"
           >
-            + Nová kampaň
+            Vytvořit kampaň
           </Link>
         </div>
-
-        {campaigns.length === 0 ? (
-          <div className="border border-black p-8 text-center">
-            <p className="text-gray-600 mb-4">Zatím žádné emailové kampaně</p>
-            <Link href="/admin/email-campaigns/new" className="border border-black px-4 py-2 inline-block hover:bg-black hover:text-white transition-colors">
-              Vytvořit první kampaň
-            </Link>
-          </div>
-        ) : (
-          <div className="space-y-3">
+      ) : (
+        <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+          <div className="divide-y divide-gray-50">
             {campaigns.map((campaign) => (
-              <div key={campaign.id} className="border border-black p-4 flex justify-between items-start hover:bg-gray-50 transition-colors">
-                <div className="flex-1">
-                  <h3 className="font-medium uppercase mb-1">{campaign.name}</h3>
-                  <p className="text-sm text-gray-600 mb-2">{campaign.subject}</p>
-                  <div className="flex gap-4 text-xs">
-                    <span><strong>Cílová skupina:</strong> {campaign.targetAudience === 'all' ? 'Všichni' : campaign.targetAudience}</span>
-                    <span><strong>Stav:</strong> <span className={`px-2 py-1 ${getStatusBadge(campaign.status)}`}>{statusLabels[campaign.status] || campaign.status}</span></span>
+              <div key={campaign.id} className="px-6 py-5 flex items-start justify-between gap-4 hover:bg-gray-50 transition-colors">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2.5 flex-wrap mb-1">
+                    <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide truncate">{campaign.name}</h3>
+                    <span className={`inline-block text-[10px] font-semibold uppercase px-2 py-0.5 rounded-md ${STATUS_STYLES[campaign.status] || STATUS_STYLES.draft}`}>
+                      {STATUS_LABELS[campaign.status] || campaign.status}
+                    </span>
+                  </div>
+                  <p className="text-sm text-gray-500 truncate mb-2">{campaign.subject}</p>
+                  <div className="flex flex-wrap gap-4 text-xs text-gray-400">
+                    <span>
+                      Cílová skupina: <span className="text-gray-600 font-medium">
+                        {campaign.targetAudience === 'all' ? 'Všichni' : campaign.targetAudience}
+                      </span>
+                    </span>
                     {campaign.status === 'sent' && (
                       <>
-                        <span><strong>Odesláno:</strong> {campaign.sentCount}</span>
-                        <span><strong>Otevřeno:</strong> {campaign.openedCount} ({campaign.sentCount > 0 ? Math.round((campaign.openedCount / campaign.sentCount) * 100) : 0}%)</span>
+                        <span>Odesláno: <span className="text-gray-600 font-medium">{campaign.sentCount}</span></span>
+                        <span>
+                          Otevřeno: <span className="text-gray-600 font-medium">
+                            {campaign.openedCount} ({campaign.sentCount > 0 ? Math.round((campaign.openedCount / campaign.sentCount) * 100) : 0}%)
+                          </span>
+                        </span>
                       </>
                     )}
                   </div>
                 </div>
-                <div className="flex gap-2 ml-4">
-                  <Link 
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <Link
                     href={`/admin/email-campaigns/${campaign.id}`}
-                    className="p-2 border border-black hover:bg-black hover:text-white transition-colors"
+                    className="p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                    title="Upravit"
                   >
-                    <Edit size={18} />
+                    <Edit size={16} />
                   </Link>
                   <button
                     onClick={() => deleteCampaign(campaign.id)}
-                    className="p-2 border border-black hover:bg-black hover:text-white transition-colors"
+                    className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                    title="Smazat"
                   >
-                    <Trash2 size={18} />
+                    <Trash2 size={16} />
                   </button>
                 </div>
               </div>
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
