@@ -1,0 +1,77 @@
+Skip to content
+ravehero3
+cink
+Repository navigation
+Code
+Issues
+Pull requests
+Agents
+Actions
+Projects
+Wiki
+Security and quality
+2
+ (2)
+Insights
+Settings
+Deploy
+yo #23
+All jobs
+Run details
+Annotations
+1 error
+deploy
+failed 17 hours ago in 3m 2s
+Search logs
+0s
+2m 59s
+#13 79.57 ├ ○ /kosik                                5.2 kB          112 kB
+#13 79.57 ├ ○ /nastaveni-cookies                    2.66 kB        90.8 kB
+#13 79.57 ├ ○ /obnovit-heslo                        1.89 kB        98.8 kB
+#13 79.57 ├ ○ /ochrana-osobnich-udaju               1.54 kB        89.7 kB
+#13 79.57 ├ ƒ /odhlasit                             190 B          97.1 kB
+#13 79.57 ├ ○ /platba                               4.67 kB        92.8 kB
+#13 79.57 ├ ○ /pokladna                             6.81 kB         105 kB
+#13 79.57 ├ ƒ /potvrzeni/[orderNumber]              1.84 kB        98.8 kB
+#13 79.57 ├ ○ /pravni-informace                     1.54 kB        89.7 kB
+#13 79.57 ├ ○ /prihlaseni                           2.86 kB         110 kB
+#13 79.57 ├ ƒ /produkty/[slug]                      12.6 kB         111 kB
+#13 79.57 ├ ƒ /produkty/zobrazit-vse                1.36 kB         119 kB
+#13 79.57 ├ ○ /registrace                           2 kB           98.9 kB
+#13 79.57 ├ ○ /reklamacni-rad                       163 B          88.3 kB
+#13 79.57 ├ ○ /sledovani-objednavky                 1.21 kB        89.3 kB
+#13 79.57 ├ ○ /ucet                                 2.09 kB         114 kB
+#13 79.57 ├ ○ /ulozeno                              6 kB            113 kB
+#13 79.57 └ ○ /vraceni-zbozi                        1.46 kB        89.6 kB
+#13 79.57 + First Load JS shared by all             88.1 kB
+#13 79.57   ├ chunks/2117-dc22ed73084055cf.js       32.2 kB
+#13 79.57   ├ chunks/fd9d1056-91e5a11fcc4d0b0d.js   54 kB
+#13 79.57   └ other shared chunks (total)           1.99 kB
+#13 79.57 
+#13 79.57 
+#13 79.57 ○  (Static)   prerendered as static content
+#13 79.57 ƒ  (Dynamic)  server-rendered on demand
+#13 79.57 
+#13 DONE 80.0s
+#14 exporting to image
+#14 exporting layers
+#14 exporting layers 37.0s done
+#14 exporting manifest sha256:5c958f54037ad1552978bb98e1a87520e07db2e6202fd6bf418919c42728fbd4 0.0s done
+#14 exporting config sha256:0e0cb7a74aaccd2ddcc68c9cbe640db1d586431d21c8d9ab15b644b6b0d30755 0.0s done
+#14 exporting attestation manifest sha256:c9cb8819ea3d13ea4200e0aeb573342e476cdc6b9eb7784aa5c2ce6d171f40b4
+#14 exporting attestation manifest sha256:c9cb8819ea3d13ea4200e0aeb573342e476cdc6b9eb7784aa5c2ce6d171f40b4 0.1s done
+#14 exporting manifest list sha256:1f79a5ddac30de73c60a9634a17460a725d978b6d3542425ed32459b0a97b723 0.0s done
+#14 naming to docker.io/library/apps-cink:latest
+#14 naming to docker.io/library/apps-cink:latest done
+#14 unpacking to docker.io/library/apps-cink:latest
+#14 unpacking to docker.io/library/apps-cink:latest 26.5s done
+#14 DONE 64.2s
+#15 resolving provenance for metadata file
+#15 DONE 0.2s
+ Image apps-cink Built 
+ Container apps-cink-1 Recreate 
+ Container apps-cink-1 Error response from daemon: Conflict. The container name "/9933a5e7aaa6_apps-cink-1" is already in use by container "8304a82518df8087cd9b17f2a2d8ae5e805e95c7efa8483bce2ea89b854dbc07". You have to remove (or rename) that container to be able to reuse that name. 
+Error response from daemon: Conflict. The container name "/9933a5e7aaa6_apps-cink-1" is already in use by container "8304a82518df8087cd9b17f2a2d8ae5e805e95c7efa8483bce2ea89b854dbc07". You have to remove (or rename) that container to be able to reuse that name.
+2026/07/15 20:53:12 Process exited with status 1
+Error: Process completed with exit code 1.
+0s
