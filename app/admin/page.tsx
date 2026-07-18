@@ -18,10 +18,11 @@ interface Stats {
 const QUICK_ACTIONS = [
   {
     href: '/admin/produkty/novy',
-    label: 'Přidat produkt',
-    description: 'Vytvořit nový produkt',
+    label: 'Nový produkt',
+    description: 'Přidat produkt do katalogu',
+    color: 'bg-black',
     icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
       </svg>
     ),
@@ -29,31 +30,36 @@ const QUICK_ACTIONS = [
   {
     href: '/admin/objednavky',
     label: 'Objednávky',
-    description: 'Zobrazit všechny objednávky',
+    description: 'Spravovat a sledovat',
+    color: 'bg-[#1a1a2e]',
     icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
         <rect x="9" y="3" width="6" height="4" rx="1"/>
+        <path d="M9 12h6M9 16h4"/>
       </svg>
     ),
   },
   {
-    href: '/admin/promo-kody',
-    label: 'Promo kódy',
-    description: 'Spravovat slevové kódy',
+    href: '/admin/media',
+    label: 'Galerie médií',
+    description: 'Nahrát a spravovat obrázky',
+    color: 'bg-[#1a2e1a]',
     icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
-        <line x1="7" y1="7" x2="7.01" y2="7"/>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+        <circle cx="8.5" cy="8.5" r="1.5"/>
+        <polyline points="21 15 16 10 5 21"/>
       </svg>
     ),
   },
   {
     href: '/admin/emaily',
-    label: 'E-mailové kampaně',
-    description: 'Spravovat e-maily',
+    label: 'E-mailové šablony',
+    description: 'Spravovat komunikaci',
+    color: 'bg-[#2e1a1a]',
     icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
         <polyline points="22,6 12,13 2,6"/>
       </svg>
@@ -61,50 +67,67 @@ const QUICK_ACTIONS = [
   },
 ];
 
-function StatCard({
-  label,
-  value,
-  href,
-  badge,
-  badgeVariant = 'neutral',
-}: {
-  label: string;
-  value: string | number;
-  href?: string;
-  badge?: string;
-  badgeVariant?: 'neutral' | 'warning' | 'success' | 'danger';
-}) {
-  const badgeColors: Record<string, string> = {
-    neutral: 'bg-gray-100 text-gray-500',
-    warning: 'bg-orange-50 text-orange-600',
-    success: 'bg-emerald-50 text-emerald-600',
-    danger: 'bg-red-50 text-red-500',
-  };
+const STAT_ITEMS = [
+  {
+    key: 'totalRevenue',
+    label: 'Celkový příjem',
+    format: (v: number) => `${v.toLocaleString('cs-CZ')} Kč`,
+    href: '/admin/objednavky',
+    accent: 'emerald',
+  },
+  {
+    key: 'totalOrders',
+    label: 'Celkem objednávek',
+    format: (v: number) => v.toString(),
+    href: '/admin/objednavky',
+    accent: 'blue',
+  },
+  {
+    key: 'pendingOrders',
+    label: 'Čekající objednávky',
+    format: (v: number) => v.toString(),
+    href: '/admin/objednavky',
+    accent: 'amber',
+  },
+  {
+    key: 'productsCount',
+    label: 'Produktů v katalogu',
+    format: (v: number) => v.toString(),
+    href: '/admin/produkty',
+    accent: 'violet',
+  },
+  {
+    key: 'newsletterCount',
+    label: 'Odběratelé',
+    format: (v: number) => v.toString(),
+    href: '/admin/newsletter',
+    accent: 'sky',
+  },
+  {
+    key: 'promoCodesCount',
+    label: 'Aktivní promo kódy',
+    format: (v: number) => v.toString(),
+    href: '/admin/promo-kody',
+    accent: 'pink',
+  },
+  {
+    key: 'lowStockProducts',
+    label: 'Nízký sklad',
+    format: (v: number) => v.toString(),
+    href: '/admin/produkty',
+    accent: 'red',
+  },
+];
 
-  const inner = (
-    <div className="bg-white rounded-2xl border border-gray-100 p-5 flex flex-col gap-3 hover:border-gray-200 hover:shadow-sm transition-all duration-200 group">
-      <div className="flex items-start justify-between gap-2">
-        <p className="text-xs font-medium text-gray-400 uppercase tracking-widest leading-tight">{label}</p>
-        {badge && (
-          <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full shrink-0 ${badgeColors[badgeVariant]}`}>
-            {badge}
-          </span>
-        )}
-      </div>
-      <p className="text-3xl font-bold text-gray-900 tracking-tight">{value}</p>
-      {href && (
-        <div className="flex items-center gap-1 text-[11px] font-medium text-gray-400 group-hover:text-gray-600 transition-colors">
-          Zobrazit
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </div>
-      )}
-    </div>
-  );
-
-  return href ? <Link href={href}>{inner}</Link> : inner;
-}
+const ACCENT_COLORS: Record<string, { dot: string; badge: string; value: string }> = {
+  emerald: { dot: 'bg-emerald-400', badge: 'bg-emerald-50 text-emerald-700', value: 'text-emerald-600' },
+  blue:    { dot: 'bg-blue-400',    badge: 'bg-blue-50 text-blue-700',       value: 'text-blue-600'    },
+  amber:   { dot: 'bg-amber-400',   badge: 'bg-amber-50 text-amber-700',     value: 'text-amber-600'   },
+  violet:  { dot: 'bg-violet-400',  badge: 'bg-violet-50 text-violet-700',   value: 'text-violet-600'  },
+  sky:     { dot: 'bg-sky-400',     badge: 'bg-sky-50 text-sky-700',         value: 'text-sky-600'     },
+  pink:    { dot: 'bg-pink-400',    badge: 'bg-pink-50 text-pink-700',       value: 'text-pink-600'    },
+  red:     { dot: 'bg-red-400',     badge: 'bg-red-50 text-red-700',         value: 'text-red-600'     },
+};
 
 export default function AdminDashboard() {
   const { data: session, status } = useSession();
@@ -134,100 +157,173 @@ export default function AdminDashboard() {
   };
 
   const now = new Date();
-  const greeting =
-    now.getHours() < 12 ? 'Dobré ráno' : now.getHours() < 18 ? 'Dobrý den' : 'Dobrý večer';
+  const hour = now.getHours();
+  const greeting = hour < 5 ? 'Dobrou noc' : hour < 12 ? 'Dobré ráno' : hour < 18 ? 'Dobrý den' : 'Dobrý večer';
+  const dateStr = now.toLocaleDateString('cs-CZ', { weekday: 'long', day: 'numeric', month: 'long' });
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-60">
-        <div className="flex items-center gap-2.5">
+      <div className="flex items-center justify-center h-64">
+        <div className="flex items-center gap-3">
           <div className="w-4 h-4 border-2 border-gray-200 border-t-gray-700 rounded-full animate-spin" />
-          <span className="text-sm text-gray-400">Načítám statistiky…</span>
+          <span className="text-sm text-gray-400">Načítám přehled…</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
 
-      {/* Page header */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900 tracking-tight">{greeting} 👋</h1>
-        <p className="mt-1 text-sm text-gray-400">Přehled vašeho obchodu UFO SPORT.</p>
+      {/* Header */}
+      <div className="flex items-end justify-between gap-4 flex-wrap">
+        <div>
+          <p className="text-xs font-medium text-gray-400 capitalize mb-1">{dateStr}</p>
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight leading-none">
+            {greeting}, {session?.user?.name?.split(' ')[0] || 'Admin'}
+          </h1>
+          <p className="mt-2 text-sm text-gray-400">Přehled obchodu UFO SPORT</p>
+        </div>
+        <div className="flex items-center gap-2.5">
+          <Link
+            href="/admin/produkty/novy"
+            className="inline-flex items-center gap-2 bg-gray-900 text-white text-[13px] font-semibold px-4 py-2.5 rounded-xl hover:bg-gray-700 transition-colors"
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Nový produkt
+          </Link>
+        </div>
       </div>
+
+      {/* Low stock alert */}
+      {stats && stats.lowStockProducts > 0 && (
+        <Link href="/admin/produkty" className="flex items-center gap-3 bg-red-50 border border-red-200 text-red-700 rounded-xl px-5 py-3.5 hover:bg-red-100 transition-colors group">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <span className="text-[13px] font-semibold">
+            {stats.lowStockProducts} {stats.lowStockProducts === 1 ? 'produkt má' : 'produkty mají'} nízký stav skladu — klikněte pro zobrazení
+          </span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="ml-auto group-hover:translate-x-0.5 transition-transform">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </Link>
+      )}
+
+      {/* Pending orders alert */}
+      {stats && stats.pendingOrders > 0 && (
+        <Link href="/admin/objednavky" className="flex items-center gap-3 bg-amber-50 border border-amber-200 text-amber-700 rounded-xl px-5 py-3.5 hover:bg-amber-100 transition-colors group">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+          <span className="text-[13px] font-semibold">
+            {stats.pendingOrders} {stats.pendingOrders === 1 ? 'objednávka čeká' : 'objednávky čekají'} na vyřízení
+          </span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="ml-auto group-hover:translate-x-0.5 transition-transform">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </Link>
+      )}
 
       {/* Stats grid */}
       <div>
-        <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">Statistiky</p>
-        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
-          <StatCard
-            label="Celkem objednávek"
-            value={stats?.totalOrders ?? 0}
-            href="/admin/objednavky"
-          />
-          <StatCard
-            label="Čekající objednávky"
-            value={stats?.pendingOrders ?? 0}
-            href="/admin/objednavky"
-            badge={stats && stats.pendingOrders > 0 ? `${stats.pendingOrders} nových` : undefined}
-            badgeVariant={stats && stats.pendingOrders > 0 ? 'warning' : 'neutral'}
-          />
-          <StatCard
-            label="Celkový příjem"
-            value={stats ? `${stats.totalRevenue.toLocaleString('cs-CZ')} Kč` : '— Kč'}
-            badgeVariant="success"
-          />
-          <StatCard
-            label="Počet produktů"
-            value={stats?.productsCount ?? 0}
-            href="/admin/produkty"
-          />
-          <StatCard
-            label="Aktivní promo kódy"
-            value={stats?.promoCodesCount ?? 0}
-            href="/admin/promo-kody"
-          />
-          <StatCard
-            label="Odběratelé newsletteru"
-            value={stats?.newsletterCount ?? 0}
-            href="/admin/newsletter"
-          />
-          {stats !== null && (
-            <StatCard
-              label="Nízký sklad"
-              value={stats.lowStockProducts}
-              href="/admin/produkty"
-              badge={stats.lowStockProducts > 0 ? 'Pozor' : 'OK'}
-              badgeVariant={stats.lowStockProducts > 0 ? 'danger' : 'success'}
-            />
-          )}
+        <div className="flex items-center justify-between mb-4">
+          <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Statistiky</p>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3">
+          {STAT_ITEMS.map((item) => {
+            const val = stats ? (stats as any)[item.key] as number : 0;
+            const colors = ACCENT_COLORS[item.accent];
+            const inner = (
+              <div className="bg-white rounded-2xl border border-gray-100 p-5 hover:border-gray-200 hover:shadow-sm transition-all duration-200 group h-full">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className={`w-1.5 h-1.5 rounded-full ${colors.dot}`} />
+                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest leading-none truncate">
+                    {item.label}
+                  </p>
+                </div>
+                <p className="text-3xl font-bold text-gray-900 tracking-tight leading-none">
+                  {item.format(val)}
+                </p>
+                {item.href && (
+                  <p className="mt-3 text-[11px] font-medium text-gray-300 group-hover:text-gray-500 transition-colors flex items-center gap-1">
+                    Zobrazit
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                  </p>
+                )}
+              </div>
+            );
+            return item.href ? (
+              <Link key={item.key} href={item.href} className="flex">{inner}</Link>
+            ) : (
+              <div key={item.key} className="flex">{inner}</div>
+            );
+          })}
         </div>
       </div>
 
       {/* Quick actions */}
       <div>
-        <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">Rychlé akce</p>
+        <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-4">Rychlé akce</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {QUICK_ACTIONS.map((action) => (
             <Link
               key={action.href}
               href={action.href}
-              className="group bg-white rounded-2xl border border-gray-100 p-5 flex items-center gap-4 hover:border-gray-900 hover:shadow-sm transition-all duration-200"
+              className="group flex items-center gap-4 bg-white rounded-2xl border border-gray-100 p-5 hover:border-gray-900 hover:shadow-sm transition-all duration-200"
             >
-              <div className="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-gray-900 group-hover:text-white transition-all duration-200 shrink-0">
+              <div className={`w-9 h-9 rounded-xl ${action.color} flex items-center justify-center text-white shrink-0 group-hover:scale-105 transition-transform duration-200`}>
                 {action.icon}
               </div>
-              <div className="min-w-0">
-                <p className="text-sm font-semibold text-gray-800 group-hover:text-gray-900 truncate">{action.label}</p>
-                <p className="text-xs text-gray-400 truncate mt-0.5">{action.description}</p>
+              <div className="min-w-0 flex-1">
+                <p className="text-[13px] font-semibold text-gray-800 truncate">{action.label}</p>
+                <p className="text-[11px] text-gray-400 truncate mt-0.5">{action.description}</p>
               </div>
               <svg
-                className="ml-auto shrink-0 text-gray-300 group-hover:text-gray-700 transition-colors"
-                width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+                className="shrink-0 text-gray-200 group-hover:text-gray-600 group-hover:translate-x-0.5 transition-all"
+                width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
               >
                 <path d="M5 12h14M12 5l7 7-7 7"/>
               </svg>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* Navigation overview */}
+      <div>
+        <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-4">Všechny sekce</p>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+          {[
+            { href: '/admin/objednavky', label: 'Objednávky', sub: 'Správa a sledování' },
+            { href: '/admin/produkty', label: 'Produkty', sub: 'Katalog a zásoby' },
+            { href: '/admin/customers', label: 'Zákazníci', sub: 'Profily a aktivity' },
+            { href: '/admin/promo-kody', label: 'Promo kódy', sub: 'Slevové kódy' },
+            { href: '/admin/pricing-rules', label: 'Cenová pravidla', sub: 'Dynamické ceny' },
+            { href: '/admin/newsletter', label: 'Newsletter', sub: 'Odběratelé' },
+            { href: '/admin/emaily', label: 'E-maily', sub: 'Šablony zpráv' },
+            { href: '/admin/email-campaigns', label: 'E-mail kampaně', sub: 'Hromadné kampaně' },
+            { href: '/admin/live-nabidky', label: 'Live nabídky', sub: 'Zvýhodněné akce' },
+            { href: '/admin/media', label: 'Média / Galerie', sub: 'Obrázky a videa' },
+            { href: '/admin/stranky', label: 'Stránky', sub: 'Obsah webu' },
+            { href: '/admin/seo-management', label: 'SEO', sub: 'Vyhledávání' },
+          ].map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="flex items-center gap-3 bg-white rounded-xl border border-gray-100 px-4 py-3 hover:border-gray-300 hover:shadow-sm transition-all group"
+            >
+              <div className="min-w-0">
+                <p className="text-[13px] font-semibold text-gray-800 truncate">{item.label}</p>
+                <p className="text-[11px] text-gray-400 truncate">{item.sub}</p>
+              </div>
             </Link>
           ))}
         </div>

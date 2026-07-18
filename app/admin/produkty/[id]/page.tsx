@@ -6,7 +6,6 @@ import SizeChartEditor from '@/components/admin/SizeChartEditor';
 import ImageUploader from '@/components/admin/ImageUploader';
 import StatusMessage from '@/components/admin/StatusMessage';
 import { SizeChartType, SizeChartData } from '@/components/SizeChart';
-import CloudinaryUploadButton from '@/components/admin/CloudinaryUploadButton';
 
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 const PRODUCT_TYPES = ['TRIKO', 'MIKINA', 'KRAŤASY', 'KALHOTY', 'CD'] as const;
@@ -294,21 +293,13 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
             <div className="bg-white rounded-2xl border border-gray-100 p-6">
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">Video</p>
               <label className={labelCls}>Video URL (volitelné)</label>
-              <div className="flex gap-2">
-                <input
-                  type="url"
-                  value={formData.videoUrl}
-                  onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
-                  className={inputCls}
-                  placeholder="https://res.cloudinary.com/…"
-                />
-                <CloudinaryUploadButton
-                  onUploadSuccess={(url) => setFormData({ ...formData, videoUrl: url })}
-                  buttonText="Nahrát"
-                  folderPath="ufosport/videos"
-                  resourceType="video"
-                />
-              </div>
+              <input
+                type="url"
+                value={formData.videoUrl}
+                onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
+                className={inputCls}
+                placeholder="https://res.cloudinary.com/… nebo jiná URL videa"
+              />
             </div>
 
             {/* Product detail sections */}
