@@ -37,3 +37,6 @@ next-env.d.ts
 /prisma/migrations
 public/uploads/images/*
 !public/uploads/images/.gitkeep
+
+# Replit attached assets (may contain uploaded keys/secrets)
+attached_assets/
