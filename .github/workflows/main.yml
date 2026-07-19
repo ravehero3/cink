@@ -20,8 +20,6 @@ jobs:
             git pull origin main
             cd ~/apps
             docker compose build cink
-            docker compose stop cink || true
-            docker compose rm -f cink || true
-            docker compose up -d cink
+            docker compose up -d --force-recreate --no-deps cink
             docker image prune -f
             echo "Deploy complete"
