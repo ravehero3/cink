@@ -1,0 +1,1 @@
+- [Admin UI conventions](admin-ui-conventions.md) — toast/confirm modal infrastructure, Czech labels, breadcrumbs, search patterns for all admin pages.

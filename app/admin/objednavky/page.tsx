@@ -36,6 +36,13 @@ const STATUS_TRANSLATIONS: Record<string, string> = {
   'CANCELLED': 'ZRUŠENO',
 };
 
+const PAYMENT_STATUS_LABELS: Record<string, string> = {
+  PAID: 'Zaplaceno',
+  PENDING: 'Čeká na platbu',
+  FAILED: 'Platba selhala',
+  REFUNDED: 'Vráceno',
+};
+
 const TIME_PERIODS = ['Dnes', '24 hodin', 'Týden', 'Měsíc', 'Rok'];
 
 export default function AdminOrdersPage() {
@@ -317,8 +324,8 @@ export default function AdminOrdersPage() {
         <div
           className="fixed z-[100] pointer-events-none w-[380px] bg-white rounded-2xl border border-gray-100 shadow-2xl overflow-hidden"
           style={{
-            left: `${Math.min(mousePos.x + 20, typeof window !== 'undefined' ? window.innerWidth - 400 : 0)}px`,
-            top: `${Math.min(mousePos.y + 20, typeof window !== 'undefined' ? window.innerHeight - 320 : 0)}px`,
+            left: `${(typeof window !== 'undefined' && mousePos.x + 420 > window.innerWidth) ? mousePos.x - 400 : mousePos.x + 20}px`,
+            top: `${Math.min(mousePos.y + 10, typeof window !== 'undefined' ? Math.max(10, window.innerHeight - 340) : 0)}px`,
           }}
         >
           <div className="flex justify-between items-start px-5 py-4 border-b border-gray-100 bg-gray-50">
@@ -492,7 +499,7 @@ export default function AdminOrdersPage() {
                   <td className="px-4 py-3 font-semibold text-gray-900 whitespace-nowrap">{Number(order.totalPrice).toFixed(0)} Kč</td>
                   <td className="px-4 py-3">
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold border ${paymentBadge(order.paymentStatus)}`}>
-                      {order.paymentStatus}
+                      {PAYMENT_STATUS_LABELS[order.paymentStatus] ?? order.paymentStatus}
                     </span>
                   </td>
                   <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>

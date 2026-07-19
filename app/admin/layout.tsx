@@ -4,6 +4,66 @@ import { useSession, signOut } from 'next-auth/react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import ToastRenderer from '@/components/admin/Toast';
+
+const SECTION_LABELS: Record<string, string> = {
+  objednavky: 'Objednávky',
+  produkty: 'Produkty',
+  customers: 'Zákazníci',
+  'promo-kody': 'Promo kódy',
+  newsletter: 'Newsletter',
+  emaily: 'E-maily',
+  'email-campaigns': 'E-mail kampaně',
+  media: 'Média',
+  'live-nabidky': 'Live nabídky',
+  stranky: 'Stránky',
+  'seo-management': 'SEO',
+  'pricing-rules': 'Cenová pravidla',
+  'nastaveni-uploadu': 'Nastavení uploadu',
+};
+
+function Breadcrumbs({ pathname }: { pathname: string }) {
+  const segs = pathname.split('/').filter(Boolean);
+  if (segs.length <= 1) return null;
+  const section = segs[1];
+  const sectionLabel = SECTION_LABELS[section];
+  if (!sectionLabel) return null;
+
+  const crumbs: { label: string; href: string; active: boolean }[] = [
+    { label: sectionLabel, href: `/admin/${section}`, active: segs.length === 2 },
+  ];
+
+  if (segs[2]) {
+    const sub =
+      segs[2] === 'novy' ? 'Nový produkt' :
+      section === 'produkty' ? 'Upravit produkt' :
+      section === 'objednavky' ? 'Detail objednávky' :
+      section === 'customers' ? 'Detail zákazníka' : 'Detail';
+    crumbs.push({ label: sub, href: pathname, active: true });
+  }
+
+  return (
+    <nav className="flex items-center gap-1.5 mb-7 text-[12px]" aria-label="Drobečková navigace">
+      <Link href="/admin" className="text-gray-400 hover:text-gray-600 transition-colors font-medium">
+        Dashboard
+      </Link>
+      {crumbs.map((crumb, i) => (
+        <span key={i} className="flex items-center gap-1.5">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-gray-300 shrink-0">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+          {crumb.active ? (
+            <span className="text-gray-700 font-semibold">{crumb.label}</span>
+          ) : (
+            <Link href={crumb.href} className="text-gray-400 hover:text-gray-600 transition-colors font-medium">
+              {crumb.label}
+            </Link>
+          )}
+        </span>
+      ))}
+    </nav>
+  );
+}
 
 const NAV_SECTIONS = [
   {
@@ -351,12 +411,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Main content */}
       <div className="flex-1 lg:ml-60 flex flex-col min-h-screen">
         <main className="flex-1 px-6 lg:px-8 py-8 pt-[4.5rem] lg:pt-8 max-w-[1400px] w-full mx-auto">
+          <Breadcrumbs pathname={pathname} />
           {children}
         </main>
         <footer className="px-6 lg:px-8 py-4 text-[11px] text-gray-300 border-t border-gray-200">
           UFO Sport Admin · {new Date().getFullYear()}
         </footer>
       </div>
+      <ToastRenderer />
     </div>
   );
 }

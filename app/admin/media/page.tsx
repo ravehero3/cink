@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useToast } from '@/store/toastStore';
+import ConfirmModal from '@/components/admin/ConfirmModal';
 import { Upload, X, ImageIcon, Video, Search, RefreshCw, Loader2, AlertCircle, Trash2 } from 'lucide-react';
 
 interface Media {
@@ -36,6 +38,8 @@ export default function MediaLibraryPage() {
   const [search, setSearch] = useState('');
   const [selectedMedia, setSelectedMedia] = useState<Media | null>(null);
   const [copied, setCopied] = useState(false);
+  const toast = useToast();
+  const [deleteModal, setDeleteModal] = useState<{ id: string } | null>(null);
 
   const fetchMedia = useCallback(async () => {
     setLoading(true);
@@ -82,16 +86,25 @@ export default function MediaLibraryPage() {
     setUploading(false);
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Opravdu chcete odstranit tento soubor?')) return;
+  const handleDelete = (id: string) => {
+    setDeleteModal({ id });
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteModal) return;
     try {
-      const res = await fetch(`/api/media?id=${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/media?id=${deleteModal.id}`, { method: 'DELETE' });
       if (res.ok) {
-        setMedia((prev) => prev.filter((m) => m.id !== id));
-        if (selectedMedia?.id === id) setSelectedMedia(null);
+        setMedia((prev) => prev.filter((m) => m.id !== deleteModal.id));
+        if (selectedMedia?.id === deleteModal.id) setSelectedMedia(null);
+        toast.success('Soubor byl odstraněn');
+      } else {
+        toast.error('Nepodařilo se odstranit soubor');
       }
     } catch {
-      alert('Nepodařilo se odstranit soubor.');
+      toast.error('Nepodařilo se odstranit soubor');
+    } finally {
+      setDeleteModal(null);
     }
   };
 
@@ -338,6 +351,14 @@ export default function MediaLibraryPage() {
           </div>
         </div>
       )}
+      <ConfirmModal
+        isOpen={!!deleteModal}
+        title="Odstranit soubor"
+        message="Opravdu chcete trvale odstranit tento soubor? Tuto akci nelze vrátit zpět."
+        confirmLabel="Odstranit"
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteModal(null)}
+      />
     </div>
   );
 }

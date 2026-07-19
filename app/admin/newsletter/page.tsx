@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useToast } from '@/store/toastStore';
+import ConfirmModal from '@/components/admin/ConfirmModal';
 
 interface NewsletterSubscriber {
   id: string;
@@ -11,6 +13,8 @@ interface NewsletterSubscriber {
 export default function AdminNewsletterPage() {
   const [subscribers, setSubscribers] = useState<NewsletterSubscriber[]>([]);
   const [loading, setLoading] = useState(true);
+  const toast = useToast();
+  const [deleteModal, setDeleteModal] = useState<{ id: string; email: string } | null>(null);
 
   useEffect(() => {
     fetchSubscribers();
@@ -30,18 +34,24 @@ export default function AdminNewsletterPage() {
     }
   };
 
-  const handleDelete = async (id: string, email: string) => {
-    if (!confirm(`Opravdu chcete odebrat odběratele "${email}"?`)) return;
+  const handleDelete = (id: string, email: string) => {
+    setDeleteModal({ id, email });
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteModal) return;
     try {
-      const response = await fetch(`/api/admin/newsletter/${id}`, { method: 'DELETE' });
+      const response = await fetch(`/api/admin/newsletter/${deleteModal.id}`, { method: 'DELETE' });
       if (response.ok) {
+        toast.success('Odběratel byl odebrán');
         fetchSubscribers();
       } else {
-        alert('Nepodařilo se odebrat odběratele');
+        toast.error('Nepodařilo se odebrat odběratele');
       }
-    } catch (error) {
-      console.error('Failed to delete subscriber:', error);
-      alert('Došlo k chybě při odebírání');
+    } catch {
+      toast.error('Došlo k chybě při odebírání');
+    } finally {
+      setDeleteModal(null);
     }
   };
 
@@ -60,7 +70,7 @@ export default function AdminNewsletterPage() {
       document.body.removeChild(a);
     } catch (error) {
       console.error('Error exporting CSV:', error);
-      alert('Nepodařilo se exportovat CSV soubor');
+      toast.error('Nepodařilo se exportovat CSV soubor');
     }
   };
 
@@ -160,7 +170,7 @@ export default function AdminNewsletterPage() {
               </svg>
             </div>
             <p className="text-sm font-medium text-gray-500">Žádní odběratelé</p>
-            <p className="text-xs text-gray-400 mt-1">Odběratelé se zde zobrazí po registraci na e-shopu.</p>
+            <p className="text-xs text-gray-400 mt-1">Odběratelé se zobrazí po registraci na e-shopu.</p>
           </div>
         )}
         {subscribers.length > 0 && (
@@ -169,6 +179,14 @@ export default function AdminNewsletterPage() {
           </div>
         )}
       </div>
+      <ConfirmModal
+        isOpen={!!deleteModal}
+        title="Odebrat odběratele"
+        message={`Opravdu chcete odebrat odběratele „${deleteModal?.email}"? Tuto akci nelze vrátit zpět.`}
+        confirmLabel="Odebrat"
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteModal(null)}
+      />
     </div>
   );
 }

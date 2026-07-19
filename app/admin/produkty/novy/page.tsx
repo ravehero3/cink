@@ -252,7 +252,7 @@ export default function NewProductPage() {
 
               {!isCD && (
                 <div>
-                  <label className={labelCls}>Size & Fit</label>
+                  <label className={labelCls}>Střih a velikost</label>
                   <textarea
                     rows={3}
                     value={formData.sizeFit}

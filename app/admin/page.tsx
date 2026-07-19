@@ -297,37 +297,6 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Navigation overview */}
-      <div>
-        <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-4">Všechny sekce</p>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-          {[
-            { href: '/admin/objednavky', label: 'Objednávky', sub: 'Správa a sledování' },
-            { href: '/admin/produkty', label: 'Produkty', sub: 'Katalog a zásoby' },
-            { href: '/admin/customers', label: 'Zákazníci', sub: 'Profily a aktivity' },
-            { href: '/admin/promo-kody', label: 'Promo kódy', sub: 'Slevové kódy' },
-            { href: '/admin/pricing-rules', label: 'Cenová pravidla', sub: 'Dynamické ceny' },
-            { href: '/admin/newsletter', label: 'Newsletter', sub: 'Odběratelé' },
-            { href: '/admin/emaily', label: 'E-maily', sub: 'Šablony zpráv' },
-            { href: '/admin/email-campaigns', label: 'E-mail kampaně', sub: 'Hromadné kampaně' },
-            { href: '/admin/live-nabidky', label: 'Live nabídky', sub: 'Zvýhodněné akce' },
-            { href: '/admin/media', label: 'Média / Galerie', sub: 'Obrázky a videa' },
-            { href: '/admin/stranky', label: 'Stránky', sub: 'Obsah webu' },
-            { href: '/admin/seo-management', label: 'SEO', sub: 'Vyhledávání' },
-          ].map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="flex items-center gap-3 bg-white rounded-xl border border-gray-100 px-4 py-3 hover:border-gray-300 hover:shadow-sm transition-all group"
-            >
-              <div className="min-w-0">
-                <p className="text-[13px] font-semibold text-gray-800 truncate">{item.label}</p>
-                <p className="text-[11px] text-gray-400 truncate">{item.sub}</p>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
 
     </div>
   );

@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useToast } from '@/store/toastStore';
+import ConfirmModal from '@/components/admin/ConfirmModal';
 
 interface PromoCode {
   id: string;
@@ -20,6 +22,8 @@ export default function AdminPromoCodesPage() {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const toast = useToast();
+  const [deleteModal, setDeleteModal] = useState<{ id: string; code: string } | null>(null);
   const [formData, setFormData] = useState({
     code: '',
     discountType: 'percentage',
@@ -106,36 +110,37 @@ export default function AdminPromoCodesPage() {
       });
 
       if (response.ok) {
-        alert(editingId ? 'Promo kód byl aktualizován' : 'Promo kód byl vytvořen');
+        toast.success(editingId ? 'Promo kód byl aktualizován' : 'Promo kód byl vytvořen');
         resetForm();
         fetchPromoCodes();
       } else {
         const error = await response.json();
-        alert(`Chyba: ${error.error || 'Operace se nezdařila'}`);
+        toast.error(`Chyba: ${error.error || 'Operace se nezdařila'}`);
       }
     } catch (error) {
       console.error('Failed to save promo code:', error);
-      alert('Došlo k chybě při ukládání');
+      toast.error('Došlo k chybě při ukládání');
     }
   };
 
-  const handleDelete = async (id: string, code: string) => {
-    if (!confirm(`Opravdu chcete smazat promo kód "${code}"?`)) return;
+  const handleDelete = (id: string, code: string) => {
+    setDeleteModal({ id, code });
+  };
 
+  const confirmDelete = async () => {
+    if (!deleteModal) return;
     try {
-      const response = await fetch(`/api/admin/promo-codes/${id}`, {
-        method: 'DELETE',
-      });
-
+      const response = await fetch(`/api/admin/promo-codes/${deleteModal.id}`, { method: 'DELETE' });
       if (response.ok) {
-        alert('Promo kód byl smazán');
+        toast.success('Promo kód byl smazán');
         fetchPromoCodes();
       } else {
-        alert('Nepodařilo se smazat promo kód');
+        toast.error('Nepodařilo se smazat promo kód');
       }
-    } catch (error) {
-      console.error('Failed to delete promo code:', error);
-      alert('Došlo k chybě při mazání');
+    } catch {
+      toast.error('Došlo k chybě při mazání');
+    } finally {
+      setDeleteModal(null);
     }
   };
 
@@ -349,9 +354,25 @@ export default function AdminPromoCodesPage() {
           </table>
         </div>
         {promoCodes.length === 0 && (
-          <div className="text-center py-16 text-sm text-gray-400">Žádné promo kódy nebyly nalezeny.</div>
+          <div className="flex flex-col items-center justify-center py-16 text-center">
+            <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center mb-3">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>
+              </svg>
+            </div>
+            <p className="text-sm font-medium text-gray-500">Žádné promo kódy</p>
+            <p className="text-xs text-gray-400 mt-1">Vytvořte první promo kód tlačítkem výše.</p>
+          </div>
         )}
       </div>
+      <ConfirmModal
+        isOpen={!!deleteModal}
+        title="Smazat promo kód"
+        message={`Opravdu chcete smazat kód „${deleteModal?.code}"? Tuto akci nelze vrátit zpět.`}
+        confirmLabel="Smazat"
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteModal(null)}
+      />
     </div>
   );
 }

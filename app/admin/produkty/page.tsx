@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useToast } from '@/store/toastStore';
+import ConfirmModal from '@/components/admin/ConfirmModal';
 
 interface Product {
   id: string;
@@ -25,6 +27,9 @@ export default function AdminProductsPage() {
   const [bulkValue, setBulkValue] = useState('');
   const [processingBulk, setProcessingBulk] = useState(false);
   const router = useRouter();
+  const toast = useToast();
+  const [search, setSearch] = useState('');
+  const [deleteModal, setDeleteModal] = useState<{ id: string; name: string } | null>(null);
 
   const CATEGORIES = ['VOODOO808', 'SPACE LOVE', 'RECREATION WELLNESS', 'T SHIRT GALLERY'];
 
@@ -46,23 +51,24 @@ export default function AdminProductsPage() {
     }
   };
 
-  const handleDelete = async (id: string, name: string) => {
-    if (!confirm(`Opravdu chcete smazat produkt "${name}"?`)) return;
+  const handleDelete = (id: string, name: string) => {
+    setDeleteModal({ id, name });
+  };
 
+  const confirmDelete = async () => {
+    if (!deleteModal) return;
     try {
-      const response = await fetch(`/api/admin/products/${id}`, {
-        method: 'DELETE',
-      });
-
+      const response = await fetch(`/api/admin/products/${deleteModal.id}`, { method: 'DELETE' });
       if (response.ok) {
-        alert('Produkt byl úspěšně smazán');
+        toast.success('Produkt byl úspěšně smazán');
         fetchProducts();
       } else {
-        alert('Nepodařilo se smazat produkt');
+        toast.error('Nepodařilo se smazat produkt');
       }
-    } catch (error) {
-      console.error('Failed to delete product:', error);
-      alert('Došlo k chybě při mazání produktu');
+    } catch {
+      toast.error('Došlo k chybě při mazání produktu');
+    } finally {
+      setDeleteModal(null);
     }
   };
 
@@ -76,14 +82,14 @@ export default function AdminProductsPage() {
 
       if (response.ok) {
         const data = await response.json();
-        alert(`Produkt byl duplikován: ${data.product.name}`);
+        toast.success(`Produkt byl duplikován: ${data.product.name}`);
         fetchProducts();
       } else {
-        alert('Nepodařilo se duplikovat produkt');
+        toast.error('Nepodařilo se duplikovat produkt');
       }
     } catch (error) {
       console.error('Failed to duplicate product:', error);
-      alert('Došlo k chybě při duplikování produktu');
+      toast.error('Došlo k chybě při duplikování produktu');
     }
   };
 
@@ -123,7 +129,7 @@ export default function AdminProductsPage() {
 
   const handleBulkOperation = async () => {
     if (!bulkValue.trim()) {
-      alert('Prosím zadejte hodnotu');
+      toast.error('Prosím zadejte hodnotu');
       return;
     }
 
@@ -156,27 +162,32 @@ export default function AdminProductsPage() {
 
       if (response.ok) {
         const data = await response.json();
-        alert(data.message);
+        toast.success(data.message || 'Hromadná akce proběhla úspěšně');
         fetchProducts();
         setSelectedProducts(new Set());
         setBulkMode('none');
         setBulkValue('');
       } else {
-        alert('Chyba při hromadné úpravě');
+        toast.error('Chyba při hromadné úpravě');
       }
     } catch (error) {
       console.error('Failed bulk operation:', error);
-      alert('Došlo k chybě');
+      toast.error('Došlo k chybě');
     } finally {
       setProcessingBulk(false);
     }
   };
 
   const filteredProducts = products.filter((product) => {
-    if (filter === 'visible') return product.isVisible;
-    if (filter === 'hidden') return !product.isVisible;
-    if (filter === 'lowstock') return product.totalStock <= product.lowStockThreshold;
-    return true;
+    const matchesFilter =
+      filter === 'visible' ? product.isVisible :
+      filter === 'hidden' ? !product.isVisible :
+      filter === 'lowstock' ? product.totalStock <= product.lowStockThreshold :
+      true;
+    const matchesSearch = !search.trim() ||
+      product.name.toLowerCase().includes(search.toLowerCase()) ||
+      product.category.toLowerCase().includes(search.toLowerCase());
+    return matchesFilter && matchesSearch;
   });
 
   const lowStockCount = products.filter((p) => p.totalStock <= p.lowStockThreshold).length;
@@ -219,6 +230,30 @@ export default function AdminProductsPage() {
         </Link>
       </div>
 
+      {/* Search */}
+      <div className="relative w-full sm:w-80">
+        <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Hledat produkt…"
+          className="w-full pl-9 pr-3 py-2.5 text-sm border border-gray-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent placeholder:text-gray-300 transition-all"
+        />
+        {search && (
+          <button
+            onClick={() => setSearch('')}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        )}
+      </div>
+
       {/* Filter tabs */}
       <div className="flex gap-1.5 flex-wrap">
         {FILTERS.map((f) => (
@@ -247,7 +282,7 @@ export default function AdminProductsPage() {
 
       {/* Bulk operations panel */}
       {selectedProducts.size > 0 && (
-        <div className="bg-gray-900 rounded-2xl px-5 py-4 flex items-center justify-between gap-4 flex-wrap">
+        <div className={`bg-gray-900 rounded-2xl px-5 py-4 flex items-center justify-between gap-4 flex-wrap transition-all duration-200 ${selectedProducts.size > 0 ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1 pointer-events-none'}`}>
           <p className="text-sm font-semibold text-white">
             Vybráno {selectedProducts.size} {selectedProducts.size === 1 ? 'produkt' : 'produktů'}
           </p>
@@ -425,12 +460,47 @@ export default function AdminProductsPage() {
           </table>
         </div>
         {filteredProducts.length === 0 && (
-          <div className="text-center py-16 text-sm text-gray-400">Žádné produkty nebyly nalezeny.</div>
+          <div className="flex flex-col items-center justify-center py-16 text-center">
+            <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center mb-3">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+              </svg>
+            </div>
+            <p className="text-sm font-medium text-gray-500">
+              {search ? `Žádné výsledky pro „${search}"` : 'Žádné produkty v tomto filtru'}
+            </p>
+            <p className="text-xs text-gray-400 mt-1">
+              {search
+                ? 'Zkuste jiné klíčové slovo nebo vymažte vyhledávání.'
+                : filter !== 'all'
+                  ? 'Zkuste změnit filtr nebo přidejte nový produkt.'
+                  : 'Začněte přidáním prvního produktu.'}
+            </p>
+            {!search && filter === 'all' && (
+              <a href="/admin/produkty/novy" className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold bg-gray-900 text-white px-4 py-2 rounded-xl hover:bg-gray-700 transition-colors">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                </svg>
+                Přidat produkt
+              </a>
+            )}
+          </div>
         )}
-        <div className="px-4 py-3 border-t border-gray-100 text-xs text-gray-400">
-          Zobrazeno {filteredProducts.length} z {products.length} produktů
-        </div>
+        {filteredProducts.length > 0 && (
+          <div className="px-4 py-3 border-t border-gray-100 text-xs text-gray-400">
+            Zobrazeno {filteredProducts.length} z {products.length} produktů
+          </div>
+        )}
       </div>
+      <ConfirmModal
+        isOpen={!!deleteModal}
+        title="Smazat produkt"
+        message={`Opravdu chcete smazat produkt „${deleteModal?.name}"? Tuto akci nelze vrátit zpět.`}
+        confirmLabel="Smazat"
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteModal(null)}
+      />
     </div>
   );
 }

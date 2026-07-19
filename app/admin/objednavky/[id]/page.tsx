@@ -2,6 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { useToast } from '@/store/toastStore';
+import ConfirmModal from '@/components/admin/ConfirmModal';
 
 interface OrderItem {
   productId: string;
@@ -50,6 +53,9 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
   const [trackingNumber, setTrackingNumber] = useState('');
   const [nextOrderId, setNextOrderId] = useState<string | null>(null);
   const [checkingPayment, setCheckingPayment] = useState(false);
+  const toast = useToast();
+  const [statusModal, setStatusModal] = useState<{ newStatus: string } | null>(null);
+  const [retryModal, setRetryModal] = useState(false);
 
   useEffect(() => {
     fetchOrder();
@@ -84,36 +90,39 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
         setOrder(data);
         setTrackingNumber(data.trackingNumber || '');
       } else {
-        alert('Objednávka nenalezena');
+        toast.error('Objednávka nenalezena');
         router.push('/admin/objednavky');
       }
     } catch (error) {
       console.error('Failed to fetch order:', error);
-      alert('Došlo k chybě při načítání objednávky');
+      toast.error('Došlo k chybě při načítání objednávky');
     } finally {
       setLoading(false);
     }
   };
 
-  const updateStatus = async (newStatus: string) => {
-    if (!confirm(`Změnit status objednávky na ${newStatus}?`)) return;
+  const updateStatus = (newStatus: string) => {
+    setStatusModal({ newStatus });
+  };
 
+  const confirmUpdateStatus = async () => {
+    if (!statusModal) return;
     try {
       const response = await fetch(`/api/admin/orders/${params.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: newStatus }),
+        body: JSON.stringify({ status: statusModal.newStatus }),
       });
-
       if (response.ok) {
-        alert('Status byl úspěšně změněn');
+        toast.success('Status objednávky byl změněn');
         fetchOrder();
       } else {
-        alert('Nepodařilo se změnit status');
+        toast.error('Nepodařilo se změnit status');
       }
-    } catch (error) {
-      console.error('Failed to update status:', error);
-      alert('Došlo k chybě při změně statusu');
+    } catch {
+      toast.error('Došlo k chybě při změně statusu');
+    } finally {
+      setStatusModal(null);
     }
   };
 
@@ -124,39 +133,35 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ trackingNumber }),
       });
-
       if (response.ok) {
-        alert('Číslo zásilky bylo úspěšně uloženo');
+        toast.success('Číslo zásilky bylo uloženo');
         fetchOrder();
       } else {
-        alert('Nepodařilo se uložit číslo zásilky');
+        toast.error('Nepodařilo se uložit číslo zásilky');
       }
-    } catch (error) {
-      console.error('Failed to update tracking number:', error);
-      alert('Došlo k chybě při ukládání');
+    } catch {
+      toast.error('Došlo k chybě při ukládání');
     }
   };
 
-  const retryPacketaCreation = async () => {
-    if (!confirm('Zkusit znovu vytvořit zásilku v Zásilkovně?')) return;
+  const retryPacketaCreation = () => {
+    setRetryModal(true);
+  };
 
+  const confirmRetry = async () => {
+    setRetryModal(false);
     setLoading(true);
     try {
-      const response = await fetch(`/api/admin/orders/${params.id}/create-packet`, {
-        method: 'POST',
-      });
-
+      const response = await fetch(`/api/admin/orders/${params.id}/create-packet`, { method: 'POST' });
       const data = await response.json();
-
       if (response.ok) {
-        alert('Zásilka byla úspěšně vytvořena v Zásilkovně!');
+        toast.success('Zásilka byla vytvořena v Zásilkovně');
         fetchOrder();
       } else {
-        alert(`Nepodařilo se vytvořit zásilku: ${data.error}`);
+        toast.error(`Nepodařilo se vytvořit zásilku: ${data.error}`);
       }
-    } catch (error) {
-      console.error('Failed to create Packeta packet:', error);
-      alert('Došlo k chybě při vytváření zásilky');
+    } catch {
+      toast.error('Došlo k chybě při vytváření zásilky');
     } finally {
       setLoading(false);
     }
@@ -164,27 +169,21 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
 
   const checkPaymentStatus = async () => {
     if (!order?.paymentId) {
-      alert('Tato objednávka nemá přiřazené ID platby v GoPay');
+      toast.warning('Tato objednávka nemá přiřazené ID platby v GoPay');
       return;
     }
-
     setCheckingPayment(true);
     try {
-      const response = await fetch(`/api/admin/orders/${params.id}/check-payment`, {
-        method: 'POST',
-      });
-
+      const response = await fetch(`/api/admin/orders/${params.id}/check-payment`, { method: 'POST' });
       const data = await response.json();
-
       if (response.ok) {
-        alert(data.message || 'Status platby byl aktualizován');
+        toast.success(data.message || 'Status platby byl aktualizován');
         fetchOrder();
       } else {
-        alert(`Chyba: ${data.error || 'Nepodařilo se zkontrolovat status platby'}`);
+        toast.error(`Chyba: ${data.error || 'Nepodařilo se zkontrolovat status platby'}`);
       }
-    } catch (error) {
-      console.error('Failed to check payment status:', error);
-      alert('Došlo k chybě při kontrole stavu platby');
+    } catch {
+      toast.error('Došlo k chybě při kontrole stavu platby');
     } finally {
       setCheckingPayment(false);
     }
@@ -224,9 +223,9 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
       {/* Header */}
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-3">
-          <button onClick={() => router.back()} className="flex items-center justify-center w-8 h-8 rounded-lg bg-white border border-gray-200 text-gray-500 hover:text-gray-900 hover:border-gray-300 transition-all">
+          <Link href="/admin/objednavky" className="flex items-center justify-center w-8 h-8 rounded-lg bg-white border border-gray-200 text-gray-500 hover:text-gray-900 hover:border-gray-300 transition-all">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-          </button>
+          </Link>
           <div>
             <h1 className="text-2xl font-bold text-gray-900 tracking-tight">#{order.orderNumber}</h1>
             <div className="flex items-center gap-2 mt-0.5">
@@ -436,6 +435,25 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
 
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={!!statusModal}
+        title="Změnit status objednávky"
+        message={`Opravdu chcete změnit status na „${STATUS_LABELS[statusModal?.newStatus ?? ''] ?? statusModal?.newStatus}"?`}
+        confirmLabel="Změnit"
+        isDestructive={false}
+        onConfirm={confirmUpdateStatus}
+        onCancel={() => setStatusModal(null)}
+      />
+      <ConfirmModal
+        isOpen={retryModal}
+        title="Vytvořit zásilku v Zásilkovně"
+        message="Zkusit znovu vytvořit zásilku pro tuto objednávku v systému Zásilkovna?"
+        confirmLabel="Vytvořit"
+        isDestructive={false}
+        onConfirm={confirmRetry}
+        onCancel={() => setRetryModal(false)}
+      />
     </div>
   );
 }
