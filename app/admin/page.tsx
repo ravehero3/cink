@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { StatCardSkeleton } from '@/components/admin/Skeleton';
 
 interface Stats {
   totalOrders: number;
@@ -163,10 +164,30 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="flex items-center gap-3">
-          <div className="w-4 h-4 border-2 border-gray-200 border-t-gray-700 rounded-full animate-spin" />
-          <span className="text-sm text-gray-400">Načítám přehled…</span>
+      <div className="space-y-10">
+        <div className="space-y-2 animate-pulse">
+          <div className="h-4 w-48 bg-gray-100 rounded-lg" />
+          <div className="h-9 w-72 bg-gray-100 rounded-xl" />
+          <div className="h-4 w-40 bg-gray-100 rounded-lg" />
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3">
+          {[...Array(7)].map((_, i) => <StatCardSkeleton key={i} />)}
+        </div>
+        <div className="space-y-3">
+          <div className="h-4 w-24 bg-gray-100 rounded-lg animate-pulse" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="bg-white rounded-2xl border border-gray-100 p-5 h-[76px] animate-pulse">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 bg-gray-100 rounded-xl shrink-0" />
+                  <div className="space-y-1.5 flex-1">
+                    <div className="h-3.5 bg-gray-100 rounded-md w-3/4" />
+                    <div className="h-3 bg-gray-100 rounded-md w-1/2" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     );
@@ -240,20 +261,18 @@ export default function AdminDashboard() {
             const val = stats ? (stats as any)[item.key] as number : 0;
             const colors = ACCENT_COLORS[item.accent];
             const inner = (
-              <div className="bg-white rounded-2xl border border-gray-100 p-5 hover:border-gray-200 hover:shadow-sm transition-all duration-200 group h-full">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className={`w-1.5 h-1.5 rounded-full ${colors.dot}`} />
-                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest leading-none truncate">
-                    {item.label}
-                  </p>
-                </div>
-                <p className="text-3xl font-bold text-gray-900 tracking-tight leading-none">
+              <div className="bg-white rounded-2xl border border-gray-100 p-5 hover:border-gray-200 hover:shadow-md transition-all duration-200 group h-full relative overflow-hidden">
+                <div className={`absolute top-0 inset-x-0 h-[3px] rounded-t-2xl ${colors.dot}`} />
+                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest leading-none truncate mb-4 mt-0.5">
+                  {item.label}
+                </p>
+                <p className="text-[2rem] font-bold text-gray-900 tracking-tight leading-none">
                   {item.format(val)}
                 </p>
                 {item.href && (
-                  <p className="mt-3 text-[11px] font-medium text-gray-300 group-hover:text-gray-500 transition-colors flex items-center gap-1">
+                  <p className="mt-3 text-[11px] font-medium text-gray-300 group-hover:text-gray-600 transition-colors flex items-center gap-1">
                     Zobrazit
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-0.5 transition-transform">
                       <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
                   </p>

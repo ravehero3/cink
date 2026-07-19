@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/store/toastStore';
 import ConfirmModal from '@/components/admin/ConfirmModal';
+import { TableSkeleton, PageHeaderSkeleton, FilterBarSkeleton } from '@/components/admin/Skeleton';
 
 interface Product {
   id: string;
@@ -194,10 +195,21 @@ export default function AdminProductsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-60">
-        <div className="flex items-center gap-2.5">
-          <div className="w-4 h-4 border-2 border-gray-200 border-t-gray-700 rounded-full animate-spin" />
-          <span className="text-sm text-gray-400">Načítám produkty…</span>
+      <div className="space-y-6">
+        <PageHeaderSkeleton />
+        <div className="h-11 w-72 bg-gray-100 rounded-xl animate-pulse" />
+        <FilterBarSkeleton tabs={4} />
+        <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+          <table className="w-full text-sm">
+            <thead className="border-b border-gray-100">
+              <tr>
+                {['Produkt','Kategorie','Cena','Sklad','Status','Akce'].map((h) => (
+                  <th key={h} className="text-left px-4 py-3 text-[10px] font-semibold text-gray-400 uppercase tracking-widest whitespace-nowrap">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody><TableSkeleton rows={9} cols={6} /></tbody>
+          </table>
         </div>
       </div>
     );
@@ -363,7 +375,7 @@ export default function AdminProductsPage() {
       <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead>
+            <thead className="sticky top-0 z-10 bg-white">
               <tr className="border-b border-gray-100">
                 <th className="px-4 py-3 w-10">
                   <input

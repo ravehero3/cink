@@ -214,19 +214,16 @@ function NavItem({ href, label, icon }: { href: string; label: string; icon: Rea
   return (
     <Link
       href={href}
-      className={`flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] font-medium transition-all duration-150 group ${
+      className={`flex items-center gap-2.5 pl-[10px] pr-3 py-[7px] rounded-lg text-[13px] font-medium transition-all duration-150 group border-l-[2.5px] ${
         isActive
-          ? 'bg-white/10 text-white'
-          : 'text-white/45 hover:text-white/80 hover:bg-white/[0.05]'
+          ? 'border-white/40 bg-white/[0.09] text-white'
+          : 'border-transparent text-white/65 hover:text-white/92 hover:bg-white/[0.05]'
       }`}
     >
-      <span className={`shrink-0 transition-colors ${isActive ? 'text-white' : 'text-white/35 group-hover:text-white/60'}`}>
+      <span className={`shrink-0 transition-colors ${isActive ? 'text-white' : 'text-white/48 group-hover:text-white/70'}`}>
         {icon}
       </span>
       {label}
-      {isActive && (
-        <span className="ml-auto w-1 h-1 rounded-full bg-white/60" />
-      )}
     </Link>
   );
 }
@@ -280,7 +277,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-6">
         {NAV_SECTIONS.map((section) => (
           <div key={section.label}>
-            <p className="text-[9px] font-bold text-white/20 uppercase tracking-[0.15em] px-3 mb-2">
+            <p className="text-[9px] font-bold text-white/35 uppercase tracking-[0.12em] px-3 mb-1.5">
               {section.label}
             </p>
             <div className="space-y-0.5">
@@ -296,7 +293,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <div className="px-3 py-4 border-t border-white/[0.06] space-y-0.5">
         <Link
           href="/"
-          className="flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] font-medium text-white/35 hover:text-white/70 hover:bg-white/[0.05] transition-all group"
+          className="flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] font-medium text-white/52 hover:text-white/80 hover:bg-white/[0.05] transition-all group"
         >
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 group-hover:text-white/60 transition-colors">
             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
@@ -306,7 +303,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </Link>
         <button
           onClick={() => signOut({ callbackUrl: '/prihlaseni' })}
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] font-medium text-white/35 hover:text-white/70 hover:bg-white/[0.05] transition-all group text-left"
+          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] font-medium text-white/52 hover:text-white/80 hover:bg-white/[0.05] transition-all group text-left"
         >
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 group-hover:text-white/60 transition-colors">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
@@ -369,7 +366,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div className="bg-[#111111] border-t border-white/[0.06] px-3 py-4 max-h-[80vh] overflow-y-auto space-y-5">
             {NAV_SECTIONS.map((section) => (
               <div key={section.label}>
-                <p className="text-[9px] font-bold text-white/20 uppercase tracking-[0.15em] px-3 mb-2">
+                <p className="text-[9px] font-bold text-white/35 uppercase tracking-[0.12em] px-3 mb-1.5">
                   {section.label}
                 </p>
                 <div className="space-y-0.5">
@@ -381,10 +378,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         href={item.href}
                         onClick={() => setMobileMenuOpen(false)}
                         className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium transition-all ${
-                          isActive ? 'bg-white/10 text-white' : 'text-white/45 hover:text-white/80 hover:bg-white/[0.05]'
+                          isActive ? 'bg-white/[0.09] text-white border-l-[2.5px] border-white/40 pl-[10px]' : 'text-white/65 hover:text-white/92 hover:bg-white/[0.05] border-l-[2.5px] border-transparent pl-[10px]'
                         }`}
                       >
-                        <span className={isActive ? 'text-white' : 'text-white/35'}>{item.icon}</span>
+                        <span className={isActive ? 'text-white' : 'text-white/48'}>{item.icon}</span>
                         {item.label}
                       </Link>
                     );
@@ -395,7 +392,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <div className="border-t border-white/[0.06] pt-4 space-y-0.5">
               <Link
                 href="/"
-                className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium text-white/35 hover:text-white/70"
+                className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium text-white/52 hover:text-white/80"
               >
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>

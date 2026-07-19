@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Search } from 'lucide-react';
+import { TableSkeleton, PageHeaderSkeleton } from '@/components/admin/Skeleton';
 
 interface Customer {
   id: string;
@@ -54,10 +55,22 @@ export default function CustomersPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-60">
-        <div className="flex items-center gap-2.5">
-          <div className="w-4 h-4 border-2 border-gray-200 border-t-gray-700 rounded-full animate-spin" />
-          <span className="text-sm text-gray-400">Načítám zákazníky…</span>
+      <div className="space-y-6">
+        <PageHeaderSkeleton />
+        <div className="bg-white rounded-2xl border border-gray-100 p-4">
+          <div className="h-9 w-full bg-gray-100 rounded-xl animate-pulse" />
+        </div>
+        <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+          <table className="w-full text-sm">
+            <thead className="border-b border-gray-100">
+              <tr>
+                {['Jméno','E-mail','Telefon','Objednávky','Utraceno','Poslední objednávka','Newsletter','Akce'].map((h) => (
+                  <th key={h} className="text-left px-4 py-3 text-[10px] font-semibold text-gray-400 uppercase tracking-widest whitespace-nowrap">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody><TableSkeleton rows={8} cols={8} /></tbody>
+          </table>
         </div>
       </div>
     );
@@ -118,7 +131,7 @@ export default function CustomersPage() {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead>
+              <thead className="sticky top-0 z-10 bg-white">
                 <tr className="border-b border-gray-100">
                   {['Jméno', 'E-mail', 'Telefon', 'Objednávky', 'Celkem utraceno', 'Poslední objednávka', 'Newsletter', 'Akce'].map((h) => (
                     <th
@@ -137,7 +150,7 @@ export default function CustomersPage() {
                     <td className="px-4 py-3 text-gray-600 text-xs">{customer.email}</td>
                     <td className="px-4 py-3 text-gray-600 text-xs">{customer.phone || '—'}</td>
                     <td className="px-4 py-3 font-semibold text-gray-900">{customer.totalOrders}</td>
-                    <td className="px-4 py-3 font-semibold text-gray-900">{customer.totalSpent} Kč</td>
+                    <td className="px-4 py-3 font-semibold text-gray-900">{Number(customer.totalSpent).toLocaleString('cs-CZ')} Kč</td>
                     <td className="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">
                       {customer.lastOrderDate
                         ? new Date(customer.lastOrderDate).toLocaleDateString('cs-CZ')

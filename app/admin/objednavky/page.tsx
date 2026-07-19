@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useToast } from '@/store/toastStore';
+import { TableSkeleton, StatCardSkeleton, PageHeaderSkeleton } from '@/components/admin/Skeleton';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface Order {
@@ -47,6 +49,7 @@ const TIME_PERIODS = ['Dnes', '24 hodin', 'Týden', 'Měsíc', 'Rok'];
 
 export default function AdminOrdersPage() {
   const router = useRouter();
+  const toast = useToast();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [updatingOrderId, setUpdatingOrderId] = useState<string | null>(null);
@@ -110,11 +113,11 @@ export default function AdminOrdersPage() {
       if (response.ok) {
         fetchOrders();
       } else {
-        alert('Nepodařilo se změnit status');
+        toast.error('Nepodařilo se změnit status');
       }
     } catch (error) {
       console.error('Failed to update status:', error);
-      alert('Došlo k chybě při změně statusu');
+      toast.error('Došlo k chybě při změně statusu');
     } finally {
       setUpdatingOrderId(null);
     }
@@ -307,10 +310,22 @@ export default function AdminOrdersPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-60">
-        <div className="flex items-center gap-2.5">
-          <div className="w-4 h-4 border-2 border-gray-200 border-t-gray-700 rounded-full animate-spin" />
-          <span className="text-sm text-gray-400">Načítám objednávky…</span>
+      <div className="space-y-6">
+        <PageHeaderSkeleton />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {[...Array(4)].map((_, i) => <StatCardSkeleton key={i} />)}
+        </div>
+        <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+          <table className="w-full text-sm">
+            <thead className="border-b border-gray-100">
+              <tr>
+                {['Objednávka','Zákazník','Datum','Celkem','Status','Platba','Akce'].map((h) => (
+                  <th key={h} className="text-left px-4 py-3 text-[10px] font-semibold text-gray-400 uppercase tracking-widest whitespace-nowrap">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody><TableSkeleton rows={10} cols={7} /></tbody>
+          </table>
         </div>
       </div>
     );
@@ -446,7 +461,7 @@ export default function AdminOrdersPage() {
       <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead>
+            <thead className="sticky top-0 z-10 bg-white">
               <tr className="border-b border-gray-100">
                 {[
                   { label: 'Číslo', key: null },
