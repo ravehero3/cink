@@ -148,11 +148,7 @@ export default function CloudinaryUploadButton({
       onClick={openUploadWidget}
       type="button"
       disabled={isLoading}
-      className={`flex items-center gap-2 px-4 py-2 border border-black uppercase text-sm font-medium transition-colors ${
-        isLoading 
-          ? 'bg-gray-100 text-gray-400 cursor-wait' 
-          : 'bg-white text-black hover:bg-black hover:text-white'
-      }`}
+      className={`admin-btn admin-btn-secondary ${isLoading ? 'opacity-50 cursor-wait' : ''}`}
     >
       {isLoading ? (
         <>

@@ -2,15 +2,16 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import ImageUploader from '@/components/admin/ImageUploader';
 import StatusMessage from '@/components/admin/StatusMessage';
 
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 const PRODUCT_TYPES = ['TRIKO', 'MIKINA', 'KRAŤASY', 'KALHOTY', 'CD'] as const;
 
-const inputCls = "w-full text-sm bg-white border border-gray-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all placeholder:text-gray-300";
-const labelCls = "block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5";
-const textareaCls = "w-full text-sm bg-white border border-gray-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all placeholder:text-gray-300 resize-none";
+const inputCls = "admin-input";
+const labelCls = "admin-label";
+const textareaCls = "admin-textarea";
 
 export default function NewProductPage() {
   const router = useRouter();
@@ -97,22 +98,21 @@ export default function NewProductPage() {
   const totalStock = Object.values(sizes).reduce((sum, val) => sum + val, 0);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
 
       {/* Header */}
-      <div className="flex items-center gap-3">
-        <button
-          type="button"
-          onClick={() => router.back()}
-          className="flex items-center justify-center w-8 h-8 rounded-lg bg-white border border-gray-200 text-gray-500 hover:text-gray-900 hover:border-gray-300 transition-all"
+      <div className="flex items-center gap-3 border-b border-black pb-4">
+        <Link
+          href="/admin/produkty"
+          className="flex items-center justify-center w-8 h-8 border border-black bg-white text-black hover:bg-black hover:text-white transition-colors"
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M19 12H5M12 19l-7-7 7-7"/>
-          </svg>
-        </button>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </Link>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Nový produkt</h1>
-          <p className="mt-0.5 text-sm text-gray-400">Vyplňte základní informace a uložte produkt</p>
+          <h1 className="admin-title">
+            Nový produkt
+          </h1>
+          <p className="admin-sub">Vyplňte základní informace a uložte produkt</p>
         </div>
       </div>
 
@@ -121,14 +121,16 @@ export default function NewProductPage() {
       )}
 
       <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
           {/* Left column (2/3) */}
-          <div className="lg:col-span-2 space-y-5">
+          <div className="lg:col-span-2 space-y-6">
 
             {/* Basic info */}
-            <div className="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Základní informace</p>
+            <div className="bg-white border border-black p-6 space-y-4">
+              <p className="text-[10px] font-bold text-[#666666] uppercase tracking-widest pb-2 border-b border-black">
+                Základní informace
+              </p>
 
               <div>
                 <label className={labelCls}>Název *</label>
@@ -202,10 +204,10 @@ export default function NewProductPage() {
                       key={type}
                       type="button"
                       onClick={() => setFormData({ ...formData, productType: type })}
-                      className={`px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all ${
+                      className={`px-3 py-1.5 text-xs uppercase font-medium tracking-wider border border-black transition-colors ${
                         formData.productType === type
-                          ? 'bg-gray-900 text-white border-gray-900'
-                          : 'bg-white text-gray-600 border-gray-200 hover:border-gray-400'
+                          ? 'bg-black text-white'
+                          : 'bg-white text-black hover:bg-black hover:text-white'
                       }`}
                     >
                       {type === '' ? 'Neurčeno' : type}
@@ -216,15 +218,15 @@ export default function NewProductPage() {
             </div>
 
             {/* Images */}
-            <div className="bg-white rounded-2xl border border-gray-100 p-6">
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-1">Obrázky produktu</p>
-              <p className="text-xs text-gray-400 mb-4">První obrázek bude zobrazen jako hlavní. Přetáhněte soubory nebo klikněte pro výběr.</p>
+            <div className="bg-white border border-black p-6">
+              <p className="text-[10px] font-bold text-[#666666] uppercase tracking-widest mb-1">Obrázky produktu</p>
+              <p className="text-xs uppercase tracking-wider text-[#666666] mb-4">První obrázek bude zobrazen jako hlavní.</p>
               <ImageUploader images={images} onChange={setImages} maxImages={10} />
             </div>
 
             {/* Video */}
-            <div className="bg-white rounded-2xl border border-gray-100 p-6">
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">Video</p>
+            <div className="bg-white border border-black p-6">
+              <p className="text-[10px] font-bold text-[#666666] uppercase tracking-widest mb-4">Video</p>
               <label className={labelCls}>Video URL (volitelné)</label>
               <input
                 type="url"
@@ -236,8 +238,10 @@ export default function NewProductPage() {
             </div>
 
             {/* Product detail sections */}
-            <div className="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Detailní informace</p>
+            <div className="bg-white border border-black p-6 space-y-4">
+              <p className="text-[10px] font-bold text-[#666666] uppercase tracking-widest pb-2 border-b border-black">
+                Detailní informace
+              </p>
 
               <div>
                 <label className={labelCls}>Informace o produktu</label>
@@ -290,11 +294,11 @@ export default function NewProductPage() {
           </div>
 
           {/* Right column (1/3) */}
-          <div className="space-y-5">
+          <div className="space-y-6">
 
             {/* Stock */}
-            <div className="bg-white rounded-2xl border border-gray-100 p-6">
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">
+            <div className="bg-white border border-black p-6">
+              <p className="text-[10px] font-bold text-[#666666] uppercase tracking-widest mb-4 pb-2 border-b border-black">
                 {isCD ? 'Sklad' : 'Velikosti a sklad'}
               </p>
 
@@ -308,8 +312,8 @@ export default function NewProductPage() {
                     onChange={(e) => updateCDStock(e.target.value)}
                     className={inputCls + " text-center"}
                   />
-                  <p className={`text-xs font-medium mt-2 ${(sizes['ONE_SIZE'] || 0) === 0 ? 'text-red-500' : 'text-gray-400'}`}>
-                    {(sizes['ONE_SIZE'] || 0) === 0 ? '⚠ Produkt bude bez skladu' : `${sizes['ONE_SIZE'] || 0} ks celkem`}
+                  <p className={`text-xs uppercase tracking-wider font-medium mt-2 ${(sizes['ONE_SIZE'] || 0) === 0 ? 'text-black font-bold' : 'text-[#666666]'}`}>
+                    {(sizes['ONE_SIZE'] || 0) === 0 ? '[!] Produkt bude bez skladu' : `${sizes['ONE_SIZE'] || 0} ks celkem`}
                   </p>
                 </div>
               ) : (
@@ -317,43 +321,43 @@ export default function NewProductPage() {
                   <div className="grid grid-cols-3 gap-2 mb-3">
                     {SIZES.map((size) => (
                       <div key={size}>
-                        <label className="block text-[10px] font-bold text-gray-500 text-center mb-1 uppercase">{size}</label>
+                        <label className="block text-[10px] font-bold text-black text-center mb-1 uppercase">{size}</label>
                         <input
                           type="number"
                           min="0"
                           value={sizes[size]}
                           onChange={(e) => updateSize(size, e.target.value)}
-                          className="w-full text-sm bg-gray-50 border border-gray-200 rounded-lg py-2 text-center focus:outline-none focus:ring-2 focus:ring-gray-900 focus:bg-white transition-all"
+                          className="w-full text-xs uppercase bg-white border border-black py-2 text-center focus:outline-none"
                         />
                       </div>
                     ))}
                   </div>
-                  <div className={`text-xs font-medium px-3 py-2 rounded-lg border ${
-                    totalStock === 0
-                      ? 'bg-red-50 border-red-200 text-red-600'
-                      : 'bg-gray-50 border-gray-100 text-gray-500'
+                  <div className={`text-xs uppercase tracking-wider font-medium p-2 border border-black ${
+                    totalStock === 0 ? 'bg-black text-white' : 'bg-white text-black'
                   }`}>
-                    {totalStock === 0 ? '⚠ Produkt bude bez skladu' : `Celkem: ${totalStock} ks`}
+                    {totalStock === 0 ? '[!] Produkt bude bez skladu' : `Celkem: ${totalStock} ks`}
                   </div>
                 </div>
               )}
             </div>
 
             {/* Visibility */}
-            <div className="bg-white rounded-2xl border border-gray-100 p-5">
-              <label className="flex items-center justify-between cursor-pointer">
+            <div className="bg-white border border-black p-5">
+              <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-semibold text-gray-800">Viditelný na e-shopu</p>
-                  <p className="text-xs text-gray-400 mt-0.5">Zákazníci uvidí tento produkt</p>
+                  <p className="text-xs font-bold uppercase tracking-wider text-black">Viditelný na e-shopu</p>
+                  <p className="text-[10px] uppercase text-[#666666] mt-0.5">Zákazníci uvidí tento produkt</p>
                 </div>
                 <button
                   type="button"
                   onClick={() => setFormData({ ...formData, isVisible: !formData.isVisible })}
-                  className={`relative w-10 h-6 rounded-full transition-all duration-200 ${formData.isVisible ? 'bg-gray-900' : 'bg-gray-200'}`}
+                  className={`px-3 py-1.5 text-xs uppercase font-bold tracking-wider border border-black transition-colors ${
+                    formData.isVisible ? 'bg-black text-white' : 'bg-white text-black'
+                  }`}
                 >
-                  <span className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-all duration-200 ${formData.isVisible ? 'left-5' : 'left-1'}`} />
+                  {formData.isVisible ? 'ANO' : 'NE'}
                 </button>
-              </label>
+              </div>
             </div>
 
             {/* Submit */}
@@ -361,22 +365,21 @@ export default function NewProductPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gray-900 text-white text-sm font-semibold py-3 rounded-xl hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="w-full bg-black text-white text-xs uppercase tracking-wider font-medium py-3 border border-black hover:bg-white hover:text-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">
-                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <span className="w-3 h-3 border border-white border-t-transparent animate-spin" />
                     Ukládám…
                   </span>
                 ) : 'Vytvořit produkt'}
               </button>
-              <button
-                type="button"
-                onClick={() => router.back()}
-                className="w-full text-sm font-semibold text-gray-500 py-3 rounded-xl border border-gray-200 hover:border-gray-300 hover:text-gray-700 transition-colors"
+              <Link
+                href="/admin/produkty"
+                className="block text-center w-full text-xs uppercase tracking-wider font-medium py-3 border border-black bg-white text-black hover:bg-black hover:text-white transition-colors"
               >
                 Zrušit
-              </button>
+              </Link>
             </div>
 
           </div>

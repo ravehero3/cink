@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Trash2, Edit, Mail } from 'lucide-react';
 
 interface EmailCampaign {
   id: string;
@@ -20,12 +19,6 @@ const STATUS_LABELS: Record<string, string> = {
   draft: 'Koncept',
   scheduled: 'Naplánováno',
   sent: 'Odesláno',
-};
-
-const STATUS_STYLES: Record<string, string> = {
-  sent: 'bg-emerald-50 text-emerald-700',
-  scheduled: 'bg-blue-50 text-blue-700',
-  draft: 'bg-gray-100 text-gray-500',
 };
 
 export default function EmailCampaignsPage() {
@@ -57,100 +50,88 @@ export default function EmailCampaignsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-60">
-        <div className="flex items-center gap-2.5">
-          <div className="w-4 h-4 border-2 border-gray-200 border-t-gray-700 rounded-full animate-spin" />
-          <span className="text-sm text-gray-400">Načítám kampaně…</span>
-        </div>
+      <div className="flex items-center gap-3 py-12">
+        <div className="admin-spinner" />
+        <span className="admin-sub" style={{ margin: 0 }}>Načítám kampaně…</span>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-
-      {/* Header */}
-      <div className="flex items-center justify-between gap-4 flex-wrap">
+    <div className="space-y-[24px]">
+      <div className="flex items-center justify-between gap-4 flex-wrap border-b border-black pb-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">E-mailové kampaně</h1>
-          <p className="mt-0.5 text-sm text-gray-400">{campaigns.length} kampaní celkem</p>
+          <h1 className="admin-title">E-mailové kampaně</h1>
+          <p className="admin-sub">{campaigns.length} kampaní celkem</p>
         </div>
-        <Link
-          href="/admin/email-campaigns/new"
-          className="flex items-center gap-2 px-4 py-2.5 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-gray-700 transition-colors"
-        >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-          </svg>
-          Nová kampaň
+        <Link href="/admin/email-campaigns/new" className="admin-btn">
+          + Nová kampaň
         </Link>
       </div>
 
-      {/* List */}
       {campaigns.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-gray-100 p-16 flex flex-col items-center gap-4 text-center">
-          <Mail size={40} className="text-gray-300" />
-          <div>
-            <p className="text-base font-semibold text-gray-700">Zatím žádné kampaně</p>
-            <p className="text-sm text-gray-400 mt-1">Vytvořte svoji první e-mailovou kampaň.</p>
-          </div>
-          <Link
-            href="/admin/email-campaigns/new"
-            className="mt-2 px-5 py-2.5 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-gray-700 transition-colors"
-          >
+        <div className="admin-card admin-empty">
+          <p>Zatím žádné kampaně</p>
+          <p className="mt-[8px]">Vytvořte svoji první e-mailovou kampaň.</p>
+          <Link href="/admin/email-campaigns/new" className="admin-btn mt-[16px]">
             Vytvořit kampaň
           </Link>
         </div>
       ) : (
-        <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-          <div className="divide-y divide-gray-50">
-            {campaigns.map((campaign) => (
-              <div key={campaign.id} className="px-6 py-5 flex items-start justify-between gap-4 hover:bg-gray-50 transition-colors">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2.5 flex-wrap mb-1">
-                    <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide truncate">{campaign.name}</h3>
-                    <span className={`inline-block text-[10px] font-semibold uppercase px-2 py-0.5 rounded-md ${STATUS_STYLES[campaign.status] || STATUS_STYLES.draft}`}>
-                      {STATUS_LABELS[campaign.status] || campaign.status}
-                    </span>
-                  </div>
-                  <p className="text-sm text-gray-500 truncate mb-2">{campaign.subject}</p>
-                  <div className="flex flex-wrap gap-4 text-xs text-gray-400">
-                    <span>
-                      Cílová skupina: <span className="text-gray-600 font-medium">
-                        {campaign.targetAudience === 'all' ? 'Všichni' : campaign.targetAudience}
-                      </span>
-                    </span>
-                    {campaign.status === 'sent' && (
-                      <>
-                        <span>Odesláno: <span className="text-gray-600 font-medium">{campaign.sentCount}</span></span>
-                        <span>
-                          Otevřeno: <span className="text-gray-600 font-medium">
-                            {campaign.openedCount} ({campaign.sentCount > 0 ? Math.round((campaign.openedCount / campaign.sentCount) * 100) : 0}%)
-                          </span>
-                        </span>
-                      </>
-                    )}
-                  </div>
+        <div className="admin-card overflow-hidden">
+          {campaigns.map((campaign, idx) => (
+            <div
+              key={campaign.id}
+              className={`px-[24px] py-[20px] flex items-start justify-between gap-4 hover:bg-black/5 transition-colors ${
+                idx !== campaigns.length - 1 ? 'border-b border-black' : ''
+              }`}
+            >
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap mb-1">
+                  <h3 className="text-xs font-bold uppercase tracking-wider truncate">{campaign.name}</h3>
+                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-[4px] border border-black">
+                    {STATUS_LABELS[campaign.status] || campaign.status}
+                  </span>
                 </div>
-                <div className="flex items-center gap-1.5 shrink-0">
-                  <Link
-                    href={`/admin/email-campaigns/${campaign.id}`}
-                    className="p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
-                    title="Upravit"
-                  >
-                    <Edit size={16} />
-                  </Link>
-                  <button
-                    onClick={() => deleteCampaign(campaign.id)}
-                    className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                    title="Smazat"
-                  >
-                    <Trash2 size={16} />
-                  </button>
+                <p className="text-xs uppercase tracking-wider text-[#666666] truncate mb-2">{campaign.subject}</p>
+                <div className="flex flex-wrap gap-4 text-[11px] uppercase tracking-wider text-[#666666]">
+                  <span>
+                    Cílová skupina:{' '}
+                    <span className="text-black font-medium">
+                      {campaign.targetAudience === 'all' ? 'Všichni' : campaign.targetAudience}
+                    </span>
+                  </span>
+                  {campaign.status === 'sent' && (
+                    <>
+                      <span>Odesláno: <span className="text-black font-medium">{campaign.sentCount}</span></span>
+                      <span>
+                        Otevřeno:{' '}
+                        <span className="text-black font-medium">
+                          {campaign.openedCount} ({campaign.sentCount > 0 ? Math.round((campaign.openedCount / campaign.sentCount) * 100) : 0}%)
+                        </span>
+                      </span>
+                    </>
+                  )}
                 </div>
               </div>
-            ))}
-          </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <Link
+                  href={`/admin/email-campaigns/${campaign.id}`}
+                  className="admin-btn admin-btn-secondary"
+                  style={{ padding: '6px 12px', fontSize: 10 }}
+                >
+                  Upravit
+                </Link>
+                <button
+                  onClick={() => deleteCampaign(campaign.id)}
+                  className="admin-btn admin-btn-secondary"
+                  style={{ padding: '6px 12px', fontSize: 10 }}
+                >
+                  Smazat
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </div>

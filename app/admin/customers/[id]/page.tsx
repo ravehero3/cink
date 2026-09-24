@@ -14,12 +14,12 @@ interface CustomerDetail {
 }
 
 const ORDER_STATUS: Record<string, string> = {
-  PENDING: 'Čeká',
-  PAID: 'Zaplaceno',
-  PROCESSING: 'Zpracovává se',
-  SHIPPED: 'Odesláno',
-  COMPLETED: 'Dokončeno',
-  CANCELLED: 'Zrušeno',
+  PENDING: 'ČEKÁ',
+  PAID: 'ZAPLACENO',
+  PROCESSING: 'ZPRACOVÁVÁ SE',
+  SHIPPED: 'ODESLÁNO',
+  COMPLETED: 'DOKONČENO',
+  CANCELLED: 'ZRUŠENO',
 };
 
 export default function CustomerDetailPage({ params }: { params: { id: string } }) {
@@ -42,20 +42,18 @@ export default function CustomerDetailPage({ params }: { params: { id: string } 
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-60">
-        <div className="flex items-center gap-2.5">
-          <div className="w-4 h-4 border-2 border-gray-200 border-t-gray-700 rounded-full animate-spin" />
-          <span className="text-sm text-gray-400">Načítám zákazníka…</span>
-        </div>
+      <div className="flex items-center justify-center py-20 gap-3" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
+        <div className="w-4 h-4 border border-black border-t-transparent animate-spin" />
+        <span className="text-xs uppercase tracking-widest text-[#666666]">Načítám zákazníka…</span>
       </div>
     );
   }
 
   if (!customer) {
     return (
-      <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center">
-        <p className="text-sm text-gray-500">Zákazník nenalezen.</p>
-        <Link href="/admin/customers" className="mt-4 inline-block text-sm font-semibold text-gray-900 underline">
+      <div className="bg-white border border-black p-12 text-center" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
+        <p className="text-xs uppercase tracking-wider text-[#666666]">Zákazník nenalezen.</p>
+        <Link href="/admin/customers" className="mt-4 inline-block text-xs uppercase font-bold text-black underline">
           ← Zpět na seznam
         </Link>
       </div>
@@ -65,29 +63,31 @@ export default function CustomerDetailPage({ params }: { params: { id: string } 
   const totalSpent = customer.orders.reduce((sum: number, o: any) => sum + Number(o.totalPrice || 0), 0);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
 
       {/* Header */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 border-b border-black pb-4">
         <Link
           href="/admin/customers"
-          className="flex items-center justify-center w-8 h-8 rounded-lg bg-white border border-gray-200 text-gray-500 hover:text-gray-900 hover:border-gray-300 transition-all"
+          className="flex items-center justify-center w-8 h-8 border border-black bg-white text-black hover:bg-black hover:text-white transition-colors"
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M19 12H5M12 19l-7-7 7-7"/>
-          </svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">{customer.name || customer.email}</h1>
-          <p className="mt-0.5 text-sm text-gray-400">Detail zákazníka</p>
+          <h1 className="admin-title">
+            {customer.name || customer.email}
+          </h1>
+          <p className="admin-sub">Detail zákazníka</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
         {/* Personal info */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Osobní údaje</p>
+        <div className="bg-white border border-black p-6 space-y-4">
+          <p className="text-[10px] font-bold text-[#666666] uppercase tracking-widest pb-2 border-b border-black">
+            Osobní údaje
+          </p>
           <div className="space-y-3">
             {[
               { label: 'Jméno', value: customer.name || '—' },
@@ -96,14 +96,14 @@ export default function CustomerDetailPage({ params }: { params: { id: string } 
               { label: 'Registrován/a', value: new Date(customer.createdAt).toLocaleDateString('cs-CZ') },
             ].map(({ label, value }) => (
               <div key={label}>
-                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest">{label}</p>
-                <p className="text-sm text-gray-900 mt-0.5 font-medium">{value}</p>
+                <p className="text-[10px] font-bold text-[#666666] uppercase tracking-widest">{label}</p>
+                <p className="text-xs uppercase font-medium text-black mt-0.5">{value}</p>
               </div>
             ))}
             <div>
-              <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Newsletter</p>
-              <span className={`inline-block mt-0.5 text-xs font-semibold px-2.5 py-1 rounded-lg ${
-                customer.newsletterSubscribed ? 'bg-emerald-50 text-emerald-700' : 'bg-gray-100 text-gray-500'
+              <p className="text-[10px] font-bold text-[#666666] uppercase tracking-widest mb-1">Newsletter</p>
+              <span className={`inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 border border-black ${
+                customer.newsletterSubscribed ? 'bg-black text-white' : 'bg-white text-black'
               }`}>
                 {customer.newsletterSubscribed ? 'Přihlášen/a' : 'Odhlášen/a'}
               </span>
@@ -112,44 +112,64 @@ export default function CustomerDetailPage({ params }: { params: { id: string } 
         </div>
 
         {/* Stats */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Přehled</p>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-gray-50 rounded-xl p-4 text-center">
-              <p className="text-2xl font-bold text-gray-900">{customer.orders.length}</p>
-              <p className="text-xs text-gray-400 mt-1 uppercase tracking-wide">Objednávky</p>
+        <div className="bg-white border border-black p-6 space-y-4">
+          <p className="text-[10px] font-bold text-[#666666] uppercase tracking-widest pb-2 border-b border-black">
+            Přehled nákupů
+          </p>
+          <div className="grid grid-cols-2 gap-px bg-black border border-black">
+            <div className="bg-white p-4 text-center">
+              <p
+                className="text-2xl font-bold text-black"
+                style={{ fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif' }}
+              >
+                {customer.orders.length}
+              </p>
+              <p className="text-[10px] font-bold text-[#666666] uppercase tracking-widest mt-1">Objednávek</p>
             </div>
-            <div className="bg-gray-50 rounded-xl p-4 text-center">
-              <p className="text-2xl font-bold text-gray-900">{totalSpent.toLocaleString('cs-CZ')}</p>
-              <p className="text-xs text-gray-400 mt-1 uppercase tracking-wide">Kč celkem</p>
+            <div className="bg-white p-4 text-center">
+              <p
+                className="text-2xl font-bold text-black"
+                style={{ fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif' }}
+              >
+                {totalSpent.toLocaleString('cs-CZ')}
+              </p>
+              <p className="text-[10px] font-bold text-[#666666] uppercase tracking-widest mt-1">Kč celkem</p>
             </div>
           </div>
         </div>
 
-        {/* Orders */}
-        <div className="lg:col-span-1 bg-white rounded-2xl border border-gray-100 p-6">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">
-            Objednávky ({customer.orders.length})
+        {/* Orders list */}
+        <div className="lg:col-span-1 bg-white border border-black p-6">
+          <p className="text-[10px] font-bold text-[#666666] uppercase tracking-widest pb-2 border-b border-black mb-4">
+            Historie objednávek ({customer.orders.length})
           </p>
           {customer.orders.length === 0 ? (
-            <p className="text-sm text-gray-400 text-center py-6">Žádné objednávky</p>
+            <p className="text-xs uppercase text-[#666666] text-center py-6">Žádné objednávky</p>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-3">
               {customer.orders.map((order: any) => (
-                <div key={order.id} className="flex items-center justify-between py-2.5 border-b border-gray-50 last:border-0">
+                <div key={order.id} className="flex items-center justify-between pb-3 border-b border-black/10 last:border-0">
                   <div>
-                    <p className="text-sm font-semibold text-gray-900">{order.orderNumber}</p>
-                    <p className="text-xs text-gray-400">{new Date(order.createdAt).toLocaleDateString('cs-CZ')}</p>
+                    <Link
+                      href={`/admin/objednavky/${order.id}`}
+                      className="text-xs font-bold uppercase tracking-wider text-black hover:underline"
+                    >
+                      #{order.orderNumber}
+                    </Link>
+                    <p className="text-[10px] uppercase text-[#666666] mt-0.5">{new Date(order.createdAt).toLocaleDateString('cs-CZ')}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-semibold text-gray-900">{Number(order.totalPrice).toLocaleString('cs-CZ')} Kč</p>
-                    <p className="text-xs text-gray-400">{ORDER_STATUS[order.status] || order.status}</p>
+                    <p className="text-xs font-bold text-black">{Number(order.totalPrice).toLocaleString('cs-CZ')} Kč</p>
+                    <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 border border-black inline-block mt-0.5">
+                      {ORDER_STATUS[order.status] || order.status}
+                    </span>
                   </div>
                 </div>
               ))}
             </div>
           )}
         </div>
+
       </div>
     </div>
   );

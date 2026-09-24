@@ -76,82 +76,71 @@ export default function AdminNewsletterPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-60">
-        <div className="flex items-center gap-2.5">
-          <div className="w-4 h-4 border-2 border-gray-200 border-t-gray-700 rounded-full animate-spin" />
-          <span className="text-sm text-gray-400">Načítám odběratele…</span>
-        </div>
+      <div className="flex items-center gap-3 py-12">
+        <div className="admin-spinner" />
+        <span className="admin-sub" style={{ margin: 0 }}>Načítám odběratele…</span>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-
-      {/* Header */}
-      <div className="flex items-center justify-between gap-4 flex-wrap">
+    <div className="space-y-[24px]">
+      <div className="flex items-center justify-between gap-4 flex-wrap border-b border-black pb-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Newsletter</h1>
-          <p className="mt-1 text-sm text-gray-400">{subscribers.length} odběratelů celkem</p>
+          <h1 className="admin-title">Newsletter</h1>
+          <p className="admin-sub">{subscribers.length} odběratelů celkem</p>
         </div>
         {subscribers.length > 0 && (
-          <button
-            onClick={handleExportCSV}
-            className="inline-flex items-center gap-2 bg-white border border-gray-200 text-gray-700 text-sm font-semibold px-4 py-2.5 rounded-xl hover:border-gray-300 hover:bg-gray-50 transition-all"
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-            </svg>
+          <button onClick={handleExportCSV} className="admin-btn admin-btn-secondary">
             Stáhnout CSV
           </button>
         )}
       </div>
 
-      {/* Stat card */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="bg-white rounded-2xl border border-gray-100 p-5">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">Celkem odběratelů</p>
-          <p className="text-3xl font-bold text-gray-900">{subscribers.length}</p>
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-px bg-black border border-black">
+        <div className="bg-white p-[20px]">
+          <p className="admin-label">Celkem odběratelů</p>
+          <p className="admin-title" style={{ fontSize: 23 }}>{subscribers.length}</p>
         </div>
         {subscribers.length > 0 && (
-          <div className="bg-white rounded-2xl border border-gray-100 p-5">
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">Nejnovější</p>
-            <p className="text-sm font-semibold text-gray-700 truncate">{subscribers[0]?.email}</p>
-            <p className="text-xs text-gray-400 mt-1">
+          <div className="bg-white p-[20px]">
+            <p className="admin-label">Nejnovější</p>
+            <p className="text-xs uppercase tracking-wider font-medium truncate">{subscribers[0]?.email}</p>
+            <p className="admin-sub">
               {new Date(subscribers[0]?.createdAt).toLocaleDateString('cs-CZ')}
             </p>
           </div>
         )}
       </div>
 
-      {/* Table */}
-      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+      <div className="admin-card overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-100">
-                <th className="text-left px-4 py-3 text-[10px] font-semibold text-gray-400 uppercase tracking-widest">#</th>
-                <th className="text-left px-4 py-3 text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Email</th>
-                <th className="text-left px-4 py-3 text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Datum registrace</th>
-                <th className="px-4 py-3" />
+          <table className="w-full">
+            <thead className="border-b border-black">
+              <tr>
+                <th className="admin-th">#</th>
+                <th className="admin-th">Email</th>
+                <th className="admin-th">Datum registrace</th>
+                <th className="admin-th">Akce</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-50">
+            <tbody className="divide-y divide-black/10">
               {subscribers.map((subscriber, idx) => (
-                <tr key={subscriber.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-4 py-3 text-xs text-gray-300 font-mono w-10">{idx + 1}</td>
-                  <td className="px-4 py-3 font-medium text-gray-800">{subscriber.email}</td>
-                  <td className="px-4 py-3 text-gray-400 text-xs whitespace-nowrap">
+                <tr key={subscriber.id} className="hover:bg-black/5 transition-colors">
+                  <td className="admin-td text-[#666666] w-10">{idx + 1}</td>
+                  <td className="admin-td font-medium">{subscriber.email}</td>
+                  <td className="admin-td text-[#666666] whitespace-nowrap">
                     {new Date(subscriber.createdAt).toLocaleDateString('cs-CZ', {
                       year: 'numeric',
                       month: 'long',
                       day: 'numeric',
                     })}
                   </td>
-                  <td className="px-4 py-3 text-right">
+                  <td className="admin-td">
                     <button
                       onClick={() => handleDelete(subscriber.id, subscriber.email)}
-                      className="text-xs font-medium text-red-400 hover:text-red-600 px-2 py-1 rounded-lg hover:bg-red-50 transition-colors"
+                      className="admin-btn admin-btn-secondary"
+                      style={{ padding: '6px 12px', fontSize: 10 }}
                     >
                       Odebrat
                     </button>
@@ -162,19 +151,10 @@ export default function AdminNewsletterPage() {
           </table>
         </div>
         {subscribers.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center mb-3">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
-              </svg>
-            </div>
-            <p className="text-sm font-medium text-gray-500">Žádní odběratelé</p>
-            <p className="text-xs text-gray-400 mt-1">Odběratelé se zobrazí po registraci na e-shopu.</p>
-          </div>
+          <div className="admin-empty">Žádní odběratelé. Zobrazí se po registraci na e-shopu.</div>
         )}
         {subscribers.length > 0 && (
-          <div className="px-4 py-3 border-t border-gray-100 text-xs text-gray-400">
+          <div className="px-4 py-3 border-t border-black text-xs uppercase tracking-wider text-[#666666]">
             {subscribers.length} odběratelů
           </div>
         )}

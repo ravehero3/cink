@@ -50,22 +50,19 @@ export default function CustomersPage() {
       (c.name || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const inputCls =
-    'w-full text-sm bg-white border border-gray-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all placeholder:text-gray-300';
-
   if (loading) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-6" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
         <PageHeaderSkeleton />
-        <div className="bg-white rounded-2xl border border-gray-100 p-4">
-          <div className="h-9 w-full bg-gray-100 rounded-xl animate-pulse" />
+        <div className="bg-white border border-black p-4">
+          <div className="h-9 w-full bg-black/10 animate-pulse" />
         </div>
-        <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+        <div className="bg-white border border-black overflow-hidden">
           <table className="w-full text-sm">
-            <thead className="border-b border-gray-100">
+            <thead className="border-b border-black">
               <tr>
                 {['Jméno','E-mail','Telefon','Objednávky','Utraceno','Poslední objednávka','Newsletter','Akce'].map((h) => (
-                  <th key={h} className="text-left px-4 py-3 text-[10px] font-semibold text-gray-400 uppercase tracking-widest whitespace-nowrap">{h}</th>
+                  <th key={h} className="text-left px-4 py-3 text-[10px] font-bold text-black uppercase tracking-widest whitespace-nowrap">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -77,26 +74,28 @@ export default function CustomersPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
 
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Zákazníci</h1>
-        <p className="mt-0.5 text-sm text-gray-400">{filteredCustomers.length} zákazníků</p>
+      <div className="border-b border-black pb-4">
+          <h1 className="admin-title">
+            Zákazníci
+          </h1>
+          <p className="admin-sub">{filteredCustomers.length} zákazníků v databázi</p>
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-2xl border border-gray-100 px-5 py-4">
+      <div className="bg-white border border-black p-4">
         <div className="flex flex-wrap items-center gap-4">
           {/* Search */}
           <div className="relative flex-1 min-w-[200px]">
-            <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-black/40 pointer-events-none" />
             <input
               type="text"
               placeholder="Hledat podle jména nebo e-mailu…"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full text-sm pl-9 pr-3 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent bg-white placeholder:text-gray-300"
+              className="w-full text-xs uppercase pl-8 pr-3 py-2 border border-black focus:outline-none bg-white placeholder:text-black/30 tracking-wider"
             />
           </div>
 
@@ -104,7 +103,7 @@ export default function CustomersPage() {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as any)}
-            className="text-sm border border-gray-200 rounded-xl px-3.5 py-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-gray-700"
+            className="text-xs uppercase border border-black px-3 py-2 bg-white focus:outline-none text-black tracking-wider cursor-pointer"
           >
             <option value="createdAt">Nejnovější</option>
             <option value="name">Jméno A–Z</option>
@@ -115,7 +114,7 @@ export default function CustomersPage() {
           <select
             value={filterRole}
             onChange={(e) => setFilterRole(e.target.value)}
-            className="text-sm border border-gray-200 rounded-xl px-3.5 py-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent text-gray-700"
+            className="text-xs uppercase border border-black px-3 py-2 bg-white focus:outline-none text-black tracking-wider cursor-pointer"
           >
             <option value="all">Všichni</option>
             <option value="USER">Zákazníci</option>
@@ -125,43 +124,43 @@ export default function CustomersPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+      <div className="bg-white border border-black overflow-hidden">
         {filteredCustomers.length === 0 ? (
-          <div className="text-center py-16 text-sm text-gray-400">Žádní zákazníci nenalezeni.</div>
+          <div className="text-center py-16 text-xs uppercase tracking-wider text-[#666666]">Žádní zákazníci nenalezeni.</div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="sticky top-0 z-10 bg-white">
-                <tr className="border-b border-gray-100">
+            <table className="w-full text-xs">
+              <thead className="bg-white border-b border-black">
+                <tr>
                   {['Jméno', 'E-mail', 'Telefon', 'Objednávky', 'Celkem utraceno', 'Poslední objednávka', 'Newsletter', 'Akce'].map((h) => (
                     <th
                       key={h}
-                      className="text-left px-4 py-3 text-[10px] font-semibold text-gray-400 uppercase tracking-widest whitespace-nowrap"
+                      className="text-left px-4 py-3 text-[10px] font-bold text-black uppercase tracking-widest whitespace-nowrap"
                     >
                       {h}
                     </th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-50">
+              <tbody className="divide-y divide-black/10">
                 {filteredCustomers.map((customer) => (
-                  <tr key={customer.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-4 py-3 font-medium text-gray-900">{customer.name || '—'}</td>
-                    <td className="px-4 py-3 text-gray-600 text-xs">{customer.email}</td>
-                    <td className="px-4 py-3 text-gray-600 text-xs">{customer.phone || '—'}</td>
-                    <td className="px-4 py-3 font-semibold text-gray-900">{customer.totalOrders}</td>
-                    <td className="px-4 py-3 font-semibold text-gray-900">{Number(customer.totalSpent).toLocaleString('cs-CZ')} Kč</td>
-                    <td className="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">
+                  <tr key={customer.id} className="hover:bg-black/5 transition-colors">
+                    <td className="px-4 py-3 font-bold uppercase text-black">{customer.name || '—'}</td>
+                    <td className="px-4 py-3 text-[#666666]">{customer.email}</td>
+                    <td className="px-4 py-3 text-[#666666]">{customer.phone || '—'}</td>
+                    <td className="px-4 py-3 font-bold text-black">{customer.totalOrders}</td>
+                    <td className="px-4 py-3 font-bold text-black">{Number(customer.totalSpent).toLocaleString('cs-CZ')} Kč</td>
+                    <td className="px-4 py-3 text-[#666666] whitespace-nowrap">
                       {customer.lastOrderDate
                         ? new Date(customer.lastOrderDate).toLocaleDateString('cs-CZ')
                         : '—'}
                     </td>
                     <td className="px-4 py-3">
                       <span
-                        className={`inline-block text-xs font-semibold px-2.5 py-1 rounded-lg ${
+                        className={`inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 border border-black ${
                           customer.newsletterSubscribed
-                            ? 'bg-emerald-50 text-emerald-700'
-                            : 'bg-gray-100 text-gray-500'
+                            ? 'bg-black text-white'
+                            : 'bg-white text-black'
                         }`}
                       >
                         {customer.newsletterSubscribed ? 'Ano' : 'Ne'}
@@ -170,7 +169,7 @@ export default function CustomersPage() {
                     <td className="px-4 py-3">
                       <Link
                         href={`/admin/customers/${customer.id}`}
-                        className="text-xs font-semibold text-gray-500 hover:text-gray-900 px-3 py-1.5 rounded-lg border border-gray-200 hover:border-gray-400 transition-colors"
+                        className="text-[10px] font-bold uppercase tracking-wider text-black border border-black bg-white hover:bg-black hover:text-white px-2.5 py-1 transition-colors whitespace-nowrap inline-block"
                       >
                         Detail
                       </Link>

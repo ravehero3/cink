@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { X, Upload, Search, Check, Loader2, AlertCircle, ImageIcon, RefreshCw } from 'lucide-react';
+import { X, Search, Check, RefreshCw } from 'lucide-react';
 
 interface MediaItem {
   id: string;
@@ -18,9 +18,7 @@ interface MediaItem {
 }
 
 interface GalerieModalProps {
-  /** Already-selected URLs (to pre-highlight in gallery) */
   selectedUrls?: string[];
-  /** Max images the user can pick in one session */
   maxSelect?: number;
   onConfirm: (urls: string[]) => void;
   onClose: () => void;
@@ -53,7 +51,7 @@ export default function GalerieModal({
       const data = await res.json();
       setMedia(data.media || []);
     } catch {
-      // ignore — show empty state
+      // ignore
     } finally {
       setLoading(false);
     }
@@ -62,14 +60,6 @@ export default function GalerieModal({
   useEffect(() => {
     fetchMedia();
   }, [fetchMedia]);
-
-  // Pre-select already-used images
-  useEffect(() => {
-    if (selectedUrls.length > 0) {
-      // We can't match by URL directly (media stores /uploads/… paths)
-      // Just start with an empty selection — user will pick fresh ones
-    }
-  }, [selectedUrls]);
 
   const togglePick = (url: string) => {
     setPicked((prev) => {
@@ -101,81 +91,89 @@ export default function GalerieModal({
         const fd = new FormData();
         fd.append('file', file);
         const res = await fetch('/api/media/upload', { method: 'POST', body: fd });
-        if (!res.ok) {
+        if (res.ok) {
+          const result = await res.json();
+          uploaded.push(result.media);
+        } else {
           const err = await res.json();
-          setUploadError(err.error || 'Nahrání selhalo.');
-          continue;
+          setUploadError(err.error || 'Nahrávání selhalo');
         }
-        const result = await res.json();
-        uploaded.push(result.media);
       } catch {
-        setUploadError(`Nahrání souboru "${file.name}" selhalo.`);
+        setUploadError('Chyba sítě při nahrávání');
       }
     }
 
     if (uploaded.length > 0) {
       setMedia((prev) => [...uploaded, ...prev]);
-      // Auto-pick newly uploaded images
-      setPicked((prev) => {
-        const next = new Set(prev);
-        for (const m of uploaded) {
-          if (next.size < maxSelect) next.add(m.url);
-        }
-        return next;
+      uploaded.forEach((item) => {
+        setPicked((prev) => {
+          if (prev.size < maxSelect) {
+            const next = new Set(prev);
+            next.add(item.url);
+            return next;
+          }
+          return prev;
+        });
       });
     }
 
     setUploading(false);
-    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  const filtered = search.trim()
-    ? media.filter((m) =>
-        m.originalName.toLowerCase().includes(search.trim().toLowerCase())
-      )
-    : media;
-
-  const handleConfirm = () => {
-    onConfirm(Array.from(picked));
-    onClose();
-  };
+  const filtered = media.filter((item) =>
+    (item.originalName || item.filename).toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
-      onClick={onClose}
+      className="fixed inset-0 z-[250] flex items-center justify-center p-4"
+      style={{
+        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+      }}
     >
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/60" onClick={onClose} />
+
+      {/* Modal dialog */}
       <div
-        className="bg-white w-full max-w-5xl max-h-[90vh] flex flex-col rounded-2xl overflow-hidden border border-gray-200 shadow-2xl"
+        className="relative bg-white border border-black w-full max-w-4xl max-h-[88vh] flex flex-col shadow-none"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* ── Header ── */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 shrink-0">
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-black shrink-0">
           <div>
-            <h2 className="text-base font-bold text-gray-900 uppercase tracking-widest">Galerie</h2>
-            <p className="text-xs text-gray-400 mt-0.5">
+            <h2
+              className="text-sm font-bold uppercase tracking-wider text-black"
+              style={{
+                fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+              }}
+            >
+              Galerie médií
+            </h2>
+            <p className="text-[11px] uppercase tracking-wide text-[#666666] mt-0.5">
               Vyberte obrázky nebo nahrajte nové · {picked.size}/{maxSelect} vybráno
             </p>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-500 hover:text-gray-900 transition-colors"
+            className="text-black hover:opacity-60 transition-opacity"
+            aria-label="Zavřít"
           >
             <X size={18} />
           </button>
         </div>
 
-        {/* ── Toolbar ── */}
-        <div className="px-6 py-3 border-b border-gray-100 flex items-center gap-3 shrink-0 flex-wrap">
+        {/* Toolbar */}
+        <div className="px-6 py-3 border-b border-black flex items-center gap-3 shrink-0 flex-wrap">
           {/* Search */}
-          <div className="relative flex-1 min-w-[180px]">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+          <div className="relative flex-1 min-w-[200px]">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-black/40 pointer-events-none" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Hledat soubory…"
-              className="w-full text-sm pl-9 pr-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent bg-white placeholder:text-gray-300"
+              className="w-full text-xs uppercase pl-8 pr-3 py-2 border border-black bg-white focus:outline-none placeholder:text-black/30 tracking-wider"
             />
           </div>
 
@@ -183,9 +181,9 @@ export default function GalerieModal({
           <button
             onClick={fetchMedia}
             disabled={loading}
-            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-gray-600 border border-gray-200 rounded-lg hover:border-gray-400 hover:text-gray-900 transition-colors disabled:opacity-40"
+            className="flex items-center gap-1.5 px-3 py-2 text-xs uppercase tracking-wider font-medium border border-black bg-white hover:bg-black hover:text-white transition-colors disabled:opacity-40"
           >
-            <RefreshCw size={13} className={loading ? 'animate-spin' : ''} />
+            <RefreshCw size={12} className={loading ? 'animate-spin' : ''} />
             Obnovit
           </button>
 
@@ -200,44 +198,46 @@ export default function GalerieModal({
               disabled={uploading}
               onChange={(e) => handleUpload(e.target.files)}
             />
-            <div className={`flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-lg transition-colors ${
-              uploading
-                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                : 'bg-gray-900 text-white hover:bg-gray-700 cursor-pointer'
-            }`}>
+            <div
+              className={`flex items-center gap-1.5 px-4 py-2 text-xs uppercase tracking-wider font-medium border border-black transition-colors ${
+                uploading
+                  ? 'bg-black/10 text-black/50 cursor-not-allowed'
+                  : 'bg-black text-white hover:bg-white hover:text-black cursor-pointer'
+              }`}
+            >
               {uploading ? (
-                <><Loader2 size={13} className="animate-spin" /> Nahrávám…</>
+                <>
+                  <span className="w-3 h-3 border border-white border-t-transparent animate-spin" />
+                  Nahrávám…
+                </>
               ) : (
-                <><Upload size={13} /> Nahrát soubory</>
+                <>+ Nahrát soubory</>
               )}
             </div>
           </label>
         </div>
 
-        {/* ── Upload error ── */}
+        {/* Upload error */}
         {uploadError && (
-          <div className="mx-6 mt-3 flex items-start gap-2 p-3 border border-red-200 bg-red-50 rounded-lg text-sm text-red-700 shrink-0">
-            <AlertCircle size={15} className="shrink-0 mt-0.5" />
+          <div className="mx-6 mt-3 flex items-start gap-2 p-3 border border-black bg-white text-xs uppercase tracking-wider text-black shrink-0">
+            <span className="font-bold">[ CHYBA ]</span>
             <span className="flex-1">{uploadError}</span>
-            <button onClick={() => setUploadError(null)} className="shrink-0 hover:text-red-900">
+            <button onClick={() => setUploadError(null)} className="shrink-0 hover:opacity-60">
               <X size={14} />
             </button>
           </div>
         )}
 
-        {/* ── Grid ── */}
+        {/* Grid */}
         <div className="flex-1 overflow-y-auto p-6">
           {loading ? (
-            <div className="flex flex-col items-center justify-center py-20 gap-3 text-gray-400">
-              <Loader2 size={32} className="animate-spin" />
-              <p className="text-sm">Načítám galerii…</p>
+            <div className="flex items-center justify-center py-20 gap-3">
+              <div className="w-5 h-5 border border-black border-t-transparent animate-spin" />
+              <span className="text-xs uppercase tracking-widest text-[#666666]">Načítám galerii…</span>
             </div>
           ) : filtered.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-20 gap-3 text-gray-400">
-              <ImageIcon size={40} />
-              <p className="text-sm font-medium">
-                {search ? 'Žádné soubory neodpovídají hledání.' : 'Galerie je prázdná. Nahrajte první obrázky.'}
-              </p>
+            <div className="text-center py-20 text-xs uppercase tracking-widest text-[#666666]">
+              {search ? 'Žádné soubory neodpovídají hledání.' : 'Galerie je prázdná. Nahrajte první obrázky.'}
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
@@ -248,10 +248,10 @@ export default function GalerieModal({
                     key={item.id}
                     type="button"
                     onClick={() => togglePick(item.url)}
-                    className={`relative group aspect-square rounded-xl overflow-hidden border-2 transition-all focus:outline-none ${
+                    className={`relative aspect-square border text-left group overflow-hidden transition-all ${
                       isPicked
-                        ? 'border-gray-900 ring-2 ring-gray-900 ring-offset-1'
-                        : 'border-gray-100 hover:border-gray-400'
+                        ? 'border-2 border-black outline outline-2 outline-black'
+                        : 'border-black hover:border-black'
                     }`}
                   >
                     <img
@@ -260,23 +260,20 @@ export default function GalerieModal({
                       className="w-full h-full object-cover"
                     />
 
-                    {/* Hover overlay */}
-                    <div className={`absolute inset-0 transition-opacity ${
-                      isPicked ? 'bg-black/20' : 'bg-black/0 group-hover:bg-black/20'
-                    }`} />
-
-                    {/* Checkmark */}
-                    <div className={`absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center transition-all ${
-                      isPicked
-                        ? 'bg-gray-900 text-white opacity-100'
-                        : 'bg-white/80 text-transparent opacity-0 group-hover:opacity-100'
-                    }`}>
-                      <Check size={13} strokeWidth={3} />
+                    {/* Check indicator */}
+                    <div
+                      className={`absolute top-1.5 right-1.5 w-5 h-5 border border-black flex items-center justify-center text-xs font-bold transition-all ${
+                        isPicked
+                          ? 'bg-black text-white opacity-100'
+                          : 'bg-white text-black opacity-0 group-hover:opacity-100'
+                      }`}
+                    >
+                      {isPicked ? <Check size={12} strokeWidth={3} /> : null}
                     </div>
 
-                    {/* File name tooltip on hover */}
-                    <div className="absolute bottom-0 left-0 right-0 px-2 py-1.5 bg-black/70 text-white text-[10px] truncate opacity-0 group-hover:opacity-100 transition-opacity">
-                      {item.originalName}
+                    {/* Info bar on hover */}
+                    <div className="absolute bottom-0 inset-x-0 bg-black text-white px-1.5 py-1 text-[9px] uppercase tracking-wider truncate opacity-0 group-hover:opacity-100 transition-opacity">
+                      {item.originalName || item.filename} · {formatSize(item.size)}
                     </div>
                   </button>
                 );
@@ -285,24 +282,28 @@ export default function GalerieModal({
           )}
         </div>
 
-        {/* ── Footer ── */}
-        <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between gap-4 shrink-0 bg-white">
-          <p className="text-xs text-gray-400">
-            {filtered.length} {filtered.length === 1 ? 'soubor' : filtered.length < 5 ? 'soubory' : 'souborů'} v galerii
+        {/* Footer */}
+        <div className="px-6 py-4 border-t border-black flex items-center justify-between shrink-0 bg-white">
+          <p className="text-xs uppercase tracking-wider text-[#666666]">
+            Vybráno <span className="font-bold text-black">{picked.size}</span> z maximálně{' '}
+            <span className="font-bold text-black">{maxSelect}</span>
           </p>
-          <div className="flex items-center gap-3">
+          <div className="flex gap-2">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm font-semibold text-gray-600 border border-gray-200 rounded-xl hover:border-gray-400 hover:text-gray-900 transition-colors"
+              className="px-4 py-2 text-xs uppercase tracking-wider font-medium border border-black bg-white text-black hover:bg-black hover:text-white transition-colors"
             >
               Zrušit
             </button>
             <button
               type="button"
-              onClick={handleConfirm}
               disabled={picked.size === 0}
-              className="px-5 py-2 text-sm font-semibold bg-gray-900 text-white rounded-xl hover:bg-gray-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              onClick={() => {
+                onConfirm(Array.from(picked));
+                onClose();
+              }}
+              className="px-5 py-2 text-xs uppercase tracking-wider font-medium border border-black bg-black text-white hover:bg-white hover:text-black transition-colors disabled:opacity-40 disabled:pointer-events-none"
             >
               Použít vybrané ({picked.size})
             </button>

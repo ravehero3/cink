@@ -1,6 +1,6 @@
 'use client';
 
-import { CheckCircle, AlertCircle, X } from 'lucide-react';
+import { X } from 'lucide-react';
 
 interface StatusMessageProps {
   type: 'success' | 'error';
@@ -13,21 +13,23 @@ export default function StatusMessage({ type, message, onDismiss }: StatusMessag
 
   return (
     <div
-      className={`flex items-start gap-3 p-4 border text-sm mb-6 ${
-        type === 'success'
-          ? 'border-green-600 bg-green-50 text-green-800'
-          : 'border-red-500 bg-red-50 text-red-800'
-      }`}
+      className="flex items-start gap-3 p-4 border border-black bg-white text-black text-xs uppercase tracking-wider mb-6"
+      style={{
+        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+      }}
     >
-      {type === 'success' ? (
-        <CheckCircle size={18} className="shrink-0 mt-0.5 text-green-600" />
-      ) : (
-        <AlertCircle size={18} className="shrink-0 mt-0.5 text-red-600" />
-      )}
-      <p className="flex-1">{message}</p>
+      <span className="font-bold shrink-0">
+        {type === 'success' ? '[ OK ]' : '[ CHYBA ]'}
+      </span>
+      <p className="flex-1 font-medium">{message}</p>
       {onDismiss && (
-        <button type="button" onClick={onDismiss} className="shrink-0 opacity-60 hover:opacity-100">
-          <X size={16} />
+        <button
+          type="button"
+          onClick={onDismiss}
+          className="shrink-0 hover:opacity-60 transition-opacity"
+          aria-label="Zavřít"
+        >
+          <X size={14} />
         </button>
       )}
     </div>

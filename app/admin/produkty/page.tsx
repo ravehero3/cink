@@ -103,21 +103,23 @@ export default function AdminProductsPage() {
       });
 
       if (response.ok) {
-        fetchProducts();
+        setProducts(products.map((p) => (p.id === id ? { ...p, isVisible: !currentVisibility } : p)));
+        toast.success('Viditelnost produktu změněna');
+      } else {
+        toast.error('Nepodařilo se změnit viditelnost');
       }
-    } catch (error) {
-      console.error('Failed to toggle visibility:', error);
+    } catch {
+      toast.error('Došlo k chybě při změně viditelnosti');
     }
   };
 
-  const toggleProductSelection = (productId: string) => {
-    const newSelected = new Set(selectedProducts);
-    if (newSelected.has(productId)) {
-      newSelected.delete(productId);
-    } else {
-      newSelected.add(productId);
-    }
-    setSelectedProducts(newSelected);
+  const toggleProductSelection = (id: string) => {
+    setSelectedProducts((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
   };
 
   const toggleAllSelection = () => {
@@ -129,82 +131,98 @@ export default function AdminProductsPage() {
   };
 
   const handleBulkOperation = async () => {
-    if (!bulkValue.trim()) {
-      toast.error('Prosím zadejte hodnotu');
-      return;
-    }
-
+    if (selectedProducts.size === 0 || !bulkValue) return;
     setProcessingBulk(true);
 
     try {
-      const updates: any = {};
+      const productIds = Array.from(selectedProducts);
+      let updateData: any = {};
 
       if (bulkMode === 'price') {
-        updates.price = parseFloat(bulkValue);
+        const p = parseFloat(bulkValue);
+        if (isNaN(p) || p < 0) {
+          toast.error('Neplatná cena');
+          setProcessingBulk(false);
+          return;
+        }
+        updateData.price = p;
       } else if (bulkMode === 'category') {
-        updates.category = bulkValue;
+        if (!bulkValue) {
+          toast.error('Vyberte kategorii');
+          setProcessingBulk(false);
+          return;
+        }
+        updateData.category = bulkValue;
       } else if (bulkMode === 'visibility') {
-        updates.isVisible = bulkValue === 'visible';
+        updateData.isVisible = bulkValue === 'visible';
       } else if (bulkMode === 'stock') {
-        updates.totalStock = parseInt(bulkValue);
+        const s = parseInt(bulkValue);
+        if (isNaN(s) || s < 0) {
+          toast.error('Neplatný počet kusů');
+          setProcessingBulk(false);
+          return;
+        }
+        updateData.totalStock = s;
       } else if (bulkMode === 'threshold') {
-        updates.lowStockThreshold = parseInt(bulkValue);
+        const t = parseInt(bulkValue);
+        if (isNaN(t) || t < 0) {
+          toast.error('Neplatný práh');
+          setProcessingBulk(false);
+          return;
+        }
+        updateData.lowStockThreshold = t;
       }
 
-      const response = await fetch('/api/admin/products/bulk', {
-        method: 'POST',
+      const res = await fetch('/api/admin/products/bulk', {
+        method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: `update${bulkMode.charAt(0).toUpperCase()}${bulkMode.slice(1)}`,
-          productIds: Array.from(selectedProducts),
-          updates,
-        }),
+        body: JSON.stringify({ productIds, updateData }),
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        toast.success(data.message || 'Hromadná akce proběhla úspěšně');
+      if (res.ok) {
+        toast.success(`Hromadná úprava provedena pro ${productIds.length} produktů`);
         fetchProducts();
         setSelectedProducts(new Set());
         setBulkMode('none');
         setBulkValue('');
       } else {
-        toast.error('Chyba při hromadné úpravě');
+        toast.error('Nepodařilo se provést hromadnou úpravu');
       }
-    } catch (error) {
-      console.error('Failed bulk operation:', error);
-      toast.error('Došlo k chybě');
+    } catch {
+      toast.error('Došlo k chybě při hromadné úpravě');
     } finally {
       setProcessingBulk(false);
     }
   };
 
-  const filteredProducts = products.filter((product) => {
-    const matchesFilter =
-      filter === 'visible' ? product.isVisible :
-      filter === 'hidden' ? !product.isVisible :
-      filter === 'lowstock' ? product.totalStock <= product.lowStockThreshold :
-      true;
-    const matchesSearch = !search.trim() ||
-      product.name.toLowerCase().includes(search.toLowerCase()) ||
-      product.category.toLowerCase().includes(search.toLowerCase());
-    return matchesFilter && matchesSearch;
-  });
-
   const lowStockCount = products.filter((p) => p.totalStock <= p.lowStockThreshold).length;
+
+  const filteredProducts = products.filter((p) => {
+    if (search.trim()) {
+      const q = search.toLowerCase();
+      const matchesSearch =
+        p.name.toLowerCase().includes(q) ||
+        p.category.toLowerCase().includes(q) ||
+        p.slug.toLowerCase().includes(q);
+      if (!matchesSearch) return false;
+    }
+    if (filter === 'visible') return p.isVisible;
+    if (filter === 'hidden') return !p.isVisible;
+    if (filter === 'lowstock') return p.totalStock <= p.lowStockThreshold;
+    return true;
+  });
 
   if (loading) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-6" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
         <PageHeaderSkeleton />
-        <div className="h-11 w-72 bg-gray-100 rounded-xl animate-pulse" />
         <FilterBarSkeleton tabs={4} />
-        <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+        <div className="bg-white border border-black overflow-hidden">
           <table className="w-full text-sm">
-            <thead className="border-b border-gray-100">
+            <thead className="border-b border-black">
               <tr>
                 {['Produkt','Kategorie','Cena','Sklad','Status','Akce'].map((h) => (
-                  <th key={h} className="text-left px-4 py-3 text-[10px] font-semibold text-gray-400 uppercase tracking-widest whitespace-nowrap">{h}</th>
+                  <th key={h} className="text-left px-4 py-3 text-[10px] font-bold uppercase tracking-widest">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -223,79 +241,76 @@ export default function AdminProductsPage() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
 
       {/* Header */}
-      <div className="flex items-center justify-between gap-4 flex-wrap">
+      <div className="flex items-center justify-between gap-4 flex-wrap border-b border-black pb-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Produkty</h1>
-          <p className="mt-1 text-sm text-gray-400">{products.length} produktů celkem</p>
+          <h1 className="admin-title">
+            Produkty
+          </h1>
+          <p className="admin-sub">
+            {products.length} produktů celkem v katalogu
+          </p>
         </div>
         <Link
           href="/admin/produkty/novy"
-          className="inline-flex items-center gap-2 bg-gray-900 text-white text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-gray-700 transition-colors"
+          className="inline-flex items-center gap-2 bg-black text-white text-xs uppercase tracking-wider font-medium px-4 py-2.5 border border-black hover:bg-white hover:text-black transition-colors"
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-          </svg>
-          Přidat produkt
+          + Přidat produkt
         </Link>
       </div>
 
-      {/* Search */}
-      <div className="relative w-full sm:w-80">
-        <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Hledat produkt…"
-          className="w-full pl-9 pr-3 py-2.5 text-sm border border-gray-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent placeholder:text-gray-300 transition-all"
-        />
-        {search && (
-          <button
-            onClick={() => setSearch('')}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-          >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-            </svg>
-          </button>
-        )}
-      </div>
+      {/* Search & Filters */}
+      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+        {/* Search */}
+        <div className="relative w-full sm:w-80">
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Hledat produkt…"
+            className="w-full text-xs uppercase px-3 py-2 border border-black bg-white focus:outline-none tracking-wider placeholder:text-black/30"
+          />
+          {search && (
+            <button
+              onClick={() => setSearch('')}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-black hover:opacity-60 transition-opacity"
+              aria-label="Vymazat"
+            >
+              ×
+            </button>
+          )}
+        </div>
 
-      {/* Filter tabs */}
-      <div className="flex gap-1.5 flex-wrap">
-        {FILTERS.map((f) => (
-          <button
-            key={f.key}
-            onClick={() => setFilter(f.key)}
-            className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-sm font-medium transition-all ${
-              filter === f.key
-                ? f.key === 'lowstock'
-                  ? 'bg-red-50 text-red-600 border border-red-200'
-                  : 'bg-gray-900 text-white'
-                : 'bg-white border border-gray-200 text-gray-600 hover:border-gray-300 hover:text-gray-900'
-            }`}
-          >
-            {f.label}
-            <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
-              filter === f.key
-                ? f.key === 'lowstock' ? 'bg-red-100 text-red-600' : 'bg-white/20 text-white'
-                : 'bg-gray-100 text-gray-500'
-            }`}>
-              {f.count}
-            </span>
-          </button>
-        ))}
+        {/* Filter tabs */}
+        <div className="flex gap-2 flex-wrap">
+          {FILTERS.map((f) => {
+            const isActive = filter === f.key;
+            return (
+              <button
+                key={f.key}
+                onClick={() => setFilter(f.key)}
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs uppercase tracking-wider font-medium border border-black transition-colors ${
+                  isActive
+                    ? 'bg-black text-white'
+                    : 'bg-white text-black hover:bg-black hover:text-white'
+                }`}
+              >
+                <span>{f.label}</span>
+                <span className={`text-[10px] font-bold ${isActive ? 'text-white/80' : 'text-[#666666]'}`}>
+                  ({f.count})
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Bulk operations panel */}
       {selectedProducts.size > 0 && (
-        <div className={`bg-gray-900 rounded-2xl px-5 py-4 flex items-center justify-between gap-4 flex-wrap transition-all duration-200 ${selectedProducts.size > 0 ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1 pointer-events-none'}`}>
-          <p className="text-sm font-semibold text-white">
+        <div className="border border-black bg-black text-white p-4 flex items-center justify-between gap-4 flex-wrap text-xs uppercase tracking-wider">
+          <p className="font-bold">
             Vybráno {selectedProducts.size} {selectedProducts.size === 1 ? 'produkt' : 'produktů'}
           </p>
           {bulkMode === 'none' ? (
@@ -310,14 +325,14 @@ export default function AdminProductsPage() {
                 <button
                   key={mode}
                   onClick={() => setBulkMode(mode)}
-                  className="px-3 py-1.5 text-xs font-semibold text-white/80 bg-white/10 hover:bg-white/20 rounded-lg transition-colors"
+                  className="px-3 py-1 border border-white bg-black text-white hover:bg-white hover:text-black transition-colors text-[10px] font-bold uppercase tracking-wider"
                 >
                   {label}
                 </button>
               ))}
               <button
                 onClick={() => setSelectedProducts(new Set())}
-                className="px-3 py-1.5 text-xs font-semibold text-white/50 hover:text-white/80 transition-colors"
+                className="px-3 py-1 text-white/60 hover:text-white text-[10px] uppercase font-bold"
               >
                 Zrušit výběr
               </button>
@@ -328,7 +343,7 @@ export default function AdminProductsPage() {
                 <select
                   value={bulkValue}
                   onChange={(e) => setBulkValue(e.target.value)}
-                  className="text-sm bg-white border border-gray-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-gray-300"
+                  className="text-xs uppercase bg-white text-black border border-black px-2 py-1 focus:outline-none"
                 >
                   <option value="">Vyberte kategorii</option>
                   {CATEGORIES.map((cat) => <option key={cat} value={cat}>{cat}</option>)}
@@ -337,7 +352,7 @@ export default function AdminProductsPage() {
                 <select
                   value={bulkValue}
                   onChange={(e) => setBulkValue(e.target.value)}
-                  className="text-sm bg-white border border-gray-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-gray-300"
+                  className="text-xs uppercase bg-white text-black border border-black px-2 py-1 focus:outline-none"
                 >
                   <option value="">Vyberte stav</option>
                   <option value="visible">Viditelný</option>
@@ -350,19 +365,19 @@ export default function AdminProductsPage() {
                   onChange={(e) => setBulkValue(e.target.value)}
                   placeholder={bulkMode === 'price' ? 'Cena (Kč)' : bulkMode === 'stock' ? 'Počet ks' : 'Práh'}
                   step={bulkMode === 'price' ? '0.01' : '1'}
-                  className="text-sm bg-white border border-gray-200 rounded-lg px-3 py-1.5 w-32 focus:outline-none focus:ring-2 focus:ring-gray-300"
+                  className="text-xs uppercase bg-white text-black border border-black px-2 py-1 w-28 focus:outline-none"
                 />
               )}
               <button
                 onClick={handleBulkOperation}
                 disabled={processingBulk}
-                className="px-3 py-1.5 text-xs font-semibold bg-white text-gray-900 rounded-lg hover:bg-gray-100 disabled:opacity-50 transition-colors"
+                className="px-3 py-1 text-xs uppercase font-medium bg-white text-black border border-black hover:bg-black hover:text-white transition-colors disabled:opacity-50"
               >
                 {processingBulk ? 'Zpracovávám…' : 'Potvrdit'}
               </button>
               <button
                 onClick={() => { setBulkMode('none'); setBulkValue(''); }}
-                className="px-3 py-1.5 text-xs font-semibold text-white/50 hover:text-white/80 transition-colors"
+                className="px-3 py-1 text-xs uppercase text-white/60 hover:text-white"
               >
                 Zrušit
               </button>
@@ -372,43 +387,45 @@ export default function AdminProductsPage() {
       )}
 
       {/* Products table */}
-      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+      <div className="bg-white border border-black overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="sticky top-0 z-10 bg-white">
-              <tr className="border-b border-gray-100">
-                <th className="px-4 py-3 w-10">
+          <table className="w-full text-xs">
+            <thead className="bg-white border-b border-black">
+              <tr>
+                <th className="px-4 py-3 w-10 text-left">
                   <input
                     type="checkbox"
                     checked={selectedProducts.size === filteredProducts.length && filteredProducts.length > 0}
                     onChange={toggleAllSelection}
-                    className="rounded border-gray-300 accent-gray-900"
+                    className="accent-black cursor-pointer"
                   />
                 </th>
-                <th className="px-4 py-3 text-left text-[10px] font-semibold text-gray-400 uppercase tracking-widest w-16">Foto</th>
-                <th className="px-4 py-3 text-left text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Název</th>
-                <th className="px-4 py-3 text-left text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Kategorie</th>
-                <th className="px-4 py-3 text-left text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Cena</th>
-                <th className="px-4 py-3 text-left text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Sklad</th>
-                <th className="px-4 py-3 text-left text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Stav</th>
-                <th className="px-4 py-3 text-left text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Akce</th>
+                <th className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-widest text-black w-16">Foto</th>
+                <th className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-widest text-black">Název</th>
+                <th className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-widest text-black">Kategorie</th>
+                <th className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-widest text-black">Cena</th>
+                <th className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-widest text-black">Sklad</th>
+                <th className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-widest text-black">Stav</th>
+                <th className="px-4 py-3 text-left text-[10px] font-bold uppercase tracking-widest text-black">Akce</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-50">
+            <tbody className="divide-y divide-black/10">
               {filteredProducts.map((product) => {
                 const isLowStock = product.totalStock <= product.lowStockThreshold;
                 return (
                   <tr
                     key={product.id}
                     onClick={() => router.push(`/admin/produkty/${product.id}`)}
-                    className={`cursor-pointer transition-colors ${isLowStock ? 'bg-red-50/40 hover:bg-red-50' : 'hover:bg-gray-50'}`}
+                    className={`cursor-pointer transition-colors ${
+                      isLowStock ? 'bg-black/5 hover:bg-black/10 border-l-4 border-l-black' : 'hover:bg-black/5'
+                    }`}
                   >
                     <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
                       <input
                         type="checkbox"
                         checked={selectedProducts.has(product.id)}
                         onChange={() => toggleProductSelection(product.id)}
-                        className="rounded border-gray-300 accent-gray-900"
+                        className="accent-black cursor-pointer"
                       />
                     </td>
                     <td className="px-4 py-3">
@@ -416,34 +433,34 @@ export default function AdminProductsPage() {
                         <img
                           src={product.images[0]}
                           alt={product.name}
-                          className="w-10 h-10 rounded-lg object-cover border border-gray-100"
+                          className="w-10 h-10 object-cover border border-black"
                         />
                       ) : (
-                        <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                        <div className="w-10 h-10 border border-black bg-white flex items-center justify-center text-[10px] uppercase text-[#666666]">
+                          —
                         </div>
                       )}
                     </td>
-                    <td className="px-4 py-3 font-semibold text-gray-900">{product.name}</td>
+                    <td className="px-4 py-3 font-bold uppercase text-black">{product.name}</td>
                     <td className="px-4 py-3">
-                      <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-md font-medium">{product.category}</span>
+                      <span className="text-[10px] uppercase tracking-wider text-[#666666] font-medium">{product.category}</span>
                     </td>
-                    <td className="px-4 py-3 font-semibold text-gray-900 whitespace-nowrap">{product.price} Kč</td>
+                    <td className="px-4 py-3 font-bold text-black whitespace-nowrap">{product.price} Kč</td>
                     <td className="px-4 py-3">
-                      <span className={`text-xs font-semibold ${isLowStock ? 'text-red-600' : 'text-gray-700'}`}>
+                      <span className={`text-xs uppercase font-medium ${isLowStock ? 'font-bold text-black' : 'text-black'}`}>
                         {product.totalStock} ks
                         {isLowStock && (
-                          <span className="ml-1.5 inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-red-100 text-red-600 text-[8px] font-bold">!</span>
+                          <span className="ml-1.5 text-[10px] font-bold text-black">[!]</span>
                         )}
                       </span>
                     </td>
                     <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
                       <button
                         onClick={() => toggleVisibility(product.id, product.isVisible)}
-                        className={`text-xs font-semibold px-2.5 py-1 rounded-lg border transition-colors ${
+                        className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 border border-black transition-colors ${
                           product.isVisible
-                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
-                            : 'bg-gray-100 text-gray-500 border-gray-200 hover:bg-gray-200'
+                            ? 'bg-black text-white hover:bg-white hover:text-black'
+                            : 'bg-white text-black hover:bg-black hover:text-white'
                         }`}
                       >
                         {product.isVisible ? 'Viditelný' : 'Skrytý'}
@@ -453,13 +470,13 @@ export default function AdminProductsPage() {
                       <div className="flex items-center gap-1.5">
                         <button
                           onClick={() => handleDuplicate(product.id)}
-                          className="text-xs font-medium text-gray-500 hover:text-gray-900 px-2 py-1 rounded-lg hover:bg-gray-100 transition-colors"
+                          className="text-[10px] uppercase font-bold tracking-wider px-2 py-1 border border-black bg-white text-black hover:bg-black hover:text-white transition-colors"
                         >
                           Kopie
                         </button>
                         <button
                           onClick={() => handleDelete(product.id, product.name)}
-                          className="text-xs font-medium text-red-400 hover:text-red-600 px-2 py-1 rounded-lg hover:bg-red-50 transition-colors"
+                          className="text-[10px] uppercase font-bold tracking-wider px-2 py-1 border border-black bg-white text-black hover:bg-black hover:text-white transition-colors"
                         >
                           Smazat
                         </button>
@@ -471,40 +488,30 @@ export default function AdminProductsPage() {
             </tbody>
           </table>
         </div>
+
         {filteredProducts.length === 0 && (
           <div className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center mb-3">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
-                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
-              </svg>
-            </div>
-            <p className="text-sm font-medium text-gray-500">
+            <p className="text-xs uppercase tracking-wider text-[#666666]">
               {search ? `Žádné výsledky pro „${search}"` : 'Žádné produkty v tomto filtru'}
             </p>
-            <p className="text-xs text-gray-400 mt-1">
-              {search
-                ? 'Zkuste jiné klíčové slovo nebo vymažte vyhledávání.'
-                : filter !== 'all'
-                  ? 'Zkuste změnit filtr nebo přidejte nový produkt.'
-                  : 'Začněte přidáním prvního produktu.'}
-            </p>
             {!search && filter === 'all' && (
-              <a href="/admin/produkty/novy" className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold bg-gray-900 text-white px-4 py-2 rounded-xl hover:bg-gray-700 transition-colors">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-                </svg>
-                Přidat produkt
-              </a>
+              <Link
+                href="/admin/produkty/novy"
+                className="mt-4 px-4 py-2 text-xs uppercase tracking-wider font-medium border border-black bg-black text-white hover:bg-white hover:text-black transition-colors"
+              >
+                + Přidat produkt
+              </Link>
             )}
           </div>
         )}
+
         {filteredProducts.length > 0 && (
-          <div className="px-4 py-3 border-t border-gray-100 text-xs text-gray-400">
+          <div className="px-4 py-3 border-t border-black text-xs uppercase tracking-wider text-[#666666]">
             Zobrazeno {filteredProducts.length} z {products.length} produktů
           </div>
         )}
       </div>
+
       <ConfirmModal
         isOpen={!!deleteModal}
         title="Smazat produkt"

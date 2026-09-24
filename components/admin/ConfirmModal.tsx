@@ -18,8 +18,8 @@ export default function ConfirmModal({
   isOpen,
   title,
   message,
-  confirmLabel = 'Potvrdit',
-  cancelLabel = 'Zrušit',
+  confirmLabel = 'POTVRDIT',
+  cancelLabel = 'ZRUŠIT',
   isDestructive = true,
   loading = false,
   onConfirm,
@@ -41,47 +41,62 @@ export default function ConfirmModal({
     <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/50"
         onClick={onCancel}
       />
       {/* Dialog */}
-      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-[400px] p-6">
-        {/* Icon */}
-        {isDestructive && (
-          <div className="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center mb-4">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="3 6 5 6 21 6" />
-              <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
-              <path d="M10 11v6M14 11v6" />
-              <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+      <div
+        className="relative bg-white border border-black w-full max-w-[440px] p-6 shadow-none"
+        style={{
+          fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+        }}
+      >
+        <div className="flex items-center justify-between pb-3 mb-4 border-b border-black">
+          <h2
+            className="text-sm font-bold uppercase tracking-wider text-black"
+            style={{
+              fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+            }}
+          >
+            {title}
+          </h2>
+          <button
+            onClick={onCancel}
+            className="text-black hover:opacity-60 transition-opacity"
+            aria-label="Zavřít"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
-          </div>
-        )}
-        <h2 className="text-[15px] font-bold text-gray-900 leading-tight">{title}</h2>
-        <p className="mt-2 text-sm text-gray-500 leading-relaxed">{message}</p>
-        <div className="flex gap-2.5 mt-6">
+          </button>
+        </div>
+
+        <p className="text-xs uppercase tracking-wide text-[#666666] leading-relaxed mb-6">
+          {message}
+        </p>
+
+        <div className="flex gap-2">
           <button
             onClick={onCancel}
             disabled={loading}
-            className="flex-1 px-4 py-2.5 text-sm font-semibold text-gray-700 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors disabled:opacity-50"
+            className="flex-1 py-2.5 px-4 text-xs uppercase tracking-wider font-medium border border-black bg-white text-black hover:bg-black hover:text-white transition-colors disabled:opacity-50"
           >
             {cancelLabel}
           </button>
           <button
             onClick={onConfirm}
             disabled={loading}
-            className={`flex-1 px-4 py-2.5 text-sm font-semibold text-white rounded-xl transition-colors disabled:opacity-50 ${
-              isDestructive
-                ? 'bg-red-600 hover:bg-red-700'
-                : 'bg-gray-900 hover:bg-gray-700'
-            }`}
+            className="flex-1 py-2.5 px-4 text-xs uppercase tracking-wider font-medium border border-black bg-black text-white hover:bg-white hover:text-black transition-colors disabled:opacity-50"
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">
-                <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <span className="w-3 h-3 border border-white border-t-transparent animate-spin" />
                 Zpracovávám…
               </span>
-            ) : confirmLabel}
+            ) : (
+              confirmLabel
+            )}
           </button>
         </div>
       </div>

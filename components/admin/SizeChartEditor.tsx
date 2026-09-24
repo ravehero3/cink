@@ -136,24 +136,24 @@ export default function SizeChartEditor({ sizeChartType, sizeChartData, onChange
   };
 
   return (
-    <div className="border border-black p-4 mb-6">
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="text-sm uppercase font-bold">Tabulka velikostí / Rozměry</h3>
+    <div className="admin-card p-[24px] mb-[24px]">
+      <div className="flex justify-between items-center mb-[16px]">
+        <h3 className="admin-title" style={{ fontSize: 14 }}>Tabulka velikostí / Rozměry</h3>
         <button
           type="button"
           onClick={() => setIsExpanded(!isExpanded)}
-          className="text-sm underline hover:no-underline"
+          className="text-xs uppercase tracking-wider underline hover:no-underline"
         >
           {isExpanded ? 'Skrýt' : 'Zobrazit'}
         </button>
       </div>
 
-      <div className="mb-4">
-        <label className="block text-sm uppercase font-medium mb-2">Typ tabulky</label>
+      <div className="mb-[16px]">
+        <label className="admin-label">Typ tabulky</label>
         <select
           value={sizeChartType || ''}
           onChange={(e) => handleTypeChange(e.target.value)}
-          className="w-full px-3 py-2 border border-black text-sm"
+          className="admin-select"
         >
           <option value="">Bez tabulky velikostí</option>
           {Object.entries(SIZE_CHART_TYPE_LABELS).map(([value, label]) => (
@@ -170,14 +170,16 @@ export default function SizeChartEditor({ sizeChartType, sizeChartData, onChange
               <button
                 type="button"
                 onClick={handleAddSize}
-                className="px-3 py-1 text-xs uppercase border border-black hover:bg-black hover:text-white transition-colors"
+                className="admin-btn admin-btn-secondary"
+                style={{ padding: '6px 12px', fontSize: 10 }}
               >
                 + Velikost
               </button>
               <button
                 type="button"
                 onClick={handleAddMeasurement}
-                className="px-3 py-1 text-xs uppercase border border-black hover:bg-black hover:text-white transition-colors"
+                className="admin-btn admin-btn-secondary"
+                style={{ padding: '6px 12px', fontSize: 10 }}
               >
                 + Míra
               </button>
@@ -187,7 +189,7 @@ export default function SizeChartEditor({ sizeChartType, sizeChartData, onChange
           <div className="overflow-x-auto">
             <table className="w-full text-sm border border-black">
               <thead>
-                <tr className="bg-gray-100">
+                <tr className="bg-white border-b border-black uppercase text-xs">
                   <th className="p-2 text-left border-r border-black" style={{ minWidth: '150px' }}>
                     {sizeChartType === 'ITEM' ? 'Rozměr' : 'Míra'}
                   </th>
@@ -198,7 +200,7 @@ export default function SizeChartEditor({ sizeChartType, sizeChartData, onChange
                         <button
                           type="button"
                           onClick={() => handleRemoveSize(size)}
-                          className="text-red-600 hover:text-red-800 text-xs ml-1"
+                          className="text-black hover:opacity-60 text-xs ml-1 transition-opacity"
                           title="Odstranit velikost"
                         >
                           ×
@@ -217,13 +219,13 @@ export default function SizeChartEditor({ sizeChartType, sizeChartData, onChange
                           type="text"
                           value={measurement.labelCz}
                           onChange={(e) => handleMeasurementLabelChange(mIndex, e.target.value)}
-                          className="flex-1 px-2 py-1 border border-gray-300 text-xs"
+                          className="admin-input flex-1"
                           placeholder="Název míry"
                         />
                         <button
                           type="button"
                           onClick={() => handleRemoveMeasurement(mIndex)}
-                          className="text-red-600 hover:text-red-800 text-sm"
+                          className="text-black hover:opacity-60 text-sm font-bold px-1"
                           title="Odstranit míru"
                         >
                           ×
@@ -236,7 +238,7 @@ export default function SizeChartEditor({ sizeChartType, sizeChartData, onChange
                           type="text"
                           value={measurement.values[size] || ''}
                           onChange={(e) => handleMeasurementValueChange(mIndex, size, e.target.value)}
-                          className="w-full px-2 py-1 border border-gray-300 text-xs text-center"
+                          className="admin-input text-center"
                           placeholder="cm"
                         />
                       </td>
@@ -247,7 +249,7 @@ export default function SizeChartEditor({ sizeChartType, sizeChartData, onChange
             </table>
           </div>
 
-          <p className="mt-3 text-xs text-gray-600">
+          <p className="mt-3 text-xs uppercase text-[#666666]">
             Hodnoty jsou v centimetrech (cm). Nechte prázdné, pokud míra není relevantní pro danou velikost.
           </p>
         </div>

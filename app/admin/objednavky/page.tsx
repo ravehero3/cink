@@ -27,7 +27,6 @@ interface Order {
 }
 
 const STATUS_OPTIONS = ['PENDING', 'PAID', 'PROCESSING', 'SHIPPED', 'COMPLETED', 'CANCELLED'];
-const PAYMENT_STATUS_OPTIONS = ['PENDING', 'PAID', 'FAILED', 'REFUNDED'];
 
 const STATUS_TRANSLATIONS: Record<string, string> = {
   'PENDING': 'ČEKÁ NA VYŘÍZENÍ',
@@ -44,8 +43,6 @@ const PAYMENT_STATUS_LABELS: Record<string, string> = {
   FAILED: 'Platba selhala',
   REFUNDED: 'Vráceno',
 };
-
-const TIME_PERIODS = ['Dnes', '24 hodin', 'Týden', 'Měsíc', 'Rok'];
 
 export default function AdminOrdersPage() {
   const router = useRouter();
@@ -90,17 +87,6 @@ export default function AdminOrdersPage() {
     }
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'COMPLETED':
-        return 'bg-black text-white';
-      case 'CANCELLED':
-        return 'bg-white text-black border-2 border-black';
-      default:
-        return 'bg-white text-black border border-black';
-    }
-  };
-
   const handleStatusChange = async (orderId: string, newStatus: string) => {
     setUpdatingOrderId(orderId);
     try {
@@ -112,6 +98,7 @@ export default function AdminOrdersPage() {
 
       if (response.ok) {
         fetchOrders();
+        toast.success('Status objednávky byl aktualizován');
       } else {
         toast.error('Nepodařilo se změnit status');
       }
@@ -152,11 +139,11 @@ export default function AdminOrdersPage() {
 
   const getTimeFrames = () => {
     return [
-      { label: 'Dnes', ...calculateStatsForPeriod('Dnes'), countLabel: calculateStatsForPeriod('Dnes').orders + ' objednávek' },
-      { label: '24 hodin', ...calculateStatsForPeriod('24 hodin'), countLabel: calculateStatsForPeriod('24 hodin').orders + ' objednávek' },
-      { label: 'Týden', ...calculateStatsForPeriod('Týden'), countLabel: calculateStatsForPeriod('Týden').orders + ' objednávek' },
-      { label: 'Měsíc', ...calculateStatsForPeriod('Měsíc'), countLabel: calculateStatsForPeriod('Měsíc').orders + ' objednávek' },
-      { label: 'Rok', ...calculateStatsForPeriod('Rok'), countLabel: calculateStatsForPeriod('Rok').orders + ' objednávek' }
+      { label: 'Dnes', ...calculateStatsForPeriod('Dnes') },
+      { label: '24 hodin', ...calculateStatsForPeriod('24 hodin') },
+      { label: 'Týden', ...calculateStatsForPeriod('Týden') },
+      { label: 'Měsíc', ...calculateStatsForPeriod('Měsíc') },
+      { label: 'Rok', ...calculateStatsForPeriod('Rok') }
     ];
   };
 
@@ -195,67 +182,63 @@ export default function AdminOrdersPage() {
         });
 
         dataPoints.push({
-          name: `${i}:00`,
+          name: `${hourStart.getHours()}:00`,
           revenue: hourOrders.reduce((sum, o) => sum + Number(o.totalPrice), 0),
           orders: hourOrders.length,
         });
       }
     } else if (selectedPeriod === 'Týden') {
-      const days = ['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne'];
+      const days = ['Ne', 'Po', 'Út', 'St', 'Čt', 'Pá', 'So'];
       for (let i = 6; i >= 0; i--) {
-        const dayStart = new Date(now);
-        dayStart.setDate(now.getDate() - i);
-        dayStart.setHours(0, 0, 0, 0);
-        const dayEnd = new Date(dayStart);
-        dayEnd.setDate(dayEnd.getDate() + 1);
+        const dayDate = new Date(now);
+        dayDate.setDate(now.getDate() - i);
+        dayDate.setHours(0, 0, 0, 0);
+        const nextDay = new Date(dayDate);
+        nextDay.setDate(dayDate.getDate() + 1);
 
         const dayOrders = activeOrders.filter((o) => {
           const date = new Date(o.createdAt);
-          return date >= dayStart && date < dayEnd;
+          return date >= dayDate && date < nextDay;
         });
 
         dataPoints.push({
-          name: days[dayStart.getDay()],
+          name: days[dayDate.getDay()],
           revenue: dayOrders.reduce((sum, o) => sum + Number(o.totalPrice), 0),
           orders: dayOrders.length,
         });
       }
     } else if (selectedPeriod === 'Měsíc') {
-      for (let i = 29; i >= 0; i--) {
-        const dayStart = new Date(now);
-        dayStart.setDate(now.getDate() - i);
-        dayStart.setHours(0, 0, 0, 0);
-        const dayEnd = new Date(dayStart);
-        dayEnd.setDate(dayEnd.getDate() + 1);
+      for (let i = 29; i >= 0; i -= 2) {
+        const dayDate = new Date(now);
+        dayDate.setDate(now.getDate() - i);
+        dayDate.setHours(0, 0, 0, 0);
+        const nextPeriod = new Date(dayDate);
+        nextPeriod.setDate(dayDate.getDate() + 2);
 
-        const dayOrders = activeOrders.filter((o) => {
+        const periodOrders = activeOrders.filter((o) => {
           const date = new Date(o.createdAt);
-          return date >= dayStart && date < dayEnd;
+          return date >= dayDate && date < nextPeriod;
         });
 
         dataPoints.push({
-          name: dayStart.getDate().toString(),
-          revenue: dayOrders.reduce((sum, o) => sum + Number(o.totalPrice), 0),
-          orders: dayOrders.length,
+          name: `${dayDate.getDate()}.${dayDate.getMonth() + 1}`,
+          revenue: periodOrders.reduce((sum, o) => sum + Number(o.totalPrice), 0),
+          orders: periodOrders.length,
         });
       }
     } else if (selectedPeriod === 'Rok') {
-      const months = ['Led', 'Úno', 'Bře', 'Dub', 'Kvě', 'Čer', 'Čer', 'Srp', 'Zář', 'Říj', 'Lis', 'Pro'];
+      const months = ['Led', 'Úno', 'Bře', 'Dub', 'Kvě', 'Čvn', 'Čvc', 'Srp', 'Zář', 'Říj', 'Lis', 'Pro'];
       for (let i = 11; i >= 0; i--) {
-        const monthStart = new Date(now);
-        monthStart.setMonth(now.getMonth() - i);
-        monthStart.setDate(1);
-        monthStart.setHours(0, 0, 0, 0);
-        const monthEnd = new Date(monthStart);
-        monthEnd.setMonth(monthEnd.getMonth() + 1);
+        const monthDate = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const nextMonth = new Date(now.getFullYear(), now.getMonth() - i + 1, 1);
 
         const monthOrders = activeOrders.filter((o) => {
           const date = new Date(o.createdAt);
-          return date >= monthStart && date < monthEnd;
+          return date >= monthDate && date < nextMonth;
         });
 
         dataPoints.push({
-          name: months[monthStart.getMonth()],
+          name: months[monthDate.getMonth()],
           revenue: monthOrders.reduce((sum, o) => sum + Number(o.totalPrice), 0),
           orders: monthOrders.length,
         });
@@ -265,62 +248,55 @@ export default function AdminOrdersPage() {
     return dataPoints;
   };
 
-  const handleSort = (column: 'paymentStatus' | 'status' | 'createdAt') => {
-    if (sortBy === column) {
+  const handleSort = (key: 'paymentStatus' | 'status' | 'createdAt') => {
+    if (sortBy === key) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     } else {
-      setSortBy(column);
+      setSortBy(key);
       setSortOrder('asc');
     }
   };
 
-  const displayedOrders = [...orders].sort((a, b) => {
+  const sortedOrders = [...orders].sort((a, b) => {
     if (!sortBy) return 0;
-
-    let aValue: any;
-    let bValue: any;
-
-    if (sortBy === 'paymentStatus') {
-      aValue = a.paymentStatus;
-      bValue = b.paymentStatus;
-    } else if (sortBy === 'status') {
-      aValue = a.status;
-      bValue = b.status;
-    } else if (sortBy === 'createdAt') {
-      aValue = new Date(a.createdAt).getTime();
-      bValue = new Date(b.createdAt).getTime();
+    let aVal = a[sortBy] || '';
+    let bVal = b[sortBy] || '';
+    if (sortBy === 'createdAt') {
+      return sortOrder === 'asc'
+        ? new Date(aVal).getTime() - new Date(bVal).getTime()
+        : new Date(bVal).getTime() - new Date(aVal).getTime();
     }
-
-    if (sortOrder === 'asc') {
-      return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
-    } else {
-      return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
-    }
+    return sortOrder === 'asc'
+      ? String(aVal).localeCompare(String(bVal))
+      : String(bVal).localeCompare(String(aVal));
   });
 
   const paymentBadge = (status: string) => {
-    const map: Record<string, string> = {
-      PAID: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-      PENDING: 'bg-amber-50 text-amber-700 border-amber-200',
-      FAILED: 'bg-red-50 text-red-600 border-red-200',
-      REFUNDED: 'bg-gray-100 text-gray-600 border-gray-200',
-    };
-    return map[status] ?? 'bg-gray-100 text-gray-500 border-gray-200';
+    switch (status) {
+      case 'PAID':
+        return 'bg-black text-white border border-black';
+      case 'PENDING':
+        return 'bg-white text-black border border-black';
+      case 'FAILED':
+        return 'bg-white text-black border-2 border-black';
+      default:
+        return 'bg-black/10 text-black border border-black';
+    }
   };
 
   if (loading) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-6" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
         <PageHeaderSkeleton />
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {[...Array(4)].map((_, i) => <StatCardSkeleton key={i} />)}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-px bg-black border border-black">
+          {[...Array(5)].map((_, i) => <StatCardSkeleton key={i} />)}
         </div>
-        <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+        <div className="bg-white border border-black overflow-hidden">
           <table className="w-full text-sm">
-            <thead className="border-b border-gray-100">
+            <thead className="border-b border-black">
               <tr>
                 {['Objednávka','Zákazník','Datum','Celkem','Status','Platba','Akce'].map((h) => (
-                  <th key={h} className="text-left px-4 py-3 text-[10px] font-semibold text-gray-400 uppercase tracking-widest whitespace-nowrap">{h}</th>
+                  <th key={h} className="text-left px-4 py-3 text-[10px] font-bold uppercase tracking-widest">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -332,57 +308,52 @@ export default function AdminOrdersPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
 
       {/* Floating order preview */}
       {hoveredOrder && (
         <div
-          className="fixed z-[100] pointer-events-none w-[380px] bg-white rounded-2xl border border-gray-100 shadow-2xl overflow-hidden"
+          className="fixed z-[100] pointer-events-none w-[360px] bg-white border border-black shadow-none overflow-hidden"
           style={{
-            left: `${(typeof window !== 'undefined' && mousePos.x + 420 > window.innerWidth) ? mousePos.x - 400 : mousePos.x + 20}px`,
+            left: `${(typeof window !== 'undefined' && mousePos.x + 400 > window.innerWidth) ? mousePos.x - 380 : mousePos.x + 20}px`,
             top: `${Math.min(mousePos.y + 10, typeof window !== 'undefined' ? Math.max(10, window.innerHeight - 340) : 0)}px`,
           }}
         >
-          <div className="flex justify-between items-start px-5 py-4 border-b border-gray-100 bg-gray-50">
+          <div className="flex justify-between items-start px-4 py-3 border-b border-black bg-white">
             <div>
-              <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Objednávka</p>
-              <p className="font-bold text-gray-900 mt-0.5">{hoveredOrder.orderNumber}</p>
+              <p className="text-[10px] font-bold text-[#666666] uppercase tracking-widest">Objednávka</p>
+              <p className="font-bold text-black mt-0.5 text-xs uppercase tracking-wider">{hoveredOrder.orderNumber}</p>
             </div>
             <div className="text-right">
-              <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Celkem</p>
-              <p className="font-bold text-gray-900 mt-0.5">{Number(hoveredOrder.totalPrice).toFixed(2)} Kč</p>
+              <p className="text-[10px] font-bold text-[#666666] uppercase tracking-widest">Celkem</p>
+              <p className="font-bold text-black mt-0.5 text-xs">{Number(hoveredOrder.totalPrice).toFixed(0)} Kč</p>
             </div>
           </div>
-          <div className="px-5 py-3 space-y-2.5">
+          <div className="px-4 py-3 space-y-2">
             {Array.isArray(hoveredOrder.items) && hoveredOrder.items.map((item: any, i: number) => (
-              <div key={i} className="flex gap-3 items-center">
+              <div key={i} className="flex gap-2.5 items-center">
                 {item.image && (
-                  <img src={item.image} alt="" className="w-11 h-11 rounded-lg object-cover border border-gray-100 shrink-0" />
+                  <img src={item.image} alt="" className="w-10 h-10 object-cover border border-black shrink-0" />
                 )}
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-semibold text-gray-800 truncate">{item.name}</p>
-                  <p className="text-[10px] text-gray-400">{item.size}{item.color ? ` · ${item.color}` : ''} · {item.quantity} ks</p>
+                  <p className="text-xs uppercase font-medium truncate">{item.name}</p>
+                  <p className="text-[10px] uppercase text-[#666666]">{item.size}{item.color ? ` · ${item.color}` : ''} · {item.quantity} ks</p>
                 </div>
-                <p className="text-xs font-semibold text-gray-700 whitespace-nowrap">{item.price} Kč</p>
+                <p className="text-xs font-bold whitespace-nowrap">{item.price} Kč</p>
               </div>
             ))}
           </div>
-          <div className="px-5 py-3 border-t border-gray-100 bg-gray-50 grid grid-cols-2 gap-4">
+          <div className="px-4 py-3 border-t border-black bg-white grid grid-cols-2 gap-3 text-[11px] uppercase tracking-wider">
             <div>
-              <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-0.5">Zákazník</p>
-              <p className="text-xs font-semibold text-gray-800">{hoveredOrder.customerName}</p>
-              <p className="text-[10px] text-gray-400">{hoveredOrder.customerPhone}</p>
+              <p className="text-[10px] font-bold text-[#666666] tracking-widest mb-0.5">Zákazník</p>
+              <p className="font-medium text-black truncate">{hoveredOrder.customerName}</p>
+              <p className="text-[10px] text-[#666666]">{hoveredOrder.customerPhone}</p>
             </div>
             <div>
-              <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-0.5">Doprava</p>
-              <p className="text-xs font-semibold text-gray-800">
+              <p className="text-[10px] font-bold text-[#666666] tracking-widest mb-0.5">Doprava</p>
+              <p className="font-medium text-black truncate">
                 {hoveredOrder.shippingMethod === 'zasilkovna' ? 'Zásilkovna' :
                  hoveredOrder.shippingMethod.startsWith('ppl') ? 'PPL' : hoveredOrder.shippingMethod}
-              </p>
-              <p className="text-[10px] text-gray-400 truncate">
-                {hoveredOrder.shippingMethod === 'zasilkovna' ? hoveredOrder.zasilkovnaName :
-                 hoveredOrder.shippingMethod === 'ppl_address' ? `${hoveredOrder.shippingStreet}, ${hoveredOrder.shippingCity}` :
-                 hoveredOrder.shippingMethod === 'ppl_parcelshop' ? hoveredOrder.pplName : ''}
               </p>
             </div>
           </div>
@@ -390,32 +361,39 @@ export default function AdminOrdersPage() {
       )}
 
       {/* Page header */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Objednávky</h1>
-        <p className="mt-1 text-sm text-gray-400">{orders.length} celkem · klikněte na řádek pro detail</p>
+      <div className="border-b border-black pb-4">
+        <h1 className="admin-title">
+          Objednávky
+        </h1>
+        <p className="admin-sub">
+          {orders.length} objednávek celkem · Klikněte na řádek pro detail
+        </p>
       </div>
 
       {/* Period selector cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-px bg-black border border-black">
         {getTimeFrames().map((frame, idx) => {
           const active = selectedPeriod === frame.label;
           return (
             <button
               key={idx}
               onClick={() => setSelectedPeriod(frame.label)}
-              className={`text-left rounded-2xl border p-4 transition-all duration-150 ${
+              className={`text-left p-4 transition-colors ${
                 active
-                  ? 'bg-gray-900 border-gray-900 text-white shadow-md'
-                  : 'bg-white border-gray-100 text-gray-700 hover:border-gray-200 hover:shadow-sm'
+                  ? 'bg-black text-white'
+                  : 'bg-white text-black hover:bg-black hover:text-white'
               }`}
             >
-              <p className={`text-[10px] font-semibold uppercase tracking-widest mb-2 ${active ? 'text-white/60' : 'text-gray-400'}`}>
+              <p className="text-[10px] font-bold uppercase tracking-widest opacity-60 mb-2">
                 {frame.label}
               </p>
-              <p className={`text-lg font-bold leading-tight ${active ? 'text-white' : 'text-gray-900'}`}>
+              <p
+                className="text-lg font-bold uppercase leading-tight"
+                style={{ fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif' }}
+              >
                 {frame.revenue} Kč
               </p>
-              <p className={`text-xs mt-1 ${active ? 'text-white/60' : 'text-gray-400'}`}>
+              <p className="text-[11px] uppercase tracking-wider mt-1 opacity-70">
                 {frame.orders} objednávek
               </p>
             </button>
@@ -424,32 +402,34 @@ export default function AdminOrdersPage() {
       </div>
 
       {/* Chart */}
-      <div className="bg-white rounded-2xl border border-gray-100 p-6">
-        <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-6">
+      <div className="bg-white border border-black p-6">
+        <p className="text-xs font-bold uppercase tracking-widest mb-6">
           Graf prodeje · {selectedPeriod}
         </p>
-        <div style={{ height: 280 }}>
+        <div style={{ height: 260 }}>
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData} margin={{ top: 4, right: 4, left: -16, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#9ca3af' }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 11, fill: '#9ca3af' }} axisLine={false} tickLine={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+              <XAxis dataKey="name" tick={{ fontSize: 10, fill: '#000000' }} axisLine={{ stroke: '#000000' }} tickLine={false} />
+              <YAxis tick={{ fontSize: 10, fill: '#000000' }} axisLine={{ stroke: '#000000' }} tickLine={false} />
               <Tooltip
                 contentStyle={{
-                  border: '1px solid #e5e7eb',
-                  borderRadius: 12,
-                  background: 'white',
-                  boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
-                  fontSize: 12,
+                  border: '1px solid #000000',
+                  borderRadius: 0,
+                  background: '#ffffff',
+                  color: '#000000',
+                  fontSize: 11,
+                  textTransform: 'uppercase',
+                  boxShadow: 'none',
                 }}
               />
               <Line
                 type="monotone"
                 dataKey="revenue"
-                stroke="#111827"
+                stroke="#000000"
                 strokeWidth={2}
                 dot={false}
-                activeDot={{ r: 4, fill: '#111827' }}
+                activeDot={{ r: 4, fill: '#000000' }}
                 name="Prodej (Kč)"
               />
             </LineChart>
@@ -458,11 +438,11 @@ export default function AdminOrdersPage() {
       </div>
 
       {/* Orders table */}
-      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+      <div className="bg-white border border-black overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="sticky top-0 z-10 bg-white">
-              <tr className="border-b border-gray-100">
+          <table className="w-full text-xs">
+            <thead className="bg-white border-b border-black">
+              <tr>
                 {[
                   { label: 'Číslo', key: null },
                   { label: 'Zákazník', key: null },
@@ -478,42 +458,42 @@ export default function AdminOrdersPage() {
                   <th
                     key={i}
                     onClick={() => col.key && handleSort(col.key)}
-                    className={`text-left px-4 py-3 text-[10px] font-semibold text-gray-400 uppercase tracking-widest whitespace-nowrap ${
-                      col.key ? 'cursor-pointer hover:text-gray-600 select-none' : ''
+                    className={`text-left px-4 py-3 text-[10px] font-bold uppercase tracking-widest whitespace-nowrap ${
+                      col.key ? 'cursor-pointer hover:bg-black hover:text-white transition-colors select-none' : ''
                     }`}
                   >
                     {col.label}
                     {col.key && (
-                      <span className={`ml-1 ${sortBy === col.key ? 'text-gray-700' : 'opacity-0 group-hover:opacity-100'}`}>
-                        {sortBy === col.key && sortOrder === 'desc' ? '↑' : '↓'}
+                      <span className="ml-1">
+                        {sortBy === col.key ? (sortOrder === 'desc' ? '↑' : '↓') : ''}
                       </span>
                     )}
                   </th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-50">
-              {displayedOrders.map((order) => (
+            <tbody className="divide-y divide-black/10">
+              {sortedOrders.map((order) => (
                 <tr
                   key={order.id}
-                  className="hover:bg-gray-50 cursor-pointer transition-colors"
+                  className="hover:bg-black/5 cursor-pointer transition-colors"
                   onClick={() => handleRowClick(order.id)}
                   onMouseEnter={() => setHoveredOrder(order)}
                   onMouseLeave={() => setHoveredOrder(null)}
                   onMouseMove={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
                 >
-                  <td className="px-4 py-3 font-semibold text-gray-900 whitespace-nowrap">{order.orderNumber}</td>
-                  <td className="px-4 py-3 text-gray-700 whitespace-nowrap">{order.customerName}</td>
-                  <td className="px-4 py-3 text-gray-500 whitespace-nowrap">{order.customerEmail}</td>
-                  <td className="px-4 py-3 text-gray-500 whitespace-nowrap">{order.customerPhone}</td>
-                  <td className="px-4 py-3 text-gray-500 max-w-[160px] truncate">
+                  <td className="px-4 py-3 font-bold uppercase whitespace-nowrap">{order.orderNumber}</td>
+                  <td className="px-4 py-3 uppercase whitespace-nowrap font-medium">{order.customerName}</td>
+                  <td className="px-4 py-3 text-[#666666] whitespace-nowrap">{order.customerEmail}</td>
+                  <td className="px-4 py-3 text-[#666666] whitespace-nowrap">{order.customerPhone}</td>
+                  <td className="px-4 py-3 text-[#666666] max-w-[160px] truncate uppercase">
                     {order.shippingMethod === 'zasilkovna' ? (order.zasilkovnaName || '—') :
                      order.shippingMethod === 'ppl_address' ? `${order.shippingStreet}, ${order.shippingCity}` :
                      order.shippingMethod === 'ppl_parcelshop' ? (order.pplName || '—') : '—'}
                   </td>
-                  <td className="px-4 py-3 font-semibold text-gray-900 whitespace-nowrap">{Number(order.totalPrice).toFixed(0)} Kč</td>
+                  <td className="px-4 py-3 font-bold whitespace-nowrap">{Number(order.totalPrice).toFixed(0)} Kč</td>
                   <td className="px-4 py-3">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold border ${paymentBadge(order.paymentStatus)}`}>
+                    <span className={`inline-flex items-center px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${paymentBadge(order.paymentStatus)}`}>
                       {PAYMENT_STATUS_LABELS[order.paymentStatus] ?? order.paymentStatus}
                     </span>
                   </td>
@@ -522,20 +502,20 @@ export default function AdminOrdersPage() {
                       value={order.status}
                       onChange={(e) => handleStatusChange(order.id, e.target.value)}
                       disabled={updatingOrderId === order.id}
-                      className="text-xs font-medium text-gray-700 bg-gray-50 border border-gray-200 rounded-lg px-2 py-1.5 cursor-pointer hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200 disabled:opacity-50"
+                      className="text-xs uppercase font-medium border border-black bg-white text-black px-2 py-1 cursor-pointer focus:outline-none disabled:opacity-50"
                     >
                       {STATUS_OPTIONS.map((s) => (
                         <option key={s} value={s}>{STATUS_TRANSLATIONS[s] ?? s}</option>
                       ))}
                     </select>
                   </td>
-                  <td className="px-4 py-3 text-gray-400 whitespace-nowrap text-xs">
+                  <td className="px-4 py-3 text-[#666666] whitespace-nowrap text-xs">
                     {new Date(order.createdAt).toLocaleDateString('cs-CZ')}
                   </td>
                   <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
                     <Link
                       href={`/admin/objednavky/${order.id}`}
-                      className="text-xs font-medium text-gray-500 hover:text-gray-900 hover:underline whitespace-nowrap"
+                      className="text-xs uppercase font-bold text-black hover:underline whitespace-nowrap"
                     >
                       Detail →
                     </Link>
@@ -545,11 +525,13 @@ export default function AdminOrdersPage() {
             </tbody>
           </table>
         </div>
-        {displayedOrders.length === 0 && (
-          <div className="text-center py-16 text-sm text-gray-400">Žádné objednávky nebyly nalezeny.</div>
+        {sortedOrders.length === 0 && (
+          <div className="text-center py-16 text-xs uppercase tracking-widest text-[#666666]">
+            Žádné objednávky nebyly nalezeny.
+          </div>
         )}
-        <div className="px-4 py-3 border-t border-gray-100 text-xs text-gray-400">
-          Zobrazeno {displayedOrders.length} z {orders.length} objednávek
+        <div className="px-4 py-3 border-t border-black text-xs uppercase tracking-wider text-[#666666]">
+          Zobrazeno {sortedOrders.length} z {orders.length} objednávek
         </div>
       </div>
     </div>

@@ -35,9 +35,8 @@ button {
 /* Consistent focus-visible ring for admin keyboard navigation */
 .admin-focus-ring:focus-visible,
 [data-admin] *:focus-visible {
-  outline: 2px solid #111111;
+  outline: 2px solid #000000;
   outline-offset: 2px;
-  border-radius: 6px;
 }
 
 input,
@@ -123,4 +122,1041 @@ h4 {
 
 .animate-pulse-color {
   animation: pulse-color 1.5s ease-in-out infinite;
+}
+
+/* Admin — same language as the storefront product listing */
+.admin-title {
+  font-family: "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #000000;
+  margin: 0;
+}
+
+.admin-sub {
+  font-size: 12px;
+  line-height: 1.6;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #666666;
+  margin: 4px 0 0;
+}
+
+.admin-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #666666;
+  margin-bottom: 8px;
+}
+
+.admin-input,
+.admin-select,
+.admin-textarea {
+  width: 100%;
+  font-family: inherit;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #000000;
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 0;
+  padding: 8px 12px;
+  outline: none;
+  box-shadow: none;
+}
+
+.admin-textarea {
+  text-transform: none;
+  letter-spacing: 0;
+  resize: vertical;
+}
+
+.admin-input:focus,
+.admin-select:focus,
+.admin-textarea:focus {
+  border-width: 2px;
+  padding: 7px 11px;
+}
+
+.admin-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 10px 16px;
+  border: 1px solid #000000;
+  border-radius: 0;
+  background: #000000;
+  color: #ffffff;
+  transition: background-color 200ms ease, color 200ms ease, opacity 200ms ease;
+}
+
+.admin-btn:hover:not(:disabled) {
+  background: #ffffff;
+  color: #000000;
+}
+
+.admin-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.admin-btn-secondary {
+  background: #ffffff;
+  color: #000000;
+}
+
+.admin-btn-secondary:hover:not(:disabled) {
+  background: #000000;
+  color: #ffffff;
+}
+
+.admin-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  border: 1px solid #000000;
+  background: #ffffff;
+  color: #000000;
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+.admin-tab:hover,
+.admin-tab.is-active {
+  background: #000000;
+  color: #ffffff;
+}
+
+.admin-card {
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.admin-th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #000000;
+  white-space: nowrap;
+}
+
+.admin-td {
+  padding: 12px 16px;
+  font-size: 12px;
+}
+
+.admin-empty {
+  text-align: center;
+  padding: 64px 24px;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #666666;
+}
+
+.admin-spinner {
+  width: 16px;
+  height: 16px;
+  border: 1px solid #000000;
+  border-top-color: transparent;
+  border-radius: 0;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Admin spacing remap — restore 4px/8px grid inside [data-admin].
+   Storefront Tailwind spacing is doubled (1=8px); admin was authored against default Tailwind. */
+[data-admin] .tracking-wide { letter-spacing: 0.05em; }
+[data-admin] .tracking-widest { letter-spacing: 0.1em; }
+[data-admin] .tracking-tighter { letter-spacing: -0.01em; }
+[data-admin] input,
+[data-admin] textarea,
+[data-admin] select,
+[data-admin] button { border-radius: 0; }
+[data-admin] .p-0\.5 { padding: 2px; }
+[data-admin] .px-0\.5 { padding-left: 2px; padding-right: 2px; }
+[data-admin] .py-0\.5 { padding-top: 2px; padding-bottom: 2px; }
+[data-admin] .pt-0\.5 { padding-top: 2px; }
+[data-admin] .pr-0\.5 { padding-right: 2px; }
+[data-admin] .pb-0\.5 { padding-bottom: 2px; }
+[data-admin] .pl-0\.5 { padding-left: 2px; }
+[data-admin] .m-0\.5 { margin: 2px; }
+[data-admin] .mx-0\.5 { margin-left: 2px; margin-right: 2px; }
+[data-admin] .my-0\.5 { margin-top: 2px; margin-bottom: 2px; }
+[data-admin] .mt-0\.5 { margin-top: 2px; }
+[data-admin] .mr-0\.5 { margin-right: 2px; }
+[data-admin] .mb-0\.5 { margin-bottom: 2px; }
+[data-admin] .ml-0\.5 { margin-left: 2px; }
+[data-admin] .gap-0\.5 { gap: 2px; }
+[data-admin] .gap-x-0\.5 { column-gap: 2px; }
+[data-admin] .gap-y-0\.5 { row-gap: 2px; }
+[data-admin] .w-0\.5 { width: 2px; }
+[data-admin] .h-0\.5 { height: 2px; }
+[data-admin] .min-w-0\.5 { min-width: 2px; }
+[data-admin] .min-h-0\.5 { min-height: 2px; }
+[data-admin] .max-w-0\.5 { max-width: 2px; }
+[data-admin] .max-h-0\.5 { max-height: 2px; }
+[data-admin] .inset-0\.5 { inset: 2px; }
+[data-admin] .inset-x-0\.5 { left: 2px; right: 2px; }
+[data-admin] .inset-y-0\.5 { top: 2px; bottom: 2px; }
+[data-admin] .top-0\.5 { top: 2px; }
+[data-admin] .right-0\.5 { right: 2px; }
+[data-admin] .bottom-0\.5 { bottom: 2px; }
+[data-admin] .left-0\.5 { left: 2px; }
+[data-admin] .size-0\.5 { width: 2px; height: 2px; }
+[data-admin] .space-y-0\.5 > :not([hidden]) ~ :not([hidden]) { margin-top: 2px; margin-bottom: 0; }
+[data-admin] .space-x-0\.5 > :not([hidden]) ~ :not([hidden]) { margin-left: 2px; margin-right: 0; }
+[data-admin] .p-1 { padding: 4px; }
+[data-admin] .px-1 { padding-left: 4px; padding-right: 4px; }
+[data-admin] .py-1 { padding-top: 4px; padding-bottom: 4px; }
+[data-admin] .pt-1 { padding-top: 4px; }
+[data-admin] .pr-1 { padding-right: 4px; }
+[data-admin] .pb-1 { padding-bottom: 4px; }
+[data-admin] .pl-1 { padding-left: 4px; }
+[data-admin] .m-1 { margin: 4px; }
+[data-admin] .mx-1 { margin-left: 4px; margin-right: 4px; }
+[data-admin] .my-1 { margin-top: 4px; margin-bottom: 4px; }
+[data-admin] .mt-1 { margin-top: 4px; }
+[data-admin] .mr-1 { margin-right: 4px; }
+[data-admin] .mb-1 { margin-bottom: 4px; }
+[data-admin] .ml-1 { margin-left: 4px; }
+[data-admin] .gap-1 { gap: 4px; }
+[data-admin] .gap-x-1 { column-gap: 4px; }
+[data-admin] .gap-y-1 { row-gap: 4px; }
+[data-admin] .w-1 { width: 4px; }
+[data-admin] .h-1 { height: 4px; }
+[data-admin] .min-w-1 { min-width: 4px; }
+[data-admin] .min-h-1 { min-height: 4px; }
+[data-admin] .max-w-1 { max-width: 4px; }
+[data-admin] .max-h-1 { max-height: 4px; }
+[data-admin] .inset-1 { inset: 4px; }
+[data-admin] .inset-x-1 { left: 4px; right: 4px; }
+[data-admin] .inset-y-1 { top: 4px; bottom: 4px; }
+[data-admin] .top-1 { top: 4px; }
+[data-admin] .right-1 { right: 4px; }
+[data-admin] .bottom-1 { bottom: 4px; }
+[data-admin] .left-1 { left: 4px; }
+[data-admin] .size-1 { width: 4px; height: 4px; }
+[data-admin] .space-y-1 > :not([hidden]) ~ :not([hidden]) { margin-top: 4px; margin-bottom: 0; }
+[data-admin] .space-x-1 > :not([hidden]) ~ :not([hidden]) { margin-left: 4px; margin-right: 0; }
+[data-admin] .p-1\.5 { padding: 6px; }
+[data-admin] .px-1\.5 { padding-left: 6px; padding-right: 6px; }
+[data-admin] .py-1\.5 { padding-top: 6px; padding-bottom: 6px; }
+[data-admin] .pt-1\.5 { padding-top: 6px; }
+[data-admin] .pr-1\.5 { padding-right: 6px; }
+[data-admin] .pb-1\.5 { padding-bottom: 6px; }
+[data-admin] .pl-1\.5 { padding-left: 6px; }
+[data-admin] .m-1\.5 { margin: 6px; }
+[data-admin] .mx-1\.5 { margin-left: 6px; margin-right: 6px; }
+[data-admin] .my-1\.5 { margin-top: 6px; margin-bottom: 6px; }
+[data-admin] .mt-1\.5 { margin-top: 6px; }
+[data-admin] .mr-1\.5 { margin-right: 6px; }
+[data-admin] .mb-1\.5 { margin-bottom: 6px; }
+[data-admin] .ml-1\.5 { margin-left: 6px; }
+[data-admin] .gap-1\.5 { gap: 6px; }
+[data-admin] .gap-x-1\.5 { column-gap: 6px; }
+[data-admin] .gap-y-1\.5 { row-gap: 6px; }
+[data-admin] .w-1\.5 { width: 6px; }
+[data-admin] .h-1\.5 { height: 6px; }
+[data-admin] .min-w-1\.5 { min-width: 6px; }
+[data-admin] .min-h-1\.5 { min-height: 6px; }
+[data-admin] .max-w-1\.5 { max-width: 6px; }
+[data-admin] .max-h-1\.5 { max-height: 6px; }
+[data-admin] .inset-1\.5 { inset: 6px; }
+[data-admin] .inset-x-1\.5 { left: 6px; right: 6px; }
+[data-admin] .inset-y-1\.5 { top: 6px; bottom: 6px; }
+[data-admin] .top-1\.5 { top: 6px; }
+[data-admin] .right-1\.5 { right: 6px; }
+[data-admin] .bottom-1\.5 { bottom: 6px; }
+[data-admin] .left-1\.5 { left: 6px; }
+[data-admin] .size-1\.5 { width: 6px; height: 6px; }
+[data-admin] .space-y-1\.5 > :not([hidden]) ~ :not([hidden]) { margin-top: 6px; margin-bottom: 0; }
+[data-admin] .space-x-1\.5 > :not([hidden]) ~ :not([hidden]) { margin-left: 6px; margin-right: 0; }
+[data-admin] .p-2 { padding: 8px; }
+[data-admin] .px-2 { padding-left: 8px; padding-right: 8px; }
+[data-admin] .py-2 { padding-top: 8px; padding-bottom: 8px; }
+[data-admin] .pt-2 { padding-top: 8px; }
+[data-admin] .pr-2 { padding-right: 8px; }
+[data-admin] .pb-2 { padding-bottom: 8px; }
+[data-admin] .pl-2 { padding-left: 8px; }
+[data-admin] .m-2 { margin: 8px; }
+[data-admin] .mx-2 { margin-left: 8px; margin-right: 8px; }
+[data-admin] .my-2 { margin-top: 8px; margin-bottom: 8px; }
+[data-admin] .mt-2 { margin-top: 8px; }
+[data-admin] .mr-2 { margin-right: 8px; }
+[data-admin] .mb-2 { margin-bottom: 8px; }
+[data-admin] .ml-2 { margin-left: 8px; }
+[data-admin] .gap-2 { gap: 8px; }
+[data-admin] .gap-x-2 { column-gap: 8px; }
+[data-admin] .gap-y-2 { row-gap: 8px; }
+[data-admin] .w-2 { width: 8px; }
+[data-admin] .h-2 { height: 8px; }
+[data-admin] .min-w-2 { min-width: 8px; }
+[data-admin] .min-h-2 { min-height: 8px; }
+[data-admin] .max-w-2 { max-width: 8px; }
+[data-admin] .max-h-2 { max-height: 8px; }
+[data-admin] .inset-2 { inset: 8px; }
+[data-admin] .inset-x-2 { left: 8px; right: 8px; }
+[data-admin] .inset-y-2 { top: 8px; bottom: 8px; }
+[data-admin] .top-2 { top: 8px; }
+[data-admin] .right-2 { right: 8px; }
+[data-admin] .bottom-2 { bottom: 8px; }
+[data-admin] .left-2 { left: 8px; }
+[data-admin] .size-2 { width: 8px; height: 8px; }
+[data-admin] .space-y-2 > :not([hidden]) ~ :not([hidden]) { margin-top: 8px; margin-bottom: 0; }
+[data-admin] .space-x-2 > :not([hidden]) ~ :not([hidden]) { margin-left: 8px; margin-right: 0; }
+[data-admin] .p-2\.5 { padding: 10px; }
+[data-admin] .px-2\.5 { padding-left: 10px; padding-right: 10px; }
+[data-admin] .py-2\.5 { padding-top: 10px; padding-bottom: 10px; }
+[data-admin] .pt-2\.5 { padding-top: 10px; }
+[data-admin] .pr-2\.5 { padding-right: 10px; }
+[data-admin] .pb-2\.5 { padding-bottom: 10px; }
+[data-admin] .pl-2\.5 { padding-left: 10px; }
+[data-admin] .m-2\.5 { margin: 10px; }
+[data-admin] .mx-2\.5 { margin-left: 10px; margin-right: 10px; }
+[data-admin] .my-2\.5 { margin-top: 10px; margin-bottom: 10px; }
+[data-admin] .mt-2\.5 { margin-top: 10px; }
+[data-admin] .mr-2\.5 { margin-right: 10px; }
+[data-admin] .mb-2\.5 { margin-bottom: 10px; }
+[data-admin] .ml-2\.5 { margin-left: 10px; }
+[data-admin] .gap-2\.5 { gap: 10px; }
+[data-admin] .gap-x-2\.5 { column-gap: 10px; }
+[data-admin] .gap-y-2\.5 { row-gap: 10px; }
+[data-admin] .w-2\.5 { width: 10px; }
+[data-admin] .h-2\.5 { height: 10px; }
+[data-admin] .min-w-2\.5 { min-width: 10px; }
+[data-admin] .min-h-2\.5 { min-height: 10px; }
+[data-admin] .max-w-2\.5 { max-width: 10px; }
+[data-admin] .max-h-2\.5 { max-height: 10px; }
+[data-admin] .inset-2\.5 { inset: 10px; }
+[data-admin] .inset-x-2\.5 { left: 10px; right: 10px; }
+[data-admin] .inset-y-2\.5 { top: 10px; bottom: 10px; }
+[data-admin] .top-2\.5 { top: 10px; }
+[data-admin] .right-2\.5 { right: 10px; }
+[data-admin] .bottom-2\.5 { bottom: 10px; }
+[data-admin] .left-2\.5 { left: 10px; }
+[data-admin] .size-2\.5 { width: 10px; height: 10px; }
+[data-admin] .space-y-2\.5 > :not([hidden]) ~ :not([hidden]) { margin-top: 10px; margin-bottom: 0; }
+[data-admin] .space-x-2\.5 > :not([hidden]) ~ :not([hidden]) { margin-left: 10px; margin-right: 0; }
+[data-admin] .p-3 { padding: 12px; }
+[data-admin] .px-3 { padding-left: 12px; padding-right: 12px; }
+[data-admin] .py-3 { padding-top: 12px; padding-bottom: 12px; }
+[data-admin] .pt-3 { padding-top: 12px; }
+[data-admin] .pr-3 { padding-right: 12px; }
+[data-admin] .pb-3 { padding-bottom: 12px; }
+[data-admin] .pl-3 { padding-left: 12px; }
+[data-admin] .m-3 { margin: 12px; }
+[data-admin] .mx-3 { margin-left: 12px; margin-right: 12px; }
+[data-admin] .my-3 { margin-top: 12px; margin-bottom: 12px; }
+[data-admin] .mt-3 { margin-top: 12px; }
+[data-admin] .mr-3 { margin-right: 12px; }
+[data-admin] .mb-3 { margin-bottom: 12px; }
+[data-admin] .ml-3 { margin-left: 12px; }
+[data-admin] .gap-3 { gap: 12px; }
+[data-admin] .gap-x-3 { column-gap: 12px; }
+[data-admin] .gap-y-3 { row-gap: 12px; }
+[data-admin] .w-3 { width: 12px; }
+[data-admin] .h-3 { height: 12px; }
+[data-admin] .min-w-3 { min-width: 12px; }
+[data-admin] .min-h-3 { min-height: 12px; }
+[data-admin] .max-w-3 { max-width: 12px; }
+[data-admin] .max-h-3 { max-height: 12px; }
+[data-admin] .inset-3 { inset: 12px; }
+[data-admin] .inset-x-3 { left: 12px; right: 12px; }
+[data-admin] .inset-y-3 { top: 12px; bottom: 12px; }
+[data-admin] .top-3 { top: 12px; }
+[data-admin] .right-3 { right: 12px; }
+[data-admin] .bottom-3 { bottom: 12px; }
+[data-admin] .left-3 { left: 12px; }
+[data-admin] .size-3 { width: 12px; height: 12px; }
+[data-admin] .space-y-3 > :not([hidden]) ~ :not([hidden]) { margin-top: 12px; margin-bottom: 0; }
+[data-admin] .space-x-3 > :not([hidden]) ~ :not([hidden]) { margin-left: 12px; margin-right: 0; }
+[data-admin] .p-3\.5 { padding: 14px; }
+[data-admin] .px-3\.5 { padding-left: 14px; padding-right: 14px; }
+[data-admin] .py-3\.5 { padding-top: 14px; padding-bottom: 14px; }
+[data-admin] .pt-3\.5 { padding-top: 14px; }
+[data-admin] .pr-3\.5 { padding-right: 14px; }
+[data-admin] .pb-3\.5 { padding-bottom: 14px; }
+[data-admin] .pl-3\.5 { padding-left: 14px; }
+[data-admin] .m-3\.5 { margin: 14px; }
+[data-admin] .mx-3\.5 { margin-left: 14px; margin-right: 14px; }
+[data-admin] .my-3\.5 { margin-top: 14px; margin-bottom: 14px; }
+[data-admin] .mt-3\.5 { margin-top: 14px; }
+[data-admin] .mr-3\.5 { margin-right: 14px; }
+[data-admin] .mb-3\.5 { margin-bottom: 14px; }
+[data-admin] .ml-3\.5 { margin-left: 14px; }
+[data-admin] .gap-3\.5 { gap: 14px; }
+[data-admin] .gap-x-3\.5 { column-gap: 14px; }
+[data-admin] .gap-y-3\.5 { row-gap: 14px; }
+[data-admin] .w-3\.5 { width: 14px; }
+[data-admin] .h-3\.5 { height: 14px; }
+[data-admin] .min-w-3\.5 { min-width: 14px; }
+[data-admin] .min-h-3\.5 { min-height: 14px; }
+[data-admin] .max-w-3\.5 { max-width: 14px; }
+[data-admin] .max-h-3\.5 { max-height: 14px; }
+[data-admin] .inset-3\.5 { inset: 14px; }
+[data-admin] .inset-x-3\.5 { left: 14px; right: 14px; }
+[data-admin] .inset-y-3\.5 { top: 14px; bottom: 14px; }
+[data-admin] .top-3\.5 { top: 14px; }
+[data-admin] .right-3\.5 { right: 14px; }
+[data-admin] .bottom-3\.5 { bottom: 14px; }
+[data-admin] .left-3\.5 { left: 14px; }
+[data-admin] .size-3\.5 { width: 14px; height: 14px; }
+[data-admin] .space-y-3\.5 > :not([hidden]) ~ :not([hidden]) { margin-top: 14px; margin-bottom: 0; }
+[data-admin] .space-x-3\.5 > :not([hidden]) ~ :not([hidden]) { margin-left: 14px; margin-right: 0; }
+[data-admin] .p-4 { padding: 16px; }
+[data-admin] .px-4 { padding-left: 16px; padding-right: 16px; }
+[data-admin] .py-4 { padding-top: 16px; padding-bottom: 16px; }
+[data-admin] .pt-4 { padding-top: 16px; }
+[data-admin] .pr-4 { padding-right: 16px; }
+[data-admin] .pb-4 { padding-bottom: 16px; }
+[data-admin] .pl-4 { padding-left: 16px; }
+[data-admin] .m-4 { margin: 16px; }
+[data-admin] .mx-4 { margin-left: 16px; margin-right: 16px; }
+[data-admin] .my-4 { margin-top: 16px; margin-bottom: 16px; }
+[data-admin] .mt-4 { margin-top: 16px; }
+[data-admin] .mr-4 { margin-right: 16px; }
+[data-admin] .mb-4 { margin-bottom: 16px; }
+[data-admin] .ml-4 { margin-left: 16px; }
+[data-admin] .gap-4 { gap: 16px; }
+[data-admin] .gap-x-4 { column-gap: 16px; }
+[data-admin] .gap-y-4 { row-gap: 16px; }
+[data-admin] .w-4 { width: 16px; }
+[data-admin] .h-4 { height: 16px; }
+[data-admin] .min-w-4 { min-width: 16px; }
+[data-admin] .min-h-4 { min-height: 16px; }
+[data-admin] .max-w-4 { max-width: 16px; }
+[data-admin] .max-h-4 { max-height: 16px; }
+[data-admin] .inset-4 { inset: 16px; }
+[data-admin] .inset-x-4 { left: 16px; right: 16px; }
+[data-admin] .inset-y-4 { top: 16px; bottom: 16px; }
+[data-admin] .top-4 { top: 16px; }
+[data-admin] .right-4 { right: 16px; }
+[data-admin] .bottom-4 { bottom: 16px; }
+[data-admin] .left-4 { left: 16px; }
+[data-admin] .size-4 { width: 16px; height: 16px; }
+[data-admin] .space-y-4 > :not([hidden]) ~ :not([hidden]) { margin-top: 16px; margin-bottom: 0; }
+[data-admin] .space-x-4 > :not([hidden]) ~ :not([hidden]) { margin-left: 16px; margin-right: 0; }
+[data-admin] .p-5 { padding: 20px; }
+[data-admin] .px-5 { padding-left: 20px; padding-right: 20px; }
+[data-admin] .py-5 { padding-top: 20px; padding-bottom: 20px; }
+[data-admin] .pt-5 { padding-top: 20px; }
+[data-admin] .pr-5 { padding-right: 20px; }
+[data-admin] .pb-5 { padding-bottom: 20px; }
+[data-admin] .pl-5 { padding-left: 20px; }
+[data-admin] .m-5 { margin: 20px; }
+[data-admin] .mx-5 { margin-left: 20px; margin-right: 20px; }
+[data-admin] .my-5 { margin-top: 20px; margin-bottom: 20px; }
+[data-admin] .mt-5 { margin-top: 20px; }
+[data-admin] .mr-5 { margin-right: 20px; }
+[data-admin] .mb-5 { margin-bottom: 20px; }
+[data-admin] .ml-5 { margin-left: 20px; }
+[data-admin] .gap-5 { gap: 20px; }
+[data-admin] .gap-x-5 { column-gap: 20px; }
+[data-admin] .gap-y-5 { row-gap: 20px; }
+[data-admin] .w-5 { width: 20px; }
+[data-admin] .h-5 { height: 20px; }
+[data-admin] .min-w-5 { min-width: 20px; }
+[data-admin] .min-h-5 { min-height: 20px; }
+[data-admin] .max-w-5 { max-width: 20px; }
+[data-admin] .max-h-5 { max-height: 20px; }
+[data-admin] .inset-5 { inset: 20px; }
+[data-admin] .inset-x-5 { left: 20px; right: 20px; }
+[data-admin] .inset-y-5 { top: 20px; bottom: 20px; }
+[data-admin] .top-5 { top: 20px; }
+[data-admin] .right-5 { right: 20px; }
+[data-admin] .bottom-5 { bottom: 20px; }
+[data-admin] .left-5 { left: 20px; }
+[data-admin] .size-5 { width: 20px; height: 20px; }
+[data-admin] .space-y-5 > :not([hidden]) ~ :not([hidden]) { margin-top: 20px; margin-bottom: 0; }
+[data-admin] .space-x-5 > :not([hidden]) ~ :not([hidden]) { margin-left: 20px; margin-right: 0; }
+[data-admin] .p-6 { padding: 24px; }
+[data-admin] .px-6 { padding-left: 24px; padding-right: 24px; }
+[data-admin] .py-6 { padding-top: 24px; padding-bottom: 24px; }
+[data-admin] .pt-6 { padding-top: 24px; }
+[data-admin] .pr-6 { padding-right: 24px; }
+[data-admin] .pb-6 { padding-bottom: 24px; }
+[data-admin] .pl-6 { padding-left: 24px; }
+[data-admin] .m-6 { margin: 24px; }
+[data-admin] .mx-6 { margin-left: 24px; margin-right: 24px; }
+[data-admin] .my-6 { margin-top: 24px; margin-bottom: 24px; }
+[data-admin] .mt-6 { margin-top: 24px; }
+[data-admin] .mr-6 { margin-right: 24px; }
+[data-admin] .mb-6 { margin-bottom: 24px; }
+[data-admin] .ml-6 { margin-left: 24px; }
+[data-admin] .gap-6 { gap: 24px; }
+[data-admin] .gap-x-6 { column-gap: 24px; }
+[data-admin] .gap-y-6 { row-gap: 24px; }
+[data-admin] .w-6 { width: 24px; }
+[data-admin] .h-6 { height: 24px; }
+[data-admin] .min-w-6 { min-width: 24px; }
+[data-admin] .min-h-6 { min-height: 24px; }
+[data-admin] .max-w-6 { max-width: 24px; }
+[data-admin] .max-h-6 { max-height: 24px; }
+[data-admin] .inset-6 { inset: 24px; }
+[data-admin] .inset-x-6 { left: 24px; right: 24px; }
+[data-admin] .inset-y-6 { top: 24px; bottom: 24px; }
+[data-admin] .top-6 { top: 24px; }
+[data-admin] .right-6 { right: 24px; }
+[data-admin] .bottom-6 { bottom: 24px; }
+[data-admin] .left-6 { left: 24px; }
+[data-admin] .size-6 { width: 24px; height: 24px; }
+[data-admin] .space-y-6 > :not([hidden]) ~ :not([hidden]) { margin-top: 24px; margin-bottom: 0; }
+[data-admin] .space-x-6 > :not([hidden]) ~ :not([hidden]) { margin-left: 24px; margin-right: 0; }
+[data-admin] .p-7 { padding: 28px; }
+[data-admin] .px-7 { padding-left: 28px; padding-right: 28px; }
+[data-admin] .py-7 { padding-top: 28px; padding-bottom: 28px; }
+[data-admin] .pt-7 { padding-top: 28px; }
+[data-admin] .pr-7 { padding-right: 28px; }
+[data-admin] .pb-7 { padding-bottom: 28px; }
+[data-admin] .pl-7 { padding-left: 28px; }
+[data-admin] .m-7 { margin: 28px; }
+[data-admin] .mx-7 { margin-left: 28px; margin-right: 28px; }
+[data-admin] .my-7 { margin-top: 28px; margin-bottom: 28px; }
+[data-admin] .mt-7 { margin-top: 28px; }
+[data-admin] .mr-7 { margin-right: 28px; }
+[data-admin] .mb-7 { margin-bottom: 28px; }
+[data-admin] .ml-7 { margin-left: 28px; }
+[data-admin] .gap-7 { gap: 28px; }
+[data-admin] .gap-x-7 { column-gap: 28px; }
+[data-admin] .gap-y-7 { row-gap: 28px; }
+[data-admin] .w-7 { width: 28px; }
+[data-admin] .h-7 { height: 28px; }
+[data-admin] .min-w-7 { min-width: 28px; }
+[data-admin] .min-h-7 { min-height: 28px; }
+[data-admin] .max-w-7 { max-width: 28px; }
+[data-admin] .max-h-7 { max-height: 28px; }
+[data-admin] .inset-7 { inset: 28px; }
+[data-admin] .inset-x-7 { left: 28px; right: 28px; }
+[data-admin] .inset-y-7 { top: 28px; bottom: 28px; }
+[data-admin] .top-7 { top: 28px; }
+[data-admin] .right-7 { right: 28px; }
+[data-admin] .bottom-7 { bottom: 28px; }
+[data-admin] .left-7 { left: 28px; }
+[data-admin] .size-7 { width: 28px; height: 28px; }
+[data-admin] .space-y-7 > :not([hidden]) ~ :not([hidden]) { margin-top: 28px; margin-bottom: 0; }
+[data-admin] .space-x-7 > :not([hidden]) ~ :not([hidden]) { margin-left: 28px; margin-right: 0; }
+[data-admin] .p-8 { padding: 32px; }
+[data-admin] .px-8 { padding-left: 32px; padding-right: 32px; }
+[data-admin] .py-8 { padding-top: 32px; padding-bottom: 32px; }
+[data-admin] .pt-8 { padding-top: 32px; }
+[data-admin] .pr-8 { padding-right: 32px; }
+[data-admin] .pb-8 { padding-bottom: 32px; }
+[data-admin] .pl-8 { padding-left: 32px; }
+[data-admin] .m-8 { margin: 32px; }
+[data-admin] .mx-8 { margin-left: 32px; margin-right: 32px; }
+[data-admin] .my-8 { margin-top: 32px; margin-bottom: 32px; }
+[data-admin] .mt-8 { margin-top: 32px; }
+[data-admin] .mr-8 { margin-right: 32px; }
+[data-admin] .mb-8 { margin-bottom: 32px; }
+[data-admin] .ml-8 { margin-left: 32px; }
+[data-admin] .gap-8 { gap: 32px; }
+[data-admin] .gap-x-8 { column-gap: 32px; }
+[data-admin] .gap-y-8 { row-gap: 32px; }
+[data-admin] .w-8 { width: 32px; }
+[data-admin] .h-8 { height: 32px; }
+[data-admin] .min-w-8 { min-width: 32px; }
+[data-admin] .min-h-8 { min-height: 32px; }
+[data-admin] .max-w-8 { max-width: 32px; }
+[data-admin] .max-h-8 { max-height: 32px; }
+[data-admin] .inset-8 { inset: 32px; }
+[data-admin] .inset-x-8 { left: 32px; right: 32px; }
+[data-admin] .inset-y-8 { top: 32px; bottom: 32px; }
+[data-admin] .top-8 { top: 32px; }
+[data-admin] .right-8 { right: 32px; }
+[data-admin] .bottom-8 { bottom: 32px; }
+[data-admin] .left-8 { left: 32px; }
+[data-admin] .size-8 { width: 32px; height: 32px; }
+[data-admin] .space-y-8 > :not([hidden]) ~ :not([hidden]) { margin-top: 32px; margin-bottom: 0; }
+[data-admin] .space-x-8 > :not([hidden]) ~ :not([hidden]) { margin-left: 32px; margin-right: 0; }
+[data-admin] .p-9 { padding: 36px; }
+[data-admin] .px-9 { padding-left: 36px; padding-right: 36px; }
+[data-admin] .py-9 { padding-top: 36px; padding-bottom: 36px; }
+[data-admin] .pt-9 { padding-top: 36px; }
+[data-admin] .pr-9 { padding-right: 36px; }
+[data-admin] .pb-9 { padding-bottom: 36px; }
+[data-admin] .pl-9 { padding-left: 36px; }
+[data-admin] .m-9 { margin: 36px; }
+[data-admin] .mx-9 { margin-left: 36px; margin-right: 36px; }
+[data-admin] .my-9 { margin-top: 36px; margin-bottom: 36px; }
+[data-admin] .mt-9 { margin-top: 36px; }
+[data-admin] .mr-9 { margin-right: 36px; }
+[data-admin] .mb-9 { margin-bottom: 36px; }
+[data-admin] .ml-9 { margin-left: 36px; }
+[data-admin] .gap-9 { gap: 36px; }
+[data-admin] .gap-x-9 { column-gap: 36px; }
+[data-admin] .gap-y-9 { row-gap: 36px; }
+[data-admin] .w-9 { width: 36px; }
+[data-admin] .h-9 { height: 36px; }
+[data-admin] .min-w-9 { min-width: 36px; }
+[data-admin] .min-h-9 { min-height: 36px; }
+[data-admin] .max-w-9 { max-width: 36px; }
+[data-admin] .max-h-9 { max-height: 36px; }
+[data-admin] .inset-9 { inset: 36px; }
+[data-admin] .inset-x-9 { left: 36px; right: 36px; }
+[data-admin] .inset-y-9 { top: 36px; bottom: 36px; }
+[data-admin] .top-9 { top: 36px; }
+[data-admin] .right-9 { right: 36px; }
+[data-admin] .bottom-9 { bottom: 36px; }
+[data-admin] .left-9 { left: 36px; }
+[data-admin] .size-9 { width: 36px; height: 36px; }
+[data-admin] .space-y-9 > :not([hidden]) ~ :not([hidden]) { margin-top: 36px; margin-bottom: 0; }
+[data-admin] .space-x-9 > :not([hidden]) ~ :not([hidden]) { margin-left: 36px; margin-right: 0; }
+[data-admin] .p-10 { padding: 40px; }
+[data-admin] .px-10 { padding-left: 40px; padding-right: 40px; }
+[data-admin] .py-10 { padding-top: 40px; padding-bottom: 40px; }
+[data-admin] .pt-10 { padding-top: 40px; }
+[data-admin] .pr-10 { padding-right: 40px; }
+[data-admin] .pb-10 { padding-bottom: 40px; }
+[data-admin] .pl-10 { padding-left: 40px; }
+[data-admin] .m-10 { margin: 40px; }
+[data-admin] .mx-10 { margin-left: 40px; margin-right: 40px; }
+[data-admin] .my-10 { margin-top: 40px; margin-bottom: 40px; }
+[data-admin] .mt-10 { margin-top: 40px; }
+[data-admin] .mr-10 { margin-right: 40px; }
+[data-admin] .mb-10 { margin-bottom: 40px; }
+[data-admin] .ml-10 { margin-left: 40px; }
+[data-admin] .gap-10 { gap: 40px; }
+[data-admin] .gap-x-10 { column-gap: 40px; }
+[data-admin] .gap-y-10 { row-gap: 40px; }
+[data-admin] .w-10 { width: 40px; }
+[data-admin] .h-10 { height: 40px; }
+[data-admin] .min-w-10 { min-width: 40px; }
+[data-admin] .min-h-10 { min-height: 40px; }
+[data-admin] .max-w-10 { max-width: 40px; }
+[data-admin] .max-h-10 { max-height: 40px; }
+[data-admin] .inset-10 { inset: 40px; }
+[data-admin] .inset-x-10 { left: 40px; right: 40px; }
+[data-admin] .inset-y-10 { top: 40px; bottom: 40px; }
+[data-admin] .top-10 { top: 40px; }
+[data-admin] .right-10 { right: 40px; }
+[data-admin] .bottom-10 { bottom: 40px; }
+[data-admin] .left-10 { left: 40px; }
+[data-admin] .size-10 { width: 40px; height: 40px; }
+[data-admin] .space-y-10 > :not([hidden]) ~ :not([hidden]) { margin-top: 40px; margin-bottom: 0; }
+[data-admin] .space-x-10 > :not([hidden]) ~ :not([hidden]) { margin-left: 40px; margin-right: 0; }
+[data-admin] .p-11 { padding: 44px; }
+[data-admin] .px-11 { padding-left: 44px; padding-right: 44px; }
+[data-admin] .py-11 { padding-top: 44px; padding-bottom: 44px; }
+[data-admin] .pt-11 { padding-top: 44px; }
+[data-admin] .pr-11 { padding-right: 44px; }
+[data-admin] .pb-11 { padding-bottom: 44px; }
+[data-admin] .pl-11 { padding-left: 44px; }
+[data-admin] .m-11 { margin: 44px; }
+[data-admin] .mx-11 { margin-left: 44px; margin-right: 44px; }
+[data-admin] .my-11 { margin-top: 44px; margin-bottom: 44px; }
+[data-admin] .mt-11 { margin-top: 44px; }
+[data-admin] .mr-11 { margin-right: 44px; }
+[data-admin] .mb-11 { margin-bottom: 44px; }
+[data-admin] .ml-11 { margin-left: 44px; }
+[data-admin] .gap-11 { gap: 44px; }
+[data-admin] .gap-x-11 { column-gap: 44px; }
+[data-admin] .gap-y-11 { row-gap: 44px; }
+[data-admin] .w-11 { width: 44px; }
+[data-admin] .h-11 { height: 44px; }
+[data-admin] .min-w-11 { min-width: 44px; }
+[data-admin] .min-h-11 { min-height: 44px; }
+[data-admin] .max-w-11 { max-width: 44px; }
+[data-admin] .max-h-11 { max-height: 44px; }
+[data-admin] .inset-11 { inset: 44px; }
+[data-admin] .inset-x-11 { left: 44px; right: 44px; }
+[data-admin] .inset-y-11 { top: 44px; bottom: 44px; }
+[data-admin] .top-11 { top: 44px; }
+[data-admin] .right-11 { right: 44px; }
+[data-admin] .bottom-11 { bottom: 44px; }
+[data-admin] .left-11 { left: 44px; }
+[data-admin] .size-11 { width: 44px; height: 44px; }
+[data-admin] .space-y-11 > :not([hidden]) ~ :not([hidden]) { margin-top: 44px; margin-bottom: 0; }
+[data-admin] .space-x-11 > :not([hidden]) ~ :not([hidden]) { margin-left: 44px; margin-right: 0; }
+[data-admin] .p-12 { padding: 48px; }
+[data-admin] .px-12 { padding-left: 48px; padding-right: 48px; }
+[data-admin] .py-12 { padding-top: 48px; padding-bottom: 48px; }
+[data-admin] .pt-12 { padding-top: 48px; }
+[data-admin] .pr-12 { padding-right: 48px; }
+[data-admin] .pb-12 { padding-bottom: 48px; }
+[data-admin] .pl-12 { padding-left: 48px; }
+[data-admin] .m-12 { margin: 48px; }
+[data-admin] .mx-12 { margin-left: 48px; margin-right: 48px; }
+[data-admin] .my-12 { margin-top: 48px; margin-bottom: 48px; }
+[data-admin] .mt-12 { margin-top: 48px; }
+[data-admin] .mr-12 { margin-right: 48px; }
+[data-admin] .mb-12 { margin-bottom: 48px; }
+[data-admin] .ml-12 { margin-left: 48px; }
+[data-admin] .gap-12 { gap: 48px; }
+[data-admin] .gap-x-12 { column-gap: 48px; }
+[data-admin] .gap-y-12 { row-gap: 48px; }
+[data-admin] .w-12 { width: 48px; }
+[data-admin] .h-12 { height: 48px; }
+[data-admin] .min-w-12 { min-width: 48px; }
+[data-admin] .min-h-12 { min-height: 48px; }
+[data-admin] .max-w-12 { max-width: 48px; }
+[data-admin] .max-h-12 { max-height: 48px; }
+[data-admin] .inset-12 { inset: 48px; }
+[data-admin] .inset-x-12 { left: 48px; right: 48px; }
+[data-admin] .inset-y-12 { top: 48px; bottom: 48px; }
+[data-admin] .top-12 { top: 48px; }
+[data-admin] .right-12 { right: 48px; }
+[data-admin] .bottom-12 { bottom: 48px; }
+[data-admin] .left-12 { left: 48px; }
+[data-admin] .size-12 { width: 48px; height: 48px; }
+[data-admin] .space-y-12 > :not([hidden]) ~ :not([hidden]) { margin-top: 48px; margin-bottom: 0; }
+[data-admin] .space-x-12 > :not([hidden]) ~ :not([hidden]) { margin-left: 48px; margin-right: 0; }
+[data-admin] .p-14 { padding: 56px; }
+[data-admin] .px-14 { padding-left: 56px; padding-right: 56px; }
+[data-admin] .py-14 { padding-top: 56px; padding-bottom: 56px; }
+[data-admin] .pt-14 { padding-top: 56px; }
+[data-admin] .pr-14 { padding-right: 56px; }
+[data-admin] .pb-14 { padding-bottom: 56px; }
+[data-admin] .pl-14 { padding-left: 56px; }
+[data-admin] .m-14 { margin: 56px; }
+[data-admin] .mx-14 { margin-left: 56px; margin-right: 56px; }
+[data-admin] .my-14 { margin-top: 56px; margin-bottom: 56px; }
+[data-admin] .mt-14 { margin-top: 56px; }
+[data-admin] .mr-14 { margin-right: 56px; }
+[data-admin] .mb-14 { margin-bottom: 56px; }
+[data-admin] .ml-14 { margin-left: 56px; }
+[data-admin] .gap-14 { gap: 56px; }
+[data-admin] .gap-x-14 { column-gap: 56px; }
+[data-admin] .gap-y-14 { row-gap: 56px; }
+[data-admin] .w-14 { width: 56px; }
+[data-admin] .h-14 { height: 56px; }
+[data-admin] .min-w-14 { min-width: 56px; }
+[data-admin] .min-h-14 { min-height: 56px; }
+[data-admin] .max-w-14 { max-width: 56px; }
+[data-admin] .max-h-14 { max-height: 56px; }
+[data-admin] .inset-14 { inset: 56px; }
+[data-admin] .inset-x-14 { left: 56px; right: 56px; }
+[data-admin] .inset-y-14 { top: 56px; bottom: 56px; }
+[data-admin] .top-14 { top: 56px; }
+[data-admin] .right-14 { right: 56px; }
+[data-admin] .bottom-14 { bottom: 56px; }
+[data-admin] .left-14 { left: 56px; }
+[data-admin] .size-14 { width: 56px; height: 56px; }
+[data-admin] .space-y-14 > :not([hidden]) ~ :not([hidden]) { margin-top: 56px; margin-bottom: 0; }
+[data-admin] .space-x-14 > :not([hidden]) ~ :not([hidden]) { margin-left: 56px; margin-right: 0; }
+[data-admin] .p-16 { padding: 64px; }
+[data-admin] .px-16 { padding-left: 64px; padding-right: 64px; }
+[data-admin] .py-16 { padding-top: 64px; padding-bottom: 64px; }
+[data-admin] .pt-16 { padding-top: 64px; }
+[data-admin] .pr-16 { padding-right: 64px; }
+[data-admin] .pb-16 { padding-bottom: 64px; }
+[data-admin] .pl-16 { padding-left: 64px; }
+[data-admin] .m-16 { margin: 64px; }
+[data-admin] .mx-16 { margin-left: 64px; margin-right: 64px; }
+[data-admin] .my-16 { margin-top: 64px; margin-bottom: 64px; }
+[data-admin] .mt-16 { margin-top: 64px; }
+[data-admin] .mr-16 { margin-right: 64px; }
+[data-admin] .mb-16 { margin-bottom: 64px; }
+[data-admin] .ml-16 { margin-left: 64px; }
+[data-admin] .gap-16 { gap: 64px; }
+[data-admin] .gap-x-16 { column-gap: 64px; }
+[data-admin] .gap-y-16 { row-gap: 64px; }
+[data-admin] .w-16 { width: 64px; }
+[data-admin] .h-16 { height: 64px; }
+[data-admin] .min-w-16 { min-width: 64px; }
+[data-admin] .min-h-16 { min-height: 64px; }
+[data-admin] .max-w-16 { max-width: 64px; }
+[data-admin] .max-h-16 { max-height: 64px; }
+[data-admin] .inset-16 { inset: 64px; }
+[data-admin] .inset-x-16 { left: 64px; right: 64px; }
+[data-admin] .inset-y-16 { top: 64px; bottom: 64px; }
+[data-admin] .top-16 { top: 64px; }
+[data-admin] .right-16 { right: 64px; }
+[data-admin] .bottom-16 { bottom: 64px; }
+[data-admin] .left-16 { left: 64px; }
+[data-admin] .size-16 { width: 64px; height: 64px; }
+[data-admin] .space-y-16 > :not([hidden]) ~ :not([hidden]) { margin-top: 64px; margin-bottom: 0; }
+[data-admin] .space-x-16 > :not([hidden]) ~ :not([hidden]) { margin-left: 64px; margin-right: 0; }
+[data-admin] .p-20 { padding: 80px; }
+[data-admin] .px-20 { padding-left: 80px; padding-right: 80px; }
+[data-admin] .py-20 { padding-top: 80px; padding-bottom: 80px; }
+[data-admin] .pt-20 { padding-top: 80px; }
+[data-admin] .pr-20 { padding-right: 80px; }
+[data-admin] .pb-20 { padding-bottom: 80px; }
+[data-admin] .pl-20 { padding-left: 80px; }
+[data-admin] .m-20 { margin: 80px; }
+[data-admin] .mx-20 { margin-left: 80px; margin-right: 80px; }
+[data-admin] .my-20 { margin-top: 80px; margin-bottom: 80px; }
+[data-admin] .mt-20 { margin-top: 80px; }
+[data-admin] .mr-20 { margin-right: 80px; }
+[data-admin] .mb-20 { margin-bottom: 80px; }
+[data-admin] .ml-20 { margin-left: 80px; }
+[data-admin] .gap-20 { gap: 80px; }
+[data-admin] .gap-x-20 { column-gap: 80px; }
+[data-admin] .gap-y-20 { row-gap: 80px; }
+[data-admin] .w-20 { width: 80px; }
+[data-admin] .h-20 { height: 80px; }
+[data-admin] .min-w-20 { min-width: 80px; }
+[data-admin] .min-h-20 { min-height: 80px; }
+[data-admin] .max-w-20 { max-width: 80px; }
+[data-admin] .max-h-20 { max-height: 80px; }
+[data-admin] .inset-20 { inset: 80px; }
+[data-admin] .inset-x-20 { left: 80px; right: 80px; }
+[data-admin] .inset-y-20 { top: 80px; bottom: 80px; }
+[data-admin] .top-20 { top: 80px; }
+[data-admin] .right-20 { right: 80px; }
+[data-admin] .bottom-20 { bottom: 80px; }
+[data-admin] .left-20 { left: 80px; }
+[data-admin] .size-20 { width: 80px; height: 80px; }
+[data-admin] .space-y-20 > :not([hidden]) ~ :not([hidden]) { margin-top: 80px; margin-bottom: 0; }
+[data-admin] .space-x-20 > :not([hidden]) ~ :not([hidden]) { margin-left: 80px; margin-right: 0; }
+[data-admin] .p-24 { padding: 96px; }
+[data-admin] .px-24 { padding-left: 96px; padding-right: 96px; }
+[data-admin] .py-24 { padding-top: 96px; padding-bottom: 96px; }
+[data-admin] .pt-24 { padding-top: 96px; }
+[data-admin] .pr-24 { padding-right: 96px; }
+[data-admin] .pb-24 { padding-bottom: 96px; }
+[data-admin] .pl-24 { padding-left: 96px; }
+[data-admin] .m-24 { margin: 96px; }
+[data-admin] .mx-24 { margin-left: 96px; margin-right: 96px; }
+[data-admin] .my-24 { margin-top: 96px; margin-bottom: 96px; }
+[data-admin] .mt-24 { margin-top: 96px; }
+[data-admin] .mr-24 { margin-right: 96px; }
+[data-admin] .mb-24 { margin-bottom: 96px; }
+[data-admin] .ml-24 { margin-left: 96px; }
+[data-admin] .gap-24 { gap: 96px; }
+[data-admin] .gap-x-24 { column-gap: 96px; }
+[data-admin] .gap-y-24 { row-gap: 96px; }
+[data-admin] .w-24 { width: 96px; }
+[data-admin] .h-24 { height: 96px; }
+[data-admin] .min-w-24 { min-width: 96px; }
+[data-admin] .min-h-24 { min-height: 96px; }
+[data-admin] .max-w-24 { max-width: 96px; }
+[data-admin] .max-h-24 { max-height: 96px; }
+[data-admin] .inset-24 { inset: 96px; }
+[data-admin] .inset-x-24 { left: 96px; right: 96px; }
+[data-admin] .inset-y-24 { top: 96px; bottom: 96px; }
+[data-admin] .top-24 { top: 96px; }
+[data-admin] .right-24 { right: 96px; }
+[data-admin] .bottom-24 { bottom: 96px; }
+[data-admin] .left-24 { left: 96px; }
+[data-admin] .size-24 { width: 96px; height: 96px; }
+[data-admin] .space-y-24 > :not([hidden]) ~ :not([hidden]) { margin-top: 96px; margin-bottom: 0; }
+[data-admin] .space-x-24 > :not([hidden]) ~ :not([hidden]) { margin-left: 96px; margin-right: 0; }
+[data-admin] .p-32 { padding: 128px; }
+[data-admin] .px-32 { padding-left: 128px; padding-right: 128px; }
+[data-admin] .py-32 { padding-top: 128px; padding-bottom: 128px; }
+[data-admin] .pt-32 { padding-top: 128px; }
+[data-admin] .pr-32 { padding-right: 128px; }
+[data-admin] .pb-32 { padding-bottom: 128px; }
+[data-admin] .pl-32 { padding-left: 128px; }
+[data-admin] .m-32 { margin: 128px; }
+[data-admin] .mx-32 { margin-left: 128px; margin-right: 128px; }
+[data-admin] .my-32 { margin-top: 128px; margin-bottom: 128px; }
+[data-admin] .mt-32 { margin-top: 128px; }
+[data-admin] .mr-32 { margin-right: 128px; }
+[data-admin] .mb-32 { margin-bottom: 128px; }
+[data-admin] .ml-32 { margin-left: 128px; }
+[data-admin] .gap-32 { gap: 128px; }
+[data-admin] .gap-x-32 { column-gap: 128px; }
+[data-admin] .gap-y-32 { row-gap: 128px; }
+[data-admin] .w-32 { width: 128px; }
+[data-admin] .h-32 { height: 128px; }
+[data-admin] .min-w-32 { min-width: 128px; }
+[data-admin] .min-h-32 { min-height: 128px; }
+[data-admin] .max-w-32 { max-width: 128px; }
+[data-admin] .max-h-32 { max-height: 128px; }
+[data-admin] .inset-32 { inset: 128px; }
+[data-admin] .inset-x-32 { left: 128px; right: 128px; }
+[data-admin] .inset-y-32 { top: 128px; bottom: 128px; }
+[data-admin] .top-32 { top: 128px; }
+[data-admin] .right-32 { right: 128px; }
+[data-admin] .bottom-32 { bottom: 128px; }
+[data-admin] .left-32 { left: 128px; }
+[data-admin] .size-32 { width: 128px; height: 128px; }
+[data-admin] .space-y-32 > :not([hidden]) ~ :not([hidden]) { margin-top: 128px; margin-bottom: 0; }
+[data-admin] .space-x-32 > :not([hidden]) ~ :not([hidden]) { margin-left: 128px; margin-right: 0; }
+[data-admin] .p-40 { padding: 160px; }
+[data-admin] .px-40 { padding-left: 160px; padding-right: 160px; }
+[data-admin] .py-40 { padding-top: 160px; padding-bottom: 160px; }
+[data-admin] .pt-40 { padding-top: 160px; }
+[data-admin] .pr-40 { padding-right: 160px; }
+[data-admin] .pb-40 { padding-bottom: 160px; }
+[data-admin] .pl-40 { padding-left: 160px; }
+[data-admin] .m-40 { margin: 160px; }
+[data-admin] .mx-40 { margin-left: 160px; margin-right: 160px; }
+[data-admin] .my-40 { margin-top: 160px; margin-bottom: 160px; }
+[data-admin] .mt-40 { margin-top: 160px; }
+[data-admin] .mr-40 { margin-right: 160px; }
+[data-admin] .mb-40 { margin-bottom: 160px; }
+[data-admin] .ml-40 { margin-left: 160px; }
+[data-admin] .gap-40 { gap: 160px; }
+[data-admin] .gap-x-40 { column-gap: 160px; }
+[data-admin] .gap-y-40 { row-gap: 160px; }
+[data-admin] .w-40 { width: 160px; }
+[data-admin] .h-40 { height: 160px; }
+[data-admin] .min-w-40 { min-width: 160px; }
+[data-admin] .min-h-40 { min-height: 160px; }
+[data-admin] .max-w-40 { max-width: 160px; }
+[data-admin] .max-h-40 { max-height: 160px; }
+[data-admin] .inset-40 { inset: 160px; }
+[data-admin] .inset-x-40 { left: 160px; right: 160px; }
+[data-admin] .inset-y-40 { top: 160px; bottom: 160px; }
+[data-admin] .top-40 { top: 160px; }
+[data-admin] .right-40 { right: 160px; }
+[data-admin] .bottom-40 { bottom: 160px; }
+[data-admin] .left-40 { left: 160px; }
+[data-admin] .size-40 { width: 160px; height: 160px; }
+[data-admin] .space-y-40 > :not([hidden]) ~ :not([hidden]) { margin-top: 160px; margin-bottom: 0; }
+[data-admin] .space-x-40 > :not([hidden]) ~ :not([hidden]) { margin-left: 160px; margin-right: 0; }
+[data-admin] .p-48 { padding: 192px; }
+[data-admin] .px-48 { padding-left: 192px; padding-right: 192px; }
+[data-admin] .py-48 { padding-top: 192px; padding-bottom: 192px; }
+[data-admin] .pt-48 { padding-top: 192px; }
+[data-admin] .pr-48 { padding-right: 192px; }
+[data-admin] .pb-48 { padding-bottom: 192px; }
+[data-admin] .pl-48 { padding-left: 192px; }
+[data-admin] .m-48 { margin: 192px; }
+[data-admin] .mx-48 { margin-left: 192px; margin-right: 192px; }
+[data-admin] .my-48 { margin-top: 192px; margin-bottom: 192px; }
+[data-admin] .mt-48 { margin-top: 192px; }
+[data-admin] .mr-48 { margin-right: 192px; }
+[data-admin] .mb-48 { margin-bottom: 192px; }
+[data-admin] .ml-48 { margin-left: 192px; }
+[data-admin] .gap-48 { gap: 192px; }
+[data-admin] .gap-x-48 { column-gap: 192px; }
+[data-admin] .gap-y-48 { row-gap: 192px; }
+[data-admin] .w-48 { width: 192px; }
+[data-admin] .h-48 { height: 192px; }
+[data-admin] .min-w-48 { min-width: 192px; }
+[data-admin] .min-h-48 { min-height: 192px; }
+[data-admin] .max-w-48 { max-width: 192px; }
+[data-admin] .max-h-48 { max-height: 192px; }
+[data-admin] .inset-48 { inset: 192px; }
+[data-admin] .inset-x-48 { left: 192px; right: 192px; }
+[data-admin] .inset-y-48 { top: 192px; bottom: 192px; }
+[data-admin] .top-48 { top: 192px; }
+[data-admin] .right-48 { right: 192px; }
+[data-admin] .bottom-48 { bottom: 192px; }
+[data-admin] .left-48 { left: 192px; }
+[data-admin] .size-48 { width: 192px; height: 192px; }
+[data-admin] .space-y-48 > :not([hidden]) ~ :not([hidden]) { margin-top: 192px; margin-bottom: 0; }
+[data-admin] .space-x-48 > :not([hidden]) ~ :not([hidden]) { margin-left: 192px; margin-right: 0; }
+[data-admin] .p-56 { padding: 224px; }
+[data-admin] .px-56 { padding-left: 224px; padding-right: 224px; }
+[data-admin] .py-56 { padding-top: 224px; padding-bottom: 224px; }
+[data-admin] .pt-56 { padding-top: 224px; }
+[data-admin] .pr-56 { padding-right: 224px; }
+[data-admin] .pb-56 { padding-bottom: 224px; }
+[data-admin] .pl-56 { padding-left: 224px; }
+[data-admin] .m-56 { margin: 224px; }
+[data-admin] .mx-56 { margin-left: 224px; margin-right: 224px; }
+[data-admin] .my-56 { margin-top: 224px; margin-bottom: 224px; }
+[data-admin] .mt-56 { margin-top: 224px; }
+[data-admin] .mr-56 { margin-right: 224px; }
+[data-admin] .mb-56 { margin-bottom: 224px; }
+[data-admin] .ml-56 { margin-left: 224px; }
+[data-admin] .gap-56 { gap: 224px; }
+[data-admin] .gap-x-56 { column-gap: 224px; }
+[data-admin] .gap-y-56 { row-gap: 224px; }
+[data-admin] .w-56 { width: 224px; }
+[data-admin] .h-56 { height: 224px; }
+[data-admin] .min-w-56 { min-width: 224px; }
+[data-admin] .min-h-56 { min-height: 224px; }
+[data-admin] .max-w-56 { max-width: 224px; }
+[data-admin] .max-h-56 { max-height: 224px; }
+[data-admin] .inset-56 { inset: 224px; }
+[data-admin] .inset-x-56 { left: 224px; right: 224px; }
+[data-admin] .inset-y-56 { top: 224px; bottom: 224px; }
+[data-admin] .top-56 { top: 224px; }
+[data-admin] .right-56 { right: 224px; }
+[data-admin] .bottom-56 { bottom: 224px; }
+[data-admin] .left-56 { left: 224px; }
+[data-admin] .size-56 { width: 224px; height: 224px; }
+[data-admin] .space-y-56 > :not([hidden]) ~ :not([hidden]) { margin-top: 224px; margin-bottom: 0; }
+[data-admin] .space-x-56 > :not([hidden]) ~ :not([hidden]) { margin-left: 224px; margin-right: 0; }
+[data-admin] .p-64 { padding: 256px; }
+[data-admin] .px-64 { padding-left: 256px; padding-right: 256px; }
+[data-admin] .py-64 { padding-top: 256px; padding-bottom: 256px; }
+[data-admin] .pt-64 { padding-top: 256px; }
+[data-admin] .pr-64 { padding-right: 256px; }
+[data-admin] .pb-64 { padding-bottom: 256px; }
+[data-admin] .pl-64 { padding-left: 256px; }
+[data-admin] .m-64 { margin: 256px; }
+[data-admin] .mx-64 { margin-left: 256px; margin-right: 256px; }
+[data-admin] .my-64 { margin-top: 256px; margin-bottom: 256px; }
+[data-admin] .mt-64 { margin-top: 256px; }
+[data-admin] .mr-64 { margin-right: 256px; }
+[data-admin] .mb-64 { margin-bottom: 256px; }
+[data-admin] .ml-64 { margin-left: 256px; }
+[data-admin] .gap-64 { gap: 256px; }
+[data-admin] .gap-x-64 { column-gap: 256px; }
+[data-admin] .gap-y-64 { row-gap: 256px; }
+[data-admin] .w-64 { width: 256px; }
+[data-admin] .h-64 { height: 256px; }
+[data-admin] .min-w-64 { min-width: 256px; }
+[data-admin] .min-h-64 { min-height: 256px; }
+[data-admin] .max-w-64 { max-width: 256px; }
+[data-admin] .max-h-64 { max-height: 256px; }
+[data-admin] .inset-64 { inset: 256px; }
+[data-admin] .inset-x-64 { left: 256px; right: 256px; }
+[data-admin] .inset-y-64 { top: 256px; bottom: 256px; }
+[data-admin] .top-64 { top: 256px; }
+[data-admin] .right-64 { right: 256px; }
+[data-admin] .bottom-64 { bottom: 256px; }
+[data-admin] .left-64 { left: 256px; }
+[data-admin] .size-64 { width: 256px; height: 256px; }
+[data-admin] .space-y-64 > :not([hidden]) ~ :not([hidden]) { margin-top: 256px; margin-bottom: 0; }
+[data-admin] .space-x-64 > :not([hidden]) ~ :not([hidden]) { margin-left: 256px; margin-right: 0; }
+
+/* Responsive utilities that are missing from the custom spacing scale */
+@media (min-width: 640px) {
+  [data-admin] .sm\:w-80 { width: 320px; }
+}
+@media (min-width: 768px) {
+  [data-admin] .md\:ml-64 { margin-left: 256px; }
+  [data-admin] .md\:w-64 { width: 256px; }
+  [data-admin] .md\:pt-0 { padding-top: 0; }
+}
+
+.admin-sidebar {
+  width: 256px;
+}
+
+.admin-mobile-bar {
+  height: 44px;
+}
+
+.admin-main {
+  padding-top: 44px;
+}
+
+@media (min-width: 768px) {
+  .admin-main {
+    margin-left: 256px;
+    padding-top: 0;
+  }
+}
+
+.admin-kicker {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #666666;
 }

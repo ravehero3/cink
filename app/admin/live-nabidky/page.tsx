@@ -65,7 +65,6 @@ export default function LiveOfferAdminPage() {
   };
 
   const resetTestState = () => {
-    // Find all live offer keys in localStorage and remove them
     const keysToRemove = [];
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
@@ -74,38 +73,46 @@ export default function LiveOfferAdminPage() {
       }
     }
     keysToRemove.forEach(key => localStorage.removeItem(key));
-    
-    // Trigger re-check in LiveOfferBar if it's currently rendered anywhere
     window.dispatchEvent(new CustomEvent('check-live-offer'));
     alert('Váš osobní testovací stav byl restartován. Nyní uvidíte nabídku znovu na webu (pokud je aktivní).');
   };
 
-  if (loading) return <div className="p-8 tracking-widest uppercase text-xs">Načítání...</div>;
+  if (loading) {
+    return (
+      <div className="flex items-center gap-3 py-12">
+        <div className="admin-spinner" />
+        <span className="admin-sub" style={{ margin: 0 }}>Načítám…</span>
+      </div>
+    );
+  }
 
   return (
-    <div className="p-8 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-8 uppercase tracking-widest">Správa Live Nabídek</h1>
+    <div className="space-y-[24px] max-w-4xl">
+      <div className="border-b border-black pb-4">
+        <h1 className="admin-title">Live nabídky</h1>
+        <p className="admin-sub">Lišta s limitovanou slevou na e-shopu</p>
+      </div>
 
-      <div className="space-y-8 bg-white border border-black p-8">
-        {/* Simplified Toggle */}
-        <div className="flex items-center justify-between p-6 bg-gray-50 border border-black/10">
+      <div className="admin-card p-[24px] space-y-[24px]">
+        <div className="flex items-center justify-between p-[16px] border border-black">
           <div>
-            <h2 className="font-bold uppercase text-sm">Aktivní stav</h2>
-            <p className="text-[10px] text-gray-500 uppercase">Zapnout/vypnout zobrazení lišty na webu</p>
+            <h2 className="text-xs font-bold uppercase tracking-wider">Aktivní stav</h2>
+            <p className="admin-sub">Zapnout / vypnout zobrazení lišty na webu</p>
           </div>
           <div className="flex items-center gap-4">
-            <span className={`text-[10px] font-bold uppercase tracking-widest ${offer.isActive ? 'text-black' : 'text-gray-400'}`}>
-              {offer.isActive ? 'AKTIVNÍ' : 'NEAKTIVNÍ'}
+            <span className="text-[10px] font-bold uppercase tracking-widest">
+              {offer.isActive ? 'Aktivní' : 'Neaktivní'}
             </span>
             <button
               type="button"
               onClick={toggleActive}
-              className={`relative inline-flex h-8 w-16 items-center rounded-full transition-colors border border-black ${
+              className={`relative inline-flex h-8 w-16 items-center border border-black transition-colors ${
                 offer.isActive ? 'bg-black' : 'bg-white'
               }`}
+              aria-label="Přepnout aktivitu"
             >
               <span
-                className={`inline-block h-4 w-4 transform rounded-full transition-transform ${
+                className={`inline-block h-4 w-4 transition-transform ${
                   offer.isActive ? 'translate-x-10 bg-white' : 'translate-x-2 bg-black'
                 }`}
               />
@@ -113,88 +120,79 @@ export default function LiveOfferAdminPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="space-y-4">
-            <div>
-              <label className="block text-[10px] uppercase font-bold mb-1 tracking-widest">Text nabídky</label>
-              <textarea
-                value={offer.text}
-                onChange={e => setOffer({ ...offer, text: e.target.value })}
-                className="w-full border border-black p-3 text-sm focus:outline-none min-h-[100px]"
-                placeholder="VYUŽIJTE LIMITOVANÝ SLEVOVÝ KUPÓN..."
-              />
-              <p className="text-[9px] mt-1 text-gray-400 uppercase">Číslo '10' bude nahrazeno výší slevy</p>
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-[24px]">
+          <div>
+            <label className="admin-label">Text nabídky</label>
+            <textarea
+              value={offer.text}
+              onChange={e => setOffer({ ...offer, text: e.target.value })}
+              className="admin-textarea min-h-[100px]"
+              placeholder="VYUŽIJTE LIMITOVANÝ SLEVOVÝ KUPÓN..."
+            />
+            <p className="admin-sub">Číslo v textu bude nahrazeno výší slevy</p>
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-[16px]">
             <div>
-              <label className="block text-[10px] uppercase font-bold mb-1 tracking-widest">Výše slevy (%)</label>
+              <label className="admin-label">Výše slevy (%)</label>
               <input
                 type="number"
                 value={offer.percentage}
                 onChange={e => setOffer({ ...offer, percentage: parseInt(e.target.value) || 0 })}
-                className="w-full border border-black p-3 text-sm focus:outline-none"
+                className="admin-input"
               />
             </div>
-
             <div>
-              <label className="block text-[10px] uppercase font-bold mb-1 tracking-widest">Doba trvání (minuty)</label>
+              <label className="admin-label">Doba trvání (minuty)</label>
               <input
                 type="number"
                 value={offer.durationMin}
                 onChange={e => setOffer({ ...offer, durationMin: parseInt(e.target.value) || 0 })}
-                className="w-full border border-black p-3 text-sm focus:outline-none"
+                className="admin-input"
               />
             </div>
           </div>
         </div>
 
         <div>
-          <label className="block text-[10px] uppercase font-bold mb-1 tracking-widest">Cílové stránky</label>
+          <label className="admin-label">Cílové stránky</label>
           <input
             type="text"
             value={offer.targetPages?.join(', ')}
-            onChange={e => setOffer({ ...offer, targetPages: e.target.value.split(',').map(p => p.trim()) })}
-            className="w-full border border-black p-3 text-sm focus:outline-none"
+            onChange={e => setOffer({ ...offer, targetPages: e.target.value.split(',').map((p: string) => p.trim()) })}
+            className="admin-input"
+            style={{ textTransform: 'none' }}
             placeholder="*, /produkty, /kosik"
           />
-          <p className="text-[9px] mt-1 text-gray-400 uppercase">* = Všechny stránky (výchozí)</p>
+          <p className="admin-sub">* = všechny stránky (výchozí)</p>
         </div>
 
-        <button
-          onClick={() => handleSave()}
-          disabled={saving}
-          className="w-full bg-black text-white p-4 text-xs font-bold uppercase tracking-[0.2em] hover:opacity-90 transition-opacity disabled:opacity-50"
-        >
-          {saving ? 'Ukládání...' : 'Uložit nastavení nabídky'}
+        <button onClick={() => handleSave()} disabled={saving} className="admin-btn w-full">
+          {saving ? 'Ukládání…' : 'Uložit nastavení nabídky'}
         </button>
 
-        <div className="pt-4 border-t border-black/5">
-          <button
-            onClick={resetTestState}
-            className="w-full border border-black text-black p-3 text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-gray-50 transition-colors"
-          >
-            Restartovat nabídku pro můj prohlížeč (Testování)
+        <div className="pt-4 border-t border-black">
+          <button onClick={resetTestState} className="admin-btn admin-btn-secondary w-full">
+            Restartovat nabídku pro můj prohlížeč
           </button>
-          <p className="text-[9px] mt-2 text-gray-400 uppercase text-center">
-            Smaže vaše lokální data o odpočtu, abyste mohli nabídku vidět a otestovat znovu.
+          <p className="admin-sub text-center">
+            Smaže lokální data o odpočtu, abyste mohli nabídku otestovat znovu.
           </p>
         </div>
       </div>
 
-      <div className="mt-12">
-        <h3 className="text-[10px] uppercase font-bold mb-4 opacity-50 tracking-[0.1em]">Náhled lišty</h3>
-        <div className="bg-black text-white py-3 px-4 flex flex-col sm:flex-row items-center justify-center gap-2 text-center overflow-hidden border border-white/20">
-          <div className="text-xs sm:text-sm font-bold tracking-tight">
-            {offer.text.replace('15', offer.percentage)} 
-            <span className="mx-2 bg-white text-black px-4 py-1 rounded-full text-[11px] font-black tracking-tight inline-block align-middle">
+      <div>
+        <h3 className="admin-label">Náhled lišty</h3>
+        <div className="bg-black text-white py-3 px-4 flex flex-col sm:flex-row items-center justify-center gap-2 text-center border border-black">
+          <div className="text-xs sm:text-sm font-bold tracking-tight uppercase">
+            {offer.text.replace('15', offer.percentage)}{' '}
+            <span className="mx-2 bg-white text-black px-4 py-1 text-[11px] font-bold tracking-tight inline-block align-middle">
               UFO{offer.percentage}XXXXX
             </span>
-            Váš unikátní kód vyprší za: 
+            Váš unikátní kód vyprší za:
           </div>
-          <div className="text-xs sm:text-sm font-medium flex items-center gap-1 opacity-90">
-            <span className="font-mono bg-white/10 px-1.5 py-0.5 rounded">{offer.durationMin}:00</span>
+          <div className="text-xs font-medium flex items-center gap-1">
+            <span className="font-mono bg-white/10 px-[6px] py-[2px]">{offer.durationMin}:00</span>
           </div>
         </div>
       </div>

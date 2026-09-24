@@ -160,74 +160,60 @@ export default function AdminPromoCodesPage() {
     }
   };
 
-  const inputCls = "w-full text-sm bg-white border border-gray-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all placeholder:text-gray-300";
-  const labelCls = "block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5";
-
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-60">
-        <div className="flex items-center gap-2.5">
-          <div className="w-4 h-4 border-2 border-gray-200 border-t-gray-700 rounded-full animate-spin" />
-          <span className="text-sm text-gray-400">Načítám promo kódy…</span>
-        </div>
+      <div className="flex items-center gap-3 py-12">
+        <div className="admin-spinner" />
+        <span className="admin-sub" style={{ margin: 0 }}>Načítám promo kódy…</span>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-
-      {/* Header */}
-      <div className="flex items-center justify-between gap-4 flex-wrap">
+    <div className="space-y-[24px]">
+      <div className="flex items-center justify-between gap-4 flex-wrap border-b border-black pb-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Promo kódy</h1>
-          <p className="mt-1 text-sm text-gray-400">{promoCodes.length} kódů celkem</p>
+          <h1 className="admin-title">Promo kódy</h1>
+          <p className="admin-sub">{promoCodes.length} kódů celkem</p>
         </div>
         {!showForm && (
-          <button
-            onClick={() => setShowForm(true)}
-            className="inline-flex items-center gap-2 bg-gray-900 text-white text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-gray-700 transition-colors"
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-            </svg>
-            Přidat promo kód
+          <button onClick={() => setShowForm(true)} className="admin-btn">
+            + Přidat promo kód
           </button>
         )}
       </div>
 
-      {/* Form */}
       {showForm && (
-        <div className="bg-white rounded-2xl border border-gray-100 p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-base font-bold text-gray-900">
+        <div className="admin-card p-[24px]">
+          <div className="flex items-center justify-between mb-[24px] border-b border-black pb-4">
+            <h2 className="admin-title" style={{ fontSize: 14 }}>
               {editingId ? 'Upravit promo kód' : 'Nový promo kód'}
             </h2>
-            <button onClick={resetForm} className="text-gray-400 hover:text-gray-600 transition-colors">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            <button onClick={resetForm} className="hover:opacity-60 transition-opacity" aria-label="Zavřít">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
               </svg>
             </button>
           </div>
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <form onSubmit={handleSubmit} className="space-y-[16px]">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-[16px]">
               <div>
-                <label className={labelCls}>Kód *</label>
+                <label className="admin-label">Kód *</label>
                 <input
                   type="text"
                   required
                   value={formData.code}
                   onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
-                  className={inputCls + " font-mono uppercase tracking-widest"}
+                  className="admin-input"
                   placeholder="např. SLEVA20"
                 />
               </div>
               <div>
-                <label className={labelCls}>Typ slevy *</label>
+                <label className="admin-label">Typ slevy *</label>
                 <select
                   value={formData.discountType}
                   onChange={(e) => setFormData({ ...formData, discountType: e.target.value })}
-                  className={inputCls}
+                  className="admin-select"
                 >
                   <option value="percentage">Procenta (%)</option>
                   <option value="fixed">Pevná částka (Kč)</option>
@@ -235,59 +221,57 @@ export default function AdminPromoCodesPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-[16px]">
               <div>
-                <label className={labelCls}>Hodnota {formData.discountType === 'percentage' ? '(%)' : '(Kč)'} *</label>
+                <label className="admin-label">Hodnota {formData.discountType === 'percentage' ? '(%)' : '(Kč)'} *</label>
                 <input type="number" required step="0.01" value={formData.discountValue}
                   onChange={(e) => setFormData({ ...formData, discountValue: e.target.value })}
-                  className={inputCls} />
+                  className="admin-input" />
               </div>
               <div>
-                <label className={labelCls}>Min. částka (Kč)</label>
+                <label className="admin-label">Min. částka (Kč)</label>
                 <input type="number" step="0.01" value={formData.minOrderAmount}
                   onChange={(e) => setFormData({ ...formData, minOrderAmount: e.target.value })}
-                  className={inputCls} placeholder="Nepovinné" />
+                  className="admin-input" placeholder="Nepovinné" />
               </div>
               <div>
-                <label className={labelCls}>Max. použití</label>
+                <label className="admin-label">Max. použití</label>
                 <input type="number" value={formData.maxUses}
                   onChange={(e) => setFormData({ ...formData, maxUses: e.target.value })}
-                  className={inputCls} placeholder="Neomezeno" />
+                  className="admin-input" placeholder="Neomezeno" />
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-[16px]">
               <div>
-                <label className={labelCls}>Platnost od *</label>
+                <label className="admin-label">Platnost od *</label>
                 <input type="date" required value={formData.validFrom}
                   onChange={(e) => setFormData({ ...formData, validFrom: e.target.value })}
-                  className={inputCls} />
+                  className="admin-input" />
               </div>
               <div>
-                <label className={labelCls}>Platnost do *</label>
+                <label className="admin-label">Platnost do *</label>
                 <input type="date" required value={formData.validUntil}
                   onChange={(e) => setFormData({ ...formData, validUntil: e.target.value })}
-                  className={inputCls} />
+                  className="admin-input" />
               </div>
             </div>
 
-            <label className="flex items-center gap-2.5 cursor-pointer group">
+            <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"
                 checked={formData.isActive}
                 onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-                className="w-4 h-4 rounded accent-gray-900"
+                className="accent-black w-4 h-4"
               />
-              <span className="text-sm font-medium text-gray-700">Kód je aktivní</span>
+              <span className="text-xs uppercase tracking-wider">Kód je aktivní</span>
             </label>
 
-            <div className="flex gap-3 pt-1">
-              <button type="submit"
-                className="bg-gray-900 text-white text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-gray-700 transition-colors">
+            <div className="flex gap-2 pt-2">
+              <button type="submit" className="admin-btn">
                 {editingId ? 'Uložit změny' : 'Vytvořit kód'}
               </button>
-              <button type="button" onClick={resetForm}
-                className="text-sm font-semibold text-gray-500 px-5 py-2.5 rounded-xl border border-gray-200 hover:border-gray-300 hover:text-gray-700 transition-colors">
+              <button type="button" onClick={resetForm} className="admin-btn admin-btn-secondary">
                 Zrušit
               </button>
             </div>
@@ -295,55 +279,52 @@ export default function AdminPromoCodesPage() {
         </div>
       )}
 
-      {/* Table */}
-      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+      <div className="admin-card overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-100">
+          <table className="w-full">
+            <thead className="border-b border-black">
+              <tr>
                 {['Kód', 'Sleva', 'Použití', 'Platnost od', 'Platnost do', 'Status', 'Akce'].map((h) => (
-                  <th key={h} className="text-left px-4 py-3 text-[10px] font-semibold text-gray-400 uppercase tracking-widest whitespace-nowrap">{h}</th>
+                  <th key={h} className="admin-th">{h}</th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-50">
+            <tbody className="divide-y divide-black/10">
               {promoCodes.map((pc) => (
-                <tr key={pc.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-4 py-3 font-mono font-bold text-gray-900 tracking-widest text-xs">{pc.code}</td>
-                  <td className="px-4 py-3 text-gray-700">
-                    <span className="font-semibold">
+                <tr key={pc.id} className="hover:bg-black/5 transition-colors">
+                  <td className="admin-td font-bold tracking-widest">{pc.code}</td>
+                  <td className="admin-td">
+                    <span className="font-bold">
                       {pc.discountType === 'percentage' ? `${pc.discountValue}%` : `${pc.discountValue} Kč`}
                     </span>
                     {pc.minOrderAmount && (
-                      <p className="text-[10px] text-gray-400 mt-0.5">min. {pc.minOrderAmount} Kč</p>
+                      <p className="text-[10px] uppercase text-[#666666] mt-[4px]">min. {pc.minOrderAmount} Kč</p>
                     )}
                   </td>
-                  <td className="px-4 py-3 text-gray-600">
-                    <span className="font-semibold">{pc.currentUses}</span>
-                    <span className="text-gray-400">{pc.maxUses ? ` / ${pc.maxUses}` : ' / ∞'}</span>
+                  <td className="admin-td">
+                    <span className="font-bold">{pc.currentUses}</span>
+                    <span className="text-[#666666]">{pc.maxUses ? ` / ${pc.maxUses}` : ' / ∞'}</span>
                   </td>
-                  <td className="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">{new Date(pc.validFrom).toLocaleDateString('cs-CZ')}</td>
-                  <td className="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">{new Date(pc.validUntil).toLocaleDateString('cs-CZ')}</td>
-                  <td className="px-4 py-3">
+                  <td className="admin-td text-[#666666] whitespace-nowrap">{new Date(pc.validFrom).toLocaleDateString('cs-CZ')}</td>
+                  <td className="admin-td text-[#666666] whitespace-nowrap">{new Date(pc.validUntil).toLocaleDateString('cs-CZ')}</td>
+                  <td className="admin-td">
                     <button
                       onClick={() => toggleActive(pc.id, pc.isActive)}
-                      className={`text-xs font-semibold px-2.5 py-1 rounded-lg border transition-colors ${
+                      className={`text-[10px] font-bold uppercase tracking-wider px-2 py-[4px] border border-black transition-colors ${
                         pc.isActive
-                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
-                          : 'bg-gray-100 text-gray-500 border-gray-200 hover:bg-gray-200'
+                          ? 'bg-black text-white hover:bg-white hover:text-black'
+                          : 'bg-white text-black hover:bg-black hover:text-white'
                       }`}
                     >
                       {pc.isActive ? 'Aktivní' : 'Neaktivní'}
                     </button>
                   </td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-1.5">
-                      <button onClick={() => handleEdit(pc)}
-                        className="text-xs font-medium text-gray-500 hover:text-gray-900 px-2 py-1 rounded-lg hover:bg-gray-100 transition-colors">
+                  <td className="admin-td">
+                    <div className="flex items-center gap-2">
+                      <button onClick={() => handleEdit(pc)} className="admin-btn admin-btn-secondary" style={{ padding: '6px 12px', fontSize: 10 }}>
                         Upravit
                       </button>
-                      <button onClick={() => handleDelete(pc.id, pc.code)}
-                        className="text-xs font-medium text-red-400 hover:text-red-600 px-2 py-1 rounded-lg hover:bg-red-50 transition-colors">
+                      <button onClick={() => handleDelete(pc.id, pc.code)} className="admin-btn admin-btn-secondary" style={{ padding: '6px 12px', fontSize: 10 }}>
                         Smazat
                       </button>
                     </div>
@@ -354,15 +335,7 @@ export default function AdminPromoCodesPage() {
           </table>
         </div>
         {promoCodes.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center mb-3">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>
-              </svg>
-            </div>
-            <p className="text-sm font-medium text-gray-500">Žádné promo kódy</p>
-            <p className="text-xs text-gray-400 mt-1">Vytvořte první promo kód tlačítkem výše.</p>
-          </div>
+          <div className="admin-empty">Žádné promo kódy. Vytvořte první kód tlačítkem výše.</div>
         )}
       </div>
       <ConfirmModal

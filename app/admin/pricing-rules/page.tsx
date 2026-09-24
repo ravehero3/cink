@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Trash2 } from 'lucide-react';
 
 interface PricingRule {
   id: string;
@@ -18,9 +17,6 @@ interface PricingRule {
   isActive: boolean;
   createdAt: string;
 }
-
-const inputCls = "w-full text-sm bg-white border border-gray-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all placeholder:text-gray-300";
-const labelCls = "block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5";
 
 const RULE_TYPE_LABELS: Record<string, string> = {
   volume: 'Objem (počet kusů)',
@@ -106,61 +102,50 @@ export default function PricingRulesPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-60">
-        <div className="flex items-center gap-2.5">
-          <div className="w-4 h-4 border-2 border-gray-200 border-t-gray-700 rounded-full animate-spin" />
-          <span className="text-sm text-gray-400">Načítám pravidla…</span>
-        </div>
+      <div className="flex items-center gap-3 py-12">
+        <div className="admin-spinner" />
+        <span className="admin-sub" style={{ margin: 0 }}>Načítám pravidla…</span>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-
-      {/* Header */}
-      <div className="flex items-center justify-between gap-4 flex-wrap">
+    <div className="space-y-[24px]">
+      <div className="flex items-center justify-between gap-4 flex-wrap border-b border-black pb-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Pravidla cen</h1>
-          <p className="mt-0.5 text-sm text-gray-400">{rules.length} pravidel celkem</p>
+          <h1 className="admin-title">Pravidla cen</h1>
+          <p className="admin-sub">{rules.length} pravidel celkem</p>
         </div>
         {!showForm && (
-          <button
-            onClick={() => setShowForm(true)}
-            className="flex items-center gap-2 px-4 py-2.5 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-gray-700 transition-colors"
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-            </svg>
-            Nové pravidlo
+          <button onClick={() => setShowForm(true)} className="admin-btn">
+            + Nové pravidlo
           </button>
         )}
       </div>
 
-      {/* Form */}
       {showForm && (
-        <div className="bg-white rounded-2xl border border-gray-100 p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-base font-bold text-gray-900">Nové pravidlo ceny</h2>
-            <button onClick={resetForm} className="text-gray-400 hover:text-gray-600 transition-colors">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        <div className="admin-card p-[24px]">
+          <div className="flex items-center justify-between mb-[24px] border-b border-black pb-4">
+            <h2 className="admin-title" style={{ fontSize: 14 }}>Nové pravidlo ceny</h2>
+            <button onClick={resetForm} className="hover:opacity-60 transition-opacity" aria-label="Zavřít">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
               </svg>
             </button>
           </div>
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <form onSubmit={handleSubmit} className="space-y-[16px]">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-[16px]">
               <div>
-                <label className={labelCls}>Název pravidla *</label>
+                <label className="admin-label">Název pravidla *</label>
                 <input type="text" required value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className={inputCls} placeholder="např. Black Friday 30%" />
+                  className="admin-input" placeholder="např. Black Friday 30%" />
               </div>
               <div>
-                <label className={labelCls}>Typ pravidla</label>
+                <label className="admin-label">Typ pravidla</label>
                 <select value={formData.ruleType}
                   onChange={(e) => setFormData({ ...formData, ruleType: e.target.value })}
-                  className={inputCls}>
+                  className="admin-select">
                   <option value="volume">Objem (počet kusů)</option>
                   <option value="minOrder">Minimální objednávka</option>
                   <option value="firstTime">První nákup</option>
@@ -169,116 +154,108 @@ export default function PricingRulesPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-[16px]">
               <div>
-                <label className={labelCls}>Typ slevy</label>
+                <label className="admin-label">Typ slevy</label>
                 <select value={formData.discountType}
                   onChange={(e) => setFormData({ ...formData, discountType: e.target.value })}
-                  className={inputCls}>
+                  className="admin-select">
                   <option value="percentage">Procenta (%)</option>
                   <option value="fixed">Fixní částka (Kč)</option>
                 </select>
               </div>
               <div>
-                <label className={labelCls}>Hodnota slevy *</label>
+                <label className="admin-label">Hodnota slevy *</label>
                 <input type="number" step="0.01" required value={formData.discountValue}
                   onChange={(e) => setFormData({ ...formData, discountValue: e.target.value })}
-                  className={inputCls}
+                  className="admin-input"
                   placeholder={formData.discountType === 'percentage' ? '10' : '100'} />
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-[16px]">
               <div>
-                <label className={labelCls}>Min. počet kusů (volitelné)</label>
+                <label className="admin-label">Min. počet kusů (volitelné)</label>
                 <input type="number" value={formData.minQuantity}
                   onChange={(e) => setFormData({ ...formData, minQuantity: e.target.value })}
-                  className={inputCls} placeholder="3" />
+                  className="admin-input" placeholder="3" />
               </div>
               <div>
-                <label className={labelCls}>Min. objednávka v Kč (volitelné)</label>
+                <label className="admin-label">Min. objednávka v Kč (volitelné)</label>
                 <input type="number" step="0.01" value={formData.minOrderAmount}
                   onChange={(e) => setFormData({ ...formData, minOrderAmount: e.target.value })}
-                  className={inputCls} placeholder="500" />
+                  className="admin-input" placeholder="500" />
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-[16px]">
               <div>
-                <label className={labelCls}>Platné od *</label>
+                <label className="admin-label">Platné od *</label>
                 <input type="date" required value={formData.validFrom}
                   onChange={(e) => setFormData({ ...formData, validFrom: e.target.value })}
-                  className={inputCls} />
+                  className="admin-input" />
               </div>
               <div>
-                <label className={labelCls}>Platné do *</label>
+                <label className="admin-label">Platné do *</label>
                 <input type="date" required value={formData.validUntil}
                   onChange={(e) => setFormData({ ...formData, validUntil: e.target.value })}
-                  className={inputCls} />
+                  className="admin-input" />
               </div>
             </div>
 
-            <div className="flex gap-3 pt-1">
-              <button type="submit"
-                className="bg-gray-900 text-white text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-gray-700 transition-colors">
-                Vytvořit pravidlo
-              </button>
-              <button type="button" onClick={resetForm}
-                className="text-sm font-semibold text-gray-500 px-5 py-2.5 rounded-xl border border-gray-200 hover:border-gray-300 hover:text-gray-700 transition-colors">
-                Zrušit
-              </button>
+            <div className="flex gap-2 pt-2">
+              <button type="submit" className="admin-btn">Vytvořit pravidlo</button>
+              <button type="button" onClick={resetForm} className="admin-btn admin-btn-secondary">Zrušit</button>
             </div>
           </form>
         </div>
       )}
 
-      {/* List */}
       {rules.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-gray-100 p-16 flex flex-col items-center gap-3 text-center">
-          <p className="text-base font-semibold text-gray-700">Zatím žádná pravidla cen</p>
-          <p className="text-sm text-gray-400">Vytvořte první pravidlo automatické slevy.</p>
-          <button onClick={() => setShowForm(true)}
-            className="mt-2 px-5 py-2.5 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-gray-700 transition-colors">
+        <div className="admin-card admin-empty">
+          <p>Zatím žádná pravidla cen</p>
+          <button onClick={() => setShowForm(true)} className="admin-btn mt-[16px]">
             Vytvořit pravidlo
           </button>
         </div>
       ) : (
-        <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-          <div className="divide-y divide-gray-50">
-            {rules.map((rule) => (
-              <div key={rule.id} className={`px-6 py-5 flex items-start justify-between gap-4 ${!rule.isActive ? 'opacity-50' : 'hover:bg-gray-50'} transition-colors`}>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2.5 flex-wrap mb-2">
-                    <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">{rule.name}</h3>
-                    <button
-                      onClick={() => toggleRuleStatus(rule.id, rule.isActive)}
-                      className={`text-[10px] font-semibold uppercase px-2 py-0.5 rounded-md border transition-colors ${
-                        rule.isActive
-                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                          : 'bg-gray-100 text-gray-500 border-gray-200'
-                      }`}
-                    >
-                      {rule.isActive ? 'Aktivní' : 'Neaktivní'}
-                    </button>
-                  </div>
-                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500">
-                    <span>Typ: <span className="text-gray-700 font-medium">{RULE_TYPE_LABELS[rule.ruleType] || rule.ruleType}</span></span>
-                    <span>Sleva: <span className="text-gray-700 font-medium">{rule.discountValue} {rule.discountType === 'percentage' ? '%' : 'Kč'}</span></span>
-                    {rule.minQuantity && <span>Min. ks: <span className="text-gray-700 font-medium">{rule.minQuantity}</span></span>}
-                    {rule.minOrderAmount && <span>Min. objednávka: <span className="text-gray-700 font-medium">{rule.minOrderAmount} Kč</span></span>}
-                    <span>Platnost: <span className="text-gray-700 font-medium">{new Date(rule.validFrom).toLocaleDateString('cs-CZ')} – {new Date(rule.validUntil).toLocaleDateString('cs-CZ')}</span></span>
-                  </div>
+        <div className="admin-card overflow-hidden">
+          {rules.map((rule, idx) => (
+            <div
+              key={rule.id}
+              className={`px-[24px] py-[20px] flex items-start justify-between gap-4 ${
+                idx !== rules.length - 1 ? 'border-b border-black' : ''
+              } ${!rule.isActive ? 'opacity-50' : 'hover:bg-black/5'} transition-colors`}
+            >
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap mb-2">
+                  <h3 className="text-xs font-bold uppercase tracking-wider">{rule.name}</h3>
+                  <button
+                    onClick={() => toggleRuleStatus(rule.id, rule.isActive)}
+                    className={`text-[10px] font-bold uppercase tracking-wider px-2 py-[4px] border border-black transition-colors ${
+                      rule.isActive ? 'bg-black text-white' : 'bg-white text-black'
+                    }`}
+                  >
+                    {rule.isActive ? 'Aktivní' : 'Neaktivní'}
+                  </button>
                 </div>
-                <button
-                  onClick={() => deleteRule(rule.id)}
-                  className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors shrink-0"
-                  title="Smazat"
-                >
-                  <Trash2 size={16} />
-                </button>
+                <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] uppercase tracking-wider text-[#666666]">
+                  <span>Typ: <span className="text-black font-medium">{RULE_TYPE_LABELS[rule.ruleType] || rule.ruleType}</span></span>
+                  <span>Sleva: <span className="text-black font-medium">{rule.discountValue} {rule.discountType === 'percentage' ? '%' : 'Kč'}</span></span>
+                  {rule.minQuantity && <span>Min. ks: <span className="text-black font-medium">{rule.minQuantity}</span></span>}
+                  {rule.minOrderAmount && <span>Min. objednávka: <span className="text-black font-medium">{rule.minOrderAmount} Kč</span></span>}
+                  <span>Platnost: <span className="text-black font-medium">{new Date(rule.validFrom).toLocaleDateString('cs-CZ')} – {new Date(rule.validUntil).toLocaleDateString('cs-CZ')}</span></span>
+                </div>
               </div>
-            ))}
-          </div>
+              <button
+                onClick={() => deleteRule(rule.id)}
+                className="admin-btn admin-btn-secondary shrink-0"
+                style={{ padding: '6px 12px', fontSize: 10 }}
+              >
+                Smazat
+              </button>
+            </div>
+          ))}
         </div>
       )}
     </div>

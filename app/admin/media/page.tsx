@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useToast } from '@/store/toastStore';
 import ConfirmModal from '@/components/admin/ConfirmModal';
-import { Upload, X, ImageIcon, Video, Search, RefreshCw, Loader2, AlertCircle, Trash2 } from 'lucide-react';
 
 interface Media {
   id: string;
@@ -119,13 +118,11 @@ export default function MediaLibraryPage() {
     : media;
 
   return (
-    <div className="space-y-6">
-
-      {/* Header */}
-      <div className="flex items-center justify-between gap-4 flex-wrap">
+    <div className="space-y-[24px]">
+      <div className="flex items-center justify-between gap-4 flex-wrap border-b border-black pb-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Galerie médií</h1>
-          <p className="mt-0.5 text-sm text-gray-400">{media.length} souborů celkem</p>
+          <h1 className="admin-title">Galerie médií</h1>
+          <p className="admin-sub">{media.length} souborů celkem</p>
         </div>
         <label className="cursor-pointer">
           <input
@@ -136,145 +133,107 @@ export default function MediaLibraryPage() {
             className="hidden"
             disabled={uploading}
           />
-          <div className={`flex items-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-xl transition-colors ${
-            uploading
-              ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-              : 'bg-gray-900 text-white hover:bg-gray-700 cursor-pointer'
-          }`}>
-            {uploading ? (
-              <><Loader2 size={15} className="animate-spin" /> Nahrávám…</>
-            ) : (
-              <><Upload size={15} /> Nahrát soubory</>
-            )}
-          </div>
+          <span className={`admin-btn ${uploading ? 'opacity-40 cursor-not-allowed' : ''}`}>
+            {uploading ? 'Nahrávám…' : '+ Nahrát soubory'}
+          </span>
         </label>
       </div>
 
-      {/* Error */}
       {uploadError && (
-        <div className="flex items-start gap-3 p-4 border border-red-200 bg-red-50 rounded-xl text-sm text-red-700">
-          <AlertCircle size={15} className="shrink-0 mt-0.5" />
+        <div className="flex items-start gap-3 p-4 border border-black bg-white text-xs uppercase tracking-wider">
+          <span className="font-bold shrink-0">[ CHYBA ]</span>
           <p className="flex-1">{uploadError}</p>
-          <button onClick={() => setUploadError(null)} className="shrink-0 hover:text-red-900">
-            <X size={14} />
-          </button>
+          <button onClick={() => setUploadError(null)} className="hover:opacity-60">×</button>
         </div>
       )}
 
-      {/* Filters */}
-      <div className="bg-white rounded-2xl border border-gray-100 px-5 py-4 flex flex-wrap items-center gap-4">
-        {/* Type filter */}
-        <div className="flex items-center gap-1.5">
-          {(['ALL', 'IMAGE', 'VIDEO'] as const).map((t) => (
+      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+        <div className="flex gap-2 flex-wrap">
+          {([
+            { key: 'ALL' as const, label: 'Vše' },
+            { key: 'IMAGE' as const, label: 'Obrázky' },
+            { key: 'VIDEO' as const, label: 'Videa' },
+          ]).map((t) => (
             <button
-              key={t}
-              onClick={() => setFilterType(t)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors ${
-                filterType === t
-                  ? 'bg-gray-900 text-white'
-                  : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100'
-              }`}
+              key={t.key}
+              onClick={() => setFilterType(t.key)}
+              className={`admin-tab ${filterType === t.key ? 'is-active' : ''}`}
             >
-              {t === 'IMAGE' && <ImageIcon size={12} />}
-              {t === 'VIDEO' && <Video size={12} />}
-              {t === 'ALL' ? 'Vše' : t === 'IMAGE' ? 'Obrázky' : 'Videa'}
+              {t.label}
             </button>
           ))}
         </div>
 
-        <div className="flex-1 relative min-w-[200px]">
-          <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+        <div className="flex gap-2 w-full sm:w-auto">
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Hledat soubory…"
-            className="w-full text-sm pl-9 pr-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent bg-white placeholder:text-gray-300"
+            className="admin-input sm:w-80"
           />
+          <button onClick={fetchMedia} disabled={loading} className="admin-btn admin-btn-secondary">
+            Obnovit
+          </button>
         </div>
-
-        <button
-          onClick={fetchMedia}
-          disabled={loading}
-          className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-gray-500 border border-gray-200 rounded-lg hover:border-gray-400 hover:text-gray-900 transition-colors disabled:opacity-40"
-        >
-          <RefreshCw size={13} className={loading ? 'animate-spin' : ''} />
-          Obnovit
-        </button>
       </div>
 
-      {/* Grid */}
       {loading ? (
-        <div className="flex flex-col items-center justify-center py-24 gap-3 text-gray-400">
-          <Loader2 size={32} className="animate-spin" />
-          <p className="text-sm">Načítám médiu…</p>
+        <div className="flex items-center gap-3 py-12">
+          <div className="admin-spinner" />
+          <span className="admin-sub" style={{ margin: 0 }}>Načítám média…</span>
         </div>
       ) : filtered.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-gray-100 p-16 flex flex-col items-center justify-center gap-4 text-gray-400">
-          <Upload size={40} />
-          <div className="text-center">
-            <p className="text-base font-semibold text-gray-700">
-              {search ? 'Žádné soubory neodpovídají hledání.' : 'Galerie je prázdná.'}
-            </p>
-            {!search && (
-              <p className="text-sm mt-1 text-gray-400">Nahrajte první soubory pomocí tlačítka výše.</p>
-            )}
-          </div>
+        <div className="admin-card admin-empty">
+          {search ? 'Žádné soubory neodpovídají hledání.' : 'Galerie je prázdná. Nahrajte první soubory tlačítkem výše.'}
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-px bg-black border border-black">
           {filtered.map((item) => (
             <div
               key={item.id}
-              className="group bg-white rounded-xl border border-gray-100 overflow-hidden cursor-pointer hover:border-gray-300 transition-all hover:shadow-sm"
+              className="bg-white cursor-pointer hover:bg-black hover:text-white transition-colors group"
               onClick={() => setSelectedMedia(item)}
             >
-              <div className="aspect-square bg-gray-50 relative overflow-hidden">
+              <div className="aspect-square bg-white relative overflow-hidden border-b border-black group-hover:border-white">
                 {item.resourceType === 'IMAGE' ? (
                   <img src={item.url} alt={item.originalName} className="w-full h-full object-cover" />
                 ) : (
                   <video src={item.url} className="w-full h-full object-cover" muted />
                 )}
-                <div className="absolute top-2 left-2">
-                  <span className="bg-black/70 text-white text-[9px] font-semibold uppercase px-1.5 py-0.5 rounded-md flex items-center gap-1">
-                    {item.resourceType === 'IMAGE' ? <ImageIcon size={9} /> : <Video size={9} />}
-                    {item.format?.toUpperCase()}
-                  </span>
-                </div>
+                <span className="absolute top-2 left-2 bg-black text-white text-[9px] font-bold uppercase tracking-widest px-[6px] py-[2px] border border-black">
+                  {item.format?.toUpperCase()}
+                </span>
               </div>
-              <div className="px-3 py-2.5">
-                <p className="text-xs font-medium text-gray-800 truncate">{item.originalName}</p>
-                <p className="text-[10px] text-gray-400 mt-0.5">{formatSize(item.size)}</p>
+              <div className="px-3 py-2">
+                <p className="text-xs uppercase tracking-wider font-medium truncate">{item.originalName}</p>
+                <p className="text-[10px] uppercase tracking-wider opacity-60 mt-[4px]">{formatSize(item.size)}</p>
               </div>
             </div>
           ))}
         </div>
       )}
 
-      {/* Detail modal */}
       {selectedMedia && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
           onClick={() => setSelectedMedia(null)}
         >
           <div
-            className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-gray-200 shadow-2xl"
+            className="bg-white border border-black w-full max-w-2xl max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Modal header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-              <h2 className="text-base font-bold text-gray-900 uppercase tracking-widest">Detail souboru</h2>
-              <button
-                onClick={() => setSelectedMedia(null)}
-                className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-500 hover:text-gray-900 transition-colors"
-              >
-                <X size={18} />
+            <div className="flex items-center justify-between px-[24px] py-[16px] border-b border-black">
+              <h2 className="admin-title" style={{ fontSize: 14 }}>Detail souboru</h2>
+              <button onClick={() => setSelectedMedia(null)} className="hover:opacity-60" aria-label="Zavřít">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
               </button>
             </div>
 
-            <div className="p-6 space-y-5">
-              {/* Preview */}
-              <div className="rounded-xl overflow-hidden border border-gray-100 bg-gray-50">
+            <div className="p-[24px] space-y-[16px]">
+              <div className="border border-black bg-white">
                 {selectedMedia.resourceType === 'IMAGE' ? (
                   <img src={selectedMedia.url} alt={selectedMedia.originalName} className="w-full max-h-72 object-contain" />
                 ) : (
@@ -282,68 +241,54 @@ export default function MediaLibraryPage() {
                 )}
               </div>
 
-              {/* Meta */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-[16px]">
                 <div>
-                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-1">Název souboru</p>
-                  <p className="text-sm text-gray-900 font-medium truncate">{selectedMedia.originalName}</p>
+                  <p className="admin-label">Název souboru</p>
+                  <p className="text-xs uppercase tracking-wider font-medium truncate">{selectedMedia.originalName}</p>
                 </div>
                 <div>
-                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-1">Typ</p>
-                  <p className="text-sm text-gray-900">{selectedMedia.format?.toUpperCase() || '—'}</p>
+                  <p className="admin-label">Typ</p>
+                  <p className="text-xs uppercase tracking-wider">{selectedMedia.format?.toUpperCase() || '—'}</p>
                 </div>
                 <div>
-                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-1">Velikost</p>
-                  <p className="text-sm text-gray-900">{formatSize(selectedMedia.size)}</p>
+                  <p className="admin-label">Velikost</p>
+                  <p className="text-xs uppercase tracking-wider">{formatSize(selectedMedia.size)}</p>
                 </div>
                 {selectedMedia.width && selectedMedia.height && (
                   <div>
-                    <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-1">Rozměry</p>
-                    <p className="text-sm text-gray-900">{selectedMedia.width} × {selectedMedia.height} px</p>
+                    <p className="admin-label">Rozměry</p>
+                    <p className="text-xs uppercase tracking-wider">{selectedMedia.width} × {selectedMedia.height} px</p>
                   </div>
                 )}
                 {selectedMedia.duration && (
                   <div>
-                    <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-1">Délka</p>
-                    <p className="text-sm text-gray-900">{Math.round(selectedMedia.duration)}s</p>
+                    <p className="admin-label">Délka</p>
+                    <p className="text-xs uppercase tracking-wider">{Math.round(selectedMedia.duration)}s</p>
                   </div>
                 )}
                 <div>
-                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-1">Přidáno</p>
-                  <p className="text-sm text-gray-900">
+                  <p className="admin-label">Přidáno</p>
+                  <p className="text-xs uppercase tracking-wider">
                     {new Date(selectedMedia.createdAt).toLocaleDateString('cs-CZ')}
                   </p>
                 </div>
               </div>
 
-              {/* URL */}
               <div>
-                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-1.5">URL</p>
+                <p className="admin-label">URL</p>
                 <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={selectedMedia.url}
-                    readOnly
-                    className="flex-1 text-xs px-3 py-2.5 border border-gray-200 rounded-xl bg-gray-50 text-gray-700 font-mono"
-                  />
-                  <button
-                    onClick={() => copyUrl(selectedMedia.url)}
-                    className={`px-4 py-2 text-sm font-semibold rounded-xl transition-colors ${
-                      copied ? 'bg-emerald-600 text-white' : 'bg-gray-900 text-white hover:bg-gray-700'
-                    }`}
-                  >
-                    {copied ? 'Zkopírováno!' : 'Kopírovat'}
+                  <input type="text" value={selectedMedia.url} readOnly className="admin-input" style={{ textTransform: 'none' }} />
+                  <button onClick={() => copyUrl(selectedMedia.url)} className="admin-btn">
+                    {copied ? 'Zkopírováno' : 'Kopírovat'}
                   </button>
                 </div>
               </div>
 
-              {/* Delete */}
-              <div className="pt-2 border-t border-gray-100">
+              <div className="pt-2 border-t border-black">
                 <button
                   onClick={() => handleDelete(selectedMedia.id)}
-                  className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-red-600 border border-red-200 rounded-xl hover:bg-red-50 transition-colors w-full justify-center"
+                  className="admin-btn admin-btn-secondary w-full"
                 >
-                  <Trash2 size={14} />
                   Odstranit soubor
                 </button>
               </div>
