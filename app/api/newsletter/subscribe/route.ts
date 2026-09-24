@@ -44,6 +44,8 @@ export async function POST(request: NextRequest) {
     // Send welcome email to new subscriber
     try {
       await sendNewsletterWelcomeEmail(email.toLowerCase());
+      const { enrollInTrigger } = await import('@/lib/journeys');
+      await enrollInTrigger('NEWSLETTER_SIGNUP', email.toLowerCase());
       console.log(`Newsletter welcome email sent to ${email}`);
     } catch (emailError) {
       console.error('Failed to send newsletter welcome email:', emailError);

@@ -15,6 +15,8 @@ interface PromoCode {
   validFrom: string;
   validUntil: string;
   isActive: boolean;
+  source?: string;
+  assignedEmail?: string | null;
 }
 
 export default function AdminPromoCodesPage() {
@@ -284,7 +286,7 @@ export default function AdminPromoCodesPage() {
           <table className="w-full">
             <thead className="border-b border-black">
               <tr>
-                {['Kód', 'Sleva', 'Použití', 'Platnost od', 'Platnost do', 'Status', 'Akce'].map((h) => (
+                {['Kód', 'Sleva', 'Použití', 'Zdroj', 'Platnost od', 'Platnost do', 'Status', 'Akce'].map((h) => (
                   <th key={h} className="admin-th">{h}</th>
                 ))}
               </tr>
@@ -304,6 +306,14 @@ export default function AdminPromoCodesPage() {
                   <td className="admin-td">
                     <span className="font-bold">{pc.currentUses}</span>
                     <span className="text-[#666666]">{pc.maxUses ? ` / ${pc.maxUses}` : ' / ∞'}</span>
+                  </td>
+                  <td className="admin-td">
+                    <span className="text-[10px] font-bold uppercase tracking-wider">
+                      {pc.source === 'journey' ? 'Cesta' : 'Manuální'}
+                    </span>
+                    {pc.assignedEmail && (
+                      <p className="text-[10px] text-[#666666] mt-[4px] normal-case tracking-normal">{pc.assignedEmail}</p>
+                    )}
                   </td>
                   <td className="admin-td text-[#666666] whitespace-nowrap">{new Date(pc.validFrom).toLocaleDateString('cs-CZ')}</td>
                   <td className="admin-td text-[#666666] whitespace-nowrap">{new Date(pc.validUntil).toLocaleDateString('cs-CZ')}</td>

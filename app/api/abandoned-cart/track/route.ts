@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { syncAbandonedCartJourney } from '@/lib/journeys';
 
 export async function POST(request: Request) {
   try {
@@ -9,13 +10,12 @@ export async function POST(request: Request) {
       return new NextResponse('Invalid data', { status: 400 });
     }
 
-    // Upsert the abandoned cart for this email
     await prisma.abandonedCart.upsert({
       where: { email },
       update: {
         items,
         lastUpdated: new Date(),
-        reminderSent: false, // Reset if they come back and add more
+        reminderSent: false,
       },
       create: {
         email,
@@ -23,6 +23,8 @@ export async function POST(request: Request) {
         reminderSent: false,
       },
     });
+
+    await syncAbandonedCartJourney(email, items);
 
     return new NextResponse('OK');
   } catch (error) {

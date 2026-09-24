@@ -139,6 +139,7 @@ export default function CheckoutPage() {
         body: JSON.stringify({
           code: formData.promoCode,
           orderAmount: subtotal,
+          email: formData.email,
         }),
       });
 

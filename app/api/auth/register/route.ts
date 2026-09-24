@@ -58,6 +58,13 @@ export async function POST(request: Request) {
       });
     }
 
+    try {
+      const { enrollInTrigger } = await import('@/lib/journeys');
+      await enrollInTrigger('ACCOUNT_CREATED', email.toLowerCase(), {}, name || undefined);
+    } catch (journeyError) {
+      console.error('Failed to enroll account journey:', journeyError);
+    }
+
     return NextResponse.json(
       { message: 'Registrace byla úspěšná', userId: user.id },
       { status: 201 }

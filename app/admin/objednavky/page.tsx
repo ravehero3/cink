@@ -409,7 +409,7 @@ export default function AdminOrdersPage() {
         <div style={{ height: 260 }}>
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData} margin={{ top: 4, right: 4, left: -16, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+              <CartesianGrid stroke="#000000" strokeOpacity={0.15} vertical={false} />
               <XAxis dataKey="name" tick={{ fontSize: 10, fill: '#000000' }} axisLine={{ stroke: '#000000' }} tickLine={false} />
               <YAxis tick={{ fontSize: 10, fill: '#000000' }} axisLine={{ stroke: '#000000' }} tickLine={false} />
               <Tooltip

@@ -12,7 +12,7 @@ const SECTION_LABELS: Record<string, string> = {
   customers: 'Zákazníci',
   'promo-kody': 'Promo kódy',
   newsletter: 'Newsletter',
-  emaily: 'E-maily',
+  emaily: 'E-maily a cesty',
   'email-campaigns': 'E-mail kampaně',
   media: 'Média',
   'live-nabidky': 'Live nabídky',
@@ -50,7 +50,7 @@ function Breadcrumbs({ pathname }: { pathname: string }) {
       </Link>
       {crumbs.map((crumb, i) => (
         <span key={i} className="flex items-center gap-2 text-black">
-          <span className="text-[#999999]">/</span>
+          <span className="text-[#666666]">/</span>
           {crumb.active ? (
             <span className="font-bold">{crumb.label}</span>
           ) : (
@@ -79,7 +79,7 @@ const NAV_SECTIONS = [
     label: 'Marketing',
     items: [
       { href: '/admin/newsletter', label: 'Newsletter' },
-      { href: '/admin/emaily', label: 'E-maily' },
+      { href: '/admin/emaily', label: 'E-maily a cesty' },
       { href: '/admin/email-campaigns', label: 'E-mail kampaně' },
       { href: '/admin/live-nabidky', label: 'Live nabídky' },
     ],
@@ -119,7 +119,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div className="w-4 h-4 border border-black border-t-transparent animate-spin" />
           <span
             className="text-xs uppercase tracking-widest font-medium"
-            style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}
+            style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif' }}
           >
             Načítání…
           </span>
@@ -133,7 +133,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const SidebarContent = () => (
     <div
       className="flex flex-col h-full bg-white text-black"
-      style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}
+      style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif' }}
     >
       {/* Brand Header */}
       <div className="px-5 py-4 border-b border-black">
@@ -154,7 +154,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <nav className="flex-1 overflow-y-auto px-0 py-2">
         {NAV_SECTIONS.map((section) => (
           <div key={section.label} className="mb-4">
-            <p className="px-5 py-1 text-[10px] font-bold uppercase tracking-widest text-[#999999]">
+            <p className="px-5 py-1 text-[10px] font-bold uppercase tracking-widest text-[#666666]">
               {section.label}
             </p>
             <div className="mt-1">
@@ -218,7 +218,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     <div
       data-admin
       className="min-h-screen bg-white text-black flex flex-col md:flex-row"
-      style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}
+      style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif' }}
     >
       {/* Mobile top bar */}
       <header className="admin-mobile-bar md:hidden fixed top-0 left-0 right-0 border-b border-black bg-white flex items-center justify-between px-4 z-40">

@@ -178,7 +178,7 @@ export default function AdminDashboard() {
             { href: '/admin/produkty/novy', label: 'Přidat produkt' },
             { href: '/admin/objednavky', label: 'Zobrazit objednávky' },
             { href: '/admin/promo-kody', label: 'Spravovat promo kódy' },
-            { href: '/admin/emaily', label: 'Spravovat e-maily' },
+            { href: '/admin/emaily', label: 'E-maily a cesty' },
           ].map((action) => (
             <Link
               key={action.href}

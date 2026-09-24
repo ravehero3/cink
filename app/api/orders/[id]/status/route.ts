@@ -70,6 +70,15 @@ export async function PUT(
           shippingMethod: order.shippingMethod,
           zasilkovnaName: order.zasilkovnaName || undefined,
         });
+        try {
+          const { enrollInTrigger } = await import('@/lib/journeys');
+          await enrollInTrigger('ORDER_SHIPPED', order.customerEmail, {
+            orderNumber: order.orderNumber,
+            items: order.items,
+          }, order.customerName);
+        } catch (journeyError) {
+          console.error('Failed to enroll shipping journey:', journeyError);
+        }
         console.log(`Shipping notification email sent for order ${order.orderNumber}`);
       } catch (emailError) {
         console.error('Failed to send shipping notification email:', emailError);

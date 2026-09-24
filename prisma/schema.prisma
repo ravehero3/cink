@@ -130,6 +130,8 @@ model PromoCode {
   validFrom       DateTime
   validUntil      DateTime
   isActive        Boolean  @default(true)
+  source          String   @default("manual")
+  assignedEmail   String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
@@ -293,4 +295,72 @@ model LiveOffer {
   durationMin   Int      @default(10)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+}
+
+model EmailLog {
+  id        String   @id @default(uuid())
+  toEmail   String
+  type      String
+  subject   String
+  html      String?  @db.Text
+  status    String
+  error     String?  @db.Text
+  journeyId String?
+  sentAt    DateTime @default(now())
+
+  @@index([sentAt])
+  @@index([toEmail])
+  @@index([type])
+}
+
+model EmailJourney {
+  id          String                   @id @default(uuid())
+  key         String                   @unique
+  name        String
+  description String                   @db.Text
+  trigger     String
+  isActive    Boolean                  @default(true)
+  steps       EmailJourneyStep[]
+  enrollments EmailJourneyEnrollment[]
+  createdAt   DateTime                 @default(now())
+  updatedAt   DateTime                 @updatedAt
+}
+
+model EmailJourneyStep {
+  id                  String       @id @default(uuid())
+  journeyId           String
+  journey             EmailJourney @relation(fields: [journeyId], references: [id], onDelete: Cascade)
+  position            Int
+  delayHours          Int
+  emailType           String
+  generatePromo       Boolean      @default(false)
+  promoDiscountType   String       @default("PERCENTAGE")
+  promoDiscountValue  Decimal      @default(10) @db.Decimal(10, 2)
+  promoValidDays      Int          @default(14)
+  promoMaxUses        Int          @default(1)
+  skipIfPurchased     Boolean      @default(false)
+  skipIfPaid          Boolean      @default(false)
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+
+  @@index([journeyId, position])
+}
+
+model EmailJourneyEnrollment {
+  id           String       @id @default(uuid())
+  journeyId    String
+  journey      EmailJourney @relation(fields: [journeyId], references: [id], onDelete: Cascade)
+  email        String
+  customerName String?
+  context      Json?
+  currentStep  Int          @default(0)
+  nextSendAt   DateTime
+  status       String       @default("ACTIVE")
+  lastError    String?      @db.Text
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@index([status, nextSendAt])
+  @@index([email, status])
+  @@index([journeyId, email])
 }

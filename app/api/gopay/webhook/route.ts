@@ -74,6 +74,18 @@ export async function POST(request: NextRequest) {
           shippingMethod: order.shippingMethod,
           zasilkovnaName: order.zasilkovnaName || undefined,
         });
+        try {
+          const { enrollInTrigger, cancelTriggerEnrollments } = await import('@/lib/journeys');
+          await cancelTriggerEnrollments('CART_ABANDONED', order.customerEmail);
+          await cancelTriggerEnrollments('ORDER_CREATED', order.customerEmail);
+          await enrollInTrigger('ORDER_PAID', order.customerEmail, {
+            orderNumber: order.orderNumber,
+            items,
+            totalPrice: Number(order.totalPrice),
+          }, order.customerName);
+        } catch (journeyError) {
+          console.error('Failed to enroll post-purchase journey:', journeyError);
+        }
         console.log(`Payment success email sent for order ${order.orderNumber}`);
       } catch (emailError) {
         console.error('Failed to send payment success email:', emailError);

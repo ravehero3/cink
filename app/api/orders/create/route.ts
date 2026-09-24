@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth';
 import { prisma, withRetry } from '@/lib/prisma';
 import { createPacketaClient, PacketaAPIError } from '@/lib/packeta-api';
 import { sendOrderConfirmationEmail, sendAdminOrderNotificationEmail } from '@/lib/email';
+import { validatePromoCode } from '@/lib/promo';
 
 function generateErrorId(): string {
   return `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -191,33 +192,17 @@ export async function POST(request: NextRequest) {
     if (promoCode) {
       logInfo('Processing promo code', { promoCode });
       try {
-        const promo = await withRetry(() => prisma.promoCode.findUnique({
-          where: { code: promoCode.toUpperCase() },
-        }));
-
-        if (promo && promo.isActive) {
-          const now = new Date();
-          if (now >= promo.validFrom && now <= promo.validUntil) {
-            if (!promo.maxUses || promo.currentUses < promo.maxUses) {
-              const subtotal = items.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0);
-              
-              if (!promo.minOrderAmount || subtotal >= Number(promo.minOrderAmount)) {
-                if (promo.discountType === 'PERCENTAGE') {
-                  discountAmount = Math.round(subtotal * (Number(promo.discountValue) / 100));
-                } else {
-                  discountAmount = Number(promo.discountValue);
-                }
-
-                await withRetry(() => prisma.promoCode.update({
-                  where: { code: promoCode.toUpperCase() },
-                  data: { currentUses: promo.currentUses + 1 },
-                }));
-                logInfo('Promo code applied', { discountAmount });
-              }
-            }
-          }
+        const subtotal = items.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0);
+        const result = await validatePromoCode(promoCode, subtotal, customerEmail);
+        if (result.ok) {
+          discountAmount = result.discountAmount;
+          await withRetry(() => prisma.promoCode.update({
+            where: { code: result.promo.code },
+            data: { currentUses: result.promo.currentUses + 1 },
+          }));
+          logInfo('Promo code applied', { discountAmount });
         } else {
-          logInfo('Promo code not found or inactive', { promoCode });
+          logInfo('Promo code rejected', { error: result.error });
         }
       } catch (promoError) {
         logError(errorId, 'Failed to process promo code (non-critical)', promoError);
@@ -416,6 +401,18 @@ export async function POST(request: NextRequest) {
       logInfo('Admin order notification email sent', { orderNumber });
     } catch (emailError) {
       logError(errorId, 'Failed to send admin order notification email (non-critical)', emailError);
+    }
+
+    try {
+      const { enrollInTrigger, cancelTriggerEnrollments } = await import('@/lib/journeys');
+      await cancelTriggerEnrollments('CART_ABANDONED', customerEmail);
+      await enrollInTrigger('ORDER_CREATED', customerEmail, {
+        orderNumber: order.orderNumber,
+        items: orderEmailData.items,
+        totalPrice: Number(totalPrice),
+      }, customerName);
+    } catch (journeyError) {
+      logError(errorId, 'Failed to enroll payment-reminder journey (non-critical)', journeyError);
     }
 
     // Step 10: Return success response

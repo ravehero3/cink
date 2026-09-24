@@ -1,86 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { validatePromoCode } from '@/lib/promo';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { code, orderAmount } = body;
+    const { code, orderAmount, email } = body;
 
     if (!code) {
-      return NextResponse.json(
-        { error: 'Promo kód je povinný' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Promo kód je povinný' }, { status: 400 });
     }
 
     if (!orderAmount || orderAmount <= 0) {
-      return NextResponse.json(
-        { error: 'Neplatná částka objednávky' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Neplatná částka objednávky' }, { status: 400 });
     }
 
-    const promoCode = await prisma.promoCode.findUnique({
-      where: { code: code.toUpperCase() },
-    });
+    const result = await validatePromoCode(code, orderAmount, email);
 
-    if (!promoCode) {
-      return NextResponse.json(
-        { error: 'Promo kód nebyl nalezen' },
-        { status: 404 }
-      );
-    }
-
-    if (!promoCode.isActive) {
-      return NextResponse.json(
-        { error: 'Tento promo kód není aktivní' },
-        { status: 400 }
-      );
-    }
-
-    const now = new Date();
-    if (now < promoCode.validFrom) {
-      return NextResponse.json(
-        { error: 'Tento promo kód ještě není platný' },
-        { status: 400 }
-      );
-    }
-
-    if (now > promoCode.validUntil) {
-      return NextResponse.json(
-        { error: 'Platnost tohoto promo kódu vypršela' },
-        { status: 400 }
-      );
-    }
-
-    if (promoCode.maxUses && promoCode.currentUses >= promoCode.maxUses) {
-      return NextResponse.json(
-        { error: 'Tento promo kód již byl využit maximální počet krát' },
-        { status: 400 }
-      );
-    }
-
-    if (promoCode.minOrderAmount && orderAmount < Number(promoCode.minOrderAmount)) {
-      return NextResponse.json(
-        { error: `Minimální částka objednávky pro tento kód je ${promoCode.minOrderAmount} Kč` },
-        { status: 400 }
-      );
-    }
-
-    let discountAmount = 0;
-    if (promoCode.discountType === 'PERCENTAGE') {
-      discountAmount = Math.round(orderAmount * (Number(promoCode.discountValue) / 100));
-    } else if (promoCode.discountType === 'FIXED') {
-      discountAmount = Number(promoCode.discountValue);
+    if (!result.ok) {
+      return NextResponse.json({ error: result.error }, { status: result.status });
     }
 
     return NextResponse.json(
       {
         valid: true,
-        discountAmount,
-        discountType: promoCode.discountType,
-        discountValue: Number(promoCode.discountValue),
-        message: `Sleva ${discountAmount} Kč byla použita`,
+        discountAmount: result.discountAmount,
+        discountType: result.discountType,
+        discountValue: result.discountValue,
+        message: `Sleva ${result.discountAmount} Kč byla použita`,
       },
       { status: 200 }
     );
