@@ -28,6 +28,10 @@ interface VideoSectionProps {
   onEditCategory?: () => void;
   onDelete?: () => void;
   onAdd?: () => void;
+  onMoveUp?: () => void;
+  onMoveDown?: () => void;
+  canMoveUp?: boolean;
+  canMoveDown?: boolean;
   isLastSection?: boolean;
   sectionId: string;
   showProducts?: boolean;
@@ -36,7 +40,7 @@ interface VideoSectionProps {
   lazy?: boolean;
 }
 
-export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, button1Text, button2Text, button1Link, button2Link, textColor = 'black', isAdmin, onEdit, onEditCategory, onDelete, onAdd, isLastSection, sectionId, showProducts, products = [], isLoading = false, lazy = true }: VideoSectionProps) {
+export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, button1Text, button2Text, button1Link, button2Link, textColor = 'black', isAdmin, onEdit, onEditCategory, onDelete, onAdd, onMoveUp, onMoveDown, canMoveUp, canMoveDown, isLastSection, sectionId, showProducts, products = [], isLoading = false, lazy = true }: VideoSectionProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const [videoError, setVideoError] = useState(false);
@@ -196,6 +200,26 @@ export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, but
 
         {isAdmin && (
           <div className="absolute top-3 right-3 flex items-center gap-2 z-10">
+            {onMoveUp && canMoveUp && (
+              <button
+                onClick={onMoveUp}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-black text-black text-xs uppercase tracking-wide hover:bg-black hover:text-white transition-all duration-200"
+                style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '10px', letterSpacing: '0.08em' }}
+                title="Přesunout nahoru"
+              >
+                ↑
+              </button>
+            )}
+            {onMoveDown && canMoveDown && (
+              <button
+                onClick={onMoveDown}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-black text-black text-xs uppercase tracking-wide hover:bg-black hover:text-white transition-all duration-200"
+                style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '10px', letterSpacing: '0.08em' }}
+                title="Přesunout dolů"
+              >
+                ↓
+              </button>
+            )}
             {onEdit && (
               <button
                 onClick={onEdit}

@@ -4,10 +4,11 @@ import { join } from 'path'
 import { prisma } from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
+import { uploadToOracleVPS } from '@/lib/oracle-vps'
 
 export const dynamic = 'force-dynamic'
 
-const MAX_FILE_SIZE = 100 * 1024 * 1024
+const MAX_FILE_SIZE = 500 * 1024 * 1024 // 500MB for videos
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif']
 const ALLOWED_VIDEO_TYPES = ['video/mp4', 'video/webm', 'video/quicktime']
 
@@ -30,13 +31,14 @@ export async function POST(request: NextRequest) {
     const category = formData.get('category') as string | null
     const description = formData.get('description') as string | null
     const tags = formData.get('tags') as string | null
+    const storage = (formData.get('storage') as string) || 'LOCAL' // LOCAL | ORACLE_VPS
 
     if (!file) {
       return NextResponse.json({ error: 'Žádný soubor nebyl odeslán.' }, { status: 400 })
     }
 
     if (file.size > MAX_FILE_SIZE) {
-      return NextResponse.json({ error: 'Soubor je příliš velký (max 100 MB).' }, { status: 400 })
+      return NextResponse.json({ error: `Soubor je příliš velký (max ${MAX_FILE_SIZE / 1024 / 1024}MB).` }, { status: 400 })
     }
 
     const isImage = ALLOWED_IMAGE_TYPES.includes(file.type)
@@ -49,19 +51,40 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Save to public/uploads directory (served statically by Next.js)
-    const uploadsDir = join(process.cwd(), 'public', 'uploads', 'images')
-    await mkdir(uploadsDir, { recursive: true })
-
-    const filename = generateFilename(file.name)
-    const filepath = join(uploadsDir, filename)
-    const buffer = Buffer.from(await file.arrayBuffer())
-    await writeFile(filepath, buffer)
-
-    const url = `/uploads/images/${filename}`
     const mediaType = isVideo ? 'VIDEO' : 'IMAGE'
-
+    const filename = generateFilename(file.name)
     const ext = filename.split('.').pop() || null
+    const buffer = Buffer.from(await file.arrayBuffer())
+
+    let url: string
+    let vpsPath: string | null = null
+    let storageType = 'LOCAL'
+
+    // For videos, prefer Oracle VPS; for images, use local storage
+    if (isVideo && storage === 'ORACLE_VPS') {
+      try {
+        const vpsResult = await uploadToOracleVPS(buffer, filename)
+        url = vpsResult.url
+        vpsPath = vpsResult.vpsPath
+        storageType = 'ORACLE_VPS'
+      } catch (vpsError) {
+        console.warn('VPS upload failed, falling back to local:', vpsError)
+        // Fall back to local storage with warning
+        const uploadsDir = join(process.cwd(), 'public', 'uploads', 'videos')
+        await mkdir(uploadsDir, { recursive: true })
+        const filepath = join(uploadsDir, filename)
+        await writeFile(filepath, buffer)
+        url = `/uploads/videos/${filename}`
+        storageType = 'LOCAL'
+      }
+    } else {
+      // Local storage (default for images and if VPS not available)
+      const uploadsDir = join(process.cwd(), 'public', 'uploads', isImage ? 'images' : 'videos')
+      await mkdir(uploadsDir, { recursive: true })
+      const filepath = join(uploadsDir, filename)
+      await writeFile(filepath, buffer)
+      url = `/uploads/${isImage ? 'images' : 'videos'}/${filename}`
+    }
 
     const media = await prisma.media.create({
       data: {
@@ -78,10 +101,22 @@ export async function POST(request: NextRequest) {
         tags: tags ? tags.split(',').map((t) => t.trim()).filter(Boolean) : [],
         category: category || null,
         description: description || null,
+        storageType,
+        oracleVpsPath: vpsPath,
+        isProtected: isVideo, // Automatically protect videos from accidental deletion
       },
     })
 
-    return NextResponse.json({ success: true, media })
+    return NextResponse.json({ 
+      success: true, 
+      media,
+      storageInfo: {
+        type: storageType,
+        message: storageType === 'ORACLE_VPS' 
+          ? '✓ Video se bezpečně ukládá na Oracle VPS' 
+          : 'Video je uloženo lokálně'
+      }
+    })
   } catch (error) {
     console.error('Upload error:', error)
     return NextResponse.json(

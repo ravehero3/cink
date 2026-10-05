@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useToast } from '@/store/toastStore';
 import ConfirmModal from '@/components/admin/ConfirmModal';
+import { Lock, Unlock } from 'lucide-react';
 
 interface Media {
   id: string;
@@ -19,6 +20,9 @@ interface Media {
   tags: string[];
   category: string | null;
   description: string | null;
+  storageType: 'LOCAL' | 'ORACLE_VPS' | 'CLOUDINARY';
+  oracleVpsPath: string | null;
+  isProtected: boolean;
   createdAt: string;
 }
 
@@ -28,15 +32,25 @@ function formatSize(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
+function getStorageColor(type: string) {
+  switch(type) {
+    case 'ORACLE_VPS': return 'bg-blue-100 text-blue-700 border-blue-300';
+    case 'CLOUDINARY': return 'bg-orange-100 text-orange-700 border-orange-300';
+    default: return 'bg-gray-100 text-gray-700 border-gray-300';
+  }
+}
+
 export default function MediaLibraryPage() {
   const [media, setMedia] = useState<Media[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [uploadSuccess, setUploadSuccess] = useState<string | null>(null);
   const [filterType, setFilterType] = useState<'ALL' | 'IMAGE' | 'VIDEO'>('ALL');
   const [search, setSearch] = useState('');
   const [selectedMedia, setSelectedMedia] = useState<Media | null>(null);
   const [copied, setCopied] = useState(false);
+  const [storageOption, setStorageOption] = useState<'LOCAL' | 'ORACLE_VPS'>('ORACLE_VPS');
   const toast = useToast();
   const [deleteModal, setDeleteModal] = useState<{ id: string } | null>(null);
 
@@ -64,11 +78,16 @@ export default function MediaLibraryPage() {
     if (!files || files.length === 0) return;
     setUploading(true);
     setUploadError(null);
+    setUploadSuccess(null);
 
+    let successCount = 0;
     for (const file of Array.from(files)) {
       try {
         const fd = new FormData();
         fd.append('file', file);
+        // For videos, use Oracle VPS; for images, use local
+        fd.append('storage', file.type.includes('video') ? storageOption : 'LOCAL');
+        
         const res = await fetch('/api/media/upload', { method: 'POST', body: fd });
         if (!res.ok) {
           const err = await res.json();
@@ -77,9 +96,15 @@ export default function MediaLibraryPage() {
         }
         const result = await res.json();
         setMedia((prev) => [result.media, ...prev]);
+        successCount++;
       } catch {
         setUploadError(`Nahrání souboru "${file.name}" selhalo.`);
       }
+    }
+
+    if (successCount > 0) {
+      setUploadSuccess(`✓ ${successCount} soubor(ů) úspěšně nahráno`);
+      setTimeout(() => setUploadSuccess(null), 3000);
     }
 
     setUploading(false);
@@ -98,12 +123,35 @@ export default function MediaLibraryPage() {
         if (selectedMedia?.id === deleteModal.id) setSelectedMedia(null);
         toast.success('Soubor byl odstraněn');
       } else {
-        toast.error('Nepodařilo se odstranit soubor');
+        const err = await res.json();
+        toast.error(err.error || 'Nepodařilo se odstranit soubor');
       }
     } catch {
       toast.error('Nepodařilo se odstranit soubor');
     } finally {
       setDeleteModal(null);
+    }
+  };
+
+  const handleToggleProtection = async (id: string, currentStatus: boolean) => {
+    try {
+      const res = await fetch(`/api/media/${id}/protect`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, isProtected: !currentStatus }),
+      });
+      if (res.ok) {
+        const updated = await res.json();
+        setMedia((prev) =>
+          prev.map((m) => (m.id === id ? { ...m, isProtected: updated.media.isProtected } : m))
+        );
+        if (selectedMedia?.id === id) {
+          setSelectedMedia({ ...selectedMedia, isProtected: updated.media.isProtected });
+        }
+        toast.success(!currentStatus ? 'Video chráněno' : 'Ochrana odebrána');
+      }
+    } catch {
+      toast.error('Nepodařilo se změnit ochranu');
     }
   };
 
@@ -139,6 +187,14 @@ export default function MediaLibraryPage() {
         </label>
       </div>
 
+      {uploadSuccess && (
+        <div className="flex items-start gap-3 p-4 border border-green-600 bg-green-50 text-xs uppercase tracking-wider text-green-700">
+          <span className="font-bold shrink-0">[ OK ]</span>
+          <p className="flex-1">{uploadSuccess}</p>
+          <button onClick={() => setUploadSuccess(null)} className="hover:opacity-60">×</button>
+        </div>
+      )}
+
       {uploadError && (
         <div className="flex items-start gap-3 p-4 border border-black bg-white text-xs uppercase tracking-wider">
           <span className="font-bold shrink-0">[ CHYBA ]</span>
@@ -146,6 +202,31 @@ export default function MediaLibraryPage() {
           <button onClick={() => setUploadError(null)} className="hover:opacity-60">×</button>
         </div>
       )}
+
+      <div className="bg-white border border-black p-4">
+        <p className="text-xs font-bold uppercase tracking-widest mb-3 text-gray-600">Možnost úložiště pro videa</p>
+        <div className="flex gap-3">
+          {([
+            { key: 'ORACLE_VPS' as const, label: '🔒 Oracle VPS (Bezpečné, trvalé)', desc: 'Přímé úložiště na vašem serveru' },
+            { key: 'LOCAL' as const, label: '💾 Místní úložiště', desc: 'Lokální server' },
+          ]).map((opt) => (
+            <label key={opt.key} className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                name="storage"
+                value={opt.key}
+                checked={storageOption === opt.key}
+                onChange={() => setStorageOption(opt.key)}
+                className="w-4 h-4"
+              />
+              <div>
+                <p className="text-xs font-semibold">{opt.label}</p>
+                <p className="text-[10px] text-gray-500">{opt.desc}</p>
+              </div>
+            </label>
+          ))}
+        </div>
+      </div>
 
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div className="flex gap-2 flex-wrap">
@@ -192,7 +273,7 @@ export default function MediaLibraryPage() {
           {filtered.map((item) => (
             <div
               key={item.id}
-              className="bg-white cursor-pointer hover:bg-black hover:text-white transition-colors group"
+              className="bg-white cursor-pointer hover:bg-black hover:text-white transition-colors group relative"
               onClick={() => setSelectedMedia(item)}
             >
               <div className="aspect-square bg-white relative overflow-hidden border-b border-black group-hover:border-white">
@@ -204,6 +285,11 @@ export default function MediaLibraryPage() {
                 <span className="absolute top-2 left-2 bg-black text-white text-[9px] font-bold uppercase tracking-widest px-[6px] py-[2px] border border-black">
                   {item.format?.toUpperCase()}
                 </span>
+                {item.isProtected && (
+                  <div className="absolute top-2 right-2 bg-blue-500 text-white p-1 rounded">
+                    <Lock size={12} />
+                  </div>
+                )}
               </div>
               <div className="px-3 py-2">
                 <p className="text-xs uppercase tracking-wider font-medium truncate">{item.originalName}</p>
@@ -240,6 +326,17 @@ export default function MediaLibraryPage() {
                   <video src={selectedMedia.url} controls className="w-full max-h-72" />
                 )}
               </div>
+
+              {selectedMedia.storageType && (
+                <div>
+                  <p className="admin-label">Úložiště</p>
+                  <div className={`text-xs font-semibold uppercase tracking-widest px-3 py-2 border rounded inline-block ${getStorageColor(selectedMedia.storageType)}`}>
+                    {selectedMedia.storageType === 'ORACLE_VPS' && '🔒 Oracle VPS - Trvalé'}
+                    {selectedMedia.storageType === 'LOCAL' && '💾 Místní'}
+                    {selectedMedia.storageType === 'CLOUDINARY' && '☁️ Cloudinary'}
+                  </div>
+                </div>
+              )}
 
               <div className="grid grid-cols-2 gap-[16px]">
                 <div>
@@ -284,12 +381,26 @@ export default function MediaLibraryPage() {
                 </div>
               </div>
 
-              <div className="pt-2 border-t border-black">
+              <div className="pt-2 border-t border-black space-y-3">
+                {selectedMedia.resourceType === 'VIDEO' && (
+                  <button
+                    onClick={() => handleToggleProtection(selectedMedia.id, selectedMedia.isProtected)}
+                    className={`w-full admin-btn ${selectedMedia.isProtected ? 'admin-btn-secondary' : ''}`}
+                  >
+                    {selectedMedia.isProtected ? (
+                      <><Unlock size={14} /> Zrušit ochranu</>
+                    ) : (
+                      <><Lock size={14} /> Chránit video</>
+                    )}
+                  </button>
+                )}
                 <button
                   onClick={() => handleDelete(selectedMedia.id)}
-                  className="admin-btn admin-btn-secondary w-full"
+                  disabled={selectedMedia.isProtected}
+                  className={`admin-btn admin-btn-secondary w-full ${selectedMedia.isProtected ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  title={selectedMedia.isProtected ? 'Chráněná videa nelze smazat' : ''}
                 >
-                  Odstranit soubor
+                  {selectedMedia.isProtected ? '🔒 Nelze smazat - je chráněno' : 'Odstranit soubor'}
                 </button>
               </div>
             </div>

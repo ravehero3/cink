@@ -619,6 +619,10 @@ export default function HomePageContent({ initialSections }: HomePageContentProp
               onEdit={() => handleEditSection(section)}
               onEditCategory={categoryKey ? () => handleEditCategorySection(categoryKey) : undefined}
               onDelete={() => handleDeleteSection(section.sectionKey)}
+              onMoveUp={() => handleMoveSection(section.sectionKey, 'up')}
+              onMoveDown={() => handleMoveSection(section.sectionKey, 'down')}
+              canMoveUp={index > 0}
+              canMoveDown={index < heroSections.length - 1}
               onAdd={handleAddSection}
               isLastSection={isLastSection}
               sectionId={section.sectionKey}

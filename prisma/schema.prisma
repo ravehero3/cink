@@ -205,6 +205,11 @@ model Media {
   category      String?
   description   String?     @db.Text
   isActive      Boolean     @default(true)
+  isProtected   Boolean     @default(false) // Protected from deletion
+  storageType   String      @default("LOCAL") // LOCAL | ORACLE_VPS | CLOUDINARY
+  oracleVpsPath String?     // Path on Oracle VPS if storageType=ORACLE_VPS
+  backupUrl     String?     // Secondary URL for failover
+  lastBackupAt  DateTime?
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 }

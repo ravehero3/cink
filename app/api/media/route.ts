@@ -78,6 +78,36 @@ export async function DELETE(request: NextRequest) {
       )
     }
 
+    // Check if media is protected
+    const media = await prisma.media.findUnique({
+      where: { id },
+    })
+
+    if (!media) {
+      return NextResponse.json(
+        { error: 'Media not found' },
+        { status: 404 }
+      )
+    }
+
+    if (media.isProtected) {
+      return NextResponse.json(
+        { error: 'Toto médium je chráněno před smazáním a nelze jej odstranit. Kontaktujte administrátora.' },
+        { status: 403 }
+      )
+    }
+
+    // If stored on Oracle VPS, delete from there too
+    if (media.storageType === 'ORACLE_VPS' && media.oracleVpsPath) {
+      try {
+        const { deleteFromOracleVPS } = await import('@/lib/oracle-vps')
+        await deleteFromOracleVPS(media.oracleVpsPath)
+      } catch (vpsError) {
+        console.error('Failed to delete from VPS:', vpsError)
+        // Continue with DB deletion even if VPS delete fails
+      }
+    }
+
     await prisma.media.update({
       where: { id },
       data: { isActive: false },

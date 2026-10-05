@@ -140,7 +140,7 @@ export default function MediaSelector({
               )}
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {filtered.map((item) => {
                 const isSel = selected.has(item.id);
                 return (
@@ -148,31 +148,33 @@ export default function MediaSelector({
                     key={item.id}
                     type="button"
                     onClick={() => toggle(item.id)}
-                    className={`relative group aspect-square rounded-xl overflow-hidden border-2 transition-all focus:outline-none ${
+                    className={`relative group flex flex-col rounded-xl overflow-hidden border-2 transition-all focus:outline-none ${
                       isSel
                         ? 'border-gray-900 ring-2 ring-gray-900 ring-offset-1'
                         : 'border-gray-100 hover:border-gray-400'
                     }`}
                   >
-                    <div className="w-full h-full bg-gray-50">
-                      {item.resourceType === 'IMAGE' ? (
-                        <img src={item.url} alt={item.originalName} className="w-full h-full object-cover" />
-                      ) : (
-                        <video src={item.url} className="w-full h-full object-cover" muted />
-                      )}
+                    <div className="w-full bg-gray-50" style={{ paddingBottom: '100%', position: 'relative' }}>
+                      <div className="absolute inset-0">
+                        {item.resourceType === 'IMAGE' ? (
+                          <img src={item.url} alt={item.originalName} className="w-full h-full object-cover" />
+                        ) : (
+                          <video src={item.url} className="w-full h-full object-cover" muted />
+                        )}
+                      </div>
+                      <div className={`absolute inset-0 transition-opacity ${
+                        isSel ? 'bg-black/20' : 'bg-black/0 group-hover:bg-black/20'
+                      }`} />
+                      <div className={`absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center transition-all ${
+                        isSel
+                          ? 'bg-gray-900 text-white opacity-100'
+                          : 'bg-white/80 text-gray-300 opacity-100 group-hover:opacity-100'
+                      }`}>
+                        <Check size={14} strokeWidth={3} />
+                      </div>
                     </div>
-                    <div className={`absolute inset-0 transition-opacity ${
-                      isSel ? 'bg-black/20' : 'bg-black/0 group-hover:bg-black/20'
-                    }`} />
-                    <div className={`absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center transition-all ${
-                      isSel
-                        ? 'bg-gray-900 text-white opacity-100'
-                        : 'bg-white/80 text-transparent opacity-0 group-hover:opacity-100'
-                    }`}>
-                      <Check size={12} strokeWidth={3} />
-                    </div>
-                    <div className="absolute bottom-0 left-0 right-0 px-2 py-1.5 bg-black/70 text-white text-[10px] truncate opacity-0 group-hover:opacity-100 transition-opacity">
-                      {item.originalName}
+                    <div className="px-2 py-2 bg-white border-t border-gray-100 flex-grow flex items-center min-h-[45px]">
+                      <p className="text-[11px] font-medium text-gray-900 truncate w-full">{item.originalName}</p>
                     </div>
                   </button>
                 );
