@@ -85,17 +85,18 @@ const DEFAULT_JOURNEYS = [
 ];
 
 function stepData(step: (typeof DEFAULT_JOURNEYS)[number]['steps'][number]) {
+  const s = step as any;
   return {
     position: step.position,
     delayHours: step.delayHours,
     emailType: step.emailType,
     generatePromo: step.generatePromo,
     promoDiscountType: 'PERCENTAGE',
-    promoDiscountValue: step.promoDiscountValue ?? 10,
-    promoValidDays: step.promoValidDays ?? 14,
+    promoDiscountValue: s.promoDiscountValue ?? 10,
+    promoValidDays: s.promoValidDays ?? 14,
     promoMaxUses: 1,
     skipIfPurchased: step.skipIfPurchased,
-    skipIfPaid: Boolean((step as { skipIfPaid?: boolean }).skipIfPaid),
+    skipIfPaid: Boolean(s.skipIfPaid),
   };
 }
 
@@ -161,7 +162,7 @@ export async function enrollInTrigger(
         where: { id: active.id },
         data: {
           customerName: customerName || active.customerName,
-          context: context || {},
+          context: (context || {}) as any,
           currentStep: 0,
           nextSendAt: hoursFromNow(first.delayHours),
           lastError: null,
@@ -175,7 +176,7 @@ export async function enrollInTrigger(
         journeyId: journey.id,
         email: email.toLowerCase(),
         customerName: customerName || null,
-        context: context || {},
+        context: (context || {}) as any,
         currentStep: 0,
         nextSendAt: hoursFromNow(first.delayHours),
         status: 'ACTIVE',

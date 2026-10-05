@@ -8,8 +8,9 @@ export async function GET(request: Request) {
 
   try {
     const abandoned = await processAbandonedCartFallback();
-    const journeys = await processDueJourneys();
-    return NextResponse.json({ processed: abandoned.carts, ...journeys });
+    const result = await processDueJourneys();
+    const { processed: journeysProcessed, ...journeyStats } = result;
+    return NextResponse.json({ processed: abandoned.carts, journeysProcessed, ...journeyStats });
   } catch (error) {
     console.error('Error processing abandoned carts:', error);
     return new NextResponse('Internal Server Error', { status: 500 });
