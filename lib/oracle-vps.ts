@@ -3,6 +3,10 @@
  * Handles SFTP uploads to your Oracle VPS for video storage
  */
 
+import { writeFile } from 'fs/promises';
+import { join } from 'path';
+import { tmpdir } from 'os';
+
 export const ORACLE_VPS_CONFIG = {
   host: process.env.ORACLE_VPS_HOST || '130.61.26.156',
   user: process.env.ORACLE_VPS_USER || 'ubuntu',
@@ -16,6 +20,11 @@ export async function uploadToOracleVPS(
   filename: string
 ): Promise<{ vpsPath: string; url: string }> {
   try {
+    // Write file to temp directory first
+    const tempDir = tmpdir();
+    const tempPath = join(tempDir, `upload-${Date.now()}-${filename}`);
+    await writeFile(tempPath, file);
+
     // Dynamically import node-ssh (added as optional dependency for production)
     const { NodeSSH } = await import('node-ssh')
     const ssh = new NodeSSH()
@@ -31,9 +40,9 @@ export async function uploadToOracleVPS(
     const remotePath = `${ORACLE_VPS_CONFIG.remoteBasePath}/${filename}`
     await ssh.execCommand(`mkdir -p ${ORACLE_VPS_CONFIG.remoteBasePath}`)
 
-    // Upload file
+    // Upload file from temp path
     await ssh.putFile(
-      Buffer.from(file),
+      tempPath,
       remotePath,
       undefined,
       0o644
