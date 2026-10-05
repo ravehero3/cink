@@ -97,8 +97,12 @@ export default function ProductShowcaseSection({
           {headerText}
         </h2>
         <div className="flex gap-1">
-          <AnimatedButton text={button1Text} link={button1Link} textColor={textColor} />
-          <AnimatedButton text={button2Text} link={button2Link} textColor={textColor} />
+          {button1Text && button1Link && (
+            <AnimatedButton text={button1Text} link={button1Link} textColor={textColor} />
+          )}
+          {button2Text && button2Link && (
+            <AnimatedButton text={button2Text} link={button2Link} textColor={textColor} />
+          )}
         </div>
       </div>
 

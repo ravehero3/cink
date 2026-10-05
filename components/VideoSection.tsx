@@ -163,12 +163,16 @@ export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, but
                   {headerText}
                 </h2>
               )}
-              {button1Text && button2Text && (
+              {button1Text && button1Link || button2Text && button2Link ? (
                 <div className="flex gap-1">
-                  <AnimatedButton text={button1Text} link={button1Link || '#'} textColor={textColor} />
-                  <AnimatedButton text={button2Text} link={button2Link || '#'} textColor={textColor} />
+                  {button1Text && button1Link && (
+                    <AnimatedButton text={button1Text} link={button1Link} textColor={textColor} />
+                  )}
+                  {button2Text && button2Link && (
+                    <AnimatedButton text={button2Text} link={button2Link} textColor={textColor} />
+                  )}
                 </div>
-              )}
+              ) : null}
             </div>
           </>
         ) : (
@@ -187,12 +191,16 @@ export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, but
                 }}>
                   {headerText}
                 </h2>
-                {button1Text && button2Text && (
-                  <div className="flex gap-1">
-                    <AnimatedButton text={button1Text} link={button1Link || '#'} textColor={textColor} />
-                    <AnimatedButton text={button2Text} link={button2Link || '#'} textColor={textColor} />
-                  </div>
-                )}
+              {button1Text && button1Link || button2Text && button2Link ? (
+                <div className="flex gap-1">
+                  {button1Text && button1Link && (
+                    <AnimatedButton text={button1Text} link={button1Link} textColor={textColor} />
+                  )}
+                  {button2Text && button2Link && (
+                    <AnimatedButton text={button2Text} link={button2Link} textColor={textColor} />
+                  )}
+                </div>
+              ) : null}
               </div>
             )}
           </>
