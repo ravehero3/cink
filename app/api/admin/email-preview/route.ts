@@ -43,8 +43,11 @@ export async function POST(request: NextRequest) {
     const inner = bodyText(content || 'Zde bude obsah e-mailu...');
     const { html } = renderEmail('NEWSLETTER_WELCOME', { ...SAMPLE_VARS, isTest: true }, undefined);
     
-    // We replace the inner part of NEWSLETTER_WELCOME with our custom content
-    const customHtml = html.replace(/<td style="padding:32px;">[\s\S]*?<\/td>/, `<td style="padding:32px;">${inner}</td>`);
+    // We replace the info part of NEWSLETTER_WELCOME with our custom content
+    const customHtml = html.replace(
+      /<td class="pad-info"[\s\S]*?<\/td>/,
+      `<td class="pad-info" height="234" align="left" valign="middle" style="height:234px;padding:0 80px;font-size:15px;line-height:20px;">${inner}</td>`
+    );
     
     return new NextResponse(customHtml, {
       headers: { 'Content-Type': 'text/html; charset=utf-8' },

@@ -626,7 +626,7 @@ function PreviewFrame({
       </div>
       <div className="px-[20px] py-[12px] border-t border-black flex items-center justify-between">
         <p className="text-[11px] uppercase tracking-wider text-[#666666]">
-          Náhled · {viewMode === 'mobile' ? 'Mobil (390 px)' : 'Desktop'} · font Roboto / Arial (čeština)
+          Náhled · {viewMode === 'mobile' ? 'Mobil (390 px)' : 'Desktop'} · font Inter / Arial (čeština)
         </p>
         <a href={src} target="_blank" rel="noopener noreferrer" className="text-[11px] uppercase tracking-wider hover:underline">
           Otevřít v nové záložce →

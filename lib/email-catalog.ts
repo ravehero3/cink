@@ -1,5 +1,5 @@
 import {
-  emailWrapper,
+  buildEmailHtml,
   emailButton,
   heading,
   kicker,
@@ -8,10 +8,12 @@ import {
   infoBox,
   promoBlock,
   itemsTable,
+  sectionDivider,
   WEBSITE_URL,
   FONT_STACK,
   HEADING_STACK,
   type CatalogItem,
+  type EmailTemplateParams,
 } from './email-layout';
 
 export type EmailType =
@@ -83,6 +85,15 @@ export const EMAIL_CATALOG: {
     description: 'Odesílá se při žádosti o reset hesla.',
     trigger: 'Automaticky',
     triggerDetail: 'Při žádosti o reset hesla',
+    category: 'transactional',
+    marketing: false,
+  },
+  {
+    id: 'ADMIN_ORDER_NOTIFICATION',
+    label: 'Notifikace adminu',
+    description: 'Interní zpráva o nové objednávce.',
+    trigger: 'Automaticky',
+    triggerDetail: 'Po odeslání objednávky',
     category: 'transactional',
     marketing: false,
   },
@@ -176,15 +187,6 @@ export const EMAIL_CATALOG: {
     category: 'journey',
     marketing: true,
   },
-  {
-    id: 'ADMIN_ORDER_NOTIFICATION',
-    label: 'Notifikace adminu',
-    description: 'Interní zpráva o nové objednávce.',
-    trigger: 'Automaticky',
-    triggerDetail: 'Po odeslání objednávky',
-    category: 'transactional',
-    marketing: false,
-  },
 ];
 
 export interface EmailVars {
@@ -201,6 +203,7 @@ export interface EmailVars {
   shippingCity?: string;
   shippingZip?: string;
   trackingNumber?: string;
+  paymentDate?: string;
   resetLink?: string;
   promoCode?: string;
   promoLabel?: string;
@@ -215,336 +218,499 @@ export const SAMPLE_ITEMS: CatalogItem[] = [
 
 export const SAMPLE_VARS: EmailVars = {
   customerName: 'Jan Novák',
-  customerEmail: 'jan.novak@email.cz',
+  customerEmail: 'jan.novak@example.cz',
   customerPhone: '+420 777 123 456',
   orderNumber: 'UFO26001',
   items: SAMPLE_ITEMS,
   totalPrice: 1650,
   shippingMethod: 'zasilkovna',
   zasilkovnaName: 'Zásilkovna Praha 1 — Centrum',
-  trackingNumber: 'CZ123456789',
-  resetLink: `${WEBSITE_URL}/obnovit-heslo`,
-  promoCode: 'UFO10JAN',
-  promoLabel: 'Sleva 10 % na další nákup',
-  promoValidUntil: '8. 10. 2026',
+  trackingNumber: 'Z 123 456 7890',
+  paymentDate: '5. 10. 2026',
+  resetLink: `${WEBSITE_URL}/obnovit-heslo?token=sample123`,
+  promoCode: 'UFO10',
+  promoLabel: 'Sleva 10 % na váš košík',
+  promoValidUntil: '48 hodin',
 };
 
-function shippingHtml(vars: EmailVars) {
+function getShippingLocation(vars: EmailVars): string {
   if (vars.shippingMethod === 'zasilkovna' && vars.zasilkovnaName) {
-    return `<p style="margin:0;font-size:12px;letter-spacing:0.04em;text-transform:uppercase;color:#666666;font-family:${FONT_STACK};">Místo vyzvednutí (Zásilkovna)</p>
-      <p style="margin:4px 0 0 0;font-size:13px;color:#000000;font-family:${FONT_STACK};">${vars.zasilkovnaName}</p>`;
+    return vars.zasilkovnaName;
   }
   if (vars.shippingMethod === 'ppl_address' && vars.shippingStreet) {
-    return `<p style="margin:0;font-size:12px;letter-spacing:0.04em;text-transform:uppercase;color:#666666;font-family:${FONT_STACK};">Doručovací adresa (PPL)</p>
-      <p style="margin:4px 0 0 0;font-size:13px;color:#000000;font-family:${FONT_STACK};">${vars.shippingStreet}<br>${vars.shippingZip} ${vars.shippingCity}</p>`;
+    return `${vars.shippingStreet}, ${vars.shippingZip || ''} ${vars.shippingCity || ''}`.trim();
   }
   if (vars.shippingMethod === 'ppl_parcelshop' && vars.pplName) {
-    return `<p style="margin:0;font-size:12px;letter-spacing:0.04em;text-transform:uppercase;color:#666666;font-family:${FONT_STACK};">Výdejní místo (PPL ParcelShop)</p>
-      <p style="margin:4px 0 0 0;font-size:13px;color:#000000;font-family:${FONT_STACK};">${vars.pplName}</p>`;
+    return `PPL ParcelShop – ${vars.pplName}`;
   }
-  return '';
+  return vars.zasilkovnaName || 'Zásilkovna Praha 1 — Centrum';
 }
 
-function testBanner() {
-  return infoBox(`<p style="margin:0;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;text-align:center;font-family:${FONT_STACK};">Testovací e-mail z administrace</p>`);
+function getCarrierName(vars: EmailVars): string {
+  if (vars.shippingMethod?.startsWith('ppl')) return 'PPL';
+  return 'Zásilkovna';
 }
 
-function contentFor(type: EmailType, vars: EmailVars): { subject: string; inner: string; marketing: boolean } {
-  const name = vars.customerName || 'zákazníku';
+function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplateParams {
+  const name = vars.customerName || 'Jan Novák';
   const items = vars.items?.length ? vars.items : SAMPLE_ITEMS;
   const order = vars.orderNumber || 'UFO26001';
-  const total = (vars.totalPrice ?? 1650).toLocaleString('cs-CZ');
-  const promo = vars.promoCode || 'UFO10JAN';
-  const promoLabel = vars.promoLabel || 'Sleva 10 % na další nákup';
+  const totalRaw = vars.totalPrice ?? 1650;
+  const total = totalRaw.toLocaleString('cs-CZ');
+  const promo = vars.promoCode || 'UFO10';
+  const shippingLocation = getShippingLocation(vars);
+  const carrierName = getCarrierName(vars);
+  const totalQuantity = items.reduce((acc, i) => acc + (i.quantity || 1), 0);
+
+  const discountAmount = Math.round(totalRaw * 0.1).toLocaleString('cs-CZ');
+  const finalTotal = Math.max(0, totalRaw - Math.round(totalRaw * 0.1)).toLocaleString('cs-CZ');
 
   switch (type) {
     case 'ORDER_CONFIRMATION':
       return {
-        subject: `Potvrzení objednávky ${order} — UFO Sport`,
-        marketing: false,
-        inner: `
-          ${kicker('Objednávka')}
-          ${heading('Děkujeme za objednávku')}
-          ${bodyText('Obdrželi jsme vaši objednávku a brzy ji zpracujeme. Nyní prosím dokončete platbu, abychom mohli zásilku expedovat.')}
-          ${infoBox(`
-            <p style="margin:0 0 4px 0;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#666666;font-family:${FONT_STACK};">Číslo objednávky</p>
-            <p style="margin:0;font-size:16px;font-weight:700;letter-spacing:0.04em;color:#000000;font-family:${FONT_STACK};">${order}</p>
-          `)}
-          ${kicker('Vaše položky')}
-          ${itemsTable(items)}
-          ${shippingHtml(vars) ? infoBox(shippingHtml(vars)) : ''}
-          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:0 0 24px 0;border-top:1px solid #000000;border-bottom:1px solid #000000;">
-            <tr>
-              <td style="padding:16px 0;">
-                <p style="margin:0;font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;font-family:${FONT_STACK};">Celkem</p>
-              </td>
-              <td style="padding:16px 0;text-align:right;">
-                <p style="margin:0;font-size:16px;font-weight:700;font-family:${FONT_STACK};">${total} Kč</p>
-              </td>
-            </tr>
+        subject: `Děkujeme za objednávku ${order}`,
+        preheader: 'Obdrželi jsme vaši objednávku. Nyní dokončete platbu.',
+        header2Title: 'Děkujeme za objednávku',
+        header2Subtitle:
+          'Obdrželi jsme vaši objednávku a brzy ji zpracujeme. Nyní prosím dokončete platbu, abychom mohli zásilku expedovat.',
+        heroImage: {
+          src: 'https://placehold.co/600x600/f2f2f2/000000.png?text=Hlavn%C3%AD%20obr%C3%A1zek%20600x600',
+          height: 600,
+          alt: 'Hlavní obrázek 600x600',
+        },
+        infoHtml: `
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Číslo objednávky</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${order}</td></tr>
+            ${items
+              .map(
+                (item) =>
+                  `<tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">${item.name}${item.size ? ` · ${item.size}` : ''} · ${item.quantity}×</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${item.price.toLocaleString('cs-CZ')} Kč</td></tr>`
+              )
+              .join('')}
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Místo vyzvednutí</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${shippingLocation}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Celkem</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${total} Kč</td></tr>
           </table>
-          <div style="text-align:center;margin:0 0 24px 0;">${emailButton(`${WEBSITE_URL}/sledovani-objednavky`, 'Sledovat objednávku')}</div>
-          ${mutedText('Máte otázky? Napište na <a href="mailto:info@ufosport.cz" style="color:#000000;">info@ufosport.cz</a>.')}
         `,
+        actionText: 'Platbu dokončíte v detailu objednávky.',
+        actionButton: {
+          label: 'Sledovat objednávku',
+          href: `${WEBSITE_URL}/objednavka/${order}`,
+        },
+        marketing: false,
       };
 
     case 'PAYMENT_SUCCESS':
       return {
-        subject: `Platba přijata — ${order} — UFO Sport`,
-        marketing: false,
-        inner: `
-          ${kicker('Platba')}
-          ${heading('Platba přijata')}
-          ${bodyText(`Děkujeme, ${name}. Vaše platba byla úspěšně zpracována.`)}
-          ${infoBox(`
-            <p style="margin:0 0 4px 0;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#666666;font-family:${FONT_STACK};">Číslo objednávky</p>
-            <p style="margin:0 0 16px 0;font-size:16px;font-weight:700;font-family:${FONT_STACK};">${order}</p>
-            <p style="margin:0 0 4px 0;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#666666;font-family:${FONT_STACK};">Celková částka</p>
-            <p style="margin:0;font-size:22px;font-weight:700;font-family:${FONT_STACK};">${total} Kč</p>
-          `)}
-          ${kicker('Souhrn objednávky')}
-          ${itemsTable(items)}
-          ${bodyText('Vaši objednávku nyní připravujeme k odeslání. Jakmile ji předáme dopravci, dáme vám vědět.')}
-          <div style="text-align:center;">${emailButton(`${WEBSITE_URL}/sledovani-objednavky`, 'Sledovat objednávku')}</div>
+        subject: `Platba za objednávku ${order} byla přijata`,
+        preheader: 'Vaši platbu jsme úspěšně přijali.',
+        header2Title: 'Platba přijata',
+        header2Subtitle: 'Děkujeme, vaši platbu jsme úspěšně přijali. Zásilku brzy připravíme k odeslání.',
+        heroImage: {
+          src: 'https://placehold.co/600x600/f2f2f2/000000.png?text=Hlavn%C3%AD%20obr%C3%A1zek%20600x600',
+          height: 600,
+          alt: 'Hlavní obrázek 600x600',
+        },
+        infoHtml: `
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Číslo objednávky</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${order}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Datum platby</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${vars.paymentDate || '5. 10. 2026'}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Způsob platby</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">Platební karta</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Místo vyzvednutí</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${shippingLocation}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Zaplaceno</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${total} Kč</td></tr>
+          </table>
         `,
+        actionText: 'Stav objednávky můžete kdykoli sledovat online.',
+        actionButton: {
+          label: 'Sledovat objednávku',
+          href: `${WEBSITE_URL}/objednavka/${order}`,
+        },
+        marketing: false,
       };
 
     case 'SHIPPING_NOTIFICATION':
       return {
-        subject: `Objednávka ${order} byla odeslána — UFO Sport`,
-        marketing: false,
-        inner: `
-          ${kicker('Doprava')}
-          ${heading('Vaše objednávka je na cestě')}
-          ${bodyText(`Objednávka <strong>${order}</strong> byla odeslána.`)}
-          ${vars.trackingNumber ? infoBox(`
-            <p style="margin:0 0 4px 0;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#666666;font-family:${FONT_STACK};">Sledovací číslo</p>
-            <p style="margin:0;font-size:16px;font-weight:700;letter-spacing:0.06em;font-family:${FONT_STACK};">${vars.trackingNumber}</p>
-          `) : ''}
-          ${shippingHtml(vars) ? infoBox(`${shippingHtml(vars)}<p style="margin:12px 0 0 0;font-size:13px;line-height:20px;color:#000000;font-family:${FONT_STACK};">Jakmile bude balík připraven k vyzvednutí, obdržíte SMS nebo e-mail od dopravce.</p>`) : ''}
-          ${infoBox(`<p style="margin:0;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;text-align:center;font-family:${FONT_STACK};">Očekávaná doba doručení · 1–3 pracovní dny</p>`)}
-          <div style="text-align:center;margin-bottom:16px;">${emailButton(`${WEBSITE_URL}/sledovani-objednavky`, 'Sledovat zásilku')}</div>
-          ${mutedText('Děkujeme za nákup u UFO Sport.')}
+        subject: `Vaše zásilka ${order} je na cestě`,
+        preheader: 'Objednávka byla předána dopravci.',
+        header2Title: 'Zásilka na cestě',
+        header2Subtitle: `Vaše objednávka ${order} byla předána dopravci a je na cestě k vám.`,
+        heroImage: {
+          src: 'https://placehold.co/600x600/f2f2f2/000000.png?text=Hlavn%C3%AD%20obr%C3%A1zek%20600x600',
+          height: 600,
+          alt: 'Hlavní obrázek 600x600',
+        },
+        infoHtml: `
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Číslo objednávky</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${order}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Číslo zásilky</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${vars.trackingNumber || 'Z 123 456 7890'}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Dopravce</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${carrierName}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Místo vyzvednutí</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${shippingLocation}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Počet kusů</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${totalQuantity}</td></tr>
+          </table>
         `,
+        actionText: 'Průběh doručení uvidíte ve sledování zásilky.',
+        actionButton: {
+          label: 'Sledovat zásilku',
+          href: vars.trackingNumber
+            ? `https://tracking.packeta.com/cs/?id=${vars.trackingNumber}`
+            : `${WEBSITE_URL}/sledovani-objednavky`,
+        },
+        marketing: false,
       };
 
     case 'NEWSLETTER_WELCOME':
       return {
-        subject: 'Vítejte v UFO Sport',
-        marketing: true,
-        inner: `
-          ${kicker('Newsletter')}
-          ${heading('Vítejte v UFO Sport')}
-          ${bodyText('Děkujeme za přihlášení k odběru novinek. Od teď budete jako první vědět o všem novém.')}
-          ${infoBox(`
-            <p style="margin:0 0 12px 0;font-size:13px;letter-spacing:0.04em;text-transform:uppercase;font-family:${FONT_STACK};">Novinky v kolekci</p>
-            <p style="margin:0 0 16px 0;font-size:13px;color:#666666;font-family:${FONT_STACK};">Budete první, kdo uvidí nové produkty.</p>
-            <p style="margin:0 0 12px 0;font-size:13px;letter-spacing:0.04em;text-transform:uppercase;font-family:${FONT_STACK};">Exkluzivní slevy</p>
-            <p style="margin:0 0 16px 0;font-size:13px;color:#666666;font-family:${FONT_STACK};">Speciální nabídky jen pro odběratele.</p>
-            <p style="margin:0 0 12px 0;font-size:13px;letter-spacing:0.04em;text-transform:uppercase;font-family:${FONT_STACK};">Limitované edice</p>
-            <p style="margin:0;font-size:13px;color:#666666;font-family:${FONT_STACK};">Přístup k limitovaným kolekcím.</p>
-          `)}
-          <div style="text-align:center;margin-bottom:16px;">${emailButton(WEBSITE_URL, 'Prozkoumat kolekci')}</div>
-          ${mutedText('Pokud jste se k odběru nepřihlásili vy, můžete tento e-mail ignorovat.')}
+        subject: 'Novinky pro vás',
+        preheader: 'Děkujeme za přihlášení k odběru našeho newsletteru.',
+        header2Title: 'Novinky pro vás',
+        header2Subtitle: 'Děkujeme za přihlášení k odběru našeho newsletteru.',
+        heroImage: {
+          src: 'https://placehold.co/600x750/f2f2f2/000000.png?text=Hlavn%C3%AD%20obr%C3%A1zek%20600x750',
+          height: 750,
+          alt: 'Hlavní obrázek 600x750',
+        },
+        infoHtml: `
+          <p style="margin:0 0 14px;">Jako první se dozvíte novinky ze světa UFO SPORT, exkluzivní nabídky a nejnovější kolekce. Vytvořte si účet a získejte:</p>
+          <ul style="margin:0;padding:0 0 0 24px;list-style:disc;">
+            <li style="margin:0;">Předčasný přístup k výprodejům</li>
+            <li style="margin:0;">Rychlý nákup s uloženými údaji</li>
+            <li style="margin:0;">Přehled objednávek a vrácení</li>
+            <li style="margin:0;">Uložené oblíbené položky</li>
+            <li style="margin:0;">Program přeprodeje UFO SPORT</li>
+          </ul>
         `,
+        actionText: 'Vytvořte si účet a využívejte všechny výhody.',
+        actionButton: {
+          label: 'Vytvořit účet',
+          href: `${WEBSITE_URL}/registrace`,
+        },
+        marketing: true,
       };
 
     case 'PASSWORD_RESET':
       return {
-        subject: 'Obnovení hesla — UFO Sport',
-        marketing: false,
-        inner: `
-          ${kicker('Účet')}
-          ${heading('Obnovení hesla')}
-          ${bodyText('Obdrželi jsme žádost o obnovení vašeho hesla. Klikněte na tlačítko níže pro nastavení nového hesla.')}
-          <div style="text-align:center;margin:0 0 24px 0;">${emailButton(vars.resetLink || WEBSITE_URL, 'Obnovit heslo')}</div>
-          ${infoBox(`<p style="margin:0 0 8px 0;font-size:13px;font-weight:500;font-family:${FONT_STACK};">Nežádali jste o změnu hesla?</p>
-            <p style="margin:0;font-size:13px;line-height:20px;color:#666666;font-family:${FONT_STACK};">Pokud jste o obnovení hesla nežádali, tento e-mail prosím ignorujte. Vaše heslo zůstane nezměněno. Odkaz je platný 1 hodinu.</p>`)}
+        subject: 'Obnovení hesla',
+        preheader: 'Nastavte si nové heslo ke svému účtu.',
+        header2Title: 'Obnovení hesla',
+        header2Subtitle: 'Obdrželi jsme žádost o obnovení hesla k vašemu účtu.',
+        heroImage: {
+          src: 'https://placehold.co/600x600/f2f2f2/000000.png?text=Hlavn%C3%AD%20obr%C3%A1zek%20600x600',
+          height: 600,
+          alt: 'Hlavní obrázek 600x600',
+        },
+        infoHtml: `
+          <p style="margin:0 0 14px;">Klikněte na tlačítko níže a nastavte si nové heslo. Odkaz je platný 1 hodinu.</p>
+          <p style="margin:0 0 0px;">Pokud jste o obnovení hesla nežádali, tento e-mail ignorujte. Vaše heslo zůstane beze změny.</p>
         `,
+        actionText: 'Z bezpečnostních důvodů odkaz nikomu nepřeposílejte.',
+        actionButton: {
+          label: 'Nastavit nové heslo',
+          href: vars.resetLink || `${WEBSITE_URL}/obnovit-heslo`,
+        },
+        marketing: false,
+      };
+
+    case 'ADMIN_ORDER_NOTIFICATION':
+      return {
+        subject: `[UFO SPORT] Nová objednávka ${order}`,
+        preheader: 'Zákazník vytvořil novou objednávku.',
+        header2Title: 'Nová objednávka',
+        header2Subtitle: `Zákazník právě vytvořil objednávku ${order}.`,
+        heroImage: {
+          src: 'https://placehold.co/600x600/f2f2f2/000000.png?text=Hlavn%C3%AD%20obr%C3%A1zek%20600x600',
+          height: 600,
+          alt: 'Hlavní obrázek 600x600',
+        },
+        infoHtml: `
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Zákazník</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${name}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">E-mail</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${vars.customerEmail || 'jan.novak@example.cz'}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Stav platby</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">Čeká na platbu</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Doprava</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${carrierName}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Celkem</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${total} Kč</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Vytvořeno</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${vars.paymentDate || '5. 10. 2026, 18:04'}</td></tr>
+          </table>
+        `,
+        actionText: 'Objednávku zpracujte v administraci.',
+        actionButton: {
+          label: 'Otevřít v administraci',
+          href: `${WEBSITE_URL}/admin/objednavky/${order}`,
+        },
+        marketing: false,
       };
 
     case 'ABANDONED_CART':
       return {
-        subject: 'Zapomněli jste něco v košíku? — UFO Sport',
-        marketing: true,
-        inner: `
-          ${kicker('Košík')}
-          ${heading('Zapomněli jste něco v košíku?')}
-          ${bodyText('Vaše vybrané kousky na vás stále čekají. Dokončete objednávku dříve, než se vyprodají.')}
-          ${itemsTable(items)}
-          <div style="text-align:center;margin:0 0 16px 0;">${emailButton(`${WEBSITE_URL}/kosik`, 'Vrátit se do košíku')}</div>
-          ${mutedText('Pokud jste již objednávku dokončili, ignorujte prosím tento e-mail.')}
+        subject: 'Zapomněli jste něco v košíku?',
+        preheader: 'Vaše položky na vás stále čekají.',
+        header2Title: 'Zapomněli jste něco v košíku?',
+        header2Subtitle: 'Vaše položky na vás stále čekají. Dokončete nákup, dokud je vaše velikost skladem.',
+        heroImage: {
+          src: 'https://placehold.co/600x750/f2f2f2/000000.png?text=Hlavn%C3%AD%20obr%C3%A1zek%20600x750',
+          height: 750,
+          alt: 'Hlavní obrázek 600x750',
+        },
+        infoHtml: `
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
+            ${items
+              .map(
+                (item) =>
+                  `<tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">${item.name}${item.size ? ` · ${item.size}` : ''} · ${item.quantity}×</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${item.price.toLocaleString('cs-CZ')} Kč</td></tr>`
+              )
+              .join('')}
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Celkem</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${total} Kč</td></tr>
+          </table>
         `,
+        actionText: 'Váš košík je uložený a čeká na dokončení.',
+        actionButton: {
+          label: 'Vrátit se do košíku',
+          href: `${WEBSITE_URL}/kosik`,
+        },
+        marketing: true,
       };
 
     case 'CART_REMINDER_DISCOUNT':
       return {
-        subject: 'Váš košík + sleva 10 % — UFO Sport',
-        marketing: true,
-        inner: `
-          ${kicker('Košík')}
-          ${heading('Ještě to stihnete')}
-          ${bodyText('Položky v košíku na vás pořád čekají. Přidáváme osobní slevový kód — při placení ho zadejte v pokladně.')}
-          ${promoBlock(promo, promoLabel, vars.promoValidUntil)}
-          ${itemsTable(items)}
-          <div style="text-align:center;">${emailButton(`${WEBSITE_URL}/kosik`, 'Dokončit nákup')}</div>
+        subject: 'Sleva 10 % na váš košík',
+        preheader: 'Připravili jsme pro vás slevu na položky v košíku.',
+        header2Title: 'Sleva na váš košík',
+        header2Subtitle: 'Připravili jsme pro vás 10 % slevu na položky ve vašem košíku.',
+        heroImage: {
+          src: 'https://placehold.co/600x600/f2f2f2/000000.png?text=Hlavn%C3%AD%20obr%C3%A1zek%20600x600',
+          height: 600,
+          alt: 'Hlavní obrázek 600x600',
+        },
+        infoHtml: `
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Slevový kód</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${promo}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Původní cena</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${total} Kč</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Sleva 10 %</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">−${discountAmount} Kč</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">K úhradě</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${finalTotal} Kč</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Platnost kódu</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${vars.promoValidUntil || '48 hodin'}</td></tr>
+          </table>
         `,
+        actionText: 'Kód uplatníte v košíku před dokončením objednávky.',
+        actionButton: {
+          label: 'Uplatnit slevu',
+          href: `${WEBSITE_URL}/kosik?kod=${promo}`,
+        },
+        marketing: true,
       };
 
     case 'POST_PURCHASE_DISCOUNT':
       return {
-        subject: 'Děkujeme za nákup — sleva na další kousek',
-        marketing: true,
-        inner: `
-          ${kicker('Poděkování')}
-          ${heading('Děkujeme, že jste s námi')}
-          ${bodyText(`Ahoj ${name}, doufáme, že se vám objednávka ${order} líbí. Na další nákup máte osobní slevový kód.`)}
-          ${promoBlock(promo, promoLabel, vars.promoValidUntil)}
-          <div style="text-align:center;">${emailButton(`${WEBSITE_URL}/produkty`, 'Nakoupit se slevou')}</div>
+        subject: 'Děkujeme za nákup – máme pro vás slevu',
+        preheader: 'Sleva 15 % na vaši další objednávku.',
+        header2Title: 'Děkujeme za nákup',
+        header2Subtitle: 'Jako poděkování pro vás máme slevu na další objednávku.',
+        heroImage: {
+          src: 'https://placehold.co/600x750/f2f2f2/000000.png?text=Hlavn%C3%AD%20obr%C3%A1zek%20600x750',
+          height: 750,
+          alt: 'Hlavní obrázek 600x750',
+        },
+        infoHtml: `
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Slevový kód</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${promo}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Sleva</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">15 % na další nákup</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Platnost</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">30 dní</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Použití</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">Jednorázově</td></tr>
+          </table>
         `,
+        actionText: 'Kód uplatníte v košíku při příštím nákupu.',
+        actionButton: {
+          label: 'Nakupovat',
+          href: `${WEBSITE_URL}/produkty`,
+        },
+        marketing: true,
       };
 
     case 'REVIEW_REQUEST':
       return {
-        subject: 'Jak se vám líbí váš nákup? — UFO Sport',
-        marketing: true,
-        inner: `
-          ${kicker('Zpětná vazba')}
-          ${heading('Jak sedí vaše UFO?')}
-          ${bodyText(`Objednávka ${order} by už měla být u vás. Budeme rádi za krátkou zpětnou vazbu — pomáhá nám dělat oblečení ještě lépe.`)}
-          ${itemsTable(items)}
-          <div style="text-align:center;margin:0 0 16px 0;">${emailButton(`${WEBSITE_URL}/faq`, 'Napsat nám')}</div>
-          ${mutedText('Stačí odpovědět na tento e-mail nebo napsat na info@ufosport.cz.')}
+        subject: 'Jak se vám líbí vaše UFO SPORT produkty?',
+        preheader: 'Podělte se o svůj názor na nákup.',
+        header2Title: 'Jak se vám líbí?',
+        header2Subtitle: 'Vaše zásilka už by měla být u vás. Podělte se o svůj názor na nákup.',
+        heroImage: {
+          src: 'https://placehold.co/600x600/f2f2f2/000000.png?text=Hlavn%C3%AD%20obr%C3%A1zek%20600x600',
+          height: 600,
+          alt: 'Hlavní obrázek 600x600',
+        },
+        infoHtml: `
+          <p style="margin:0 0 14px;">Vaše recenze pomáhá ostatním vybrat správnou velikost i produkt. Zabere to jen chvilku.</p>
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
+            ${items
+              .map(
+                (item) =>
+                  `<tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">${item.name}</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${item.size || 'UNI'}</td></tr>`
+              )
+              .join('')}
+          </table>
         `,
+        actionText: 'Napište nám, co si o produktech myslíte.',
+        actionButton: {
+          label: 'Napsat recenzi',
+          href: `${WEBSITE_URL}/recenze/${order}`,
+        },
+        marketing: true,
       };
 
     case 'WINBACK':
       return {
-        subject: 'Chybíte nám — sleva 15 % uvnitř',
-        marketing: true,
-        inner: `
-          ${kicker('Zpět ke značce')}
-          ${heading('Nová kolekce na vás čeká')}
-          ${bodyText(`Ahoj ${name}, je to už chvíle, co jste u nás nakoupili. Připravili jsme pro vás osobní slevu na cokoliv z aktuální kolekce.`)}
-          ${promoBlock(promo, promoLabel, vars.promoValidUntil)}
-          <div style="text-align:center;">${emailButton(`${WEBSITE_URL}/produkty`, 'Prohlédnout kolekci')}</div>
+        subject: 'Dlouho jsme se neviděli',
+        preheader: 'Podívejte se, co je nového ve světě UFO SPORT.',
+        header2Title: 'Dlouho jsme se neviděli',
+        header2Subtitle: 'Podívejte se, co je nového ve světě UFO SPORT.',
+        heroImage: {
+          src: 'https://placehold.co/600x750/f2f2f2/000000.png?text=Hlavn%C3%AD%20obr%C3%A1zek%20600x750',
+          height: 750,
+          alt: 'Hlavní obrázek 600x750',
+        },
+        infoHtml: `
+          <p style="margin:0 0 14px;">Od vaší poslední návštěvy jsme přidali nové produkty a kolekce. Vyberte si své oblíbené kousky dřív, než se vyprodají.</p>
+          <p style="margin:0 0 0px;">Těšíme se na vás.</p>
         `,
-      };
-
-    case 'NEWSLETTER_COLLECTION':
-      return {
-        subject: 'Kolekce UFO Sport — co nosit teď',
+        actionText: 'Objevte nejnovější kolekci UFO SPORT.',
+        actionButton: {
+          label: 'Objevit novinky',
+          href: `${WEBSITE_URL}/novinky`,
+        },
         marketing: true,
-        inner: `
-          ${kicker('Kolekce')}
-          ${heading('Oblečení pro pohyb i město')}
-          ${bodyText('UFO Sport stavíme jako čistý, funkční šatník. Oversized střihy, precizní materiály, nic navíc.')}
-          ${infoBox(`
-            <p style="margin:0 0 8px 0;font-size:13px;letter-spacing:0.04em;text-transform:uppercase;font-family:${FONT_STACK};">Trika a vrstvy</p>
-            <p style="margin:0 0 16px 0;font-size:13px;color:#666666;font-family:${FONT_STACK};">Základ, který obstojí v tréninku i ve městě.</p>
-            <p style="margin:0 0 8px 0;font-size:13px;letter-spacing:0.04em;text-transform:uppercase;font-family:${FONT_STACK};">Doplňky</p>
-            <p style="margin:0;font-size:13px;color:#666666;font-family:${FONT_STACK};">Ponožky a detaily, které drží celek pohromadě.</p>
-          `)}
-          <div style="text-align:center;">${emailButton(`${WEBSITE_URL}/produkty`, 'Zobrazit produkty')}</div>
-        `,
-      };
-
-    case 'NEWSLETTER_FIRST_ORDER':
-      return {
-        subject: 'Sleva 10 % na první nákup — UFO Sport',
-        marketing: true,
-        inner: `
-          ${kicker('První nákup')}
-          ${heading('Začněte se slevou')}
-          ${bodyText('Ještě jste u nás nenakoupili — tady je osobní kód na první objednávku. Platí na celý sortiment.')}
-          ${promoBlock(promo, promoLabel, vars.promoValidUntil)}
-          <div style="text-align:center;">${emailButton(`${WEBSITE_URL}/produkty`, 'Vybrat kousek')}</div>
-        `,
       };
 
     case 'ACCOUNT_WELCOME':
       return {
-        subject: 'Váš účet UFO Sport je připraven',
-        marketing: false,
-        inner: `
-          ${kicker('Účet')}
-          ${heading('Vítejte, účet je aktivní')}
-          ${bodyText(`Ahoj ${name}, registrace proběhla v pořádku. V účtu najdete objednávky, uložené produkty a správu údajů.`)}
-          <div style="text-align:center;margin:0 0 16px 0;">${emailButton(`${WEBSITE_URL}/ucet`, 'Přejít do účtu')}</div>
-          ${mutedText('Nakupovat můžete i bez přihlášení — účet jen usnadní příště.')}
+        subject: 'Vítejte v UFO SPORT',
+        preheader: 'Váš zákaznický účet byl úspěšně vytvořen.',
+        header2Title: 'Vítejte v účtu',
+        header2Subtitle: 'Váš zákaznický účet UFO SPORT byl úspěšně vytvořen.',
+        heroImage: {
+          src: 'https://placehold.co/600x600/f2f2f2/000000.png?text=Hlavn%C3%AD%20obr%C3%A1zek%20600x600',
+          height: 600,
+          alt: 'Hlavní obrázek 600x600',
+        },
+        infoHtml: `
+          <p style="margin:0 0 14px;">Vítejte v UFO SPORT. Ve svém účtu můžete sledovat objednávky, ukládat oblíbené kousky a spravovat své doručovací údaje.</p>
+          <ul style="margin:0;padding:0 0 0 24px;list-style:disc;">
+            <li style="margin:0;">Přehled objednávek a faktur</li>
+            <li style="margin:0;">Rychlejší objednávání s uloženou adresou</li>
+            <li style="margin:0;">Historie všech vašich nákupů</li>
+          </ul>
         `,
+        actionText: 'Přejděte do svého zákaznického účtu.',
+        actionButton: {
+          label: 'Přejít do účtu',
+          href: `${WEBSITE_URL}/muj-ucet`,
+        },
+        marketing: false,
       };
 
     case 'PAYMENT_REMINDER':
       return {
-        subject: `Objednávka ${order} čeká na platbu — UFO Sport`,
-        marketing: false,
-        inner: `
-          ${kicker('Platba')}
-          ${heading('Objednávka čeká na platbu')}
-          ${bodyText(`Ahoj ${name}, objednávka ${order} je připravená — stačí dokončit platbu, abychom ji mohli expedovat.`)}
-          ${infoBox(`
-            <p style="margin:0 0 4px 0;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#666666;font-family:${FONT_STACK};">Číslo objednávky</p>
-            <p style="margin:0 0 16px 0;font-size:16px;font-weight:700;font-family:${HEADING_STACK};">${order}</p>
-            <p style="margin:0 0 4px 0;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#666666;font-family:${FONT_STACK};">Částka</p>
-            <p style="margin:0;font-size:22px;font-weight:700;font-family:${HEADING_STACK};">${total} Kč</p>
-          `)}
-          ${itemsTable(items)}
-          <div style="text-align:center;margin:0 0 16px 0;">${emailButton(`${WEBSITE_URL}/sledovani-objednavky`, 'Dokončit platbu')}</div>
-          ${mutedText('Pokud jste už zaplatili, tento e-mail ignorujte.')}
+        subject: `Připomínka platby pro objednávku ${order}`,
+        preheader: 'Dokončete platbu své objednávky.',
+        header2Title: 'Připomínka platby',
+        header2Subtitle: `Objednávka ${order} stále čeká na úhradu. Jakmile platbu přijmeme, zásilku obratem vyexpedujeme.`,
+        heroImage: {
+          src: 'https://placehold.co/600x600/f2f2f2/000000.png?text=Hlavn%C3%AD%20obr%C3%A1zek%20600x600',
+          height: 600,
+          alt: 'Hlavní obrázek 600x600',
+        },
+        infoHtml: `
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Číslo objednávky</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${order}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Částka k úhradě</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${total} Kč</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Způsob platby</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">Platební karta / Převod</td></tr>
+          </table>
         `,
+        actionText: 'Platbu dokončíte online v detailu objednávky.',
+        actionButton: {
+          label: 'Zaplatit objednávku',
+          href: `${WEBSITE_URL}/objednavka/${order}`,
+        },
+        marketing: false,
       };
 
     case 'CROSS_SELL':
       return {
-        subject: 'Doplňte look — UFO Sport',
-        marketing: true,
-        inner: `
-          ${kicker('Kolekce')}
-          ${heading('Další kousky k vašemu looku')}
-          ${bodyText(`Ahoj ${name}, díky za nákup ${order}. Pokud chcete look uzavřít, mrkněte na zbytek kolekce — trika, ponožky a vrstvy, které drží celek.`)}
-          <div style="text-align:center;">${emailButton(`${WEBSITE_URL}/produkty`, 'Prohlédnout produkty')}</div>
+        subject: 'Doplňte svůj look — UFO SPORT',
+        preheader: 'Vybrali jsme pro vás kousky, které ladí s vaším stylem.',
+        header2Title: 'Doplňte svůj look',
+        header2Subtitle: `Kousky, které skvěle doplní vaši nedávnou objednávku ${order}.`,
+        heroImage: {
+          src: 'https://placehold.co/600x750/f2f2f2/000000.png?text=Hlavn%C3%AD%20obr%C3%A1zek%20600x750',
+          height: 750,
+          alt: 'Hlavní obrázek 600x750',
+        },
+        infoHtml: `
+          <p style="margin:0 0 14px;">Díky za nákup ${order}. Pokud chcete outfit dotáhnout, mrkněte na zbytek kolekce — trika, ponožky a vrstvy, které drží celek pohromadě.</p>
         `,
+        actionText: 'Prohlédněte si doporučené kousky.',
+        actionButton: {
+          label: 'Prohlédnout produkty',
+          href: `${WEBSITE_URL}/produkty`,
+        },
+        marketing: true,
       };
 
-    case 'ADMIN_ORDER_NOTIFICATION': {
-      let shippingLabel = '—';
-      if (vars.shippingMethod === 'zasilkovna') shippingLabel = `Zásilkovna${vars.zasilkovnaName ? ` – ${vars.zasilkovnaName}` : ''}`;
-      else if (vars.shippingMethod === 'ppl_address') shippingLabel = `PPL – ${vars.shippingStreet}, ${vars.shippingZip} ${vars.shippingCity}`;
-      else if (vars.shippingMethod === 'ppl_parcelshop') shippingLabel = `PPL ParcelShop – ${vars.pplName}`;
+    case 'NEWSLETTER_COLLECTION':
       return {
-        subject: `[UFO Sport] Nová objednávka ${order} – ${total} Kč`,
-        marketing: false,
-        inner: `
-          ${kicker('Admin')}
-          ${heading(`Nová objednávka ${order}`)}
-          ${infoBox(`
-            <p style="margin:0 0 4px 0;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#666666;font-family:${FONT_STACK};">Zákazník</p>
-            <p style="margin:0 0 4px 0;font-size:14px;font-weight:700;font-family:${FONT_STACK};">${name}</p>
-            <p style="margin:0 0 4px 0;font-size:13px;font-family:${FONT_STACK};">${vars.customerEmail || ''}</p>
-            ${vars.customerPhone ? `<p style="margin:0;font-size:13px;font-family:${FONT_STACK};">${vars.customerPhone}</p>` : ''}
-          `)}
-          ${kicker('Položky')}
-          ${itemsTable(items)}
-          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:0 0 24px 0;border-top:1px solid #000000;border-bottom:1px solid #000000;">
-            <tr>
-              <td style="padding:16px 0;"><p style="margin:0;font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;font-family:${FONT_STACK};">Celkem</p></td>
-              <td style="padding:16px 0;text-align:right;"><p style="margin:0;font-size:16px;font-weight:700;font-family:${FONT_STACK};">${total} Kč</p></td>
-            </tr>
-          </table>
-          ${infoBox(`<p style="margin:0 0 4px 0;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#666666;font-family:${FONT_STACK};">Doprava</p>
-            <p style="margin:0;font-size:13px;font-family:${FONT_STACK};">${shippingLabel}</p>`)}
-          <div style="text-align:center;">${emailButton(`${WEBSITE_URL}/admin/objednavky`, 'Zobrazit v adminu')}</div>
+        subject: 'Nová kolekce UFO SPORT',
+        preheader: 'Prozkoumejte nejnovější kousky z naší dílny.',
+        header2Title: 'Představení kolekce',
+        header2Subtitle: 'Novinky v kolekci a svět UFO SPORT.',
+        heroImage: {
+          src: 'https://placehold.co/600x750/f2f2f2/000000.png?text=Hlavn%C3%AD%20obr%C3%A1zek%20600x750',
+          height: 750,
+          alt: 'Hlavní obrázek 600x750',
+        },
+        infoHtml: `
+          <p style="margin:0 0 14px;">Přinášíme nové střihy, materiály a funkční detaily. Prohlédněte si celou novou řadu dřív, než se vyprodá.</p>
         `,
+        actionText: 'Objevte novou kolekci na e-shopu.',
+        actionButton: {
+          label: 'Prozkoumat kolekci',
+          href: `${WEBSITE_URL}/kolekce`,
+        },
+        marketing: true,
       };
-    }
+
+    case 'NEWSLETTER_FIRST_ORDER':
+      return {
+        subject: 'Sleva na první nákup — UFO SPORT',
+        preheader: 'Osobní slevový kód na vaši první objednávku.',
+        header2Title: 'Sleva na první nákup',
+        header2Subtitle: 'Připravili jsme pro vás slevový kód na první objednávku.',
+        heroImage: {
+          src: 'https://placehold.co/600x750/f2f2f2/000000.png?text=Hlavn%C3%AD%20obr%C3%A1zek%20600x750',
+          height: 750,
+          alt: 'Hlavní obrázek 600x750',
+        },
+        infoHtml: `
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Slevový kód</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${promo}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Sleva</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">10 % na první nákup</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Platnost</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">14 dní</td></tr>
+          </table>
+        `,
+        actionText: 'Uplatněte svůj slevový kód v košíku.',
+        actionButton: {
+          label: 'Využít slevu',
+          href: `${WEBSITE_URL}/produkty?kod=${promo}`,
+        },
+        marketing: true,
+      };
   }
 }
 
 export function renderEmail(type: EmailType, vars: EmailVars = {}, unsubscribeUrl?: string) {
-  const { subject, inner, marketing } = contentFor(type, vars);
-  const banner = vars.isTest ? testBanner() : '';
-  const html = emailWrapper(banner + inner, marketing ? unsubscribeUrl : undefined);
-  const finalSubject = vars.isTest ? `[TEST] ${subject}` : subject;
-  return { subject: finalSubject, html, marketing };
+  const params = buildTemplateParams(type, vars);
+  if (unsubscribeUrl) {
+    params.unsubscribeUrl = unsubscribeUrl;
+  }
+  const html = buildEmailHtml(params);
+  const finalSubject = vars.isTest ? `[TEST] ${params.subject}` : params.subject;
+  const isMarketing = EMAIL_CATALOG.find((e) => e.id === type)?.marketing ?? false;
+  return { subject: finalSubject, html, marketing: isMarketing };
 }
+
+// Export buildTemplateParams for direct usage or testing
+export { buildTemplateParams };
