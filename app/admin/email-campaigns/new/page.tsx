@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -17,7 +17,6 @@ export default function NewEmailCampaignPage() {
   const [previewLoading, setPreviewLoading] = useState(false);
 
   // Debounced preview update
-  import { useEffect } from 'react';
   useEffect(() => {
     const timer = setTimeout(async () => {
       if (!formData.content) return setPreviewHtml('');
