@@ -2,7 +2,9 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { EMAIL_CATALOG, type EmailType } from '@/lib/email-catalog';
+import type { EmailTemplateCustomization, LinkedProduct } from '@/lib/email-layout';
 import JourneySequencePanel from '@/components/admin/JourneySequencePanel';
+import ProductPickerModal, { type PickedProduct } from '@/components/admin/ProductPickerModal';
 
 type Tab = 'sablony' | 'odeslane' | 'cesty';
 type ViewMode = 'desktop' | 'mobile';
@@ -47,6 +49,15 @@ interface JourneyStat {
   _count: { _all: number };
 }
 
+interface DbEmailTemplate {
+  id: string;
+  type: string;
+  subject: string;
+  body: string;
+  variables: EmailTemplateCustomization | any;
+  isActive: boolean;
+}
+
 const TRIGGER_LABELS: Record<string, string> = {
   ORDER_PAID: 'Zaplacená objednávka',
   ORDER_CREATED: 'Nezaplacená objednávka',
@@ -56,6 +67,18 @@ const TRIGGER_LABELS: Record<string, string> = {
   ORDER_SHIPPED: 'Objednávka odeslána',
   WINBACK: 'Neaktivní zákazník',
 };
+
+const EMAIL_SECTIONS: { id: string; label: string; desc: string; isPhoto?: boolean }[] = [
+  { id: 'header1', label: '1. Horní logo', desc: 'UFO SPORT (výška 72 px)' },
+  { id: 'header2', label: '2. Nadpis a text', desc: 'Hlavní sdělení e-mailu (136 px)' },
+  { id: 'heroImage', label: '3. Hlavní fotka (Hero)', desc: 'Velký obrázek / produkt (600 px)', isPhoto: true },
+  { id: 'info', label: '4. Informační blok', desc: 'Položky objednávky, slevový kód, text' },
+  { id: 'photoGrid', label: '5. Mřížka produktů 2x2', desc: '4 fotky produktů vedle sebe', isPhoto: true },
+  { id: 'actionButton', label: '6. Tlačítko akce', desc: 'Černé tlačítko s výzvou k akci' },
+  { id: 'browseAll', label: '7. Tlačítko „Zobrazit vše“', desc: 'Odkaz do e-shopu na všechny produkty' },
+  { id: 'footerLinks', label: '8. Odkazy v patičce', desc: 'Kolekce, novinky, služby, kontakt' },
+  { id: 'footerSocial', label: '9. Sociální sítě a patička', desc: 'Ikony sítí, adresa a odhlášení' },
+];
 
 function catalogLabel(type: string) {
   return EMAIL_CATALOG.find((item) => item.id === type)?.label || type;
@@ -87,6 +110,8 @@ export default function EmailAdminPage() {
   const [selectedId, setSelectedId] = useState<EmailType>(EMAIL_CATALOG[0].id);
   const [viewMode, setViewMode] = useState<ViewMode>('desktop');
   const [previewLoading, setPreviewLoading] = useState(true);
+  const [previewNonce, setPreviewNonce] = useState(0);
+
   const [testEmail, setTestEmail] = useState('');
   const [sendingTest, setSendingTest] = useState(false);
   const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
@@ -106,7 +131,20 @@ export default function EmailAdminPage() {
   const [runningCron, setRunningCron] = useState(false);
   const [cronResult, setCronResult] = useState<string | null>(null);
 
-  const [templates, setTemplates] = useState<{ id: string; type: string; isActive: boolean }[]>([]);
+  const [templates, setTemplates] = useState<DbEmailTemplate[]>([]);
+
+  // Product Picker Modal State
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const [pickerTarget, setPickerTarget] = useState<'hero' | 'grid'>('hero');
+  const [pickerSlotIndex, setPickerSlotIndex] = useState<number | undefined>(undefined);
+  const [pickerTitle, setPickerTitle] = useState('');
+  const [pickerDescription, setPickerDescription] = useState('');
+  const [pickerMaxSelect, setPickerMaxSelect] = useState(1);
+
+  // Section manager panel state & feedback toast
+  const [showSectionManager, setShowSectionManager] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [undoSection, setUndoSection] = useState<string | null>(null);
 
   const selected = EMAIL_CATALOG.find((t) => t.id === selectedId)!;
   const selectedLog = logs.find((log) => log.id === selectedLogId) || null;
@@ -114,17 +152,29 @@ export default function EmailAdminPage() {
   const selectedTemplate = templates.find((t) => t.type === selectedId);
   const isTemplateActive = selectedTemplate ? selectedTemplate.isActive : true;
 
+  const currentCustomization: EmailTemplateCustomization = useMemo(() => {
+    return (selectedTemplate?.variables as EmailTemplateCustomization) || {};
+  }, [selectedTemplate]);
+
+  const hiddenSections = currentCustomization.hiddenSections || [];
+  const heroProduct = currentCustomization.heroProduct || null;
+  const gridProducts = currentCustomization.gridProducts || [];
+
   useEffect(() => {
     fetch('/api/admin/email-status')
       .then((r) => r.json())
       .then((d) => setServiceStatus(d))
       .catch(() => setServiceStatus({ configured: false, fromEmail: 'noreply@ufosport.cz' }));
 
+    loadTemplates();
+  }, []);
+
+  const loadTemplates = () => {
     fetch('/api/admin/email-templates')
       .then((r) => r.json())
       .then((d) => setTemplates(Array.isArray(d) ? d : []))
       .catch(console.error);
-  }, []);
+  };
 
   useEffect(() => {
     if (tab !== 'odeslane') return;
@@ -156,10 +206,30 @@ export default function EmailAdminPage() {
       .finally(() => setJourneysLoading(false));
   }, [tab]);
 
+  // Handle postMessages from iframe (Hover "+" and "X" buttons)
+  useEffect(() => {
+    const handleMessage = (e: MessageEvent) => {
+      if (!e.data || typeof e.data !== 'object') return;
+
+      if (e.data.type === 'DELETE_SECTION') {
+        const sectionId = e.data.sectionId;
+        if (sectionId) {
+          handleDeleteSection(sectionId);
+        }
+      } else if (e.data.type === 'OPEN_PRODUCT_PICKER') {
+        const { target, slotIndex } = e.data;
+        handleOpenProductPicker(target || 'hero', slotIndex);
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, [selectedId, selectedTemplate]);
+
   const previewSrc = useMemo(() => {
     if (tab === 'odeslane' && selectedLogId) return `/api/admin/email-preview?logId=${selectedLogId}`;
-    return `/api/admin/email-preview?type=${selectedId}`;
-  }, [tab, selectedLogId, selectedId]);
+    return `/api/admin/email-preview?type=${selectedId}&adminInteractive=1&_t=${previewNonce}`;
+  }, [tab, selectedLogId, selectedId, previewNonce]);
 
   const handleSelectTemplate = (id: EmailType) => {
     if (id === selectedId) return;
@@ -167,6 +237,191 @@ export default function EmailAdminPage() {
     setPreviewLoading(true);
     setTestResult(null);
     setShowTestPanel(false);
+    setShowSectionManager(false);
+    setToastMessage(null);
+    setUndoSection(null);
+  };
+
+  const saveTemplateCustomization = async (customization: EmailTemplateCustomization) => {
+    try {
+      const res = await fetch('/api/admin/email-templates', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: selectedId,
+          customization,
+          isActive: isTemplateActive,
+        }),
+      });
+
+      if (res.ok) {
+        const saved: DbEmailTemplate = await res.json();
+        setTemplates((prev) => {
+          const exists = prev.find((t) => t.type === selectedId);
+          if (exists) return prev.map((t) => (t.type === selectedId ? saved : t));
+          return [...prev, saved];
+        });
+        setPreviewNonce((n) => n + 1);
+        return true;
+      }
+    } catch (err) {
+      console.error('Failed to save customization:', err);
+    }
+    return false;
+  };
+
+  const handleDeleteSection = async (sectionId: string) => {
+    const hidden = new Set(hiddenSections);
+    hidden.add(sectionId);
+
+    const updated: EmailTemplateCustomization = {
+      ...currentCustomization,
+      hiddenSections: Array.from(hidden),
+    };
+
+    await saveTemplateCustomization(updated);
+    setUndoSection(sectionId);
+    const secObj = EMAIL_SECTIONS.find((s) => s.id === sectionId);
+    setToastMessage(`Sekce „${secObj?.label || sectionId}“ byla odstraněna.`);
+  };
+
+  const handleRestoreSection = async (sectionId: string) => {
+    const hidden = new Set(hiddenSections);
+    hidden.delete(sectionId);
+
+    const updated: EmailTemplateCustomization = {
+      ...currentCustomization,
+      hiddenSections: Array.from(hidden),
+    };
+
+    await saveTemplateCustomization(updated);
+    if (undoSection === sectionId) setUndoSection(null);
+    const secObj = EMAIL_SECTIONS.find((s) => s.id === sectionId);
+    setToastMessage(`Sekce „${secObj?.label || sectionId}“ byla obnovena.`);
+  };
+
+  const handleRestoreAllSections = async () => {
+    const updated: EmailTemplateCustomization = {
+      ...currentCustomization,
+      hiddenSections: [],
+    };
+
+    await saveTemplateCustomization(updated);
+    setUndoSection(null);
+    setToastMessage('Všechny sekce byly obnoveny.');
+  };
+
+  const handleResetTemplate = async () => {
+    if (!confirm('Opravdu chcete resetovat šablonu do výchozího stavu? Budou smazány všechny vlastní odkazy a obnoveny skryté sekce.')) {
+      return;
+    }
+
+    const updated: EmailTemplateCustomization = {
+      hiddenSections: [],
+      heroProduct: null,
+      gridProducts: [],
+    };
+
+    await saveTemplateCustomization(updated);
+    setToastMessage('Šablona byla resetována do výchozího stavu.');
+  };
+
+  const handleOpenProductPicker = (target: 'hero' | 'grid', slotIndex?: number) => {
+    setPickerTarget(target);
+    setPickerSlotIndex(slotIndex);
+
+    if (target === 'hero') {
+      setPickerTitle('Vybrat produkt pro hlavní fotku (Hero)');
+      setPickerDescription('Vyberte produkt z obchodu. Fotka produktu se vloží do hlavní sekce e-mailu a po kliknutí odkáže zákazníka na URL produktu.');
+      setPickerMaxSelect(1);
+    } else {
+      if (slotIndex !== undefined) {
+        setPickerTitle(`Vybrat produkt pro pozici #${slotIndex + 1} v mřížce 2x2`);
+        setPickerDescription(`Vyberte produkt pro pozici #${slotIndex + 1}. Obrázek se automaticky propojí s odkazem do obchodu.`);
+        setPickerMaxSelect(1);
+      } else {
+        setPickerTitle('Vybrat produkty pro mřížku 2x2');
+        setPickerDescription('Vyberte až 4 produkty z obchodu pro zobrazení v mřížce. Všechny fotky budou klikatelné a odkážou na daný produkt.');
+        setPickerMaxSelect(4);
+      }
+    }
+
+    setPickerOpen(true);
+  };
+
+  const handleProductsPicked = async (products: PickedProduct[]) => {
+    if (products.length === 0) return;
+
+    if (pickerTarget === 'hero') {
+      const p = products[0];
+      const updated: EmailTemplateCustomization = {
+        ...currentCustomization,
+        heroProduct: {
+          id: p.id,
+          name: p.name,
+          slug: p.slug,
+          image: p.image,
+          price: p.price,
+        },
+      };
+      await saveTemplateCustomization(updated);
+      setToastMessage(`Hlavní fotka propojena s produktem „${p.name}“.`);
+    } else {
+      // Grid
+      if (pickerSlotIndex !== undefined) {
+        // Single slot updated
+        const p = products[0];
+        const newGrid = [...(currentCustomization.gridProducts || [])];
+        newGrid[pickerSlotIndex] = {
+          id: p.id,
+          name: p.name,
+          slug: p.slug,
+          image: p.image,
+          price: p.price,
+        };
+        const updated: EmailTemplateCustomization = {
+          ...currentCustomization,
+          gridProducts: newGrid,
+        };
+        await saveTemplateCustomization(updated);
+        setToastMessage(`Pozice #${pickerSlotIndex + 1} v mřížce propojena s produktem „${p.name}“.`);
+      } else {
+        // Multi slots updated
+        const newGrid: LinkedProduct[] = products.map((p) => ({
+          id: p.id,
+          name: p.name,
+          slug: p.slug,
+          image: p.image,
+          price: p.price,
+        }));
+        const updated: EmailTemplateCustomization = {
+          ...currentCustomization,
+          gridProducts: newGrid,
+        };
+        await saveTemplateCustomization(updated);
+        setToastMessage(`${products.length} produkty propojeny v mřížce 2x2.`);
+      }
+    }
+  };
+
+  const handleRemoveHeroProduct = async () => {
+    const updated: EmailTemplateCustomization = {
+      ...currentCustomization,
+      heroProduct: null,
+    };
+    await saveTemplateCustomization(updated);
+    setToastMessage('Vlastní produkt byl z hlavní fotky odebrán.');
+  };
+
+  const handleRemoveGridProduct = async (idx: number) => {
+    const newGrid = [...(currentCustomization.gridProducts || [])];
+    newGrid.splice(idx, 1);
+    const updated: EmailTemplateCustomization = {
+      ...currentCustomization,
+      gridProducts: newGrid,
+    };
+    await saveTemplateCustomization(updated);
+    setToastMessage(`Produkt na pozici #${idx + 1} byl odebrán z mřížky.`);
   };
 
   const handleSendTest = async () => {
@@ -342,10 +597,18 @@ export default function EmailAdminPage() {
           </div>
 
           <div className="lg:col-span-9 flex flex-col gap-[16px]">
+            {/* Template Header Card */}
             <div className="admin-card p-[20px]">
               <div className="flex items-start justify-between gap-4 flex-wrap">
                 <div className="flex-1 min-w-0">
-                  <h2 className="admin-title" style={{ fontSize: 14 }}>{selected.label}</h2>
+                  <div className="flex items-center gap-2">
+                    <h2 className="admin-title" style={{ fontSize: 14 }}>{selected.label}</h2>
+                    {isTemplateActive ? (
+                      <span className="text-[9px] font-bold uppercase tracking-widest bg-black text-white px-2 py-0.5">Aktivní</span>
+                    ) : (
+                      <span className="text-[9px] font-bold uppercase tracking-widest bg-red-600 text-white px-2 py-0.5">Pozastaveno</span>
+                    )}
+                  </div>
                   <p className="admin-sub">{selected.description}</p>
                   <div className="space-y-2 text-xs uppercase tracking-wider mt-4">
                     <div className="flex items-baseline gap-2">
@@ -360,7 +623,6 @@ export default function EmailAdminPage() {
                       <button onClick={toggleTemplate} className={`admin-btn ${isTemplateActive ? 'admin-btn-secondary' : ''}`}>
                         {isTemplateActive ? 'Pozastavit e-mail' : 'Aktivovat e-mail'}
                       </button>
-                      {!isTemplateActive && <span className="text-[10px] font-bold text-red-600 ml-2">POZASTAVENO</span>}
                     </div>
                   </div>
                 </div>
@@ -398,6 +660,191 @@ export default function EmailAdminPage() {
                 </div>
               )}
             </div>
+
+            {/* Email Visual Editor Toolbar */}
+            <div className="admin-card p-[16px] bg-[#fafafa]">
+              <div className="flex items-center justify-between gap-3 flex-wrap">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-[10px] font-bold uppercase tracking-widest bg-black text-white px-2 py-1">
+                    Vizuální editor
+                  </span>
+                  <button
+                    onClick={() => handleOpenProductPicker('hero')}
+                    className="admin-btn text-xs"
+                    title="Vybrat produkt pro hlavní fotku"
+                  >
+                    + Produkt Hero
+                  </button>
+                  <button
+                    onClick={() => handleOpenProductPicker('grid')}
+                    className="admin-btn text-xs"
+                    title="Vybrat produkty pro mřížku 2x2"
+                  >
+                    + Produkty Mřížka (2x2)
+                  </button>
+                  <button
+                    onClick={() => setShowSectionManager(!showSectionManager)}
+                    className={`admin-btn admin-btn-secondary text-xs ${showSectionManager ? 'bg-black text-white' : ''}`}
+                  >
+                    Sekce ({EMAIL_SECTIONS.length - hiddenSections.length}/{EMAIL_SECTIONS.length}) {showSectionManager ? '▲' : '▼'}
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  {hiddenSections.length > 0 && (
+                    <button
+                      onClick={handleRestoreAllSections}
+                      className="text-[11px] font-bold uppercase tracking-wider text-black underline hover:opacity-70"
+                    >
+                      Obnovit skryté sekce ({hiddenSections.length})
+                    </button>
+                  )}
+                  {(hiddenSections.length > 0 || heroProduct || gridProducts.length > 0) && (
+                    <button
+                      onClick={handleResetTemplate}
+                      className="text-[11px] uppercase tracking-wider text-[#666666] hover:text-black border border-black/20 hover:border-black px-2 py-1"
+                    >
+                      Resetovat
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Toast Feedback */}
+              {toastMessage && (
+                <div className="mt-3 p-3 bg-black text-white text-xs uppercase tracking-wider flex items-center justify-between gap-3 animate-fade-in">
+                  <span>{toastMessage}</span>
+                  <div className="flex items-center gap-3">
+                    {undoSection && (
+                      <button
+                        onClick={() => handleRestoreSection(undoSection)}
+                        className="underline font-bold text-white hover:opacity-80"
+                      >
+                        Vrátit zpět
+                      </button>
+                    )}
+                    <button onClick={() => setToastMessage(null)} className="text-white/70 hover:text-white">✕</button>
+                  </div>
+                </div>
+              )}
+
+              {/* Expandable Sections Manager */}
+              {showSectionManager && (
+                <div className="mt-4 pt-4 border-t border-black space-y-3 bg-white p-4 border">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xs font-bold uppercase tracking-wider">Viditelnost sekcí e-mailu</h3>
+                    <span className="text-[10px] text-[#666666]">
+                      Tip: Sekci můžete smazat i přímo v náhledu najetím myší a kliknutím na symbol ✕.
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                    {EMAIL_SECTIONS.map((sec) => {
+                      const isHidden = hiddenSections.includes(sec.id);
+                      return (
+                        <div
+                          key={sec.id}
+                          className={`p-2.5 border flex items-center justify-between gap-2 transition-colors ${
+                            isHidden ? 'bg-[#f4f4f4] border-black/20 opacity-60' : 'bg-white border-black'
+                          }`}
+                        >
+                          <div className="min-w-0">
+                            <p className={`text-xs font-bold uppercase tracking-wider truncate ${isHidden ? 'line-through' : ''}`}>
+                              {sec.label}
+                            </p>
+                            <p className="text-[10px] text-[#777777] truncate">{sec.desc}</p>
+                          </div>
+                          {isHidden ? (
+                            <button
+                              onClick={() => handleRestoreSection(sec.id)}
+                              className="shrink-0 text-[10px] font-bold uppercase tracking-wider bg-black text-white px-2 py-1 hover:opacity-80"
+                            >
+                              + Obnovit
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => handleDeleteSection(sec.id)}
+                              className="shrink-0 text-xs font-bold text-black hover:text-red-600 px-2 py-1"
+                              title="Odstranit sekci"
+                            >
+                              ✕
+                            </button>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Linked Products Summary */}
+              {(heroProduct || gridProducts.length > 0) && (
+                <div className="mt-3 pt-3 border-t border-black/10 flex items-center gap-4 flex-wrap text-xs">
+                  {heroProduct && (
+                    <div className="flex items-center gap-2 bg-white border border-black px-2.5 py-1.5 shadow-sm">
+                      {heroProduct.image && (
+                        <img src={heroProduct.image} alt={heroProduct.name} className="w-6 h-6 object-cover border border-black" />
+                      )}
+                      <div>
+                        <span className="text-[9px] uppercase font-bold text-[#666666] block">Hero produkt</span>
+                        <a
+                          href={`/produkt/${heroProduct.slug}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="font-bold underline hover:opacity-70 truncate max-w-[140px] block"
+                        >
+                          {heroProduct.name}
+                        </a>
+                      </div>
+                      <button
+                        onClick={handleRemoveHeroProduct}
+                        className="text-xs text-red-600 hover:text-red-800 ml-1 font-bold"
+                        title="Odebrat propojení"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  )}
+
+                  {gridProducts.length > 0 && (
+                    <div className="flex items-center gap-2 bg-white border border-black px-2.5 py-1.5 shadow-sm">
+                      <div className="flex -space-x-1 overflow-hidden">
+                        {gridProducts.map((p, idx) => (
+                          <img
+                            key={idx}
+                            src={p.image}
+                            alt={p.name}
+                            className="inline-block w-6 h-6 object-cover border border-black ring-1 ring-white"
+                          />
+                        ))}
+                      </div>
+                      <div>
+                        <span className="text-[9px] uppercase font-bold text-[#666666] block">Mřížka 2x2</span>
+                        <span className="font-bold">{gridProducts.length} propojených produktů</span>
+                      </div>
+                      <button
+                        onClick={() => handleOpenProductPicker('grid')}
+                        className="text-[10px] uppercase font-bold underline ml-1 hover:opacity-70"
+                      >
+                        Upravit
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Interactive Help Hint */}
+              <div className="mt-3 pt-2 text-[11px] text-[#666666] flex items-center gap-2 border-t border-black/5">
+                <span className="font-bold text-black uppercase tracking-wider text-[10px] bg-white border border-black px-1.5 py-0.5">
+                  Interaktivní ovládání
+                </span>
+                <span>
+                  V náhledu níže najeďte myší na jakoukoliv sekci: tlačítkem <strong>✕</strong> vlevo nahoře sekci smažete, tlačítkem <strong>+</strong> na fotkách vyberete a propojíte produkt z obchodu.
+                </span>
+              </div>
+            </div>
+
+            {/* Email Preview Frame */}
             <PreviewFrame
               src={previewSrc}
               title={selected.label}
@@ -405,7 +852,7 @@ export default function EmailAdminPage() {
               setViewMode={setViewMode}
               previewLoading={previewLoading}
               setPreviewLoading={setPreviewLoading}
-              frameKey={selectedId}
+              frameKey={`${selectedId}-${previewNonce}`}
             />
           </div>
         </div>
@@ -487,88 +934,86 @@ export default function EmailAdminPage() {
         <div className="space-y-[16px]">
           <div className="flex items-center justify-between gap-4 flex-wrap">
             <p className="admin-sub" style={{ margin: 0 }}>
-              Cesty běží každou hodinu. Slevové kódy jsou jednorázové a vázané na e-mail zákazníka.
+              Sekvence e-mailů s časovými rozestupy a automatickými spouštěči
             </p>
-            <button onClick={runNow} disabled={runningCron} className="admin-btn">
-              {runningCron ? 'Spouštím…' : 'Spustit teď'}
-            </button>
+            <div className="flex items-center gap-3">
+              {cronResult && <span className="text-xs border border-black px-3 py-1 font-mono">{cronResult}</span>}
+              <button onClick={runNow} disabled={runningCron} className="admin-btn">
+                {runningCron ? 'Zpracovávám…' : 'Spustit kontrolu teď'}
+              </button>
+            </div>
           </div>
-          {cronResult && (
-            <div className="border border-black px-4 py-3 text-xs uppercase tracking-wider">{cronResult}</div>
-          )}
+
+          <div className="flex gap-2 flex-wrap">
+            {journeys.map((j) => (
+              <button
+                key={j.id}
+                onClick={() => setSelectedJourneyId(j.id)}
+                className={`admin-tab ${selectedJourney?.id === j.id ? 'is-active' : ''}`}
+              >
+                {j.name} {!j.isActive && '· POZASTAVENO'}
+              </button>
+            ))}
+          </div>
 
           {journeysLoading ? (
-            <div className="admin-empty">Načítám cesty…</div>
-          ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-[16px]">
-              <div className="lg:col-span-4">
-                <div className="admin-card overflow-hidden">
-                  {journeys.map((journey, idx) => (
-                    <button
-                      key={journey.id}
-                      onClick={() => setSelectedJourneyId(journey.id)}
-                      className={`w-full text-left px-[16px] py-[14px] ${idx !== journeys.length - 1 ? 'border-b border-black' : ''} ${
-                        selectedJourney?.id === journey.id ? 'bg-black text-white' : 'bg-white hover:bg-black hover:text-white'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between gap-2">
-                        <p className="text-xs font-bold uppercase tracking-wider">{journey.name}</p>
-                        <span className="text-[10px] uppercase tracking-wider">
-                          {journey.isActive ? 'Aktivní' : 'Vypnuto'}
-                        </span>
-                      </div>
-                      <p className="text-[10px] uppercase tracking-wider mt-1 opacity-70">
-                        {TRIGGER_LABELS[journey.trigger] || journey.trigger} · {journey.steps.length} kroků
-                      </p>
-                    </button>
-                  ))}
+            <div className="admin-card admin-empty">Načítám automatické cesty…</div>
+          ) : selectedJourney ? (
+            <div className="space-y-[16px]">
+              <div className="admin-card p-[20px]">
+                <div className="flex items-start justify-between gap-4 flex-wrap">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h2 className="admin-title" style={{ fontSize: 14 }}>{selectedJourney.name}</h2>
+                      {selectedJourney.isActive ? (
+                        <span className="text-[10px] font-bold uppercase tracking-widest bg-black text-white px-2 py-0.5">Aktivní</span>
+                      ) : (
+                        <span className="text-[10px] font-bold uppercase tracking-widest bg-red-600 text-white px-2 py-0.5">Pozastaveno</span>
+                      )}
+                    </div>
+                    <p className="admin-sub">{selectedJourney.description}</p>
+                    <div className="flex items-center gap-2 mt-3 text-xs uppercase tracking-wider">
+                      <span className="text-[#666666] font-bold">Spouštěč:</span>
+                      <span className="border border-black px-2 py-[2px]">{TRIGGER_LABELS[selectedJourney.trigger] || selectedJourney.trigger}</span>
+                    </div>
+                  </div>
+                  <button onClick={() => toggleJourney(selectedJourney)} className={`admin-btn ${selectedJourney.isActive ? 'admin-btn-secondary' : ''}`}>
+                    {selectedJourney.isActive ? 'Pozastavit cestu' : 'Aktivovat cestu'}
+                  </button>
                 </div>
               </div>
 
-              <div className="lg:col-span-8 space-y-[20px]">
-                {selectedJourney && (
-                  <>
-                    <div className="admin-card p-[20px] space-y-[20px]">
-                      <div className="flex items-start justify-between gap-4 flex-wrap">
-                        <div>
-                          <h2 className="admin-title" style={{ fontSize: 14 }}>{selectedJourney.name}</h2>
-                          <p className="admin-sub">{selectedJourney.description}</p>
-                        </div>
-                        <button onClick={() => toggleJourney(selectedJourney)} className="admin-btn admin-btn-secondary">
-                          {selectedJourney.isActive ? 'Vypnout' : 'Zapnout'}
-                        </button>
-                      </div>
-
-                      <div className="grid grid-cols-3 gap-px bg-black border border-black">
-                        {[
-                          ['Aktivní', countFor(selectedJourney.id, 'ACTIVE')],
-                          ['Dokončené', countFor(selectedJourney.id, 'COMPLETED')],
-                          ['Zrušené', countFor(selectedJourney.id, 'CANCELLED')],
-                        ].map(([label, value]) => (
-                          <div key={String(label)} className="bg-white p-4">
-                            <p className="admin-label">{label}</p>
-                            <p className="admin-title" style={{ fontSize: 23 }}>{value}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <JourneySequencePanel
-                      journey={selectedJourney}
-                      triggerLabel={TRIGGER_LABELS[selectedJourney.trigger] || selectedJourney.trigger}
-                      onUpdateJourney={(updated) => {
-                        setJourneys((prev) =>
-                          prev.map((item) => (item.id === updated.id ? updated : item))
-                        );
-                      }}
-                    />
-                  </>
-                )}
-              </div>
+              {/* Visual Curved Sequence Panel */}
+              <JourneySequencePanel
+                journey={selectedJourney}
+                triggerLabel={TRIGGER_LABELS[selectedJourney.trigger] || selectedJourney.trigger}
+                onUpdateJourney={(updated) => {
+                  setJourneys((prev) => prev.map((j) => (j.id === updated.id ? updated : j)));
+                }}
+              />
             </div>
+          ) : (
+            <div className="admin-card admin-empty">Žádná cesta nebyla nalezena.</div>
           )}
         </div>
       )}
+
+      {/* Product Picker Modal */}
+      <ProductPickerModal
+        isOpen={pickerOpen}
+        onClose={() => setPickerOpen(false)}
+        onSelect={handleProductsPicked}
+        title={pickerTitle}
+        description={pickerDescription}
+        maxSelect={pickerMaxSelect}
+        initialSelectedSlugs={
+          pickerTarget === 'hero' && heroProduct?.slug
+            ? [heroProduct.slug]
+            : pickerTarget === 'grid'
+            ? gridProducts.map((p) => p.slug)
+            : []
+        }
+      />
     </div>
   );
 }

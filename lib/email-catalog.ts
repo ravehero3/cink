@@ -12,9 +12,14 @@ import {
   WEBSITE_URL,
   FONT_STACK,
   HEADING_STACK,
+  toAbsoluteUrl,
   type CatalogItem,
   type EmailTemplateParams,
+  type EmailTemplateCustomization,
+  type LinkedProduct,
 } from './email-layout';
+
+export type { EmailTemplateCustomization, LinkedProduct };
 
 export type EmailType =
   | 'ORDER_CONFIRMATION'
@@ -208,12 +213,27 @@ export interface EmailVars {
   promoCode?: string;
   promoLabel?: string;
   promoValidUntil?: string;
+  productImages?: string[];
   isTest?: boolean;
 }
 
 export const SAMPLE_ITEMS: CatalogItem[] = [
-  { name: 'UFO Oversized T-Shirt', size: 'L', quantity: 1, price: 850 },
-  { name: 'UFO Sport Socks', size: 'UNI', quantity: 2, price: 800 },
+  {
+    name: 'TRIKO REBORN',
+    size: 'L',
+    quantity: 1,
+    price: 850,
+    image: 'https://ilnuafwmrjyn1hfl.public.blob.vercel-storage.com/1765565438929-reborn.jpg',
+    slug: 'triko-reborn',
+  },
+  {
+    name: 'TRIKO "PINK ALIEN"',
+    size: 'UNI',
+    quantity: 2,
+    price: 800,
+    image: 'https://ilnuafwmrjyn1hfl.public.blob.vercel-storage.com/1776168620867-ahoj2.jpg',
+    slug: 'triko-pink-alien-very-rare',
+  },
 ];
 
 export const SAMPLE_VARS: EmailVars = {
@@ -222,6 +242,12 @@ export const SAMPLE_VARS: EmailVars = {
   customerPhone: '+420 777 123 456',
   orderNumber: 'UFO26001',
   items: SAMPLE_ITEMS,
+  productImages: [
+    'https://ilnuafwmrjyn1hfl.public.blob.vercel-storage.com/1765565438929-reborn.jpg',
+    'https://ilnuafwmrjyn1hfl.public.blob.vercel-storage.com/1776168620867-ahoj2.jpg',
+    'https://res.cloudinary.com/dju6l748w/image/upload/v1767878842/kkk_vs7qti.jpg',
+    'https://res.cloudinary.com/dju6l748w/image/upload/v1767878837/KERAMIKA_TRAY_bnxd83.jpg',
+  ],
   totalPrice: 1650,
   shippingMethod: 'zasilkovna',
   zasilkovnaName: 'Zásilkovna Praha 1 — Centrum',
@@ -251,6 +277,28 @@ function getCarrierName(vars: EmailVars): string {
   return 'Zásilkovna';
 }
 
+function getProductPhotos(items: CatalogItem[], vars: EmailVars): { primary: string; grid: string[] } {
+  const boughtPhotos = [
+    ...(vars.productImages || []),
+    ...items.map((i) => i.image).filter(Boolean),
+  ].filter((img, idx, arr) => arr.indexOf(img) === idx) as string[];
+
+  const defaultGrid = [
+    'https://ilnuafwmrjyn1hfl.public.blob.vercel-storage.com/1765565438929-reborn.jpg',
+    'https://ilnuafwmrjyn1hfl.public.blob.vercel-storage.com/1776168620867-ahoj2.jpg',
+    'https://res.cloudinary.com/dju6l748w/image/upload/v1767878842/kkk_vs7qti.jpg',
+    'https://res.cloudinary.com/dju6l748w/image/upload/v1767878837/KERAMIKA_TRAY_bnxd83.jpg',
+  ];
+
+  const primary = boughtPhotos[0] || defaultGrid[0];
+  const grid = [
+    ...boughtPhotos,
+    ...defaultGrid,
+  ].slice(0, 4);
+
+  return { primary, grid };
+}
+
 function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplateParams {
   const name = vars.customerName || 'Jan Novák';
   const items = vars.items?.length ? vars.items : SAMPLE_ITEMS;
@@ -265,6 +313,8 @@ function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplatePar
   const discountAmount = Math.round(totalRaw * 0.1).toLocaleString('cs-CZ');
   const finalTotal = Math.max(0, totalRaw - Math.round(totalRaw * 0.1)).toLocaleString('cs-CZ');
 
+  const { primary: primaryBoughtPhoto, grid: boughtGridPhotos } = getProductPhotos(items, vars);
+
   switch (type) {
     case 'ORDER_CONFIRMATION':
       return {
@@ -274,23 +324,59 @@ function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplatePar
         header2Subtitle:
           'Obdrželi jsme vaši objednávku a brzy ji zpracujeme. Nyní prosím dokončete platbu, abychom mohli zásilku expedovat.',
         heroImage: {
-          src: 'https://placehold.co/600x600/f2f2f2/000000.png?text=Hlavn%C3%AD%20obr%C3%A1zek%20600x600',
+          src: primaryBoughtPhoto,
           height: 600,
-          alt: 'Hlavní obrázek 600x600',
+          alt: items[0]?.name || 'Zakoupený produkt',
+          productSlug: items[0]?.slug,
         },
         infoHtml: `
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
-            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Číslo objednávky</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${order}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 10px 0;font-size:15px;line-height:20px;">Číslo objednávky</td><td align="right" valign="top" style="padding:0 0 10px;font-size:15px;line-height:20px;font-weight:600;">${order}</td></tr>
             ${items
               .map(
-                (item) =>
-                  `<tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">${item.name}${item.size ? ` · ${item.size}` : ''} · ${item.quantity}×</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${item.price.toLocaleString('cs-CZ')} Kč</td></tr>`
+                (item) => {
+                  const itemHref = item.slug ? `${WEBSITE_URL}/produkt/${item.slug}` : undefined;
+                  const imgTag = item.image
+                    ? `<td valign="middle" style="padding-right:12px;">
+                        ${itemHref ? `<a href="${itemHref}" target="_blank" style="display:block;border:0;line-height:0;">` : ''}
+                        <img src="${toAbsoluteUrl(item.image)}" width="48" height="48" alt="${item.name}" style="display:block;width:48px;height:48px;object-fit:cover;border:1px solid #000000;" />
+                        ${itemHref ? `</a>` : ''}
+                      </td>`
+                    : '';
+                  const nameTag = itemHref
+                    ? `<a href="${itemHref}" target="_blank" style="color:#000000;text-decoration:underline;"><span style="font-weight:600;">${item.name}</span></a>`
+                    : `<span style="font-weight:600;">${item.name}</span>`;
+
+                  return `
+                    <tr>
+                      <td valign="top" style="padding:0 12px 10px 0;font-size:15px;line-height:20px;">
+                        <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                          <tr>
+                            ${imgTag}
+                            <td valign="middle" style="font-size:15px;line-height:20px;">
+                              ${nameTag}${item.size ? ` · ${item.size}` : ''} · ${item.quantity}×
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                      <td align="right" valign="middle" style="padding:0 0 10px;font-size:15px;line-height:20px;font-weight:600;white-space:nowrap;">
+                        ${item.price.toLocaleString('cs-CZ')} Kč
+                      </td>
+                    </tr>
+                  `;
+                }
               )
               .join('')}
-            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Místo vyzvednutí</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${shippingLocation}</td></tr>
-            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Celkem</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${total} Kč</td></tr>
+            <tr><td valign="top" style="padding:0 12px 10px 0;font-size:15px;line-height:20px;">Místo vyzvednutí</td><td align="right" valign="top" style="padding:0 0 10px;font-size:15px;line-height:20px;font-weight:600;">${shippingLocation}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 10px 0;font-size:15px;line-height:20px;">Celkem</td><td align="right" valign="top" style="padding:0 0 10px;font-size:15px;line-height:20px;font-weight:600;">${total} Kč</td></tr>
           </table>
         `,
+        photoGrid: boughtGridPhotos,
+        photoGridItems: boughtGridPhotos.map((photo, i) => ({
+          src: photo,
+          productSlug: items[i]?.slug,
+          alt: items[i]?.name || `Produkt ${i + 1}`,
+        })),
         actionText: 'Platbu dokončíte v detailu objednávky.',
         actionButton: {
           label: 'Sledovat objednávku',
@@ -306,19 +392,20 @@ function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplatePar
         header2Title: 'Platba přijata',
         header2Subtitle: 'Děkujeme, vaši platbu jsme úspěšně přijali. Zásilku brzy připravíme k odeslání.',
         heroImage: {
-          src: 'https://placehold.co/600x600/f2f2f2/000000.png?text=Hlavn%C3%AD%20obr%C3%A1zek%20600x600',
+          src: primaryBoughtPhoto,
           height: 600,
-          alt: 'Hlavní obrázek 600x600',
+          alt: items[0]?.name || 'Zakoupený produkt',
         },
         infoHtml: `
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
-            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Číslo objednávky</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${order}</td></tr>
-            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Datum platby</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${vars.paymentDate || '5. 10. 2026'}</td></tr>
-            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Způsob platby</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">Platební karta</td></tr>
-            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Místo vyzvednutí</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${shippingLocation}</td></tr>
-            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Zaplaceno</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${total} Kč</td></tr>
+            <tr><td valign="top" style="padding:0 12px 10px 0;font-size:15px;line-height:20px;">Číslo objednávky</td><td align="right" valign="top" style="padding:0 0 10px;font-size:15px;line-height:20px;font-weight:600;">${order}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 10px 0;font-size:15px;line-height:20px;">Datum platby</td><td align="right" valign="top" style="padding:0 0 10px;font-size:15px;line-height:20px;font-weight:600;">${vars.paymentDate || '5. 10. 2026'}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 10px 0;font-size:15px;line-height:20px;">Způsob platby</td><td align="right" valign="top" style="padding:0 0 10px;font-size:15px;line-height:20px;font-weight:600;">Platební karta</td></tr>
+            <tr><td valign="top" style="padding:0 12px 10px 0;font-size:15px;line-height:20px;">Místo vyzvednutí</td><td align="right" valign="top" style="padding:0 0 10px;font-size:15px;line-height:20px;font-weight:600;">${shippingLocation}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 10px 0;font-size:15px;line-height:20px;">Zaplaceno</td><td align="right" valign="top" style="padding:0 0 10px;font-size:15px;line-height:20px;font-weight:600;">${total} Kč</td></tr>
           </table>
         `,
+        photoGrid: boughtGridPhotos,
         actionText: 'Stav objednávky můžete kdykoli sledovat online.',
         actionButton: {
           label: 'Sledovat objednávku',
@@ -334,19 +421,20 @@ function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplatePar
         header2Title: 'Zásilka na cestě',
         header2Subtitle: `Vaše objednávka ${order} byla předána dopravci a je na cestě k vám.`,
         heroImage: {
-          src: 'https://placehold.co/600x600/f2f2f2/000000.png?text=Hlavn%C3%AD%20obr%C3%A1zek%20600x600',
+          src: primaryBoughtPhoto,
           height: 600,
-          alt: 'Hlavní obrázek 600x600',
+          alt: items[0]?.name || 'Zakoupený produkt',
         },
         infoHtml: `
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
-            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Číslo objednávky</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${order}</td></tr>
-            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Číslo zásilky</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${vars.trackingNumber || 'Z 123 456 7890'}</td></tr>
-            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Dopravce</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${carrierName}</td></tr>
-            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Místo vyzvednutí</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${shippingLocation}</td></tr>
-            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Počet kusů</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${totalQuantity}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 10px 0;font-size:15px;line-height:20px;">Číslo objednávky</td><td align="right" valign="top" style="padding:0 0 10px;font-size:15px;line-height:20px;font-weight:600;">${order}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 10px 0;font-size:15px;line-height:20px;">Číslo zásilky</td><td align="right" valign="top" style="padding:0 0 10px;font-size:15px;line-height:20px;font-weight:600;">${vars.trackingNumber || 'Z 123 456 7890'}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 10px 0;font-size:15px;line-height:20px;">Dopravce</td><td align="right" valign="top" style="padding:0 0 10px;font-size:15px;line-height:20px;font-weight:600;">${carrierName}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 10px 0;font-size:15px;line-height:20px;">Místo vyzvednutí</td><td align="right" valign="top" style="padding:0 0 10px;font-size:15px;line-height:20px;font-weight:600;">${shippingLocation}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 10px 0;font-size:15px;line-height:20px;">Počet kusů</td><td align="right" valign="top" style="padding:0 0 10px;font-size:15px;line-height:20px;font-weight:600;">${totalQuantity}</td></tr>
           </table>
         `,
+        photoGrid: boughtGridPhotos,
         actionText: 'Průběh doručení uvidíte ve sledování zásilky.',
         actionButton: {
           label: 'Sledovat zásilku',
@@ -416,9 +504,9 @@ function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplatePar
         header2Title: 'Nová objednávka',
         header2Subtitle: `Zákazník právě vytvořil objednávku ${order}.`,
         heroImage: {
-          src: 'https://placehold.co/600x600/f2f2f2/000000.png?text=Hlavn%C3%AD%20obr%C3%A1zek%20600x600',
+          src: primaryBoughtPhoto,
           height: 600,
-          alt: 'Hlavní obrázek 600x600',
+          alt: items[0]?.name || 'Zakoupený produkt',
         },
         infoHtml: `
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
@@ -430,6 +518,7 @@ function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplatePar
             <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Vytvořeno</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${vars.paymentDate || '5. 10. 2026, 18:04'}</td></tr>
           </table>
         `,
+        photoGrid: boughtGridPhotos,
         actionText: 'Objednávku zpracujte v administraci.',
         actionButton: {
           label: 'Otevřít v administraci',
@@ -445,21 +534,42 @@ function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplatePar
         header2Title: 'Zapomněli jste něco v košíku?',
         header2Subtitle: 'Vaše položky na vás stále čekají. Dokončete nákup, dokud je vaše velikost skladem.',
         heroImage: {
-          src: 'https://placehold.co/600x750/f2f2f2/000000.png?text=Hlavn%C3%AD%20obr%C3%A1zek%20600x750',
+          src: primaryBoughtPhoto,
           height: 750,
-          alt: 'Hlavní obrázek 600x750',
+          alt: items[0]?.name || 'Produkt v košíku',
         },
         infoHtml: `
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
             ${items
               .map(
                 (item) =>
-                  `<tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">${item.name}${item.size ? ` · ${item.size}` : ''} · ${item.quantity}×</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${item.price.toLocaleString('cs-CZ')} Kč</td></tr>`
+                  `<tr>
+                    <td valign="top" style="padding:0 12px 10px 0;font-size:15px;line-height:20px;">
+                      <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                          ${
+                            item.image
+                              ? `<td valign="middle" style="padding-right:12px;">
+                                  <img src="${item.image}" width="48" height="48" alt="${item.name}" style="display:block;width:48px;height:48px;object-fit:cover;border:1px solid #000000;" />
+                                </td>`
+                              : ''
+                          }
+                          <td valign="middle" style="font-size:15px;line-height:20px;">
+                            <span style="font-weight:600;">${item.name}</span>${item.size ? ` · ${item.size}` : ''} · ${item.quantity}×
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                    <td align="right" valign="middle" style="padding:0 0 10px;font-size:15px;line-height:20px;font-weight:600;white-space:nowrap;">
+                      ${item.price.toLocaleString('cs-CZ')} Kč
+                    </td>
+                  </tr>`
               )
               .join('')}
-            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Celkem</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${total} Kč</td></tr>
+            <tr><td valign="top" style="padding:0 12px 10px 0;font-size:15px;line-height:20px;">Celkem</td><td align="right" valign="top" style="padding:0 0 10px;font-size:15px;line-height:20px;font-weight:600;">${total} Kč</td></tr>
           </table>
         `,
+        photoGrid: boughtGridPhotos,
         actionText: 'Váš košík je uložený a čeká na dokončení.',
         actionButton: {
           label: 'Vrátit se do košíku',
@@ -475,9 +585,9 @@ function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplatePar
         header2Title: 'Sleva na váš košík',
         header2Subtitle: 'Připravili jsme pro vás 10 % slevu na položky ve vašem košíku.',
         heroImage: {
-          src: 'https://placehold.co/600x600/f2f2f2/000000.png?text=Hlavn%C3%AD%20obr%C3%A1zek%20600x600',
+          src: primaryBoughtPhoto,
           height: 600,
-          alt: 'Hlavní obrázek 600x600',
+          alt: items[0]?.name || 'Položky v košíku',
         },
         infoHtml: `
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
@@ -488,6 +598,7 @@ function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplatePar
             <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Platnost kódu</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${vars.promoValidUntil || '48 hodin'}</td></tr>
           </table>
         `,
+        photoGrid: boughtGridPhotos,
         actionText: 'Kód uplatníte v košíku před dokončením objednávky.',
         actionButton: {
           label: 'Uplatnit slevu',
@@ -701,10 +812,24 @@ function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplatePar
   }
 }
 
-export function renderEmail(type: EmailType, vars: EmailVars = {}, unsubscribeUrl?: string) {
+export function renderEmail(
+  type: EmailType,
+  vars: EmailVars = {},
+  unsubscribeUrl?: string,
+  options?: {
+    customization?: EmailTemplateCustomization;
+    adminMode?: boolean;
+  }
+) {
   const params = buildTemplateParams(type, vars);
   if (unsubscribeUrl) {
     params.unsubscribeUrl = unsubscribeUrl;
+  }
+  if (options?.customization) {
+    params.customization = options.customization;
+  }
+  if (options?.adminMode !== undefined) {
+    params.adminMode = options.adminMode;
   }
   const html = buildEmailHtml(params);
   const finalSubject = vars.isTest ? `[TEST] ${params.subject}` : params.subject;

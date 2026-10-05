@@ -47,11 +47,13 @@ export async function sendCatalogEmail(options: {
   isTest?: boolean;
 }) {
   const { type, to, vars = {}, journeyId, isTest } = options;
-  const rendered = renderEmail(type, { ...vars, isTest }, buildUnsubscribeUrl(to));
 
   const templateConfig = await prisma.emailTemplate.findUnique({
     where: { type },
   });
+
+  const customization = (templateConfig?.variables as any) || undefined;
+  const rendered = renderEmail(type, { ...vars, isTest }, buildUnsubscribeUrl(to), { customization });
 
   if (templateConfig && !templateConfig.isActive && !isTest) {
     await logEmail({
@@ -102,14 +104,54 @@ export async function sendCatalogEmail(options: {
   }
 }
 
-interface OrderItem {
+export interface OrderItem {
   name: string;
   size?: string;
   quantity: number;
   price: number;
+  image?: string;
+  slug?: string;
 }
 
-interface OrderEmailData {
+export async function enrichOrderItemsWithImages(items: OrderItem[]): Promise<OrderItem[]> {
+  if (!items || items.length === 0) return items;
+  try {
+    const missing = items.some((i) => !i.image || !i.slug);
+    if (!missing) return items;
+
+    const names = items.map((i) => i.name).filter(Boolean);
+    const products = await prisma.product.findMany({
+      where: {
+        OR: [
+          { name: { in: names } },
+        ],
+      },
+      select: { name: true, slug: true, images: true },
+    });
+
+    const byName = new Map<string, { image?: string; slug: string }>();
+    for (const p of products) {
+      byName.set(p.name.toLowerCase().trim(), {
+        image: p.images?.[0],
+        slug: p.slug,
+      });
+    }
+
+    return items.map((item) => {
+      const found = byName.get(item.name.toLowerCase().trim());
+      return {
+        ...item,
+        image: item.image || found?.image,
+        slug: item.slug || found?.slug,
+      };
+    });
+  } catch (err) {
+    console.error('Failed to enrich order items with images:', err);
+    return items;
+  }
+}
+
+export interface OrderEmailData {
   orderNumber: string;
   customerName: string;
   customerEmail: string;
@@ -131,6 +173,7 @@ function toVars(data: OrderEmailData): EmailVars {
     customerPhone: data.customerPhone,
     orderNumber: data.orderNumber,
     items: data.items,
+    productImages: data.items.map((i) => i.image).filter(Boolean) as string[],
     totalPrice: data.totalPrice,
     shippingMethod: data.shippingMethod,
     zasilkovnaName: data.zasilkovnaName,
@@ -142,10 +185,12 @@ function toVars(data: OrderEmailData): EmailVars {
 }
 
 export async function sendOrderConfirmationEmail(data: OrderEmailData) {
+  data.items = await enrichOrderItemsWithImages(data.items);
   return sendCatalogEmail({ type: 'ORDER_CONFIRMATION', to: data.customerEmail, vars: toVars(data) });
 }
 
 export async function sendPaymentSuccessEmail(data: OrderEmailData) {
+  data.items = await enrichOrderItemsWithImages(data.items);
   return sendCatalogEmail({ type: 'PAYMENT_SUCCESS', to: data.customerEmail, vars: toVars(data) });
 }
 
@@ -180,6 +225,7 @@ export async function sendNewsletterWelcomeEmail(email: string) {
 const ADMIN_NOTIFICATION_EMAIL = 'andrea.gasi@seznam.cz';
 
 export async function sendAdminOrderNotificationEmail(data: OrderEmailData & { customerPhone?: string }) {
+  data.items = await enrichOrderItemsWithImages(data.items);
   return sendCatalogEmail({
     type: 'ADMIN_ORDER_NOTIFICATION',
     to: ADMIN_NOTIFICATION_EMAIL,

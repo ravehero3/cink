@@ -377,6 +377,8 @@ export async function POST(request: NextRequest) {
         size: item.size,
         quantity: item.quantity,
         price: item.price,
+        image: item.image,
+        slug: item.slug,
       })),
       totalPrice: Number(totalPrice),
       shippingMethod,
