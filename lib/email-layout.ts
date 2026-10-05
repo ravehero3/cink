@@ -5,7 +5,7 @@ export { WEBSITE_URL, LOGO_URL };
 
 /** Email-safe stacks with Latin Extended (Czech: ěščřžýáíéůú). Arial is the Outlook fallback. */
 export const FONT_STACK = "Roboto, Arial, Helvetica, sans-serif";
-export const HEADING_STACK = "'Roboto Condensed', 'Arial Narrow', Arial, Helvetica, sans-serif";
+export const HEADING_STACK = "'Helvetica Neue Condensed Bold', 'Arial Narrow', Arial, Helvetica, sans-serif";
 
 export const buttonStyle = `
   display: inline-block;
@@ -32,7 +32,7 @@ export function kicker(text: string) {
 }
 
 export function heading(text: string) {
-  return `<h1 style="margin:0 0 16px 0;font-size:22px;line-height:1.2;font-weight:700;letter-spacing:0.03em;text-transform:uppercase;color:#000000;font-family:${HEADING_STACK};font-stretch:condensed;">${text}</h1>`;
+  return `<h1 style="margin:0 0 16px 0;font-size:22px;line-height:1.2;font-weight:700;letter-spacing:0.03em;text-transform:uppercase;color:#000000;font-family:${HEADING_STACK};">${text}</h1>`;
 }
 
 export function bodyText(text: string, extra = '') {
@@ -99,63 +99,90 @@ export function emailWrapper(content: string, unsubscribeUrl?: string) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>UFO Sport</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;family=Roboto+Condensed:wght@700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet">
   <style type="text/css">
-    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Condensed:wght@700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
     body, table, td, p, a, li { font-family: ${FONT_STACK} !important; }
-    h1, h2, h3 { font-family: ${HEADING_STACK} !important; }
+    <!--[if mso]>
+    body, table, td, p, a, li { font-family: Arial, Helvetica, sans-serif !important; }
+    <![endif]-->
+    /* Force 600px on all devices */
+    .email-container { width: 600px !important; max-width: 600px !important; }
+    @media only screen and (max-width: 620px) {
+      .email-outer-td { padding: 0 !important; }
+      .email-container { width: 100% !important; max-width: 100% !important; }
+      .email-body-td { padding: 24px 16px !important; }
+      .email-footer-td { padding: 20px 16px !important; }
+    }
   </style>
-  <!--[if mso]>
-  <style type="text/css">
-    body, table, td, p, a, li, h1, h2, h3 { font-family: Arial, Helvetica, sans-serif !important; }
-  </style>
-  <![endif]-->
 </head>
-<body style="margin:0;padding:0;background-color:#ffffff;color:#000000;font-family:${FONT_STACK};-webkit-font-smoothing:antialiased;">
-  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color:#ffffff;">
+<body style="margin:0;padding:0;background-color:#f4f4f4;color:#000000;font-family:${FONT_STACK};-webkit-font-smoothing:antialiased;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color:#f4f4f4;">
     <tr>
-      <td align="center" style="padding:32px 16px;">
-        <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="max-width:600px;width:100%;background-color:#ffffff;border:1px solid #000000;">
+      <td align="center" class="email-outer-td" style="padding:24px 16px;">
+
+        <!-- ══════════════════════════════════════
+             EMAIL CONTAINER — always 600px
+             ══════════════════════════════════════ -->
+        <table role="presentation" class="email-container" width="600" cellspacing="0" cellpadding="0" style="width:600px;max-width:600px;background-color:#ffffff;border:1px solid #000000;">
+
+          <!-- ── HEADER: 600×72px — identical to website header ── -->
           <tr>
-            <td style="padding:28px 32px;text-align:center;border-bottom:1px solid #000000;">
-              <a href="${WEBSITE_URL}" style="display:inline-block;text-decoration:none;">
-                <img src="${LOGO_URL}" alt="UFO Sport" width="56" height="56" style="display:block;margin:0 auto 12px auto;max-width:56px;height:auto;border:0;" />
-                <span style="display:block;font-size:13px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:#000000;font-family:${HEADING_STACK};">UFO Sport</span>
+            <td style="height:72px;padding:0;border-bottom:1px solid #000000;text-align:center;vertical-align:middle;background-color:#ffffff;">
+              <a href="${WEBSITE_URL}" style="display:block;text-decoration:none;height:72px;line-height:72px;vertical-align:middle;">
+                <span style="
+                  font-size:22px;
+                  font-weight:700;
+                  letter-spacing:0.03em;
+                  text-transform:uppercase;
+                  color:#000000;
+                  font-family:'Helvetica Neue Condensed Bold','Arial Narrow',Arial,Helvetica,sans-serif;
+                  font-stretch:condensed;
+                  line-height:72px;
+                  vertical-align:middle;
+                ">UFO SPORT</span>
               </a>
             </td>
           </tr>
+
+          <!-- ── BODY ── -->
           <tr>
-            <td style="padding:32px;">
+            <td class="email-body-td" style="padding:32px;">
               ${content}
             </td>
           </tr>
+
+          <!-- ── FOOTER LINKS ── -->
           <tr>
-            <td style="padding:24px 32px;border-top:1px solid #000000;">
-              <p style="margin:0 0 8px 0;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#000000;font-family:${HEADING_STACK};text-align:center;">UFO Sport</p>
-              <p style="margin:0 0 16px 0;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:#666666;font-family:${FONT_STACK};text-align:center;line-height:18px;">Sportovní oblečení pro každý den</p>
-              <p style="margin:0 0 16px 0;text-align:center;">
+            <td class="email-footer-td" style="padding:24px 32px 16px 32px;border-top:1px solid #000000;">
+              <p style="margin:0 0 12px 0;text-align:center;">
                 <a href="${WEBSITE_URL}" style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#000000;text-decoration:none;font-family:${FONT_STACK};">www.ufosport.cz</a>
               </p>
-              <p style="margin:0;text-align:center;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#666666;font-family:${FONT_STACK};">
+              <p style="margin:0 0 16px 0;text-align:center;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#666666;font-family:${FONT_STACK};">
                 <a href="${WEBSITE_URL}/produkty" style="color:#666666;text-decoration:none;">Produkty</a>
                 &nbsp;&nbsp;·&nbsp;&nbsp;
                 <a href="${WEBSITE_URL}/sledovani-objednavky" style="color:#666666;text-decoration:none;">Sledování objednávky</a>
                 &nbsp;&nbsp;·&nbsp;&nbsp;
                 <a href="${WEBSITE_URL}/faq" style="color:#666666;text-decoration:none;">Pomoc</a>
               </p>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:16px 32px 28px 32px;text-align:center;">
-              <p style="margin:0;font-size:11px;line-height:18px;color:#666666;font-family:${FONT_STACK};">
+
+              <!-- Logo / alien in footer -->
+              <p style="margin:0 0 12px 0;text-align:center;">
+                <a href="${WEBSITE_URL}" style="display:inline-block;text-decoration:none;">
+                  <img src="${LOGO_URL}" alt="UFO Sport" width="40" height="40" style="display:inline-block;width:40px;height:40px;border:0;" />
+                </a>
+              </p>
+
+              <p style="margin:0 0 8px 0;font-size:11px;line-height:18px;color:#666666;font-family:${FONT_STACK};text-align:center;">
                 Tento e-mail byl odeslán automaticky z adresy noreply@ufosport.cz.
               </p>
-              <p style="margin:8px 0 0 0;font-size:11px;color:#666666;font-family:${FONT_STACK};">
+              <p style="margin:0;font-size:11px;color:#666666;font-family:${FONT_STACK};text-align:center;">
                 © ${year} UFO Sport. Všechna práva vyhrazena.
               </p>
-              ${unsubscribeUrl ? `<p style="margin:8px 0 0 0;font-size:11px;font-family:${FONT_STACK};"><a href="${unsubscribeUrl}" style="color:#666666;text-decoration:underline;">Odhlásit odběr novinek</a></p>` : ''}
+              ${unsubscribeUrl ? `<p style="margin:8px 0 0 0;font-size:11px;font-family:${FONT_STACK};text-align:center;"><a href="${unsubscribeUrl}" style="color:#666666;text-decoration:underline;">Odhlásit odběr novinek</a></p>` : ''}
             </td>
           </tr>
+
         </table>
       </td>
     </tr>
