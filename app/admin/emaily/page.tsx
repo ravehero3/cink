@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { EMAIL_CATALOG, type EmailType } from '@/lib/email-catalog';
+import JourneySequencePanel from '@/components/admin/JourneySequencePanel';
 
 type Tab = 'sablony' | 'odeslane' | 'cesty';
 type ViewMode = 'desktop' | 'mobile';
@@ -524,64 +525,44 @@ export default function EmailAdminPage() {
                 </div>
               </div>
 
-              <div className="lg:col-span-8">
+              <div className="lg:col-span-8 space-y-[20px]">
                 {selectedJourney && (
-                  <div className="admin-card p-[20px] space-y-[20px]">
-                    <div className="flex items-start justify-between gap-4 flex-wrap">
-                      <div>
-                        <h2 className="admin-title" style={{ fontSize: 14 }}>{selectedJourney.name}</h2>
-                        <p className="admin-sub">{selectedJourney.description}</p>
+                  <>
+                    <div className="admin-card p-[20px] space-y-[20px]">
+                      <div className="flex items-start justify-between gap-4 flex-wrap">
+                        <div>
+                          <h2 className="admin-title" style={{ fontSize: 14 }}>{selectedJourney.name}</h2>
+                          <p className="admin-sub">{selectedJourney.description}</p>
+                        </div>
+                        <button onClick={() => toggleJourney(selectedJourney)} className="admin-btn admin-btn-secondary">
+                          {selectedJourney.isActive ? 'Vypnout' : 'Zapnout'}
+                        </button>
                       </div>
-                      <button onClick={() => toggleJourney(selectedJourney)} className="admin-btn admin-btn-secondary">
-                        {selectedJourney.isActive ? 'Vypnout' : 'Zapnout'}
-                      </button>
-                    </div>
 
-                    <div className="grid grid-cols-3 gap-px bg-black border border-black">
-                      {[
-                        ['Aktivní', countFor(selectedJourney.id, 'ACTIVE')],
-                        ['Dokončené', countFor(selectedJourney.id, 'COMPLETED')],
-                        ['Zrušené', countFor(selectedJourney.id, 'CANCELLED')],
-                      ].map(([label, value]) => (
-                        <div key={String(label)} className="bg-white p-4">
-                          <p className="admin-label">{label}</p>
-                          <p className="admin-title" style={{ fontSize: 23 }}>{value}</p>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div>
-                      <p className="admin-label">Plán sekvence</p>
-                      <div className="border border-black">
-                        <div className="px-[16px] py-[12px] border-b border-black bg-black text-white">
-                          <p className="text-[10px] font-bold uppercase tracking-widest">Spouštěč</p>
-                          <p className="text-xs uppercase tracking-wider mt-1">
-                            {TRIGGER_LABELS[selectedJourney.trigger] || selectedJourney.trigger}
-                          </p>
-                        </div>
-                        {selectedJourney.steps
-                          .slice()
-                          .sort((a, b) => a.position - b.position)
-                          .map((step, index) => (
-                            <div key={step.id} className={index !== selectedJourney.steps.length - 1 ? 'border-b border-black' : ''}>
-                              <div className="px-[16px] py-[8px] text-[10px] uppercase tracking-widest text-[#666666] border-b border-black">
-                                Čekání {formatDelay(step.delayHours)}
-                              </div>
-                              <div className="px-[16px] py-[14px]">
-                                <p className="text-xs font-bold uppercase tracking-wider">{catalogLabel(step.emailType)}</p>
-                                <p className="admin-sub">
-                                  {step.generatePromo
-                                    ? `Osobní kód ${step.promoDiscountValue} % · platnost ${step.promoValidDays} dní · 1 použití`
-                                    : 'Bez slevového kódu'}
-                                  {step.skipIfPurchased ? ' · přeskočit po nákupu' : ''}
-                                  {step.skipIfPaid ? ' · přeskočit po platbě' : ''}
-                                </p>
-                              </div>
-                            </div>
-                          ))}
+                      <div className="grid grid-cols-3 gap-px bg-black border border-black">
+                        {[
+                          ['Aktivní', countFor(selectedJourney.id, 'ACTIVE')],
+                          ['Dokončené', countFor(selectedJourney.id, 'COMPLETED')],
+                          ['Zrušené', countFor(selectedJourney.id, 'CANCELLED')],
+                        ].map(([label, value]) => (
+                          <div key={String(label)} className="bg-white p-4">
+                            <p className="admin-label">{label}</p>
+                            <p className="admin-title" style={{ fontSize: 23 }}>{value}</p>
+                          </div>
+                        ))}
                       </div>
                     </div>
-                  </div>
+
+                    <JourneySequencePanel
+                      journey={selectedJourney}
+                      triggerLabel={TRIGGER_LABELS[selectedJourney.trigger] || selectedJourney.trigger}
+                      onUpdateJourney={(updated) => {
+                        setJourneys((prev) =>
+                          prev.map((item) => (item.id === updated.id ? updated : item))
+                        );
+                      }}
+                    />
+                  </>
                 )}
               </div>
             </div>

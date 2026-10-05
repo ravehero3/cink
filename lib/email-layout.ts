@@ -89,6 +89,10 @@ export function itemsTable(items: CatalogItem[]) {
   return `<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:0 0 24px 0;">${rows}</table>`;
 }
 
+export function sectionDivider() {
+  return `<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:24px 0;border-top:1px solid #000000;"><tr><td style="font-size:0;line-height:0;height:1px;">&nbsp;</td></tr></table>`;
+}
+
 export function emailWrapper(content: string, unsubscribeUrl?: string) {
   const year = new Date().getFullYear();
   return `<!DOCTYPE html>
@@ -107,12 +111,10 @@ export function emailWrapper(content: string, unsubscribeUrl?: string) {
     body, table, td, p, a, li { font-family: Arial, Helvetica, sans-serif !important; }
     <![endif]-->
     /* Force 600px on all devices */
-    .email-container { width: 600px !important; max-width: 600px !important; }
+    .email-container { width: 600px !important; max-width: 600px !important; min-width: 600px !important; }
     @media only screen and (max-width: 620px) {
-      .email-outer-td { padding: 0 !important; }
-      .email-container { width: 100% !important; max-width: 100% !important; }
-      .email-body-td { padding: 24px 16px !important; }
-      .email-footer-td { padding: 20px 16px !important; }
+      .email-outer-td { padding: 12px 0 !important; }
+      .email-container { width: 600px !important; max-width: 600px !important; min-width: 600px !important; }
     }
   </style>
 </head>
@@ -122,9 +124,9 @@ export function emailWrapper(content: string, unsubscribeUrl?: string) {
       <td align="center" class="email-outer-td" style="padding:24px 16px;">
 
         <!-- ══════════════════════════════════════
-             EMAIL CONTAINER — always 600px
+             EMAIL CONTAINER — strictly 600px
              ══════════════════════════════════════ -->
-        <table role="presentation" class="email-container" width="600" cellspacing="0" cellpadding="0" style="width:600px;max-width:600px;background-color:#ffffff;border:1px solid #000000;">
+        <table role="presentation" class="email-container" width="600" cellspacing="0" cellpadding="0" style="width:600px;max-width:600px;min-width:600px;background-color:#ffffff;border:1px solid #000000;">
 
           <!-- ── HEADER: 600×72px — identical to website header ── -->
           <tr>
@@ -152,20 +154,25 @@ export function emailWrapper(content: string, unsubscribeUrl?: string) {
             </td>
           </tr>
 
-          <!-- ── FOOTER LINKS ── -->
+          <!-- ── FOOTER NAV: 600px wide separated by black lines ── -->
           <tr>
-            <td class="email-footer-td" style="padding:24px 32px 16px 32px;border-top:1px solid #000000;">
-              <p style="margin:0 0 12px 0;text-align:center;">
+            <td style="padding:20px 32px;border-top:1px solid #000000;border-bottom:1px solid #000000;text-align:center;">
+              <p style="margin:0 0 10px 0;text-align:center;">
                 <a href="${WEBSITE_URL}" style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#000000;text-decoration:none;font-family:${FONT_STACK};">www.ufosport.cz</a>
               </p>
-              <p style="margin:0 0 16px 0;text-align:center;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#666666;font-family:${FONT_STACK};">
+              <p style="margin:0;text-align:center;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#666666;font-family:${FONT_STACK};">
                 <a href="${WEBSITE_URL}/produkty" style="color:#666666;text-decoration:none;">Produkty</a>
                 &nbsp;&nbsp;·&nbsp;&nbsp;
                 <a href="${WEBSITE_URL}/sledovani-objednavky" style="color:#666666;text-decoration:none;">Sledování objednávky</a>
                 &nbsp;&nbsp;·&nbsp;&nbsp;
                 <a href="${WEBSITE_URL}/faq" style="color:#666666;text-decoration:none;">Pomoc</a>
               </p>
+            </td>
+          </tr>
 
+          <!-- ── FOOTER BOTTOM: Brand logo & legal details (600px wide) ── -->
+          <tr>
+            <td class="email-footer-td" style="padding:24px 32px;text-align:center;">
               <!-- Logo / alien in footer -->
               <p style="margin:0 0 12px 0;text-align:center;">
                 <a href="${WEBSITE_URL}" style="display:inline-block;text-decoration:none;">
