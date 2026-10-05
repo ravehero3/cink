@@ -47,11 +47,12 @@ export default function MobileMenu({ isOpen, onClose, categories }: MobileMenuPr
         }`}
       >
         <div className="h-full flex flex-col border-r border-black">
-          <div className="border-b border-black relative" style={{ height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '16px', paddingRight: '12px' }}>
-            <span 
+          {/* Header - Green background matching CartDrawer */}
+          <div className="border-b border-black relative flex items-center justify-center" style={{ height: '56px', backgroundColor: '#24e053' }}>
+            <h2 
               style={{
                 fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '14px',
+                fontSize: '16px',
                 fontWeight: 700,
                 textTransform: 'uppercase',
                 letterSpacing: '0.03em',
@@ -59,40 +60,45 @@ export default function MobileMenu({ isOpen, onClose, categories }: MobileMenuPr
                 color: '#000000'
               }}
             >
-              MENU
-            </span>
+              NAVIGACE
+            </h2>
             <button
               onClick={onClose}
-              className="hover:opacity-70 transition-opacity"
+              className="absolute hover:opacity-70 transition-opacity"
               style={{
-                width: '22px',
-                height: '22px',
+                width: '24px',
+                height: '24px',
+                right: '12px',
                 padding: '0',
                 color: '#000000'
               }}
+              aria-label="Zavřít menu"
             >
-              <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg style={{ width: '24px', height: '24px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
 
+          {/* Menu Content */}
           <div className="flex-1 overflow-y-auto">
-            <nav className="py-4">
-              {categories.map((category) => (
+            {/* Categories */}
+            <nav className="border-b border-black">
+              {categories.map((category, index) => (
                 <Link
                   key={category.slug}
                   href={`/${category.slug}`}
                   onClick={onClose}
-                  className="block px-6 py-4 border-b border-gray-200 hover:bg-gray-50 transition-colors"
+                  className="block px-6 py-4 hover:bg-gray-50 transition-colors"
                   style={{
                     fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '16px',
+                    fontSize: '14px',
                     fontWeight: 700,
                     textTransform: 'uppercase',
                     letterSpacing: '0.03em',
                     fontStretch: 'condensed',
-                    color: '#000000'
+                    color: '#000000',
+                    borderBottom: index < categories.length - 1 ? '1px solid #e5e5e5' : 'none'
                   }}
                 >
                   {category.name}
@@ -100,37 +106,38 @@ export default function MobileMenu({ isOpen, onClose, categories }: MobileMenuPr
               ))}
             </nav>
 
-            <div className="border-t border-black py-4">
+            {/* Account & Settings */}
+            <div className="border-b border-black">
               <Link
                 href={isLoggedIn ? "/ucet" : "/prihlaseni"}
                 onClick={onClose}
-                className="block px-6 py-3 hover:bg-gray-50 transition-colors"
+                className="block px-6 py-3 hover:bg-gray-50 transition-colors border-b border-gray-200"
                 style={{
                   fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '14px',
+                  fontSize: '13px',
                   fontWeight: 400,
                   textTransform: 'uppercase',
                   letterSpacing: '0.05em',
                   color: '#000000'
                 }}
               >
-                {isLoggedIn ? "MŮJ ÚČET" : "PŘIHLÁSIT SE"}
+                {isLoggedIn ? "✓ MŮJ ÚČET" : "PŘIHLÁSIT SE"}
               </Link>
 
               <Link
                 href="/ulozeno"
                 onClick={onClose}
-                className="block px-6 py-3 hover:bg-gray-50 transition-colors"
+                className="block px-6 py-3 hover:bg-gray-50 transition-colors border-b border-gray-200"
                 style={{
                   fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '14px',
+                  fontSize: '13px',
                   fontWeight: 400,
                   textTransform: 'uppercase',
                   letterSpacing: '0.05em',
                   color: '#000000'
                 }}
               >
-                ULOŽENÉ POLOŽKY
+                ♡ ULOŽENÉ POLOŽKY
               </Link>
 
               {isAdmin && (
@@ -140,14 +147,14 @@ export default function MobileMenu({ isOpen, onClose, categories }: MobileMenuPr
                   className="block px-6 py-3 hover:bg-gray-50 transition-colors"
                   style={{
                     fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
+                    fontSize: '13px',
                     fontWeight: 400,
                     textTransform: 'uppercase',
                     letterSpacing: '0.05em',
                     color: '#000000'
                   }}
                 >
-                  SPRAVCE ESHOPU
+                  ⚙ SPRÁVCE ESHOPU
                 </Link>
               )}
             </div>
