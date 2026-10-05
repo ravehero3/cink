@@ -286,7 +286,7 @@ export default function AdminOrdersPage() {
 
   if (loading) {
     return (
-      <div className="space-y-6" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
+      <div className="space-y-6" style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif' }}>
         <PageHeaderSkeleton />
         <div className="grid grid-cols-2 md:grid-cols-5 gap-px bg-black border border-black">
           {[...Array(5)].map((_, i) => <StatCardSkeleton key={i} />)}
@@ -308,7 +308,7 @@ export default function AdminOrdersPage() {
   }
 
   return (
-    <div className="space-y-8" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
+    <div className="space-y-8" style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif' }}>
 
       {/* Floating order preview */}
       {hoveredOrder && (

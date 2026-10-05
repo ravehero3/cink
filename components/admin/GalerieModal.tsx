@@ -128,7 +128,7 @@ export default function GalerieModal({
     <div
       className="fixed inset-0 z-[250] flex items-center justify-center p-4"
       style={{
-        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+        fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
       }}
     >
       {/* Backdrop */}

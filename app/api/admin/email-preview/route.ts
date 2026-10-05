@@ -30,3 +30,26 @@ export async function GET(request: NextRequest) {
     headers: { 'Content-Type': 'text/html; charset=utf-8' },
   });
 }
+
+export async function POST(request: NextRequest) {
+  const session = await getServerSession(authOptions);
+  if (!session || session.user?.role !== 'ADMIN') {
+    return new NextResponse('Unauthorized', { status: 401 });
+  }
+
+  try {
+    const { subject, content } = await request.json();
+    const { bodyText } = await import('@/lib/email-layout');
+    const inner = bodyText(content || 'Zde bude obsah e-mailu...');
+    const { html } = renderEmail('NEWSLETTER_WELCOME', { ...SAMPLE_VARS, isTest: true }, undefined);
+    
+    // We replace the inner part of NEWSLETTER_WELCOME with our custom content
+    const customHtml = html.replace(/<td style="padding:32px;">[\s\S]*?<\/td>/, `<td style="padding:32px;">${inner}</td>`);
+    
+    return new NextResponse(customHtml, {
+      headers: { 'Content-Type': 'text/html; charset=utf-8' },
+    });
+  } catch (error) {
+    return new NextResponse('Internal server error', { status: 500 });
+  }
+}

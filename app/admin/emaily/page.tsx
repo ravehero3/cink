@@ -105,15 +105,24 @@ export default function EmailAdminPage() {
   const [runningCron, setRunningCron] = useState(false);
   const [cronResult, setCronResult] = useState<string | null>(null);
 
+  const [templates, setTemplates] = useState<{ id: string; type: string; isActive: boolean }[]>([]);
+
   const selected = EMAIL_CATALOG.find((t) => t.id === selectedId)!;
   const selectedLog = logs.find((log) => log.id === selectedLogId) || null;
   const selectedJourney = journeys.find((j) => j.id === selectedJourneyId) || journeys[0] || null;
+  const selectedTemplate = templates.find((t) => t.type === selectedId);
+  const isTemplateActive = selectedTemplate ? selectedTemplate.isActive : true;
 
   useEffect(() => {
     fetch('/api/admin/email-status')
       .then((r) => r.json())
       .then((d) => setServiceStatus(d))
       .catch(() => setServiceStatus({ configured: false, fromEmail: 'noreply@ufosport.cz' }));
+
+    fetch('/api/admin/email-templates')
+      .then((r) => r.json())
+      .then((d) => setTemplates(Array.isArray(d) ? d : []))
+      .catch(console.error);
   }, []);
 
   useEffect(() => {
@@ -196,6 +205,33 @@ export default function EmailAdminPage() {
     if (res.ok) {
       const updated = await res.json();
       setJourneys((prev) => prev.map((item) => (item.id === updated.id ? { ...item, isActive: updated.isActive } : item)));
+    }
+  };
+
+  const toggleTemplate = async () => {
+    let method = 'POST';
+    let url = '/api/admin/email-templates';
+    let body: any = { type: selectedId, subject: selected.label, body: selected.description, isActive: !isTemplateActive };
+    
+    if (selectedTemplate) {
+      method = 'PATCH';
+      url = `/api/admin/email-templates/${selectedTemplate.id}`;
+      body = { isActive: !isTemplateActive };
+    }
+
+    const res = await fetch(url, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+
+    if (res.ok) {
+      const updated = await res.json();
+      setTemplates((prev) => {
+        const exists = prev.find((t) => t.id === updated.id);
+        if (exists) return prev.map((t) => (t.id === updated.id ? updated : t));
+        return [...prev, updated];
+      });
     }
   };
 
@@ -318,6 +354,12 @@ export default function EmailAdminPage() {
                     <div className="flex items-center gap-2">
                       <span className="w-16 text-[10px] font-bold text-[#666666] shrink-0">Spouštěč</span>
                       <span className="text-[10px] font-bold border border-black px-2 py-[2px]">{selected.triggerDetail}</span>
+                    </div>
+                    <div className="flex items-center gap-2 pt-2">
+                      <button onClick={toggleTemplate} className={`admin-btn ${isTemplateActive ? 'admin-btn-secondary' : ''}`}>
+                        {isTemplateActive ? 'Pozastavit e-mail' : 'Aktivovat e-mail'}
+                      </button>
+                      {!isTemplateActive && <span className="text-[10px] font-bold text-red-600 ml-2">POZASTAVENO</span>}
                     </div>
                   </div>
                 </div>
@@ -598,7 +640,6 @@ function PreviewFrame({
             className={`w-full border-0 ${previewLoading ? 'opacity-0' : 'opacity-100'}`}
             style={{ height: 680, display: 'block', border: viewMode === 'mobile' ? '1px solid #000' : 'none' }}
             title={`Náhled: ${title}`}
-            sandbox="allow-same-origin"
           />
         </div>
       </div>

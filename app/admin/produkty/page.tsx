@@ -214,7 +214,7 @@ export default function AdminProductsPage() {
 
   if (loading) {
     return (
-      <div className="space-y-6" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
+      <div className="space-y-6" style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif' }}>
         <PageHeaderSkeleton />
         <FilterBarSkeleton tabs={4} />
         <div className="bg-white border border-black overflow-hidden">
@@ -241,7 +241,7 @@ export default function AdminProductsPage() {
   ];
 
   return (
-    <div className="space-y-6" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
+    <div className="space-y-6" style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif' }}>
 
       {/* Header */}
       <div className="flex items-center justify-between gap-4 flex-wrap border-b border-black pb-4">

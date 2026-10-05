@@ -15,7 +15,7 @@ export default function StatusMessage({ type, message, onDismiss }: StatusMessag
     <div
       className="flex items-start gap-3 p-4 border border-black bg-white text-black text-xs uppercase tracking-wider mb-6"
       style={{
-        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+        fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
       }}
     >
       <span className="font-bold shrink-0">

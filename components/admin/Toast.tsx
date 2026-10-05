@@ -17,7 +17,7 @@ function ToastItem({ toast }: { toast: ToastType }) {
       className="flex items-start gap-3 bg-black text-white border border-black px-4 py-3 w-[340px] max-w-[calc(100vw-2rem)] pointer-events-auto shadow-none"
       role="alert"
       style={{
-        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+        fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
       }}
     >
       <div className="flex-1 pt-0.5">

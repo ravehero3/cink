@@ -210,7 +210,7 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-20 gap-3" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
+      <div className="flex items-center justify-center py-20 gap-3" style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif' }}>
         <div className="w-4 h-4 border border-black border-t-transparent animate-spin" />
         <span className="text-xs uppercase tracking-widest text-[#666666]">Načítám objednávku…</span>
       </div>
@@ -222,7 +222,7 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
   }
 
   return (
-    <div className="space-y-8" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
+    <div className="space-y-8" style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif' }}>
 
       {/* Header */}
       <div className="flex items-center justify-between gap-4 flex-wrap border-b border-black pb-4">

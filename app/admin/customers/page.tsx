@@ -52,7 +52,7 @@ export default function CustomersPage() {
 
   if (loading) {
     return (
-      <div className="space-y-6" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
+      <div className="space-y-6" style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif' }}>
         <PageHeaderSkeleton />
         <div className="bg-white border border-black p-4">
           <div className="h-9 w-full bg-black/10 animate-pulse" />
@@ -74,7 +74,7 @@ export default function CustomersPage() {
   }
 
   return (
-    <div className="space-y-6" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
+    <div className="space-y-6" style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif' }}>
 
       {/* Header */}
       <div className="border-b border-black pb-4">

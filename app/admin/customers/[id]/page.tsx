@@ -42,7 +42,7 @@ export default function CustomerDetailPage({ params }: { params: { id: string } 
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-20 gap-3" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
+      <div className="flex items-center justify-center py-20 gap-3" style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif' }}>
         <div className="w-4 h-4 border border-black border-t-transparent animate-spin" />
         <span className="text-xs uppercase tracking-widest text-[#666666]">Načítám zákazníka…</span>
       </div>
@@ -51,7 +51,7 @@ export default function CustomerDetailPage({ params }: { params: { id: string } 
 
   if (!customer) {
     return (
-      <div className="bg-white border border-black p-12 text-center" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
+      <div className="bg-white border border-black p-12 text-center" style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif' }}>
         <p className="text-xs uppercase tracking-wider text-[#666666]">Zákazník nenalezen.</p>
         <Link href="/admin/customers" className="mt-4 inline-block text-xs uppercase font-bold text-black underline">
           ← Zpět na seznam
@@ -63,7 +63,7 @@ export default function CustomerDetailPage({ params }: { params: { id: string } 
   const totalSpent = customer.orders.reduce((sum: number, o: any) => sum + Number(o.totalPrice || 0), 0);
 
   return (
-    <div className="space-y-8" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
+    <div className="space-y-8" style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif' }}>
 
       {/* Header */}
       <div className="flex items-center gap-3 border-b border-black pb-4">

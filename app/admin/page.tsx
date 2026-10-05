@@ -36,7 +36,7 @@ const StatCard = ({
       <p
         className="uppercase mb-3 group-hover:text-white text-[10px] tracking-widest text-[#666666]"
         style={{
-          fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+          fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
         }}
       >
         {label}
@@ -100,7 +100,7 @@ export default function AdminDashboard() {
         <span
           className="text-xs uppercase tracking-widest font-medium"
           style={{
-            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+            fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
           }}
         >
           Načítám statistiky...
@@ -168,7 +168,7 @@ export default function AdminDashboard() {
         <h2
           className="mb-3 uppercase text-[11px] font-bold tracking-widest text-[#666666]"
           style={{
-            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+            fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
           }}
         >
           Rychlé akce
@@ -188,7 +188,7 @@ export default function AdminDashboard() {
               <span
                 className="uppercase text-xs tracking-wider"
                 style={{
-                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                 }}
               >
                 {action.label}

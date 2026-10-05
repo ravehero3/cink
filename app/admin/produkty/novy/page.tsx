@@ -98,7 +98,7 @@ export default function NewProductPage() {
   const totalStock = Object.values(sizes).reduce((sum, val) => sum + val, 0);
 
   return (
-    <div className="space-y-6" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
+    <div className="space-y-6" style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif' }}>
 
       {/* Header */}
       <div className="flex items-center gap-3 border-b border-black pb-4">

@@ -125,6 +125,10 @@ h4 {
 }
 
 /* Admin — same language as the storefront product listing */
+[data-admin] {
+  font-family: BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
 .admin-title {
   font-family: "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 17px;

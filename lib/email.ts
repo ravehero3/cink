@@ -49,6 +49,23 @@ export async function sendCatalogEmail(options: {
   const { type, to, vars = {}, journeyId, isTest } = options;
   const rendered = renderEmail(type, { ...vars, isTest }, buildUnsubscribeUrl(to));
 
+  const templateConfig = await prisma.emailTemplate.findUnique({
+    where: { type },
+  });
+
+  if (templateConfig && !templateConfig.isActive && !isTest) {
+    await logEmail({
+      toEmail: to,
+      type,
+      subject: rendered.subject,
+      html: rendered.html,
+      status: 'failed',
+      error: 'E-mail je pozastaven v administraci.',
+      journeyId,
+    });
+    return { success: false, error: 'E-mail je pozastaven.' };
+  }
+
   if (!resend) {
     await logEmail({
       toEmail: to,

@@ -1,24 +1,49 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 
-export default function NewEmailCampaignPage() {
+export default function EditEmailCampaignPage() {
   const router = useRouter();
+  const params = useParams();
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [formData, setFormData] = useState({
     name: '',
     subject: '',
     content: '',
     targetAudience: 'all',
+    status: 'draft',
   });
   const [previewHtml, setPreviewHtml] = useState<string>('');
   const [previewLoading, setPreviewLoading] = useState(false);
 
-  // Debounced preview update
-  import { useEffect } from 'react';
   useEffect(() => {
+    const fetchCampaign = async () => {
+      try {
+        const res = await fetch(`/api/admin/email-campaigns/${params.id}`);
+        if (res.ok) {
+          const data = await res.json();
+          setFormData({
+            name: data.name,
+            subject: data.subject,
+            content: data.content,
+            targetAudience: data.targetAudience,
+            status: data.status,
+          });
+        }
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setInitialLoading(false);
+      }
+    };
+    fetchCampaign();
+  }, [params.id]);
+
+  useEffect(() => {
+    if (initialLoading) return;
     const timer = setTimeout(async () => {
       if (!formData.content) return setPreviewHtml('');
       setPreviewLoading(true);
@@ -36,14 +61,14 @@ export default function NewEmailCampaignPage() {
       }
     }, 500);
     return () => clearTimeout(timer);
-  }, [formData.subject, formData.content]);
+  }, [formData.subject, formData.content, initialLoading]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch('/api/admin/email-campaigns', {
-        method: 'POST',
+      const res = await fetch(`/api/admin/email-campaigns/${params.id}`, {
+        method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
@@ -55,17 +80,59 @@ export default function NewEmailCampaignPage() {
     }
   };
 
+  const toggleStatus = async () => {
+    const newStatus = formData.status === 'scheduled' ? 'draft' : 'scheduled';
+    try {
+      const res = await fetch(`/api/admin/email-campaigns/${params.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      if (res.ok) {
+        setFormData({ ...formData, status: newStatus });
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  if (initialLoading) {
+    return (
+      <div className="flex items-center gap-3 py-12">
+        <div className="admin-spinner" />
+        <span className="admin-sub" style={{ margin: 0 }}>Načítám kampaň…</span>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-[24px]">
-      <div className="flex items-center gap-3 border-b border-black pb-4">
-        <Link href="/admin/email-campaigns" className="admin-btn admin-btn-secondary" style={{ padding: 8 }} aria-label="Zpět">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M19 12H5M12 19l-7-7 7-7" />
-          </svg>
-        </Link>
-        <div>
-          <h1 className="admin-title">Nová kampaň</h1>
-          <p className="admin-sub">Vyplňte detaily nové e-mailové kampaně</p>
+      <div className="flex items-center justify-between gap-4 border-b border-black pb-4 flex-wrap">
+        <div className="flex items-center gap-3">
+          <Link href="/admin/email-campaigns" className="admin-btn admin-btn-secondary" style={{ padding: 8 }} aria-label="Zpět">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+          </Link>
+          <div>
+            <h1 className="admin-title">Upravit kampaň</h1>
+            <p className="admin-sub">Úprava a náhled stávající e-mailové kampaně</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <button 
+            type="button" 
+            onClick={toggleStatus} 
+            className={`admin-btn ${formData.status === 'scheduled' ? 'admin-btn-secondary' : ''}`}
+          >
+            {formData.status === 'scheduled' ? 'Pozastavit (Odebrat z plánu)' : 'Naplánovat k odeslání'}
+          </button>
+          {formData.status === 'scheduled' && (
+             <span className="text-[10px] font-bold text-green-600 uppercase tracking-wider">Aktivní</span>
+          )}
+          {formData.status === 'draft' && (
+             <span className="text-[10px] font-bold text-[#666666] uppercase tracking-wider">Pozastaveno</span>
+          )}
         </div>
       </div>
 
@@ -82,7 +149,6 @@ export default function NewEmailCampaignPage() {
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 className="admin-input"
-                placeholder="např. Black Friday promoce"
               />
             </div>
 
@@ -94,7 +160,6 @@ export default function NewEmailCampaignPage() {
                 value={formData.subject}
                 onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                 className="admin-input"
-                placeholder="Předmět e-mailu…"
               />
             </div>
 
@@ -119,14 +184,13 @@ export default function NewEmailCampaignPage() {
                 onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                 className="admin-textarea"
                 rows={12}
-                placeholder="Napište obsah e-mailu…"
               />
             </div>
           </div>
 
           <div className="flex gap-2 mt-[16px]">
             <button type="submit" disabled={loading} className="admin-btn">
-              {loading ? 'Vytváření…' : 'Vytvořit kampaň'}
+              {loading ? 'Ukládání…' : 'Uložit změny'}
             </button>
             <Link href="/admin/email-campaigns" className="admin-btn admin-btn-secondary">
               Zrušit

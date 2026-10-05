@@ -106,15 +106,20 @@ export default function LiveOfferAdminPage() {
             <button
               type="button"
               onClick={toggleActive}
-              className={`relative inline-flex h-8 w-16 items-center border border-black transition-colors ${
+              className={`relative inline-flex items-center border border-black transition-colors ${
                 offer.isActive ? 'bg-black' : 'bg-white'
               }`}
+              style={{ width: 64, height: 32 }}
               aria-label="Přepnout aktivitu"
             >
               <span
-                className={`inline-block h-4 w-4 transition-transform ${
-                  offer.isActive ? 'translate-x-10 bg-white' : 'translate-x-2 bg-black'
-                }`}
+                className="inline-block transition-transform"
+                style={{
+                  width: 16,
+                  height: 16,
+                  background: offer.isActive ? '#fff' : '#000',
+                  transform: offer.isActive ? 'translateX(40px)' : 'translateX(8px)',
+                }}
               />
             </button>
           </div>

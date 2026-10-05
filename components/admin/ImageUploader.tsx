@@ -114,7 +114,7 @@ export default function ImageUploader({
     <div
       className="space-y-4"
       style={{
-        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+        fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
       }}
     >
       {/* Error */}

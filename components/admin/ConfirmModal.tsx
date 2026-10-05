@@ -48,7 +48,7 @@ export default function ConfirmModal({
       <div
         className="relative bg-white border border-black w-full max-w-[440px] p-6 shadow-none"
         style={{
-          fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+          fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
         }}
       >
         <div className="flex items-center justify-between pb-3 mb-4 border-b border-black">
