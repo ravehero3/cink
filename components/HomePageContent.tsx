@@ -198,8 +198,8 @@ function AddSectionPickerModal({ isOpen, onClose, onPick }: { isOpen: boolean; o
 
   return (
     <>
-      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" onClick={onClose} />
-      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white border border-black w-[480px] max-w-[92vw] shadow-2xl">
+      <div className="fixed inset-0 bg-black/20 z-[54]" onClick={onClose} />
+      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[56] bg-white border border-black w-[480px] max-w-[92vw] shadow-2xl">
         <div className="border-b border-black p-4 flex items-center justify-between">
           <h2 className="text-xs font-bold uppercase tracking-widest">Přidat novou sekci</h2>
           <button
@@ -449,6 +449,44 @@ export default function HomePageContent({ initialSections }: HomePageContentProp
     } finally {
       setDeleteModalOpen(false);
       setSectionToDelete(null);
+    }
+  };
+
+  const handleMoveSection = async (sectionKey: string, direction: 'up' | 'down') => {
+    const currentIndex = heroSections.findIndex(s => s.sectionKey === sectionKey);
+    if (currentIndex === -1) return;
+
+    const newIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
+    if (newIndex < 0 || newIndex >= heroSections.length) return;
+
+    // Swap sections
+    const newSections = [...heroSections];
+    [newSections[currentIndex], newSections[newIndex]] = [newSections[newIndex], newSections[currentIndex]];
+
+    // Update order field
+    newSections[currentIndex].order = currentIndex;
+    newSections[newIndex].order = newIndex;
+
+    try {
+      const response = await fetch('/api/hero-sections/reorder', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sectionKeys: newSections.map(s => s.sectionKey),
+        }),
+      });
+
+      if (response.ok) {
+        setHeroSections(newSections);
+      } else {
+        const result = await response.json();
+        alert(`Chyba při přesunutí: ${result.error || 'Neznámá chyba'}`);
+        await fetchHeroSections();
+      }
+    } catch (error) {
+      console.error('Error reordering sections:', error);
+      alert('Chyba při přesunutí sekce. Zkuste to prosím znovu.');
+      await fetchHeroSections();
     }
   };
 
