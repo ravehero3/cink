@@ -131,7 +131,7 @@ export function emailWrapper(content: string, unsubscribeUrl?: string) {
             <td style="height:72px;padding:0;border-bottom:1px solid #000000;text-align:center;vertical-align:middle;background-color:#ffffff;">
               <a href="${WEBSITE_URL}" style="display:block;text-decoration:none;height:72px;line-height:72px;vertical-align:middle;">
                 <span style="
-                  font-size:22px;
+                  font-size:26px;
                   font-weight:700;
                   letter-spacing:0.03em;
                   text-transform:uppercase;
