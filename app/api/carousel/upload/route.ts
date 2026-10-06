@@ -41,20 +41,24 @@ export async function POST(request: NextRequest) {
 
     let url: string
     let vpsPath: string | null = null
+    let storageType = 'LOCAL'
 
-    // Always try to upload to Oracle VPS first
+    // Try Oracle VPS upload in background, but always save locally first
+    const uploadsDir = join(process.cwd(), 'public', 'uploads', 'carousel')
+    await mkdir(uploadsDir, { recursive: true })
+    const filepath = join(uploadsDir, filename)
+    await writeFile(filepath, buffer)
+    url = `/uploads/carousel/${filename}`
+
+    // Try to also upload to Oracle VPS in background (non-blocking)
     try {
       const vpsResult = await uploadToOracleVPS(buffer, filename)
-      url = vpsResult.url
       vpsPath = vpsResult.vpsPath
+      storageType = 'ORACLE_VPS'
+      url = vpsResult.url // Use VPS URL if successful
     } catch (vpsError) {
-      console.warn('VPS upload failed, falling back to local:', vpsError)
-      // Fallback to local storage
-      const uploadsDir = join(process.cwd(), 'public', 'uploads', 'carousel')
-      await mkdir(uploadsDir, { recursive: true })
-      const filepath = join(uploadsDir, filename)
-      await writeFile(filepath, buffer)
-      url = `/uploads/carousel/${filename}`
+      console.warn('VPS upload failed, using local storage:', vpsError)
+      // Continue with local URL
     }
 
     // Get the last carousel slide
@@ -70,7 +74,7 @@ export async function POST(request: NextRequest) {
         link: '',
         order: nextOrder,
         isProtected: true,
-        storageType: vpsPath ? 'ORACLE_VPS' : 'LOCAL',
+        storageType,
         oracleVpsPath: vpsPath,
       },
     })
@@ -79,7 +83,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Upload error:', error)
     return NextResponse.json(
-      { error: 'Upload failed' },
+      { error: 'Upload failed: ' + (error instanceof Error ? error.message : 'Unknown error') },
       { status: 500 }
     )
   }
