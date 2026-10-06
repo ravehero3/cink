@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Upload, X, Loader2, AlertCircle } from 'lucide-react';
-import { useToast } from '@/lib/toast-store';
+import { useToast } from '@/store/toastStore';
 
 interface CarouselSlide {
   id: string;
@@ -17,7 +17,7 @@ export default function HomepageAdminPage() {
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [saved, setSaved] = useState(false);
-  const { showToast } = useToast();
+  const toast = useToast();
 
   // Fetch carousel slides
   useEffect(() => {
@@ -34,7 +34,7 @@ export default function HomepageAdminPage() {
       }
     } catch (error) {
       console.error('Error fetching slides:', error);
-      showToast('Chyba při načítání snímků', 'error');
+      toast.error('Chyba při načítání snímků');
     } finally {
       setLoading(false);
     }
@@ -57,14 +57,14 @@ export default function HomepageAdminPage() {
       const data = await res.json();
 
       if (res.ok) {
-        showToast(`Obrázek "${file.name}" byl nahrán`, 'success');
+      toast.success(`Obrázek "${file.name}" byl nahrán`);
         await fetchSlides();
       } else {
-        showToast(`Chyba: ${data.error || 'Nahrávání selhalo'}`, 'error');
+        toast.error(`Chyba: ${data.error || 'Nahrávání selhalo'}`);
       }
     } catch (error) {
       console.error('Upload error:', error);
-      showToast('Chyba při nahrávání obrázku', 'error');
+      toast.error('Chyba při nahrávání obrázku');
     } finally {
       setUploading(false);
       e.currentTarget.value = '';
@@ -73,7 +73,7 @@ export default function HomepageAdminPage() {
 
   const handleRemoveSlide = async (slideId: string) => {
     if (slides.length <= 1) {
-      showToast('Musí zůstat alespoň jeden snímek', 'error');
+      toast.error('Musí zůstat alespoň jeden snímek');
       return;
     }
 
@@ -83,15 +83,15 @@ export default function HomepageAdminPage() {
       const res = await fetch(`/api/carousel/${slideId}`, { method: 'DELETE' });
 
       if (res.ok) {
-        showToast('Snímek byl odstraněn', 'success');
+        toast.success('Snímek byl odstraněn');
         setSlides(slides.filter(s => s.id !== slideId));
       } else {
         const data = await res.json();
-        showToast(`Chyba: ${data.error || 'Smazání selhalo'}`, 'error');
+        toast.error(`Chyba: ${data.error || 'Smazání selhalo'}`);
       }
     } catch (error) {
       console.error('Error removing slide:', error);
-      showToast('Chyba při odstraňování snímku', 'error');
+      toast.error('Chyba při odstraňování snímku');
     }
   };
 
@@ -122,15 +122,15 @@ export default function HomepageAdminPage() {
 
       if (res.ok) {
         setSaved(true);
-        showToast('Zmeny byly uloženy', 'success');
+        toast.success('Zmeny byly uloženy');
         setTimeout(() => setSaved(false), 3000);
       } else {
         const data = await res.json();
-        showToast(`Chyba: ${data.error || 'Ukládání selhalo'}`, 'error');
+        toast.error(`Chyba: ${data.error || 'Ukládání selhalo'}`);
       }
     } catch (error) {
       console.error('Error saving:', error);
-      showToast('Chyba při ukládání', 'error');
+      toast.error('Chyba při ukládání');
     } finally {
       setUploading(false);
     }
