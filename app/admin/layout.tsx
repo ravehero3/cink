@@ -20,6 +20,7 @@ const SECTION_LABELS: Record<string, string> = {
   'seo-management': 'SEO',
   'pricing-rules': 'Cenová pravidla',
   'nastaveni-uploadu': 'Diagnostika',
+  'domovska-stranka': 'Domovská stránka',
 };
 
 function Breadcrumbs({ pathname }: { pathname: string }) {
@@ -66,6 +67,16 @@ function Breadcrumbs({ pathname }: { pathname: string }) {
 
 const NAV_SECTIONS = [
   {
+    label: 'Obsah & Systém',
+    items: [
+      { href: '/admin/domovska-stranka', label: 'Domovská stránka' },
+      { href: '/admin/media', label: 'Média / Galerie' },
+      { href: '/admin/stranky', label: 'Stránky' },
+      { href: '/admin/seo-management', label: 'SEO' },
+      { href: '/admin/nastaveni-uploadu', label: 'Diagnostika' },
+    ],
+  },
+  {
     label: 'Obchod',
     items: [
       { href: '/admin/objednavky', label: 'Objednávky' },
@@ -82,15 +93,6 @@ const NAV_SECTIONS = [
       { href: '/admin/emaily', label: 'E-maily a cesty' },
       { href: '/admin/email-campaigns', label: 'E-mail kampaně' },
       { href: '/admin/live-nabidky', label: 'Live nabídky' },
-    ],
-  },
-  {
-    label: 'Obsah & Systém',
-    items: [
-      { href: '/admin/media', label: 'Média / Galerie' },
-      { href: '/admin/stranky', label: 'Stránky' },
-      { href: '/admin/seo-management', label: 'SEO' },
-      { href: '/admin/nastaveni-uploadu', label: 'Diagnostika' },
     ],
   },
 ];
