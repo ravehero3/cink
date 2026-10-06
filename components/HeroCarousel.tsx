@@ -373,7 +373,7 @@ export default function HeroCarousel({
 
       {/* Pagination dots */}
       {hasSlides && (
-        <div className="absolute left-1/2 bottom-3 z-10 flex items-center" style={{ transform: 'translateX(-50%)', gap: '-2px' }}>
+        <div className="absolute left-1/2 bottom-3 z-10 flex items-center" style={{ transform: 'translateX(-50%)', gap: '4px' }}>
           {slides.map((_, i) => (
             <button
               key={i}
@@ -382,7 +382,7 @@ export default function HeroCarousel({
               onClick={() => goTo(i)}
               aria-label={`Go to slide ${i + 1}`}
               aria-current={i === active ? 'true' : 'false'}
-              style={{ width: '12px', height: '12px', padding: '0', margin: '-2px 0' }}
+              style={{ width: '12px', height: '12px', padding: '0', margin: '0' }}
             >
               <div
                 style={{
