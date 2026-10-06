@@ -112,6 +112,28 @@ export default function HeroCarousel({
     startLeftRef.current = trackRef.current.scrollLeft;
   };
 
+  // Auto-advance carousel every 6 seconds
+  useEffect(() => {
+    if (!hasSlides || slides.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setActive((prev) => {
+        const next = (prev + 1) % slides.length;
+        // Use setTimeout to ensure goTo is called with updated active
+        setTimeout(() => {
+          if (!trackRef.current) return;
+          trackRef.current.scrollTo({
+            left: next * trackRef.current.clientWidth,
+            behavior: 'smooth',
+          });
+        }, 0);
+        return next;
+      });
+    }, 6000);
+
+    return () => clearInterval(interval);
+  }, [hasSlides, slides.length]);
+
   useEffect(() => {
     const handlePointerMove = (e: PointerEvent) => {
       if (!downRef.current || !trackRef.current) return;
@@ -329,24 +351,24 @@ export default function HeroCarousel({
 
       {/* Pagination dots */}
       {hasSlides && (
-        <div className="absolute left-1/2 bottom-3 z-10 flex items-center gap-0.5" style={{ transform: 'translateX(-50%)' }}>
+        <div className="absolute left-1/2 bottom-3 z-10 flex items-center" style={{ transform: 'translateX(-50%)', gap: '-2px' }}>
           {slides.map((_, i) => (
             <button
               key={i}
               type="button"
-              className="w-5 h-5 flex items-center justify-center hover:scale-150 transition-transform"
+              className="flex items-center justify-center hover:scale-150 transition-transform"
               onClick={() => goTo(i)}
               aria-label={`Go to slide ${i + 1}`}
               aria-current={i === active ? 'true' : 'false'}
+              style={{ width: '12px', height: '12px', padding: '0', margin: '-2px 0' }}
             >
               <div
                 style={{
                   width: '9px',
                   height: '9px',
                   borderRadius: '50%',
-                  border: '1px solid white',
-                  backgroundColor: i === active ? 'white' : 'transparent',
-                  mixBlendMode: 'difference',
+                  border: '2px solid black',
+                  backgroundColor: i === active ? 'black' : 'transparent',
                   transition: 'all 0.35s cubic-bezier(0.22, 1, 0.36, 1)',
                 }}
               />
