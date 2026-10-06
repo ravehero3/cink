@@ -18,7 +18,7 @@ export default function HomepageAdminPage() {
   const [uploading, setUploading] = useState(false);
   const [saved, setSaved] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const { toast } = useToast();
+  const toast = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Fetch carousel slides

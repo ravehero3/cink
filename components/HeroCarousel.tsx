@@ -329,7 +329,7 @@ export default function HeroCarousel({
 
       {/* Pagination dots */}
       {hasSlides && (
-        <div className="absolute left-1/2 bottom-3 z-10 flex items-center gap-1" style={{ transform: 'translateX(-50%)' }}>
+        <div className="absolute left-1/2 bottom-3 z-10 flex items-center gap-0.5" style={{ transform: 'translateX(-50%)' }}>
           {slides.map((_, i) => (
             <button
               key={i}
