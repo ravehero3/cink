@@ -26,7 +26,7 @@ interface HeroCarouselProps {
 }
 
 export default function HeroCarousel({
-  isAdmin,
+  isAdmin: isAdminProp,
   onEdit,
   onDelete,
   onAdd,
@@ -48,10 +48,17 @@ export default function HeroCarousel({
   const startLeftRef = useRef(0);
   const movedRef = useRef(false);
 
-  const isLoggedInAdmin = isAdmin || session?.user?.role === 'ADMIN';
+  // isAdmin from prop OR session
+  const isLoggedInAdmin = isAdminProp || session?.user?.role === 'ADMIN';
   const hasSlides = slides.length > 0 && slides.some(s => s.image);
 
-  console.log('HeroCarousel debug:', { isAdmin, sessionRole: session?.user?.role, isLoggedInAdmin });
+  useEffect(() => {
+    if (isLoggedInAdmin) {
+      console.log('✓ Admin detected in HeroCarousel');
+    } else {
+      console.log('✗ Not admin in HeroCarousel', { isAdminProp, sessionRole: session?.user?.role });
+    }
+  }, [isLoggedInAdmin, isAdminProp, session]);
 
   // Fetch carousel slides
   useEffect(() => {
@@ -60,11 +67,11 @@ export default function HeroCarousel({
         const res = await fetch('/api/carousel?_t=' + Date.now());
         if (res.ok) {
           const data = await res.json();
-          console.log('Fetched carousel slides:', data.slides);
+          console.log('✓ Fetched carousel slides:', data.slides?.length, 'slides');
           setSlides(data.slides || []);
         }
       } catch (error) {
-        console.error('Error fetching carousel slides:', error);
+        console.error('✗ Error fetching carousel slides:', error);
       } finally {
         setLoading(false);
       }
@@ -156,39 +163,36 @@ export default function HeroCarousel({
   };
 
   const handlePickerClose = () => {
+    console.log('Picker closed, refreshing slides...');
     setShowPicker(false);
-    // Refresh slides
-    setTimeout(() => {
-      const refreshSlides = async () => {
-        try {
-          const res = await fetch('/api/carousel?_t=' + Date.now());
-          if (res.ok) {
-            const data = await res.json();
-            console.log('Refreshed slides after upload:', data.slides);
-            setSlides(data.slides || []);
-            // Auto-navigate to the new slide
-            if (data.slides && data.slides.length > 0) {
-              setTimeout(() => goTo(data.slides.length - 1), 100);
-            }
+    // Refresh slides immediately
+    const refreshSlides = async () => {
+      try {
+        const res = await fetch('/api/carousel?_t=' + Date.now());
+        if (res.ok) {
+          const data = await res.json();
+          console.log('✓ Refreshed carousel slides:', data.slides?.length, 'slides');
+          setSlides(data.slides || []);
+          // Auto-navigate to the new slide
+          if (data.slides && data.slides.length > 0) {
+            setTimeout(() => goTo(data.slides.length - 1), 100);
           }
-        } catch (error) {
-          console.error('Error refreshing slides:', error);
         }
-      };
-      refreshSlides();
-    }, 500);
+      } catch (error) {
+        console.error('✗ Error refreshing slides:', error);
+      }
+    };
+    refreshSlides();
   };
 
   if (loading) {
-    return <div className="w-full bg-gray-100 flex items-center justify-center border-b border-black" style={{ aspectRatio: '2576 / 584' }}>Loading...</div>;
+    return <div className="w-full bg-gray-100 flex items-center justify-center border-b border-black" style={{ aspectRatio: '2576 / 584' }}>Loading carousel...</div>;
   }
-
-  console.log('HeroCarousel render:', { slidesCount: slides.length, hasImages: hasSlides, isLoggedInAdmin });
 
   return (
     <section className="w-full relative bg-white border-b border-black overflow-hidden">
       {/* Admin watermark */}
-      {isAdmin && (
+      {isLoggedInAdmin && (
         <div
           style={{
             position: 'absolute',
@@ -204,7 +208,7 @@ export default function HeroCarousel({
             borderRadius: '2px',
           }}
         >
-          Desktop: 2576×584 | Mobile: 4:5
+          ✓ ADMIN | Desktop: 2576×584 | Mobile: 4:5
         </div>
       )}
 
@@ -236,7 +240,10 @@ export default function HeroCarousel({
               <button
                 type="button"
                 className="flex flex-col items-center justify-center gap-4 cursor-pointer hover:opacity-70 transition-opacity"
-                onClick={() => setShowPicker(true)}
+                onClick={() => {
+                  console.log('✓ + button clicked, opening picker');
+                  setShowPicker(true);
+                }}
               >
                 <div
                   style={{
@@ -300,7 +307,7 @@ export default function HeroCarousel({
               )}
 
               {/* Remove button */}
-              {isAdmin && (
+              {isLoggedInAdmin && (
                 <button
                   type="button"
                   className="absolute right-12 bottom-11 z-10 w-7 h-7 bg-white border border-black hover:bg-black hover:text-white transition-all opacity-0 group-hover:opacity-100"
@@ -349,7 +356,10 @@ export default function HeroCarousel({
             <button
               type="button"
               className="ml-1 text-white hover:scale-125 transition-transform"
-              onClick={() => setShowPicker(true)}
+              onClick={() => {
+                console.log('✓ + dot clicked, opening picker');
+                setShowPicker(true);
+              }}
               style={{ fontSize: '15px', lineHeight: '1', fontWeight: 300 }}
             >
               +
@@ -359,7 +369,7 @@ export default function HeroCarousel({
       )}
 
       {/* Admin controls */}
-      {isAdmin && (
+      {isLoggedInAdmin && (
         <div className="absolute top-3 right-3 flex items-center gap-2 z-10">
           {onMoveUp && canMoveUp && (
             <button
