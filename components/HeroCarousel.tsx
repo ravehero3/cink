@@ -49,6 +49,9 @@ export default function HeroCarousel({
   const movedRef = useRef(false);
 
   const isLoggedInAdmin = isAdmin || session?.user?.role === 'ADMIN';
+  const hasSlides = slides.length > 0 && slides.some(s => s.image);
+
+  console.log('HeroCarousel debug:', { isAdmin, sessionRole: session?.user?.role, isLoggedInAdmin });
 
   // Fetch carousel slides
   useEffect(() => {
@@ -177,10 +180,10 @@ export default function HeroCarousel({
   };
 
   if (loading) {
-    return <div className="w-full bg-gray-100 flex items-center justify-center border-b border-black" style={{ aspectRatio: '2576 / 584' }}>Loading carousel...</div>;
+    return <div className="w-full bg-gray-100 flex items-center justify-center border-b border-black" style={{ aspectRatio: '2576 / 584' }}>Loading...</div>;
   }
 
-  const hasSlides = slides.length > 0 && slides.some(s => s.image);
+  console.log('HeroCarousel render:', { slidesCount: slides.length, hasImages: hasSlides, isLoggedInAdmin });
 
   return (
     <section className="w-full relative bg-white border-b border-black overflow-hidden">
@@ -223,8 +226,8 @@ export default function HeroCarousel({
         onKeyDown={handleKeyDown}
         tabIndex={0}
       >
-        {slides.length === 0 || !hasSlides ? (
-          // Empty state
+        {!hasSlides ? (
+          // Empty state - show + button for admin
           <div
             className="flex-shrink-0 w-full h-full flex items-center justify-center bg-gray-100"
             style={{ aspectRatio: '2576 / 584', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}
