@@ -108,7 +108,7 @@ export default function HeroCarousel({
         setMoved(true);
         trackRef.current.classList.add('is-dragging');
       }
-      if (setMoved) {
+      if (moved) {
         trackRef.current.scrollLeft = startLeftRef.current - dx;
       }
     };
