@@ -19,13 +19,17 @@ export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     if (!session || session.user?.role !== 'ADMIN') {
+      console.log('Unauthorized - no session or not admin')
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     const formData = await request.formData()
     const file = formData.get('file') as File
 
+    console.log('Carousel upload request - file:', file?.name, 'size:', file?.size, 'type:', file?.type)
+
     if (!file || !ALLOWED_TYPES.includes(file.type)) {
+      console.log('Invalid file type:', file?.type)
       return NextResponse.json(
         { error: 'Invalid file type. Allowed: JPEG, PNG, WebP' },
         { status: 400 }
@@ -33,10 +37,12 @@ export async function POST(request: NextRequest) {
     }
 
     if (file.size > 10 * 1024 * 1024) {
+      console.log('File too large:', file.size)
       return NextResponse.json({ error: 'File too large (max 10MB)' }, { status: 400 })
     }
 
     const filename = generateFilename(file.name)
+    console.log('Generated filename:', filename)
     const buffer = Buffer.from(await file.arrayBuffer())
 
     let url: string
@@ -49,15 +55,18 @@ export async function POST(request: NextRequest) {
     const filepath = join(uploadsDir, filename)
     await writeFile(filepath, buffer)
     url = `/uploads/carousel/${filename}`
+    console.log('Saved locally to:', url)
 
-    // Try to also upload to Oracle VPS in background (non-blocking)
+    // Try to also upload to Oracle VPS
     try {
+      console.log('Attempting VPS upload...')
       const vpsResult = await uploadToOracleVPS(buffer, filename)
       vpsPath = vpsResult.vpsPath
       storageType = 'ORACLE_VPS'
       url = vpsResult.url // Use VPS URL if successful
+      console.log('VPS upload successful:', { vpsPath, url })
     } catch (vpsError) {
-      console.warn('VPS upload failed, using local storage:', vpsError)
+      console.warn('VPS upload failed, using local storage:', vpsError instanceof Error ? vpsError.message : String(vpsError))
       // Continue with local URL
     }
 
@@ -79,11 +88,13 @@ export async function POST(request: NextRequest) {
       },
     })
 
+    console.log('Created slide:', { id: slide.id, storageType, url })
     return NextResponse.json({ slide })
   } catch (error) {
-    console.error('Upload error:', error)
+    const msg = error instanceof Error ? error.message : String(error)
+    console.error('Upload error:', msg, error)
     return NextResponse.json(
-      { error: 'Upload failed: ' + (error instanceof Error ? error.message : 'Unknown error') },
+      { error: 'Upload failed: ' + msg },
       { status: 500 }
     )
   }

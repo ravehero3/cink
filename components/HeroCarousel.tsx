@@ -137,38 +137,51 @@ export default function HeroCarousel({
 
   const handleSlotClick = (i: number) => {
     setPendingIndex(i);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-      fileInputRef.current.click();
-    }
+    setTimeout(() => {
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+        fileInputRef.current.click();
+      }
+    }, 0);
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.currentTarget.files?.[0];
-    if (!f || pendingIndex === null) return;
+    if (!f || pendingIndex === null) {
+      console.log('No file or pendingIndex:', { f, pendingIndex });
+      return;
+    }
 
     const formData = new FormData();
     formData.append('file', f);
 
     try {
+      console.log('Starting upload for file:', f.name, 'Size:', f.size);
       const res = await fetch('/api/carousel/upload', {
         method: 'POST',
         body: formData,
       });
 
+      const data = await res.json();
+      console.log('Upload response:', { status: res.status, data });
+
       if (res.ok) {
-        const data = await res.json();
         setPendingIndex(null);
         // Refresh slides
         const refreshRes = await fetch('/api/carousel?_t=' + Date.now());
         if (refreshRes.ok) {
           const refreshData = await refreshRes.json();
+          console.log('Refreshed slides:', refreshData.slides);
           setSlides(refreshData.slides);
           goTo(refreshData.slides.length - 1);
         }
+      } else {
+        alert('Upload failed: ' + (data.error || 'Unknown error'));
+        console.error('Upload error:', data);
       }
     } catch (error) {
       console.error('Error uploading image:', error);
+      alert('Error uploading image: ' + (error instanceof Error ? error.message : 'Unknown'));
     }
   };
 
