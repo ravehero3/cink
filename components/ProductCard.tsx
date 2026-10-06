@@ -75,15 +75,15 @@ export default function ProductCard({
     <>
     <Link
       href={`/produkty/${slug}`}
-      className="block bg-white border border-black relative"
-      style={{ marginRight: '-1px', marginBottom: '-1px', marginTop: '-1px' }}
+      className="block bg-white relative w-full h-full"
+      style={{ marginRight: '-1px', marginBottom: '-1px', marginTop: '-1px', border: '1px solid black' }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => {
         setIsHovered(false);
         setCurrentImageIndex(0);
       }}
     >
-      <div className="relative overflow-hidden aspect-product flex items-center justify-center bg-white" style={{ padding: 'clamp(8px, 10%, 40px)' }}>
+      <div className="relative overflow-hidden aspect-product flex items-center justify-center bg-white" style={{ padding: '0px' }}>
         <img
           src={displayImage}
           alt={name}
