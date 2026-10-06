@@ -47,6 +47,8 @@ export default function HeroCarousel({
   const startXRef = useRef(0);
   const startLeftRef = useRef(0);
   const movedRef = useRef(false);
+  const userInteractionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [isUserInteracting, setIsUserInteracting] = useState(false);
 
   // isAdmin from prop OR session
   const isLoggedInAdmin = isAdminProp || session?.user?.role === 'ADMIN';
@@ -94,10 +96,24 @@ export default function HeroCarousel({
     if (!trackRef.current) return;
     const i = Math.round(trackRef.current.scrollLeft / trackRef.current.clientWidth);
     setActive(i);
+    
+    // Pause auto-advance on scroll
+    setIsUserInteracting(true);
+    if (userInteractionTimeoutRef.current) clearTimeout(userInteractionTimeoutRef.current);
+    userInteractionTimeoutRef.current = setTimeout(() => {
+      setIsUserInteracting(false);
+    }, 8000);
   }, []);
 
   // Handle keyboard
   const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+      setIsUserInteracting(true);
+      if (userInteractionTimeoutRef.current) clearTimeout(userInteractionTimeoutRef.current);
+      userInteractionTimeoutRef.current = setTimeout(() => {
+        setIsUserInteracting(false);
+      }, 8000);
+    }
     if (e.key === 'ArrowRight') goTo(active + 1);
     if (e.key === 'ArrowLeft') goTo(active - 1);
   };
@@ -110,16 +126,22 @@ export default function HeroCarousel({
     movedRef.current = false;
     startXRef.current = e.clientX;
     startLeftRef.current = trackRef.current.scrollLeft;
+    
+    // Pause auto-advance on user interaction
+    setIsUserInteracting(true);
+    if (userInteractionTimeoutRef.current) clearTimeout(userInteractionTimeoutRef.current);
+    userInteractionTimeoutRef.current = setTimeout(() => {
+      setIsUserInteracting(false);
+    }, 8000);
   };
 
-  // Auto-advance carousel every 6 seconds
+  // Auto-advance carousel every 6 seconds, pause on user interaction
   useEffect(() => {
-    if (!hasSlides || slides.length <= 1) return;
+    if (!hasSlides || slides.length <= 1 || isUserInteracting) return;
 
     const interval = setInterval(() => {
       setActive((prev) => {
         const next = (prev + 1) % slides.length;
-        // Use setTimeout to ensure goTo is called with updated active
         setTimeout(() => {
           if (!trackRef.current) return;
           trackRef.current.scrollTo({
@@ -132,7 +154,7 @@ export default function HeroCarousel({
     }, 6000);
 
     return () => clearInterval(interval);
-  }, [hasSlides, slides.length]);
+  }, [hasSlides, slides.length, isUserInteracting]);
 
   useEffect(() => {
     const handlePointerMove = (e: PointerEvent) => {
@@ -367,8 +389,8 @@ export default function HeroCarousel({
                   width: '9px',
                   height: '9px',
                   borderRadius: '50%',
-                  border: '2px solid black',
-                  backgroundColor: i === active ? 'black' : 'transparent',
+                  border: '1.5px solid white',
+                  backgroundColor: i === active ? 'rgba(0, 0, 0, 0.3)' : 'transparent',
                   transition: 'all 0.35s cubic-bezier(0.22, 1, 0.36, 1)',
                 }}
               />
