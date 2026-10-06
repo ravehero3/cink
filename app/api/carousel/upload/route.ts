@@ -1,21 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { writeFile, mkdir } from 'fs/promises'
-import { join } from 'path'
 import { prisma } from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { uploadToOracleVPS } from '@/lib/oracle-vps'
 
-const ADMIN_EMAILS = ['spravce.eshopu@ufosport.cz']
-const isAdminUser = (session: any) => session?.user?.role === 'ADMIN' || ADMIN_EMAILS.includes(session?.user?.email)
 const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
-
-function generateFilename(originalName: string): string {
-  const ext = originalName.split('.').pop()?.toLowerCase() || 'jpg'
-  const base = originalName.replace(/\.[^/.]+$/, '').replace(/[^a-zA-Z0-9-_]/g, '_').slice(0, 50)
-  const unique = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
-  return `carousel-${base}-${unique}.${ext}`
-}
+const MAX_SIZE = 5 * 1024 * 1024 // 5MB for data URLs
 
 export async function POST(request: NextRequest) {
   try {
@@ -39,39 +28,17 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    if (file.size > 10 * 1024 * 1024) {
+    if (file.size > MAX_SIZE) {
       console.log('File too large:', file.size)
-      return NextResponse.json({ error: 'File too large (max 10MB)' }, { status: 400 })
+      return NextResponse.json({ error: `File too large (max ${MAX_SIZE / 1024 / 1024}MB)` }, { status: 400 })
     }
 
-    const filename = generateFilename(file.name)
-    console.log('Generated filename:', filename)
+    // Convert file to base64 data URL
     const buffer = Buffer.from(await file.arrayBuffer())
-
-    let url: string
-    let vpsPath: string | null = null
-    let storageType = 'LOCAL'
-
-    // Try Oracle VPS upload in background, but always save locally first
-    const uploadsDir = join(process.cwd(), 'public', 'uploads', 'carousel')
-    await mkdir(uploadsDir, { recursive: true })
-    const filepath = join(uploadsDir, filename)
-    await writeFile(filepath, buffer)
-    url = `/uploads/carousel/${filename}`
-    console.log('Saved locally to:', url, 'at path:', filepath)
-
-    // Try to also upload to Oracle VPS
-    try {
-      console.log('Attempting VPS upload...')
-      const vpsResult = await uploadToOracleVPS(buffer, filename)
-      vpsPath = vpsResult.vpsPath
-      storageType = 'ORACLE_VPS'
-      url = vpsResult.url // Use VPS URL if successful
-      console.log('VPS upload successful:', { vpsPath, url })
-    } catch (vpsError) {
-      console.warn('VPS upload failed, using local storage:', vpsError instanceof Error ? vpsError.message : String(vpsError))
-      // Continue with local URL
-    }
+    const base64 = buffer.toString('base64')
+    const dataUrl = `data:${file.type};base64,${base64}`
+    
+    console.log('Converted to data URL, size:', dataUrl.length)
 
     // Get the last carousel slide
     const lastSlide = await prisma.carouselSlide.findFirst({
@@ -79,19 +46,19 @@ export async function POST(request: NextRequest) {
     })
     const nextOrder = (lastSlide?.order ?? -1) + 1
 
-    // Create carousel slide with protection enabled
+    // Create carousel slide with data URL (stored in database)
     const slide = await prisma.carouselSlide.create({
       data: {
-        image: url,
+        image: dataUrl,
         link: '',
         order: nextOrder,
         isProtected: true,
-        storageType,
-        oracleVpsPath: vpsPath,
+        storageType: 'DATABASE',
+        oracleVpsPath: null,
       },
     })
 
-    console.log('Created slide:', { id: slide.id, storageType, url })
+    console.log('Created slide:', { id: slide.id, storageType: 'DATABASE' })
     return NextResponse.json({ slide })
   } catch (error) {
     const msg = error instanceof Error ? error.message : String(error)
