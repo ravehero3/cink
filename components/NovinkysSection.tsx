@@ -222,63 +222,6 @@ export default function NovinkysSection({
   // Extract only product data for ProductsGrid
   const products: Product[] = novinkysProducts.map((np) => np.product);
 
-  // Wrapper component for draggable grid items (for admin only)
-  const DraggableProductsGrid = () => {
-    if (!isLoggedInAdmin) {
-      return (
-        <ProductsGrid
-          products={products}
-          savedProducts={savedProducts}
-          onToggleSave={handleToggleSave}
-        />
-      );
-    }
-
-    // For admin, show draggable version
-    return (
-      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-px bg-black border border-black">
-        {novinkysProducts.map((item, index) => (
-          <div
-            key={item.productId}
-            draggable
-            onDragStart={(e) => handleDragStart(e, item)}
-            onDragOver={(e) => handleDragOver(e, index)}
-            onDrop={(e) => handleDrop(e, item, index)}
-            className={`relative bg-white border-b border-black transition-all duration-200 ${
-              draggedItem?.productId === item.productId ? 'opacity-50' : ''
-            } ${draggedOverIndex === index ? 'ring-2 ring-blue-500' : ''}`}
-            style={{
-              marginRight: '-1px',
-              marginBottom: '-1px',
-              marginTop: '-1px',
-            }}
-          >
-            <div className="relative group cursor-move">
-              <ProductsGrid
-                products={[item.product]}
-                savedProducts={savedProducts}
-                onToggleSave={handleToggleSave}
-              />
-
-              {/* Remove button for admin */}
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  handleRemoveProduct(item.productId);
-                }}
-                className="absolute top-2 right-2 w-6 h-6 bg-red-500 hover:bg-red-600 text-white flex items-center justify-center rounded z-20 transition-all opacity-0 group-hover:opacity-100"
-                title="Remove from NOVINKY"
-              >
-                <X size={14} strokeWidth={2} />
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  };
-
   return (
     <section className="w-full relative bg-white border-b border-black">
       {/* Admin dimensions watermark */}
@@ -303,7 +246,7 @@ export default function NovinkysSection({
       )}
 
       {/* Title */}
-      <div className="px-4 md:px-8 py-6 md:py-8 border-b border-black">
+      <div className="px-4 md:px-8 py-6 md:py-8 border-b border-black bg-white">
         <div className="flex items-center justify-between">
           <h2
             className="text-xl md:text-2xl uppercase font-bold"
@@ -321,12 +264,60 @@ export default function NovinkysSection({
         </div>
       </div>
 
-      {/* Product Grid - Same as zobrazit-vse page */}
-      <DraggableProductsGrid />
+      {/* Product Grid - Same as zobrazit-vse page with admin drag support */}
+      {isLoggedInAdmin ? (
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-px bg-black border border-black">
+          {novinkysProducts.map((item, index) => (
+            <div
+              key={item.productId}
+              draggable
+              onDragStart={(e) => handleDragStart(e, item)}
+              onDragOver={(e) => handleDragOver(e, index)}
+              onDrop={(e) => handleDrop(e, item, index)}
+              className={`relative transition-all duration-200 ${
+                draggedItem?.productId === item.productId ? 'opacity-50' : ''
+              } ${draggedOverIndex === index ? 'ring-2 ring-inset ring-blue-500' : ''}`}
+              style={{
+                marginRight: '-1px',
+                marginBottom: '-1px',
+                marginTop: '-1px',
+              }}
+            >
+              <div className="relative group bg-white border border-black cursor-move" style={{ marginRight: '-1px', marginBottom: '-1px', marginTop: '-1px' }}>
+                {/* ProductCard content inline */}
+                <ProductsGrid
+                  products={[item.product]}
+                  savedProducts={savedProducts}
+                  onToggleSave={handleToggleSave}
+                />
+
+                {/* Remove button for admin */}
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleRemoveProduct(item.productId);
+                  }}
+                  className="absolute top-2 right-2 w-6 h-6 bg-red-500 hover:bg-red-600 text-white flex items-center justify-center rounded z-20 transition-all opacity-0 group-hover:opacity-100"
+                  title="Remove from NOVINKY"
+                >
+                  <X size={14} strokeWidth={2} />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <ProductsGrid
+          products={products}
+          savedProducts={savedProducts}
+          onToggleSave={handleToggleSave}
+        />
+      )}
 
       {/* Add Product Button for Admin */}
       {isLoggedInAdmin && (
-        <div className="px-4 md:px-8 py-6 md:py-8 flex justify-center border-t border-black">
+        <div className="px-4 md:px-8 py-6 md:py-8 flex justify-center border-t border-black bg-white">
           <button
             onClick={handleAddProduct}
             className="px-6 py-3 bg-black text-white uppercase text-sm font-bold hover:bg-gray-800 transition-colors"
