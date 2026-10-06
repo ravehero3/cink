@@ -8,6 +8,7 @@ import { uploadToOracleVPS } from '@/lib/oracle-vps'
 
 const ADMIN_EMAILS = ['spravce.eshopu@ufosport.cz']
 const isAdminUser = (session: any) => session?.user?.role === 'ADMIN' || ADMIN_EMAILS.includes(session?.user?.email)
+const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
 
 function generateFilename(originalName: string): string {
   const ext = originalName.split('.').pop()?.toLowerCase() || 'jpg'
