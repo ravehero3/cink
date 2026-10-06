@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import VideoPromo from './VideoPromo';
 import HeroCarousel from './HeroCarousel';
+import NovinkysSection from './NovinkysSection';
 import VideoSection from './VideoSection';
 import ProductShowcaseSection from './ProductShowcaseSection';
 import QuadImageSection from './QuadImageSection';
@@ -613,6 +614,17 @@ export default function HomePageContent({ initialSections }: HomePageContentProp
       <HeroCarousel
         isAdmin={isAdmin}
         onAdd={handleAddSection}
+        isLastSection={false}
+      />
+
+      {/* NOVINKY Section - Second Section */}
+      <NovinkysSection
+        isAdmin={isAdmin}
+        onAdd={handleAddSection}
+        onMoveUp={() => {}}
+        onMoveDown={() => {}}
+        canMoveUp={false}
+        canMoveDown={true}
         isLastSection={false}
       />
 

@@ -57,6 +57,7 @@ model Product {
   seoDescription     String?
   seoKeywords        String?
   ogImage            String?
+  novinkysProduct    NovinkysProduct?
   createdAt          DateTime        @default(now())
   updatedAt          DateTime        @updatedAt
 }
@@ -332,6 +333,14 @@ model CarouselSlide {
   oracleVpsPath String?     // Path on Oracle VPS if stored there
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
+}
+
+model NovinkysProduct {
+  productId   String   @id
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model EmailJourney {
