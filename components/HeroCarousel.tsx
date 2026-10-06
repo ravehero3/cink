@@ -2,8 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
-import Link from 'next/link';
-import { ChevronUp, ChevronDown, X, Plus } from 'lucide-react';
+import { X } from 'lucide-react';
 import CarouselImagePicker from './CarouselImagePicker';
 
 interface CarouselSlide {
@@ -41,13 +40,13 @@ export default function HeroCarousel({
   const [slides, setSlides] = useState<CarouselSlide[]>([]);
   const [active, setActive] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [moved, setMoved] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
-  
+
   const trackRef = useRef<HTMLDivElement>(null);
   const downRef = useRef(false);
   const startXRef = useRef(0);
   const startLeftRef = useRef(0);
+  const movedRef = useRef(false);
 
   const isLoggedInAdmin = isAdmin || session?.user?.role === 'ADMIN';
 
@@ -58,6 +57,7 @@ export default function HeroCarousel({
         const res = await fetch('/api/carousel?_t=' + Date.now());
         if (res.ok) {
           const data = await res.json();
+          console.log('Fetched carousel slides:', data.slides);
           setSlides(data.slides || []);
         }
       } catch (error) {
@@ -97,7 +97,7 @@ export default function HeroCarousel({
     if (e.pointerType !== 'mouse' || e.button !== 0) return;
     if (!trackRef.current) return;
     downRef.current = true;
-    setMoved(false);
+    movedRef.current = false;
     startXRef.current = e.clientX;
     startLeftRef.current = trackRef.current.scrollLeft;
   };
@@ -107,10 +107,10 @@ export default function HeroCarousel({
       if (!downRef.current || !trackRef.current) return;
       const dx = e.clientX - startXRef.current;
       if (Math.abs(dx) > 5) {
-        setMoved(true);
+        movedRef.current = true;
         trackRef.current.classList.add('is-dragging');
       }
-      if (moved) {
+      if (movedRef.current) {
         trackRef.current.scrollLeft = startLeftRef.current - dx;
       }
     };
@@ -119,13 +119,13 @@ export default function HeroCarousel({
       if (!downRef.current || !trackRef.current) return;
       downRef.current = false;
       trackRef.current.classList.remove('is-dragging');
-      if (moved) {
+      if (movedRef.current) {
         const dx = e.clientX - startXRef.current;
         const w = trackRef.current.clientWidth;
         let target = Math.round(startLeftRef.current / w);
         if (Math.abs(dx) > w * 0.12) target += dx < 0 ? 1 : -1;
         goTo(target);
-        setMoved(false);
+        movedRef.current = false;
       }
     };
 
@@ -135,7 +135,7 @@ export default function HeroCarousel({
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('pointerup', handlePointerUp);
     };
-  }, [moved, goTo]);
+  }, [goTo]);
 
   const handleRemoveSlide = async (slideId: string) => {
     if (slides.length <= 1) return;
@@ -146,9 +146,6 @@ export default function HeroCarousel({
         const newSlides = slides.filter((s) => s.id !== slideId);
         setSlides(newSlides);
         setActive(Math.max(0, active - 1));
-      } else {
-        const err = await res.json();
-        alert(err.error || 'Failed to remove slide');
       }
     } catch (error) {
       console.error('Error removing slide:', error);
@@ -158,27 +155,36 @@ export default function HeroCarousel({
   const handlePickerClose = () => {
     setShowPicker(false);
     // Refresh slides
-    const refreshSlides = async () => {
-      try {
-        const res = await fetch('/api/carousel?_t=' + Date.now());
-        if (res.ok) {
-          const data = await res.json();
-          setSlides(data.slides || []);
+    setTimeout(() => {
+      const refreshSlides = async () => {
+        try {
+          const res = await fetch('/api/carousel?_t=' + Date.now());
+          if (res.ok) {
+            const data = await res.json();
+            console.log('Refreshed slides after upload:', data.slides);
+            setSlides(data.slides || []);
+            // Auto-navigate to the new slide
+            if (data.slides && data.slides.length > 0) {
+              setTimeout(() => goTo(data.slides.length - 1), 100);
+            }
+          }
+        } catch (error) {
+          console.error('Error refreshing slides:', error);
         }
-      } catch (error) {
-        console.error('Error refreshing slides:', error);
-      }
-    };
-    refreshSlides();
+      };
+      refreshSlides();
+    }, 500);
   };
 
   if (loading) {
-    return <div className="w-full h-80 bg-gray-100 flex items-center justify-center">Loading carousel...</div>;
+    return <div className="w-full bg-gray-100 flex items-center justify-center border-b border-black" style={{ aspectRatio: '2576 / 584' }}>Loading carousel...</div>;
   }
+
+  const hasSlides = slides.length > 0 && slides.some(s => s.image);
 
   return (
     <section className="w-full relative bg-white border-b border-black overflow-hidden">
-      {/* Admin dimensions watermark */}
+      {/* Admin watermark */}
       {isAdmin && (
         <div
           style={{
@@ -209,7 +215,7 @@ export default function HeroCarousel({
           overscrollBehavior: 'contain',
           scrollbarWidth: 'none',
           WebkitOverflowScrolling: 'touch',
-          cursor: moved ? 'grabbing' : 'grab',
+          cursor: 'grab',
           aspectRatio: '2576 / 584',
         }}
         onScroll={handleScroll}
@@ -217,16 +223,16 @@ export default function HeroCarousel({
         onKeyDown={handleKeyDown}
         tabIndex={0}
       >
-        {slides.length === 0 ? (
-          // Empty state - show + button
+        {slides.length === 0 || !hasSlides ? (
+          // Empty state
           <div
-            className="flex-shrink-0 w-full h-full relative overflow-hidden bg-gray-100 flex items-center justify-center"
+            className="flex-shrink-0 w-full h-full flex items-center justify-center bg-gray-100"
             style={{ aspectRatio: '2576 / 584', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}
           >
             {isLoggedInAdmin ? (
               <button
                 type="button"
-                className="flex flex-col items-center justify-center gap-4 cursor-pointer hover:opacity-80 transition-opacity"
+                className="flex flex-col items-center justify-center gap-4 cursor-pointer hover:opacity-70 transition-opacity"
                 onClick={() => setShowPicker(true)}
               >
                 <div
@@ -246,15 +252,7 @@ export default function HeroCarousel({
                 >
                   +
                 </div>
-                <span
-                  style={{
-                    fontSize: '13px',
-                    letterSpacing: '0.08em',
-                    textTransform: 'uppercase',
-                    fontWeight: 600,
-                    color: '#000',
-                  }}
-                >
+                <span style={{ fontSize: '13px', letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 600, color: '#000' }}>
                   Add Carousel Image
                 </span>
               </button>
@@ -272,35 +270,44 @@ export default function HeroCarousel({
               aria-roledescription="slide"
               aria-label={`${i + 1} of ${slides.length}`}
             >
-              {slide.image ? (
+              {/* Image */}
+              {slide.image && (
                 <a
                   href={slide.link || '#'}
                   className="absolute inset-0 block"
-                  style={{ textDecoration: 'none', color: 'inherit' }}
+                  style={{ textDecoration: 'none' }}
                 >
                   <img
                     src={slide.image}
                     alt="Carousel slide"
-                    className="w-full h-full object-cover transition-transform duration-1200 group-hover:scale-[1.015]"
+                    className="w-full h-full object-cover"
+                    style={{ transition: 'transform 1.2s cubic-bezier(.22, 1, .36, 1)' }}
                     draggable={false}
                     loading={i > 0 ? 'lazy' : 'eager'}
+                    onMouseEnter={(e) => {
+                      const img = e.currentTarget as HTMLImageElement;
+                      img.style.transform = 'scale(1.015)';
+                    }}
+                    onMouseLeave={(e) => {
+                      const img = e.currentTarget as HTMLImageElement;
+                      img.style.transform = 'scale(1)';
+                    }}
                   />
                 </a>
-              ) : null}
+              )}
 
-              {/* Remove button - only show for admin */}
+              {/* Remove button */}
               {isAdmin && (
                 <button
                   type="button"
-                  className="absolute right-12 bottom-11 z-10 w-7 h-7 bg-white border border-black hover:bg-black hover:text-white transition-all"
+                  className="absolute right-12 bottom-11 z-10 w-7 h-7 bg-white border border-black hover:bg-black hover:text-white transition-all opacity-0 group-hover:opacity-100"
                   onClick={(e) => {
                     e.stopPropagation();
                     if (!confirm('Remove this slide?')) return;
                     handleRemoveSlide(slide.id);
                   }}
-                  disabled={slides.length === 1 || slide.isProtected}
-                  title={slide.isProtected ? 'Protected slides cannot be removed' : slides.length === 1 ? 'At least one slide required' : 'Remove slide'}
-                  aria-label={`Remove slide ${i + 1}`}
+                  disabled={slides.length === 1}
+                  title={slides.length === 1 ? 'At least one slide required' : 'Remove slide'}
                 >
                   <X size={14} strokeWidth={1.5} />
                 </button>
@@ -311,7 +318,7 @@ export default function HeroCarousel({
       </div>
 
       {/* Pagination dots */}
-      {slides.length > 0 && (
+      {hasSlides && (
         <div className="absolute left-1/2 bottom-3 z-10 flex items-center gap-1" style={{ transform: 'translateX(-50%)' }}>
           {slides.map((_, i) => (
             <button
@@ -335,12 +342,11 @@ export default function HeroCarousel({
               />
             </button>
           ))}
-          {isAdmin && (
+          {isLoggedInAdmin && (
             <button
               type="button"
               className="ml-1 text-white hover:scale-125 transition-transform"
               onClick={() => setShowPicker(true)}
-              aria-label="Add a new slide"
               style={{ fontSize: '15px', lineHeight: '1', fontWeight: 300 }}
             >
               +
@@ -355,9 +361,8 @@ export default function HeroCarousel({
           {onMoveUp && canMoveUp && (
             <button
               onClick={onMoveUp}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-black text-black text-xs uppercase tracking-wide hover:bg-black hover:text-white transition-all duration-200"
-              title="Move section up"
-              aria-label="Move up"
+              className="px-3 py-1.5 bg-white border border-black text-black text-xs uppercase tracking-wide hover:bg-black hover:text-white transition-all"
+              title="Move up"
             >
               ↑
             </button>
@@ -365,28 +370,17 @@ export default function HeroCarousel({
           {onMoveDown && canMoveDown && (
             <button
               onClick={onMoveDown}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-black text-black text-xs uppercase tracking-wide hover:bg-black hover:text-white transition-all duration-200"
-              title="Move section down"
-              aria-label="Move down"
+              className="px-3 py-1.5 bg-white border border-black text-black text-xs uppercase tracking-wide hover:bg-black hover:text-white transition-all"
+              title="Move down"
             >
               ↓
-            </button>
-          )}
-          {isLastSection && onAdd && (
-            <button
-              onClick={onAdd}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-black text-white text-xs uppercase tracking-wide hover:bg-gray-800 transition-all duration-200"
-            >
-              + Add section
             </button>
           )}
         </div>
       )}
 
       {/* Image Picker Modal */}
-      {showPicker && (
-        <CarouselImagePicker onSelect={() => {}} onClose={handlePickerClose} />
-      )}
+      {showPicker && <CarouselImagePicker onSelect={() => {}} onClose={handlePickerClose} />}
     </section>
   );
 }
