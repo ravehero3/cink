@@ -67,14 +67,6 @@ export async function DELETE(
       return NextResponse.json({ error: 'Slide not found' }, { status: 404 })
     }
 
-    // Prevent deletion of protected slides
-    if (slide.isProtected) {
-      return NextResponse.json(
-        { error: 'This slide is protected and cannot be deleted' },
-        { status: 403 }
-      )
-    }
-
     // Delete from VPS if applicable
     if (slide.storageType === 'ORACLE_VPS' && slide.oracleVpsPath) {
       try {
