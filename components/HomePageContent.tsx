@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import VideoPromo from './VideoPromo';
+import HeroCarousel from './HeroCarousel';
 import VideoSection from './VideoSection';
 import ProductShowcaseSection from './ProductShowcaseSection';
 import QuadImageSection from './QuadImageSection';
@@ -607,6 +608,13 @@ export default function HomePageContent({ initialSections }: HomePageContentProp
   return (
     <div className="w-full">
       <VideoPromo videoUrl={videoUrl} />
+
+      {/* Hero Carousel - First Section */}
+      <HeroCarousel
+        isAdmin={isAdmin}
+        onAdd={handleAddSection}
+        isLastSection={false}
+      />
 
       {/* Blur overlay when any admin modal is open */}
       {isAdmin && isAnyModalOpen && (
