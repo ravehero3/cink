@@ -273,8 +273,8 @@ export default function HeroCarousel({
                 <img
                   src={slide.image}
                   alt="Carousel slide"
-                  className="w-full h-full object-cover transition-transform duration-1200"
-                  style={{ transform: 'scale(1)', groupHover: { transform: 'scale(1.015)' } }}
+                  className="w-full h-full object-cover transition-transform duration-1200 group-hover:scale-[1.015]"
+                  style={{ transform: 'scale(1)' }}
                   draggable={false}
                   loading={i > 0 ? 'lazy' : 'eager'}
                 />
