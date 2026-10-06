@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { ChevronUp, ChevronDown, X, Plus } from 'lucide-react';
+import CarouselImagePicker from './CarouselImagePicker';
 
 interface CarouselSlide {
   id: string;
@@ -39,9 +40,8 @@ export default function HeroCarousel({
   const [active, setActive] = useState(0);
   const [loading, setLoading] = useState(true);
   const [moved, setMoved] = useState(false);
+  const [showPicker, setShowPicker] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [pendingIndex, setPendingIndex] = useState<number | null>(null);
   const downRef = useRef(false);
   const startXRef = useRef(0);
   const startLeftRef = useRef(0);
@@ -54,9 +54,6 @@ export default function HeroCarousel({
         if (res.ok) {
           const data = await res.json();
           setSlides(data.slides || []);
-          if (data.slides.length === 0) {
-            setSlides([{ id: 'empty-1', image: '', link: '', order: 0, isProtected: false }]);
-          }
         }
       } catch (error) {
         console.error('Error fetching carousel slides:', error);
@@ -135,56 +132,6 @@ export default function HeroCarousel({
     };
   }, [moved, goTo]);
 
-  const handleSlotClick = (i: number) => {
-    setPendingIndex(i);
-    setTimeout(() => {
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-        fileInputRef.current.click();
-      }
-    }, 0);
-  };
-
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const f = e.currentTarget.files?.[0];
-    if (!f || pendingIndex === null) {
-      console.log('No file or pendingIndex:', { f, pendingIndex });
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append('file', f);
-
-    try {
-      console.log('Starting upload for file:', f.name, 'Size:', f.size);
-      const res = await fetch('/api/carousel/upload', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const data = await res.json();
-      console.log('Upload response:', { status: res.status, data });
-
-      if (res.ok) {
-        setPendingIndex(null);
-        // Refresh slides
-        const refreshRes = await fetch('/api/carousel?_t=' + Date.now());
-        if (refreshRes.ok) {
-          const refreshData = await refreshRes.json();
-          console.log('Refreshed slides:', refreshData.slides);
-          setSlides(refreshData.slides);
-          goTo(refreshData.slides.length - 1);
-        }
-      } else {
-        alert('Upload failed: ' + (data.error || 'Unknown error'));
-        console.error('Upload error:', data);
-      }
-    } catch (error) {
-      console.error('Error uploading image:', error);
-      alert('Error uploading image: ' + (error instanceof Error ? error.message : 'Unknown'));
-    }
-  };
-
   const handleRemoveSlide = async (slideId: string) => {
     if (slides.length <= 1) return;
 
@@ -203,29 +150,26 @@ export default function HeroCarousel({
     }
   };
 
-  const handleAddSlide = async () => {
-    try {
-      const res = await fetch('/api/carousel', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ order: slides.length }),
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        setSlides([...slides, data.slide]);
-        goTo(slides.length);
+  const handlePickerClose = () => {
+    setShowPicker(false);
+    // Refresh slides
+    const refreshSlides = async () => {
+      try {
+        const res = await fetch('/api/carousel?_t=' + Date.now());
+        if (res.ok) {
+          const data = await res.json();
+          setSlides(data.slides || []);
+        }
+      } catch (error) {
+        console.error('Error refreshing slides:', error);
       }
-    } catch (error) {
-      console.error('Error adding slide:', error);
-    }
+    };
+    refreshSlides();
   };
 
   if (loading) {
     return <div className="w-full h-80 bg-gray-100 flex items-center justify-center">Loading carousel...</div>;
   }
-
-  const pad = (n: number) => String(n).padStart(2, '0');
 
   return (
     <section className="w-full relative bg-white border-b border-black overflow-hidden">
@@ -260,7 +204,7 @@ export default function HeroCarousel({
           overscrollBehavior: 'contain',
           scrollbarWidth: 'none',
           WebkitOverflowScrolling: 'touch',
-          cursor: 'grab',
+          cursor: moved ? 'grabbing' : 'grab',
           aspectRatio: '2576 / 584',
         }}
         onScroll={handleScroll}
@@ -268,105 +212,134 @@ export default function HeroCarousel({
         onKeyDown={handleKeyDown}
         tabIndex={0}
       >
-        {slides.map((slide, i) => (
+        {slides.length === 0 ? (
+          // Empty state
           <div
-            key={slide.id}
-            className="flex-shrink-0 w-full relative overflow-hidden bg-white"
+            className="flex-shrink-0 w-full h-full relative overflow-hidden bg-gray-100 flex items-center justify-center"
             style={{ aspectRatio: '2576 / 584', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}
-            role="group"
-            aria-roledescription="slide"
-            aria-label={`${i + 1} of ${slides.length}`}
           >
-            {slide.image ? (
-              <a
-                href={slide.link || '#'}
-                className="absolute inset-0 block group"
-                style={{ textDecoration: 'none', color: 'inherit' }}
-              >
-                <img
-                  src={slide.image}
-                  alt="Carousel slide"
-                  className="w-full h-full object-cover transition-transform duration-1200 group-hover:scale-[1.015]"
-                  style={{ transform: 'scale(1)' }}
-                  draggable={false}
-                  loading={i > 0 ? 'lazy' : 'eager'}
-                />
-              </a>
-            ) : (
-              <button
-                type="button"
-                className="w-full h-full bg-gray-100 hover:bg-gray-50 transition-colors relative cursor-pointer"
-                onClick={() => handleSlotClick(i)}
-                aria-label={`Add content to slide ${i + 1}`}
-              >
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
-                  <div style={{ width: '34px', height: '34px', position: 'relative' }}>
-                    <div style={{ width: '100%', height: '1px', background: '#000', position: 'absolute', top: '50%', left: '0' }} />
-                    <div style={{ width: '1px', height: '100%', background: '#000', position: 'absolute', left: '50%', top: '0' }} />
-                  </div>
-                  <span style={{ fontSize: '11px', letterSpacing: '0.28em', textTransform: 'uppercase' }}>
-                    Add slide
-                  </span>
-                </div>
-                <span style={{ position: 'absolute', top: '44px', left: '48px', fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#8c8c8c' }}>
-                  {pad(i + 1)} / {pad(slides.length)}
-                </span>
-              </button>
-            )}
-
-            {/* Remove button */}
             <button
               type="button"
-              className="absolute right-12 bottom-11 z-10 w-7 h-7 bg-white border border-black hover:bg-black hover:text-white transition-all"
-              onClick={(e) => {
-                e.stopPropagation();
-                if (slide.image && !confirm('Remove this slide?')) return;
-                handleRemoveSlide(slide.id);
-              }}
-              disabled={slides.length === 1 || slide.isProtected}
-              title={slide.isProtected ? 'Protected slides cannot be removed' : slides.length === 1 ? 'At least one slide required' : 'Remove slide'}
-              aria-label={`Remove slide ${i + 1}`}
+              className="flex flex-col items-center justify-center gap-4 cursor-pointer hover:opacity-80 transition-opacity"
+              onClick={() => isAdmin && setShowPicker(true)}
+              disabled={!isAdmin}
             >
-              <X size={14} strokeWidth={1.5} />
+              <div
+                style={{
+                  width: '80px',
+                  height: '80px',
+                  borderRadius: '50%',
+                  border: '3px solid #000',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '48px',
+                  fontWeight: 300,
+                  color: '#000',
+                  backgroundColor: '#fff',
+                }}
+              >
+                +
+              </div>
+              <span
+                style={{
+                  fontSize: '13px',
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  fontWeight: 600,
+                  color: '#000',
+                }}
+              >
+                Add Carousel Image
+              </span>
             </button>
           </div>
-        ))}
+        ) : (
+          slides.map((slide, i) => (
+            <div
+              key={slide.id}
+              className="flex-shrink-0 w-full relative overflow-hidden bg-white group"
+              style={{ aspectRatio: '2576 / 584', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}
+              role="group"
+              aria-roledescription="slide"
+              aria-label={`${i + 1} of ${slides.length}`}
+            >
+              {slide.image ? (
+                <a
+                  href={slide.link || '#'}
+                  className="absolute inset-0 block"
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  <img
+                    src={slide.image}
+                    alt="Carousel slide"
+                    className="w-full h-full object-cover transition-transform duration-1200 group-hover:scale-[1.015]"
+                    draggable={false}
+                    loading={i > 0 ? 'lazy' : 'eager'}
+                  />
+                </a>
+              ) : null}
+
+              {/* Remove button - only show for admin */}
+              {isAdmin && (
+                <button
+                  type="button"
+                  className="absolute right-12 bottom-11 z-10 w-7 h-7 bg-white border border-black hover:bg-black hover:text-white transition-all"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (!confirm('Remove this slide?')) return;
+                    handleRemoveSlide(slide.id);
+                  }}
+                  disabled={slides.length === 1 || slide.isProtected}
+                  title={slide.isProtected ? 'Protected slides cannot be removed' : slides.length === 1 ? 'At least one slide required' : 'Remove slide'}
+                  aria-label={`Remove slide ${i + 1}`}
+                >
+                  <X size={14} strokeWidth={1.5} />
+                </button>
+              )}
+            </div>
+          ))
+        )}
       </div>
 
       {/* Pagination dots */}
-      <div className="absolute left-1/2 bottom-3 z-10 flex items-center gap-1" style={{ transform: 'translateX(-50%)' }}>
-        {slides.map((_, i) => (
-          <button
-            key={i}
-            type="button"
-            className="w-5 h-5 flex items-center justify-center hover:scale-150 transition-transform"
-            onClick={() => goTo(i)}
-            aria-label={`Go to slide ${i + 1}`}
-            aria-current={i === active ? 'true' : 'false'}
-          >
-            <div
-              style={{
-                width: '9px',
-                height: '9px',
-                borderRadius: '50%',
-                border: '1px solid white',
-                backgroundColor: i === active ? 'white' : 'transparent',
-                mixBlendMode: 'difference',
-                transition: 'all 0.35s cubic-bezier(0.22, 1, 0.36, 1)',
-              }}
-            />
-          </button>
-        ))}
-        <button
-          type="button"
-          className="ml-1 text-white hover:scale-125 transition-transform"
-          onClick={handleAddSlide}
-          aria-label="Add a new slide"
-          style={{ fontSize: '15px', lineHeight: '1', fontWeight: 300 }}
-        >
-          +
-        </button>
-      </div>
+      {slides.length > 0 && (
+        <div className="absolute left-1/2 bottom-3 z-10 flex items-center gap-1" style={{ transform: 'translateX(-50%)' }}>
+          {slides.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              className="w-5 h-5 flex items-center justify-center hover:scale-150 transition-transform"
+              onClick={() => goTo(i)}
+              aria-label={`Go to slide ${i + 1}`}
+              aria-current={i === active ? 'true' : 'false'}
+            >
+              <div
+                style={{
+                  width: '9px',
+                  height: '9px',
+                  borderRadius: '50%',
+                  border: '1px solid white',
+                  backgroundColor: i === active ? 'white' : 'transparent',
+                  mixBlendMode: 'difference',
+                  transition: 'all 0.35s cubic-bezier(0.22, 1, 0.36, 1)',
+                }}
+              />
+            </button>
+          ))}
+          {isAdmin && (
+            <button
+              type="button"
+              className="ml-1 text-white hover:scale-125 transition-transform"
+              onClick={() => setShowPicker(true)}
+              aria-label="Add a new slide"
+              style={{ fontSize: '15px', lineHeight: '1', fontWeight: 300 }}
+            >
+              +
+            </button>
+          )}
+        </div>
+      )}
 
       {/* Admin controls */}
       {isAdmin && (
@@ -402,13 +375,10 @@ export default function HeroCarousel({
         </div>
       )}
 
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/*"
-        onChange={handleFileChange}
-        style={{ display: 'none' }}
-      />
+      {/* Image Picker Modal */}
+      {showPicker && (
+        <CarouselImagePicker onSelect={() => {}} onClose={handlePickerClose} />
+      )}
     </section>
   );
 }
