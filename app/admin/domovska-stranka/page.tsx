@@ -247,6 +247,9 @@ export default function HomepageAdminPage() {
                       src={slide.image}
                       alt={`Slide ${index + 1}`}
                       className="w-full h-full object-cover"
+                      onError={(e) => {
+                        console.warn('Image failed to load:', slide.image);
+                      }}
                     />
                   </div>
                 )}
@@ -256,8 +259,8 @@ export default function HomepageAdminPage() {
                   <p className="text-xs font-medium text-gray-900 truncate">
                     {slide.image ? 'Obrázek nahrán' : 'Prázdný snímek'}
                   </p>
-                  <p className="text-xs text-gray-500 mt-1">
-                    {slide.link ? `Odkaz: ${slide.link}` : 'Bez odkazu'}
+                  <p className="text-xs text-gray-500 mt-1 truncate" title={slide.image}>
+                    {slide.image ? slide.image : 'Bez odkazu'}
                   </p>
                 </div>
 

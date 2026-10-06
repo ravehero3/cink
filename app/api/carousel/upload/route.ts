@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
     const filepath = join(uploadsDir, filename)
     await writeFile(filepath, buffer)
     url = `/uploads/carousel/${filename}`
-    console.log('Saved locally to:', url)
+    console.log('Saved locally to:', url, 'at path:', filepath)
 
     // Try to also upload to Oracle VPS
     try {
