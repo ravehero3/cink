@@ -266,7 +266,7 @@ export default function NovinkysSection({
 
       {/* Product Grid - Same as zobrazit-vse page with admin drag support */}
       {isLoggedInAdmin ? (
-        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-px bg-black border border-black">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 bg-black border border-black" style={{ gap: '0px' }}>
           {novinkysProducts.map((item, index) => (
             <div
               key={item.productId}

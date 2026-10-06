@@ -33,7 +33,7 @@ export default function ProductsGrid({ products, savedProducts = [], onToggleSav
 
   return (
     <div>
-      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-px bg-black border border-black">
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 bg-black border border-black" style={{ gap: '0px' }}>
         {displayProducts.map((product) => (
           <ProductCard
             key={product.id}
