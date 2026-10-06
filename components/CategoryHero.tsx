@@ -64,15 +64,22 @@ export default function CategoryHero({ title, imageUrl }: CategoryHeroProps) {
         style={{ height: 'calc(5 * 44px)' }}
       >
         <h1 
-          className="uppercase text-center m-0 p-0"
+          className="uppercase text-center"
           style={{ 
             fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
             fontSize: '22px',
             fontWeight: 700,
-            lineHeight: '22px',
+            lineHeight: '1.2',
             letterSpacing: '0.03em',
             fontStretch: 'condensed',
-            color: '#000000'
+            color: '#000000',
+            margin: '0',
+            padding: '20px',
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            textAlign: 'center',
           }}
         >
           {title}
@@ -102,11 +109,10 @@ export default function CategoryHero({ title, imageUrl }: CategoryHeroProps) {
                   left: '50%',
                   transform: 'translate(-50%, -50%) translateZ(0)',
                   WebkitTransform: 'translate(-50%, -50%) translateZ(0)',
-                  minWidth: '100%',
-                  minHeight: '100%',
-                  width: isMobile ? 'auto' : '100%',
-                  height: isMobile ? '100%' : 'auto',
-                  objectFit: 'cover',
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                  objectPosition: 'center',
                 }}
                 loop
                 autoPlay
@@ -120,24 +126,7 @@ export default function CategoryHero({ title, imageUrl }: CategoryHeroProps) {
                 <source src={imageUrl} />
               </video>
             )}
-            {(!showVideo || !videoLoaded) && (
-              <img
-                src={imageUrl}
-                alt={title}
-                className={`absolute ${showVideo && videoLoaded ? 'hidden' : ''}`}
-                style={{
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  minWidth: '100%',
-                  minHeight: '100%',
-                  width: isMobile ? 'auto' : '100%',
-                  height: isMobile ? '100%' : 'auto',
-                  objectFit: 'cover',
-                }}
-                onError={() => {}}
-              />
-            )}
+
           </div>
         </div>
       )}
