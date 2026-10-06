@@ -83,12 +83,12 @@ export default function ProductCard({
         setCurrentImageIndex(0);
       }}
     >
-      <div className="relative overflow-hidden aspect-product flex items-center justify-center bg-white" style={{ padding: '0 40px' }}>
+      <div className="relative overflow-hidden aspect-product flex items-center justify-center bg-white" style={{ padding: 'clamp(8px, 10%, 40px)' }}>
         <img
           src={displayImage}
           alt={name}
           className="object-contain w-full h-full"
-          style={{ transform: 'scale(1.1)' }}
+          style={{ transform: 'scale(1)' }}
         />
         
         {onToggleSave && (

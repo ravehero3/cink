@@ -47,12 +47,12 @@ export default function MobileMenu({ isOpen, onClose, categories }: MobileMenuPr
         }`}
       >
         <div className="h-full flex flex-col border-r border-black">
-          {/* Header - Green background matching CartDrawer */}
-          <div className="border-b border-black relative flex items-center justify-center" style={{ height: '56px', backgroundColor: '#24e053' }}>
+          {/* Header - White background */}
+          <div className="border-b border-black relative flex items-center justify-center" style={{ height: '56px', backgroundColor: '#ffffff' }}>
             <h2 
               style={{
                 fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '16px',
+                fontSize: '14px',
                 fontWeight: 700,
                 textTransform: 'uppercase',
                 letterSpacing: '0.03em',
@@ -60,7 +60,7 @@ export default function MobileMenu({ isOpen, onClose, categories }: MobileMenuPr
                 color: '#000000'
               }}
             >
-              NAVIGACE
+              MENU
             </h2>
             <button
               onClick={onClose}
