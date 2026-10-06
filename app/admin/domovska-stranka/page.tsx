@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Upload, X, Loader2, AlertCircle } from 'lucide-react';
 import { useToast } from '@/store/toastStore';
 
@@ -17,7 +17,9 @@ export default function HomepageAdminPage() {
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [saved, setSaved] = useState(false);
-  const toast = useToast();
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Fetch carousel slides
   useEffect(() => {
@@ -40,7 +42,7 @@ export default function HomepageAdminPage() {
     }
   };
 
-  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>, slideId?: string) => {
     const file = e.currentTarget.files?.[0];
     if (!file) return;
 
@@ -57,8 +59,31 @@ export default function HomepageAdminPage() {
       const data = await res.json();
 
       if (res.ok) {
-      toast.success(`Obrázek "${file.name}" byl nahrán`);
-        await fetchSlides();
+        // If editing existing slide, update it
+        if (slideId) {
+          try {
+            const updateRes = await fetch(`/api/carousel/${slideId}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ image: data.slide.image }),
+            });
+
+            if (updateRes.ok) {
+              toast.success(`Obrázek "${file.name}" byl aktualizován`);
+              setEditingId(null);
+              await fetchSlides();
+            } else {
+              throw new Error('Update failed');
+            }
+          } catch (error) {
+            console.error('Error updating slide:', error);
+            toast.error('Chyba při aktualizaci snímku');
+          }
+        } else {
+          // New upload
+          toast.success(`Obrázek "${file.name}" byl nahrán`);
+          await fetchSlides();
+        }
       } else {
         toast.error(`Chyba: ${data.error || 'Nahrávání selhalo'}`);
       }
@@ -80,6 +105,7 @@ export default function HomepageAdminPage() {
     if (!confirm('Opravdu chcete odstranit tento snímek?')) return;
 
     try {
+      setUploading(true);
       const res = await fetch(`/api/carousel/${slideId}`, { method: 'DELETE' });
 
       if (res.ok) {
@@ -92,6 +118,8 @@ export default function HomepageAdminPage() {
     } catch (error) {
       console.error('Error removing slide:', error);
       toast.error('Chyba při odstraňování snímku');
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -170,7 +198,7 @@ export default function HomepageAdminPage() {
           <input
             type="file"
             accept="image/*"
-            onChange={handleUpload}
+            onChange={(e) => handleUpload(e)}
             disabled={uploading}
             className="hidden"
           />
@@ -190,7 +218,7 @@ export default function HomepageAdminPage() {
         </label>
 
         <p className="text-xs text-gray-500 mt-3 uppercase tracking-widest">
-          Doporučená velikost: 2576 × 584 px (desktop) nebo 4:5 (mobil) · Max 10MB
+          Doporučená velikost: 2576 × 584 px (desktop) nebo 4:5 (mobil) · Max 5MB
         </p>
       </div>
 
@@ -240,18 +268,27 @@ export default function HomepageAdminPage() {
                   #{index + 1}
                 </div>
 
-                {/* Image preview */}
+                {/* Image preview - clickable to edit */}
                 {slide.image && (
-                  <div className="flex-shrink-0 w-24 h-16 border border-gray-200 rounded overflow-hidden bg-gray-50">
+                  <button
+                    onClick={() => setEditingId(editingId === slide.id ? null : slide.id)}
+                    className="flex-shrink-0 w-24 h-16 border-2 border-gray-200 rounded overflow-hidden bg-gray-50 hover:border-black transition-colors cursor-pointer relative group"
+                    title="Klikněte pro změnu obrázku"
+                  >
                     <img
                       src={slide.image}
                       alt={`Slide ${index + 1}`}
                       className="w-full h-full object-cover"
                       onError={(e) => {
-                        console.warn('Image failed to load:', slide.image);
+                        console.warn('Image failed to load:', slide.image?.substring(0, 100));
                       }}
                     />
-                  </div>
+                    {editingId === slide.id && (
+                      <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                        <Upload size={14} className="text-white" />
+                      </div>
+                    )}
+                  </button>
                 )}
 
                 {/* Info */}
@@ -259,15 +296,29 @@ export default function HomepageAdminPage() {
                   <p className="text-xs font-medium text-gray-900 truncate">
                     {slide.image ? 'Obrázek nahrán' : 'Prázdný snímek'}
                   </p>
-                  <p className="text-xs text-gray-500 mt-1 truncate" title={slide.image}>
-                    {slide.image ? slide.image : 'Bez odkazu'}
+                  <p className="text-xs text-gray-500 mt-1">
+                    Klikněte na náhled obrázku pro změnu
                   </p>
                 </div>
+
+                {/* Hidden file input for editing */}
+                {editingId === slide.id && (
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      handleUpload(e, slide.id);
+                    }}
+                    className="hidden"
+                    ref={fileInputRef}
+                    style={{ display: 'none' }}
+                  />
+                )}
 
                 {/* Delete button */}
                 <button
                   onClick={() => handleRemoveSlide(slide.id)}
-                  disabled={slides.length === 1}
+                  disabled={slides.length === 1 || uploading}
                   className="p-2 text-red-500 hover:bg-red-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                   title={slides.length === 1 ? 'Musí zůstat alespoň jeden snímek' : 'Odstranit snímek'}
                 >
@@ -278,6 +329,35 @@ export default function HomepageAdminPage() {
           </div>
         )}
       </div>
+
+      {/* Hidden file input for editing */}
+      {editingId && (
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => {
+            handleUpload(e, editingId);
+            if (fileInputRef.current) {
+              fileInputRef.current.value = '';
+            }
+          }}
+          style={{ display: 'none' }}
+          ref={fileInputRef}
+        />
+      )}
+
+      {/* Trigger hidden input when editing */}
+      {editingId && (
+        <button
+          onClick={() => fileInputRef.current?.click()}
+          style={{ display: 'none' }}
+          ref={(el) => {
+            if (el && fileInputRef.current) {
+              fileInputRef.current.click();
+            }
+          }}
+        />
+      )}
 
       {/* Save Button */}
       <div className="flex items-center gap-3">
@@ -299,8 +379,8 @@ export default function HomepageAdminPage() {
       {/* Info box */}
       <div className="bg-blue-50 border border-blue-200 p-4 rounded">
         <p className="text-xs text-blue-900 uppercase tracking-widest leading-relaxed">
-          💡 Tipy: Obrázky jsou automaticky chráněny a nikdy se nebudou smazat, pokud je sami neodstraníte. 
-          Pořadí lze změnit pomocí šipek a poté klikněte "Uložit". Všechny změny se zobrazí veřejně na domovské stránce.
+          💡 Tipy: Klikněte na náhled obrázku pro změnu. Pořadí lze změnit pomocí šipek a poté klikněte "Uložit". 
+          Všechny změny se zobrazí veřejně na domovské stránce.
         </p>
       </div>
     </div>
