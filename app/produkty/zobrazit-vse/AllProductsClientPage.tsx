@@ -24,7 +24,7 @@ interface Product {
   colorCount?: number;
 }
 
-export default function AllProductsClientPage() {
+export default function AllProductsClientPage({ isHomePage = false }: { isHomePage?: boolean }) {
   const { data: session } = useSession();
   
   const [products, setProducts] = useState<Product[]>([]);
@@ -169,10 +169,12 @@ export default function AllProductsClientPage() {
 
   return (
     <div>
-      <SearchBar />
-      <div className="relative">
-        <CategoryHero title="VŠECHNY PRODUKTY" imageUrl="" />
-      </div>
+      {!isHomePage && <SearchBar />}
+      {!isHomePage && (
+        <div className="relative">
+          <CategoryHero title="VŠECHNY PRODUKTY" imageUrl="" />
+        </div>
+      )}
       <ControlBar
         productCount={totalProducts}
         currentSort={currentSort}

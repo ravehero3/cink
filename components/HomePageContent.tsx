@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import VideoPromo from './VideoPromo';
 import HeroCarousel from './HeroCarousel';
-import NovinkysSection from './NovinkysSection';
+import AllProductsClientPage from '@/app/produkty/zobrazit-vse/AllProductsClientPage';
 import VideoSection from './VideoSection';
 import ProductShowcaseSection from './ProductShowcaseSection';
 import QuadImageSection from './QuadImageSection';
@@ -617,16 +617,24 @@ export default function HomePageContent({ initialSections }: HomePageContentProp
         isLastSection={false}
       />
 
-      {/* NOVINKY Section - Second Section */}
-      <NovinkysSection
-        isAdmin={isAdmin}
-        onAdd={handleAddSection}
-        onMoveUp={() => {}}
-        onMoveDown={() => {}}
-        canMoveUp={false}
-        canMoveDown={true}
-        isLastSection={false}
-      />
+      {/* NOVINKY Section - Products Grid (copy of zobrazit-vse page) */}
+      <div className="border-b border-black">
+        <div className="px-4 md:px-8 py-6 md:py-8 border-b border-black bg-white">
+          <div className="flex items-center justify-between">
+            <h2
+              className="text-xl md:text-2xl uppercase font-bold"
+              style={{
+                fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                letterSpacing: '0.03em',
+                fontStretch: 'condensed',
+              }}
+            >
+              NOVINKY
+            </h2>
+          </div>
+        </div>
+        <AllProductsClientPage isHomePage={true} />
+      </div>
 
       {/* Blur overlay when any admin modal is open */}
       {isAdmin && isAnyModalOpen && (
