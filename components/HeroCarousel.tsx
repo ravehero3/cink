@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { ChevronUp, ChevronDown, X, Plus } from 'lucide-react';
 import CarouselImagePicker from './CarouselImagePicker';
@@ -36,15 +37,19 @@ export default function HeroCarousel({
   canMoveDown,
   isLastSection,
 }: HeroCarouselProps) {
+  const { data: session } = useSession();
   const [slides, setSlides] = useState<CarouselSlide[]>([]);
   const [active, setActive] = useState(0);
   const [loading, setLoading] = useState(true);
   const [moved, setMoved] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
+  
   const trackRef = useRef<HTMLDivElement>(null);
   const downRef = useRef(false);
   const startXRef = useRef(0);
   const startLeftRef = useRef(0);
+
+  const isLoggedInAdmin = isAdmin || session?.user?.role === 'ADMIN';
 
   // Fetch carousel slides
   useEffect(() => {
@@ -213,46 +218,49 @@ export default function HeroCarousel({
         tabIndex={0}
       >
         {slides.length === 0 ? (
-          // Empty state
+          // Empty state - show + button
           <div
             className="flex-shrink-0 w-full h-full relative overflow-hidden bg-gray-100 flex items-center justify-center"
             style={{ aspectRatio: '2576 / 584', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}
           >
-            <button
-              type="button"
-              className="flex flex-col items-center justify-center gap-4 cursor-pointer hover:opacity-80 transition-opacity"
-              onClick={() => isAdmin && setShowPicker(true)}
-              disabled={!isAdmin}
-            >
-              <div
-                style={{
-                  width: '80px',
-                  height: '80px',
-                  borderRadius: '50%',
-                  border: '3px solid #000',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '48px',
-                  fontWeight: 300,
-                  color: '#000',
-                  backgroundColor: '#fff',
-                }}
+            {isLoggedInAdmin ? (
+              <button
+                type="button"
+                className="flex flex-col items-center justify-center gap-4 cursor-pointer hover:opacity-80 transition-opacity"
+                onClick={() => setShowPicker(true)}
               >
-                +
-              </div>
-              <span
-                style={{
-                  fontSize: '13px',
-                  letterSpacing: '0.08em',
-                  textTransform: 'uppercase',
-                  fontWeight: 600,
-                  color: '#000',
-                }}
-              >
-                Add Carousel Image
-              </span>
-            </button>
+                <div
+                  style={{
+                    width: '80px',
+                    height: '80px',
+                    borderRadius: '50%',
+                    border: '3px solid #000',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '48px',
+                    fontWeight: 300,
+                    color: '#000',
+                    backgroundColor: '#fff',
+                  }}
+                >
+                  +
+                </div>
+                <span
+                  style={{
+                    fontSize: '13px',
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    fontWeight: 600,
+                    color: '#000',
+                  }}
+                >
+                  Add Carousel Image
+                </span>
+              </button>
+            ) : (
+              <span style={{ color: '#999', fontSize: '14px' }}>No carousel images</span>
+            )}
           </div>
         ) : (
           slides.map((slide, i) => (

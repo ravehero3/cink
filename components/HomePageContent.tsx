@@ -242,7 +242,7 @@ interface HomePageContentProps {
 
 export default function HomePageContent({ initialSections }: HomePageContentProps) {
   const { data: session } = useSession();
-  const isAdmin = session?.user?.role === 'ADMIN';
+  const isAdmin = session?.user?.role === 'ADMIN' || session?.user?.email === 'spravce.eshopu@ufosport.cz';
   const [categoryProducts, setCategoryProducts] = useState<CategoryProducts>({});
   const [videoUrl, setVideoUrl] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);

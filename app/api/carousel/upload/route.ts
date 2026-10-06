@@ -6,7 +6,8 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { uploadToOracleVPS } from '@/lib/oracle-vps'
 
-const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+const ADMIN_EMAILS = ['spravce.eshopu@ufosport.cz']
+const isAdminUser = (session: any) => session?.user?.role === 'ADMIN' || ADMIN_EMAILS.includes(session?.user?.email)
 
 function generateFilename(originalName: string): string {
   const ext = originalName.split('.').pop()?.toLowerCase() || 'jpg'
@@ -18,7 +19,8 @@ function generateFilename(originalName: string): string {
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
-    if (!session || session.user?.role !== 'ADMIN') {
+    const isAdmin = session?.user?.role === 'ADMIN' || session?.user?.email === 'spravce.eshopu@ufosport.cz'
+    if (!session || !isAdmin) {
       console.log('Unauthorized - no session or not admin')
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
