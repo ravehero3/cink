@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { GripVertical, X } from 'lucide-react';
+import ProductsGrid from './ProductsGrid';
+import { useSavedProductsStore } from '@/lib/saved-products-store';
+import { X } from 'lucide-react';
 
 interface Product {
   id: string;
@@ -14,6 +14,7 @@ interface Product {
   images: string[];
   color?: string;
   colorCount?: number;
+  sizes?: Record<string, number>;
 }
 
 interface NovinkysProduct {
@@ -47,11 +48,11 @@ export default function NovinkysSection({
 }: NovinkySectionProps) {
   const { data: session } = useSession();
   const isLoggedInAdmin = isAdmin && !!session;
-  const [products, setProducts] = useState<NovinkysProduct[]>([]);
+  const [novinkysProducts, setNovinkysProducts] = useState<NovinkysProduct[]>([]);
   const [loading, setLoading] = useState(true);
+  const [savedProducts, setSavedProducts] = useState<string[]>([]);
   const [draggedItem, setDraggedItem] = useState<NovinkysProduct | null>(null);
-  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [draggedOverIndex, setDraggedOverIndex] = useState<number | null>(null);
 
   // Fetch NOVINKY products
   useEffect(() => {
@@ -60,7 +61,7 @@ export default function NovinkysSection({
         const res = await fetch('/api/novinky?_t=' + Date.now());
         if (res.ok) {
           const data = await res.json();
-          setProducts(data.products || []);
+          setNovinkysProducts(data.products || []);
         }
       } catch (error) {
         console.error('Error fetching novinky:', error);
@@ -72,33 +73,92 @@ export default function NovinkysSection({
     fetchProducts();
   }, []);
 
-  const handleDragStart = (e: React.DragEvent, product: NovinkysProduct, index: number) => {
+  useEffect(() => {
+    const loadSavedProducts = async () => {
+      if (session?.user) {
+        try {
+          const response = await fetch('/api/saved-products');
+          if (response.ok) {
+            const data = await response.json();
+            const savedIds = data.map((product: any) => product.id);
+            setSavedProducts(savedIds);
+          }
+        } catch (error) {
+          console.error('Error loading saved products:', error);
+        }
+      } else if (session === null) {
+        const zustandSavedIds = useSavedProductsStore.getState().savedIds;
+        setSavedProducts(zustandSavedIds);
+      }
+    };
+
+    loadSavedProducts();
+  }, [session]);
+
+  const handleToggleSave = async (productId: string) => {
+    const isSaved = savedProducts.includes(productId);
+
+    setSavedProducts((prev) =>
+      prev.includes(productId) ? prev.filter((id) => id !== productId) : [...prev, productId]
+    );
+
+    if (isSaved) {
+      useSavedProductsStore.getState().removeProduct(productId);
+    } else {
+      useSavedProductsStore.getState().addProduct(productId);
+    }
+
+    if (session?.user) {
+      try {
+        const url = isSaved ? `/api/saved-products?productId=${productId}` : '/api/saved-products';
+        const method = isSaved ? 'DELETE' : 'POST';
+        const body = isSaved ? undefined : JSON.stringify({ productId });
+
+        await fetch(url, {
+          method,
+          headers: body ? { 'Content-Type': 'application/json' } : {},
+          body,
+        });
+      } catch (error) {
+        console.error('Error updating saved products:', error);
+      }
+    }
+  };
+
+  const handleDragStart = (e: React.DragEvent, product: NovinkysProduct) => {
     if (!isLoggedInAdmin) return;
     e.dataTransfer.effectAllowed = 'move';
     setDraggedItem(product);
-    setDragOffset({ x: 0, y: 0 });
   };
 
-  const handleDragOver = (e: React.DragEvent) => {
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    if (!isLoggedInAdmin) return;
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
+    setDraggedOverIndex(index);
   };
 
   const handleDrop = async (e: React.DragEvent, targetProduct: NovinkysProduct, targetIndex: number) => {
+    if (!isLoggedInAdmin || !draggedItem) return;
     e.preventDefault();
-    if (!draggedItem || draggedItem.productId === targetProduct.productId) return;
 
-    const draggedIndex = products.findIndex((p) => p.productId === draggedItem.productId);
-    const newProducts = [...products];
+    if (draggedItem.productId === targetProduct.productId) {
+      setDraggedItem(null);
+      setDraggedOverIndex(null);
+      return;
+    }
+
+    const draggedIndex = novinkysProducts.findIndex((p) => p.productId === draggedItem.productId);
+    const newProducts = [...novinkysProducts];
     [newProducts[draggedIndex], newProducts[targetIndex]] = [newProducts[targetIndex], newProducts[draggedIndex]];
 
-    // Update order
     newProducts.forEach((p, idx) => {
       p.order = idx;
     });
 
-    setProducts(newProducts);
+    setNovinkysProducts(newProducts);
     setDraggedItem(null);
+    setDraggedOverIndex(null);
 
     // Save to API
     try {
@@ -117,16 +177,16 @@ export default function NovinkysSection({
   const handleRemoveProduct = async (productId: string) => {
     try {
       await fetch(`/api/novinky/${productId}`, { method: 'DELETE' });
-      setProducts((prev) => prev.filter((p) => p.productId !== productId));
+      setNovinkysProducts((prev) => prev.filter((p) => p.productId !== productId));
     } catch (error) {
       console.error('Error removing product:', error);
     }
   };
 
   const handleAddProduct = async () => {
-    // Open a modal or dropdown to select products
+    // Fetch all products to show which ones are available
     const allProducts = await fetch('/api/products?limit=1000').then((r) => r.json());
-    const currentIds = new Set(products.map((p) => p.productId));
+    const currentIds = new Set(novinkysProducts.map((p) => p.productId));
     const available = allProducts.products.filter((p: Product) => !currentIds.has(p.id));
 
     if (available.length === 0) {
@@ -142,13 +202,13 @@ export default function NovinkysSection({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           productId: product.id,
-          order: products.length,
+          order: novinkysProducts.length,
         }),
       });
 
       if (res.ok) {
         const data = await res.json();
-        setProducts([...products, data.novinkysProduct]);
+        setNovinkysProducts([...novinkysProducts, data.novinkysProduct]);
       }
     } catch (error) {
       console.error('Error adding product:', error);
@@ -156,8 +216,68 @@ export default function NovinkysSection({
   };
 
   if (loading) {
-    return <div className="w-full h-80 bg-gray-100 flex items-center justify-center">Loading NOVINKY...</div>;
+    return <div className="w-full h-80 bg-white flex items-center justify-center border-b border-black">Loading NOVINKY...</div>;
   }
+
+  // Extract only product data for ProductsGrid
+  const products: Product[] = novinkysProducts.map((np) => np.product);
+
+  // Wrapper component for draggable grid items (for admin only)
+  const DraggableProductsGrid = () => {
+    if (!isLoggedInAdmin) {
+      return (
+        <ProductsGrid
+          products={products}
+          savedProducts={savedProducts}
+          onToggleSave={handleToggleSave}
+        />
+      );
+    }
+
+    // For admin, show draggable version
+    return (
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-px bg-black border border-black">
+        {novinkysProducts.map((item, index) => (
+          <div
+            key={item.productId}
+            draggable
+            onDragStart={(e) => handleDragStart(e, item)}
+            onDragOver={(e) => handleDragOver(e, index)}
+            onDrop={(e) => handleDrop(e, item, index)}
+            className={`relative bg-white border-b border-black transition-all duration-200 ${
+              draggedItem?.productId === item.productId ? 'opacity-50' : ''
+            } ${draggedOverIndex === index ? 'ring-2 ring-blue-500' : ''}`}
+            style={{
+              marginRight: '-1px',
+              marginBottom: '-1px',
+              marginTop: '-1px',
+            }}
+          >
+            <div className="relative group cursor-move">
+              <ProductsGrid
+                products={[item.product]}
+                savedProducts={savedProducts}
+                onToggleSave={handleToggleSave}
+              />
+
+              {/* Remove button for admin */}
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleRemoveProduct(item.productId);
+                }}
+                className="absolute top-2 right-2 w-6 h-6 bg-red-500 hover:bg-red-600 text-white flex items-center justify-center rounded z-20 transition-all opacity-0 group-hover:opacity-100"
+                title="Remove from NOVINKY"
+              >
+                <X size={14} strokeWidth={2} />
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
 
   return (
     <section className="w-full relative bg-white border-b border-black">
@@ -182,109 +302,40 @@ export default function NovinkysSection({
         </div>
       )}
 
-      <div className="px-4 py-8 md:px-8 md:py-12">
-        <h2
-          className="text-2xl md:text-3xl uppercase mb-8 font-bold"
-          style={{
-            fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-            letterSpacing: '0.03em',
-            fontStretch: 'condensed',
-          }}
-        >
-          NOVINKY
-        </h2>
-
-        {/* Product Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-px bg-black border border-black">
-          {products.map((item, index) => (
-            <div
-              key={item.productId}
-              draggable={isLoggedInAdmin}
-              onDragStart={(e) => handleDragStart(e, item, index)}
-              onDragOver={handleDragOver}
-              onDrop={(e) => handleDrop(e, item, index)}
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
-              className={`relative bg-white border-b border-black cursor-move transition-all duration-200 group ${
-                isLoggedInAdmin && hoveredIndex === index ? 'opacity-90 scale-95' : ''
-              }`}
-              style={{
-                marginRight: '-1px',
-                marginBottom: '-1px',
-                marginTop: '-1px',
-                opacity: draggedItem?.productId === item.productId ? 0.5 : 1,
-              }}
-            >
-              <Link href={`/produkty/${item.product.slug}`} className="block w-full h-full">
-                <div className="relative overflow-hidden aspect-product flex items-center justify-center bg-white" style={{ padding: 'clamp(8px, 10%, 40px)' }}>
-                  {item.product.images?.[0] && (
-                    <img
-                      src={item.product.images[0]}
-                      alt={item.product.name}
-                      className="object-contain w-full h-full"
-                      style={{ transform: 'scale(1)' }}
-                    />
-                  )}
-
-                  {/* Admin drag indicator */}
-                  {isLoggedInAdmin && hoveredIndex === index && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/30 z-10 transition-opacity duration-200">
-                      <GripVertical size={32} className="text-white" strokeWidth={1.5} />
-                    </div>
-                  )}
-
-                  {/* Remove button for admin */}
-                  {isLoggedInAdmin && (
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        handleRemoveProduct(item.productId);
-                      }}
-                      className="absolute top-2 right-2 w-6 h-6 bg-red-500 hover:bg-red-600 text-white flex items-center justify-center rounded z-20 transition-all"
-                      title="Remove from NOVINKY"
-                    >
-                      <X size={14} strokeWidth={2} />
-                    </button>
-                  )}
-                </div>
-
-                {/* Product Info */}
-                <div className="text-center p-2 md:p-3">
-                  <h3
-                    className="uppercase text-xs md:text-sm font-bold line-clamp-2"
-                    style={{
-                      fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '13px',
-                      letterSpacing: '0.03em',
-                      fontStretch: 'condensed',
-                    }}
-                  >
-                    {item.product.name}
-                  </h3>
-                  <p className="text-xs md:text-sm mt-1">{item.product.price} Kč</p>
-                  {item.product.colorCount && (
-                    <p className="text-xs text-gray-600 mt-1">{item.product.colorCount} barev</p>
-                  )}
-                </div>
-              </Link>
-            </div>
-          ))}
+      {/* Title */}
+      <div className="px-4 md:px-8 py-6 md:py-8 border-b border-black">
+        <div className="flex items-center justify-between">
+          <h2
+            className="text-xl md:text-2xl uppercase font-bold"
+            style={{
+              fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+              letterSpacing: '0.03em',
+              fontStretch: 'condensed',
+            }}
+          >
+            NOVINKY
+          </h2>
+          <p className="text-xs md:text-sm uppercase tracking-wide text-gray-600">
+            {products.length} produktů
+          </p>
         </div>
-
-        {/* Add Product Button for Admin */}
-        {isLoggedInAdmin && (
-          <div className="mt-8 flex justify-center">
-            <button
-              onClick={handleAddProduct}
-              className="px-6 py-3 bg-black text-white uppercase text-sm font-bold hover:bg-gray-800 transition-colors border border-black"
-              style={{ letterSpacing: '0.08em' }}
-            >
-              + Add Product to NOVINKY
-            </button>
-          </div>
-        )}
       </div>
+
+      {/* Product Grid - Same as zobrazit-vse page */}
+      <DraggableProductsGrid />
+
+      {/* Add Product Button for Admin */}
+      {isLoggedInAdmin && (
+        <div className="px-4 md:px-8 py-6 md:py-8 flex justify-center border-t border-black">
+          <button
+            onClick={handleAddProduct}
+            className="px-6 py-3 bg-black text-white uppercase text-sm font-bold hover:bg-gray-800 transition-colors"
+            style={{ letterSpacing: '0.08em' }}
+          >
+            + Přidat produkt do NOVINKY
+          </button>
+        </div>
+      )}
 
       {/* Admin section controls */}
       {isLoggedInAdmin && (
@@ -312,7 +363,7 @@ export default function NovinkysSection({
               onClick={onAdd}
               className="flex items-center gap-1.5 px-3 py-1.5 bg-black text-white text-xs uppercase tracking-wide hover:bg-gray-800 transition-all duration-200"
             >
-              + Add section
+              + Přidat sekci
             </button>
           )}
         </div>
