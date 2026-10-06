@@ -75,8 +75,7 @@ export default function ProductCard({
     <>
     <Link
       href={`/produkty/${slug}`}
-      className="block bg-white relative w-full h-full"
-      style={{ marginRight: '-1px', marginBottom: '-1px', marginTop: '-1px', border: '1px solid black' }}
+      className="block bg-white relative w-full border-r border-b border-black"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => {
         setIsHovered(false);
@@ -156,7 +155,7 @@ export default function ProductCard({
         )}
       </div>
       
-      <div className="product-info-container text-center relative md:absolute md:bottom-16 md:left-0 md:right-0 pt-1 md:pt-0 md:py-0">
+      <div className="product-info-container text-center relative md:absolute md:bottom-16 md:left-0 md:right-0 pt-1 md:pt-0 md:py-0 bg-white">
         {/* Title or Dot Indicators */}
         {isHovered && maxImages > 1 ? (
           <div 
@@ -290,13 +289,7 @@ export default function ProductCard({
       }
 
       .product-info-container {
-        margin-top: -32px;
-      }
-
-      @media (min-width: 768px) {
-        .product-info-container {
-          margin-top: 0;
-        }
+        margin-top: 0;
       }
     `}</style>
     </>

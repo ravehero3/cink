@@ -33,21 +33,24 @@ export default function ProductsGrid({ products, savedProducts = [], onToggleSav
 
   return (
     <div>
-      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 bg-black border border-black" style={{ gap: '0px' }}>
-        {displayProducts.map((product) => (
-          <ProductCard
-            key={product.id}
-            id={product.id}
-            name={product.name}
-            slug={product.slug}
-            price={Number(product.price)}
-            images={product.images}
-            sizes={product.sizes}
-            colorCount={product.colorCount || 1}
-            isSaved={savedProducts.includes(product.id)}
-            onToggleSave={onToggleSave}
-          />
-        ))}
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 bg-black border-t border-l border-black" style={{ gap: '0px' }}>
+        {displayProducts.map((product, index) => {
+          const isFirstInRow = index % 4 === 0;
+          return (
+            <ProductCard
+              key={product.id}
+              id={product.id}
+              name={product.name}
+              slug={product.slug}
+              price={Number(product.price)}
+              images={product.images}
+              sizes={product.sizes}
+              colorCount={product.colorCount || 1}
+              isSaved={savedProducts.includes(product.id)}
+              onToggleSave={onToggleSave}
+            />
+          );
+        })}
       </div>
     </div>
   );
