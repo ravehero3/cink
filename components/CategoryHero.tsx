@@ -86,12 +86,12 @@ export default function CategoryHero({ title, imageUrl }: CategoryHeroProps) {
         </h1>
       </div>
 
-      {/* Hero Media - 2576:584 aspect ratio on both mobile and desktop */}
+      {/* Hero Media - 2576:584 aspect ratio on desktop, zoomed/cropped on mobile to match header height */}
       {imageUrl && (
         <div 
           className="w-full border-b border-black relative overflow-hidden"
           style={{ 
-            aspectRatio: '2576 / 584',
+            aspectRatio: isMobile ? '16 / 9' : '2576 / 584',
             backgroundColor: 'transparent',
           }}
         >

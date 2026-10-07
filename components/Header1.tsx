@@ -159,7 +159,7 @@ export default function Header1() {
 
           {/* Mobile: Right side - Heart, Login icon, and Cart */}
           {!isPokladna && (
-            <div className="flex md:hidden items-center" style={{ paddingRight: '12px', gap: '12px' }}>
+            <div className="flex md:hidden items-center" style={{ paddingRight: '12px', gap: '8px' }}>
               <Link 
                 href="/ulozeno"
                 className="relative hover:opacity-70 transition-opacity"

@@ -16,14 +16,14 @@ export default function ControlBar({ productCount, currentSort, onSortChange }: 
 
   return (
     <div className="border-b border-black bg-white h-header">
-      <div className="h-full flex items-center justify-between" style={{ paddingLeft: '12px', paddingRight: '8px' }}>
+      <div className="h-full flex items-center justify-between" style={{ paddingLeft: '12px', paddingRight: '12px' }}>
         {/* Left: Product count - 12px from left edge */}
         <div className="text-sm uppercase tracking-tight font-normal">
           {productCount} {getCzechProductPlural(productCount)}
         </div>
 
-        {/* Right: Sort and Filter buttons */}
-        <div className="flex items-center">
+        {/* Right: Sort and Filter buttons - aligned right on mobile */}
+        <div className="flex items-center" style={{ gap: '8px' }}>
           <button
             onClick={openSortPanel}
             className="flex items-center text-sm uppercase tracking-tight font-normal hover:opacity-70 transition-opacity"
