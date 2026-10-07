@@ -3,7 +3,7 @@
 import { useFilterStore } from '@/lib/filter-store';
 import { useEffect } from 'react';
 
-const availableColors = ['Černá', 'Bílá'];
+const availableColors = ['Bílá', 'Černá', 'Modrá', 'Světle modrá', 'Růžová', 'Žlutá', 'Lila'];
 const availableSizes = ['S', 'M', 'L', 'XL', '2XL'];
 
 export default function FilterWindow() {
@@ -65,15 +65,26 @@ export default function FilterWindow() {
               </h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {availableColors.map((color) => {
+                  const colorMap: Record<string, string> = {
+                    'Bílá': '#FFFFFF',
+                    'Černá': '#000000',
+                    'Modrá': '#054ac8',
+                    'Světle modrá': '#9dcbff',
+                    'Růžová': '#ffc3e8',
+                    'Žlutá': '#ffe153',
+                    'Lila': '#d99cff'
+                  };
+                  const colorHex = colorMap[color] || '#CCCCCC';
                   const isBlack = color === 'Černá';
+                  const isWhite = color === 'Bílá';
                   const isSelected = colors.includes(color);
                   return (
                     <label key={color} className="flex items-center gap-2 cursor-pointer">
                       <div
                         className="w-5 h-5 flex items-center justify-center relative"
                         style={{
-                          backgroundColor: isBlack ? '#000000' : '#FFFFFF',
-                          border: '1px solid #000000',
+                          backgroundColor: colorHex,
+                          border: isWhite ? '1px solid #000000' : '1px solid ' + colorHex,
                           borderRadius: '3px'
                         }}
                       >
@@ -100,7 +111,7 @@ export default function FilterWindow() {
                           fontWeight: 400
                         }}
                       >
-                        {color}
+                        {color.toUpperCase()}
                       </span>
                     </label>
                   );
