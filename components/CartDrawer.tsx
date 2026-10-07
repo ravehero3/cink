@@ -507,6 +507,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 ))}
               </div>
             )}
+          </div>
 
           {items.length > 0 && (
             <div style={{ marginTop: 'auto' }}>
