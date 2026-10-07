@@ -173,7 +173,7 @@ export default function ProductCard({
           )}
         </div>
         
-        <div className="product-info-container text-center relative md:absolute md:bottom-16 md:left-0 md:right-0 md:pt-0 md:py-0" style={{ background: 'transparent', paddingTop: '2px' }}>
+        <div className="product-info-container text-center relative md:absolute md:bottom-16 md:left-0 md:right-0 md:pt-0 md:py-0" style={{ background: 'transparent', paddingTop: '2px', paddingBottom: '4px' }}>
           {isHovered && maxImages > 1 ? (
             <div 
               className="flex justify-center gap-1"
@@ -229,8 +229,8 @@ export default function ProductCard({
                 return (
                   <button
                     key={size}
-                    onClick={(e) => isAvailable && handleSizeClick(e, size)}
-                    onMouseEnter={() => isAvailable && setHoveredSize(size)}
+                    onClick={(e) => handleSizeClick(e, size)}
+                    onMouseEnter={() => setHoveredSize(size)}
                     onMouseLeave={() => setHoveredSize(null)}
                     className="transition-colors"
                     style={{
@@ -247,7 +247,7 @@ export default function ProductCard({
                       position: 'relative',
                       background: isAvailable && isHoveredSize ? 'white' : 'transparent',
                       border: isAvailable && isHoveredSize ? '1px solid black' : '1px solid transparent',
-                      cursor: isAvailable ? 'pointer' : 'default',
+                      cursor: 'pointer',
                       WebkitTextStroke: '0.5px white',
                       paintOrder: 'stroke fill'
                     }}
