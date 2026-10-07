@@ -30,6 +30,7 @@ export default function Header2({ isOpen, onClose }: Header2Props) {
   const searchTimeout = useRef<NodeJS.Timeout>();
   const { shortcuts } = useSearchShortcutsStore();
 
+  // Track scroll position
   useEffect(() => {
     const handleScroll = () => {
       setScrollPosition(window.scrollY);
@@ -39,6 +40,7 @@ export default function Header2({ isOpen, onClose }: Header2Props) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Search results fetch
   useEffect(() => {
     if (searchTimeout.current) {
       clearTimeout(searchTimeout.current);
@@ -81,44 +83,6 @@ export default function Header2({ isOpen, onClose }: Header2Props) {
   const isScrolledDown = scrollPosition > 44;
   const shouldShowSlideUp = !isOpen && isScrolledDown;
 
-  useEffect(() => {
-    if (searchTimeout.current) {
-      clearTimeout(searchTimeout.current);
-    }
-
-    if (searchQuery.trim().length === 0) {
-      setSearchResults([]);
-      return;
-    }
-
-    setIsLoading(true);
-
-    searchTimeout.current = setTimeout(async () => {
-      try {
-        const response = await fetch(`/api/products?search=${encodeURIComponent(searchQuery)}&limit=5`);
-        const data = await response.json();
-        setSearchResults(data.products || []);
-      } catch (error) {
-        console.error('Search error:', error);
-        setSearchResults([]);
-      } finally {
-        setIsLoading(false);
-      }
-    }, 300);
-
-    return () => {
-      if (searchTimeout.current) {
-        clearTimeout(searchTimeout.current);
-      }
-    };
-  }, [searchQuery]);
-
-  const handleResultClick = () => {
-    setSearchQuery('');
-    setSearchResults([]);
-    onClose();
-  };
-
   return (
     <>
       <div 
@@ -133,10 +97,6 @@ export default function Header2({ isOpen, onClose }: Header2Props) {
       >
         <div 
           className="h-header flex items-center w-full border-b border-black bg-white"
-          style={{
-            transform: isOpen ? 'translateY(0)' : 'translateY(0)',
-            transition: 'transform 0.4s ease-in-out'
-          }}
         >
           <div className="flex items-center flex-1" style={{ paddingLeft: '12px', gap: '12px' }}>
             <svg style={{ width: '17px', height: '17px', flexShrink: 0 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -163,9 +123,8 @@ export default function Header2({ isOpen, onClose }: Header2Props) {
           <div 
             className="w-full bg-white"
             style={{
-              opacity: isOpen ? 1 : 0,
-              transition: 'opacity 1s ease-in-out',
-              transitionDelay: isOpen ? '0.1s' : '0s'
+              opacity: 1,
+              transition: 'opacity 0.3s ease-in-out'
             }}
           >
             {searchQuery.trim().length > 0 ? (
