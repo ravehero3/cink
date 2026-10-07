@@ -659,27 +659,26 @@ export default function ProductDetailPage() {
                     <button
                       key={size}
                       onClick={() => {
-                        if (isAvailable) {
-                          setSelectedSize(size);
-                          setQuantity(1);
-                          setIsSizeDropdownOpen(false);
-                        }
+                        setSelectedSize(size);
+                        setQuantity(1);
+                        setIsSizeDropdownOpen(false);
                       }}
-                      disabled={!isAvailable}
+                      
                       className={`w-full py-3 border-b border-black last:border-b-0 transition-colors ${
                         isAvailable
                           ? 'hover:bg-black hover:text-white'
-                          : 'text-gray-400 cursor-not-allowed'
+                          : 'hover:bg-gray-100'
                       }`}
                       style={{
                         fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                         fontSize: '13px',
                         fontWeight: 400,
                         WebkitTextStroke: '0.5px rgba(255, 255, 255, 0.6)',
-                        paintOrder: 'stroke fill'
+                        paintOrder: 'stroke fill',
+                        color: isAvailable ? 'inherit' : '#999999'
                       }}
                     >
-                      {size}{!isAvailable && ' (Na objednáćí - Doručí se za 14 dní)'}
+                      {size}{!isAvailable && ' (Na objednání)'}
                     </button>
                   );
                 })}
