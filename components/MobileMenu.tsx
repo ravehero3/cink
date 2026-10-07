@@ -106,41 +106,9 @@ export default function MobileMenu({ isOpen, onClose, categories }: MobileMenuPr
               ))}
             </nav>
 
-            {/* Account & Settings */}
-            <div className="border-b border-black">
-              <Link
-                href={isLoggedIn ? "/ucet" : "/prihlaseni"}
-                onClick={onClose}
-                className="block px-6 py-3 hover:bg-gray-50 transition-colors border-b border-gray-200"
-                style={{
-                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '13px',
-                  fontWeight: 400,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
-                  color: '#000000'
-                }}
-              >
-                {isLoggedIn ? "✓ MŮJ ÚČET" : "PŘIHLÁSIT SE"}
-              </Link>
-
-              <Link
-                href="/ulozeno"
-                onClick={onClose}
-                className="block px-6 py-3 hover:bg-gray-50 transition-colors border-b border-gray-200"
-                style={{
-                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '13px',
-                  fontWeight: 400,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
-                  color: '#000000'
-                }}
-              >
-                ♡ ULOŽENÉ POLOŽKY
-              </Link>
-
-              {isAdmin && (
+            {/* Account & Settings - Only Admin link */}
+            {isAdmin && (
+              <div className="border-b border-black">
                 <Link
                   href="/admin"
                   onClick={onClose}
@@ -154,10 +122,10 @@ export default function MobileMenu({ isOpen, onClose, categories }: MobileMenuPr
                     color: '#000000'
                   }}
                 >
-                  ⚙ SPRÁVCE ESHOPU
+                  SPRAVCE ESHOPU
                 </Link>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

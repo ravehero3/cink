@@ -61,7 +61,7 @@ export default function CategoryHero({ title, imageUrl }: CategoryHeroProps) {
       {/* White Title Bar - 5x header height (44px * 5 = 220px) */}
       <div 
         className="bg-white border-b border-black flex items-center justify-center"
-        style={{ height: 'calc(5 * 44px)' }}
+        style={{ height: 'calc(5 * 44px)', paddingTop: '20px' }}
       >
         <h1 
           className="uppercase text-center"
@@ -76,7 +76,6 @@ export default function CategoryHero({ title, imageUrl }: CategoryHeroProps) {
             margin: '0',
             padding: '0',
             width: '100%',
-            height: '100%',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -87,13 +86,12 @@ export default function CategoryHero({ title, imageUrl }: CategoryHeroProps) {
         </h1>
       </div>
 
-      {/* Hero Media - square on mobile, 50vh on desktop */}
+      {/* Hero Media - 2576:584 aspect ratio on both mobile and desktop */}
       {imageUrl && (
         <div 
           className="w-full border-b border-black relative overflow-hidden"
           style={{ 
-            height: isMobile ? '100vw' : '50vh',
-            maxHeight: isMobile ? '100vw' : 'none',
+            aspectRatio: '2576 / 584',
             backgroundColor: 'transparent',
           }}
         >

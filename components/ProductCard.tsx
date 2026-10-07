@@ -20,12 +20,12 @@ interface ProductCardProps {
 
 const getColorHex = (colorName: string): string => {
   const colorMap: Record<string, string> = {
-    'ŽLUTÁ': '#FFD700',
+    'RŮŽOVÁ': '#ffc3e8',
+    'MODRÁ': '#054ac8',
+    'ŽLUTÁ': '#ffe153',
+    'LILA': '#d99cff',
+    'SVĚTLE MODRÁ': '#9dcbff',
     'ČERNÁ': '#000000',
-    'MODRÁ': '#0066CC',
-    'SVĚTLE MODRÁ': '#87CEEB',
-    'LILA': '#800080',
-    'RŮŽOVÁ': '#FF69B4',
     'BÍLÁ': '#FFFFFF',
     'ČERVENÁ': '#FF0000',
     'ZELENÁ': '#00AA00',

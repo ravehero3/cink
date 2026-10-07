@@ -79,7 +79,7 @@ export default function Header1() {
           
           {/* Mobile: Left side - Hamburger menu + Search */}
           {!isPokladna && (
-            <div className="flex md:hidden items-center" style={{ gap: '8px', paddingLeft: '12px' }}>
+            <div className="flex md:hidden items-center" style={{ gap: '12px', paddingLeft: '12px' }}>
               <button 
                 onClick={() => setShowMobileMenu(true)}
                 className="hover:opacity-70 transition-opacity"

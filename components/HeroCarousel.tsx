@@ -389,7 +389,7 @@ export default function HeroCarousel({
                   width: '9px',
                   height: '9px',
                   borderRadius: '50%',
-                  border: '0.75px solid white',
+                  border: '1.5px solid white',
                   backgroundColor: i === active ? 'rgba(0, 0, 0, 0.3)' : 'transparent',
                   transition: 'all 0.35s cubic-bezier(0.22, 1, 0.36, 1)',
                 }}
