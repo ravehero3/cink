@@ -28,7 +28,7 @@ export default function DeleteConfirmModal({
       />
       
       <div className="fixed top-1/2 z-50 bg-white border border-black" style={{ width: '33.33%', left: 'calc(50% + 6px)', transform: 'translate(-50%, -50%)' }}>
-        <div className="border-b border-black" style={{ height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#ffffff' }}>
+        <div className="border-b border-black" style={{ height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#ffffff', padding: '0 16px' }}>
           <h2 style={{
             fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
             fontSize: '14px',
@@ -36,7 +36,9 @@ export default function DeleteConfirmModal({
             textTransform: 'uppercase',
             letterSpacing: '0.03em',
             fontStretch: 'condensed',
-            color: '#000000'
+            color: '#000000',
+            margin: 0,
+            lineHeight: '1.2'
           }}>
             Odebrat položku z mého košíku
           </h2>
@@ -49,7 +51,7 @@ export default function DeleteConfirmModal({
             fontWeight: 400,
             lineHeight: '19.6px',
             color: '#000000',
-            marginBottom: '16px'
+            margin: '0'
           }}>
             Jste si jisti, že chcete odebrat {productName} ({productSize}) z košíku?
           </p>
