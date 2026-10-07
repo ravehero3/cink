@@ -323,11 +323,15 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         <div
                           style={{ display: 'flex', flexDirection: 'column', width: '100%', flexShrink: 0, paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px' }}
                         >
-                          <div style={{ position: 'relative', width: '100%', aspectRatio: '1 / 1', backgroundColor: '#fff', overflow: 'hidden', marginBottom: '26px' }}>
+                          <div style={{ position: 'relative', width: '400px', height: '400px', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '26px', margin: '0 auto 26px auto' }}>
                             <img
                               src={product.image}
                               alt={product.name}
-                              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                              onError={(e) => {
+                                const img = e.target as HTMLImageElement;
+                                img.style.display = 'none';
+                              }}
                             />
                           </div>
                           <h4 style={{
@@ -351,9 +355,28 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                             fontWeight: 400,
                             lineHeight: '1.3',
                             color: '#000000',
-                            margin: 0,
+                            margin: '0 0 26px 0',
                             textAlign: 'center'
                           }}>{product.price} Kč</p>
+                          <button
+                            onClick={() => handleAddToCart(product)}
+                            style={{
+                              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                              fontSize: '11px',
+                              fontWeight: 400,
+                              lineHeight: '1.3',
+                              color: '#000000',
+                              textDecoration: 'underline',
+                              border: 'none',
+                              background: 'none',
+                              cursor: 'pointer',
+                              padding: 0,
+                              textAlign: 'center'
+                            }}
+                            className="hover:opacity-60 transition-opacity"
+                          >
+                            Přidat do košíku
+                          </button>
                         </div>
                       </div>
                     ))}
@@ -400,13 +423,11 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       {recentlyViewed.map((product, index) => (
                         <div key={product.id} style={{ display: 'flex', flex: '0 0 50%' }}>
                           {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
-                          <Link
-                            href={`/produkty/${product.slug}`}
-                            onClick={onClose}
-                            style={{ display: 'flex', flexDirection: 'column', width: '100%', flexShrink: 0, paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px', textDecoration: 'none' }}
+                          <div
+                            style={{ display: 'flex', flexDirection: 'column', width: '100%', flexShrink: 0, paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px' }}
                             className="hover:opacity-80 transition-opacity"
                           >
-                            <div style={{ position: 'relative', width: '100%', aspectRatio: '1 / 1', backgroundColor: '#fff', overflow: 'hidden', marginBottom: '26px' }}>
+                            <div style={{ position: 'relative', width: '100%', height: '400px', backgroundColor: '#fff', overflow: 'hidden', marginBottom: '26px' }}>
                               <img
                                 src={product.image}
                                 alt={product.name}
@@ -434,10 +455,26 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                               fontWeight: 400,
                               lineHeight: '1.3',
                               color: '#000000',
-                              margin: 0,
+                              margin: '0 0 26px 0',
                               textAlign: 'center'
                             }}>{product.price} Kč</p>
-                          </Link>
+                            <Link
+                              href={`/produkty/${product.slug}`}
+                              onClick={onClose}
+                              style={{
+                                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                                fontSize: '11px',
+                                fontWeight: 400,
+                                lineHeight: '1.3',
+                                color: '#000000',
+                                textDecoration: 'underline',
+                                textAlign: 'center'
+                              }}
+                              className="hover:opacity-60 transition-opacity"
+                            >
+                              Přidat do košíku
+                            </Link>
+                          </div>
                         </div>
                       ))}
                     </div>
