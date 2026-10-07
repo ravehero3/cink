@@ -600,7 +600,9 @@ export default function ProductDetailPage() {
             let isOnOrder = false;
             if (selectedSize && product?.sizes[selectedSize]) {
               const stock = product.sizes[selectedSize];
-              isOnOrder = stock === 0;
+              // Check if stock is 0, null, undefined, or falsy
+              isOnOrder = !stock || Number(stock) === 0;
+              console.log(`Selected size: ${selectedSize}, Stock value: ${stock}, Stock type: ${typeof stock}, isOnOrder: ${isOnOrder}`);
             }
             const delivery = getDeliveryDateRange(isOnOrder);
             return (
