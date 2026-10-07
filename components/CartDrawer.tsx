@@ -80,10 +80,13 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   useEffect(() => {
     const fetchAllProducts = async () => {
       try {
-        const res = await fetch('/api/products');
+        const res = await fetch('/api/products?limit=1000');
         const data = await res.json();
+        console.log('Fetched products:', data); // Debug log
         if (Array.isArray(data)) {
           setAllProducts(data);
+        } else if (data.products && Array.isArray(data.products)) {
+          setAllProducts(data.products);
         }
       } catch (error) {
         console.error('Failed to fetch products:', error);
@@ -413,48 +416,50 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       }}
                       className="select-none"
                     >
-                      {recentlyViewed.map((product) => (
-                        <Link
-                          key={product.id}
-                          href={`/produkty/${product.slug}`}
-                          onClick={onClose}
-                          style={{ display: 'flex', flexDirection: 'column', width: 'calc(50% - 8px)', marginRight: '16px', flexShrink: 0, paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '0px', textDecoration: 'none' }}
-                          className="hover:opacity-80 transition-opacity"
-                        >
-                          <div style={{ position: 'relative', width: '100%', height: '402px', backgroundColor: '#fff', border: '1px solid #000', overflow: 'hidden', marginBottom: '26px' }}>
-                            <Image
-                              src={product.image}
-                              alt={product.name}
-                              fill
-                              className="object-cover"
-                              unoptimized
-                            />
-                          </div>
-                          <h4 style={{
-                            fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                            fontSize: '12px',
-                            fontWeight: 700,
-                            textTransform: 'uppercase',
-                            marginTop: 0,
-                            marginBottom: '26px',
-                            letterSpacing: '0.03em',
-                            fontStretch: 'condensed',
-                            color: '#000000',
-                            lineHeight: '1.3',
-                            textAlign: 'center'
-                          }}>
-                            {product.name}
-                          </h4>
-                          <p style={{
-                            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                            fontSize: '11px',
-                            fontWeight: 400,
-                            lineHeight: '1.3',
-                            color: '#000000',
-                            margin: 0,
-                            textAlign: 'center'
-                          }}>{product.price} Kč</p>
-                        </Link>
+                      {recentlyViewed.map((product, index) => (
+                        <div key={product.id} style={{ display: 'flex', flex: '0 0 50%' }}>
+                          {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
+                          <Link
+                            href={`/produkty/${product.slug}`}
+                            onClick={onClose}
+                            style={{ display: 'flex', flexDirection: 'column', width: '100%', flexShrink: 0, paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px', textDecoration: 'none' }}
+                            className="hover:opacity-80 transition-opacity"
+                          >
+                            <div style={{ position: 'relative', width: '100%', height: '402px', backgroundColor: '#fff', overflow: 'hidden', marginBottom: '26px' }}>
+                              <Image
+                                src={product.image}
+                                alt={product.name}
+                                fill
+                                className="object-cover"
+                                unoptimized
+                              />
+                            </div>
+                            <h4 style={{
+                              fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                              fontSize: '12px',
+                              fontWeight: 700,
+                              textTransform: 'uppercase',
+                              marginTop: 0,
+                              marginBottom: '26px',
+                              letterSpacing: '0.03em',
+                              fontStretch: 'condensed',
+                              color: '#000000',
+                              lineHeight: '1.3',
+                              textAlign: 'center'
+                            }}>
+                              {product.name}
+                            </h4>
+                            <p style={{
+                              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                              fontSize: '11px',
+                              fontWeight: 400,
+                              lineHeight: '1.3',
+                              color: '#000000',
+                              margin: 0,
+                              textAlign: 'center'
+                            }}>{product.price} Kč</p>
+                          </Link>
+                        </div>
                       ))}
                     </div>
                   </div>
@@ -478,7 +483,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     <img 
                       src="/payment-methods.jpg" 
                       alt="Payment Methods: Visa, Mastercard, GoPay, PayPal, Apple Pay" 
-                      style={{ height: '56px', width: 'auto' }}
+                      style={{ height: '64px', width: 'auto' }}
                     />
                   </div>
                 </div>
