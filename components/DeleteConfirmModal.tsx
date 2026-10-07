@@ -27,11 +27,11 @@ export default function DeleteConfirmModal({
         onClick={onClose}
       />
       
-      <div className="fixed top-1/2 z-50 bg-white border border-black" style={{ width: '33.33%', left: 'calc(50% + 6px)', transform: 'translate(-50%, -50%)' }}>
-        <div className="border-b border-black" style={{ height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#ffffff', padding: '0 16px' }}>
+      <div className="fixed top-1/2 z-50 bg-white border border-black" style={{ width: '70%', maxWidth: '480px', left: '50%', transform: 'translate(-50%, -50%)' }}>
+        <div className="border-b border-black" style={{ height: '52px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#24e053', padding: '0 24px' }}>
           <h2 style={{
             fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-            fontSize: '14px',
+            fontSize: '16px',
             fontWeight: 700,
             textTransform: 'uppercase',
             letterSpacing: '0.03em',
@@ -44,16 +44,17 @@ export default function DeleteConfirmModal({
           </h2>
         </div>
 
-        <div style={{ padding: '16px' }}>
+        <div style={{ padding: '32px 28px' }}>
           <p style={{
             fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-            fontSize: '14px',
+            fontSize: '15px',
             fontWeight: 400,
-            lineHeight: '19.6px',
+            lineHeight: '1.6',
             color: '#000000',
-            margin: '0'
+            margin: '0',
+            textAlign: 'center'
           }}>
-            Jste si jisti, že chcete odebrat {productName} ({productSize}) z košíku?
+            Jste si jisti, že chcete odebrat <strong>{productName}</strong> ({productSize}) z košíku?
           </p>
         </div>
 
@@ -62,9 +63,9 @@ export default function DeleteConfirmModal({
         }} />
 
         <div style={{
-          padding: '12px',
+          padding: '20px 24px',
           display: 'flex',
-          gap: '8px'
+          gap: '12px'
         }}>
           <AnimatedButton
             text="ZRUŠIT"
@@ -73,9 +74,9 @@ export default function DeleteConfirmModal({
             style={{
               flex: 1,
               fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-              fontSize: '12px',
+              fontSize: '13px',
               fontWeight: 400,
-              padding: '12px',
+              padding: '16px',
               backgroundColor: '#fff',
               border: '1px solid #000',
               borderRadius: '4px',
@@ -85,15 +86,15 @@ export default function DeleteConfirmModal({
             }}
           />
           <AnimatedButton
-            text="ANO"
+            text="ANO, ODEBRAT"
             onClick={onConfirm}
             type="button"
             style={{
               flex: 1,
               fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-              fontSize: '12px',
+              fontSize: '13px',
               fontWeight: 400,
-              padding: '12px',
+              padding: '16px',
               borderRadius: '4px'
             }}
           />
