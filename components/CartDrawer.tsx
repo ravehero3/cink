@@ -129,7 +129,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 color: '#000000'
               }}
             >
-              NÁKUPNÍ KOŠÍK
+              KOŠÍK
             </h2>
             <button
               onClick={onClose}
@@ -164,7 +164,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             )}
             {items.length === 0 ? (
               <div className="h-full flex flex-col relative" style={{ display: 'flex', flexDirection: 'column' }}>
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', paddingLeft: '24px', paddingRight: '24px' }}>
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', paddingLeft: '24px', paddingRight: '24px', paddingTop: '100px', paddingBottom: '22px' }}>
                   <p 
                     style={{
                       fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -200,30 +200,30 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                           PROHLÍŽELI JSTE
                         </h3>
                       </div>
-                      {/* Horizontal scroll container */}
-                      <div style={{ display: 'flex', overflowX: 'auto', overflowY: 'hidden', gap: '12px', paddingLeft: '16px', paddingRight: '16px', scrollBehavior: 'smooth', WebkitOverflowScrolling: 'touch' }}>
+                      {/* Horizontal scroll container - product grid style */}
+                      <div style={{ display: 'flex', overflowX: 'auto', overflowY: 'hidden', gap: '0', paddingLeft: '0', paddingRight: '0', scrollBehavior: 'smooth', WebkitOverflowScrolling: 'touch' }}>
                         {recentlyViewed.map((product) => (
                           <Link
                             key={product.id}
                             href={`/produkty/${product.slug}`}
                             onClick={onClose}
                             className="flex-shrink-0 hover:opacity-80 transition-opacity"
-                            style={{ display: 'flex', flexDirection: 'column' }}
+                            style={{ display: 'flex', flexDirection: 'column', width: 'calc(50% - 8px)', marginRight: '16px' }}
                           >
-                            <div style={{ position: 'relative', width: '280px', height: '396px', backgroundColor: '#fff', border: '1px solid #000', flexShrink: 0, overflow: 'hidden' }}>
+                            <div style={{ position: 'relative', width: '100%', aspectRatio: '1 / 1', backgroundColor: '#fff', border: '1px solid #000', flexShrink: 0, overflow: 'hidden' }}>
                               <Image
                                 src={product.image}
                                 alt={product.name}
                                 fill
                                 className="object-cover"
-                                sizes="280px"
+                                sizes="calc(50vw - 80px)"
                                 unoptimized
                               />
                             </div>
-                            <div style={{ paddingTop: '8px', paddingBottom: '0px', minWidth: '280px' }}>
+                            <div style={{ paddingTop: '8px', paddingBottom: '0px', textAlign: 'center' }}>
                               <h4 style={{
                                 fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                                fontSize: '11px',
+                                fontSize: '12px',
                                 fontWeight: 700,
                                 textTransform: 'uppercase',
                                 marginTop: 0,
@@ -232,21 +232,20 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                                 fontStretch: 'condensed',
                                 color: '#000000',
                                 lineHeight: '1.3',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                display: '-webkit-box',
-                                WebkitLineClamp: 2,
-                                WebkitBoxOrient: 'vertical'
+                                WebkitTextStroke: '2px white',
+                                paintOrder: 'stroke fill'
                               }}>
                                 {product.name}
                               </h4>
                               <p style={{
                                 fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                                fontSize: '10px',
+                                fontSize: '11px',
                                 fontWeight: 400,
                                 lineHeight: '1.3',
                                 color: '#000000',
-                                margin: 0
+                                margin: 0,
+                                WebkitTextStroke: '2px white',
+                                paintOrder: 'stroke fill'
                               }}>{product.price} Kč</p>
                             </div>
                           </Link>
