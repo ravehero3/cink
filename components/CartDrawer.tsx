@@ -317,63 +317,44 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     }}
                     className="select-none"
                   >
-                    {selectedProducts.map((product) => (
-                      <div
-                        key={product.id}
-                        style={{ display: 'flex', flexDirection: 'column', width: 'calc(50% - 8px)', marginRight: '16px', flexShrink: 0, paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '0px' }}
-                      >
-                        <div style={{ position: 'relative', width: '100%', height: '402px', backgroundColor: '#fff', border: '1px solid #000', overflow: 'hidden', marginBottom: '26px' }}>
-                          <Image
-                            src={product.image}
-                            alt={product.name}
-                            fill
-                            className="object-cover"
-                            unoptimized
-                          />
-                        </div>
-                        <h4 style={{
-                          fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                          fontSize: '12px',
-                          fontWeight: 700,
-                          textTransform: 'uppercase',
-                          marginTop: 0,
-                          marginBottom: '26px',
-                          letterSpacing: '0.03em',
-                          fontStretch: 'condensed',
-                          color: '#000000',
-                          lineHeight: '1.3',
-                          textAlign: 'center'
-                        }}>
-                          {product.name}
-                        </h4>
-                        <p style={{
-                          fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                          fontSize: '11px',
-                          fontWeight: 400,
-                          lineHeight: '1.3',
-                          color: '#000000',
-                          margin: '0 0 26px 0',
-                          textAlign: 'center'
-                        }}>{product.price} Kč</p>
-                        <button
-                          onClick={() => handleAddToCart(product)}
-                          style={{
+                    {selectedProducts.map((product, index) => (
+                      <div key={product.id} style={{ display: 'flex', flex: '0 0 50%' }}>
+                        {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
+                        <div
+                          style={{ display: 'flex', flexDirection: 'column', width: '100%', flexShrink: 0, paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px' }}
+                        >
+                          <div style={{ position: 'relative', width: '100%', aspectRatio: '1 / 1', backgroundColor: '#fff', overflow: 'hidden', marginBottom: '26px' }}>
+                            <img
+                              src={product.image}
+                              alt={product.name}
+                              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                            />
+                          </div>
+                          <h4 style={{
+                            fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                            fontSize: '12px',
+                            fontWeight: 700,
+                            textTransform: 'uppercase',
+                            marginTop: 0,
+                            marginBottom: '26px',
+                            letterSpacing: '0.03em',
+                            fontStretch: 'condensed',
+                            color: '#000000',
+                            lineHeight: '1.3',
+                            textAlign: 'center'
+                          }}>
+                            {product.name}
+                          </h4>
+                          <p style={{
                             fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                             fontSize: '11px',
                             fontWeight: 400,
                             lineHeight: '1.3',
                             color: '#000000',
-                            textDecoration: 'underline',
-                            border: 'none',
-                            background: 'none',
-                            cursor: 'pointer',
-                            padding: 0,
+                            margin: 0,
                             textAlign: 'center'
-                          }}
-                          className="hover:opacity-60 transition-opacity"
-                        >
-                          Přidat do košíku
-                        </button>
+                          }}>{product.price} Kč</p>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -425,13 +406,11 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                             style={{ display: 'flex', flexDirection: 'column', width: '100%', flexShrink: 0, paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px', textDecoration: 'none' }}
                             className="hover:opacity-80 transition-opacity"
                           >
-                            <div style={{ position: 'relative', width: '100%', height: '402px', backgroundColor: '#fff', overflow: 'hidden', marginBottom: '26px' }}>
-                              <Image
+                            <div style={{ position: 'relative', width: '100%', aspectRatio: '1 / 1', backgroundColor: '#fff', overflow: 'hidden', marginBottom: '26px' }}>
+                              <img
                                 src={product.image}
                                 alt={product.name}
-                                fill
-                                className="object-cover"
-                                unoptimized
+                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                               />
                             </div>
                             <h4 style={{
