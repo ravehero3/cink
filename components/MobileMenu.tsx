@@ -42,13 +42,13 @@ export default function MobileMenu({ isOpen, onClose, categories }: MobileMenuPr
       />
       
       <div
-        className={`fixed top-0 left-0 h-full w-4/5 max-w-[320px] bg-white z-50 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 h-full w-full bg-white z-50 transform transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div className="h-full flex flex-col border-r border-black">
-          {/* Header - White background */}
-          <div className="border-b border-black relative flex items-center justify-center" style={{ height: '56px', backgroundColor: '#ffffff' }}>
+          {/* Header - 44px height to match mobile header */}
+          <div className="border-b border-black relative flex items-center justify-center" style={{ height: '44px', backgroundColor: '#ffffff' }}>
             <h2 
               style={{
                 fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -83,14 +83,15 @@ export default function MobileMenu({ isOpen, onClose, categories }: MobileMenuPr
           {/* Menu Content */}
           <div className="flex-1 overflow-y-auto">
             {/* Categories */}
-            <nav className="border-b border-black">
+            <nav className="border-b border-black w-full">
               {categories.map((category, index) => (
                 <Link
                   key={category.slug}
                   href={`/${category.slug}`}
                   onClick={onClose}
-                  className="block px-6 py-4 hover:bg-gray-50 transition-colors"
+                  className="block px-6 hover:bg-gray-50 transition-colors border-b border-gray-200 flex items-center"
                   style={{
+                    height: '44px',
                     fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '14px',
                     fontWeight: 700,
@@ -108,12 +109,13 @@ export default function MobileMenu({ isOpen, onClose, categories }: MobileMenuPr
 
             {/* Account & Settings - Only Admin link */}
             {isAdmin && (
-              <div className="border-b border-black">
+              <div className="border-b border-black w-full">
                 <Link
                   href="/admin"
                   onClick={onClose}
-                  className="block px-6 py-3 hover:bg-gray-50 transition-colors"
+                  className="block px-6 hover:bg-gray-50 transition-colors flex items-center"
                   style={{
+                    height: '44px',
                     fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '13px',
                     fontWeight: 400,

@@ -41,6 +41,7 @@ export default function HeroCarousel({
   const [active, setActive] = useState(0);
   const [loading, setLoading] = useState(true);
   const [showPicker, setShowPicker] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const trackRef = useRef<HTMLDivElement>(null);
   const downRef = useRef(false);
@@ -61,6 +62,16 @@ export default function HeroCarousel({
       console.log('✗ Not admin in HeroCarousel', { isAdminProp, sessionRole: session?.user?.role });
     }
   }, [isLoggedInAdmin, isAdminProp, session]);
+
+  // Detect mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Fetch carousel slides
   useEffect(() => {
@@ -230,7 +241,7 @@ export default function HeroCarousel({
   };
 
   if (loading) {
-    return <div className="w-full bg-gray-100 flex items-center justify-center border-b border-black" style={{ aspectRatio: '2576 / 584' }}>Vítejte na ufosport.cz</div>;
+    return <div className="w-full bg-gray-100 flex items-center justify-center border-b border-black" style={{ aspectRatio: isMobile ? '16 / 9' : '2576 / 584' }}>Vítejte na ufosport.cz</div>;
   }
 
   return (
@@ -267,7 +278,7 @@ export default function HeroCarousel({
           scrollbarWidth: 'none',
           WebkitOverflowScrolling: 'touch',
           cursor: 'grab',
-          aspectRatio: '2576 / 584',
+          aspectRatio: isMobile ? '16 / 9' : '2576 / 584',
         }}
         onScroll={handleScroll}
         onPointerDown={handlePointerDown}
@@ -278,7 +289,7 @@ export default function HeroCarousel({
           // Empty state - show + button for admin
           <div
             className="flex-shrink-0 w-full h-full flex items-center justify-center bg-gray-100"
-            style={{ aspectRatio: '2576 / 584', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}
+            style={{ aspectRatio: isMobile ? '16 / 9' : '2576 / 584', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}
           >
             {isLoggedInAdmin ? (
               <button
@@ -319,7 +330,7 @@ export default function HeroCarousel({
             <div
               key={slide.id}
               className="flex-shrink-0 w-full relative overflow-hidden bg-white group"
-              style={{ aspectRatio: '2576 / 584', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}
+              style={{ aspectRatio: isMobile ? '16 / 9' : '2576 / 584', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}
               role="group"
               aria-roledescription="slide"
               aria-label={`${i + 1} of ${slides.length}`}

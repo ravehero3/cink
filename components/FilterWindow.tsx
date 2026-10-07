@@ -3,7 +3,7 @@
 import { useFilterStore } from '@/lib/filter-store';
 import { useEffect } from 'react';
 
-const availableColors = ['Bílá', 'Černá', 'Modrá', 'Světle modrá', 'Růžová', 'Žlutá', 'Lila'];
+const availableColors = ['BÍLÁ', 'ČERNÁ', 'MODRÁ', 'SVĚTLE MODRÁ', 'RŮŽOVÁ', 'ŽLUTÁ', 'LILA'];
 const availableSizes = ['S', 'M', 'L', 'XL', '2XL'];
 
 export default function FilterWindow() {
