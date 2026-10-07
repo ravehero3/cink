@@ -155,7 +155,7 @@ export default function ProductCard({
         )}
       </div>
       
-      <div className="product-info-container text-center relative md:absolute md:bottom-16 md:left-0 md:right-0 pt-1 md:pt-0 md:py-0 bg-white">
+      <div className="product-info-container text-center relative md:absolute md:bottom-16 md:left-0 md:right-0 pt-1 md:pt-0 md:py-0" style={{ background: 'transparent' }}>
         {/* Title or Dot Indicators */}
         {isHovered && maxImages > 1 ? (
           <div 
@@ -188,8 +188,13 @@ export default function ProductCard({
               fontStretch: 'condensed',
               lineHeight: '1.4',
               marginBottom: '2px',
-              WebkitTextStroke: '0.8px white',
-              paintOrder: 'stroke fill'
+              WebkitTextStroke: '2px white',
+              paintOrder: 'stroke fill',
+              color: '#000000',
+              textShadow: 'none',
+              backgroundColor: 'transparent',
+              padding: '0',
+              margin: '0 0 2px 0'
             }}
           >
             {name}
@@ -236,7 +241,7 @@ export default function ProductCard({
         ) : !isHovered ? (
           <p 
             className="text-small"
-            style={{ marginBottom: '2px', WebkitTextStroke: '0.8px white', paintOrder: 'stroke fill' }}
+            style={{ marginBottom: '2px', WebkitTextStroke: '2px white', paintOrder: 'stroke fill', color: '#000000', backgroundColor: 'transparent' }}
           >
             {colorCount} {getCzechColorPlural(colorCount)}
           </p>
@@ -259,7 +264,7 @@ export default function ProductCard({
             ))}
           </div>
         ) : (
-          <p className="text-small" style={{ WebkitTextStroke: '0.8px white', paintOrder: 'stroke fill' }}>{price} Kč</p>
+          <p className="text-small" style={{ WebkitTextStroke: '2px white', paintOrder: 'stroke fill', color: '#000000', backgroundColor: 'transparent' }}>{price} Kč</p>
         )}
       </div>
     </Link>
