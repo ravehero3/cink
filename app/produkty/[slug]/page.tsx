@@ -674,10 +674,12 @@ export default function ProductDetailPage() {
                       style={{
                         fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                         fontSize: '13px',
-                        fontWeight: 400
+                        fontWeight: 400,
+                        WebkitTextStroke: '0.5px rgba(255, 255, 255, 0.6)',
+                        paintOrder: 'stroke fill'
                       }}
                     >
-                      {size}{!isAvailable && ' (Vyprodáno)'}
+                      {size}{!isAvailable && ' (Na objednáćí - Doručí se za 14 dní)'}
                     </button>
                   );
                 })}

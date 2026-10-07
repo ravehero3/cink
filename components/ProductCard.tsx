@@ -170,7 +170,7 @@ export default function ProductCard({
                   height: '4px',
                   borderRadius: '50%',
                   backgroundColor: index === currentImageIndex ? '#000000' : '#999999',
-                  border: 'none',
+                  border: '0.5px solid rgba(255, 255, 255, 0.8)',
                   padding: 0,
                   transition: 'background-color 0.2s'
                 }}
@@ -230,7 +230,9 @@ export default function ProductCard({
                     position: 'relative',
                     background: isAvailable && isHoveredSize ? 'white' : 'transparent',
                     border: isAvailable && isHoveredSize ? '1px solid black' : '1px solid transparent',
-                    cursor: isAvailable ? 'pointer' : 'default'
+                    cursor: isAvailable ? 'pointer' : 'default',
+                    WebkitTextStroke: '0.5px white',
+                    paintOrder: 'stroke fill'
                   }}
                 >
                   {size}
