@@ -56,12 +56,11 @@ export default function ProductCard({
   };
 
   const colorHex = getColorHex(color);
+  const router = useRouter();
+
+  const availableSizes = Object.entries(sizes)
     .filter(([_, stock]) => stock > 0)
     .map(([size, _]) => size);
-  
-  const allSizes = Object.entries(sizes).map(([size, stock]) => ({ size, stock }));
-
-  const handleSizeClick = (e: React.MouseEvent, size: string) => {
     e.preventDefault();
     e.stopPropagation();
     router.push(`/produkty/${slug}?size=${size}`);
