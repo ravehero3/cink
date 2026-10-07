@@ -230,7 +230,7 @@ export default function HeroCarousel({
   };
 
   if (loading) {
-    return <div className="w-full bg-gray-100 flex items-center justify-center border-b border-black" style={{ aspectRatio: '2576 / 584' }}>Loading carousel...</div>;
+    return <div className="w-full bg-gray-100 flex items-center justify-center border-b border-black" style={{ aspectRatio: '2576 / 584' }}>Vítejte na ufosport.cz</div>;
   }
 
   return (
