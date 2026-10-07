@@ -597,7 +597,12 @@ export default function ProductDetailPage() {
           {!isEditMode && (
             <>
           {(() => {
-            const delivery = getDeliveryDateRange();
+            let isOnOrder = false;
+            if (selectedSize && product?.sizes[selectedSize]) {
+              const stock = product.sizes[selectedSize];
+              isOnOrder = stock === 0;
+            }
+            const delivery = getDeliveryDateRange(isOnOrder);
             return (
               <p
                 className="w-full md:w-[36vw] text-center mt-5 mb-2"

@@ -82,7 +82,7 @@ function isWorkingDay(date: Date): boolean {
   return !isWeekend(date) && !isHoliday(date, holidays);
 }
 
-export function getDeliveryDateRange(): { minDate: string; maxDate: string; isBeforeCutoff: boolean } {
+export function getDeliveryDateRange(isOnOrder: boolean = false): { minDate: string; maxDate: string; isBeforeCutoff: boolean } {
   const now = new Date();
   const czechTime = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Prague' }));
   
@@ -93,7 +93,11 @@ export function getDeliveryDateRange(): { minDate: string; maxDate: string; isBe
   let maxDays = 5;
   let startDate = new Date(czechTime);
   
-  if (isBeforeCutoff && isWorkingDay(czechTime)) {
+  // If "Na objednání" (on order), add 14 days
+  if (isOnOrder) {
+    minDays = 14;
+    maxDays = 14;
+  } else if (isBeforeCutoff && isWorkingDay(czechTime)) {
     minDays = 2;
     maxDays = 4;
   } else if (!isBeforeCutoff) {
