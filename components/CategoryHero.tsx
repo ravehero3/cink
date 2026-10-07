@@ -74,7 +74,7 @@ export default function CategoryHero({ title, imageUrl }: CategoryHeroProps) {
             fontStretch: 'condensed',
             color: '#000000',
             margin: '0',
-            padding: '20px',
+            padding: '0',
             width: '100%',
             display: 'flex',
             alignItems: 'center',
@@ -89,15 +89,16 @@ export default function CategoryHero({ title, imageUrl }: CategoryHeroProps) {
       {/* Hero Media - square on mobile, 50vh on desktop */}
       {imageUrl && (
         <div 
-          className="w-full border-b border-black bg-white relative overflow-hidden"
+          className="w-full border-b border-black relative overflow-hidden"
           style={{ 
             height: isMobile ? '100vw' : '50vh',
             maxHeight: isMobile ? '100vw' : 'none',
+            backgroundColor: 'transparent',
           }}
         >
           <div 
             className="absolute inset-0 overflow-hidden"
-            style={{ backgroundColor: 'white' }}
+            style={{ backgroundColor: 'transparent' }}
           >
             {showVideo && (
               <video
