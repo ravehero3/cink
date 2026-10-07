@@ -46,6 +46,7 @@ export default function ProductsGrid({ products, savedProducts = [], onToggleSav
               images={product.images}
               sizes={product.sizes}
               colorCount={product.colorCount || 1}
+              color={product.color || ''}
               isSaved={savedProducts.includes(product.id)}
               onToggleSave={onToggleSave}
             />

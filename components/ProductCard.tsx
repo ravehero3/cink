@@ -13,6 +13,7 @@ interface ProductCardProps {
   images: string[];
   sizes?: Record<string, number>;
   colorCount?: number;
+  color?: string;
   isSaved?: boolean;
   onToggleSave?: (id: string) => void;
 }
@@ -25,6 +26,7 @@ export default function ProductCard({
   images,
   sizes = {},
   colorCount = 1,
+  color = '',
   isSaved = false,
   onToggleSave,
 }: ProductCardProps) {
@@ -32,9 +34,28 @@ export default function ProductCard({
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [hoveredSize, setHoveredSize] = useState<string | null>(null);
   const [showHeartAnimation, setShowHeartAnimation] = useState(false);
-  const router = useRouter();
+  const getColorHex = (colorName: string): string => {
+    const colorMap: Record<string, string> = {
+      'ŽLUTÁ': '#FFD700',
+      'ČERNÁ': '#000000',
+      'MODRÁ': '#0066CC',
+      'SVĚTLE MODRÁ': '#87CEEB',
+      'LILA': '#800080',
+      'RŮŽOVÁ': '#FF69B4',
+      'BÍLÁ': '#FFFFFF',
+      'ČERVENÁ': '#FF0000',
+      'ZELENÁ': '#00AA00',
+      'ORANŽOVÁ': '#FFA500',
+      'FIALOVÁ': '#800080',
+      'ŠEDÁ': '#808080',
+      'TMAVĚ MODRÁ': '#00008B',
+      'BÉŽOVÁ': '#F5DEB3',
+      'HNĚDÁ': '#8B4513',
+    };
+    return colorMap[colorName.toUpperCase()] || '#CCCCCC';
+  };
 
-  const availableSizes = Object.entries(sizes)
+  const colorHex = getColorHex(color);
     .filter(([_, stock]) => stock > 0)
     .map(([size, _]) => size);
   
@@ -259,7 +280,7 @@ export default function ProductCard({
                   width: '16px',
                   height: '16px',
                   border: '1px solid #000000',
-                  backgroundColor: '#ffffff',
+                  backgroundColor: colorHex,
                   borderRadius: '2px',
                 }}
               />
