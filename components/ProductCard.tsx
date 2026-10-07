@@ -173,7 +173,7 @@ export default function ProductCard({
           )}
         </div>
         
-        <div className="product-info-container text-center relative md:absolute md:bottom-16 md:left-0 md:right-0 pt-1 md:pt-0 md:py-0" style={{ background: 'transparent' }}>
+        <div className="product-info-container text-center relative md:absolute md:bottom-16 md:left-0 md:right-0 md:pt-0 md:py-0" style={{ background: 'transparent', paddingTop: '2px' }}>
           {isHovered && maxImages > 1 ? (
             <div 
               className="flex justify-center gap-1"
@@ -203,15 +203,15 @@ export default function ProductCard({
                 fontWeight: 700,
                 letterSpacing: '0.03em',
                 fontStretch: 'condensed',
-                lineHeight: '1.4',
-                marginBottom: '2px',
+                lineHeight: '1.2',
+                marginBottom: '1px',
                 WebkitTextStroke: '3px white',
                 paintOrder: 'stroke fill',
                 color: '#000000',
                 textShadow: 'none',
                 backgroundColor: 'transparent',
                 padding: '0',
-                margin: '0 0 2px 0'
+                margin: '0 0 1px 0'
               }}
             >
               {name}
@@ -220,8 +220,8 @@ export default function ProductCard({
           
           {isHovered && allSizes.length > 0 ? (
             <div 
-              className="flex justify-center gap-1 flex-wrap px-2"
-              style={{ marginBottom: '2px' }}
+              className="flex justify-center gap-1 flex-wrap px-1"
+              style={{ marginBottom: '1px' }}
             >
               {allSizes.map(({ size, stock }) => {
                 const isAvailable = stock > 0;
@@ -260,7 +260,7 @@ export default function ProductCard({
           ) : !isHovered ? (
             <p 
               className="text-small"
-              style={{ marginBottom: '2px', WebkitTextStroke: '3px white', paintOrder: 'stroke fill', color: '#000000', backgroundColor: 'transparent' }}
+              style={{ marginBottom: '1px', WebkitTextStroke: '3px white', paintOrder: 'stroke fill', color: '#000000', backgroundColor: 'transparent' }}
             >
               {colorCount} {getCzechColorPlural(colorCount)}
             </p>
@@ -282,7 +282,7 @@ export default function ProductCard({
               ))}
             </div>
           ) : (
-            <p className="text-small" style={{ WebkitTextStroke: '3px white', paintOrder: 'stroke fill', color: '#000000', backgroundColor: 'transparent' }}>{price} Kč</p>
+            <p className="text-small" style={{ WebkitTextStroke: '3px white', paintOrder: 'stroke fill', color: '#000000', backgroundColor: 'transparent', marginBottom: 0 }}>{price} Kč</p>
           )}
         </div>
       </Link>

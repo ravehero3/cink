@@ -58,10 +58,10 @@ export default function CategoryHero({ title, imageUrl }: CategoryHeroProps) {
 
   return (
     <div>
-      {/* White Title Bar - 5x header height (44px * 5 = 220px) */}
+      {/* White Title Bar - 5x header height (44px * 5 = 220px) with centered title accounting for CO PRÁVĚ HLEDÁTE bar */}
       <div 
         className="bg-white border-b border-black flex items-center justify-center"
-        style={{ height: 'calc(5 * 44px)', paddingTop: '20px' }}
+        style={{ height: 'calc(5 * 44px)' }}
       >
         <h1 
           className="uppercase text-center"
@@ -80,6 +80,7 @@ export default function CategoryHero({ title, imageUrl }: CategoryHeroProps) {
             alignItems: 'center',
             justifyContent: 'center',
             textAlign: 'center',
+            marginTop: '22px',
           }}
         >
           {title}
