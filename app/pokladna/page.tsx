@@ -729,7 +729,7 @@ export default function CheckoutPage() {
                       borderRadius: '4px',
                       fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                       fontSize: '14px',
-                      fontWeight: 400'
+                      fontWeight: 400
                     }}
                   >
                     <option>+420</option>
