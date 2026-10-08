@@ -5,6 +5,7 @@ import { EMAIL_CATALOG, type EmailType } from '@/lib/email-catalog';
 import type { EmailTemplateCustomization, LinkedProduct } from '@/lib/email-layout';
 import JourneySequencePanel from '@/components/admin/JourneySequencePanel';
 import ProductPickerModal, { type PickedProduct } from '@/components/admin/ProductPickerModal';
+import ImageUploadModal from '@/components/admin/ImageUploadModal';
 
 type Tab = 'sablony' | 'odeslane' | 'cesty';
 type ViewMode = 'desktop' | 'mobile';
@@ -140,6 +141,10 @@ export default function EmailAdminPage() {
   const [pickerTitle, setPickerTitle] = useState('');
   const [pickerDescription, setPickerDescription] = useState('');
   const [pickerMaxSelect, setPickerMaxSelect] = useState(1);
+
+  // Image Upload Modal State
+  const [imageUploadOpen, setImageUploadOpen] = useState(false);
+  const [imageUploadTarget, setImageUploadTarget] = useState<'photoGrid' | 'hero'>('photoGrid');
 
   // Section manager panel state & feedback toast
   const [showSectionManager, setShowSectionManager] = useState(false);
@@ -683,6 +688,16 @@ export default function EmailAdminPage() {
                     + Produkty Mřížka (2x2)
                   </button>
                   <button
+                    onClick={() => {
+                      setImageUploadTarget('photoGrid');
+                      setImageUploadOpen(true);
+                    }}
+                    className="admin-btn text-xs"
+                    title="Nahrát obrázky do mřížky"
+                  >
+                    + Nahrát fotky
+                  </button>
+                  <button
                     onClick={() => setShowSectionManager(!showSectionManager)}
                     className={`admin-btn admin-btn-secondary text-xs ${showSectionManager ? 'bg-black text-white' : ''}`}
                   >
@@ -1013,6 +1028,20 @@ export default function EmailAdminPage() {
             ? gridProducts.map((p) => p.slug)
             : []
         }
+      />
+
+      {/* Image Upload Modal */}
+      <ImageUploadModal
+        isOpen={imageUploadOpen}
+        onClose={() => setImageUploadOpen(false)}
+        onImagesSelected={(urls) => {
+          // Handle uploaded images - can be extended for custom functionality
+          console.log('Uploaded images:', urls, 'for target:', imageUploadTarget);
+          // Future: integrate with email builder to add images to sections
+        }}
+        maxImages={imageUploadTarget === 'photoGrid' ? 4 : 1}
+        title={imageUploadTarget === 'photoGrid' ? 'Nahrání fotografií do mřížky' : 'Nahrání hlavní fotografie'}
+        description={imageUploadTarget === 'photoGrid' ? 'Přetáhněte až 4 fotografie do pole' : 'Přetáhněte fotku do pole'}
       />
     </div>
   );
