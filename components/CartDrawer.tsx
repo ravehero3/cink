@@ -381,6 +381,11 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                           </button>
                         </div>
                       </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* PROHLÍŽELI JSTE Section - 634px */}
                 {recentlyViewed.length > 0 && (
                   <div style={{ height: '634px', display: 'flex', flexDirection: 'column', borderBottom: '1px solid #000' }}>
                     <div style={{ paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px', borderBottom: '1px solid #000' }}>
