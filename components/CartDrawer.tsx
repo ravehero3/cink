@@ -381,34 +381,6 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                           </button>
                         </div>
                       </div>
-                    ))}
-                  </div>
-                          <button
-                            onClick={() => handleAddToCart(product)}
-                            style={{
-                              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                              fontSize: '11px',
-                              fontWeight: 400,
-                              lineHeight: '1.3',
-                              color: '#000000',
-                              textDecoration: 'underline',
-                              border: 'none',
-                              background: 'none',
-                              cursor: 'pointer',
-                              padding: 0,
-                              textAlign: 'center'
-                            }}
-                            className="hover:opacity-60 transition-opacity"
-                          >
-                            Přidat do košíku
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* PROHLÍŽELI JSTE Section - 634px */}
                 {recentlyViewed.length > 0 && (
                   <div style={{ height: '634px', display: 'flex', flexDirection: 'column', borderBottom: '1px solid #000' }}>
                     <div style={{ paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px', borderBottom: '1px solid #000' }}>
