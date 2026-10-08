@@ -622,30 +622,33 @@ export default function CartPage() {
         right: 0,
         backgroundColor: '#fff',
         borderTop: '1px solid #000',
-        zIndex: 10
+        zIndex: 10,
+        padding: '0 16px',
+        height: '40px',
+        display: 'flex',
+        alignItems: 'center'
       }}>
-        <div style={{
-          display: 'flex',
-          justifyContent: 'center',
-          padding: '12px'
-        }}>
-          <div style={{ width: '50%' }}>
-            <AnimatedButton
-              text={`PŘEJÍT K POKLADNĚ (${cartItemCount})`}
-              onClick={() => router.push('/pokladna')}
-              type="button"
-              style={{
-                width: '100%',
-                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '12px',
-                fontWeight: 400,
-                padding: '12px',
-                textTransform: 'uppercase',
-                cursor: 'pointer'
-              }}
-            />
-          </div>
-        </div>
+        <AnimatedButton
+          text={`PŘEJÍT K POKLADNĚ (${cartItemCount})`}
+          onClick={() => router.push('/pokladna')}
+          type="button"
+          style={{
+            width: '100%',
+            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+            fontSize: '12px',
+            fontWeight: 300,
+            padding: '0',
+            textTransform: 'uppercase',
+            cursor: 'pointer',
+            height: '40px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            border: 'none',
+            borderRadius: '0',
+            backgroundColor: '#fff'
+          }}
+        />
       </div>
 
       <DeleteConfirmModal
