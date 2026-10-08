@@ -324,14 +324,14 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
     });
   }
 
-  // Section 5 - Photo grid 2x2 (4 rectangles, 300x375)
+  // Section 5 - Photo grid 2x2 (4 squares, 300x300)
   if (!hiddenSections.has('photoGrid')) {
     const renderCell = (idx: number, width: number) => {
       const cell = gridCells[idx];
-      const img = `<img class="fluid" src="${cell.src}" width="${width}" height="375" alt="${cell.alt}" style="display:block;width:${width}px;height:375px;border:0;">`;
+      const img = `<img class="fluid" src="${cell.src}" width="${width}" height="${width}" alt="${cell.alt}" style="display:block;width:${width}px;height:${width}px;object-fit:cover;border:0;">`;
       if (adminMode) {
         return `
-          <div class="photo-container" style="position:relative;display:block;width:${width}px;height:375px;overflow:hidden;line-height:0;font-size:0;">
+          <div class="photo-container" style="position:relative;display:block;width:${width}px;height:${width}px;overflow:hidden;line-height:0;font-size:0;">
             <button class="photo-overlay-btn photo-cell-btn" type="button" title="Vybrat produkt pro pozici #${idx + 1}" onclick="window.parent.postMessage({type:'OPEN_PRODUCT_PICKER',target:'grid',slotIndex:${idx}},'*')">+</button>
             <span class="photo-cell-badge">+ #${idx + 1}</span>
             ${img}
@@ -422,7 +422,7 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
               <tr>
                 <td class="fcol" width="299" valign="top" style="width:299px;padding:36px 0 0 40px;font-family:'Inter',Arial,Helvetica,sans-serif;">
                   <div style="margin:0 0 20px;font-size:15px;line-height:20px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;">Prozkoumat více</div>
-                  <div style="margin:0;font-size:15px;line-height:22px;text-transform:uppercase;"><a href="${WEBSITE_URL}/kolekce" style="color:#000000;text-decoration:none;">Kolekce</a></div>
+                  <div style="margin:0;font-size:15px;line-height:22px;text-transform:uppercase;"><a href="${WEBSITE_URL}/magazin" style="color:#000000;text-decoration:none;">Magazín</a></div>
                   <div style="margin:0;font-size:15px;line-height:22px;text-transform:uppercase;"><a href="${WEBSITE_URL}/novinky" style="color:#000000;text-decoration:none;">Novinky</a></div>
                   <div style="margin:0;font-size:15px;line-height:22px;text-transform:uppercase;"><a href="${WEBSITE_URL}/darky" style="color:#000000;text-decoration:none;">Najít dárek</a></div>
                   <div style="margin:0;font-size:15px;line-height:22px;text-transform:uppercase;"><a href="${WEBSITE_URL}/darkove-poukazy" style="color:#000000;text-decoration:none;">Dárkové poukazy</a></div>
@@ -462,9 +462,14 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
             </table>
             <div style="font-size:15px;line-height:20px;font-weight:400;text-align:center;">
               <div style="margin:0;">UFO SPORT</div>
-              <div style="margin:0;"><a href="${WEBSITE_URL}/kontakt" style="color:#000000;text-decoration:underline;">Ulice 1, 110 00 Praha 1 – IČO 000 00 000</a></div>
+              <div style="margin:0;font-size:13px;line-height:18px;">
+                <div style="margin:0;">Vojtěch Vojkovský, Bachelor of Arts,</div>
+                <div style="margin:0;">Bědovická 193e, Třebechovice pod Orebem, 503 46</div>
+                <div style="margin:0;">Česká Republika</div>
+                <div style="margin:4px 0 0;"><a href="${WEBSITE_URL}/kontakt" style="color:#000000;text-decoration:underline;">IČO: 08701032</a></div>
+              </div>
               ${marketing ? `<div style="margin:16px 0 0;">Pokud již nechcete dostávat náš newsletter, můžete se odhlásit <a href="${unsubscribeUrl || `${WEBSITE_URL}/odhlasit-odber`}" style="color:#000000;text-decoration:underline;">zde</a>.</div>` : ''}
-              <div style="${marketing ? 'margin:0px 0 0;' : 'margin:16px 0 0;'}">Více o <a href="${WEBSITE_URL}/ochrana-osobnich-udaju" style="color:#000000;text-decoration:underline;">zásadách ochrany osobních údajů</a>.</div>
+              <div style="${marketing ? 'margin:8px 0 0;' : 'margin:16px 0 0;'}">Více o <a href="${WEBSITE_URL}/ochrana-osobnich-udaju" style="color:#000000;text-decoration:underline;">zásadách ochrany osobních údajů</a>.</div>
               <div style="margin:0;">Zobrazit e-mail ve webovém prohlížeči: <a href="${webVersionUrl || `${WEBSITE_URL}/email/web`}" style="color:#000000;text-decoration:underline;">zde</a>.</div>
             </div>
           </td>
