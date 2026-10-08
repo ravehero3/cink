@@ -388,11 +388,11 @@ export default function CartPage() {
                 justifyContent: 'space-between'
               }}
             >
-              <div className="flex flex-col md:flex-row gap-4 mb-4">
+              <div className="flex flex-col md:flex-row gap-6 md:gap-8">
                 <Link href={`/produkty/${item.slug}`} style={{ flexShrink: 0 }}>
-                  <div className="w-full md:w-[160px] h-[200px] md:h-[192px]" style={{
+                  <div className="w-[120px] h-[160px] md:w-[140px] md:h-[200px]" style={{
                     border: '1px solid #000',
-                    backgroundColor: '#fff',
+                    backgroundColor: '#f5f5f5',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -406,136 +406,160 @@ export default function CartPage() {
                   </div>
                 </Link>
 
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                  <Link
-                    href={`/produkty/${item.slug}`}
-                    style={{ textDecoration: 'none', color: '#000' }}
-                    className="hover:opacity-60 transition-opacity"
-                  >
-                    <h3 style={{
-                      fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                  <div>
+                    <Link
+                      href={`/produkty/${item.slug}`}
+                      style={{ textDecoration: 'none', color: '#000' }}
+                      className="hover:opacity-60 transition-opacity"
+                    >
+                      <h3 style={{
+                        fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                        fontSize: '16px',
+                        fontWeight: 700,
+                        textTransform: 'uppercase',
+                        marginBottom: '12px',
+                        marginTop: 0,
+                        lineHeight: '1.2',
+                        letterSpacing: '0.03em',
+                        fontStretch: 'condensed',
+                        color: '#000'
+                      }}>
+                        {item.name}
+                      </h3>
+                    </Link>
+                    
+                    <p style={{
+                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                       fontSize: '14px',
-                      fontWeight: 700,
-                      textTransform: 'uppercase',
+                      fontWeight: 400,
+                      lineHeight: '1.4',
+                      color: '#000',
+                      marginBottom: '16px',
+                      marginTop: 0
+                    }}>
+                      {item.price} Kč
+                    </p>
+
+                    <p style={{
+                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontSize: '14px',
+                      fontWeight: 400,
+                      lineHeight: '1.4',
+                      color: '#000',
                       marginBottom: '4px',
-                      lineHeight: '19.6px',
-                      letterSpacing: '0.03em',
-                      fontStretch: 'condensed',
-                      color: '#000'
+                      marginTop: 0
                     }}>
-                      {item.name}
-                    </h3>
-                  </Link>
-                  
-                  <p style={{
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
-                    fontWeight: 400,
-                    lineHeight: '19.6px',
-                    color: '#000',
-                    marginBottom: '8px'
-                  }}>
-                    {item.price} Kč
-                  </p>
+                      Color: {item.color}
+                    </p>
 
-                  <p style={{
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
-                    fontWeight: 400,
-                    lineHeight: '17.6px',
-                    color: '#000',
-                    marginBottom: '4px'
-                  }}>
-                    Barva: {item.color}
-                  </p>
-
-                  <p style={{
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
-                    fontWeight: 400,
-                    lineHeight: '17.6px',
-                    color: '#000',
-                    marginBottom: '8px'
-                  }}>
-                    Velikost: {item.size}
-                  </p>
-
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    marginBottom: '8px'
-                  }}>
-                    <span style={{
+                    <p style={{
                       fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                       fontSize: '14px',
                       fontWeight: 400,
-                      lineHeight: '17.6px',
-                      color: '#000'
+                      lineHeight: '1.4',
+                      color: '#000',
+                      marginBottom: '12px',
+                      marginTop: 0
                     }}>
-                      Množství:
-                    </span>
-                    <button
-                      onClick={() => updateQuantity(item.productId, item.size, item.quantity - 1)}
-                      style={{
-                        padding: '2px 8px',
-                        border: 'none',
-                        background: 'none',
-                        cursor: 'pointer',
-                        fontSize: '14px',
+                      Size: {item.size}
+                    </p>
+
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px'
+                    }}>
+                      <span style={{
                         fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                        fontSize: '14px',
                         fontWeight: 400,
+                        lineHeight: '1.4',
                         color: '#000'
+                      }}>
+                        Quantity:
+                      </span>
+                      <button
+                        onClick={() => updateQuantity(item.productId, item.size, item.quantity - 1)}
+                        style={{
+                          padding: '0 6px',
+                          border: 'none',
+                          background: 'none',
+                          cursor: 'pointer',
+                          fontSize: '16px',
+                          fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                          fontWeight: 400,
+                          color: '#000'
+                        }}
+                        className="hover:opacity-60 transition-opacity"
+                      >
+                        −
+                      </button>
+                      <span style={{
+                        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                        fontSize: '14px',
+                        fontWeight: 400,
+                        lineHeight: '1.4',
+                        color: '#000',
+                        minWidth: '20px',
+                        textAlign: 'center'
+                      }}>
+                        {item.quantity}
+                      </span>
+                      <button
+                        onClick={() => updateQuantity(item.productId, item.size, item.quantity + 1)}
+                        style={{
+                          padding: '0 6px',
+                          border: 'none',
+                          background: 'none',
+                          cursor: 'pointer',
+                          fontSize: '16px',
+                          fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                          fontWeight: 400,
+                          color: '#000'
+                        }}
+                        className="hover:opacity-60 transition-opacity"
+                      >
+                        +
+                      </button>
+                    </div>
+
+                    <Link
+                      href="/"
+                      style={{
+                        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                        fontSize: '12px',
+                        fontWeight: 400,
+                        lineHeight: '1.4',
+                        color: '#666',
+                        textDecoration: 'underline',
+                        display: 'block',
+                        marginTop: '12px'
                       }}
                       className="hover:opacity-60 transition-opacity"
                     >
-                      −
-                    </button>
-                    <span style={{
-                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '14px',
-                      fontWeight: 400,
-                      lineHeight: '17.6px',
-                      color: '#000'
-                    }}>
-                      {item.quantity}
-                    </span>
-                    <button
-                      onClick={() => updateQuantity(item.productId, item.size, item.quantity + 1)}
-                      style={{
-                        padding: '2px 8px',
-                        border: 'none',
-                        background: 'none',
-                        cursor: 'pointer',
-                        fontSize: '14px',
-                        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                        fontWeight: 400,
-                        color: '#000'
-                      }}
-                      className="hover:opacity-60 transition-opacity"
-                    >
-                      +
-                    </button>
+                      Estimate shipping options
+                    </Link>
                   </div>
                 </div>
-
               </div>
 
               {/* Buttons section */}
               <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',
-                alignItems: 'flex-end',
-                paddingTop: '8px'
+                alignItems: 'center',
+                paddingTop: '16px',
+                borderTop: '1px solid #f0f0f0'
               }}>
                 <button
                   onClick={() => handleSaveForLater(item)}
                   disabled={savingItem === item.productId}
                   style={{
                     fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
+                    fontSize: '12px',
                     fontWeight: 400,
-                    lineHeight: '19.6px',
+                    lineHeight: '1.4',
                     color: '#000',
                     textDecoration: 'underline',
                     border: 'none',
@@ -547,30 +571,30 @@ export default function CartPage() {
                   }}
                   className="hover:opacity-60 transition-opacity"
                 >
-                  {savingItem === item.productId ? 'Ukládám...' : 'Uložit na později'}
+                  {savingItem === item.productId ? 'Saving...' : 'Save for later'}
                 </button>
-                <div style={{ display: 'flex', gap: '24px', alignItems: 'flex-end' }}>
+                <div style={{ display: 'flex', gap: '32px', alignItems: 'center' }}>
                   <Link
                     href={`/produkty/${item.slug}`}
                     style={{
                       fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '14px',
+                      fontSize: '12px',
                       fontWeight: 400,
-                      lineHeight: '19.6px',
+                      lineHeight: '1.4',
                       color: '#000',
                       textDecoration: 'underline'
                     }}
                     className="hover:opacity-60 transition-opacity"
                   >
-                    Upravit
+                    Edit
                   </Link>
                   <button
                     onClick={() => handleOpenDeleteModal(item.productId, item.name, item.size)}
                     style={{
                       fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '14px',
+                      fontSize: '12px',
                       fontWeight: 400,
-                      lineHeight: '19.6px',
+                      lineHeight: '1.4',
                       color: '#000',
                       textDecoration: 'underline',
                       border: 'none',
@@ -581,7 +605,7 @@ export default function CartPage() {
                     }}
                     className="hover:opacity-60 transition-opacity"
                   >
-                    Smazat
+                    Delete
                   </button>
                 </div>
               </div>
