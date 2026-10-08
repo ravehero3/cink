@@ -131,6 +131,7 @@ export default function Footer() {
           <div style={{ paddingTop: '16px', paddingLeft: '12px', paddingRight: '16px', paddingBottom: '48px' }}>
             <h3 className="uppercase mb-3 text-gray-500" style={{ fontSize: '12px', lineHeight: '23.6px', letterSpacing: '0.12px', margin: '0px 0px 12px 0px', padding: '0px' }}>TEAM UFO SPORT</h3>
             <ul className="space-y-0" style={{ margin: '0px', padding: '0px' }}>
+              <li className="text-gray-500" style={{ fontSize: '12px', lineHeight: '23.6px', letterSpacing: '0.12px', margin: '0px', padding: '0px' }}><a href="/magazin" className="hover:underline">Magazín</a></li>
               <li className="text-gray-500" style={{ fontSize: '12px', lineHeight: '23.6px', letterSpacing: '0.12px', margin: '0px', padding: '0px' }}>Země / Region: Česká republika</li>
               <li className="text-gray-500" style={{ fontSize: '12px', lineHeight: '23.6px', letterSpacing: '0.12px', margin: '0px', padding: '0px' }}>Jazyk: Čeština</li>
             </ul>
@@ -219,6 +220,7 @@ export default function Footer() {
             onToggle={() => toggleSection('team')}
           >
             <ul className="space-y-2" style={{ margin: '0px', padding: '0px' }}>
+              <li className="text-gray-500" style={{ fontSize: '12px', lineHeight: '20px' }}><a href="/magazin" className="hover:underline">Magazín</a></li>
               <li className="text-gray-500" style={{ fontSize: '12px', lineHeight: '20px' }}>Země / Region: Česká republika</li>
               <li className="text-gray-500" style={{ fontSize: '12px', lineHeight: '20px' }}>Jazyk: Čeština</li>
             </ul>

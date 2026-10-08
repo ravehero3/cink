@@ -21,6 +21,7 @@ const SECTION_LABELS: Record<string, string> = {
   'pricing-rules': 'Cenová pravidla',
   'nastaveni-uploadu': 'Diagnostika',
   'domovska-stranka': 'Domovská stránka',
+  magazin: 'Magazín',
 };
 
 function Breadcrumbs({ pathname }: { pathname: string }) {
@@ -70,6 +71,7 @@ const NAV_SECTIONS = [
     label: 'Obsah & Systém',
     items: [
       { href: '/admin/domovska-stranka', label: 'Domovská stránka' },
+      { href: '/admin/magazin', label: 'Magazín' },
       { href: '/admin/media', label: 'Média / Galerie' },
       { href: '/admin/stranky', label: 'Stránky' },
       { href: '/admin/seo-management', label: 'SEO' },

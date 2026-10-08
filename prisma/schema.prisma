@@ -394,3 +394,21 @@ model EmailJourneyEnrollment {
   @@index([email, status])
   @@index([journeyId, email])
 }
+
+model MagazineArticle {
+  id          String    @id @default(uuid())
+  slug        String    @unique
+  title       String
+  subtitle    String?   @db.Text
+  author      String?
+  category    String?
+  tags        String?
+  blocks      Json      @default("{}")
+  published   Boolean   @default(false)
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([published, publishedAt])
+  @@index([slug])
+}

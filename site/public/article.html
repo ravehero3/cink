@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Article</title>
+  <link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+  <div id="site-header"></div>
+  <main id="art" class="art"></main>
+  <div id="site-footer"></div>
+  <script src="/js/config.js"></script>
+  <script src="/js/layout.js"></script>
+  <script src="/js/template.js"></script>
+  <script src="/js/article.js"></script>
+  <script>
+    (async () => {
+      const slug = (location.pathname.match(/^\/p\/([^/]+)/) || [])[1] || new URLSearchParams(location.search).get('slug');
+      const root = document.getElementById('art');
+      const token = localStorage.getItem('adminToken') || '';
+      const get = (u) => fetch(u, { headers: token ? { 'x-admin-token': token } : {} }).then((r) => (r.ok ? r.json() : Promise.reject(r.status)));
+      try {
+        const a = await get('/api/articles/' + encodeURIComponent(slug));
+        const list = await get('/api/articles').catch(() => []);
+        document.title = (a.title || 'Untitled') + ' – ' + window.SITE.name;
+        Article.mount(root, a, { related: list.filter((x) => x.slug !== a.slug).slice(0, 5) });
+        if (!a.published) root.insertAdjacentHTML('afterbegin', '<p class="edit-note" style="color:#b00020">Draft preview – not public yet.</p>');
+      } catch {
+        root.innerHTML = '<div class="art-head"><h1>Article not found</h1><p><a href="/">Back to home</a></p></div>';
+      }
+    })();
+  </script>
+</body>
+</html>

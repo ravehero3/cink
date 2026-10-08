@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Latest</title>
+  <link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+  <div id="site-header"></div>
+  <main class="art">
+    <section class="rel" style="margin-top:48px">
+      <h2>Latest</h2>
+      <div class="rel-grid" id="grid"></div>
+      <p class="edit-note" id="empty" hidden style="margin-left:0">No published articles yet. Create one in <a href="/admin">/admin</a>.</p>
+    </section>
+  </main>
+  <div id="site-footer"></div>
+  <script src="/js/config.js"></script>
+  <script src="/js/layout.js"></script>
+  <script>
+    const esc = (s) => String(s || '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    fetch('/api/articles').then((r) => r.json()).then((list) => {
+      document.getElementById('empty').hidden = list.length > 0;
+      document.getElementById('grid').innerHTML = list.map((r) => `<a class="card" href="/p/${esc(r.slug)}/"><div class="fig-box" style="--ratio:3/2">${r.hero ? `<img src="${esc(r.hero)}" alt="" loading="lazy">` : ''}</div><div class="card-meta">${esc(r.category)}${r.category && r.author ? ' / ' : ''}${esc(r.author)}</div><div class="card-title">${esc(r.title) || 'Untitled'}</div></a>`).join('');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin</title>
+  <link rel="stylesheet" href="/css/site.css">
+  <style>
+    .adm { max-width: 900px; margin: 0 auto; padding: 48px var(--page-pad) 0; }
+    .adm h1 { font-size: 28px; margin: 0 0 24px; }
+    .adm input[type=text], .adm input[type=password] { padding: 12px; border: 1px solid #bbb; font: 14px var(--font); min-width: 260px; border-radius: 0; }
+    .btn { padding: 12px 20px; border: 0; background: #000; color: #fff; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+    .btn.ghost { background: none; color: #000; border: 1px solid #000; }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 24px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th { text-align: left; font-size: 11px; letter-spacing: .08em; color: var(--grey-text); text-transform: uppercase; padding: 8px 0; border-bottom: 1px solid var(--line); }
+    td { padding: 14px 0; border-bottom: 1px solid var(--line); vertical-align: middle; }
+    td a { margin-right: 14px; }
+    .pill { font-size: 10px; letter-spacing: .08em; padding: 3px 8px; border: 1px solid #999; color: #777; text-transform: uppercase; }
+    .pill.live { border-color: #1a9d55; color: #1a9d55; }
+    .err { color: #b00020; font-size: 13px; min-height: 18px; }
+    .hint { font-size: 12px; color: var(--grey-text); margin: -12px 0 24px; }
+  </style>
+</head>
+<body>
+  <div id="site-header"></div>
+  <main class="adm">
+    <h1>Admin</h1>
+    <form id="login" hidden class="row" style="flex-direction:column;align-items:flex-start">
+      <label>Password<br><input type="password" id="pw" autofocus></label>
+      <div class="err" id="loginErr"></div>
+      <button class="btn" type="submit">Log in</button>
+    </form>
+
+    <section id="panel" hidden>
+      <form id="newForm" class="row">
+        <input type="text" id="slug" placeholder="new-article-url-slug" pattern="[a-z0-9]+(-[a-z0-9]+)*" required>
+        <button class="btn" type="submit">New article</button>
+        <button class="btn ghost" type="button" id="logout">Log out</button>
+      </form>
+      <p class="hint">URL will be /p/your-slug/ — lowercase letters, numbers and dashes.</p>
+      <table>
+        <thead><tr><th>Title</th><th>Status</th><th></th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </section>
+  </main>
+  <div id="site-footer"></div>
+  <script src="/js/config.js"></script>
+  <script src="/js/layout.js"></script>
+  <script>
+    const esc = (s) => String(s || '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const $ = (id) => document.getElementById(id);
+    const tok = () => localStorage.getItem('adminToken') || '';
+    const api = (u, o = {}) => fetch(u, { ...o, headers: { 'Content-Type': 'application/json', 'x-admin-token': tok(), ...(o.headers || {}) } });
+
+    async function load() {
+      const r = await api('/api/articles?all=1');
+      const list = await r.json();
+      $('rows').innerHTML = list.map((a) => `<tr>
+        <td><strong>${esc(a.title) || '<span style="color:#999">Untitled</span>'}</strong><br><small style="color:#999">/p/${esc(a.slug)}/</small></td>
+        <td><span class="pill ${a.published ? 'live' : ''}">${a.published ? 'Published' : 'Draft'}</span></td>
+        <td style="text-align:right"><a href="/admin/editor.html?slug=${esc(a.slug)}">Edit</a><a href="/p/${esc(a.slug)}/" target="_blank">View</a><a href="#" data-del="${esc(a.slug)}">Delete</a></td></tr>`).join('')
+        || '<tr><td colspan="3" style="color:#999">No articles yet.</td></tr>';
+    }
+    async function show() {
+      const r = await api('/api/auth-check');
+      const authed = r.status === 200;
+      $('login').hidden = authed; $('panel').hidden = !authed;
+      if (authed) load();
+    }
+    $('login').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const r = await fetch('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: $('pw').value }) });
+      const j = await r.json();
+      if (!r.ok) { $('loginErr').textContent = j.error || 'Login failed'; return; }
+      localStorage.setItem('adminToken', j.token); $('loginErr').textContent = ''; show();
+    });
+    $('logout').addEventListener('click', () => { localStorage.removeItem('adminToken'); show(); });
+    $('newForm').addEventListener('submit', (e) => { e.preventDefault(); location.href = '/admin/editor.html?slug=' + encodeURIComponent($('slug').value.trim()); });
+    $('rows').addEventListener('click', async (e) => {
+      const s = e.target.dataset.del; if (!s) return; e.preventDefault();
+      if (confirm('Delete "' + s + '"? This cannot be undone.')) { await api('/api/articles/' + s, { method: 'DELETE' }); load(); }
+    });
+    show();
+  </script>
+</body>
+</html>

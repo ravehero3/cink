@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Edit article</title>
+  <link rel="stylesheet" href="/css/site.css">
+</head>
+<body class="has-admin-bar">
+  <div class="admin-bar">
+    <a href="/admin/">← Articles</a>
+    <span class="pill" id="state">Draft</span>
+    <span class="sp"></span>
+    <span class="status" id="status">Loaded</span>
+    <button id="preview" type="button">Preview</button>
+    <button id="save" type="button">Save</button>
+    <button id="publish" type="button" class="primary">Publish</button>
+  </div>
+  <div id="site-header"></div>
+  <main id="art" class="art edit"></main>
+  <div id="site-footer"></div>
+  <script src="/js/config.js"></script>
+  <script src="/js/layout.js"></script>
+  <script src="/js/template.js"></script>
+  <script src="/js/article.js"></script>
+  <script>
+    (async () => {
+      const slug = new URLSearchParams(location.search).get('slug');
+      const token = localStorage.getItem('adminToken') || '';
+      const $ = (id) => document.getElementById(id);
+      const H = { 'Content-Type': 'application/json', 'x-admin-token': token };
+      if (!slug || !token) return (location.href = '/admin/');
+
+      let a;
+      const r = await fetch('/api/articles/' + slug, { headers: H });
+      if (r.status === 401 || r.status === 400) return (location.href = '/admin/');
+      a = r.ok ? await r.json() : { slug, title: '', subtitle: '', author: '', category: '', tags: '', blocks: {}, published: false };
+      document.title = 'Edit: ' + slug;
+
+      const setState = () => { const p = $('state'); p.textContent = a.published ? 'Published' : 'Draft'; p.classList.toggle('live', !!a.published); $('publish').textContent = a.published ? 'Unpublish' : 'Publish'; };
+      setState();
+
+      let timer, dirty = false;
+      const status = (t) => ($('status').textContent = t);
+      async function save() {
+        clearTimeout(timer); status('Saving…');
+        const res = await fetch('/api/articles/' + slug, { method: 'PUT', headers: H, body: JSON.stringify(a) });
+        if (res.status === 401) { location.href = '/admin/'; return false; }
+        if (!res.ok) { status('Save failed'); return false; }
+        const saved = await res.json(); a.publishedAt = saved.publishedAt; dirty = false; status('Saved'); return true;
+      }
+      const onChange = () => { dirty = true; status('Unsaved changes'); clearTimeout(timer); timer = setTimeout(save, 1500); };
+
+      async function upload(file) {
+        const dataUrl = await new Promise((res, rej) => {
+          const fr = new FileReader();
+          fr.onerror = () => rej(new Error('Could not read file'));
+          fr.onload = () => {
+            if (!/^image\/(png|jpeg|webp)$/.test(file.type)) return res(fr.result);
+            const img = new Image();
+            img.onload = () => {
+              const MAX = 2400; if (img.width <= MAX) return res(fr.result);
+              const c = document.createElement('canvas'); c.width = MAX; c.height = Math.round(img.height * MAX / img.width);
+              c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+              res(c.toDataURL(file.type === 'image/png' ? 'image/png' : file.type, 0.92));
+            };
+            img.onerror = () => res(fr.result); img.src = fr.result;
+          };
+          fr.readAsDataURL(file);
+        });
+        const res = await fetch('/api/upload', { method: 'POST', headers: H, body: JSON.stringify({ dataUrl }) });
+        const j = await res.json(); if (!res.ok) throw new Error(j.error || 'Upload failed'); return j.url;
+      }
+
+      Article.mount($('art'), a, { edit: true, onChange, upload });
+
+      $('save').onclick = save;
+      $('preview').onclick = async () => { if (dirty) await save(); window.open('/p/' + slug + '/', '_blank'); };
+      $('publish').onclick = async () => {
+        if (!a.published && !(a.title || '').trim()) return alert('Add a headline before publishing.');
+        a.published = !a.published; setState(); await save();
+      };
+      window.addEventListener('beforeunload', (e) => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
+    })();
+  </script>
+</body>
+</html>

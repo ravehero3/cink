@@ -3,6 +3,7 @@
 import type { Metadata } from "next";
 import { usePathname } from "next/navigation";
 import "./globals.css";
+import "../public/magazine.css";
 import Header1 from "@/components/Header1";
 import Footer from "@/components/Footer";
 import SessionProvider from "@/components/SessionProvider";
