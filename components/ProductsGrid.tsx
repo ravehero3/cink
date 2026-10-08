@@ -33,7 +33,7 @@ export default function ProductsGrid({ products, savedProducts = [], onToggleSav
 
   return (
     <div>
-      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 bg-black border-t border-l border-black" style={{ gap: '0px' }}>
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 bg-white border-t border-l border-black" style={{ gap: '0px' }}>
         {displayProducts.map((product, index) => {
           const isFirstInRow = index % 4 === 0;
           return (

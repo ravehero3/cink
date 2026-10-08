@@ -323,11 +323,11 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         <div
                           style={{ display: 'flex', flexDirection: 'column', width: '100%', flexShrink: 0, paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px' }}
                         >
-                          <div style={{ position: 'relative', width: '400px', height: '400px', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '26px', margin: '0 auto 26px auto' }}>
+                          <div style={{ position: 'relative', width: '400px', height: '400px', backgroundColor: '#ffffff', overflow: 'hidden', marginBottom: '26px', margin: '0 auto 26px auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <img
                               src={product.image}
                               alt={product.name}
-                              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                              style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', display: 'block' }}
                               onError={(e) => {
                                 const img = e.target as HTMLImageElement;
                                 img.style.display = 'none';
@@ -427,11 +427,11 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                             style={{ display: 'flex', flexDirection: 'column', width: '100%', flexShrink: 0, paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px' }}
                             className="hover:opacity-80 transition-opacity"
                           >
-                            <div style={{ position: 'relative', width: '100%', height: '400px', backgroundColor: '#fff', overflow: 'hidden', marginBottom: '26px' }}>
+                            <div style={{ position: 'relative', width: '100%', height: '400px', backgroundColor: '#fff', overflow: 'hidden', marginBottom: '26px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                               <img
                                 src={product.image}
                                 alt={product.name}
-                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
                               />
                             </div>
                             <h4 style={{
