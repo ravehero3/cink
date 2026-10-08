@@ -42,6 +42,23 @@ export async function PUT(
 
     const { title, subtitle, author, category, tags, blocks, published } = await request.json();
 
+    // Fetch existing article to preserve publishedAt on first publish
+    const existing = await prisma.magazineArticle.findUnique({
+      where: { slug: params.slug },
+    });
+
+    if (!existing) {
+      return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    }
+
+    // Set publishedAt: keep existing if already published, set now if publishing for first time
+    let publishedAt = existing.publishedAt;
+    if (published && !existing.published) {
+      publishedAt = new Date();
+    } else if (!published) {
+      publishedAt = null;
+    }
+
     const article = await prisma.magazineArticle.update({
       where: { slug: params.slug },
       data: {
@@ -52,9 +69,7 @@ export async function PUT(
         tags,
         blocks: blocks || {},
         published,
-        publishedAt: published ? (await prisma.magazineArticle.findUnique({
-          where: { slug: params.slug },
-        })).publishedAt || new Date() : null,
+        publishedAt,
         updatedAt: new Date(),
       },
     });
