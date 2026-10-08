@@ -427,7 +427,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         PROHLÍŽELI JSTE
                       </h3>
                     </div>
-                    {/* Horizontal scroll container */}
+                    {/* Horizontal scroll container - 1.5 products show */}
                     <div 
                       ref={prohlizeniRef}
                       style={{ 
@@ -440,66 +440,69 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         scrollBehavior: 'smooth', 
                         WebkitOverflowScrolling: 'touch',
                         scrollbarWidth: 'none',
+                        scrollSnapType: 'x mandatory',
                         flex: 1,
                         cursor: 'grab'
                       }}
                       className="select-none"
                     >
                       {recentlyViewed.map((product, index) => (
-                        <div key={product.id} style={{ display: 'flex', flex: '0 0 50%' }}>
+                        <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(66.666% - 0.67px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
                           {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
-                          <div
-                            style={{ display: 'flex', flexDirection: 'column', width: '100%', flexShrink: 0, paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px' }}
+                          <Link
+                            href={`/produkty/${product.slug}`}
+                            onClick={onClose}
+                            style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px', textDecoration: 'none' }}
                             className="hover:opacity-80 transition-opacity"
                           >
-                            <div style={{ position: 'relative', width: '100%', height: '400px', backgroundColor: '#fff', overflow: 'hidden', marginBottom: '26px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#ffffff', overflow: 'hidden', marginBottom: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                               <img
                                 src={product.image}
                                 alt={product.name}
-                                style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+                                style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', display: 'block' }}
+                                loading="lazy"
+                                onError={(e) => {
+                                  const img = e.target as HTMLImageElement;
+                                  img.parentElement!.style.backgroundColor = '#f5f5f5';
+                                }}
                               />
                             </div>
                             <h4 style={{
                               fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                              fontSize: '12px',
+                              fontSize: '11px',
                               fontWeight: 700,
                               textTransform: 'uppercase',
                               marginTop: 0,
-                              marginBottom: '26px',
+                              marginBottom: '4px',
                               letterSpacing: '0.03em',
                               fontStretch: 'condensed',
                               color: '#000000',
-                              lineHeight: '1.3',
+                              lineHeight: '1.2',
                               textAlign: 'center'
                             }}>
                               {product.name}
                             </h4>
                             <p style={{
                               fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                              fontSize: '11px',
+                              fontSize: '10px',
                               fontWeight: 400,
-                              lineHeight: '1.3',
+                              lineHeight: '1.2',
                               color: '#000000',
-                              margin: '0 0 26px 0',
+                              margin: '0 0 12px 0',
                               textAlign: 'center'
                             }}>{product.price} Kč</p>
-                            <Link
-                              href={`/produkty/${product.slug}`}
-                              onClick={onClose}
-                              style={{
-                                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                                fontSize: '11px',
-                                fontWeight: 400,
-                                lineHeight: '1.3',
-                                color: '#000000',
-                                textDecoration: 'underline',
-                                textAlign: 'center'
-                              }}
-                              className="hover:opacity-60 transition-opacity"
-                            >
+                            <div style={{
+                              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                              fontSize: '9px',
+                              fontWeight: 400,
+                              lineHeight: '1.2',
+                              color: '#000000',
+                              textDecoration: 'underline',
+                              textAlign: 'center'
+                            }}>
                               Přidat do košíku
-                            </Link>
-                          </div>
+                            </div>
+                          </Link>
                         </div>
                       ))}
                     </div>
