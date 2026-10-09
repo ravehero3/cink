@@ -283,8 +283,26 @@ export default function CartPage() {
 
             {/* VYBRÁNO PRO VÁS Section - when cart empty */}
             {selectedProducts.length > 0 && (
-              <div style={{ display: 'flex', flexDirection: 'column', borderTop: '1px solid #000', borderBottom: '1px solid #000', minHeight: '0' }}>
-                <div style={{ paddingTop: '4px', paddingBottom: '4px', paddingLeft: '16px', paddingRight: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px', position: 'relative' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', borderTop: '1px solid #000', borderBottom: '1px solid #000', minHeight: '0', position: 'relative' }}>
+                {/* Title row with line below */}
+                <div style={{ paddingTop: '4px', paddingBottom: '4px', paddingLeft: '16px', paddingRight: '16px', textAlign: 'center', borderBottom: '1px solid #000' }}>
+                  <h3 style={{
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '13px',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.03em',
+                    fontStretch: 'condensed',
+                    margin: '0',
+                    textAlign: 'center'
+                  }}>
+                    VYBRÁNO PRO VÁS
+                  </h3>
+                </div>
+                
+                {/* Products container with centered arrows */}
+                <div style={{ display: 'flex', position: 'relative', flex: 1, minHeight: '0' }}>
+                  {/* Left arrow - positioned in the middle */}
                   <button
                     onClick={() => {
                       if (vybrranoRef.current) {
@@ -305,7 +323,12 @@ export default function CartPage() {
                       backgroundColor: '#fff',
                       cursor: 'pointer',
                       padding: '0',
-                      flex: '0 0 auto'
+                      flex: '0 0 auto',
+                      position: 'absolute',
+                      left: '8px',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      zIndex: 10
                     }}
                     onMouseEnter={(e) => {
                       (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5';
@@ -318,19 +341,8 @@ export default function CartPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
                     </svg>
                   </button>
-                  <h3 style={{
-                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '13px',
-                    fontWeight: 700,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.03em',
-                    fontStretch: 'condensed',
-                    margin: '0',
-                    textAlign: 'center',
-                    flex: 1
-                  }}>
-                    VYBRÁNO PRO VÁS
-                  </h3>
+                  
+                  {/* Right arrow - positioned in the middle */}
                   <button
                     onClick={() => {
                       if (vybrranoRef.current) {
@@ -351,7 +363,12 @@ export default function CartPage() {
                       backgroundColor: '#fff',
                       cursor: 'pointer',
                       padding: '0',
-                      flex: '0 0 auto'
+                      flex: '0 0 auto',
+                      position: 'absolute',
+                      right: '8px',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      zIndex: 10
                     }}
                     onMouseEnter={(e) => {
                       (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5';
@@ -364,30 +381,31 @@ export default function CartPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                     </svg>
                   </button>
-                </div>
-                <div style={{ borderTop: '1px solid #000' }} />
-                <div
-                  ref={vybrranoRef}
-                  style={{ 
-                    display: 'flex', 
-                    overflowX: 'auto', 
-                    overflowY: 'hidden', 
-                    gap: '0', 
-                    paddingLeft: '0', 
-                    paddingRight: '0', 
-                    paddingTop: '4px',
-                    scrollBehavior: 'smooth', 
-                    WebkitOverflowScrolling: 'touch',
-                    scrollbarWidth: 'none',
-                    scrollSnapType: 'x mandatory',
-                    flex: 1,
-                    cursor: 'grab',
-                    minHeight: '0',
-                    userSelect: 'none',
-                    WebkitUserSelect: 'none'
-                  }}
-                  className="select-none"
-                >
+                  
+                  {/* Products scroll container */}
+                  <div
+                    ref={vybrranoRef}
+                    style={{ 
+                      display: 'flex', 
+                      overflowX: 'auto', 
+                      overflowY: 'hidden', 
+                      gap: '0', 
+                      paddingLeft: '0', 
+                      paddingRight: '0', 
+                      paddingTop: '4px',
+                      scrollBehavior: 'smooth', 
+                      WebkitOverflowScrolling: 'touch',
+                      scrollbarWidth: 'none',
+                      scrollSnapType: 'x mandatory',
+                      flex: 1,
+                      cursor: 'grab',
+                      minHeight: '0',
+                      userSelect: 'none',
+                      WebkitUserSelect: 'none',
+                      width: '100%'
+                    }}
+                    className="select-none"
+                  >
                   {selectedProducts.map((product, index) => (
                     <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(66.666% - 0.67px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
                       {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
