@@ -13,15 +13,15 @@ export default function CheckoutPage() {
   const { data: session } = useSession();
   const { items, getTotal, clearCart } = useCartStore();
   const hasHydrated = useCartHydration();
-  const [step, setStep] = useState(2); // 1 = EMAIL, 2 = SHIPPING, 3 = PAYMENT
+  const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  // Flag to prevent empty cart redirect when order is being processed
   const isNavigatingToPayment = useRef(false);
 
   const [formData, setFormData] = useState({
     email: session?.user?.email || '',
     name: '',
     phone: '',
-    civility: 'Mr.',
     shippingMethod: 'zasilkovna',
     zasilkovnaId: '',
     zasilkovnaName: '',
@@ -36,10 +36,13 @@ export default function CheckoutPage() {
 
   const [discount, setDiscount] = useState(0);
   const [promoError, setPromoError] = useState('');
+  const [showManualZasilkovnaForm, setShowManualZasilkovnaForm] = useState(false);
   const [isPplModalOpen, setIsPplModalOpen] = useState(false);
 
   useEffect(() => {
+    // Don't redirect if we're intentionally navigating to payment page
     if (isNavigatingToPayment.current) return;
+    
     if (hasHydrated && items.length === 0) {
       router.push('/kosik');
     }
@@ -51,6 +54,7 @@ export default function CheckoutPage() {
     }
   }, [session?.user?.email]);
 
+  // Abandoned Cart Tracking
   useEffect(() => {
     const timer = setTimeout(async () => {
       if (formData.email && formData.email.includes('@') && items.length > 0) {
@@ -73,7 +77,10 @@ export default function CheckoutPage() {
   }, [formData.email, items]);
 
   useEffect(() => {
+    // Script is loaded globally in layout.tsx
+    // Just verify it's available
     if (typeof window === 'undefined') return;
+    
     let checkCount = 0;
     const checkInterval = setInterval(() => {
       checkCount++;
@@ -85,10 +92,12 @@ export default function CheckoutPage() {
         clearInterval(checkInterval);
       }
     }, 100);
+    
     return () => clearInterval(checkInterval);
   }, []);
 
   useEffect(() => {
+    // PPL Widget selection listener (Older version)
     const handlePplSelect = (event: any) => {
       console.log('PPL select event received:', event.detail);
       const point = event.detail;
@@ -187,6 +196,7 @@ export default function CheckoutPage() {
         quantity: Number(item.quantity)
       }));
 
+      // Create order
       const orderResponse = await fetch('/api/orders/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -217,11 +227,15 @@ export default function CheckoutPage() {
         return;
       }
 
+      // Set flag to prevent empty cart redirect
       isNavigatingToPayment.current = true;
+      
+      // Clear cart and cleanup
       clearCart();
       sessionStorage.removeItem('checkoutEmail');
       sessionStorage.removeItem('checkoutData');
 
+      // Redirect to payment page where customer can review order and select payment method
       window.location.href = `/platba?order=${orderData.orderNumber}&token=${orderData.securityToken}`;
     } catch (error) {
       alert('Došlo k chybě. Zkuste to prosím znovu.');
@@ -252,11 +266,15 @@ export default function CheckoutPage() {
           });
         } catch (err) {
           console.error('Error opening widget:', err);
+          setShowManualZasilkovnaForm(true);
         }
       } else {
         retries++;
         if (retries < maxRetries) {
           setTimeout(openWidget, 50);
+        } else {
+          console.error('Widget not available, showing manual form');
+          setShowManualZasilkovnaForm(true);
         }
       }
     };
@@ -268,7 +286,7 @@ export default function CheckoutPage() {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <p style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px' }}>Načítám...</p>
+          <p className="text-body">Načítám...</p>
         </div>
       </div>
     );
@@ -280,610 +298,366 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
-      {/* Header with Logo and FAQ */}
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        alignItems: 'center', 
-        padding: '20px 40px',
-        borderBottom: '1px solid #000',
-        maxWidth: '1200px',
-        margin: '0 auto',
-        width: '100%'
-      }}>
-        <button onClick={() => router.back()} style={{
-          fontSize: '20px',
-          background: 'none',
-          border: 'none',
-          cursor: 'pointer',
-          padding: '0',
-          color: '#000'
-        }}>
-          ←
-        </button>
-        <h1 style={{
-          fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-          fontSize: '16px',
-          fontWeight: 700,
-          textTransform: 'uppercase',
-          letterSpacing: '0.03em',
-          margin: '0',
-          flex: 1,
-          textAlign: 'center'
-        }}>
-          UFO SPORT
-        </h1>
-        <a href="#" style={{
-          fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-          fontSize: '12px',
-          fontWeight: 400,
-          textDecoration: 'none',
-          color: '#000',
-          textTransform: 'uppercase'
-        }}>
-          FAQ
-        </a>
-      </div>
-
-      {/* Step Indicators */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        gap: '40px',
-        padding: '24px 40px',
-        borderBottom: '1px solid #000',
-        maxWidth: '1200px',
-        margin: '0 auto',
-        width: '100%'
-      }}>
-        {[
-          { num: '1', label: 'EMAIL', active: step === 1 },
-          { num: '2', label: 'SHIPPING', active: step === 2 },
-          { num: '3', label: 'PAYMENT', active: step === 3 }
-        ].map((s) => (
-          <div key={s.num} style={{ textAlign: 'center' }}>
-            <div style={{
-              fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-              fontSize: '12px',
-              fontWeight: 700,
-              letterSpacing: '0.03em',
-              textTransform: 'uppercase',
-              color: s.active ? '#000' : '#999',
-              borderBottom: s.active ? '2px solid #000' : 'none',
-              paddingBottom: '4px'
-            }}>
-              {s.num}. {s.label}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Main Content */}
-      <div style={{ flex: 1, maxWidth: '1200px', margin: '0 auto', width: '100%', paddingTop: '40px', paddingBottom: '40px', paddingLeft: '40px', paddingRight: '40px' }}>
-        <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '60px', flexDirection: 'row' }}>
-          {/* Left Column - Form */}
-          <div style={{ flex: 1, minWidth: '0' }}>
-            {/* EMAIL Section */}
-            <div style={{ marginBottom: '60px' }}>
-              <h2 style={{
-                fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '12px',
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                letterSpacing: '0.03em',
-                marginBottom: '24px',
-                marginTop: 0
-              }}>
-                EMAIL
-              </h2>
-              <div style={{ marginBottom: '12px' }}>
-                <p style={{
-                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+      <div className="max-w-7xl mx-auto px-4 flex-1">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 h-full border-b border-black">
+          <div className="lg:col-span-2 h-full flex flex-col">
+            <form onSubmit={handleSubmit} className="lg:border-l border-black p-4 lg:p-8 flex flex-col h-full">
+              <h2 
+                className="font-bold mb-4 uppercase"
+                style={{
+                  fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontSize: '14px',
-                  fontWeight: 400,
-                  marginBottom: '8px',
-                  marginTop: 0
-                }}>
-                  {formData.email}
-                </p>
-                <a href="#" style={{
-                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '12px',
-                  fontWeight: 400,
-                  textDecoration: 'underline',
-                  color: '#000'
-                }}>
-                  Edit
-                </a>
-              </div>
-
-              <div style={{ marginBottom: '24px' }}>
-                <p style={{
-                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '14px',
-                  fontWeight: 400,
-                  marginBottom: '8px',
-                  marginTop: 0,
-                  color: '#666'
-                }}>
-                  Shipping country/region: <strong>Czechia.</strong>
-                </p>
-                <a href="#" style={{
-                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '12px',
-                  fontWeight: 400,
-                  textDecoration: 'underline',
-                  color: '#000'
-                }}>
-                  Edit
-                </a>
-              </div>
-
-              <div>
-                <p style={{
-                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '14px',
-                  fontWeight: 400,
-                  marginBottom: '8px',
-                  marginTop: 0,
-                  color: '#666'
-                }}>
-                  ZIP Code: <strong>503 46.</strong>
-                </p>
-                <a href="#" style={{
-                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '12px',
-                  fontWeight: 400,
-                  textDecoration: 'underline',
-                  color: '#000'
-                }}>
-                  Edit
-                </a>
-              </div>
-            </div>
-
-            {/* SHIPPING OPTIONS */}
-            <div>
-              <h2 style={{
-                fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '12px',
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                letterSpacing: '0.03em',
-                marginBottom: '12px',
-                marginTop: 0
-              }}>
-                SHIPPING OPTIONS
-              </h2>
-              <p style={{
-                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '14px',
-                fontWeight: 400,
-                color: '#666',
-                marginBottom: '24px',
-                marginTop: 0
-              }}>
-                Orders containing fragrances or personalized items may require some additional days for processing and delivery.
-              </p>
-
-              {/* Zasilkovna Option */}
-              <label style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                padding: '16px',
-                border: '1px solid #000',
-                marginBottom: '12px',
-                cursor: 'pointer',
-                borderRadius: '4px',
-                backgroundColor: formData.shippingMethod === 'zasilkovna' ? '#f5f5f5' : '#fff'
-              }}>
-                <input
-                  type="radio"
-                  name="shipping"
-                  value="zasilkovna"
-                  checked={formData.shippingMethod === 'zasilkovna'}
-                  onChange={(e) => setFormData({ ...formData, shippingMethod: e.target.value })}
-                  style={{ marginRight: '16px', marginTop: '2px' }}
-                />
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                    <div>
-                      <p style={{
-                        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                        fontSize: '14px',
-                        fontWeight: 400,
-                        margin: '0',
-                        marginBottom: '4px'
-                      }}>
-                        Express shipping
-                      </p>
-                    </div>
-                    <p style={{
-                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '14px',
-                      fontWeight: 400,
-                      margin: '0',
-                      color: calculateShippingCost(subtotal, 'zasilkovna') === 0 ? '#24e053' : '#000'
-                    }}>
-                      {calculateShippingCost(subtotal, 'zasilkovna') === 0 ? 'Free' : `${calculateShippingCost(subtotal, 'zasilkovna')} Kč`}
-                    </p>
-                  </div>
-                  <div style={{ backgroundColor: '#f0f0f0', padding: '12px', marginTop: '12px', textAlign: 'center' }}>
-                    <p style={{
-                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '12px',
-                      fontWeight: 400,
-                      margin: '0'
-                    }}>
-                      Guaranteed delivery by: 12/10/2026
-                    </p>
-                  </div>
-                </div>
-              </label>
-
-              {/* Pick up in store */}
-              <label style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                padding: '16px',
-                border: '1px solid #000',
-                cursor: 'pointer',
-                borderRadius: '4px',
-                backgroundColor: formData.shippingMethod === 'ppl_parcelshop' ? '#f5f5f5' : '#fff'
-              }}>
-                <input
-                  type="radio"
-                  name="shipping"
-                  value="ppl_parcelshop"
-                  checked={formData.shippingMethod === 'ppl_parcelshop'}
-                  onChange={(e) => setFormData({ ...formData, shippingMethod: e.target.value })}
-                  style={{ marginRight: '16px', marginTop: '2px' }}
-                />
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                    <p style={{
-                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '14px',
-                      fontWeight: 400,
-                      margin: '0'
-                    }}>
-                      Pick up in store
-                    </p>
-                    <p style={{
-                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '14px',
-                      fontWeight: 400,
-                      margin: '0',
-                      color: calculateShippingCost(subtotal, 'ppl_parcelshop') === 0 ? '#24e053' : '#000'
-                    }}>
-                      {calculateShippingCost(subtotal, 'ppl_parcelshop') === 0 ? 'Free' : `${calculateShippingCost(subtotal, 'ppl_parcelshop')} Kč`}
-                    </p>
-                  </div>
-                </div>
-              </label>
-            </div>
-
-            {/* DELIVERY INFORMATION */}
-            <div style={{ marginTop: '60px' }}>
-              <h2 style={{
-                fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '12px',
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                letterSpacing: '0.03em',
-                marginBottom: '24px',
-                marginTop: 0
-              }}>
-                DELIVERY INFORMATION
+                  fontWeight: 700,
+                  lineHeight: '16.1px'
+                }}
+              >
+                KONTAKTNÍ ÚDAJE
               </h2>
 
-              {/* Civility */}
-              <div style={{ marginBottom: '24px' }}>
-                <label style={{
-                  display: 'block',
-                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '12px',
-                  fontWeight: 400,
-                  marginBottom: '8px',
-                  color: '#666'
-                }}>
-                  Civility * <span style={{ color: '#999' }}>*required</span>
-                </label>
-                <select
-                  value={formData.civility}
-                  onChange={(e) => setFormData({ ...formData, civility: e.target.value })}
+              <div className="mb-1">
+                <label 
+                  className="block"
                   style={{
-                    width: '100%',
-                    padding: '12px',
-                    border: '1px solid #000',
-                    borderRadius: '4px',
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
-                    fontWeight: 400
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '10px',
+                    fontWeight: 400,
+                    lineHeight: '14.1px',
+                    paddingLeft: '2px',
+                    paddingRight: '2px',
+                    color: '#999',
+                    marginBottom: '2px'
                   }}
                 >
-                  <option>Mr.</option>
-                  <option>Ms.</option>
-                </select>
+                  E-mail *
+                </label>
+                <input
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="w-full border border-black px-2 py-1 text-body focus:outline-none"
+                  style={{ borderRadius: '4px' }}
+                />
               </div>
 
-              {/* First Name */}
-              <div style={{ marginBottom: '24px' }}>
-                <label style={{
-                  display: 'block',
-                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '12px',
-                  fontWeight: 400,
-                  marginBottom: '8px',
-                  color: '#666'
-                }}>
-                  First Name *
+              <div className="mb-1">
+                <label 
+                  className="block"
+                  style={{
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '10px',
+                    fontWeight: 400,
+                    lineHeight: '14.1px',
+                    paddingLeft: '2px',
+                    paddingRight: '2px',
+                    color: '#999',
+                    marginBottom: '2px'
+                  }}
+                >
+                  Jméno a příjmení *
                 </label>
                 <input
                   type="text"
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  style={{
-                    width: '100%',
-                    padding: '12px',
-                    border: '1px solid #000',
-                    borderRadius: '4px',
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
-                    fontWeight: 400,
-                    boxSizing: 'border-box'
-                  }}
+                  className="w-full border border-black px-2 py-1 text-body focus:outline-none"
+                  style={{ borderRadius: '4px' }}
                 />
               </div>
 
-              {/* Last Name */}
-              <div style={{ marginBottom: '24px' }}>
-                <label style={{
-                  display: 'block',
-                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '12px',
-                  fontWeight: 400,
-                  marginBottom: '8px',
-                  color: '#666'
-                }}>
-                  Last Name *
+              <div className="mb-1">
+                <label 
+                  className="block"
+                  style={{
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '10px',
+                    fontWeight: 400,
+                    lineHeight: '14.1px',
+                    paddingLeft: '2px',
+                    paddingRight: '2px',
+                    color: '#999',
+                    marginBottom: '2px'
+                  }}
+                >
+                  Telefon *
                 </label>
                 <input
-                  type="text"
+                  type="tel"
                   required
-                  placeholder="Last Name"
-                  style={{
-                    width: '100%',
-                    padding: '12px',
-                    border: '1px solid #000',
-                    borderRadius: '4px',
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
-                    fontWeight: 400,
-                    boxSizing: 'border-box'
-                  }}
+                  value={formData.phone}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  className="w-full border border-black px-2 py-1 text-body focus:outline-none"
+                  style={{ borderRadius: '4px' }}
                 />
               </div>
 
-              {/* Address */}
-              <div style={{ marginBottom: '24px' }}>
-                <label style={{
-                  display: 'block',
-                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '12px',
-                  fontWeight: 400,
-                  marginBottom: '8px',
-                  color: '#666'
-                }}>
-                  Address *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={formData.shippingStreet}
-                  onChange={(e) => setFormData({ ...formData, shippingStreet: e.target.value })}
-                  placeholder="Start Typing The First Line Of Your Address"
-                  style={{
-                    width: '100%',
-                    padding: '12px',
-                    border: '1px solid #000',
-                    borderRadius: '4px',
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
-                    fontWeight: 400,
-                    boxSizing: 'border-box'
-                  }}
-                />
-                <a href="#" style={{
-                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '12px',
-                  fontWeight: 400,
-                  textDecoration: 'underline',
-                  color: '#000',
-                  display: 'block',
-                  marginTop: '8px'
-                }}>
-                  Clear
-                </a>
-              </div>
-
-              {/* Prefix and Phone */}
-              <div style={{ display: 'flex', gap: '16px', marginBottom: '24px' }}>
-                <div style={{ width: '100px' }}>
-                  <label style={{
-                    display: 'block',
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '12px',
-                    fontWeight: 400,
-                    marginBottom: '8px',
-                    color: '#666'
-                  }}>
-                    Prefix *
-                  </label>
-                  <select
+              <div className="mb-4 mt-2">
+                <label className="flex items-center cursor-pointer group">
+                  <div className="relative flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={formData.newsletterSubscribed}
+                      onChange={(e) => setFormData({ ...formData, newsletterSubscribed: e.target.checked })}
+                      className="peer h-5 w-5 cursor-pointer appearance-none border border-black rounded transition-all checked:bg-black"
+                    />
+                    <svg
+                      className="absolute w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={3}
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <span 
+                    className="ml-3 select-none"
                     style={{
-                      width: '100%',
-                      padding: '12px',
-                      border: '1px solid #000',
-                      borderRadius: '4px',
-                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '14px',
-                      fontWeight: 400
+                      fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontSize: '11px',
+                      fontWeight: 400,
+                      lineHeight: '14px',
+                      color: '#000'
                     }}
                   >
-                    <option>+420</option>
-                  </select>
-                </div>
-                <div style={{ flex: 1 }}>
-                  <label style={{
-                    display: 'block',
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '12px',
-                    fontWeight: 400,
-                    marginBottom: '8px',
-                    color: '#666'
-                  }}>
-                    Mobile phone number *
-                  </label>
+                    Chci dostávat informace o novinkách, slevách a akcích e-mailem.
+                  </span>
+                </label>
+              </div>
+
+              <h2 
+                className="font-bold mb-4 uppercase pt-4"
+                style={{
+                  fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '14px',
+                  fontWeight: 400,
+                  lineHeight: '16.1px'
+                }}
+              >
+                DOPRAVA
+              </h2>
+
+              <div className="mb-4">
+                {/* Zásilkovna Option */}
+                <label className={`flex items-start p-3 sm:p-4 cursor-pointer border rounded-md mb-2 ${formData.shippingMethod === 'zasilkovna' ? 'border-black bg-gray-50' : 'border-gray-200'}`}>
                   <input
-                    type="tel"
-                    required
-                    value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    style={{
-                      width: '100%',
-                      padding: '12px',
-                      border: '1px solid #000',
-                      borderRadius: '4px',
-                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '14px',
-                      fontWeight: 400,
-                      boxSizing: 'border-box'
-                    }}
+                    type="radio"
+                    name="shipping"
+                    value="zasilkovna"
+                    checked={formData.shippingMethod === 'zasilkovna'}
+                    onChange={(e) => setFormData({ ...formData, shippingMethod: e.target.value })}
+                    className="mr-3 sm:mr-4 mt-1"
                   />
+                  <div className="flex-1 flex justify-between items-start gap-2">
+                    <div>
+                      <p className="text-body font-bold leading-tight">Zásilkovna</p>
+                      <p className="text-body text-xs sm:text-sm">Doručení na výdejní místo</p>
+                    </div>
+                    <p className="text-body font-bold whitespace-nowrap" style={{ color: calculateShippingCost(subtotal, 'zasilkovna') === 0 ? '#24e053' : 'inherit' }}>
+                      {calculateShippingCost(subtotal, 'zasilkovna') === 0 ? 'ZDARMA' : `${calculateShippingCost(subtotal, 'zasilkovna')} Kč`}
+                    </p>
+                  </div>
+                </label>
+
+                {formData.shippingMethod === 'zasilkovna' && (
+                  <button
+                    type="button"
+                    onClick={openZasilkovnaWidget}
+                    className="w-full border border-black bg-white text-black px-4 py-2 text-body uppercase hover:bg-gray-100 transition-colors mb-4"
+                    style={{ borderRadius: '4px', marginTop: '4px', borderWidth: '1px' }}
+                  >
+                    {formData.zasilkovnaName ? `Změnit: ${formData.zasilkovnaName}` : 'VYBRAT VÝDEJNÍ MÍSTO ZÁSILKOVNY'}
+                  </button>
+                )}
+
+                {/* PPL Home Delivery Option */}
+                <label className={`flex items-start p-3 sm:p-4 cursor-pointer border rounded-md mb-2 ${formData.shippingMethod === 'ppl_address' ? 'border-black bg-gray-50' : 'border-gray-200'}`}>
+                  <input
+                    type="radio"
+                    name="shipping"
+                    value="ppl_address"
+                    checked={formData.shippingMethod === 'ppl_address'}
+                    onChange={(e) => setFormData({ ...formData, shippingMethod: e.target.value })}
+                    className="mr-3 sm:mr-4 mt-1"
+                  />
+                  <div className="flex-1 flex justify-between items-start gap-2">
+                    <div>
+                      <p className="text-body font-bold leading-tight">PPL - Doručení na adresu</p>
+                      <p className="text-body text-xs sm:text-sm">Kurýr doručí zásilku až k vám domů</p>
+                    </div>
+                    <p className="text-body font-bold whitespace-nowrap" style={{ color: calculateShippingCost(subtotal, 'ppl_address') === 0 ? '#24e053' : 'inherit' }}>
+                      {calculateShippingCost(subtotal, 'ppl_address') === 0 ? 'ZDARMA' : `${calculateShippingCost(subtotal, 'ppl_address')} Kč`}
+                    </p>
+                  </div>
+                </label>
+
+                {formData.shippingMethod === 'ppl_address' && (
+                  <div className="space-y-2 mt-2 p-4 border border-black rounded-md bg-white">
+                    <p className="text-xs font-bold uppercase mb-2">Doručovací adresa</p>
+                    <input
+                      type="text"
+                      placeholder="Ulice a číslo popisné *"
+                      required={formData.shippingMethod === 'ppl_address'}
+                      value={formData.shippingStreet}
+                      onChange={(e) => setFormData({ ...formData, shippingStreet: e.target.value })}
+                      className="w-full border border-black px-2 py-1 text-body focus:outline-none"
+                      style={{ borderRadius: '4px' }}
+                    />
+                    <div className="flex flex-col sm:flex-row gap-2">
+                      <input
+                        type="text"
+                        placeholder="Město *"
+                        required={formData.shippingMethod === 'ppl_address'}
+                        value={formData.shippingCity}
+                        onChange={(e) => setFormData({ ...formData, shippingCity: e.target.value })}
+                        className="w-full sm:flex-1 border border-black px-2 py-1 text-body focus:outline-none"
+                        style={{ borderRadius: '4px' }}
+                      />
+                      <input
+                        type="text"
+                        placeholder="PSČ *"
+                        required={formData.shippingMethod === 'ppl_address'}
+                        value={formData.shippingZip}
+                        onChange={(e) => setFormData({ ...formData, shippingZip: e.target.value })}
+                        className="w-full sm:w-24 border border-black px-2 py-1 text-body focus:outline-none"
+                        style={{ borderRadius: '4px' }}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* PPL ParcelShop Option (Placeholder for widget) */}
+                <label className={`flex items-start p-3 sm:p-4 cursor-pointer border rounded-md mb-2 ${formData.shippingMethod === 'ppl_parcelshop' ? 'border-black bg-gray-50' : 'border-gray-200'}`}>
+                  <input
+                    type="radio"
+                    name="shipping"
+                    value="ppl_parcelshop"
+                    checked={formData.shippingMethod === 'ppl_parcelshop'}
+                    onChange={(e) => setFormData({ ...formData, shippingMethod: e.target.value })}
+                    className="mr-3 sm:mr-4 mt-1"
+                  />
+                  <div className="flex-1 flex justify-between items-start gap-2">
+                    <div>
+                      <p className="text-body font-bold leading-tight">PPL ParcelShop</p>
+                      <p className="text-body text-xs sm:text-sm">Vyzvednutí na výdejním místě PPL</p>
+                    </div>
+                    <p className="text-body font-bold whitespace-nowrap" style={{ color: calculateShippingCost(subtotal, 'ppl_parcelshop') === 0 ? '#24e053' : 'inherit' }}>
+                      {calculateShippingCost(subtotal, 'ppl_parcelshop') === 0 ? 'ZDARMA' : `${calculateShippingCost(subtotal, 'ppl_parcelshop')} Kč`}
+                    </p>
+                  </div>
+                </label>
+
+                {formData.shippingMethod === 'ppl_parcelshop' && (
+                  <button
+                    type="button"
+                    onClick={openPplWidget}
+                    className="w-full border border-black bg-white text-black px-4 py-2 text-body uppercase hover:bg-gray-100 transition-colors mb-4"
+                    style={{ borderRadius: '4px', marginTop: '4px', borderWidth: '1px' }}
+                  >
+                    {formData.pplName ? `Změnit: ${formData.pplName}` : 'VYBRAT VÝDEJNÍ MÍSTO PPL'}
+                  </button>
+                )}
+              </div>
+
+              {/* PPL Widget - Always present in DOM for the script to find it on load */}
+              <div 
+                className={`fixed inset-0 z-[100] bg-white flex flex-col transition-all duration-300 ${
+                  isPplModalOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+                }`}
+              >
+                <div className="flex justify-between items-center p-4 border-b border-black bg-black text-white">
+                  <h2 className="font-bold uppercase text-sm tracking-widest">Vyberte výdejní místo PPL</h2>
+                  <button 
+                    onClick={() => setIsPplModalOpen(false)} 
+                    className="px-4 py-2 border border-white uppercase text-xs hover:bg-white hover:text-black transition-colors"
+                  >
+                    Zavřít
+                  </button>
+                </div>
+                <div className="flex-1 relative bg-gray-100">
+                  <div 
+                    id="ppl-parcelshop-map" 
+                    data-language="cs" 
+                    data-mode="default"
+                    style={{ height: '100%', width: '100%', minHeight: '500px' }}
+                  ></div>
                 </div>
               </div>
-            </div>
 
-            {/* GIFT MESSAGE */}
-            <div style={{ marginTop: '60px', padding: '24px', border: '1px solid #e0e0e0', borderRadius: '4px' }}>
-              <label style={{ display: 'flex', alignItems: 'flex-start', cursor: 'pointer' }}>
-                <input type="checkbox" style={{ marginRight: '12px', marginTop: '2px' }} />
-                <span style={{
-                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '14px',
-                  fontWeight: 400
-                }}>
-                  Buying a gift? Add a ribbon a personalised gift message
-                </span>
-              </label>
-            </div>
-
-            {/* SAVE AND CONTINUE Button */}
-            <button
-              type="submit"
-              disabled={loading}
-              style={{
-                width: '100%',
-                padding: '16px',
-                marginTop: '40px',
-                backgroundColor: '#000',
-                color: '#fff',
-                border: 'none',
-                borderRadius: '0',
-                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '12px',
-                fontWeight: 400,
-                textTransform: 'uppercase',
-                letterSpacing: '0.08em',
-                cursor: loading ? 'not-allowed' : 'pointer',
-                opacity: loading ? 0.6 : 1
-              }}
-            >
-              {loading ? 'Processing...' : 'SAVE AND CONTINUE'}
-            </button>
+              <div className="mt-4">
+                <AnimatedButton 
+                  text="PŘEJÍT K PLATBĚ" 
+                  loading={loading}
+                  disabled={
+                    !formData.email || 
+                    !formData.name || 
+                    !formData.phone || 
+                    (formData.shippingMethod === 'zasilkovna' && !formData.zasilkovnaId) ||
+                    (formData.shippingMethod === 'ppl_address' && (!formData.shippingStreet || !formData.shippingCity || !formData.shippingZip)) ||
+                    (formData.shippingMethod === 'ppl_parcelshop' && !formData.pplId)
+                  }
+                  type="submit"
+                  className="w-full"
+                />
+              </div>
+            </form>
           </div>
 
-          {/* Right Column - Order Summary */}
-          <div style={{ width: '320px', paddingTop: '0' }}>
-            <div style={{
-              border: '1px solid #e0e0e0',
-              borderRadius: '4px',
-              padding: '24px'
-            }}>
-              <h3 style={{
-                fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '12px',
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                letterSpacing: '0.03em',
-                marginBottom: '16px',
-                marginTop: 0
-              }}>
-                ORDER SUMMARY
-              </h3>
+          <div className="lg:col-span-1 h-full">
+            <div className="lg:border-l lg:border-r border-black h-full flex flex-col">
+              <div className="h-header flex items-center justify-center px-6">
+                <h2 
+                  className="font-bold uppercase"
+                  style={{
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '9.33px',
+                    fontWeight: 400,
+                    lineHeight: '10.7px'
+                  }}
+                >
+                  SOUHRN OBJEDNÁVKY
+                </h2>
+              </div>
+              <div className="border-b border-black"></div>
+              <div className="p-6 overflow-auto flex flex-col flex-1">
 
-              {items.map((item) => (
-                <div key={`${item.productId}-${item.size}`} style={{ marginBottom: '16px', paddingBottom: '16px', borderBottom: '1px solid #e0e0e0' }}>
-                  <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
-                    <div style={{
-                      width: '60px',
-                      height: '80px',
-                      border: '1px solid #000',
-                      flexShrink: 0,
-                      overflow: 'hidden'
-                    }}>
+              <div className="mb-4 pb-4">
+                {items.map((item) => (
+                  <div key={`${item.productId}-${item.size}`} className="flex gap-4 mb-4">
+                    <div className="w-16 h-16 border border-black flex-shrink-0 flex items-center justify-center overflow-hidden" style={{ borderRadius: '4px' }}>
                       <img
                         src={item.image}
                         alt={item.name}
-                        style={{ objectFit: 'contain', width: '100%', height: '100%' }}
+                        className="object-cover w-full h-full"
                       />
                     </div>
-                    <div style={{ flex: 1 }}>
-                      <p style={{
-                        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                        fontSize: '11px',
-                        fontWeight: 400,
-                        margin: '0 0 4px 0',
-                        lineHeight: 1.3
-                      }}>
-                        {item.name}
-                      </p>
-                      <p style={{
-                        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                        fontSize: '10px',
-                        fontWeight: 400,
-                        margin: '0 0 4px 0',
-                        color: '#666'
-                      }}>
-                        {item.size} - Qty: {item.quantity}
-                      </p>
-                      <p style={{
-                        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                        fontSize: '11px',
-                        fontWeight: 400,
-                        margin: '0'
-                      }}>
-                        {(item.price * item.quantity).toLocaleString('cs-CZ')} Kč
-                      </p>
+                    <div className="flex-1">
+                      <p style={{ fontSize: '14px', fontWeight: 'bold' }}>{item.name}</p>
+                      <p style={{ fontSize: '14px' }}>{item.size} / {item.quantity}x</p>
+                      <p style={{ fontSize: '14px' }}>{item.price * item.quantity} Kč</p>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
 
-              <div style={{ marginBottom: '24px' }}>
-                <label style={{
-                  display: 'block',
-                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '11px',
-                  fontWeight: 400,
-                  marginBottom: '8px',
-                  color: '#666'
-                }}>
-                  Promo code
+              <div className="mb-4 mt-4">
+                <label 
+                  className="block font-bold text-body"
+                  style={{
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '10px',
+                    fontWeight: 400,
+                    lineHeight: '14.1px',
+                    paddingLeft: '2px',
+                    paddingRight: '2px',
+                    color: '#999',
+                    marginBottom: '2px'
+                  }}
+                >
+                  Promo kód
                 </label>
-                <div style={{ display: 'flex', gap: '8px' }}>
+                <div className="flex gap-2">
                   <input
                     type="text"
                     value={formData.promoCode}
@@ -891,154 +665,54 @@ export default function CheckoutPage() {
                       setFormData({ ...formData, promoCode: e.target.value });
                       setPromoError('');
                     }}
-                    placeholder="CODE"
-                    style={{
-                      flex: 1,
-                      padding: '8px',
-                      border: '1px solid #000',
-                      borderRadius: '4px',
-                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '12px',
-                      fontWeight: 400,
-                      boxSizing: 'border-box'
-                    }}
+                    className="flex-1 border border-black px-2 py-1 text-body focus:outline-none"
+                    placeholder="KÓD"
+                    style={{ borderRadius: '4px' }}
                   />
                   <button
                     type="button"
                     onClick={handleApplyPromo}
-                    style={{
-                      padding: '8px 16px',
-                      border: '1px solid #000',
-                      borderRadius: '4px',
-                      backgroundColor: '#fff',
-                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '11px',
-                      fontWeight: 400,
-                      textTransform: 'uppercase',
-                      cursor: 'pointer'
-                    }}
+                    className="border border-black px-4 py-1 text-body uppercase hover:bg-black hover:text-white transition-colors"
+                    style={{ borderRadius: '4px' }}
                   >
-                    Apply
+                    POUŽÍT
                   </button>
                 </div>
-                {promoError && <p style={{
-                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '11px',
-                  fontWeight: 400,
-                  color: '#f00',
-                  marginTop: '4px'
-                }}>{promoError}</p>}
+                {promoError && <p className="text-body mt-2 text-black">{promoError}</p>}
               </div>
 
-              <div style={{
-                borderTop: '1px solid #e0e0e0',
-                paddingTop: '16px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '8px'
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '12px',
-                    fontWeight: 400
-                  }}>
-                    Subtotal
-                  </span>
-                  <span style={{
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '12px',
-                    fontWeight: 400
-                  }}>
-                    {subtotal.toLocaleString('cs-CZ')} Kč
+              <div className="space-y-2 mb-6">
+                <div className="flex justify-between" style={{ fontSize: '14px' }}>
+                  <span>Mezisoučet</span>
+                  <span>{subtotal} Kč</span>
+                </div>
+                <div className="flex justify-between" style={{ fontSize: '14px' }}>
+                  <span>Doprava</span>
+                  <span style={{ color: shippingCost === 0 ? '#24e053' : 'inherit' }}>
+                    {shippingCost === 0 ? 'ZDARMA' : `${shippingCost} Kč`}
                   </span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '12px',
-                    fontWeight: 400
-                  }}>
-                    Shipping
-                  </span>
-                  <span style={{
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '12px',
-                    fontWeight: 400,
-                    color: shippingCost === 0 ? '#24e053' : '#000'
-                  }}>
-                    {shippingCost === 0 ? 'Free' : `${shippingCost.toLocaleString('cs-CZ')} Kč`}
-                  </span>
-                </div>
+                {amountToFreeShipping > 0 && (
+                  <p style={{ fontSize: '11px', color: '#24e053', marginTop: '4px' }}>
+                    Přidejte zboží za {amountToFreeShipping} Kč pro dopravu zdarma!
+                  </p>
+                )}
                 {discount > 0 && (
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{
-                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '12px',
-                      fontWeight: 400
-                    }}>
-                      Discount
-                    </span>
-                    <span style={{
-                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '12px',
-                      fontWeight: 400
-                    }}>
-                      -{discount.toLocaleString('cs-CZ')} Kč
-                    </span>
+                  <div className="flex justify-between" style={{ fontSize: '14px' }}>
+                    <span>Sleva</span>
+                    <span>-{discount} Kč</span>
                   </div>
                 )}
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  paddingTop: '16px',
-                  borderTop: '1px solid #e0e0e0'
-                }}>
-                  <span style={{
-                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
-                    fontWeight: 700,
-                    textTransform: 'uppercase'
-                  }}>
-                    TOTAL
-                  </span>
-                  <span style={{
-                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
-                    fontWeight: 700,
-                    textTransform: 'uppercase'
-                  }}>
-                    {total.toLocaleString('cs-CZ')} Kč <span style={{ fontSize: '10px', fontWeight: 400 }}>(tax included)</span>
-                  </span>
+                <div className="pt-4">
+                  <div className="flex justify-between font-bold" style={{ fontSize: '14px' }}>
+                    <span>CELKEM</span>
+                    <span>{total} Kč</span>
+                  </div>
                 </div>
+              </div>
               </div>
             </div>
           </div>
-        </form>
-      </div>
-
-      {/* PPL Widget Modal */}
-      <div 
-        className={`fixed inset-0 z-[100] bg-white flex flex-col transition-all duration-300 ${
-          isPplModalOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-        }`}
-      >
-        <div className="flex justify-between items-center p-4 border-b border-black bg-black text-white">
-          <h2 className="font-bold uppercase text-sm tracking-widest">Select PPL ParcelShop</h2>
-          <button 
-            onClick={() => setIsPplModalOpen(false)} 
-            className="px-4 py-2 border border-white uppercase text-xs hover:bg-white hover:text-black transition-colors"
-          >
-            Close
-          </button>
-        </div>
-        <div className="flex-1 relative bg-gray-100">
-          <div 
-            id="ppl-parcelshop-map" 
-            data-language="cs" 
-            data-mode="default"
-            style={{ height: '100%', width: '100%', minHeight: '500px' }}
-          ></div>
         </div>
       </div>
     </div>
