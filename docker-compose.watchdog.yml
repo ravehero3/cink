@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  # Existing cink service (reference)
+  cink:
+    build: .
+    container_name: apps-cink-1
+    environment:
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - NEXTAUTH_URL=https://ufosport.cz
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - DATABASE_URL=${DATABASE_URL}
+    ports:
+      - "5000:5000"
+    networks:
+      - apps-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  # Health check watchdog - monitors site and auto-restarts if down
+  watchdog:
+    image: curlimages/curl:latest
+    container_name: ufosport-watchdog
+    entrypoint: /bin/sh
+    command: -c "sh /watchdog.sh"
+    volumes:
+      - ./healthcheck-watchdog.sh:/watchdog.sh
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - SITE_URL=https://ufosport.cz
+      - CHECK_INTERVAL=30
+      - MAX_RETRIES=3
+    networks:
+      - apps-network
+    depends_on:
+      - cink
+    restart: unless-stopped
+
+networks:
+  apps-network:
+    name: apps-network
+    driver: bridge
