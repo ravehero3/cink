@@ -405,7 +405,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     className="select-none"
                   >
                     {selectedProducts.map((product, index) => (
-                      <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(66.666% - 0.67px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
+                      <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(40% - 0.4px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
                         {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
                         <Link
                           href={`/produkty/${product.slug}`}
@@ -468,8 +468,8 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   </div>
                 </div>
 
-                {/* PROHLÍŽELI JSTE Section */}
-                {recentlyViewed.length > 0 && (
+                {/* PROHLÍŽELI JSTE Section - only show when cart is empty */}
+                {recentlyViewed.length > 0 && items.length === 0 && (
                   <div style={{ display: 'flex', flexDirection: 'column', borderBottom: '1px solid #000', minHeight: '0', flex: 1 }}>
                     <div style={{ paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <h3 
@@ -545,7 +545,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       className="select-none"
                     >
                       {recentlyViewed.map((product, index) => (
-                        <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(66.666% - 0.67px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
+                        <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(40% - 0.4px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
                           {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
                           <Link
                             href={`/produkty/${product.slug}`}
@@ -730,7 +730,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     className="select-none"
                   >
                     {selectedProducts.map((product, index) => (
-                      <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(66.666% - 0.67px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
+                      <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(40% - 0.4px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
                         {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
                         <Link
                           href={`/produkty/${product.slug}`}
@@ -793,8 +793,8 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   </div>
                 </div>
 
-                {/* PROHLÍŽELI JSTE Section */}
-                {recentlyViewed.length > 0 && (
+                {/* PROHLÍŽELI JSTE Section - never show when items in cart */}
+                {recentlyViewed.length > 0 && items.length === 0 && (
                   <div style={{ display: 'flex', flexDirection: 'column', borderBottom: '1px solid #000', minHeight: '0', flex: '0 0 auto' }}>
                     <div style={{ paddingTop: '20px', paddingBottom: '12px', paddingLeft: '16px', paddingRight: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <h3 
