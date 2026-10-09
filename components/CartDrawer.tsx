@@ -122,7 +122,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
     let scrollLeft: number;
 
     const handleMouseDown = (e: Event) => {
-      const mouseEvent = e as MouseEvent;
+      const mouseEvent = e as unknown as MouseEvent;
       isDown = true;
       startX = mouseEvent.pageX - element.offsetLeft;
       scrollLeft = element.scrollLeft;
@@ -141,7 +141,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
     const handleMouseMove = (e: Event) => {
       if (!isDown) return;
-      const mouseEvent = e as MouseEvent;
+      const mouseEvent = e as unknown as MouseEvent;
       mouseEvent.preventDefault();
       const x = mouseEvent.pageX - element.offsetLeft;
       const walk = (x - startX) * 1;
