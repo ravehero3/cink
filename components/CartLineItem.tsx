@@ -52,7 +52,10 @@ export default function CartLineItem({
     }).replace('Kč', '').trim() + ' Kč';
   };
 
-  const isCDCategory = category?.toUpperCase() === 'CD';
+  // Robust check for CD category (matches product page logic)
+  const isCDCategory = 
+    /\bcd\b/i.test(category || '') || 
+    /\bone\s*size\b/i.test(size || '');
 
   // Modal layout: 143px grid
   if (layout === 'modal') {
