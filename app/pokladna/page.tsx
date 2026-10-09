@@ -370,10 +370,11 @@ export default function CheckoutPage() {
                     fontWeight: 400,
                     borderBottom: num === step ? '1px solid #000' : num < step ? '1px solid #000' : '1px solid transparent',
                     cursor: num > reached ? 'default' : 'pointer',
-                    flex: 1,
+                    flex: '0 0 auto',
                     textAlign: 'left',
                     fontFamily: '"Helvetica Neue Condensed Bold", "Arial Narrow", Impact, sans-serif',
-                    fontStretch: 'condensed'
+                    fontStretch: 'condensed',
+                    marginRight: '16px'
                   }}
                 >
                   {num}. {num === 1 ? 'EMAIL' : num === 2 ? 'DOPRAVA' : 'PLATBA'}
@@ -622,17 +623,21 @@ export default function CheckoutPage() {
                           onClick={openZasilkovnaWidget}
                           style={{
                             width: '100%',
-                            height: '36px',
+                            minHeight: '36px',
+                            height: 'auto',
                             border: '1px solid #000',
                             borderRadius: '4px',
-                            padding: '0',
+                            padding: '8px 12px',
                             fontSize: '11px',
                             textTransform: 'uppercase',
                             letterSpacing: '.06em',
                             background: '#fff',
                             color: '#000',
                             cursor: 'pointer',
-                            fontWeight: 400
+                            fontWeight: 400,
+                            lineHeight: '1.4',
+                            whiteSpace: 'normal',
+                            wordWrap: 'break-word'
                           }}
                         >
                           {formData.zasilkovnaName ? `Změnit: ${formData.zasilkovnaName}` : 'Vybrat výdejní místo'}
