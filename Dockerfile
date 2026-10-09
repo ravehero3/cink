@@ -14,12 +14,11 @@ RUN npm config set registry https://registry.npmjs.org && \
     npm ci --legacy-peer-deps --ignore-scripts
 
 COPY . .
+COPY build.sh ./build.sh
+RUN chmod +x ./build.sh
 
-# Generate Prisma client (skip db check during build)
-RUN SKIP_ENV_VALIDATION=true npx prisma generate
-
-# Build Next.js with optimizations
-RUN SKIP_ENV_VALIDATION=true npm run build
+# Build: generate Prisma client and build Next.js (no db operations)
+RUN ./build.sh
 
 ENV NODE_OPTIONS="--max-old-space-size=2048"
 
