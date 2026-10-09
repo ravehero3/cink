@@ -331,7 +331,41 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
                 {/* VYBRÁNO PRO VÁS Section */}
                 <div style={{ display: 'flex', flexDirection: 'column', borderBottom: '1px solid #000', minHeight: '0', flex: 1 }}>
-                  <div style={{ paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
+                    <button
+                      onClick={() => {
+                        if (vybrranoRef.current) {
+                          vybrranoRef.current.scrollBy({
+                            left: -(vybrranoRef.current.clientWidth * 0.4),
+                            behavior: 'smooth'
+                          });
+                        }
+                      }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '24px',
+                        height: '24px',
+                        border: '1px solid #000',
+                        borderRadius: '4px',
+                        backgroundColor: '#fff',
+                        cursor: 'pointer',
+                        padding: '0',
+                        flex: '0 0 auto',
+                        marginTop: 'calc(50% - 12px)'
+                      }}
+                      onMouseEnter={(e) => {
+                        (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5';
+                      }}
+                      onMouseLeave={(e) => {
+                        (e.currentTarget as HTMLElement).style.backgroundColor = '#fff';
+                      }}
+                    >
+                      <svg style={{ width: '14px', height: '14px', stroke: '#000', fill: 'none' }} viewBox="0 0 24 24" strokeWidth="2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                      </svg>
+                    </button>
                     <h3 
                       style={{
                         fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -351,7 +385,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       onClick={() => {
                         if (vybrranoRef.current) {
                           vybrranoRef.current.scrollBy({
-                            left: vybrranoRef.current.clientWidth * 0.66,
+                            left: vybrranoRef.current.clientWidth * 0.4,
                             behavior: 'smooth'
                           });
                         }
@@ -367,8 +401,8 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         backgroundColor: '#fff',
                         cursor: 'pointer',
                         padding: '0',
-                        marginLeft: '8px',
-                        flex: '0 0 auto'
+                        flex: '0 0 auto',
+                        marginTop: 'calc(50% - 12px)'
                       }}
                       onMouseEnter={(e) => {
                         (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5';
@@ -471,7 +505,41 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 {/* PROHLÍŽELI JSTE Section - only show when cart is empty */}
                 {recentlyViewed.length > 0 && items.length === 0 && (
                   <div style={{ display: 'flex', flexDirection: 'column', borderBottom: '1px solid #000', minHeight: '0', flex: 1 }}>
-                    <div style={{ paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div style={{ paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
+                      <button
+                        onClick={() => {
+                          if (prohlizeniRef.current) {
+                            prohlizeniRef.current.scrollBy({
+                              left: -(prohlizeniRef.current.clientWidth * 0.4),
+                              behavior: 'smooth'
+                            });
+                          }
+                        }}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          width: '24px',
+                          height: '24px',
+                          border: '1px solid #000',
+                          borderRadius: '4px',
+                          backgroundColor: '#fff',
+                          cursor: 'pointer',
+                          padding: '0',
+                          flex: '0 0 auto',
+                          marginTop: 'calc(50% - 12px)'
+                        }}
+                        onMouseEnter={(e) => {
+                          (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5';
+                        }}
+                        onMouseLeave={(e) => {
+                          (e.currentTarget as HTMLElement).style.backgroundColor = '#fff';
+                        }}
+                      >
+                        <svg style={{ width: '14px', height: '14px', stroke: '#000', fill: 'none' }} viewBox="0 0 24 24" strokeWidth="2">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                        </svg>
+                      </button>
                       <h3 
                         style={{
                           fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -491,7 +559,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         onClick={() => {
                           if (prohlizeniRef.current) {
                             prohlizeniRef.current.scrollBy({
-                              left: prohlizeniRef.current.clientWidth * 0.66,
+                              left: prohlizeniRef.current.clientWidth * 0.4,
                               behavior: 'smooth'
                             });
                           }
@@ -507,8 +575,8 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                           backgroundColor: '#fff',
                           cursor: 'pointer',
                           padding: '0',
-                          marginLeft: '8px',
-                          flex: '0 0 auto'
+                          flex: '0 0 auto',
+                          marginTop: 'calc(50% - 12px)'
                         }}
                         onMouseEnter={(e) => {
                           (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5';
@@ -656,7 +724,41 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
                 {/* VYBRÁNO PRO VÁS Section */}
                 <div style={{ display: 'flex', flexDirection: 'column', borderBottom: '1px solid #000', minHeight: '0', flex: '0 0 auto' }}>
-                  <div style={{ paddingTop: '20px', paddingBottom: '12px', paddingLeft: '16px', paddingRight: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ paddingTop: '20px', paddingBottom: '12px', paddingLeft: '16px', paddingRight: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
+                    <button
+                      onClick={() => {
+                        if (vybrranoRef.current) {
+                          vybrranoRef.current.scrollBy({
+                            left: -(vybrranoRef.current.clientWidth * 0.4),
+                            behavior: 'smooth'
+                          });
+                        }
+                      }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '24px',
+                        height: '24px',
+                        border: '1px solid #000',
+                        borderRadius: '4px',
+                        backgroundColor: '#fff',
+                        cursor: 'pointer',
+                        padding: '0',
+                        flex: '0 0 auto',
+                        marginTop: 'calc(50% - 12px)'
+                      }}
+                      onMouseEnter={(e) => {
+                        (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5';
+                      }}
+                      onMouseLeave={(e) => {
+                        (e.currentTarget as HTMLElement).style.backgroundColor = '#fff';
+                      }}
+                    >
+                      <svg style={{ width: '14px', height: '14px', stroke: '#000', fill: 'none' }} viewBox="0 0 24 24" strokeWidth="2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                      </svg>
+                    </button>
                     <h3 
                       style={{
                         fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -676,7 +778,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       onClick={() => {
                         if (vybrranoRef.current) {
                           vybrranoRef.current.scrollBy({
-                            left: vybrranoRef.current.clientWidth * 0.66,
+                            left: vybrranoRef.current.clientWidth * 0.4,
                             behavior: 'smooth'
                           });
                         }
@@ -692,8 +794,8 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         backgroundColor: '#fff',
                         cursor: 'pointer',
                         padding: '0',
-                        marginLeft: '8px',
-                        flex: '0 0 auto'
+                        flex: '0 0 auto',
+                        marginTop: 'calc(50% - 12px)'
                       }}
                       onMouseEnter={(e) => {
                         (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5';
@@ -796,57 +898,91 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 {/* PROHLÍŽELI JSTE Section - never show when items in cart */}
                 {recentlyViewed.length > 0 && items.length === 0 && (
                   <div style={{ display: 'flex', flexDirection: 'column', borderBottom: '1px solid #000', minHeight: '0', flex: '0 0 auto' }}>
-                    <div style={{ paddingTop: '20px', paddingBottom: '12px', paddingLeft: '16px', paddingRight: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <h3 
-                        style={{
-                          fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                          fontSize: '13px',
-                          fontWeight: 700,
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.03em',
-                          fontStretch: 'condensed',
-                          margin: '0',
-                          textAlign: 'center',
-                          flex: 1
-                        }}
-                      >
-                        PROHLÍŽELI JSTE
-                      </h3>
-                      <button
-                        onClick={() => {
-                          if (prohlizeniRef.current) {
-                            prohlizeniRef.current.scrollBy({
-                              left: prohlizeniRef.current.clientWidth * 0.66,
-                              behavior: 'smooth'
-                            });
-                          }
-                        }}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          width: '24px',
-                          height: '24px',
-                          border: '1px solid #000',
-                          borderRadius: '4px',
-                          backgroundColor: '#fff',
-                          cursor: 'pointer',
-                          padding: '0',
-                          marginLeft: '8px',
-                          flex: '0 0 auto'
-                        }}
-                        onMouseEnter={(e) => {
-                          (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5';
-                        }}
-                        onMouseLeave={(e) => {
-                          (e.currentTarget as HTMLElement).style.backgroundColor = '#fff';
-                        }}
-                      >
-                        <svg style={{ width: '14px', height: '14px', stroke: '#000', fill: 'none' }} viewBox="0 0 24 24" strokeWidth="2">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                        </svg>
-                      </button>
-                    </div>
+                  <div style={{ paddingTop: '20px', paddingBottom: '12px', paddingLeft: '16px', paddingRight: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
+                    <button
+                      onClick={() => {
+                        if (vybrranoRef.current) {
+                          vybrranoRef.current.scrollBy({
+                            left: -(vybrranoRef.current.clientWidth * 0.4),
+                            behavior: 'smooth'
+                          });
+                        }
+                      }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '24px',
+                        height: '24px',
+                        border: '1px solid #000',
+                        borderRadius: '4px',
+                        backgroundColor: '#fff',
+                        cursor: 'pointer',
+                        padding: '0',
+                        flex: '0 0 auto',
+                        marginTop: 'calc(50% - 12px)'
+                      }}
+                      onMouseEnter={(e) => {
+                        (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5';
+                      }}
+                      onMouseLeave={(e) => {
+                        (e.currentTarget as HTMLElement).style.backgroundColor = '#fff';
+                      }}
+                    >
+                      <svg style={{ width: '14px', height: '14px', stroke: '#000', fill: 'none' }} viewBox="0 0 24 24" strokeWidth="2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                      </svg>
+                    </button>
+                    <h3 
+                      style={{
+                        fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                        fontSize: '13px',
+                        fontWeight: 700,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.03em',
+                        fontStretch: 'condensed',
+                        margin: '0',
+                        textAlign: 'center',
+                        flex: 1
+                      }}
+                    >
+                      VYBRÁNO PRO VÁS
+                    </h3>
+                    <button
+                      onClick={() => {
+                        if (vybrranoRef.current) {
+                          vybrranoRef.current.scrollBy({
+                            left: vybrranoRef.current.clientWidth * 0.4,
+                            behavior: 'smooth'
+                          });
+                        }
+                      }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '24px',
+                        height: '24px',
+                        border: '1px solid #000',
+                        borderRadius: '4px',
+                        backgroundColor: '#fff',
+                        cursor: 'pointer',
+                        padding: '0',
+                        flex: '0 0 auto',
+                        marginTop: 'calc(50% - 12px)'
+                      }}
+                      onMouseEnter={(e) => {
+                        (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5';
+                      }}
+                      onMouseLeave={(e) => {
+                        (e.currentTarget as HTMLElement).style.backgroundColor = '#fff';
+                      }}
+                    >
+                      <svg style={{ width: '14px', height: '14px', stroke: '#000', fill: 'none' }} viewBox="0 0 24 24" strokeWidth="2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                  </div>
                     {/* Horizontal scroll container - 1.5 products show */}
                     <div 
                       ref={prohlizeniRef}
