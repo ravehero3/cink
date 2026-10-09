@@ -105,8 +105,9 @@ export default function CartPage() {
       <div className="min-h-screen bg-white flex flex-col relative">
         {/* Vertical lines at product edges (995px wide, centered) - hidden on mobile */}
         <div className="hidden md:block" style={{
-          position: 'absolute',
-          left: 'calc(50vw - 497.5px)',
+          position: 'fixed',
+          left: '50%',
+          marginLeft: '-497.5px',
           top: 0,
           bottom: 0,
           width: '1px',
@@ -114,8 +115,9 @@ export default function CartPage() {
           zIndex: 5
         }} />
         <div className="hidden md:block" style={{
-          position: 'absolute',
-          right: 'calc(50vw - 497.5px)',
+          position: 'fixed',
+          left: '50%',
+          marginLeft: '497.5px',
           top: 0,
           bottom: 0,
           width: '1px',
@@ -250,8 +252,9 @@ export default function CartPage() {
     <div className="min-h-screen bg-white flex flex-col relative">
       {/* Vertical lines at product edges (995px wide, centered in 50% container) - hidden on mobile */}
       <div className="hidden md:block" style={{
-        position: 'absolute',
-        left: 'calc(50vw - 497.5px)',
+        position: 'fixed',
+        left: '50%',
+        marginLeft: '-497.5px',
         top: 0,
         bottom: 0,
         width: '1px',
@@ -259,8 +262,9 @@ export default function CartPage() {
         zIndex: 5
       }} />
       <div className="hidden md:block" style={{
-        position: 'absolute',
-        right: 'calc(50vw - 497.5px)',
+        position: 'fixed',
+        left: '50%',
+        marginLeft: '497.5px',
         top: 0,
         bottom: 0,
         width: '1px',
@@ -390,7 +394,7 @@ export default function CartPage() {
             >
               <div className="flex flex-col md:flex-row gap-6 md:gap-8">
                 <Link href={`/produkty/${item.slug}`} style={{ flexShrink: 0 }}>
-                  <div className="w-[120px] h-[160px] md:w-[140px] md:h-[200px]" style={{
+                  <div className="w-[120px] h-[120px] md:w-[200px] md:h-[200px]" style={{
                     border: '1px solid #000',
                     backgroundColor: '#f5f5f5',
                     display: 'flex',
@@ -401,7 +405,7 @@ export default function CartPage() {
                     <img
                       src={item.image}
                       alt={item.name}
-                      style={{ objectFit: 'contain', width: '100%', height: '100%' }}
+                      style={{ objectFit: 'cover', width: '100%', height: '100%' }}
                     />
                   </div>
                 </Link>
@@ -533,7 +537,7 @@ export default function CartPage() {
                         lineHeight: '1.4',
                         color: '#666',
                         textDecoration: 'underline',
-                        display: 'block',
+                        display: 'none',
                         marginTop: '12px'
                       }}
                       className="hover:opacity-60 transition-opacity"
