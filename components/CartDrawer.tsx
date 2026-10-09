@@ -121,9 +121,10 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
     let startX: number;
     let scrollLeft: number;
 
-    const handleMouseDown = (e: MouseEvent) => {
+    const handleMouseDown = (e: Event) => {
+      const mouseEvent = e as MouseEvent;
       isDown = true;
-      startX = e.pageX - element.offsetLeft;
+      startX = mouseEvent.pageX - element.offsetLeft;
       scrollLeft = element.scrollLeft;
       element.style.cursor = 'grabbing';
     };
@@ -138,48 +139,51 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
       element.style.cursor = 'grab';
     };
 
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleMouseMove = (e: Event) => {
       if (!isDown) return;
-      e.preventDefault();
-      const x = e.pageX - element.offsetLeft;
+      const mouseEvent = e as MouseEvent;
+      mouseEvent.preventDefault();
+      const x = mouseEvent.pageX - element.offsetLeft;
       const walk = (x - startX) * 1;
       element.scrollLeft = scrollLeft - walk;
     };
 
-    const handleTouchStart = (e: TouchEvent) => {
-      startX = e.touches[0].pageX - element.offsetLeft;
+    const handleTouchStart = (e: Event) => {
+      const touchEvent = e as TouchEvent;
+      startX = touchEvent.touches[0].pageX - element.offsetLeft;
       scrollLeft = element.scrollLeft;
     };
 
-    const handleTouchMove = (e: TouchEvent) => {
-      const x = e.touches[0].pageX - element.offsetLeft;
+    const handleTouchMove = (e: Event) => {
+      const touchEvent = e as TouchEvent;
+      const x = touchEvent.touches[0].pageX - element.offsetLeft;
       const walk = (x - startX) * 1;
       element.scrollLeft = scrollLeft - walk;
     };
 
     // Remove old listeners if they exist
-    element.removeEventListener('mousedown', handleMouseDown);
-    element.removeEventListener('mouseleave', handleMouseLeave);
-    element.removeEventListener('mouseup', handleMouseUp);
-    element.removeEventListener('mousemove', handleMouseMove);
-    element.removeEventListener('touchstart', handleTouchStart);
-    element.removeEventListener('touchmove', handleTouchMove);
+    element.removeEventListener('mousedown', handleMouseDown as EventListener);
+    element.removeEventListener('mouseleave', handleMouseLeave as EventListener);
+    element.removeEventListener('mouseup', handleMouseUp as EventListener);
+    element.removeEventListener('mousemove', handleMouseMove as EventListener);
+    element.removeEventListener('touchstart', handleTouchStart as EventListener);
+    element.removeEventListener('touchmove', handleTouchMove as EventListener);
 
     // Add listeners
-    element.addEventListener('mousedown', handleMouseDown);
-    element.addEventListener('mouseleave', handleMouseLeave);
-    element.addEventListener('mouseup', handleMouseUp);
-    element.addEventListener('mousemove', handleMouseMove);
-    element.addEventListener('touchstart', handleTouchStart);
-    element.addEventListener('touchmove', handleTouchMove);
+    element.addEventListener('mousedown', handleMouseDown as EventListener);
+    element.addEventListener('mouseleave', handleMouseLeave as EventListener);
+    element.addEventListener('mouseup', handleMouseUp as EventListener);
+    element.addEventListener('mousemove', handleMouseMove as EventListener);
+    element.addEventListener('touchstart', handleTouchStart as EventListener);
+    element.addEventListener('touchmove', handleTouchMove as EventListener);
 
     return () => {
-      element.removeEventListener('mousedown', handleMouseDown);
-      element.removeEventListener('mouseleave', handleMouseLeave);
-      element.removeEventListener('mouseup', handleMouseUp);
-      element.removeEventListener('mousemove', handleMouseMove);
-      element.removeEventListener('touchstart', handleTouchStart);
-      element.removeEventListener('touchmove', handleTouchMove);
+      element.removeEventListener('mousedown', handleMouseDown as EventListener);
+      element.removeEventListener('mouseleave', handleMouseLeave as EventListener);
+      element.removeEventListener('mouseup', handleMouseUp as EventListener);
+      element.removeEventListener('mousemove', handleMouseMove as EventListener);
+      element.removeEventListener('touchstart', handleTouchStart as EventListener);
+      element.removeEventListener('touchmove', handleTouchMove as EventListener);
     };
   };
 
