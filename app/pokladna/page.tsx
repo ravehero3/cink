@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { useSession, signIn } from 'next-auth/react';
 import { useCartStore, useCartHydration } from '@/lib/cart-store';
 import { calculateShippingCost, getAmountToFreeShipping } from '@/lib/shipping';
 
@@ -16,8 +16,20 @@ export default function CheckoutPage() {
   const [step, setStep] = useState(1);
   const [reached, setReached] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [hasGoogleProvider, setHasGoogleProvider] = useState(false);
 
-  const [formData, setFormData] = useState({
+  useEffect(() => {
+    fetch('/api/auth/providers')
+      .then(res => res.json())
+      .then(providers => {
+        setHasGoogleProvider('google' in providers);
+      })
+      .catch(() => setHasGoogleProvider(false));
+  }, []);
+
+  const handleGoogleLogin = () => {
+    signIn('google', { callbackUrl: '/pokladna' });
+  };
     email: session?.user?.email || '',
     name: '',
     phone: '',
@@ -470,41 +482,44 @@ export default function CheckoutPage() {
                   <div style={{ flex: 1, height: '1px', background: '#d9d9d9' }}></div>
                 </div>
 
-                {/* Google Button - Links to Login Page */}
-                <a
-                  href="/prihlaseni"
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    border: '1px solid #000',
-                    backgroundColor: '#fff',
-                    color: '#000',
-                    gap: '8px',
-                    width: '100%',
-                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '13px',
-                    padding: '11.8px 25.6px',
-                    borderRadius: '4px',
-                    letterSpacing: '0.05em',
-                    textDecoration: 'none',
-                    transition: 'all 0.3s',
-                    cursor: 'pointer'
-                  }}
-                  onMouseEnter={(e) => {
-                    (e.target as HTMLElement).style.backgroundColor = '#000';
-                    (e.target as HTMLElement).style.color = '#fff';
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.target as HTMLElement).style.backgroundColor = '#fff';
-                    (e.target as HTMLElement).style.color = '#000';
-                  }}
-                >
-                  <svg width="18" height="18" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-                    <path fill="currentColor" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
-                  </svg>
-                  PŘIHLÁSIT SE PŘES GOOGLE
-                </a>
+                {/* Google Button - OAuth Sign In */}
+                {hasGoogleProvider && (
+                  <button
+                    type="button"
+                    onClick={handleGoogleLogin}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      border: '1px solid #000',
+                      backgroundColor: '#fff',
+                      color: '#000',
+                      gap: '8px',
+                      width: '100%',
+                      fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontSize: '13px',
+                      padding: '11.8px 25.6px',
+                      borderRadius: '4px',
+                      letterSpacing: '0.05em',
+                      textDecoration: 'none',
+                      transition: 'all 0.3s',
+                      cursor: 'pointer'
+                    }}
+                    onMouseEnter={(e) => {
+                      (e.target as HTMLElement).style.backgroundColor = '#000';
+                      (e.target as HTMLElement).style.color = '#fff';
+                    }}
+                    onMouseLeave={(e) => {
+                      (e.target as HTMLElement).style.backgroundColor = '#fff';
+                      (e.target as HTMLElement).style.color = '#000';
+                    }}
+                  >
+                    <svg width="18" height="18" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                      <path fill="currentColor" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
+                    </svg>
+                    PŘIHLÁSIT SE PŘES GOOGLE
+                  </button>
+                )}
               </section>
             )}
 
