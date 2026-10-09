@@ -534,7 +534,7 @@ export default function CartPage() {
                 }}>{product.price} Kč</p>
                 <div style={{
                   fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '8px',
+                  fontSize: '10px',
                   fontWeight: 400,
                   lineHeight: '1.1',
                   color: '#000000',
