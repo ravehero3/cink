@@ -1217,7 +1217,7 @@ export default function CheckoutPage() {
                 target="_blank" 
                 rel="noopener noreferrer"
                 style={{
-                  display: 'block',
+                  display: 'inline-block',
                   border: '1px solid #000',
                   borderRadius: '2px',
                   padding: '8px 12px',
@@ -1225,6 +1225,7 @@ export default function CheckoutPage() {
                   textDecoration: 'underline',
                   color: '#000',
                   marginBottom: '8px',
+                  marginRight: '8px',
                   textTransform: 'uppercase',
                   fontWeight: 500
                 }}
@@ -1236,7 +1237,7 @@ export default function CheckoutPage() {
               <a 
                 href="tel:+420775181107"
                 style={{
-                  display: 'block',
+                  display: 'inline-block',
                   border: '1px solid #000',
                   borderRadius: '2px',
                   padding: '8px 12px',
