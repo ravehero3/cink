@@ -564,9 +564,29 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               </div>
             ) : (
               <div style={{ padding: '0', display: 'flex', flexDirection: 'column' }}>
-                {/* VYBRÁNO PRO VÁS Section - show even with items */}
+                {/* Cart items - FIRST */}
+                {items.map((item) => (
+                  <CartLineItem
+                    key={`${item.productId}-${item.size}`}
+                    productId={item.productId}
+                    name={item.name}
+                    price={item.price}
+                    image={item.image}
+                    slug={item.slug}
+                    color={item.color}
+                    size={item.size}
+                    quantity={item.quantity}
+                    category={item.category}
+                    onUpdateQuantity={updateQuantity}
+                    onRemove={handleOpenDeleteModal}
+                    onSaveForLater={handleSaveForLater}
+                    onClose={onClose}
+                  />
+                ))}
+
+                {/* VYBRÁNO PRO VÁS Section */}
                 <div style={{ display: 'flex', flexDirection: 'column', borderBottom: '1px solid #000', minHeight: '0', flex: '0 0 auto' }}>
-                  <div style={{ paddingTop: '12px', paddingBottom: '12px', paddingLeft: '16px', paddingRight: '16px' }}>
+                  <div style={{ paddingTop: '20px', paddingBottom: '12px', paddingLeft: '16px', paddingRight: '16px' }}>
                     <h3 
                       style={{
                         fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -671,7 +691,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 {/* PROHLÍŽELI JSTE Section */}
                 {recentlyViewed.length > 0 && (
                   <div style={{ display: 'flex', flexDirection: 'column', borderBottom: '1px solid #000', minHeight: '0', flex: '0 0 auto' }}>
-                    <div style={{ paddingTop: '12px', paddingBottom: '12px', paddingLeft: '16px', paddingRight: '16px' }}>
+                    <div style={{ paddingTop: '20px', paddingBottom: '12px', paddingLeft: '16px', paddingRight: '16px' }}>
                       <h3 
                         style={{
                           fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -773,26 +793,6 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     </div>
                   </div>
                 )}
-
-                {/* Cart items */}
-                {items.map((item) => (
-                  <CartLineItem
-                    key={`${item.productId}-${item.size}`}
-                    productId={item.productId}
-                    name={item.name}
-                    price={item.price}
-                    image={item.image}
-                    slug={item.slug}
-                    color={item.color}
-                    size={item.size}
-                    quantity={item.quantity}
-                    category={item.category}
-                    onUpdateQuantity={updateQuantity}
-                    onRemove={handleOpenDeleteModal}
-                    onSaveForLater={handleSaveForLater}
-                    onClose={onClose}
-                  />
-                ))}
               </div>
             )}
           </div>
