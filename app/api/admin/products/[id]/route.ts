@@ -71,6 +71,7 @@ export async function PATCH(
     if (data.sizeChartType !== undefined) updateData.sizeChartType = data.sizeChartType;
     if (data.sizeChartData !== undefined) updateData.sizeChartData = data.sizeChartData;
     if (data.productType !== undefined) updateData.productType = data.productType || null;
+    if (data.productImage !== undefined) updateData.productImage = data.productImage || null;
     
     if (data.sizes !== undefined) {
       updateData.sizes = data.sizes;

@@ -42,6 +42,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
     careInfo: '',
     productType: '',
   });
+  const [productImage, setProductImage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -86,6 +87,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
           setSizes(product.sizes || SIZES.reduce((acc, size) => ({ ...acc, [size]: 0 }), {}));
           setSizeChartType(product.sizeChartType || null);
           setSizeChartData(product.sizeChartData || null);
+          setProductImage(product.productImage || null);
         } else {
           setStatus({ type: 'error', message: 'Produkt nenalezen' });
           router.push('/admin/produkty');
@@ -120,6 +122,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
           sizeChartType,
           sizeChartData,
           productType: formData.productType || null,
+          productImage,
         }),
       });
 
@@ -285,8 +288,14 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
             {/* Images */}
             <div className="bg-white border border-black p-6">
               <p className="text-[10px] font-bold text-[#666666] uppercase tracking-widest mb-1">Obrázky produktu</p>
-              <p className="text-xs uppercase tracking-wider text-[#666666] mb-4">První obrázek bude zobrazen jako hlavní. Pomocí šipek lze měnit pořadí.</p>
-              <ImageUploader images={images} onChange={setImages} maxImages={10} />
+              <p className="text-xs uppercase tracking-wider text-[#666666] mb-4">První obrázek bude zobrazen jako hlavní. Pomocí šipek lze měnit pořadí. Klikněte na hvězdičku pro výběr produktového obrázku.</p>
+              <ImageUploader
+                images={images}
+                onChange={setImages}
+                maxImages={10}
+                productImage={productImage}
+                onProductImageChange={setProductImage}
+              />
             </div>
 
             {/* Video */}

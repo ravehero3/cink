@@ -8,12 +8,16 @@ interface ImageUploaderProps {
   images: string[];
   onChange: (urls: string[]) => void;
   maxImages?: number;
+  productImage?: string | null;
+  onProductImageChange?: (url: string | null) => void;
 }
 
 export default function ImageUploader({
   images,
   onChange,
   maxImages = 10,
+  productImage,
+  onProductImageChange,
 }: ImageUploaderProps) {
   const [globalError, setGlobalError] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -169,6 +173,28 @@ export default function ImageUploader({
                   </button>
                 )}
               </div>
+
+              {productImage === url && (
+                <button
+                  type="button"
+                  onClick={() => onProductImageChange?.(null)}
+                  className="absolute top-1.5 right-1.5 bg-black text-white w-7 h-7 border border-black flex items-center justify-center hover:bg-white hover:text-black transition-colors z-20"
+                  title="Zrušit jako produktový obrázek"
+                >
+                  <span className="text-sm">★</span>
+                </button>
+              )}
+
+              {productImage !== url && (
+                <button
+                  type="button"
+                  onClick={() => onProductImageChange?.(url)}
+                  className="absolute bottom-1.5 right-1.5 bg-white text-black w-7 h-7 border border-black flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black hover:text-white z-20"
+                  title="Nastavit jako produktový obrázek"
+                >
+                  <span className="text-sm">☆</span>
+                </button>
+              )}
 
               {idx === 0 && (
                 <div className="absolute bottom-0 left-0 right-0 bg-black text-white text-[9px] text-center py-1 uppercase tracking-widest font-bold border-t border-black">

@@ -53,6 +53,7 @@ model Product {
   sizeChartType      String?
   sizeChartData      Json?
   productType        String?
+  productImage        String?  @db.Text
   seoTitle           String?
   seoDescription     String?
   seoKeywords        String?
