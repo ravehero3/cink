@@ -368,7 +368,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     </button>
                     <h3 
                       style={{
-                        fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                        fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                         fontSize: '13px',
                         fontWeight: 700,
                         textTransform: 'uppercase',
@@ -463,7 +463,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                             )}
                           </div>
                           <h4 style={{
-                            fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                            fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                             fontSize: '13px',
                             fontWeight: 700,
                             textTransform: 'uppercase',
@@ -543,7 +543,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       </button>
                       <h3 
                         style={{
-                          fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                          fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                           fontSize: '13px',
                           fontWeight: 700,
                           textTransform: 'uppercase',
@@ -638,7 +638,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                               )}
                             </div>
                             <h4 style={{
-                              fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                              fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                               fontSize: '13px',
                               fontWeight: 700,
                               textTransform: 'uppercase',
@@ -763,7 +763,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     </button>
                     <h3 
                       style={{
-                        fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                        fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                         fontSize: '13px',
                         fontWeight: 700,
                         textTransform: 'uppercase',
@@ -857,7 +857,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                             )}
                           </div>
                           <h4 style={{
-                            fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                            fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                             fontSize: '13px',
                             fontWeight: 700,
                             textTransform: 'uppercase',
@@ -937,7 +937,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     </button>
                     <h3 
                       style={{
-                        fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                        fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                         fontSize: '13px',
                         fontWeight: 700,
                         textTransform: 'uppercase',
@@ -1032,7 +1032,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                               )}
                             </div>
                             <h4 style={{
-                              fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                              fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                               fontSize: '11px',
                               fontWeight: 700,
                               textTransform: 'uppercase',
@@ -1123,7 +1123,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   alignItems: 'center'
                 }}>
                   <span style={{
-                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '14px',
                     fontWeight: 700,
                     textTransform: 'uppercase',
@@ -1134,7 +1134,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     PŘEDPOKLÁDANÁ CENA
                   </span>
                   <span style={{
-                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '14px',
                     fontWeight: 700,
                     textTransform: 'uppercase',

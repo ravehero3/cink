@@ -166,7 +166,7 @@ export default function CartPage() {
         {/* Header - same as when products exist */}
         <div className="w-full md:w-[995px]" style={{ position: 'relative', margin: '0 auto', height: '226px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
           <h1 className="text-center uppercase" style={{
-            fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+            fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
             fontSize: '22px',
             fontWeight: 700,
             lineHeight: '22px',
@@ -287,7 +287,7 @@ export default function CartPage() {
                 {/* Title row with line below */}
                 <div style={{ paddingTop: '2px', paddingBottom: '2px', paddingLeft: '16px', paddingRight: '16px', textAlign: 'center', borderBottom: '1px solid #000' }}>
                   <h3 style={{
-                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '13px',
                     fontWeight: 700,
                     textTransform: 'uppercase',
@@ -432,7 +432,7 @@ export default function CartPage() {
                               )}
                             </div>
                             <h4 style={{
-                              fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                              fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                               fontSize: '13px',
                               fontWeight: 700,
                               textTransform: 'uppercase',
@@ -529,7 +529,7 @@ export default function CartPage() {
       {/* Header - border handled by navigation panel */}
       <div className="w-full md:w-[995px]" style={{ position: 'relative', margin: '0 auto', height: '226px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
         <h1 className="text-center uppercase" style={{
-          fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+          fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
           fontSize: '22px',
           fontWeight: 700,
           lineHeight: '22px',
@@ -671,7 +671,7 @@ export default function CartPage() {
           textAlign: 'center'
         }}>
           <h2 style={{
-            fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+            fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
             fontSize: '13px',
             fontWeight: 700,
             textTransform: 'uppercase',
@@ -726,7 +726,7 @@ export default function CartPage() {
                   )}
                 </div>
                 <h4 style={{
-                  fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontSize: '10px',
                   fontWeight: 700,
                   textTransform: 'uppercase',
