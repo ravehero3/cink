@@ -300,6 +300,22 @@ export default function CheckoutPage() {
 
   return (
     <div style={{ minHeight: '100vh', background: '#fff', display: 'flex', flexDirection: 'column' }}>
+      <style>{`
+        @media (min-width: 1024px) {
+          .checkout-grid {
+            display: grid !important;
+            grid-template-columns: 1fr 33% !important;
+          }
+          .checkout-aside {
+            border-left: 1px solid #000 !important;
+            border-top: none !important;
+            margin-top: 0 !important;
+          }
+          .checkout-main {
+            border-right: 1px solid #000 !important;
+          }
+        }
+      `}</style>
       {/* Single Header */}
       <header style={{
         height: '42px',
@@ -343,18 +359,18 @@ export default function CheckoutPage() {
       </header>
 
       {/* Main Layout */}
-      <div style={{
+      <div className="checkout-grid" style={{
         display: 'grid',
         gridTemplateColumns: '1fr',
         minHeight: 'calc(100vh - 42px)'
-      }} className="lg:grid-cols-[1fr_33%]">
+      }}>
         {/* Left Column - Form */}
-        <main style={{
+        <main className="checkout-main" style={{
           padding: '32px 16px 80px',
           display: 'flex',
           justifyContent: 'center',
           borderRight: 'none'
-        }} className="lg:border-r lg:border-black">
+        }}>
           <form style={{ width: '100%', maxWidth: '416px' }} onSubmit={handleSubmit}>
             {/* Stepper */}
             <nav style={{
@@ -989,14 +1005,14 @@ export default function CheckoutPage() {
         </main>
 
         {/* Right Column - Order Summary */}
-        <aside style={{
+        <aside className="checkout-aside" style={{
           borderLeft: 'none',
           display: 'flex',
           flexDirection: 'column',
           minHeight: 'auto',
           borderTop: '1px solid #000',
           marginTop: '32px'
-        }} className="lg:border-l lg:border-black lg:border-t-0 lg:mt-0">
+        }}>
           <div style={{
             height: '41px',
             display: 'flex',
