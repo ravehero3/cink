@@ -15,11 +15,11 @@ RUN npm config set registry https://registry.npmjs.org && \
 
 COPY . .
 
-# Generate Prisma client
-RUN npx prisma generate
+# Generate Prisma client (skip db check during build)
+RUN SKIP_ENV_VALIDATION=true npx prisma generate
 
 # Build Next.js with optimizations
-RUN npm run build
+RUN SKIP_ENV_VALIDATION=true npm run build
 
 ENV NODE_OPTIONS="--max-old-space-size=2048"
 
