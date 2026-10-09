@@ -303,6 +303,7 @@ export default function SavedProductsPage() {
         price: Number(product.price),
         image: product.images[0],
         color: product.color,
+        category: product.category,
       });
       
       removeProduct(product.id);

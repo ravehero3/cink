@@ -592,29 +592,33 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                             {item.price} Kč
                           </p>
 
-                          <p style={{
-                            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                            fontSize: '10px',
-                            fontWeight: 400,
-                            lineHeight: '1.2',
-                            color: 'rgb(0, 0, 0)',
-                            marginBottom: '2px',
-                            marginTop: '0'
-                          }}>
-                            Barva: {item.color}
-                          </p>
+                          {item.category?.toUpperCase() !== 'CD' && (
+                            <>
+                              <p style={{
+                                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                                fontSize: '10px',
+                                fontWeight: 400,
+                                lineHeight: '1.2',
+                                color: 'rgb(0, 0, 0)',
+                                marginBottom: '2px',
+                                marginTop: '0'
+                              }}>
+                                Barva: {item.color}
+                              </p>
 
-                          <p style={{
-                            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                            fontSize: '10px',
-                            fontWeight: 400,
-                            lineHeight: '1.2',
-                            color: 'rgb(0, 0, 0)',
-                            marginBottom: '0',
-                            marginTop: '0'
-                          }}>
-                            Velikost: {item.size}
-                          </p>
+                              <p style={{
+                                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                                fontSize: '10px',
+                                fontWeight: 400,
+                                lineHeight: '1.2',
+                                color: 'rgb(0, 0, 0)',
+                                marginBottom: '0',
+                                marginTop: '0'
+                              }}>
+                                Velikost: {item.size}
+                              </p>
+                            </>
+                          )}
                         </div>
 
                         {/* Quantity and low stock warning */}

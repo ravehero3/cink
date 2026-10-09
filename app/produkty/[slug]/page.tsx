@@ -140,6 +140,16 @@ export default function ProductDetailPage() {
       price: Number(product.price),
       image: product.images[0],
       color: product.color,
+      category: product.category,
+    });
+      productId: product.id,
+      name: product.name,
+      slug: product.slug,
+      size: selectedSize,
+      quantity,
+      price: Number(product.price),
+      image: product.images[0],
+      color: product.color,
     });
 
     setShowConfirmation(true);

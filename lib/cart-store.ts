@@ -10,6 +10,7 @@ export interface CartItem {
   price: number;
   image: string;
   color: string;
+  category?: string;
 }
 
 interface CartStore {
