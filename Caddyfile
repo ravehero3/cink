@@ -1,0 +1,71 @@
+voodoo808.com, www.voodoo808.com {
+    handle /apps-monitor/* {
+        uri strip_prefix /apps-monitor
+        reverse_proxy monitor:9999
+    }
+    handle {
+        reverse_proxy swag:5000
+    }
+}
+
+typebeatz.voodoo808.com {
+    reverse_proxy ayobr:5000
+}
+
+ufosport.cz, www.ufosport.cz {
+    # Try cink backend first, with health check
+    reverse_proxy cink:5000 {
+        # Health check endpoint
+        health /api/health
+        health_timeout 5s
+        health_interval 10s
+        health_uri /
+        unhealthy_status 500 502 503 504
+        unhealthy_latency 15s
+        unhealthy_request_count 3
+    }
+    
+    # Fallback to static backup if backend is down
+    handle_errors {
+        @errors expression `{err.status_code} >= 500`
+        rewrite @errors /backup.html
+        file_server {
+            root /var/www
+        }
+    }
+    
+    # Serve static backup page on manual request
+    @backup path /maintenance
+    handle @backup {
+        file_server {
+            root /var/www
+            try_files backup.html
+        }
+    }
+}
+
+beatpack.voodoo808.com {
+    reverse_proxy beatz:10000
+}
+
+portfolio.voodoo808.com, www.portfolio.voodoo808.com {
+    reverse_proxy voodoo808-portfolio:3000
+}
+
+status.voodoo808.com {
+    handle /hooks/* {
+        reverse_proxy 172.18.0.1:9000
+    }
+    handle {
+        reverse_proxy monitor:9999
+    }
+}
+
+http://130.61.26.156 {
+    handle /hooks/* {
+        reverse_proxy 172.18.0.1:9000
+    }
+    handle {
+        reverse_proxy monitor:9999
+    }
+}

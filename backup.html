@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UFO SPORT - Údržba</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: #fff;
+            color: #000;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            text-align: center;
+            max-width: 600px;
+            padding: 20px;
+        }
+        
+        .logo {
+            font-size: 48px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 40px;
+            text-decoration: none;
+            color: #000;
+            display: inline-block;
+        }
+        
+        .status {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background: #ff4444;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+        
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+        
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .contact {
+            border: 1px solid #000;
+            border-radius: 4px;
+            padding: 20px;
+            margin: 30px 0;
+            background: #f9f9f9;
+        }
+        
+        .contact h3 {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 15px;
+            color: #000;
+        }
+        
+        .contact-link {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            border: 1px solid #000;
+            border-radius: 4px;
+            background: #000;
+            color: #fff;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+        
+        .contact-link:hover {
+            background: #fff;
+            color: #000;
+        }
+        
+        .info {
+            margin-top: 50px;
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .retry-hint {
+            margin-top: 40px;
+            padding: 20px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="logo">
+            <span class="status"></span>
+            UFO SPORT
+        </a>
+        
+        <h1>Údržba v průběhu</h1>
+        <p>Náš web právě aktualizujeme. Vraťte se prosím za několik minut.</p>
+        
+        <div class="contact">
+            <h3>Potřebujete nám napsat?</h3>
+            <p style="color: #666; margin-bottom: 15px; font-size: 14px;">
+                Naše podpora je k dispozici od pondělí do soboty 9:30 - 19:00
+            </p>
+            <a href="https://wa.me/420775181107" target="_blank" class="contact-link">
+                WhatsApp
+            </a>
+            <a href="tel:+420775181107" class="contact-link">
+                Zavolat
+            </a>
+        </div>
+        
+        <div class="retry-hint">
+            <strong>Tip:</strong> Zkuste stránku načíst znovu (F5 nebo Ctrl+R)
+        </div>
+        
+        <div class="info">
+            <p>Děkujeme za vaši trpělivost 🙏</p>
+            <p>UFO SPORT Team</p>
+        </div>
+    </div>
+    
+    <script>
+        // Auto-refresh every 30 seconds
+        setTimeout(() => {
+            location.reload();
+        }, 30000);
+    </script>
+</body>
+</html>
