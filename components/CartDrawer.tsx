@@ -494,7 +494,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                               textDecoration: 'underline',
                               textAlign: 'center'
                             }}>
-                              Přidat
+                              Přidat do košíku
                             </div>
                         </Link>
                       </div>
@@ -668,7 +668,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                               textDecoration: 'underline',
                               textAlign: 'center'
                             }}>
-                              Přidat
+                              Přidat do košíku
                             </div>
                           </Link>
                         </div>
@@ -724,7 +724,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
                 {/* VYBRÁNO PRO VÁS Section */}
                 <div style={{ display: 'flex', flexDirection: 'column', borderBottom: '1px solid #000', minHeight: '0', flex: '0 0 auto' }}>
-                  <div style={{ paddingTop: '20px', paddingBottom: '12px', paddingLeft: '16px', paddingRight: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
+                  <div style={{ paddingTop: '12px', paddingBottom: '8px', paddingLeft: '16px', paddingRight: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
                     <button
                       onClick={() => {
                         if (vybrranoRef.current) {
@@ -837,10 +837,10 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         <Link
                           href={`/produkty/${product.slug}`}
                           onClick={onClose}
-                          style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '8px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px', textDecoration: 'none' }}
+                          style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '6px', paddingBottom: '12px', paddingLeft: '16px', paddingRight: '16px', textDecoration: 'none' }}
                           className="hover:opacity-80 transition-opacity"
                         >
-                          <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             {product.image && (
                               <img
                                 src={product.image}
@@ -887,7 +887,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                               textDecoration: 'underline',
                               textAlign: 'center'
                             }}>
-                              Přidat
+                              Přidat do košíku
                             </div>
                         </Link>
                       </div>
@@ -898,7 +898,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 {/* PROHLÍŽELI JSTE Section - never show when items in cart */}
                 {recentlyViewed.length > 0 && items.length === 0 && (
                   <div style={{ display: 'flex', flexDirection: 'column', borderBottom: '1px solid #000', minHeight: '0', flex: '0 0 auto' }}>
-                  <div style={{ paddingTop: '20px', paddingBottom: '12px', paddingLeft: '16px', paddingRight: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
+                  <div style={{ paddingTop: '12px', paddingBottom: '8px', paddingLeft: '16px', paddingRight: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
                     <button
                       onClick={() => {
                         if (vybrranoRef.current) {
@@ -1011,10 +1011,10 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                           <Link
                             href={`/produkty/${product.slug}`}
                             onClick={onClose}
-                            style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '8px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px', textDecoration: 'none' }}
+                            style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '6px', paddingBottom: '12px', paddingLeft: '16px', paddingRight: '16px', textDecoration: 'none' }}
                             className="hover:opacity-80 transition-opacity"
                           >
-                            <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                               {product.image && (
                                 <img
                                   src={product.image}
@@ -1061,7 +1061,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                               textDecoration: 'underline',
                               textAlign: 'center'
                             }}>
-                              Přidat
+                              Přidat do košíku
                             </div>
                           </Link>
                         </div>
