@@ -287,13 +287,13 @@ export default function CartPage() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col relative">
-      {/* Vertical lines at product edges (995px wide, centered in 50% container) - hidden on mobile */}
+      {/* Vertical lines at product edges (995px wide, centered) - stop at footer top */}
       <div className="hidden md:block" style={{
         position: 'fixed',
         left: '50%',
         marginLeft: '-497.5px',
         top: 0,
-        bottom: 0,
+        height: 'calc(100vh - 80px)',
         width: '1px',
         backgroundColor: '#000',
         zIndex: 5
@@ -303,7 +303,7 @@ export default function CartPage() {
         left: '50%',
         marginLeft: '497.5px',
         top: 0,
-        bottom: 0,
+        height: 'calc(100vh - 80px)',
         width: '1px',
         backgroundColor: '#000',
         zIndex: 5
@@ -437,7 +437,7 @@ export default function CartPage() {
         </div>
       </div>
 
-      {/* VYBRÁNO PRO VÁS Section */}
+      {/* VYBRÁNO PRO VÁS Section - compact height */}
       <div style={{
         maxWidth: '995px',
         marginLeft: 'auto',
@@ -449,8 +449,8 @@ export default function CartPage() {
         width: '100%'
       }}>
         <div style={{
-          paddingTop: '20px',
-          paddingBottom: '12px',
+          paddingTop: '16px',
+          paddingBottom: '8px',
           textAlign: 'center'
         }}>
           <h2 style={{
@@ -466,7 +466,7 @@ export default function CartPage() {
             VYBRÁNO PRO VÁS
           </h2>
         </div>
-        {/* Horizontal scroll container */}
+        {/* Horizontal scroll container - shows 1.5 products on desktop */}
         <div 
           style={{
             display: 'flex',
@@ -479,10 +479,11 @@ export default function CartPage() {
             WebkitOverflowScrolling: 'touch',
             scrollbarWidth: 'none',
             scrollSnapType: 'x mandatory',
-            paddingBottom: '16px',
+            paddingBottom: '8px',
             cursor: 'grab',
             userSelect: 'none',
-            WebkitUserSelect: 'none'
+            WebkitUserSelect: 'none',
+            minHeight: '0'
           }}
         >
           {selectedProducts.map((product, index) => (
@@ -490,10 +491,10 @@ export default function CartPage() {
               {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
               <Link
                 href={`/produkty/${product.slug}`}
-                style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '8px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px', textDecoration: 'none' }}
+                style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '4px', paddingBottom: '4px', paddingLeft: '12px', paddingRight: '12px', textDecoration: 'none' }}
                 className="hover:opacity-80 transition-opacity"
               >
-                <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #000' }}>
+                <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #000' }}>
                   {product.image && (
                     <img
                       src={product.image}
@@ -509,38 +510,38 @@ export default function CartPage() {
                 </div>
                 <h4 style={{
                   fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '11px',
+                  fontSize: '10px',
                   fontWeight: 700,
                   textTransform: 'uppercase',
                   marginTop: 0,
-                  marginBottom: '4px',
+                  marginBottom: '2px',
                   letterSpacing: '0.03em',
                   fontStretch: 'condensed',
                   color: '#000000',
-                  lineHeight: '1.2',
+                  lineHeight: '1.1',
                   textAlign: 'center'
                 }}>
                   {product.name}
                 </h4>
                 <p style={{
                   fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '10px',
+                  fontSize: '9px',
                   fontWeight: 400,
-                  lineHeight: '1.2',
+                  lineHeight: '1.1',
                   color: '#000000',
-                  margin: '0 0 8px 0',
+                  margin: '0 0 2px 0',
                   textAlign: 'center'
                 }}>{product.price} Kč</p>
                 <div style={{
                   fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '9px',
+                  fontSize: '8px',
                   fontWeight: 400,
-                  lineHeight: '1.2',
+                  lineHeight: '1.1',
                   color: '#000000',
                   textDecoration: 'underline',
                   textAlign: 'center'
                 }}>
-                  Přidat do košíku
+                  Přidat
                 </div>
               </Link>
             </div>
@@ -559,9 +560,11 @@ export default function CartPage() {
         backgroundColor: '#fff',
         borderTop: '1px solid #000',
         zIndex: 10,
-        padding: '16px',
-        paddingBottom: '16px',
-        boxSizing: 'border-box'
+        padding: '12px 16px',
+        boxSizing: 'border-box',
+        height: '80px',
+        display: 'flex',
+        alignItems: 'center'
       }}>
         <button
           onClick={() => router.push('/pokladna')}
