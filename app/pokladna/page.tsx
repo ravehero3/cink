@@ -316,47 +316,7 @@ export default function CheckoutPage() {
           }
         }
       `}</style>
-      {/* Single Header */}
-      <header style={{
-        height: '42px',
-        borderBottom: '1px solid #000',
-        display: 'grid',
-        gridTemplateColumns: '1fr auto 1fr',
-        alignItems: 'center',
-        padding: '0 16px'
-      }}>
-        <button
-          onClick={() => router.back()}
-          style={{
-            background: 'none',
-            border: 'none',
-            width: '24px',
-            height: '24px',
-            display: 'flex',
-            alignItems: 'center',
-            cursor: 'pointer',
-            padding: 0
-          }}
-          aria-label="Zpět"
-        >
-          <svg width="10" height="16" viewBox="0 0 10 16" fill="none" stroke="#000" strokeWidth="1.4">
-            <path d="M8.5 1L1.5 8l7 7"/>
-          </svg>
-        </button>
-        <a href="/" style={{ 
-          fontFamily: '"Helvetica Neue Condensed Bold", "Arial Narrow", Impact, sans-serif', 
-          fontWeight: 800, 
-          fontSize: '22px', 
-          letterSpacing: '.02em', 
-          textTransform: 'uppercase', 
-          textDecoration: 'none', 
-          color: '#000',
-          fontStretch: 'condensed'
-        }}>
-          UFO SPORT
-        </a>
-        <div></div>
-      </header>
+      
 
       {/* Main Layout */}
       <div className="checkout-grid" style={{
@@ -510,10 +470,41 @@ export default function CheckoutPage() {
                   <div style={{ flex: 1, height: '1px', background: '#d9d9d9' }}></div>
                 </div>
 
+                {/* Google Button - Links to Login Page */}
+                <a
+                  href="/prihlaseni"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    border: '1px solid #000',
+                    backgroundColor: '#fff',
+                    color: '#000',
+                    gap: '8px',
+                    width: '100%',
+                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '13px',
+                    padding: '11.8px 25.6px',
+                    borderRadius: '4px',
+                    letterSpacing: '0.05em',
+                    textDecoration: 'none',
+                    transition: 'all 0.3s',
+                    cursor: 'pointer'
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.target as HTMLElement).style.backgroundColor = '#000';
+                    (e.target as HTMLElement).style.color = '#fff';
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.target as HTMLElement).style.backgroundColor = '#fff';
+                    (e.target as HTMLElement).style.color = '#000';
+                  }}
+                >
                   <svg width="18" height="18" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
                     <path fill="currentColor" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
                   </svg>
-                  PŘI HLÁSIT SE PŘES GOOGLE
+                  PŘIHLÁSIT SE PŘES GOOGLE
+                </a>
               </section>
             )}
 
@@ -996,19 +987,19 @@ export default function CheckoutPage() {
                 borderBottom: '1px solid #000'
               }}>
                 <div style={{
-                  background: '#f2f2f2',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  padding: '12px'
+                  overflow: 'hidden'
                 }}>
                   <img
                     src={item.image}
                     alt={item.name}
                     style={{
                       width: '100%',
-                      height: 'auto',
-                      display: 'block'
+                      height: '100%',
+                      display: 'block',
+                      objectFit: 'cover'
                     }}
                   />
                 </div>
