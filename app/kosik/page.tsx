@@ -393,6 +393,99 @@ export default function CartPage() {
         </div>
       </div>
 
+      {/* VYBRÁNO PRO VÁS Section */}
+      <div style={{
+        maxWidth: '995px',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        paddingLeft: '16px',
+        paddingRight: '16px',
+        marginBottom: '80px',
+        borderBottom: '1px solid #000'
+      }}>
+        <div style={{
+          paddingTop: '20px',
+          paddingBottom: '12px',
+          textAlign: 'center'
+        }}>
+          <h2 style={{
+            fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+            fontSize: '13px',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            letterSpacing: '0.03em',
+            fontStretch: 'condensed',
+            margin: '0',
+            color: '#000'
+          }}>
+            VYBRÁNO PRO VÁS
+          </h2>
+        </div>
+        {/* Horizontal scroll container */}
+        <div 
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+            gap: '12px',
+            paddingBottom: '16px',
+            overflow: 'hidden'
+          }}
+        >
+          {/* Show 3 placeholder items */}
+          {[1,2,3].map(i => (
+            <a
+              key={i}
+              href="/"
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                textDecoration: 'none',
+                color: '#000'
+              }}
+            >
+              <div style={{
+                position: 'relative',
+                width: '100%',
+                paddingBottom: '100%',
+                backgroundColor: '#f5f5f5',
+                overflow: 'hidden',
+                marginBottom: '8px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                border: '1px solid #000'
+              }}>
+                {/* Placeholder */}
+              </div>
+              <h4 style={{
+                fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '11px',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                marginTop: 0,
+                marginBottom: '4px',
+                letterSpacing: '0.03em',
+                fontStretch: 'condensed',
+                color: '#000000',
+                lineHeight: '1.2',
+                textAlign: 'center'
+              }}>
+                PRODUKT
+              </h4>
+              <p style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '10px',
+                fontWeight: 400,
+                lineHeight: '1.2',
+                color: '#000000',
+                margin: '0 0 8px 0',
+                textAlign: 'center'
+              }}>XXX Kč</p>
+            </a>
+          ))}
+        </div>
+      </div>
+
       {/* Sticky Footer with Checkout Button */}
       <div style={{
         position: 'fixed',
@@ -405,7 +498,8 @@ export default function CartPage() {
         borderTop: '1px solid #000',
         zIndex: 10,
         padding: '16px',
-        paddingBottom: '16px'
+        paddingBottom: '16px',
+        boxSizing: 'border-box'
       }}>
         <button
           onClick={() => router.push('/pokladna')}

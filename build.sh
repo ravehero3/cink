@@ -1,3 +1,5 @@
 #!/bin/bash
 # Build script for Docker - skips database operations
-npx prisma generate && next build
+set -e
+npx prisma generate
+npx next build
