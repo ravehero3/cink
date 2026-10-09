@@ -330,7 +330,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
                 {/* VYBRÁNO PRO VÁS Section */}
                 <div style={{ display: 'flex', flexDirection: 'column', borderBottom: '1px solid #000', minHeight: '0', flex: 1 }}>
-                  <div style={{ paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px', borderBottom: '1px solid #000' }}>
+                  <div style={{ paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px' }}>
                     <h3 
                       style={{
                         fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -362,7 +362,9 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       scrollSnapType: 'x mandatory',
                       flex: 1,
                       cursor: 'grab',
-                      minHeight: '0'
+                      minHeight: '0',
+                      userSelect: 'none',
+                      WebkitUserSelect: 'none'
                     }}
                     className="select-none"
                   >
@@ -433,7 +435,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 {/* PROHLÍŽELI JSTE Section */}
                 {recentlyViewed.length > 0 && (
                   <div style={{ display: 'flex', flexDirection: 'column', borderBottom: '1px solid #000', minHeight: '0', flex: 1 }}>
-                    <div style={{ paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px', borderBottom: '1px solid #000' }}>
+                    <div style={{ paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px' }}>
                       <h3 
                         style={{
                           fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -465,7 +467,9 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         scrollSnapType: 'x mandatory',
                         flex: 1,
                         cursor: 'grab',
-                        minHeight: '0'
+                        minHeight: '0',
+                        userSelect: 'none',
+                        WebkitUserSelect: 'none'
                       }}
                       className="select-none"
                     >
