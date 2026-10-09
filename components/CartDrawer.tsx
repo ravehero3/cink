@@ -536,32 +536,17 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                               margin: '0 0 8px 0',
                               textAlign: 'center'
                             }}>{product.price} Kč</p>
-                            <button
-                              onClick={() => {}}
-                              style={{
-                                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                                fontSize: '12px',
-                                fontWeight: 700,
-                                lineHeight: '1.4',
-                                color: '#ffffff',
-                                backgroundColor: '#000000',
-                                padding: '8px 12px',
-                                borderRadius: '4px',
-                                border: 'none',
-                                textAlign: 'center',
-                                cursor: 'pointer',
-                                transition: 'all 0.3s',
-                                width: '100%'
-                              }}
-                              onMouseEnter={(e) => {
-                                (e.currentTarget as HTMLElement).style.backgroundColor = '#333333';
-                              }}
-                              onMouseLeave={(e) => {
-                                (e.currentTarget as HTMLElement).style.backgroundColor = '#000000';
-                              }}
-                            >
+                            <div style={{
+                              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                              fontSize: '11px',
+                              fontWeight: 400,
+                              lineHeight: '1.2',
+                              color: '#000000',
+                              textDecoration: 'underline',
+                              textAlign: 'center'
+                            }}>
                               Přidat do košíku
-                            </button>
+                            </div>
                           </Link>
                         </div>
                       ))}
@@ -821,32 +806,17 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                               margin: '0 0 8px 0',
                               textAlign: 'center'
                             }}>{product.price} Kč</p>
-                            <button
-                              onClick={() => {}}
-                              style={{
-                                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                                fontSize: '12px',
-                                fontWeight: 700,
-                                lineHeight: '1.4',
-                                color: '#ffffff',
-                                backgroundColor: '#000000',
-                                padding: '8px 12px',
-                                borderRadius: '4px',
-                                border: 'none',
-                                textAlign: 'center',
-                                cursor: 'pointer',
-                                transition: 'all 0.3s',
-                                width: '100%'
-                              }}
-                              onMouseEnter={(e) => {
-                                (e.currentTarget as HTMLElement).style.backgroundColor = '#333333';
-                              }}
-                              onMouseLeave={(e) => {
-                                (e.currentTarget as HTMLElement).style.backgroundColor = '#000000';
-                              }}
-                            >
+                            <div style={{
+                              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                              fontSize: '11px',
+                              fontWeight: 400,
+                              lineHeight: '1.2',
+                              color: '#000000',
+                              textDecoration: 'underline',
+                              textAlign: 'center'
+                            }}>
                               Přidat do košíku
-                            </button>
+                            </div>
                           </Link>
                         </div>
                       ))}

@@ -286,7 +286,7 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex flex-col relative">
+    <div className="min-h-screen bg-white flex flex-col relative" style={{ paddingBottom: '80px' }}>
       {/* Vertical lines at product edges (995px wide, centered) - stop at footer top */}
       <div className="hidden md:block" style={{
         position: 'fixed',
@@ -412,7 +412,7 @@ export default function CartPage() {
         </div>
       </div>
 
-      <div className="flex-1 flex justify-center" style={{ paddingBottom: '80px' }}>
+      <div className="flex-1 flex justify-center" style={{ marginBottom: '40px' }}>
         <div className="w-full md:w-[995px]" style={{ position: 'relative' }}>
           {items.map((item, index) => (
             <CartLineItem
@@ -444,7 +444,7 @@ export default function CartPage() {
         marginRight: 'auto',
         paddingLeft: '16px',
         paddingRight: '16px',
-        marginBottom: '80px',
+        marginBottom: '0px',
         borderBottom: '1px solid #000',
         width: '100%'
       }}>
@@ -494,7 +494,7 @@ export default function CartPage() {
                 style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '4px', paddingBottom: '4px', paddingLeft: '12px', paddingRight: '12px', textDecoration: 'none' }}
                 className="hover:opacity-80 transition-opacity"
               >
-                <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #000' }}>
+                <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   {product.image && (
                     <img
                       src={product.image}
