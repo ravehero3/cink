@@ -331,7 +331,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
                 {/* VYBRÁNO PRO VÁS Section */}
                 <div style={{ display: 'flex', flexDirection: 'column', borderBottom: '1px solid #000', minHeight: '0', flex: 1 }}>
-                  <div style={{ paddingTop: '8px', paddingBottom: '0px', paddingLeft: '16px', paddingRight: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px', position: 'relative' }}>
+                  <div style={{ paddingTop: '4px', paddingBottom: '0px', paddingLeft: '16px', paddingRight: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px', position: 'relative' }}>
                     <button
                       onClick={() => {
                         if (vybrranoRef.current) {
@@ -445,7 +445,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         <Link
                           href={`/produkty/${product.slug}`}
                           onClick={onClose}
-                          style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px', textDecoration: 'none' }}
+                          style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '8px', paddingBottom: '8px', paddingLeft: '12px', paddingRight: '12px', textDecoration: 'none' }}
                           className="hover:opacity-80 transition-opacity"
                         >
                           <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -468,7 +468,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                             fontWeight: 700,
                             textTransform: 'uppercase',
                             marginTop: 0,
-                            marginBottom: '6px',
+                            marginBottom: '2px',
                             letterSpacing: '0.03em',
                             fontStretch: 'condensed',
                             color: '#000000',
@@ -483,7 +483,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                             fontWeight: 400,
                             lineHeight: '1.2',
                             color: '#000000',
-                            margin: '0 0 8px 0',
+                            margin: '0',
                             textAlign: 'center'
                           }}>{product.price} Kč</p>
                           <div style={{
@@ -862,7 +862,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                             fontWeight: 700,
                             textTransform: 'uppercase',
                             marginTop: 0,
-                            marginBottom: '6px',
+                            marginBottom: '2px',
                             letterSpacing: '0.03em',
                             fontStretch: 'condensed',
                             color: '#000000',
@@ -877,7 +877,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                             fontWeight: 400,
                             lineHeight: '1.2',
                             color: '#000000',
-                            margin: '0 0 8px 0',
+                            margin: '0',
                             textAlign: 'center'
                           }}>{product.price} Kč</p>
                           <div style={{
