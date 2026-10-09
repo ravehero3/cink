@@ -97,6 +97,7 @@ export async function GET(request: Request) {
           images: true,
           sizes: true,
           totalStock: true,
+          productImage: true,
         },
       }),
       prisma.product.count({ where }),

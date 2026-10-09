@@ -301,7 +301,7 @@ export default function SavedProductsPage() {
         size: availableSize,
         quantity: 1,
         price: Number(product.price),
-        image: product.images[0],
+        image: product.productImage || product.images[0],
         color: product.color,
         category: product.category,
       });

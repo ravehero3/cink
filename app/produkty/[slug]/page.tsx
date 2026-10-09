@@ -138,7 +138,7 @@ export default function ProductDetailPage() {
       size: selectedSize,
       quantity,
       price: Number(product.price),
-      image: product.images[0],
+      image: product.productImage || product.images[0],
       color: product.color,
       category: product.category,
     });
