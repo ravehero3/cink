@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { useSession, signIn } from 'next-auth/react';
 import { useCartStore, useCartHydration } from '@/lib/cart-store';
 import { calculateShippingCost, getAmountToFreeShipping } from '@/lib/shipping';
 
@@ -513,7 +513,7 @@ export default function CheckoutPage() {
                 {/* Google Button */}
                 <button
                   type="button"
-                  onClick={() => {}}
+                  onClick={() => signIn('google', { redirect: false })}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
