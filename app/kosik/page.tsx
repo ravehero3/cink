@@ -6,6 +6,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import CartLineItem from '@/components/CartLineItem';
 import AnimatedButton from '@/components/AnimatedButton';
 import DeleteConfirmModal from '@/components/DeleteConfirmModal';
 
@@ -378,242 +379,24 @@ export default function CartPage() {
       <div className="flex-1 flex justify-center" style={{ paddingBottom: '80px' }}>
         <div className="w-full md:w-[995px]" style={{ position: 'relative' }}>
           {items.map((item, index) => (
-            <div
+            <CartLineItem
               key={`${item.productId}-${item.size}`}
-              className="w-full md:w-[995px] h-auto"
-              style={{
-                margin: '0 auto',
-                borderTop: index === 0 ? '1px solid #000' : 'none',
-                borderBottom: '1px solid #000',
-                padding: '16px',
-                paddingBottom: '16px',
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between'
-              }}
-            >
-              <div className="flex flex-row gap-4 md:gap-8">
-                <Link href={`/produkty/${item.slug}`} style={{ flexShrink: 0 }}>
-                  <div className="w-[120px] h-[120px] md:w-[200px] md:h-[200px]" style={{
-                    border: '1px solid #000',
-                    backgroundColor: '#f5f5f5',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    overflow: 'hidden'
-                  }}>
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      style={{ objectFit: 'cover', width: '100%', height: '100%' }}
-                    />
-                  </div>
-                </Link>
-
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                  <div>
-                    <Link
-                      href={`/produkty/${item.slug}`}
-                      style={{ textDecoration: 'none', color: '#000' }}
-                      className="hover:opacity-60 transition-opacity"
-                    >
-                      <h3 style={{
-                        fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                        fontSize: '16px',
-                        fontWeight: 700,
-                        textTransform: 'uppercase',
-                        marginBottom: '12px',
-                        marginTop: 0,
-                        lineHeight: '1.2',
-                        letterSpacing: '0.03em',
-                        fontStretch: 'condensed',
-                        color: '#000'
-                      }}>
-                        {item.name}
-                      </h3>
-                    </Link>
-                    
-                    <p style={{
-                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '14px',
-                      fontWeight: 400,
-                      lineHeight: '1.4',
-                      color: '#000',
-                      marginBottom: '16px',
-                      marginTop: 0
-                    }}>
-                      {item.price} Kč
-                    </p>
-
-                    <p style={{
-                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '14px',
-                      fontWeight: 400,
-                      lineHeight: '1.4',
-                      color: '#000',
-                      marginBottom: '4px',
-                      marginTop: 0
-                    }}>
-                      Barva: {item.color}
-                    </p>
-
-                    <p style={{
-                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '14px',
-                      fontWeight: 400,
-                      lineHeight: '1.4',
-                      color: '#000',
-                      marginBottom: '12px',
-                      marginTop: 0
-                    }}>
-                      Velikost: {item.size}
-                    </p>
-
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '12px'
-                    }}>
-                      <span style={{
-                        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                        fontSize: '14px',
-                        fontWeight: 400,
-                        lineHeight: '1.4',
-                        color: '#000'
-                      }}>
-                        Množství:
-                      </span>
-                      <button
-                        onClick={() => updateQuantity(item.productId, item.size, item.quantity - 1)}
-                        style={{
-                          padding: '0 6px',
-                          border: 'none',
-                          background: 'none',
-                          cursor: 'pointer',
-                          fontSize: '16px',
-                          fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                          fontWeight: 400,
-                          color: '#000'
-                        }}
-                        className="hover:opacity-60 transition-opacity"
-                      >
-                        −
-                      </button>
-                      <span style={{
-                        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                        fontSize: '14px',
-                        fontWeight: 400,
-                        lineHeight: '1.4',
-                        color: '#000',
-                        minWidth: '20px',
-                        textAlign: 'center'
-                      }}>
-                        {item.quantity}
-                      </span>
-                      <button
-                        onClick={() => updateQuantity(item.productId, item.size, item.quantity + 1)}
-                        style={{
-                          padding: '0 6px',
-                          border: 'none',
-                          background: 'none',
-                          cursor: 'pointer',
-                          fontSize: '16px',
-                          fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                          fontWeight: 400,
-                          color: '#000'
-                        }}
-                        className="hover:opacity-60 transition-opacity"
-                      >
-                        +
-                      </button>
-                    </div>
-
-                    <Link
-                      href="/"
-                      style={{
-                        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                        fontSize: '12px',
-                        fontWeight: 400,
-                        lineHeight: '1.4',
-                        color: '#666',
-                        textDecoration: 'underline',
-                        display: 'none',
-                        marginTop: '12px'
-                      }}
-                      className="hover:opacity-60 transition-opacity"
-                    >
-                      Estimate shipping options
-                    </Link>
-                  </div>
-                </div>
-              </div>
-
-              {/* Buttons section */}
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                paddingTop: '16px',
-                borderTop: '1px solid #f0f0f0'
-              }}>
-                <button
-                  onClick={() => handleSaveForLater(item)}
-                  disabled={savingItem === item.productId}
-                  style={{
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '12px',
-                    fontWeight: 400,
-                    lineHeight: '1.4',
-                    color: '#000',
-                    textDecoration: 'underline',
-                    border: 'none',
-                    background: 'none',
-                    cursor: savingItem === item.productId ? 'not-allowed' : 'pointer',
-                    padding: 0,
-                    textAlign: 'left',
-                    opacity: savingItem === item.productId ? 0.6 : 1
-                  }}
-                  className="hover:opacity-60 transition-opacity"
-                >
-                  {savingItem === item.productId ? 'Ukládám...' : 'Uložit'}
-                </button>
-                <div style={{ display: 'flex', gap: '32px', alignItems: 'center' }}>
-                  <Link
-                    href={`/produkty/${item.slug}`}
-                    style={{
-                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '12px',
-                      fontWeight: 400,
-                      lineHeight: '1.4',
-                      color: '#000',
-                      textDecoration: 'underline'
-                    }}
-                    className="hover:opacity-60 transition-opacity"
-                  >
-                    Upravit
-                  </Link>
-                  <button
-                    onClick={() => handleOpenDeleteModal(item.productId, item.name, item.size)}
-                    style={{
-                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '12px',
-                      fontWeight: 400,
-                      lineHeight: '1.4',
-                      color: '#000',
-                      textDecoration: 'underline',
-                      border: 'none',
-                      background: 'none',
-                      cursor: 'pointer',
-                      padding: 0,
-                      textAlign: 'right'
-                    }}
-                    className="hover:opacity-60 transition-opacity"
-                  >
-                    Smazat
-                  </button>
-                </div>
-              </div>
-            </div>
+              productId={item.productId}
+              name={item.name}
+              price={item.price}
+              image={item.image}
+              slug={item.slug}
+              color={item.color}
+              size={item.size}
+              quantity={item.quantity}
+              category={item.category}
+              layout="page"
+              isFirstItem={index === 0}
+              isSavingForLater={savingItem === item.productId}
+              onUpdateQuantity={updateQuantity}
+              onRemove={handleOpenDeleteModal}
+              onSaveForLater={() => handleSaveForLater(item)}
+            />
           ))}
         </div>
       </div>
