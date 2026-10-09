@@ -121,45 +121,82 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
     let startX: number;
     let scrollLeft: number;
 
-    element.addEventListener('mousedown', (e) => {
+    const handleMouseDown = (e: MouseEvent) => {
       isDown = true;
       startX = e.pageX - element.offsetLeft;
       scrollLeft = element.scrollLeft;
-    });
+      element.style.cursor = 'grabbing';
+    };
 
-    element.addEventListener('mouseleave', () => {
+    const handleMouseLeave = () => {
       isDown = false;
-    });
+      element.style.cursor = 'grab';
+    };
 
-    element.addEventListener('mouseup', () => {
+    const handleMouseUp = () => {
       isDown = false;
-    });
+      element.style.cursor = 'grab';
+    };
 
-    element.addEventListener('mousemove', (e) => {
+    const handleMouseMove = (e: MouseEvent) => {
       if (!isDown) return;
       e.preventDefault();
       const x = e.pageX - element.offsetLeft;
       const walk = (x - startX) * 1;
       element.scrollLeft = scrollLeft - walk;
-    });
+    };
 
-    // Touch support
-    element.addEventListener('touchstart', (e) => {
+    const handleTouchStart = (e: TouchEvent) => {
       startX = e.touches[0].pageX - element.offsetLeft;
       scrollLeft = element.scrollLeft;
-    });
+    };
 
-    element.addEventListener('touchmove', (e) => {
+    const handleTouchMove = (e: TouchEvent) => {
       const x = e.touches[0].pageX - element.offsetLeft;
       const walk = (x - startX) * 1;
       element.scrollLeft = scrollLeft - walk;
-    });
+    };
+
+    // Remove old listeners if they exist
+    element.removeEventListener('mousedown', handleMouseDown);
+    element.removeEventListener('mouseleave', handleMouseLeave);
+    element.removeEventListener('mouseup', handleMouseUp);
+    element.removeEventListener('mousemove', handleMouseMove);
+    element.removeEventListener('touchstart', handleTouchStart);
+    element.removeEventListener('touchmove', handleTouchMove);
+
+    // Add listeners
+    element.addEventListener('mousedown', handleMouseDown);
+    element.addEventListener('mouseleave', handleMouseLeave);
+    element.addEventListener('mouseup', handleMouseUp);
+    element.addEventListener('mousemove', handleMouseMove);
+    element.addEventListener('touchstart', handleTouchStart);
+    element.addEventListener('touchmove', handleTouchMove);
+
+    return () => {
+      element.removeEventListener('mousedown', handleMouseDown);
+      element.removeEventListener('mouseleave', handleMouseLeave);
+      element.removeEventListener('mouseup', handleMouseUp);
+      element.removeEventListener('mousemove', handleMouseMove);
+      element.removeEventListener('touchstart', handleTouchStart);
+      element.removeEventListener('touchmove', handleTouchMove);
+    };
   };
 
   useEffect(() => {
-    if (isOpen) {
-      enableDragScroll(vybrranoRef);
-      enableDragScroll(prohlizeniRef);
+    if (isOpen && vybrranoRef.current && prohlizeniRef.current) {
+      // Set initial cursor
+      vybrranoRef.current.style.cursor = 'grab';
+      prohlizeniRef.current.style.cursor = 'grab';
+      
+      // Enable drag scroll
+      const cleanup1 = enableDragScroll(vybrranoRef);
+      const cleanup2 = enableDragScroll(prohlizeniRef);
+      
+      return () => {
+        cleanup1?.();
+        cleanup2?.();
+      };
     }
   }, [isOpen]);
 
