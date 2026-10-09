@@ -564,6 +564,217 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               </div>
             ) : (
               <div style={{ padding: '0', display: 'flex', flexDirection: 'column' }}>
+                {/* VYBRÁNO PRO VÁS Section - show even with items */}
+                <div style={{ display: 'flex', flexDirection: 'column', borderBottom: '1px solid #000', minHeight: '0', flex: '0 0 auto' }}>
+                  <div style={{ paddingTop: '12px', paddingBottom: '12px', paddingLeft: '16px', paddingRight: '16px' }}>
+                    <h3 
+                      style={{
+                        fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                        fontSize: '13px',
+                        fontWeight: 700,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.03em',
+                        fontStretch: 'condensed',
+                        margin: '0',
+                        textAlign: 'center'
+                      }}
+                    >
+                      VYBRÁNO PRO VÁS
+                    </h3>
+                  </div>
+                  {/* Horizontal scroll container - 1.5 products show */}
+                  <div 
+                    ref={vybrranoRef}
+                    style={{ 
+                      display: 'flex', 
+                      overflowX: 'auto', 
+                      overflowY: 'hidden', 
+                      gap: '0', 
+                      paddingLeft: '0', 
+                      paddingRight: '0', 
+                      scrollBehavior: 'smooth', 
+                      WebkitOverflowScrolling: 'touch',
+                      scrollbarWidth: 'none',
+                      scrollSnapType: 'x mandatory',
+                      flex: 1,
+                      cursor: 'grab',
+                      minHeight: '0',
+                      userSelect: 'none',
+                      WebkitUserSelect: 'none'
+                    }}
+                    className="select-none"
+                  >
+                    {selectedProducts.map((product, index) => (
+                      <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(66.666% - 0.67px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
+                        {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
+                        <Link
+                          href={`/produkty/${product.slug}`}
+                          onClick={onClose}
+                          style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '8px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px', textDecoration: 'none' }}
+                          className="hover:opacity-80 transition-opacity"
+                        >
+                          <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #000' }}>
+                            {product.image && (
+                              <img
+                                src={product.image}
+                                alt={product.name}
+                                style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                                loading="lazy"
+                                onError={(e) => {
+                                  const img = e.target as HTMLImageElement;
+                                  img.style.display = 'none';
+                                }}
+                              />
+                            )}
+                          </div>
+                          <h4 style={{
+                            fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                            fontSize: '11px',
+                            fontWeight: 700,
+                            textTransform: 'uppercase',
+                            marginTop: 0,
+                            marginBottom: '4px',
+                            letterSpacing: '0.03em',
+                            fontStretch: 'condensed',
+                            color: '#000000',
+                            lineHeight: '1.2',
+                            textAlign: 'center'
+                          }}>
+                            {product.name}
+                          </h4>
+                          <p style={{
+                            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                            fontSize: '10px',
+                            fontWeight: 400,
+                            lineHeight: '1.2',
+                            color: '#000000',
+                            margin: '0 0 8px 0',
+                            textAlign: 'center'
+                          }}>{product.price} Kč</p>
+                          <div style={{
+                            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                            fontSize: '9px',
+                            fontWeight: 400,
+                            lineHeight: '1.2',
+                            color: '#000000',
+                            textDecoration: 'underline',
+                            textAlign: 'center'
+                          }}>
+                            Přidat do košíku
+                          </div>
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* PROHLÍŽELI JSTE Section */}
+                {recentlyViewed.length > 0 && (
+                  <div style={{ display: 'flex', flexDirection: 'column', borderBottom: '1px solid #000', minHeight: '0', flex: '0 0 auto' }}>
+                    <div style={{ paddingTop: '12px', paddingBottom: '12px', paddingLeft: '16px', paddingRight: '16px' }}>
+                      <h3 
+                        style={{
+                          fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                          fontSize: '13px',
+                          fontWeight: 700,
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.03em',
+                          fontStretch: 'condensed',
+                          margin: '0',
+                          textAlign: 'center'
+                        }}
+                      >
+                        PROHLÍŽELI JSTE
+                      </h3>
+                    </div>
+                    {/* Horizontal scroll container - 1.5 products show */}
+                    <div 
+                      ref={prohlizeniRef}
+                      style={{ 
+                        display: 'flex', 
+                        overflowX: 'auto', 
+                        overflowY: 'hidden', 
+                        gap: '0', 
+                        paddingLeft: '0', 
+                        paddingRight: '0', 
+                        scrollBehavior: 'smooth', 
+                        WebkitOverflowScrolling: 'touch',
+                        scrollbarWidth: 'none',
+                        scrollSnapType: 'x mandatory',
+                        flex: 1,
+                        cursor: 'grab',
+                        minHeight: '0',
+                        userSelect: 'none',
+                        WebkitUserSelect: 'none'
+                      }}
+                      className="select-none"
+                    >
+                      {recentlyViewed.map((product, index) => (
+                        <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(66.666% - 0.67px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
+                          {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
+                          <Link
+                            href={`/produkty/${product.slug}`}
+                            onClick={onClose}
+                            style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '8px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px', textDecoration: 'none' }}
+                            className="hover:opacity-80 transition-opacity"
+                          >
+                            <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #000' }}>
+                              {product.image && (
+                                <img
+                                  src={product.image}
+                                  alt={product.name}
+                                  style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                                  loading="lazy"
+                                  onError={(e) => {
+                                    const img = e.target as HTMLImageElement;
+                                    img.style.display = 'none';
+                                  }}
+                                />
+                              )}
+                            </div>
+                            <h4 style={{
+                              fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                              fontSize: '11px',
+                              fontWeight: 700,
+                              textTransform: 'uppercase',
+                              marginTop: 0,
+                              marginBottom: '4px',
+                              letterSpacing: '0.03em',
+                              fontStretch: 'condensed',
+                              color: '#000000',
+                              lineHeight: '1.2',
+                              textAlign: 'center'
+                            }}>
+                              {product.name}
+                            </h4>
+                            <p style={{
+                              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                              fontSize: '10px',
+                              fontWeight: 400,
+                              lineHeight: '1.2',
+                              color: '#000000',
+                              margin: '0 0 8px 0',
+                              textAlign: 'center'
+                            }}>{product.price} Kč</p>
+                            <div style={{
+                              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                              fontSize: '9px',
+                              fontWeight: 400,
+                              lineHeight: '1.2',
+                              color: '#000000',
+                              textDecoration: 'underline',
+                              textAlign: 'center'
+                            }}>
+                              Přidat do košíku
+                            </div>
+                          </Link>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Cart items */}
                 {items.map((item) => (
                   <CartLineItem
                     key={`${item.productId}-${item.size}`}

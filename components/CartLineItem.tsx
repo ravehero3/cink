@@ -60,7 +60,7 @@ export default function CartLineItem({
   // Modal layout: 143px grid
   if (layout === 'modal') {
     return (
-      <article className={styles.cartItem}>
+      <article className={styles.cartItem} style={{ marginRight: 0, width: '100%', boxSizing: 'border-box' }}>
         {/* Product Image */}
         <div className={styles.media}>
           {image && (
