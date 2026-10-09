@@ -454,7 +454,7 @@ export default function CartPage() {
                       marginBottom: '4px',
                       marginTop: 0
                     }}>
-                      Color: {item.color}
+                      Barva: {item.color}
                     </p>
 
                     <p style={{
@@ -466,7 +466,7 @@ export default function CartPage() {
                       marginBottom: '12px',
                       marginTop: 0
                     }}>
-                      Size: {item.size}
+                      Velikost: {item.size}
                     </p>
 
                     <div style={{
@@ -481,7 +481,7 @@ export default function CartPage() {
                         lineHeight: '1.4',
                         color: '#000'
                       }}>
-                        Quantity:
+                        Množství:
                       </span>
                       <button
                         onClick={() => updateQuantity(item.productId, item.size, item.quantity - 1)}
@@ -575,7 +575,7 @@ export default function CartPage() {
                   }}
                   className="hover:opacity-60 transition-opacity"
                 >
-                  {savingItem === item.productId ? 'Saving...' : 'Save for later'}
+                  {savingItem === item.productId ? 'Ukládám...' : 'Uložit'}
                 </button>
                 <div style={{ display: 'flex', gap: '32px', alignItems: 'center' }}>
                   <Link
@@ -590,7 +590,7 @@ export default function CartPage() {
                     }}
                     className="hover:opacity-60 transition-opacity"
                   >
-                    Edit
+                    Upravit
                   </Link>
                   <button
                     onClick={() => handleOpenDeleteModal(item.productId, item.name, item.size)}
@@ -609,7 +609,7 @@ export default function CartPage() {
                     }}
                     className="hover:opacity-60 transition-opacity"
                   >
-                    Delete
+                    Smazat
                   </button>
                 </div>
               </div>

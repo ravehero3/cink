@@ -631,7 +631,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                               color: 'rgb(0, 0, 0)',
                               margin: '0'
                             }}>
-                              Color: {item.color}
+                              Barva: {item.color}
                             </p>
 
                             <p style={{
@@ -642,7 +642,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                               color: 'rgb(0, 0, 0)',
                               margin: '0'
                             }}>
-                              Size: {item.size}
+                              Velikost: {item.size}
                             </p>
                           </>
                         )}
@@ -657,7 +657,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                           fontWeight: 400,
                           marginTop: 'auto'
                         }}>
-                          <span>Quantity:</span>
+                          <span>Množství:</span>
                           <button
                             onClick={() => updateQuantity(item.productId, item.size, item.quantity - 1)}
                             style={{
@@ -718,7 +718,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                             }}
                             className="hover:opacity-60 transition-opacity"
                           >
-                            Save for later
+                            Uložit
                           </button>
                           <div style={{
                             display: 'flex',
@@ -737,7 +737,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                               }}
                               className="hover:opacity-60 transition-opacity"
                             >
-                              Edit
+                              Upravit
                             </Link>
                             <button
                               onClick={() => handleOpenDeleteModal(item.productId, item.name, item.size)}
@@ -755,7 +755,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                               }}
                               className="hover:opacity-60 transition-opacity"
                             >
-                              Delete
+                              Smazat
                             </button>
                           </div>
                         </div>
