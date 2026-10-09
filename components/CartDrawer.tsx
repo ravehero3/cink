@@ -10,6 +10,7 @@ import { useSavedProductsStore } from '@/lib/saved-products-store';
 import { X } from 'lucide-react';
 import AnimatedButton from './AnimatedButton';
 import DeleteConfirmModal from './DeleteConfirmModal';
+import CartLineItem from './CartLineItem';
 import { useRouter } from 'next/navigation';
 
 function SavedItemsButton({ onClose }: { onClose: () => void }) {
@@ -563,206 +564,23 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               </div>
             ) : (
               <div style={{ padding: '0', display: 'flex', flexDirection: 'column' }}>
-                {items.map((item, index) => (
-                  <div
+                {items.map((item) => (
+                  <CartLineItem
                     key={`${item.productId}-${item.size}`}
-                    style={{
-                      borderBottom: '1px solid #000',
-                      padding: '0',
-                      display: 'flex',
-                      flexDirection: 'column'
-                    }}
-                  >
-                    {/* Image on top left, text on right */}
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                      {/* Image - Full width at top */}
-                      <Link
-                        href={`/produkty/${item.slug}`}
-                        onClick={onClose}
-                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', backgroundColor: '#f5f5f5', overflow: 'hidden', borderBottom: '1px solid #000', aspectRatio: '1/1', width: '100%' }}
-                      >
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          style={{ objectFit: 'contain', width: '100%', height: '100%', maxWidth: '100%', maxHeight: '100%' }}
-                        />
-                      </Link>
-
-                      {/* Product Info - Below image */}
-                      <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                        {/* Name */}
-                        <Link
-                          href={`/produkty/${item.slug}`}
-                          onClick={onClose}
-                          style={{ textDecoration: 'none', color: 'rgb(0, 0, 0)' }}
-                          className="hover:opacity-60 transition-opacity"
-                        >
-                          <h3 style={{
-                            fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                            fontSize: '14px',
-                            fontWeight: 700,
-                            textTransform: 'uppercase',
-                            margin: '0',
-                            lineHeight: '1.2',
-                            letterSpacing: '0.03em',
-                            fontStretch: 'condensed',
-                            color: '#000000'
-                          }}>
-                            {item.name}
-                          </h3>
-                        </Link>
-
-                        {/* Price */}
-                        <p style={{
-                          fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                          fontSize: '13px',
-                          fontWeight: 400,
-                          lineHeight: '1.2',
-                          color: 'rgb(0, 0, 0)',
-                          margin: '0'
-                        }}>
-                          {item.price} Kč
-                        </p>
-
-                        {/* Barva, Velikost, Množství stacked */}
-                        {item.category?.toUpperCase() !== 'CD' && (
-                          <>
-                            <p style={{
-                              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                              fontSize: '12px',
-                              fontWeight: 400,
-                              lineHeight: '1.2',
-                              color: 'rgb(0, 0, 0)',
-                              margin: '0'
-                            }}>
-                              Barva: {item.color}
-                            </p>
-
-                            <p style={{
-                              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                              fontSize: '12px',
-                              fontWeight: 400,
-                              lineHeight: '1.2',
-                              color: 'rgb(0, 0, 0)',
-                              margin: '0'
-                            }}>
-                              Velikost: {item.size}
-                            </p>
-                          </>
-                        )}
-
-                        {/* Quantity */}
-                        <div style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '8px',
-                          fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                          fontSize: '12px',
-                          fontWeight: 400
-                        }}>
-                          <span>Množství:</span>
-                          <button
-                            onClick={() => updateQuantity(item.productId, item.size, item.quantity - 1)}
-                            style={{
-                              padding: '0px 6px',
-                              border: 'none',
-                              background: 'none',
-                              cursor: 'pointer',
-                              fontSize: '14px',
-                              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                              fontWeight: 400,
-                              color: 'rgb(0, 0, 0)',
-                              lineHeight: '1'
-                            }}
-                          >
-                            −
-                          </button>
-                          <span style={{ minWidth: '20px', textAlign: 'center' }}>{item.quantity}</span>
-                          <button
-                            onClick={() => updateQuantity(item.productId, item.size, item.quantity + 1)}
-                            style={{
-                              padding: '0px 6px',
-                              border: 'none',
-                              background: 'none',
-                              cursor: 'pointer',
-                              fontSize: '14px',
-                              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                              fontWeight: 400,
-                              color: 'rgb(0, 0, 0)',
-                              lineHeight: '1'
-                            }}
-                          >
-                            +
-                          </button>
-                        </div>
-
-                        {/* Bottom Actions - Edit and Delete on same line */}
-                        <div style={{
-                          display: 'flex',
-                          justifyContent: 'flex-start',
-                          alignItems: 'center',
-                          paddingTop: '12px',
-                          borderTop: '1px solid #000',
-                          gap: '12px'
-                        }}>
-                          <Link
-                            href={`/produkty/${item.slug}`}
-                            onClick={onClose}
-                            style={{
-                              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                              fontSize: '12px',
-                              fontWeight: 400,
-                              lineHeight: '1.2',
-                              color: 'rgb(0, 0, 0)',
-                              textDecoration: 'underline'
-                            }}
-                            className="hover:opacity-60 transition-opacity"
-                          >
-                            Upravit
-                          </Link>
-                          <button
-                            onClick={() => handleOpenDeleteModal(item.productId, item.name, item.size)}
-                            style={{
-                              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                              fontSize: '12px',
-                              fontWeight: 400,
-                              lineHeight: '1.2',
-                              color: 'rgb(0, 0, 0)',
-                              textDecoration: 'underline',
-                              border: 'none',
-                              background: 'none',
-                              cursor: 'pointer',
-                              padding: '0'
-                            }}
-                            className="hover:opacity-60 transition-opacity"
-                          >
-                            Smazat
-                          </button>
-                        </div>
-
-                        {/* Save for later - below other actions */}
-                        <button
-                          onClick={() => handleSaveForLater(item.productId, item.size)}
-                          style={{
-                            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                            fontSize: '12px',
-                            fontWeight: 400,
-                            lineHeight: '1.2',
-                            color: 'rgb(0, 0, 0)',
-                            textDecoration: 'underline',
-                            border: 'none',
-                            background: 'none',
-                            cursor: 'pointer',
-                            padding: '0',
-                            textAlign: 'left'
-                          }}
-                          className="hover:opacity-60 transition-opacity"
-                        >
-                          Uložit na později
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+                    productId={item.productId}
+                    name={item.name}
+                    price={item.price}
+                    image={item.image}
+                    slug={item.slug}
+                    color={item.color}
+                    size={item.size}
+                    quantity={item.quantity}
+                    category={item.category}
+                    onUpdateQuantity={updateQuantity}
+                    onRemove={handleOpenDeleteModal}
+                    onSaveForLater={handleSaveForLater}
+                    onClose={onClose}
+                  />
                 ))}
               </div>
             )}

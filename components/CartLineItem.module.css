@@ -1,0 +1,142 @@
+/* Scoped styles for individual cart line item - matches cart-item.html exactly */
+
+.cartItem {
+  position: relative;
+  margin: 0;
+  background: #fff;
+  border: 1px solid #000;
+  display: grid;
+  grid-template-columns: 143px 1fr;
+  grid-template-rows: auto auto;
+  width: 100%;
+  max-width: 670px;
+  height: auto;
+  box-sizing: border-box;
+}
+
+.media {
+  background: #d9d9d9;
+  width: 143px;
+  height: 143px;
+  aspect-ratio: 1 / 1;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.info {
+  padding: 23px 15px 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.name {
+  margin: 0 0 5px 0;
+  font-size: 15.3px;
+  line-height: 17px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #000;
+}
+
+.price {
+  font-size: 16.5px;
+  line-height: 19px;
+  margin: 0 0 10px 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #000;
+}
+
+.attr {
+  font-size: 16.5px;
+  line-height: 23px;
+  margin: 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #000;
+}
+
+.qty {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-size: 16.5px;
+  line-height: 23px;
+  margin: 0;
+}
+
+.qtyButton {
+  background: none;
+  border: 0;
+  padding: 0;
+  width: 14px;
+  font: inherit;
+  font-size: 19px;
+  line-height: 23px;
+  cursor: pointer;
+  color: #000;
+  text-align: center;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.qtyButton:hover {
+  opacity: 0.6;
+}
+
+.qtyOutput {
+  min-width: 8px;
+  text-align: center;
+}
+
+.actions {
+  grid-column: 1 / -1;
+  align-self: end;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 23px 17px 15px 17px;
+  font-size: 16.5px;
+  line-height: 19px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #000;
+}
+
+.actionsRight {
+  display: flex;
+  gap: 21px;
+}
+
+.actionButton {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: #000;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16.5px;
+  line-height: 19px;
+}
+
+.actionButton:hover {
+  opacity: 0.6;
+}
+
+@media (max-width: 520px) {
+  .actionsRight {
+    gap: 14px;
+  }
+}
