@@ -338,26 +338,26 @@ export default function SavedProductsPage() {
   if (products.length === 0) {
     return (
       <div className="min-h-screen bg-white flex flex-col relative">
-        {/* Vertical lines at 700px apart (centered) - hidden on mobile */}
+        {/* Vertical lines at product edges (995px wide, centered) - hidden on mobile */}
         <div className="hidden md:block" style={{
-          position: 'absolute',
-          left: 'calc(50vw - 350px)',
+          position: 'fixed',
+          left: '50%',
+          marginLeft: '-497.5px',
           top: 0,
           bottom: 0,
           width: '1px',
           backgroundColor: '#000',
-          zIndex: 5,
-          pointerEvents: 'none'
+          zIndex: 5
         }} />
         <div className="hidden md:block" style={{
-          position: 'absolute',
-          right: 'calc(50vw - 350px)',
+          position: 'fixed',
+          left: '50%',
+          marginLeft: '497.5px',
           top: 0,
           bottom: 0,
           width: '1px',
           backgroundColor: '#000',
-          zIndex: 5,
-          pointerEvents: 'none'
+          zIndex: 5
         }} />
 
         {/* Header - same as when products exist */}
@@ -375,7 +375,7 @@ export default function SavedProductsPage() {
           </h1>
         </div>
 
-        {/* Navigation Panel - with 700px wide top and bottom borders */}
+        {/* Navigation Panel - with 995px wide top and bottom borders */}
         <div className="w-full md:w-[995px]" style={{
           position: 'relative',
           margin: '0 auto',
@@ -388,23 +388,23 @@ export default function SavedProductsPage() {
           overflow: 'visible',
           zIndex: 10
         }}>
-          {/* Top border - 700px wide to match vertical lines */}
-          <div className="w-full md:w-[700px]" style={{
+          {/* Top border - 995px wide to extend to vertical lines */}
+          <div style={{
             position: 'absolute',
             top: 0,
-            left: '50%',
-            transform: 'translateX(-50%)',
+            left: 'calc(50% - 497.5px)',
+            width: '995px',
             height: '1px',
             backgroundColor: '#000',
             zIndex: 1
           }} />
           
-          {/* Bottom border - 700px wide to match vertical lines */}
-          <div className="w-full md:w-[700px]" style={{
+          {/* Bottom border - 995px wide to extend to vertical lines */}
+          <div style={{
             position: 'absolute',
             bottom: 0,
-            left: '50%',
-            transform: 'translateX(-50%)',
+            left: 'calc(50% - 497.5px)',
+            width: '995px',
             height: '1px',
             backgroundColor: '#000',
             zIndex: 1
@@ -465,7 +465,7 @@ export default function SavedProductsPage() {
         </div>
 
         <div className="flex-1 flex justify-center">
-          <div className="w-full md:w-[700px] px-4 md:px-0" style={{ position: 'relative' }}>
+          <div className="w-full md:w-[995px]" style={{ position: 'relative', margin: '0 auto' }}>
             <div className="flex flex-col items-center justify-center px-8 text-center" style={{ minHeight: '300px' }}>
               <p style={{
                 fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -485,45 +485,27 @@ export default function SavedProductsPage() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col relative">
-      {/* Vertical lines at 700px apart (centered) - hidden on mobile */}
+      {/* Vertical lines at product edges (995px wide, centered) - hidden on mobile */}
       <div className="hidden md:block" style={{
-        position: 'absolute',
-        left: 'calc(50vw - 350px)',
+        position: 'fixed',
+        left: '50%',
+        marginLeft: '-497.5px',
         top: 0,
         bottom: 0,
         width: '1px',
         backgroundColor: '#000',
-        zIndex: 5,
-        pointerEvents: 'none'
+        zIndex: 5
       }} />
       <div className="hidden md:block" style={{
-        position: 'absolute',
-        right: 'calc(50vw - 350px)',
+        position: 'fixed',
+        left: '50%',
+        marginLeft: '497.5px',
         top: 0,
         bottom: 0,
         width: '1px',
         backgroundColor: '#000',
-        zIndex: 5,
-        pointerEvents: 'none'
+        zIndex: 5
       }} />
-
-      {/* Horizontal lines at 700px intervals (starting after banner + nav) - hidden on mobile */}
-      {[...Array(18)].map((_, i) => (
-        <div
-          key={`h-line-${i}`}
-          className="hidden md:block"
-          style={{
-            position: 'fixed',
-            left: 'calc(50vw - 350px)',
-            right: 'calc(50vw - 350px)',
-            top: `${2370 + i * 700}px`,
-            height: '1px',
-            backgroundColor: '#000',
-            zIndex: 4,
-            pointerEvents: 'none'
-          }}
-        />
-      ))}
 
       {/* Header - border handled by navigation panel */}
       <div className="w-full md:w-[995px]" style={{ position: 'relative', margin: '0 auto', height: '226px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
@@ -540,7 +522,7 @@ export default function SavedProductsPage() {
         </h1>
       </div>
 
-      {/* Navigation Panel - with 700px wide top and bottom borders */}
+      {/* Navigation Panel - with 995px wide top and bottom borders */}
       <div className="w-full md:w-[995px]" style={{
         position: 'relative',
         margin: '0 auto',
@@ -553,23 +535,23 @@ export default function SavedProductsPage() {
         overflow: 'visible',
         zIndex: 10
       }}>
-        {/* Top border - 700px wide to match vertical lines */}
-        <div className="w-full md:w-[700px]" style={{
+        {/* Top border - 995px wide to extend to vertical lines */}
+        <div style={{
           position: 'absolute',
           top: 0,
-          left: '50%',
-          transform: 'translateX(-50%)',
+          left: 'calc(50% - 497.5px)',
+          width: '995px',
           height: '1px',
           backgroundColor: '#000',
           zIndex: 1
         }} />
         
-        {/* Bottom border - 700px wide to match vertical lines */}
-        <div className="w-full md:w-[700px]" style={{
+        {/* Bottom border - 995px wide to extend to vertical lines */}
+        <div style={{
           position: 'absolute',
           bottom: 0,
-          left: '50%',
-          transform: 'translateX(-50%)',
+          left: 'calc(50% - 497.5px)',
+          width: '995px',
           height: '1px',
           backgroundColor: '#000',
           zIndex: 1
@@ -630,7 +612,7 @@ export default function SavedProductsPage() {
       </div>
 
       <div className="flex-1 flex justify-center">
-        <div className="w-full md:w-[700px] px-4 md:px-0" style={{ position: 'relative' }}>
+        <div className="w-full md:w-[995px]" style={{ position: 'relative', margin: '0 auto' }}>
           {/* Login Prompt - Only for unauthenticated users */}
           {status === 'unauthenticated' && (
             <div

@@ -30,6 +30,8 @@ export default function CheckoutPage() {
   const handleGoogleLogin = () => {
     signIn('google', { callbackUrl: '/pokladna' });
   };
+
+  const [formData, setFormData] = useState({
     email: session?.user?.email || '',
     name: '',
     phone: '',

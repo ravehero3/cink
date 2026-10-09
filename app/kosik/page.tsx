@@ -9,6 +9,14 @@ import { useEffect, useState } from 'react';
 import CartLineItem from '@/components/CartLineItem';
 import DeleteConfirmModal from '@/components/DeleteConfirmModal';
 
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  image?: string;
+  slug: string;
+}
+
 function EmptyCartLink({ href, text }: { href: string; text: string }) {
   return (
     <a
@@ -40,6 +48,8 @@ export default function CartPage() {
   const [savingItem, setSavingItem] = useState<string | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteItemData, setDeleteItemData] = useState<{ productId: string; productName: string; size: string } | null>(null);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);
   const router = useRouter();
   const pathname = usePathname();
   const { data: session } = useSession();
@@ -47,6 +57,40 @@ export default function CartPage() {
   const { addProduct } = useSavedProductsStore();
   const cartItemCount = getItemCount();
   const isKosik = pathname === '/kosik';
+
+  // Fetch products for VYBRÁNO PRO VÁS section
+  useEffect(() => {
+    const fetchAllProducts = async () => {
+      try {
+        const res = await fetch('/api/products?limit=1000');
+        const data = await res.json();
+        let products = [];
+        if (Array.isArray(data)) {
+          products = data;
+        } else if (data.products && Array.isArray(data.products)) {
+          products = data.products;
+        }
+        
+        const productsWithImage = products.map((p: any) => ({
+          ...p,
+          image: p.productImage || (p.images && p.images.length > 0 ? p.images[0] : ''),
+        }));
+        setAllProducts(productsWithImage);
+      } catch (error) {
+        console.error('Failed to fetch products:', error);
+      }
+    };
+
+    fetchAllProducts();
+  }, []);
+
+  // Select random products
+  useEffect(() => {
+    if (allProducts.length > 0 && selectedProducts.length === 0) {
+      const shuffled = [...allProducts].sort(() => Math.random() - 0.5);
+      setSelectedProducts(shuffled.slice(0, 9));
+    }
+  }, [allProducts, selectedProducts.length]);
 
   const handleOpenDeleteModal = (productId: string, productName: string, size: string) => {
     setDeleteItemData({ productId, productName, size });
@@ -294,22 +338,22 @@ export default function CartPage() {
         zIndex: 10
       }}>
         {/* Top border - 995px wide to extend to vertical lines */}
-        <div className="w-full md:w-[995px]" style={{
+        <div style={{
           position: 'absolute',
           top: 0,
-          left: '50%',
-          transform: 'translateX(-50%)',
+          left: 'calc(50% - 497.5px)',
+          width: '995px',
           height: '1px',
           backgroundColor: '#000',
           zIndex: 1
         }} />
         
         {/* Bottom border - 995px wide to extend to vertical lines */}
-        <div className="w-full md:w-[995px]" style={{
+        <div style={{
           position: 'absolute',
           bottom: 0,
-          left: '50%',
-          transform: 'translateX(-50%)',
+          left: 'calc(50% - 497.5px)',
+          width: '995px',
           height: '1px',
           backgroundColor: '#000',
           zIndex: 1
@@ -401,7 +445,8 @@ export default function CartPage() {
         paddingLeft: '16px',
         paddingRight: '16px',
         marginBottom: '80px',
-        borderBottom: '1px solid #000'
+        borderBottom: '1px solid #000',
+        width: '100%'
       }}>
         <div style={{
           paddingTop: '20px',
@@ -424,64 +469,81 @@ export default function CartPage() {
         {/* Horizontal scroll container */}
         <div 
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-            gap: '12px',
+            display: 'flex',
+            overflowX: 'auto',
+            overflowY: 'hidden',
+            gap: '0',
+            paddingLeft: '0',
+            paddingRight: '0',
+            scrollBehavior: 'smooth',
+            WebkitOverflowScrolling: 'touch',
+            scrollbarWidth: 'none',
+            scrollSnapType: 'x mandatory',
             paddingBottom: '16px',
-            overflow: 'hidden'
+            cursor: 'grab',
+            userSelect: 'none',
+            WebkitUserSelect: 'none'
           }}
         >
-          {/* Show 3 placeholder items */}
-          {[1,2,3].map(i => (
-            <a
-              key={i}
-              href="/"
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                textDecoration: 'none',
-                color: '#000'
-              }}
-            >
-              <div style={{
-                position: 'relative',
-                width: '100%',
-                paddingBottom: '100%',
-                backgroundColor: '#f5f5f5',
-                overflow: 'hidden',
-                marginBottom: '8px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                border: '1px solid #000'
-              }}>
-                {/* Placeholder */}
-              </div>
-              <h4 style={{
-                fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '11px',
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                marginTop: 0,
-                marginBottom: '4px',
-                letterSpacing: '0.03em',
-                fontStretch: 'condensed',
-                color: '#000000',
-                lineHeight: '1.2',
-                textAlign: 'center'
-              }}>
-                PRODUKT
-              </h4>
-              <p style={{
-                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '10px',
-                fontWeight: 400,
-                lineHeight: '1.2',
-                color: '#000000',
-                margin: '0 0 8px 0',
-                textAlign: 'center'
-              }}>XXX Kč</p>
-            </a>
+          {selectedProducts.map((product, index) => (
+            <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(66.666% - 0.67px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
+              {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
+              <Link
+                href={`/produkty/${product.slug}`}
+                style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '8px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px', textDecoration: 'none' }}
+                className="hover:opacity-80 transition-opacity"
+              >
+                <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #000' }}>
+                  {product.image && (
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                      loading="lazy"
+                      onError={(e) => {
+                        const img = e.target as HTMLImageElement;
+                        img.style.display = 'none';
+                      }}
+                    />
+                  )}
+                </div>
+                <h4 style={{
+                  fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  marginTop: 0,
+                  marginBottom: '4px',
+                  letterSpacing: '0.03em',
+                  fontStretch: 'condensed',
+                  color: '#000000',
+                  lineHeight: '1.2',
+                  textAlign: 'center'
+                }}>
+                  {product.name}
+                </h4>
+                <p style={{
+                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '10px',
+                  fontWeight: 400,
+                  lineHeight: '1.2',
+                  color: '#000000',
+                  margin: '0 0 8px 0',
+                  textAlign: 'center'
+                }}>{product.price} Kč</p>
+                <div style={{
+                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '9px',
+                  fontWeight: 400,
+                  lineHeight: '1.2',
+                  color: '#000000',
+                  textDecoration: 'underline',
+                  textAlign: 'center'
+                }}>
+                  Přidat do košíku
+                </div>
+              </Link>
+            </div>
           ))}
         </div>
       </div>
