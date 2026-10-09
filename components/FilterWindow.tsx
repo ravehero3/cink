@@ -66,13 +66,13 @@ export default function FilterWindow() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {availableColors.map((color) => {
                   const colorMap: Record<string, string> = {
-                    'Bílá': '#FFFFFF',
-                    'Černá': '#000000',
-                    'Modrá': '#054ac8',
-                    'Světle modrá': '#9dcbff',
-                    'Růžová': '#ffc3e8',
-                    'Žlutá': '#ffe153',
-                    'Lila': '#d99cff'
+                    'BÍLÁ': '#FFFFFF',
+                    'ČERNÁ': '#000000',
+                    'MODRÁ': '#054ac8',
+                    'SVĚTLE MODRÁ': '#9dcbff',
+                    'RŮŽOVÁ': '#ffc3e8',
+                    'ŽLUTÁ': '#ffe153',
+                    'LILA': '#d99cff'
                   };
                   const colorHex = colorMap[color] || '#CCCCCC';
                   const isBlack = color === 'Černá';
