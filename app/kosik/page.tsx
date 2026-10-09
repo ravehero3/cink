@@ -406,92 +406,93 @@ export default function CartPage() {
                     }}
                     className="select-none"
                   >
-                  {selectedProducts.map((product, index) => (
-                    <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(66.666% - 0.67px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
-                      {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
-                      <div
-                        style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '12px', paddingBottom: '12px', paddingLeft: '12px', paddingRight: '12px' }}
-                        className="hover:opacity-80 transition-opacity"
-                      >
-                        <a
-                          href={`/produkty/${product.slug}`}
-                          style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', flex: 1 }}
+                    {selectedProducts.map((product, index) => (
+                      <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(66.666% - 0.67px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
+                        {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
+                        <div
+                          style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '12px', paddingBottom: '12px', paddingLeft: '12px', paddingRight: '12px' }}
+                          className="hover:opacity-80 transition-opacity"
                         >
-                          <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            {product.image && (
-                              <img
-                                src={product.image}
-                                alt={product.name}
-                                style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                                loading="lazy"
-                                onError={(e) => {
-                                  const img = e.target as HTMLImageElement;
-                                  img.style.display = 'none';
-                                }}
-                              />
-                            )}
-                          </div>
-                          <h4 style={{
-                            fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                            fontSize: '13px',
-                            fontWeight: 700,
-                            textTransform: 'uppercase',
-                            letterSpacing: '0.03em',
-                            fontStretch: 'condensed',
-                            margin: '0 0 4px 0',
-                            textAlign: 'center',
-                            color: '#000',
-                            lineHeight: '1.2'
-                          }}>
-                            {product.name}
-                          </h4>
-                          <p style={{
-                            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                            fontSize: '11px',
-                            fontWeight: 400,
-                            margin: '0 0 4px 0',
-                            textAlign: 'center',
-                            color: '#000',
-                            lineHeight: '1.2'
-                          }}>
-                            {product.price} Kč
-                          </p>
-                        </a>
-                        <button
-                          onClick={() => {
-                            const { addItem } = useCartStore.getState();
-                            addItem({
-                              productId: product.id,
-                              name: product.name,
-                              price: product.price,
-                              image: product.image,
-                              slug: product.slug,
-                              size: 'ONE SIZE',
-                              color: '',
-                              quantity: 1,
-                              category: ''
-                            });
-                          }}
-                          style={{
-                            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                            fontSize: '11px',
-                            fontWeight: 400,
-                            margin: '0',
-                            textAlign: 'center',
-                            color: '#000',
-                            textDecoration: 'underline',
-                            background: 'none',
-                            border: 'none',
-                            cursor: 'pointer',
-                            padding: '0',
-                            lineHeight: '1.2'
-                          }}
-                        >
-                          Přidat do košíku
-                        </button>
+                          <a
+                            href={`/produkty/${product.slug}`}
+                            style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', flex: 1 }}
+                          >
+                            <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              {product.image && (
+                                <img
+                                  src={product.image}
+                                  alt={product.name}
+                                  style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                                  loading="lazy"
+                                  onError={(e) => {
+                                    const img = e.target as HTMLImageElement;
+                                    img.style.display = 'none';
+                                  }}
+                                />
+                              )}
+                            </div>
+                            <h4 style={{
+                              fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                              fontSize: '13px',
+                              fontWeight: 700,
+                              textTransform: 'uppercase',
+                              letterSpacing: '0.03em',
+                              fontStretch: 'condensed',
+                              margin: '0 0 4px 0',
+                              textAlign: 'center',
+                              color: '#000',
+                              lineHeight: '1.2'
+                            }}>
+                              {product.name}
+                            </h4>
+                            <p style={{
+                              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                              fontSize: '11px',
+                              fontWeight: 400,
+                              margin: '0 0 4px 0',
+                              textAlign: 'center',
+                              color: '#000',
+                              lineHeight: '1.2'
+                            }}>
+                              {product.price} Kč
+                            </p>
+                          </a>
+                          <button
+                            onClick={() => {
+                              const { addItem } = useCartStore.getState();
+                              addItem({
+                                productId: product.id,
+                                name: product.name,
+                                price: product.price,
+                                image: product.image,
+                                slug: product.slug,
+                                size: 'ONE SIZE',
+                                color: '',
+                                quantity: 1,
+                                category: ''
+                              });
+                            }}
+                            style={{
+                              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                              fontSize: '11px',
+                              fontWeight: 400,
+                              margin: '0',
+                              textAlign: 'center',
+                              color: '#000',
+                              textDecoration: 'underline',
+                              background: 'none',
+                              border: 'none',
+                              cursor: 'pointer',
+                              padding: '0',
+                              lineHeight: '1.2'
+                            }}
+                          >
+                            Přidat do košíku
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               </div>
             )}
