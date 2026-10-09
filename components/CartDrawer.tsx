@@ -78,23 +78,25 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   const vybrranoRef = useRef<HTMLDivElement>(null);
   const prohlizeniRef = useRef<HTMLDivElement>(null);
 
-  // Fetch all products
   useEffect(() => {
     const fetchAllProducts = async () => {
       try {
         const res = await fetch('/api/products?limit=1000');
         const data = await res.json();
         console.log('Fetched products:', data); // Debug log
+        let products = [];
         if (Array.isArray(data)) {
-          setAllProducts(data);
+          products = data;
         } else if (data.products && Array.isArray(data.products)) {
-          // Map images array to image property for consistency
-          const productsWithImage = data.products.map((p: any) => ({
-            ...p,
-            image: p.images && p.images.length > 0 ? p.images[0] : '',
-          }));
-          setAllProducts(productsWithImage);
+          products = data.products;
         }
+        
+        // Use productImage (featured) if available, otherwise fall back to first image
+        const productsWithImage = products.map((p: any) => ({
+          ...p,
+          image: p.productImage || (p.images && p.images.length > 0 ? p.images[0] : ''),
+        }));
+        setAllProducts(productsWithImage);
       } catch (error) {
         console.error('Failed to fetch products:', error);
       }
@@ -104,8 +106,6 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
       fetchAllProducts();
     }
   }, [isOpen, allProducts.length]);
-
-  // Select 9 random products when all products load
   useEffect(() => {
     if (allProducts.length > 0 && selectedProducts.length === 0) {
       const shuffled = [...allProducts].sort(() => Math.random() - 0.5);
