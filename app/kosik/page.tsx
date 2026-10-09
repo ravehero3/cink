@@ -464,7 +464,7 @@ export default function CartPage() {
                                 productId: product.id,
                                 name: product.name,
                                 price: product.price,
-                                image: product.image,
+                                image: product.image || '',
                                 slug: product.slug,
                                 size: 'ONE SIZE',
                                 color: '',
