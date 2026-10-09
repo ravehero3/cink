@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { Prisma } from '@prisma/client';
+import { getFullImageUrl } from '@/lib/image-url';
 
 export const dynamic = 'force-dynamic';
 
@@ -80,7 +81,7 @@ export async function GET(request: Request) {
 
     const skip = (page - 1) * limit;
 
-    const [products, total] = await Promise.all([
+    const [rawProducts, total] = await Promise.all([
       prisma.product.findMany({
         where,
         orderBy,
@@ -102,6 +103,13 @@ export async function GET(request: Request) {
       }),
       prisma.product.count({ where }),
     ]);
+
+    // Convert local image paths to full URLs
+    const products = rawProducts.map(p => ({
+      ...p,
+      images: (p.images || []).map((img: string) => getFullImageUrl(img)),
+      productImage: getFullImageUrl(p.productImage),
+    }));
 
     return NextResponse.json({
       products,

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { getFullImageUrl } from '@/lib/image-url';
 
 export async function GET(
   request: Request,
@@ -41,7 +42,14 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(product);
+    // Convert local image paths to full URLs
+    const productWithFullUrls = {
+      ...product,
+      images: (product.images || []).map((img: string) => getFullImageUrl(img)),
+      productImage: getFullImageUrl(product.productImage),
+    };
+
+    return NextResponse.json(productWithFullUrls);
   } catch (error) {
     console.error('Error fetching product:', error);
     return NextResponse.json(
