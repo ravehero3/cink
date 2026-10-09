@@ -30,6 +30,7 @@ interface Product {
   sizeChartType?: SizeChartType;
   sizeChartData?: any;
   productType?: string;
+  productImage?: string;
 }
 
 export default function ProductDetailPage() {
