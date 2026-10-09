@@ -233,7 +233,7 @@ export default function CartPage() {
               }}>
                 Váš košík je prázdný
               </p>
-              <AnimatedLink href="/" text="POKRAČOVAT V NÁKUPU" />
+              <EmptyCartLink href="/" text="POKRAČOVAT V NÁKUPU" />
             </div>
           </div>
         </div>
