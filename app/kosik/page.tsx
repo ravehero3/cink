@@ -5,7 +5,7 @@ import { useSavedProductsStore } from '@/lib/saved-products-store';
 import { useSession } from 'next-auth/react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import CartLineItem from '@/components/CartLineItem';
 import DeleteConfirmModal from '@/components/DeleteConfirmModal';
 
@@ -57,6 +57,7 @@ export default function CartPage() {
   const { addProduct } = useSavedProductsStore();
   const cartItemCount = getItemCount();
   const isKosik = pathname === '/kosik';
+  const vybrranoRef = useRef<HTMLDivElement>(null);
 
   // Fetch products for VYBRÁNO PRO VÁS section
   useEffect(() => {
@@ -279,6 +280,150 @@ export default function CartPage() {
               </p>
               <EmptyCartLink href="/" text="POKRAČOVAT V NÁKUPU" />
             </div>
+
+            {/* VYBRÁNO PRO VÁS Section - when cart empty */}
+            {selectedProducts.length > 0 && (
+              <div style={{ borderTop: '1px solid #000', paddingTop: '20px', marginTop: '40px' }}>
+                <div style={{ paddingTop: '8px', paddingBottom: '8px', paddingLeft: '16px', paddingRight: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px', position: 'relative' }}>
+                  <button
+                    onClick={() => {
+                      if (vybrranoRef.current) {
+                        vybrranoRef.current.scrollBy({
+                          left: -(vybrranoRef.current.clientWidth * 0.4),
+                          behavior: 'smooth'
+                        });
+                      }
+                    }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: '24px',
+                      height: '24px',
+                      border: '1px solid #000',
+                      borderRadius: '4px',
+                      backgroundColor: '#fff',
+                      cursor: 'pointer',
+                      padding: '0',
+                      flex: '0 0 auto'
+                    }}
+                    onMouseEnter={(e) => {
+                      (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5';
+                    }}
+                    onMouseLeave={(e) => {
+                      (e.currentTarget as HTMLElement).style.backgroundColor = '#fff';
+                    }}
+                  >
+                    <svg style={{ width: '14px', height: '14px', stroke: '#000', fill: 'none' }} viewBox="0 0 24 24" strokeWidth="2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                  <h3 style={{
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '13px',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.03em',
+                    fontStretch: 'condensed',
+                    margin: '0',
+                    textAlign: 'center',
+                    flex: 1
+                  }}>
+                    VYBRÁNO PRO VÁS
+                  </h3>
+                  <button
+                    onClick={() => {
+                      if (vybrranoRef.current) {
+                        vybrranoRef.current.scrollBy({
+                          left: vybrranoRef.current.clientWidth * 0.4,
+                          behavior: 'smooth'
+                        });
+                      }
+                    }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: '24px',
+                      height: '24px',
+                      border: '1px solid #000',
+                      borderRadius: '4px',
+                      backgroundColor: '#fff',
+                      cursor: 'pointer',
+                      padding: '0',
+                      flex: '0 0 auto'
+                    }}
+                    onMouseEnter={(e) => {
+                      (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5';
+                    }}
+                    onMouseLeave={(e) => {
+                      (e.currentTarget as HTMLElement).style.backgroundColor = '#fff';
+                    }}
+                  >
+                    <svg style={{ width: '14px', height: '14px', stroke: '#000', fill: 'none' }} viewBox="0 0 24 24" strokeWidth="2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
+                <div
+                  ref={vybrranoRef}
+                  style={{
+                    display: 'flex',
+                    gap: '0',
+                    overflowX: 'auto',
+                    scrollBehavior: 'smooth',
+                    scrollSnapType: 'x mandatory'
+                  }}
+                >
+                  {selectedProducts.map((product, index) => (
+                    <a
+                      key={product.id}
+                      href={`/produkty/${product.slug}`}
+                      onClick={undefined}
+                      style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '6px', paddingBottom: '12px', paddingLeft: '16px', paddingRight: '16px', textDecoration: 'none' }}
+                    >
+                      <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        {product.image && (
+                          <img
+                            src={product.image}
+                            alt={product.name}
+                            style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                            loading="lazy"
+                            onError={(e) => {
+                              const img = e.target as HTMLImageElement;
+                              img.style.display = 'none';
+                            }}
+                          />
+                        )}
+                      </div>
+                      <h4 style={{
+                        fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                        fontSize: '13px',
+                        fontWeight: 700,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.03em',
+                        fontStretch: 'condensed',
+                        margin: '0',
+                        textAlign: 'center',
+                        color: '#000'
+                      }}>
+                        {product.name}
+                      </h4>
+                      <p style={{
+                        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                        fontSize: '11px',
+                        fontWeight: 400,
+                        margin: '4px 0 0',
+                        textAlign: 'center',
+                        color: '#000'
+                      }}>
+                        {product.price} Kč
+                      </p>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
