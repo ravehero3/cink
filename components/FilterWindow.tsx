@@ -75,8 +75,8 @@ export default function FilterWindow() {
                     'LILA': '#d99cff'
                   };
                   const colorHex = colorMap[color] || '#CCCCCC';
-                  const isBlack = color === 'Černá';
-                  const isWhite = color === 'Bílá';
+                  const isBlack = color === 'ČERNÁ';
+                  const isWhite = color === 'BÍLÁ';
                   const isSelected = colors.includes(color);
                   return (
                     <label key={color} className="flex items-center gap-2 cursor-pointer">
