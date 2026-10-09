@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSession, signIn } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { useCartStore, useCartHydration } from '@/lib/cart-store';
 import { calculateShippingCost, getAmountToFreeShipping } from '@/lib/shipping';
 
@@ -510,10 +510,9 @@ export default function CheckoutPage() {
                   <div style={{ flex: 1, height: '1px', background: '#d9d9d9' }}></div>
                 </div>
 
-                {/* Google Button */}
-                <button
-                  type="button"
-                  onClick={() => signIn('google', { redirect: false })}
+                {/* Google Button - Links to Login Page */}
+                <a
+                  href="/prihlaseni"
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -530,7 +529,8 @@ export default function CheckoutPage() {
                     color: '#000',
                     cursor: 'pointer',
                     fontWeight: 300,
-                    gap: '8px'
+                    gap: '8px',
+                    fontFamily: 'inherit'
                   }}
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="#000" xmlns="http://www.w3.org/2000/svg">
@@ -541,7 +541,7 @@ export default function CheckoutPage() {
                     <text x="12" y="14" textAnchor="middle" fontSize="9" fontWeight="bold" fill="#000">G</text>
                   </svg>
                   PŘIHLÁSIT SE PŘES GOOGLE
-                </button>
+                </a>
               </section>
             )}
 

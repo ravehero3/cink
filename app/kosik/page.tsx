@@ -7,39 +7,31 @@ import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import CartLineItem from '@/components/CartLineItem';
-import AnimatedButton from '@/components/AnimatedButton';
 import DeleteConfirmModal from '@/components/DeleteConfirmModal';
 
-function AnimatedLink({ href, text }: { href: string; text: string }) {
-  const [isHovered, setIsHovered] = useState(false);
-
+function EmptyCartLink({ href, text }: { href: string; text: string }) {
   return (
-    <Link
+    <a
       href={href}
-      className="relative overflow-hidden bg-white text-black font-normal uppercase tracking-tight transition-all border border-black text-sm"
-      style={{ borderRadius: '4px', padding: '11.8px 25.6px' }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: '#fff',
+        color: '#000',
+        fontWeight: 'normal',
+        textTransform: 'uppercase',
+        letterSpacing: 'tight',
+        transition: 'all 0.3s',
+        border: '1px solid #000',
+        fontSize: '13px',
+        borderRadius: '4px',
+        padding: '11.8px 25.6px',
+        textDecoration: 'none'
+      }}
     >
-      <span
-        className="block transition-all duration-200"
-        style={{
-          transform: isHovered ? 'translateY(-150%)' : 'translateY(0)',
-          opacity: isHovered ? 0 : 1,
-        }}
-      >
-        {text}
-      </span>
-      <span
-        className="absolute inset-0 flex items-center justify-center transition-all duration-200"
-        style={{
-          transform: isHovered ? 'translateY(0)' : 'translateY(150%)',
-          opacity: isHovered ? 1 : 0,
-        }}
-      >
-        {text}
-      </span>
-    </Link>
+      {text}
+    </a>
   );
 }
 
@@ -405,37 +397,39 @@ export default function CartPage() {
       <div style={{
         position: 'fixed',
         bottom: 0,
-        left: 0,
-        right: 0,
+        left: '50%',
+        transform: 'translateX(-50%)',
+        width: '100%',
+        maxWidth: '995px',
         backgroundColor: '#fff',
         borderTop: '1px solid #000',
         zIndex: 10,
-        padding: '0 16px',
-        height: '40px',
-        display: 'flex',
-        alignItems: 'center'
+        padding: '16px',
+        paddingBottom: '16px'
       }}>
-        <AnimatedButton
-          text={`PŘEJÍT K POKLADNĚ (${cartItemCount})`}
+        <button
           onClick={() => router.push('/pokladna')}
-          type="button"
           style={{
             width: '100%',
-            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-            fontSize: '12px',
-            fontWeight: 300,
-            padding: '0',
-            textTransform: 'uppercase',
-            cursor: 'pointer',
             height: '40px',
+            borderRadius: '4px',
+            border: '1px solid #000',
+            fontSize: '13px',
+            textTransform: 'uppercase',
+            letterSpacing: '.06em',
+            textDecoration: 'none',
+            background: '#000',
+            color: '#fff',
+            cursor: 'pointer',
+            fontWeight: 300,
+            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            border: 'none',
-            borderRadius: '0',
-            backgroundColor: '#fff'
+            justifyContent: 'center'
           }}
-        />
+        >
+          POKRAČOVAT V OBJEDNÁVCE
+        </button>
       </div>
 
       <DeleteConfirmModal
