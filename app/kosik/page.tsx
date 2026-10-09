@@ -380,7 +380,7 @@ export default function CartPage() {
           {items.map((item, index) => (
             <div
               key={`${item.productId}-${item.size}`}
-              className="w-full md:w-[995px] h-auto md:h-[270px]"
+              className="w-full md:w-[995px] h-auto"
               style={{
                 margin: '0 auto',
                 borderTop: index === 0 ? '1px solid #000' : 'none',
@@ -388,11 +388,11 @@ export default function CartPage() {
                 padding: '16px',
                 paddingBottom: '16px',
                 display: 'flex',
-                flexDirection: 'column',
+                flexDirection: 'row',
                 justifyContent: 'space-between'
               }}
             >
-              <div className="flex flex-col md:flex-row gap-6 md:gap-8">
+              <div className="flex flex-row gap-4 md:gap-8">
                 <Link href={`/produkty/${item.slug}`} style={{ flexShrink: 0 }}>
                   <div className="w-[120px] h-[120px] md:w-[200px] md:h-[200px]" style={{
                     border: '1px solid #000',
