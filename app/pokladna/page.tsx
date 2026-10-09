@@ -1299,14 +1299,19 @@ export default function CheckoutPage() {
         <div 
           style={{
             position: 'fixed',
-            inset: 0,
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
             zIndex: 101,
             backgroundColor: '#fff',
             display: 'flex',
             flexDirection: 'column',
             opacity: isPplModalOpen ? 1 : 0,
             pointerEvents: isPplModalOpen ? 'auto' : 'none',
-            transition: 'opacity 0.3s'
+            transition: 'opacity 0.3s',
+            maxHeight: '100vh',
+            overflow: 'hidden'
           }}
         >
           <div style={{
@@ -1315,7 +1320,8 @@ export default function CheckoutPage() {
             alignItems: 'center',
             padding: '16px',
             borderBottom: '1px solid #000',
-            backgroundColor: '#000'
+            backgroundColor: '#000',
+            flexShrink: 0
           }}>
             <h2 style={{
               margin: 0,
@@ -1337,7 +1343,8 @@ export default function CheckoutPage() {
                 fontWeight: 600,
                 textTransform: 'uppercase',
                 cursor: 'pointer',
-                borderRadius: '4px'
+                borderRadius: '4px',
+                flexShrink: 0
               }}
             >
               Zavřít
@@ -1347,7 +1354,7 @@ export default function CheckoutPage() {
             id="ppl-parcelshop-map" 
             data-language="cs" 
             data-mode="default"
-            style={{ flex: 1, minHeight: '500px', width: '100%' }}
+            style={{ flex: 1, minHeight: 'calc(100vh - 70px)', width: '100%', overflow: 'auto' }}
           ></div>
         </div>
       </div>
