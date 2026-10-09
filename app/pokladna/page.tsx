@@ -4,25 +4,25 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useCartStore, useCartHydration } from '@/lib/cart-store';
-import { calculateShippingCost, getShippingLabel, getAmountToFreeShipping } from '@/lib/shipping';
-import Image from 'next/image';
-import AnimatedButton from '@/components/AnimatedButton';
+import { calculateShippingCost, getAmountToFreeShipping } from '@/lib/shipping';
 
 export default function CheckoutPage() {
   const router = useRouter();
   const { data: session } = useSession();
   const { items, getTotal, clearCart } = useCartStore();
   const hasHydrated = useCartHydration();
-  const [step, setStep] = useState(1);
-  const [loading, setLoading] = useState(false);
-  // Flag to prevent empty cart redirect when order is being processed
   const isNavigatingToPayment = useRef(false);
+
+  const [step, setStep] = useState(1);
+  const [reached, setReached] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     email: session?.user?.email || '',
     name: '',
     phone: '',
-    shippingMethod: 'zasilkovna',
+    prefix: '+420',
+    shippingMethod: 'ppl_parcelshop',
     zasilkovnaId: '',
     zasilkovnaName: '',
     pplId: '',
@@ -36,13 +36,10 @@ export default function CheckoutPage() {
 
   const [discount, setDiscount] = useState(0);
   const [promoError, setPromoError] = useState('');
-  const [showManualZasilkovnaForm, setShowManualZasilkovnaForm] = useState(false);
   const [isPplModalOpen, setIsPplModalOpen] = useState(false);
 
   useEffect(() => {
-    // Don't redirect if we're intentionally navigating to payment page
     if (isNavigatingToPayment.current) return;
-    
     if (hasHydrated && items.length === 0) {
       router.push('/kosik');
     }
@@ -54,7 +51,6 @@ export default function CheckoutPage() {
     }
   }, [session?.user?.email]);
 
-  // Abandoned Cart Tracking
   useEffect(() => {
     const timer = setTimeout(async () => {
       if (formData.email && formData.email.includes('@') && items.length > 0) {
@@ -77,29 +73,21 @@ export default function CheckoutPage() {
   }, [formData.email, items]);
 
   useEffect(() => {
-    // Script is loaded globally in layout.tsx
-    // Just verify it's available
     if (typeof window === 'undefined') return;
-    
     let checkCount = 0;
     const checkInterval = setInterval(() => {
       checkCount++;
       if ((window as any).Packeta?.Widget?.pick) {
-        console.log('Zasilkovna widget is ready');
         clearInterval(checkInterval);
       } else if (checkCount > 100) {
-        console.error('Zasilkovna widget failed to load');
         clearInterval(checkInterval);
       }
     }, 100);
-    
     return () => clearInterval(checkInterval);
   }, []);
 
   useEffect(() => {
-    // PPL Widget selection listener (Older version)
     const handlePplSelect = (event: any) => {
-      console.log('PPL select event received:', event.detail);
       const point = event.detail;
       if (point) {
         setFormData(prev => ({
@@ -115,16 +103,52 @@ export default function CheckoutPage() {
     return () => document.removeEventListener('ppl-parcelshop-map', handlePplSelect);
   }, []);
 
-  const openPplWidget = () => {
-    setIsPplModalOpen(true);
-  };
-
   const rawSubtotal = getTotal();
   const subtotal = typeof rawSubtotal === 'number' && !isNaN(rawSubtotal) ? rawSubtotal : 0;
   const shippingCost = calculateShippingCost(subtotal, formData.shippingMethod);
   const amountToFreeShipping = getAmountToFreeShipping(subtotal);
   const safeDiscount = typeof discount === 'number' && !isNaN(discount) ? discount : 0;
   const total = Math.max(0, subtotal + shippingCost - safeDiscount);
+
+  const goToStep = (newStep: number) => {
+    if (newStep <= reached) {
+      setStep(newStep);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const validateEmail = () => {
+    const emailRegex = /^\S+@\S+\.\S+$/;
+    return formData.email && emailRegex.test(formData.email);
+  };
+
+  const validateContact = () => {
+    return formData.name && formData.phone;
+  };
+
+  const nextStep = (nextNum: number) => {
+    if (nextNum === 2 && !validateEmail()) {
+      alert('Zadejte platný e-mail');
+      return;
+    }
+    if (nextNum === 3) {
+      if (!validateContact()) {
+        alert('Vyplňte jméno a telefonní číslo');
+        return;
+      }
+      if (formData.shippingMethod === 'zasilkovna' && !formData.zasilkovnaId) {
+        alert('Vyberte výdejní místo Zásilkovny');
+        return;
+      }
+      if (formData.shippingMethod === 'ppl_parcelshop' && !formData.pplId) {
+        alert('Vyberte výdejní místo PPL');
+        return;
+      }
+    }
+    setReached(Math.max(reached, nextNum));
+    setStep(nextNum);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const handleApplyPromo = async () => {
     if (!formData.promoCode) return;
@@ -160,23 +184,18 @@ export default function CheckoutPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.email || !formData.name || !formData.phone) {
-      alert('Vyplňte prosím všechny povinné údaje');
+    if (!validateEmail() || !validateContact()) {
+      alert('Vyplňte všechny povinné údaje');
       return;
     }
 
     if (formData.shippingMethod === 'zasilkovna' && !formData.zasilkovnaId) {
-      alert('Vyberte prosím výdejní místo Zásilkovny');
-      return;
-    }
-
-    if (formData.shippingMethod === 'ppl_address' && (!formData.shippingStreet || !formData.shippingCity || !formData.shippingZip)) {
-      alert('Vyplňte prosím doručovací adresu');
+      alert('Vyberte výdejní místo Zásilkovny');
       return;
     }
 
     if (formData.shippingMethod === 'ppl_parcelshop' && !formData.pplId) {
-      alert('Vyberte prosím výdejní místo PPL ParcelShop');
+      alert('Vyberte výdejní místo PPL');
       return;
     }
 
@@ -196,7 +215,6 @@ export default function CheckoutPage() {
         quantity: Number(item.quantity)
       }));
 
-      // Create order
       const orderResponse = await fetch('/api/orders/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -204,15 +222,12 @@ export default function CheckoutPage() {
           items: orderItems,
           customerEmail: formData.email,
           customerName: formData.name,
-          customerPhone: formData.phone,
+          customerPhone: formData.prefix + ' ' + formData.phone,
           shippingMethod: formData.shippingMethod,
           zasilkovnaId: formData.zasilkovnaId,
           zasilkovnaName: formData.zasilkovnaName,
           pplId: formData.pplId,
           pplName: formData.pplName,
-          shippingStreet: formData.shippingStreet,
-          shippingCity: formData.shippingCity,
-          shippingZip: formData.shippingZip,
           promoCode: formData.promoCode,
           totalPrice: finalTotal,
           newsletterSubscribed: formData.newsletterSubscribed,
@@ -227,15 +242,8 @@ export default function CheckoutPage() {
         return;
       }
 
-      // Set flag to prevent empty cart redirect
       isNavigatingToPayment.current = true;
-      
-      // Clear cart and cleanup
       clearCart();
-      sessionStorage.removeItem('checkoutEmail');
-      sessionStorage.removeItem('checkoutData');
-
-      // Redirect to payment page where customer can review order and select payment method
       window.location.href = `/platba?order=${orderData.orderNumber}&token=${orderData.securityToken}`;
     } catch (error) {
       alert('Došlo k chybě. Zkuste to prosím znovu.');
@@ -254,11 +262,11 @@ export default function CheckoutPage() {
         try {
           (window as any).Packeta.Widget.pick(process.env.NEXT_PUBLIC_ZASILKOVNA_API_KEY || 'demo', (point: any) => {
             if (point) {
-              setFormData({
-                ...formData,
+              setFormData(prev => ({
+                ...prev,
                 zasilkovnaId: point.id,
                 zasilkovnaName: `${point.name}, ${point.street}, ${point.zip} ${point.place}`,
-              });
+              }));
             }
           }, {
             country: 'cz',
@@ -266,15 +274,11 @@ export default function CheckoutPage() {
           });
         } catch (err) {
           console.error('Error opening widget:', err);
-          setShowManualZasilkovnaForm(true);
         }
       } else {
         retries++;
         if (retries < maxRetries) {
           setTimeout(openWidget, 50);
-        } else {
-          console.error('Widget not available, showing manual form');
-          setShowManualZasilkovnaForm(true);
         }
       }
     };
@@ -284,10 +288,8 @@ export default function CheckoutPage() {
 
   if (!hasHydrated) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-body">Načítám...</p>
-        </div>
+      <div style={{ minHeight: '100vh', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <p style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '13px' }}>Načítám...</p>
       </div>
     );
   }
@@ -297,422 +299,1073 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
-      <div className="max-w-7xl mx-auto px-4 flex-1">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 h-full border-b border-black">
-          <div className="lg:col-span-2 h-full flex flex-col">
-            <form onSubmit={handleSubmit} className="lg:border-l border-black p-4 lg:p-8 flex flex-col h-full">
-              <h2 
-                className="font-bold mb-4 uppercase"
-                style={{
-                  fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '14px',
-                  fontWeight: 700,
-                  lineHeight: '16.1px'
-                }}
-              >
-                KONTAKTNÍ ÚDAJE
-              </h2>
+    <div style={{ minHeight: '100vh', background: '#fff', display: 'flex', flexDirection: 'column' }}>
+      {/* Single Header */}
+      <header style={{
+        height: '42px',
+        borderBottom: '1px solid #000',
+        display: 'grid',
+        gridTemplateColumns: '1fr auto 1fr',
+        alignItems: 'center',
+        padding: '0 16px'
+      }}>
+        <button
+          onClick={() => router.back()}
+          style={{
+            background: 'none',
+            border: 'none',
+            width: '24px',
+            height: '24px',
+            display: 'flex',
+            alignItems: 'center',
+            cursor: 'pointer',
+            padding: 0
+          }}
+          aria-label="Zpět"
+        >
+          <svg width="10" height="16" viewBox="0 0 10 16" fill="none" stroke="#000" strokeWidth="1.4">
+            <path d="M8.5 1L1.5 8l7 7"/>
+          </svg>
+        </button>
+        <a href="/" style={{ 
+          fontFamily: '"Helvetica Neue Condensed Bold", "Arial Narrow", Impact, sans-serif', 
+          fontWeight: 800, 
+          fontSize: '22px', 
+          letterSpacing: '.02em', 
+          textTransform: 'uppercase', 
+          textDecoration: 'none', 
+          color: '#000',
+          fontStretch: 'condensed'
+        }}>
+          UFO SPORT
+        </a>
+        <div></div>
+      </header>
 
-              <div className="mb-1">
-                <label 
-                  className="block"
+      {/* Main Layout */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr',
+        minHeight: 'calc(100vh - 42px)'
+      }} className="lg:grid-cols-[1fr_33%]">
+        {/* Left Column - Form */}
+        <main style={{
+          padding: '32px 16px 80px',
+          display: 'flex',
+          justifyContent: 'center',
+          borderRight: 'none'
+        }} className="lg:border-r lg:border-black">
+          <form style={{ width: '100%', maxWidth: '416px' }} onSubmit={handleSubmit}>
+            {/* Stepper */}
+            <nav style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              marginBottom: '36px',
+              gap: '8px'
+            }}>
+              {[1, 2, 3].map(num => (
+                <button
+                  key={num}
+                  type="button"
+                  onClick={() => goToStep(num)}
+                  disabled={num > reached}
                   style={{
-                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '10px',
+                    background: 'none',
+                    border: '0',
+                    fontSize: '11px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '.03em',
+                    color: num === step ? '#000' : num < step ? '#000' : '#8a8a8a',
+                    padding: '0 0 3px',
                     fontWeight: 400,
-                    lineHeight: '14.1px',
-                    paddingLeft: '2px',
-                    paddingRight: '2px',
-                    color: '#999',
-                    marginBottom: '2px'
+                    borderBottom: num === step ? '1px solid #000' : num < step ? '1px solid #000' : '1px solid transparent',
+                    cursor: num > reached ? 'default' : 'pointer',
+                    flex: 1,
+                    textAlign: 'left',
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Arial Narrow", Impact, sans-serif',
+                    fontStretch: 'condensed'
                   }}
                 >
-                  E-mail *
-                </label>
-                <input
-                  type="email"
-                  required
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full border border-black px-2 py-1 text-body focus:outline-none"
-                  style={{ borderRadius: '4px' }}
-                />
-              </div>
+                  {num}. {num === 1 ? 'EMAIL' : num === 2 ? 'DOPRAVA' : 'PLATBA'}
+                </button>
+              ))}
+            </nav>
 
-              <div className="mb-1">
-                <label 
-                  className="block"
-                  style={{
-                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '10px',
-                    fontWeight: 400,
-                    lineHeight: '14.1px',
-                    paddingLeft: '2px',
-                    paddingRight: '2px',
-                    color: '#999',
-                    marginBottom: '2px'
-                  }}
-                >
-                  Jméno a příjmení *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full border border-black px-2 py-1 text-body focus:outline-none"
-                  style={{ borderRadius: '4px' }}
-                />
-              </div>
+            {/* Step 1: Email */}
+            {step === 1 && (
+              <section>
+                <p style={{ textAlign: 'center', marginBottom: '28px', fontSize: '13px' }}>
+                  Zadejte svůj e-mail a pokračujte v objednávce. Účet si můžete vytvořit později.
+                </p>
 
-              <div className="mb-1">
-                <label 
-                  className="block"
-                  style={{
-                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '10px',
-                    fontWeight: 400,
-                    lineHeight: '14.1px',
-                    paddingLeft: '2px',
-                    paddingRight: '2px',
-                    color: '#999',
-                    marginBottom: '2px'
-                  }}
-                >
-                  Telefon *
-                </label>
-                <input
-                  type="tel"
-                  required
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full border border-black px-2 py-1 text-body focus:outline-none"
-                  style={{ borderRadius: '4px' }}
-                />
-              </div>
+                <div style={{ marginBottom: '22px' }}>
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    fontSize: '11px',
+                    color: '#8a8a8a',
+                    marginBottom: '4px'
+                  }}>
+                    <span style={{ fontWeight: 600 }}>EMAIL *</span>
+                  </div>
+                  <div style={{
+                    borderBottom: '1px solid #000',
+                    display: 'inline-block',
+                    marginBottom: '12px'
+                  }}>
+                    <span style={{ fontSize: '11px', fontWeight: 600 }}>EMAIL *</span>
+                  </div>
+                  <input
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    style={{
+                      width: '100%',
+                      height: '36px',
+                      border: '1px solid #000',
+                      borderRadius: '4px',
+                      padding: '0 12px',
+                      font: 'inherit',
+                      fontSize: '13px',
+                      background: '#fff',
+                      color: '#000',
+                      outline: 'none'
+                    }}
+                  />
+                </div>
 
-              <div className="mb-4 mt-2">
-                <label className="flex items-center cursor-pointer group">
-                  <div className="relative flex items-center">
+                <label style={{
+                  display: 'flex',
+                  gap: '12px',
+                  alignItems: 'flex-start',
+                  fontSize: '12px',
+                  cursor: 'pointer',
+                  margin: '6px 0 28px'
+                }}>
+                  <div style={{ position: 'relative', flexShrink: 0 }}>
                     <input
                       type="checkbox"
                       checked={formData.newsletterSubscribed}
                       onChange={(e) => setFormData({ ...formData, newsletterSubscribed: e.target.checked })}
-                      className="peer h-5 w-5 cursor-pointer appearance-none border border-black rounded transition-all checked:bg-black"
+                      style={{ position: 'absolute', opacity: 0 }}
                     />
-                    <svg
-                      className="absolute w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={3}
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                    </svg>
+                    <div style={{
+                      flex: '0 0 16px',
+                      height: '16px',
+                      border: '1px solid #000',
+                      borderRadius: '2px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginTop: '1px',
+                      background: formData.newsletterSubscribed ? '#000' : '#fff'
+                    }}>
+                      {formData.newsletterSubscribed && (
+                        <svg width="8" height="4" viewBox="0 0 8 4" fill="none" stroke="#fff" strokeWidth="1.5">
+                          <path d="M1 2.5L3 0.5L7 3.5"/>
+                        </svg>
+                      )}
+                    </div>
                   </div>
-                  <span 
-                    className="ml-3 select-none"
+                  <span>Chci dostávat informace o novinkách, slevách a akcích e-mailem.</span>
+                </label>
+
+                {/* Google Button */}
+                <button
+                  type="button"
+                  onClick={() => {}}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '100%',
+                    height: '40px',
+                    borderRadius: '4px',
+                    border: '1px solid #000',
+                    fontSize: '13px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '.04em',
+                    textDecoration: 'none',
+                    background: '#fff',
+                    color: '#000',
+                    cursor: 'pointer',
+                    fontWeight: 400,
+                    gap: '8px',
+                    marginBottom: '12px'
+                  }}
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <text x="12" y="15" textAnchor="middle" fontSize="12" fontWeight="bold" fill="#000">G</text>
+                  </svg>
+                  PŘIHLÁSIT SE PŘES GOOGLE
+                </button>
+
+                {/* NEBO Divider */}
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  margin: '20px 0',
+                  fontSize: '12px',
+                  textTransform: 'uppercase'
+                }}>
+                  <div style={{ flex: 1, height: '1px', background: '#d9d9d9' }}></div>
+                  <span style={{ color: '#999', fontWeight: 400 }}>NEBO</span>
+                  <div style={{ flex: 1, height: '1px', background: '#d9d9d9' }}></div>
+                </div>
+
+                {/* Continue Button */}
+                <button
+                  type="button"
+                  onClick={() => nextStep(2)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '100%',
+                    height: '40px',
+                    borderRadius: '4px',
+                    border: '1px solid #000',
+                    fontSize: '13px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '.06em',
+                    textDecoration: 'none',
+                    background: '#000',
+                    color: '#fff',
+                    cursor: 'pointer',
+                    fontWeight: 400
+                  }}
+                >
+                  Pokračovat v objednávce
+                </button>
+              </section>
+            )}
+
+            {/* Step 2: Shipping & Contact */}
+            {step === 2 && (
+              <section>
+                <div style={{
+                  textAlign: 'center',
+                  fontSize: '13px',
+                  lineHeight: '1.9',
+                  marginBottom: '28px'
+                }}>
+                  <span style={{
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    letterSpacing: '.04em',
+                    display: 'block',
+                    lineHeight: '1.4',
+                    color: '#000'
+                  }}>
+                    E-mail
+                  </span>
+                  <span style={{ color: '#8a8a8a' }}>{formData.email}</span>
+                  <button
+                    type="button"
+                    onClick={() => goToStep(1)}
                     style={{
-                      fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '11px',
-                      fontWeight: 400,
-                      lineHeight: '14px',
-                      color: '#000'
+                      background: 'none',
+                      border: 'none',
+                      textDecoration: 'underline',
+                      cursor: 'pointer',
+                      marginLeft: '2px',
+                      color: '#000',
+                      fontSize: '13px'
                     }}
                   >
-                    Chci dostávat informace o novinkách, slevách a akcích e-mailem.
-                  </span>
-                </label>
-              </div>
-
-              <h2 
-                className="font-bold mb-4 uppercase pt-4"
-                style={{
-                  fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '14px',
-                  fontWeight: 400,
-                  lineHeight: '16.1px'
-                }}
-              >
-                DOPRAVA
-              </h2>
-
-              <div className="mb-4">
-                {/* Zásilkovna Option */}
-                <label className={`flex items-start p-3 sm:p-4 cursor-pointer border rounded-md mb-2 ${formData.shippingMethod === 'zasilkovna' ? 'border-black bg-gray-50' : 'border-gray-200'}`}>
-                  <input
-                    type="radio"
-                    name="shipping"
-                    value="zasilkovna"
-                    checked={formData.shippingMethod === 'zasilkovna'}
-                    onChange={(e) => setFormData({ ...formData, shippingMethod: e.target.value })}
-                    className="mr-3 sm:mr-4 mt-1"
-                  />
-                  <div className="flex-1 flex justify-between items-start gap-2">
-                    <div>
-                      <p className="text-body font-bold leading-tight">Zásilkovna</p>
-                      <p className="text-body text-xs sm:text-sm">Doručení na výdejní místo</p>
-                    </div>
-                    <p className="text-body font-bold whitespace-nowrap" style={{ color: calculateShippingCost(subtotal, 'zasilkovna') === 0 ? '#24e053' : 'inherit' }}>
-                      {calculateShippingCost(subtotal, 'zasilkovna') === 0 ? 'ZDARMA' : `${calculateShippingCost(subtotal, 'zasilkovna')} Kč`}
-                    </p>
-                  </div>
-                </label>
-
-                {formData.shippingMethod === 'zasilkovna' && (
-                  <button
-                    type="button"
-                    onClick={openZasilkovnaWidget}
-                    className="w-full border border-black bg-white text-black px-4 py-2 text-body uppercase hover:bg-gray-100 transition-colors mb-4"
-                    style={{ borderRadius: '4px', marginTop: '4px', borderWidth: '1px' }}
-                  >
-                    {formData.zasilkovnaName ? `Změnit: ${formData.zasilkovnaName}` : 'VYBRAT VÝDEJNÍ MÍSTO ZÁSILKOVNY'}
-                  </button>
-                )}
-
-                {/* PPL Home Delivery Option */}
-                <label className={`flex items-start p-3 sm:p-4 cursor-pointer border rounded-md mb-2 ${formData.shippingMethod === 'ppl_address' ? 'border-black bg-gray-50' : 'border-gray-200'}`}>
-                  <input
-                    type="radio"
-                    name="shipping"
-                    value="ppl_address"
-                    checked={formData.shippingMethod === 'ppl_address'}
-                    onChange={(e) => setFormData({ ...formData, shippingMethod: e.target.value })}
-                    className="mr-3 sm:mr-4 mt-1"
-                  />
-                  <div className="flex-1 flex justify-between items-start gap-2">
-                    <div>
-                      <p className="text-body font-bold leading-tight">PPL - Doručení na adresu</p>
-                      <p className="text-body text-xs sm:text-sm">Kurýr doručí zásilku až k vám domů</p>
-                    </div>
-                    <p className="text-body font-bold whitespace-nowrap" style={{ color: calculateShippingCost(subtotal, 'ppl_address') === 0 ? '#24e053' : 'inherit' }}>
-                      {calculateShippingCost(subtotal, 'ppl_address') === 0 ? 'ZDARMA' : `${calculateShippingCost(subtotal, 'ppl_address')} Kč`}
-                    </p>
-                  </div>
-                </label>
-
-                {formData.shippingMethod === 'ppl_address' && (
-                  <div className="space-y-2 mt-2 p-4 border border-black rounded-md bg-white">
-                    <p className="text-xs font-bold uppercase mb-2">Doručovací adresa</p>
-                    <input
-                      type="text"
-                      placeholder="Ulice a číslo popisné *"
-                      required={formData.shippingMethod === 'ppl_address'}
-                      value={formData.shippingStreet}
-                      onChange={(e) => setFormData({ ...formData, shippingStreet: e.target.value })}
-                      className="w-full border border-black px-2 py-1 text-body focus:outline-none"
-                      style={{ borderRadius: '4px' }}
-                    />
-                    <div className="flex flex-col sm:flex-row gap-2">
-                      <input
-                        type="text"
-                        placeholder="Město *"
-                        required={formData.shippingMethod === 'ppl_address'}
-                        value={formData.shippingCity}
-                        onChange={(e) => setFormData({ ...formData, shippingCity: e.target.value })}
-                        className="w-full sm:flex-1 border border-black px-2 py-1 text-body focus:outline-none"
-                        style={{ borderRadius: '4px' }}
-                      />
-                      <input
-                        type="text"
-                        placeholder="PSČ *"
-                        required={formData.shippingMethod === 'ppl_address'}
-                        value={formData.shippingZip}
-                        onChange={(e) => setFormData({ ...formData, shippingZip: e.target.value })}
-                        className="w-full sm:w-24 border border-black px-2 py-1 text-body focus:outline-none"
-                        style={{ borderRadius: '4px' }}
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {/* PPL ParcelShop Option (Placeholder for widget) */}
-                <label className={`flex items-start p-3 sm:p-4 cursor-pointer border rounded-md mb-2 ${formData.shippingMethod === 'ppl_parcelshop' ? 'border-black bg-gray-50' : 'border-gray-200'}`}>
-                  <input
-                    type="radio"
-                    name="shipping"
-                    value="ppl_parcelshop"
-                    checked={formData.shippingMethod === 'ppl_parcelshop'}
-                    onChange={(e) => setFormData({ ...formData, shippingMethod: e.target.value })}
-                    className="mr-3 sm:mr-4 mt-1"
-                  />
-                  <div className="flex-1 flex justify-between items-start gap-2">
-                    <div>
-                      <p className="text-body font-bold leading-tight">PPL ParcelShop</p>
-                      <p className="text-body text-xs sm:text-sm">Vyzvednutí na výdejním místě PPL</p>
-                    </div>
-                    <p className="text-body font-bold whitespace-nowrap" style={{ color: calculateShippingCost(subtotal, 'ppl_parcelshop') === 0 ? '#24e053' : 'inherit' }}>
-                      {calculateShippingCost(subtotal, 'ppl_parcelshop') === 0 ? 'ZDARMA' : `${calculateShippingCost(subtotal, 'ppl_parcelshop')} Kč`}
-                    </p>
-                  </div>
-                </label>
-
-                {formData.shippingMethod === 'ppl_parcelshop' && (
-                  <button
-                    type="button"
-                    onClick={openPplWidget}
-                    className="w-full border border-black bg-white text-black px-4 py-2 text-body uppercase hover:bg-gray-100 transition-colors mb-4"
-                    style={{ borderRadius: '4px', marginTop: '4px', borderWidth: '1px' }}
-                  >
-                    {formData.pplName ? `Změnit: ${formData.pplName}` : 'VYBRAT VÝDEJNÍ MÍSTO PPL'}
-                  </button>
-                )}
-              </div>
-
-              {/* PPL Widget - Always present in DOM for the script to find it on load */}
-              <div 
-                className={`fixed inset-0 z-[100] bg-white flex flex-col transition-all duration-300 ${
-                  isPplModalOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-                }`}
-              >
-                <div className="flex justify-between items-center p-4 border-b border-black bg-black text-white">
-                  <h2 className="font-bold uppercase text-sm tracking-widest">Vyberte výdejní místo PPL</h2>
-                  <button 
-                    onClick={() => setIsPplModalOpen(false)} 
-                    className="px-4 py-2 border border-white uppercase text-xs hover:bg-white hover:text-black transition-colors"
-                  >
-                    Zavřít
+                    Upravit
                   </button>
                 </div>
-                <div className="flex-1 relative bg-gray-100">
-                  <div 
-                    id="ppl-parcelshop-map" 
-                    data-language="cs" 
-                    data-mode="default"
-                    style={{ height: '100%', width: '100%', minHeight: '500px' }}
-                  ></div>
-                </div>
-              </div>
 
-              <div className="mt-4">
-                <AnimatedButton 
-                  text="PŘEJÍT K PLATBĚ" 
-                  loading={loading}
-                  disabled={
-                    !formData.email || 
-                    !formData.name || 
-                    !formData.phone || 
-                    (formData.shippingMethod === 'zasilkovna' && !formData.zasilkovnaId) ||
-                    (formData.shippingMethod === 'ppl_address' && (!formData.shippingStreet || !formData.shippingCity || !formData.shippingZip)) ||
-                    (formData.shippingMethod === 'ppl_parcelshop' && !formData.pplId)
-                  }
-                  type="submit"
-                  className="w-full"
-                />
-              </div>
-            </form>
-          </div>
-
-          <div className="lg:col-span-1 h-full">
-            <div className="lg:border-l lg:border-r border-black h-full flex flex-col">
-              <div className="h-header flex items-center justify-center px-6">
-                <h2 
-                  className="font-bold uppercase"
-                  style={{
-                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '9.33px',
-                    fontWeight: 400,
-                    lineHeight: '10.7px'
-                  }}
-                >
-                  SOUHRN OBJEDNÁVKY
+                <h2 style={{
+                  fontSize: '12px',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '.04em',
+                  margin: '36px 0 12px'
+                }}>
+                  Doprava
                 </h2>
-              </div>
-              <div className="border-b border-black"></div>
-              <div className="p-6 overflow-auto flex flex-col flex-1">
+                <p style={{ color: '#8a8a8a', fontSize: '12px', marginBottom: '16px' }}>
+                  Doručení zboží může trvat několik pracovních dnů v závislosti na zvolené službě.
+                </p>
 
-              <div className="mb-4 pb-4">
-                {items.map((item) => (
-                  <div key={`${item.productId}-${item.size}`} className="flex gap-4 mb-4">
-                    <div className="w-16 h-16 border border-black flex-shrink-0 flex items-center justify-center overflow-hidden" style={{ borderRadius: '4px' }}>
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className="object-cover w-full h-full"
-                      />
+                {/* Shipping Options */}
+                <div style={{ border: '1px solid #000', borderRadius: '4px', overflow: 'hidden', marginBottom: '24px' }}>
+                  {/* Zasilkovna */}
+                  <label style={{ display: 'block', borderTop: '1px solid #000', cursor: 'pointer' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 12px' }}>
+                      <div style={{
+                        flex: '0 0 14px',
+                        height: '14px',
+                        border: '1px solid #000',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}>
+                        {formData.shippingMethod === 'zasilkovna' && (
+                          <div style={{
+                            width: '8px',
+                            height: '8px',
+                            borderRadius: '50%',
+                            background: '#000'
+                          }}/>
+                        )}
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontWeight: 500, display: 'block' }}>Zásilkovna</div>
+                        <div style={{ display: 'block', color: '#8a8a8a', fontSize: '11px' }}>Doručení na výdejní místo</div>
+                      </div>
+                      <div style={{ whiteSpace: 'nowrap' }}>
+                        {calculateShippingCost(subtotal, 'zasilkovna') === 0 ? 'Zdarma' : calculateShippingCost(subtotal, 'zasilkovna') + ' Kč'}
+                      </div>
                     </div>
-                    <div className="flex-1">
-                      <p style={{ fontSize: '14px', fontWeight: 'bold' }}>{item.name}</p>
-                      <p style={{ fontSize: '14px' }}>{item.size} / {item.quantity}x</p>
-                      <p style={{ fontSize: '14px' }}>{item.price * item.quantity} Kč</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                    <input
+                      type="radio"
+                      name="shipping"
+                      value="zasilkovna"
+                      checked={formData.shippingMethod === 'zasilkovna'}
+                      onChange={(e) => setFormData({ ...formData, shippingMethod: e.target.value })}
+                      style={{ position: 'absolute', opacity: 0 }}
+                    />
+                    {formData.shippingMethod === 'zasilkovna' && (
+                      <div style={{ padding: '0 12px 12px', minHeight: '60px', display: 'flex', alignItems: 'center' }}>
+                        <button
+                          type="button"
+                          onClick={openZasilkovnaWidget}
+                          style={{
+                            width: '100%',
+                            height: '36px',
+                            border: '1px solid #000',
+                            borderRadius: '4px',
+                            padding: '0',
+                            fontSize: '11px',
+                            textTransform: 'uppercase',
+                            letterSpacing: '.06em',
+                            background: '#fff',
+                            color: '#000',
+                            cursor: 'pointer',
+                            fontWeight: 400
+                          }}
+                        >
+                          {formData.zasilkovnaName ? `Změnit: ${formData.zasilkovnaName}` : 'Vybrat výdejní místo'}
+                        </button>
+                      </div>
+                    )}
+                  </label>
 
-              <div className="mb-4 mt-4">
-                <label 
-                  className="block font-bold text-body"
-                  style={{
-                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '10px',
-                    fontWeight: 400,
-                    lineHeight: '14.1px',
-                    paddingLeft: '2px',
-                    paddingRight: '2px',
-                    color: '#999',
-                    marginBottom: '2px'
-                  }}
-                >
-                  Promo kód
-                </label>
-                <div className="flex gap-2">
+                  {/* PPL ParcelShop */}
+                  <label style={{ display: 'block', borderTop: '1px solid #000', cursor: 'pointer' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 12px' }}>
+                      <div style={{
+                        flex: '0 0 14px',
+                        height: '14px',
+                        border: '1px solid #000',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}>
+                        {formData.shippingMethod === 'ppl_parcelshop' && (
+                          <div style={{
+                            width: '8px',
+                            height: '8px',
+                            borderRadius: '50%',
+                            background: '#000'
+                          }}/>
+                        )}
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontWeight: 500, display: 'block' }}>PPL ParcelShop</div>
+                        <div style={{ display: 'block', color: '#8a8a8a', fontSize: '11px' }}>Vyzvednutí na výdejním místě PPL</div>
+                      </div>
+                      <div style={{ whiteSpace: 'nowrap' }}>
+                        {calculateShippingCost(subtotal, 'ppl_parcelshop') === 0 ? 'Zdarma' : calculateShippingCost(subtotal, 'ppl_parcelshop') + ' Kč'}
+                      </div>
+                    </div>
+                    <input
+                      type="radio"
+                      name="shipping"
+                      value="ppl_parcelshop"
+                      checked={formData.shippingMethod === 'ppl_parcelshop'}
+                      onChange={(e) => setFormData({ ...formData, shippingMethod: e.target.value })}
+                      style={{ position: 'absolute', opacity: 0 }}
+                    />
+                    {formData.shippingMethod === 'ppl_parcelshop' && (
+                      <div style={{ padding: '0 12px 12px', minHeight: '60px', display: 'flex', alignItems: 'center' }}>
+                        <button
+                          type="button"
+                          onClick={() => setIsPplModalOpen(true)}
+                          style={{
+                            width: '100%',
+                            height: '36px',
+                            border: '1px solid #000',
+                            borderRadius: '4px',
+                            padding: '0',
+                            fontSize: '11px',
+                            textTransform: 'uppercase',
+                            letterSpacing: '.06em',
+                            background: '#fff',
+                            color: '#000',
+                            cursor: 'pointer',
+                            fontWeight: 400
+                          }}
+                        >
+                          {formData.pplName ? `Změnit: ${formData.pplName}` : 'Vybrat výdejní místo'}
+                        </button>
+                      </div>
+                    )}
+                  </label>
+                </div>
+
+                <h2 style={{
+                  fontSize: '12px',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '.04em',
+                  margin: '36px 0 12px'
+                }}>
+                  Kontaktní údaje
+                </h2>
+
+                <div style={{ marginBottom: '22px' }}>
+                  <label style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    fontSize: '11px',
+                    color: '#8a8a8a',
+                    marginBottom: '4px'
+                  }}>
+                    <span style={{ fontWeight: 600 }}>Jméno a příjmení *</span>
+                    <span style={{ fontWeight: 600 }}>*povinné</span>
+                  </label>
                   <input
                     type="text"
-                    value={formData.promoCode}
-                    onChange={(e) => {
-                      setFormData({ ...formData, promoCode: e.target.value });
-                      setPromoError('');
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    style={{
+                      width: '100%',
+                      height: '36px',
+                      border: '1px solid #000',
+                      borderRadius: '4px',
+                      padding: '0 12px',
+                      font: 'inherit',
+                      fontSize: '13px',
+                      background: '#fff',
+                      color: '#000',
+                      outline: 'none'
                     }}
-                    className="flex-1 border border-black px-2 py-1 text-body focus:outline-none"
-                    placeholder="KÓD"
-                    style={{ borderRadius: '4px' }}
                   />
-                  <button
-                    type="button"
-                    onClick={handleApplyPromo}
-                    className="border border-black px-4 py-1 text-body uppercase hover:bg-black hover:text-white transition-colors"
-                    style={{ borderRadius: '4px' }}
-                  >
-                    POUŽÍT
-                  </button>
                 </div>
-                {promoError && <p className="text-body mt-2 text-black">{promoError}</p>}
-              </div>
 
-              <div className="space-y-2 mb-6">
-                <div className="flex justify-between" style={{ fontSize: '14px' }}>
-                  <span>Mezisoučet</span>
-                  <span>{subtotal} Kč</span>
-                </div>
-                <div className="flex justify-between" style={{ fontSize: '14px' }}>
-                  <span>Doprava</span>
-                  <span style={{ color: shippingCost === 0 ? '#24e053' : 'inherit' }}>
-                    {shippingCost === 0 ? 'ZDARMA' : `${shippingCost} Kč`}
-                  </span>
-                </div>
-                {amountToFreeShipping > 0 && (
-                  <p style={{ fontSize: '11px', color: '#24e053', marginTop: '4px' }}>
-                    Přidejte zboží za {amountToFreeShipping} Kč pro dopravu zdarma!
-                  </p>
-                )}
-                {discount > 0 && (
-                  <div className="flex justify-between" style={{ fontSize: '14px' }}>
-                    <span>Sleva</span>
-                    <span>-{discount} Kč</span>
+                <div style={{ display: 'grid', gridTemplateColumns: '96px 1fr', gap: '12px', marginBottom: '22px' }}>
+                  <div>
+                    <label style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      fontSize: '11px',
+                      color: '#8a8a8a',
+                      marginBottom: '4px'
+                    }}>
+                      <span style={{ fontWeight: 600 }}>Předvolba *</span>
+                    </label>
+                    <select
+                      value={formData.prefix}
+                      onChange={(e) => setFormData({ ...formData, prefix: e.target.value })}
+                      style={{
+                        width: '100%',
+                        height: '36px',
+                        border: '1px solid #000',
+                        borderRadius: '4px',
+                        padding: '0 12px',
+                        font: 'inherit',
+                        fontSize: '13px',
+                        background: '#fff url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2712%27 height=%278%27 fill=%27none%27 stroke=%27%23000%27 stroke-width=%271.4%27%3E%3Cpath d=%27M1 1.5l5 5 5-5%27/%3E%3C/svg%3E") right 12px center no-repeat',
+                        backgroundSize: '12px 8px',
+                        color: '#000',
+                        outline: 'none',
+                        appearance: 'none',
+                        paddingRight: '32px'
+                      }}
+                    >
+                      <option value="+420">+420</option>
+                      <option value="+421">+421</option>
+                      <option value="+48">+48</option>
+                      <option value="+49">+49</option>
+                      <option value="+43">+43</option>
+                    </select>
                   </div>
-                )}
-                <div className="pt-4">
-                  <div className="flex justify-between font-bold" style={{ fontSize: '14px' }}>
-                    <span>CELKEM</span>
-                    <span>{total} Kč</span>
+                  <div>
+                    <label style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      fontSize: '11px',
+                      color: '#8a8a8a',
+                      marginBottom: '4px'
+                    }}>
+                      <span style={{ fontWeight: 600 }}>Telefon *</span>
+                    </label>
+                    <input
+                      type="tel"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      style={{
+                        width: '100%',
+                        height: '36px',
+                        border: '1px solid #000',
+                        borderRadius: '4px',
+                        padding: '0 12px',
+                        font: 'inherit',
+                        fontSize: '13px',
+                        background: '#fff',
+                        color: '#000',
+                        outline: 'none'
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => nextStep(3)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '100%',
+                    height: '40px',
+                    borderRadius: '4px',
+                    border: '1px solid #000',
+                    fontSize: '13px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '.06em',
+                    textDecoration: 'none',
+                    background: '#000',
+                    color: '#fff',
+                    cursor: 'pointer',
+                    fontWeight: 400
+                  }}
+                >
+                  Uložit a pokračovat
+                </button>
+              </section>
+            )}
+
+            {/* Step 3: Payment */}
+            {step === 3 && (
+              <section>
+                <h2 style={{
+                  fontSize: '12px',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '.04em',
+                  marginTop: 0,
+                  marginBottom: '12px'
+                }}>
+                  Shrnutí
+                </h2>
+
+                <div style={{
+                  border: '1px solid #000',
+                  borderRadius: '4px',
+                  marginBottom: '24px',
+                  overflow: 'hidden'
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    gap: '16px',
+                    padding: '12px',
+                    fontSize: '12px'
+                  }}>
+                    <span>E-mail</span>
+                    <span style={{ textAlign: 'right' }}>
+                      {formData.email}
+                      <button
+                        type="button"
+                        onClick={() => goToStep(1)}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          textDecoration: 'underline',
+                          cursor: 'pointer',
+                          marginLeft: '8px',
+                          color: '#000',
+                          fontSize: '12px'
+                        }}
+                      >
+                        Upravit
+                      </button>
+                    </span>
+                  </div>
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    gap: '16px',
+                    padding: '12px',
+                    borderTop: '1px solid #d9d9d9',
+                    fontSize: '12px'
+                  }}>
+                    <span>Kontakt</span>
+                    <span style={{ textAlign: 'right' }}>
+                      {formData.name}<br/>{formData.prefix} {formData.phone}
+                      <button
+                        type="button"
+                        onClick={() => goToStep(2)}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          textDecoration: 'underline',
+                          cursor: 'pointer',
+                          marginLeft: '8px',
+                          color: '#000',
+                          fontSize: '12px'
+                        }}
+                      >
+                        Upravit
+                      </button>
+                    </span>
+                  </div>
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    gap: '16px',
+                    padding: '12px',
+                    borderTop: '1px solid #d9d9d9',
+                    fontSize: '12px'
+                  }}>
+                    <span>Doprava</span>
+                    <span style={{ textAlign: 'right' }}>
+                      {formData.shippingMethod === 'zasilkovna' ? 'Zásilkovna' : formData.shippingMethod === 'ppl_parcelshop' ? 'PPL ParcelShop' : 'Doprava'} – {shippingCost === 0 ? 'Zdarma' : shippingCost + ' Kč'}
+                      <button
+                        type="button"
+                        onClick={() => goToStep(2)}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          textDecoration: 'underline',
+                          cursor: 'pointer',
+                          marginLeft: '8px',
+                          color: '#000',
+                          fontSize: '12px'
+                        }}
+                      >
+                        Upravit
+                      </button>
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '100%',
+                    height: '40px',
+                    borderRadius: '4px',
+                    border: '1px solid #000',
+                    fontSize: '13px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '.06em',
+                    textDecoration: 'none',
+                    background: loading ? '#808080' : '#000',
+                    color: '#fff',
+                    cursor: loading ? 'not-allowed' : 'pointer',
+                    fontWeight: 400
+                  }}
+                >
+                  {loading ? 'Zpracovávám...' : 'Přejít k platbě'}
+                </button>
+              </section>
+            )}
+          </form>
+        </main>
+
+        {/* Right Column - Order Summary */}
+        <aside style={{
+          borderLeft: 'none',
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: 'auto',
+          borderTop: '1px solid #000',
+          marginTop: '32px'
+        }} className="lg:border-l lg:border-black lg:border-t-0 lg:mt-0">
+          <div style={{
+            height: '41px',
+            display: 'flex',
+            alignItems: 'center',
+            padding: '0 12px',
+            fontSize: '12px',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            letterSpacing: '.04em',
+            borderBottom: '1px solid #000',
+            background: '#f5f5f5'
+          }}>
+            Souhrn objednávky
+          </div>
+
+          <div style={{ flex: 1, overflowY: 'auto' }}>
+            {/* Cart Items */}
+            {items.map((item) => (
+              <div key={`${item.productId}-${item.size}`} style={{
+                display: 'grid',
+                gridTemplateColumns: '107px 1fr',
+                borderBottom: '1px solid #000'
+              }}>
+                <div style={{
+                  background: '#f2f2f2',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '12px'
+                }}>
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    style={{
+                      width: '100%',
+                      height: 'auto',
+                      display: 'block'
+                    }}
+                  />
+                </div>
+                <div style={{
+                  padding: '14px 12px',
+                  fontSize: '12px',
+                  lineHeight: '1.7'
+                }}>
+                  <div style={{
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    letterSpacing: '.03em',
+                    fontSize: '12px',
+                    marginBottom: '4px'
+                  }}>
+                    {item.name}
+                  </div>
+                  <div>{item.size} × {item.quantity}</div>
+                  <div style={{ marginTop: '8px', fontWeight: 600 }}>
+                    {(item.price * item.quantity).toLocaleString('cs-CZ')} Kč
                   </div>
                 </div>
               </div>
+            ))}
+
+            {/* Promo Code */}
+            <div style={{
+              display: 'flex',
+              gap: '12px',
+              alignItems: 'flex-end',
+              padding: '20px 12px',
+              borderBottom: '1px solid #000'
+            }}>
+              <div style={{ flex: 1, marginBottom: 0 }}>
+                <label style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  fontSize: '11px',
+                  color: '#8a8a8a',
+                  marginBottom: '4px'
+                }}>
+                  Promo kód
+                </label>
+                <input
+                  type="text"
+                  value={formData.promoCode}
+                  onChange={(e) => {
+                    setFormData({ ...formData, promoCode: e.target.value });
+                    setPromoError('');
+                  }}
+                  placeholder="KÓD"
+                  style={{
+                    width: '100%',
+                    height: '36px',
+                    border: '1px solid #000',
+                    borderRadius: '4px',
+                    padding: '0 12px',
+                    font: 'inherit',
+                    fontSize: '13px',
+                    background: '#fff',
+                    color: '#000',
+                    outline: 'none'
+                  }}
+                />
+              </div>
+              <button
+                type="button"
+                onClick={handleApplyPromo}
+                disabled={loading}
+                style={{
+                  background: 'none',
+                  border: '0',
+                  height: '36px',
+                  padding: '0 8px',
+                  fontSize: '11px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '.06em',
+                  textDecoration: 'underline',
+                  cursor: loading ? 'not-allowed' : 'pointer'
+                }}
+              >
+                Použít
+              </button>
+            </div>
+            {promoError && (
+              <div style={{
+                color: '#d00',
+                fontSize: '11px',
+                padding: '8px 12px',
+                borderBottom: '1px solid #000'
+              }}>
+                {promoError}
+              </div>
+            )}
+
+            {/* Summary Lines */}
+            <div style={{
+              padding: '16px 12px',
+              borderBottom: '1px solid #000'
+            }}>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                fontSize: '11px',
+                textTransform: 'uppercase',
+                letterSpacing: '.03em',
+                padding: '5px 0'
+              }}>
+                <span>Mezisoučet</span>
+                <span>{subtotal.toLocaleString('cs-CZ')} Kč</span>
+              </div>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                fontSize: '11px',
+                textTransform: 'uppercase',
+                letterSpacing: '.03em',
+                padding: '5px 0'
+              }}>
+                <span>Doprava</span>
+                <span style={{ color: shippingCost === 0 ? '#2ecc40' : '#000' }}>
+                  {shippingCost === 0 ? 'Zdarma' : shippingCost.toLocaleString('cs-CZ') + ' Kč'}
+                </span>
+              </div>
+              {amountToFreeShipping > 0 && (
+                <div style={{
+                  color: '#2ecc40',
+                  fontSize: '11px',
+                  padding: '5px 0',
+                  textTransform: 'none',
+                  letterSpacing: 0
+                }}>
+                  Přidejte zboží za {amountToFreeShipping.toLocaleString('cs-CZ')} Kč pro dopravu zdarma!
+                </div>
+              )}
+              {discount > 0 && (
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  fontSize: '11px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '.03em',
+                  padding: '5px 0'
+                }}>
+                  <span>Sleva</span>
+                  <span>-{discount.toLocaleString('cs-CZ')} Kč</span>
+                </div>
+              )}
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                fontSize: '12px',
+                fontWeight: 700,
+                padding: '5px 0'
+              }}>
+                <span>Celkem</span>
+                <span>{total.toLocaleString('cs-CZ')} Kč</span>
               </div>
             </div>
+
+            {/* Payment Methods */}
+            <div style={{
+              padding: '16px 12px',
+              borderBottom: '1px solid #000',
+              textAlign: 'center'
+            }}>
+              <p style={{
+                fontSize: '11px',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '.03em',
+                margin: '0 0 8px 0',
+                color: '#000'
+              }}>
+                BEZPEČNĚ PŘIJÍMÁME
+              </p>
+              <img 
+                src="/payment-methods.jpg" 
+                alt="Payment Methods: Visa, Mastercard, GoPay, PayPal, Apple Pay" 
+                style={{
+                  height: '32px',
+                  width: 'auto',
+                  display: 'inline-block'
+                }}
+              />
+            </div>
+
+            {/* Customer Support */}
+            <div style={{
+              padding: '16px 12px',
+              textAlign: 'center',
+              borderBottom: '1px solid #000'
+            }}>
+              <p style={{
+                fontSize: '11px',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '.03em',
+                margin: '0 0 8px 0',
+                color: '#000'
+              }}>
+                ZÁKAZNICKÁ PODPORA
+              </p>
+              <p style={{
+                fontSize: '11px',
+                margin: '0 0 12px 0',
+                color: '#666',
+                lineHeight: '1.4'
+              }}>
+                Naše klientská podpora je k dispozici od pondělí do soboty 9:30 - 19:00
+              </p>
+
+              {/* WhatsApp Button */}
+              <a 
+                href="https://wa.me/420775181107" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                style={{
+                  display: 'block',
+                  border: '1px solid #000',
+                  borderRadius: '2px',
+                  padding: '8px 12px',
+                  fontSize: '11px',
+                  textDecoration: 'underline',
+                  color: '#000',
+                  marginBottom: '8px',
+                  textTransform: 'uppercase',
+                  fontWeight: 500
+                }}
+              >
+                WHATSAPP +420775181107
+              </a>
+
+              {/* Phone Button */}
+              <a 
+                href="tel:+420775181107"
+                style={{
+                  display: 'block',
+                  border: '1px solid #000',
+                  borderRadius: '2px',
+                  padding: '8px 12px',
+                  fontSize: '11px',
+                  textDecoration: 'underline',
+                  color: '#000',
+                  textTransform: 'uppercase',
+                  fontWeight: 500
+                }}
+              >
+                ZAVOLEJTE NÁM NA +420775181107
+              </a>
+            </div>
+
+            {/* Bullets */}
+            <ul style={{
+              padding: '16px 12px 24px',
+              listStyle: 'disc inside',
+              fontSize: '12px',
+              lineHeight: '1.9',
+              margin: 0
+            }}>
+              <li>Bezpečná platba</li>
+              <li>Rychlé doručení</li>
+            </ul>
           </div>
+        </aside>
+      </div>
+
+      {/* PPL Modal */}
+      <div 
+        style={{
+          position: 'fixed',
+          inset: 0,
+          zIndex: 100,
+          backgroundColor: isPplModalOpen ? 'rgba(0,0,0,0.5)' : 'transparent',
+          pointerEvents: isPplModalOpen ? 'auto' : 'none',
+          opacity: isPplModalOpen ? 1 : 0,
+          transition: 'opacity 0.3s'
+        }}
+      >
+        <div 
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 101,
+            backgroundColor: '#fff',
+            display: 'flex',
+            flexDirection: 'column',
+            opacity: isPplModalOpen ? 1 : 0,
+            pointerEvents: isPplModalOpen ? 'auto' : 'none',
+            transition: 'opacity 0.3s'
+          }}
+        >
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '16px',
+            borderBottom: '1px solid #000',
+            backgroundColor: '#000'
+          }}>
+            <h2 style={{
+              margin: 0,
+              fontSize: '14px',
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              color: '#fff'
+            }}>
+              Vyberte výdejní místo PPL
+            </h2>
+            <button 
+              onClick={() => setIsPplModalOpen(false)}
+              style={{
+                background: 'none',
+                border: '1px solid #fff',
+                color: '#fff',
+                padding: '8px 16px',
+                fontSize: '12px',
+                fontWeight: 600,
+                textTransform: 'uppercase',
+                cursor: 'pointer',
+                borderRadius: '4px'
+              }}
+            >
+              Zavřít
+            </button>
+          </div>
+          <div 
+            id="ppl-parcelshop-map" 
+            data-language="cs" 
+            data-mode="default"
+            style={{ flex: 1, minHeight: '500px', width: '100%' }}
+          ></div>
         </div>
       </div>
     </div>
