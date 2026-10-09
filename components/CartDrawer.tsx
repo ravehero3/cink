@@ -268,7 +268,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
           <div className="border-b border-black relative" style={{ height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#24e053' }}>
             <h2 
               style={{
-                fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                 fontSize: '14px',
                 fontWeight: 700,
                 textTransform: 'uppercase',
@@ -378,7 +378,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                           style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px', textDecoration: 'none' }}
                           className="hover:opacity-80 transition-opacity"
                         >
-                          <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #000' }}>
+                          <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             {product.image && (
                               <img
                                 src={product.image}
@@ -394,11 +394,11 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                           </div>
                           <h4 style={{
                             fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                            fontSize: '11px',
+                            fontSize: '13px',
                             fontWeight: 700,
                             textTransform: 'uppercase',
                             marginTop: 0,
-                            marginBottom: '4px',
+                            marginBottom: '6px',
                             letterSpacing: '0.03em',
                             fontStretch: 'condensed',
                             color: '#000000',
@@ -483,7 +483,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                             style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px', textDecoration: 'none' }}
                             className="hover:opacity-80 transition-opacity"
                           >
-                            <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #000' }}>
+                            <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                               {product.image && (
                                 <img
                                   src={product.image}
@@ -521,17 +521,32 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                               margin: '0 0 8px 0',
                               textAlign: 'center'
                             }}>{product.price} Kč</p>
-                            <div style={{
-                              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                              fontSize: '9px',
-                              fontWeight: 400,
-                              lineHeight: '1.2',
-                              color: '#000000',
-                              textDecoration: 'underline',
-                              textAlign: 'center'
-                            }}>
+                            <button
+                              onClick={() => {}}
+                              style={{
+                                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                                fontSize: '12px',
+                                fontWeight: 700,
+                                lineHeight: '1.4',
+                                color: '#ffffff',
+                                backgroundColor: '#000000',
+                                padding: '8px 12px',
+                                borderRadius: '4px',
+                                border: 'none',
+                                textAlign: 'center',
+                                cursor: 'pointer',
+                                transition: 'all 0.3s',
+                                width: '100%'
+                              }}
+                              onMouseEnter={(e) => {
+                                (e.currentTarget as HTMLElement).style.backgroundColor = '#333333';
+                              }}
+                              onMouseLeave={(e) => {
+                                (e.currentTarget as HTMLElement).style.backgroundColor = '#000000';
+                              }}
+                            >
                               Přidat do košíku
-                            </div>
+                            </button>
                           </Link>
                         </div>
                       ))}
@@ -633,7 +648,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                           style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '8px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px', textDecoration: 'none' }}
                           className="hover:opacity-80 transition-opacity"
                         >
-                          <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #000' }}>
+                          <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             {product.image && (
                               <img
                                 src={product.image}
@@ -649,11 +664,11 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                           </div>
                           <h4 style={{
                             fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                            fontSize: '11px',
+                            fontSize: '13px',
                             fontWeight: 700,
                             textTransform: 'uppercase',
                             marginTop: 0,
-                            marginBottom: '4px',
+                            marginBottom: '6px',
                             letterSpacing: '0.03em',
                             fontStretch: 'condensed',
                             color: '#000000',
@@ -738,7 +753,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                             style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '8px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px', textDecoration: 'none' }}
                             className="hover:opacity-80 transition-opacity"
                           >
-                            <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #000' }}>
+                            <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                               {product.image && (
                                 <img
                                   src={product.image}
@@ -776,17 +791,32 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                               margin: '0 0 8px 0',
                               textAlign: 'center'
                             }}>{product.price} Kč</p>
-                            <div style={{
-                              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                              fontSize: '9px',
-                              fontWeight: 400,
-                              lineHeight: '1.2',
-                              color: '#000000',
-                              textDecoration: 'underline',
-                              textAlign: 'center'
-                            }}>
+                            <button
+                              onClick={() => {}}
+                              style={{
+                                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                                fontSize: '12px',
+                                fontWeight: 700,
+                                lineHeight: '1.4',
+                                color: '#ffffff',
+                                backgroundColor: '#000000',
+                                padding: '8px 12px',
+                                borderRadius: '4px',
+                                border: 'none',
+                                textAlign: 'center',
+                                cursor: 'pointer',
+                                transition: 'all 0.3s',
+                                width: '100%'
+                              }}
+                              onMouseEnter={(e) => {
+                                (e.currentTarget as HTMLElement).style.backgroundColor = '#333333';
+                              }}
+                              onMouseLeave={(e) => {
+                                (e.currentTarget as HTMLElement).style.backgroundColor = '#000000';
+                              }}
+                            >
                               Přidat do košíku
-                            </div>
+                            </button>
                           </Link>
                         </div>
                       ))}
