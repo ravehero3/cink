@@ -20,7 +20,10 @@ jobs:
             git stash
             git pull origin main
             cd ~/apps
+            # Stop and remove all orphaned cink containers
+            docker ps -a | grep apps-cink | awk '{print $1}' | xargs -r docker rm -f
+            # Now build and start
             docker compose build cink
-            docker compose up -d --force-recreate --no-deps cink
+            docker compose up -d cink
             docker image prune -f
             echo "Deploy complete"
