@@ -440,7 +440,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     className="select-none"
                   >
                     {selectedProducts.map((product, index) => (
-                      <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(40% - 0.4px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
+                      <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(66.666% - 0.67px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
                         {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
                         <Link
                           href={`/produkty/${product.slug}`}
@@ -615,7 +615,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       className="select-none"
                     >
                       {recentlyViewed.map((product, index) => (
-                        <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(40% - 0.4px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
+                        <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(66.666% - 0.67px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
                           {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
                           <Link
                             href={`/produkty/${product.slug}`}
@@ -834,7 +834,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     className="select-none"
                   >
                     {selectedProducts.map((product, index) => (
-                      <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(40% - 0.4px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
+                      <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(66.666% - 0.67px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
                         {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
                         <Link
                           href={`/produkty/${product.slug}`}
