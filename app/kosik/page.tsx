@@ -284,7 +284,7 @@ export default function CartPage() {
             {/* VYBRÁNO PRO VÁS Section - when cart empty */}
             {selectedProducts.length > 0 && (
               <div style={{ display: 'flex', flexDirection: 'column', borderTop: '1px solid #000', borderBottom: '1px solid #000', minHeight: '0' }}>
-                <div style={{ paddingTop: '8px', paddingBottom: '8px', paddingLeft: '16px', paddingRight: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px', position: 'relative' }}>
+                <div style={{ paddingTop: '4px', paddingBottom: '4px', paddingLeft: '16px', paddingRight: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px', position: 'relative' }}>
                   <button
                     onClick={() => {
                       if (vybrranoRef.current) {
@@ -375,7 +375,7 @@ export default function CartPage() {
                     gap: '0', 
                     paddingLeft: '0', 
                     paddingRight: '0', 
-                    paddingTop: '8px',
+                    paddingTop: '4px',
                     scrollBehavior: 'smooth', 
                     WebkitOverflowScrolling: 'touch',
                     scrollbarWidth: 'none',
@@ -389,17 +389,17 @@ export default function CartPage() {
                   className="select-none"
                 >
                   {selectedProducts.map((product, index) => (
-                    <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(40% - 0.4px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
+                    <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(66.666% - 0.67px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
                       {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
                       <div
-                        style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px' }}
+                        style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '12px', paddingBottom: '12px', paddingLeft: '12px', paddingRight: '12px' }}
                         className="hover:opacity-80 transition-opacity"
                       >
                         <a
                           href={`/produkty/${product.slug}`}
                           style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', flex: 1 }}
                         >
-                          <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             {product.image && (
                               <img
                                 src={product.image}
