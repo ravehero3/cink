@@ -283,7 +283,7 @@ export default function CartPage() {
 
             {/* VYBRÁNO PRO VÁS Section - when cart empty */}
             {selectedProducts.length > 0 && (
-              <div style={{ display: 'flex', flexDirection: 'column', borderTop: '1px solid #000', minHeight: '0' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', borderTop: '1px solid #000', borderBottom: '1px solid #000', minHeight: '0' }}>
                 <div style={{ paddingTop: '8px', paddingBottom: '8px', paddingLeft: '16px', paddingRight: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px', position: 'relative' }}>
                   <button
                     onClick={() => {
@@ -325,7 +325,7 @@ export default function CartPage() {
                     textTransform: 'uppercase',
                     letterSpacing: '0.03em',
                     fontStretch: 'condensed',
-                    margin: '0 0 4px 0',
+                    margin: '0',
                     textAlign: 'center',
                     flex: 1
                   }}>
@@ -365,6 +365,7 @@ export default function CartPage() {
                     </svg>
                   </button>
                 </div>
+                <div style={{ borderTop: '1px solid #000' }} />
                 <div
                   ref={vybrranoRef}
                   style={{ 
@@ -374,6 +375,7 @@ export default function CartPage() {
                     gap: '0', 
                     paddingLeft: '0', 
                     paddingRight: '0', 
+                    paddingTop: '8px',
                     scrollBehavior: 'smooth', 
                     WebkitOverflowScrolling: 'touch',
                     scrollbarWidth: 'none',
@@ -389,51 +391,87 @@ export default function CartPage() {
                   {selectedProducts.map((product, index) => (
                     <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(40% - 0.4px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
                       {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
-                      <a
-                        href={`/produkty/${product.slug}`}
-                        style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px', textDecoration: 'none' }}
+                      <div
+                        style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px' }}
                         className="hover:opacity-80 transition-opacity"
                       >
-                        <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          {product.image && (
-                            <img
-                              src={product.image}
-                              alt={product.name}
-                              style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                              loading="lazy"
-                              onError={(e) => {
-                                const img = e.target as HTMLImageElement;
-                                img.style.display = 'none';
-                              }}
-                            />
-                          )}
-                        </div>
-                        <h4 style={{
-                          fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                          fontSize: '13px',
-                          fontWeight: 700,
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.03em',
-                          fontStretch: 'condensed',
-                          margin: '0 0 4px 0',
-                          textAlign: 'center',
-                          color: '#000',
-                          lineHeight: '1.2'
-                        }}>
-                          {product.name}
-                        </h4>
-                        <p style={{
-                          fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                          fontSize: '11px',
-                          fontWeight: 400,
-                          margin: '0',
-                          textAlign: 'center',
-                          color: '#000',
-                          lineHeight: '1.2'
-                        }}>
-                          {product.price} Kč
-                        </p>
-                      </a>
+                        <a
+                          href={`/produkty/${product.slug}`}
+                          style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', flex: 1 }}
+                        >
+                          <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            {product.image && (
+                              <img
+                                src={product.image}
+                                alt={product.name}
+                                style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                                loading="lazy"
+                                onError={(e) => {
+                                  const img = e.target as HTMLImageElement;
+                                  img.style.display = 'none';
+                                }}
+                              />
+                            )}
+                          </div>
+                          <h4 style={{
+                            fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                            fontSize: '13px',
+                            fontWeight: 700,
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.03em',
+                            fontStretch: 'condensed',
+                            margin: '0 0 4px 0',
+                            textAlign: 'center',
+                            color: '#000',
+                            lineHeight: '1.2'
+                          }}>
+                            {product.name}
+                          </h4>
+                          <p style={{
+                            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                            fontSize: '11px',
+                            fontWeight: 400,
+                            margin: '0 0 4px 0',
+                            textAlign: 'center',
+                            color: '#000',
+                            lineHeight: '1.2'
+                          }}>
+                            {product.price} Kč
+                          </p>
+                        </a>
+                        <button
+                          onClick={() => {
+                            const { addItem } = useCartStore.getState();
+                            addItem({
+                              productId: product.id,
+                              name: product.name,
+                              price: product.price,
+                              image: product.image,
+                              slug: product.slug,
+                              size: 'ONE SIZE',
+                              color: '',
+                              quantity: 1,
+                              category: ''
+                            });
+                          }}
+                          style={{
+                            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                            fontSize: '11px',
+                            fontWeight: 400,
+                            margin: '0',
+                            textAlign: 'center',
+                            color: '#000',
+                            textDecoration: 'underline',
+                            background: 'none',
+                            border: 'none',
+                            cursor: 'pointer',
+                            padding: '0',
+                            lineHeight: '1.2'
+                          }}
+                        >
+                          Přidat do košíku
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
