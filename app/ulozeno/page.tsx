@@ -17,6 +17,7 @@ interface Product {
   images: string[];
   category: string;
   color: string;
+  productImage?: string;
 }
 
 function AnimatedLink({ href, text }: { href: string; text: string }) {
