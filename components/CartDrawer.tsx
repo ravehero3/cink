@@ -50,7 +50,8 @@ interface Product {
   id: string;
   name: string;
   price: number;
-  image: string;
+  image?: string;
+  images?: string[];
   slug: string;
 }
 
@@ -86,7 +87,12 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
         if (Array.isArray(data)) {
           setAllProducts(data);
         } else if (data.products && Array.isArray(data.products)) {
-          setAllProducts(data.products);
+          // Map images array to image property for consistency
+          const productsWithImage = data.products.map((p: any) => ({
+            ...p,
+            image: p.images && p.images.length > 0 ? p.images[0] : '',
+          }));
+          setAllProducts(productsWithImage);
         }
       } catch (error) {
         console.error('Failed to fetch products:', error);
@@ -281,8 +287,8 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   <SavedItemsButton onClose={onClose} />
                 </div>
 
-                {/* VYBRÁNO PRO VÁS Section - 634px */}
-                <div style={{ display: 'flex', flexDirection: 'column', borderBottom: '1px solid #000' }}>
+                {/* VYBRÁNO PRO VÁS Section */}
+                <div style={{ display: 'flex', flexDirection: 'column', borderBottom: '1px solid #000', minHeight: '0', flex: 1 }}>
                   <div style={{ paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px', borderBottom: '1px solid #000' }}>
                     <h3 
                       style={{
@@ -333,7 +339,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                               <img
                                 src={product.image}
                                 alt={product.name}
-                                style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', maxWidth: '100%', maxHeight: '100%', objectFit: 'cover', display: 'block' }}
+                                style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                                 loading="lazy"
                                 onError={(e) => {
                                   const img = e.target as HTMLImageElement;
@@ -383,9 +389,9 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   </div>
                 </div>
 
-                {/* PROHLÍŽELI JSTE Section - 634px */}
+                {/* PROHLÍŽELI JSTE Section */}
                 {recentlyViewed.length > 0 && (
-                  <div style={{ height: '634px', display: 'flex', flexDirection: 'column', borderBottom: '1px solid #000' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', borderBottom: '1px solid #000', minHeight: '0', flex: 1 }}>
                     <div style={{ paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px', borderBottom: '1px solid #000' }}>
                       <h3 
                         style={{
@@ -417,7 +423,8 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         scrollbarWidth: 'none',
                         scrollSnapType: 'x mandatory',
                         flex: 1,
-                        cursor: 'grab'
+                        cursor: 'grab',
+                        minHeight: '0'
                       }}
                       className="select-none"
                     >
@@ -430,17 +437,19 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                             style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '16px', paddingBottom: '16px', paddingLeft: '16px', paddingRight: '16px', textDecoration: 'none' }}
                             className="hover:opacity-80 transition-opacity"
                           >
-                            <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#ffffff', overflow: 'hidden', marginBottom: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                              <img
-                                src={product.image}
-                                alt={product.name}
-                                style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', display: 'block' }}
-                                loading="lazy"
-                                onError={(e) => {
-                                  const img = e.target as HTMLImageElement;
-                                  img.parentElement!.style.backgroundColor = '#f5f5f5';
-                                }}
-                              />
+                            <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #000' }}>
+                              {product.image && (
+                                <img
+                                  src={product.image}
+                                  alt={product.name}
+                                  style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                                  loading="lazy"
+                                  onError={(e) => {
+                                    const img = e.target as HTMLImageElement;
+                                    img.style.display = 'none';
+                                  }}
+                                />
+                              )}
                             </div>
                             <h4 style={{
                               fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -463,7 +472,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                               fontWeight: 400,
                               lineHeight: '1.2',
                               color: '#000000',
-                              margin: '0 0 12px 0',
+                              margin: '0 0 8px 0',
                               textAlign: 'center'
                             }}>{product.price} Kč</p>
                             <div style={{
@@ -484,8 +493,8 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   </div>
                 )}
 
-                {/* Info Section - 200px */}
-                <div style={{ height: '200px', padding: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '12px' }}>
+                {/* Info Section */}
+                <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '12px' }}>
                   <div style={{ 
                     fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '12px',
