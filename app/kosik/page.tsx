@@ -407,7 +407,7 @@ export default function CartPage() {
                     className="select-none"
                   >
                     {selectedProducts.map((product, index) => (
-                      <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(66.666% - 0.67px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
+                      <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(40% - 0.4px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
                         {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
                         <div
                           style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '8px', paddingBottom: '8px', paddingLeft: '8px', paddingRight: '8px' }}
@@ -662,13 +662,15 @@ export default function CartPage() {
         paddingLeft: '16px',
         paddingRight: '16px',
         marginBottom: '0px',
+        borderTop: '1px solid #000',
         borderBottom: '1px solid #000',
         width: '100%'
       }}>
         <div style={{
-          paddingTop: '16px',
-          paddingBottom: '8px',
-          textAlign: 'center'
+          paddingTop: '2px',
+          paddingBottom: '2px',
+          textAlign: 'center',
+          borderBottom: '1px solid #000'
         }}>
           <h2 style={{
             fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -677,7 +679,7 @@ export default function CartPage() {
             textTransform: 'uppercase',
             letterSpacing: '0.03em',
             fontStretch: 'condensed',
-            margin: '0 0 4px 0',
+            margin: '0',
             color: '#000'
           }}>
             VYBRÁNO PRO VÁS
@@ -704,7 +706,7 @@ export default function CartPage() {
           }}
         >
           {selectedProducts.map((product, index) => (
-            <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(66.666% - 0.67px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
+            <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(40% - 0.4px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
               {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
               <Link
                 href={`/produkty/${product.slug}`}
