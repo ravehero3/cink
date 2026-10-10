@@ -407,7 +407,7 @@ export default function CartPage() {
                     className="select-none"
                   >
                     {selectedProducts.map((product, index) => (
-                      <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(40% - 0.4px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
+                      <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(30% - 0.3px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
                         {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
                         <div
                           style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '8px', paddingBottom: '8px', paddingLeft: '8px', paddingRight: '8px' }}
@@ -503,7 +503,7 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex flex-col relative" style={{ paddingBottom: '80px' }}>
+    <div className="min-h-screen bg-white flex flex-col relative" style={{ paddingBottom: '328px' }}>
       {/* Vertical lines at product edges (995px wide, centered) - stop at footer top */}
       <div className="hidden md:block" style={{
         position: 'fixed',
@@ -706,7 +706,7 @@ export default function CartPage() {
           }}
         >
           {selectedProducts.map((product, index) => (
-            <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(40% - 0.4px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
+            <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(30% - 0.3px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
               {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
               <Link
                 href={`/produkty/${product.slug}`}
@@ -768,7 +768,7 @@ export default function CartPage() {
         </div>
       </div>
 
-      {/* Sticky Footer with Checkout Button */}
+      {/* Custom White Footer for Kosik Page */}
       <div style={{
         position: 'fixed',
         bottom: 0,
@@ -779,36 +779,163 @@ export default function CartPage() {
         backgroundColor: '#fff',
         borderTop: '1px solid #000',
         zIndex: 10,
-        padding: '12px 16px',
-        boxSizing: 'border-box',
-        height: '80px',
+        height: '328px',
         display: 'flex',
-        alignItems: 'center'
+        padding: '24px 16px',
+        boxSizing: 'border-box',
+        gap: '24px'
       }}>
-        <button
-          onClick={() => router.push('/pokladna')}
-          style={{
-            width: '100%',
-            height: '40px',
-            borderRadius: '4px',
-            border: '1px solid #000',
-            fontSize: '13px',
-            textTransform: 'uppercase',
-            letterSpacing: '.06em',
-            textDecoration: 'none',
-            background: '#000',
-            color: '#fff',
-            cursor: 'pointer',
-            fontWeight: 300,
+        {/* Left Section - Payment Methods */}
+        <div style={{
+          flex: '1',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+          textAlign: 'center',
+          gap: '12px'
+        }}>
+          <h3 style={{
             fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+            fontSize: '12px',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            letterSpacing: '0.03em',
+            margin: '0',
+            color: '#000'
+          }}>
+            BEZPEČNĚ PŘIJÍMÁME
+          </h3>
+          <div style={{
             display: 'flex',
+            gap: '8px',
             alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
-          POKRAČOVAT V OBJEDNÁVCE
-        </button>
+            justifyContent: 'center',
+            flexWrap: 'wrap'
+          }}>
+            <img src="/payment-methods.jpg" alt="Payment Methods" style={{ height: '48px', width: 'auto' }} />
+          </div>
+        </div>
+
+        {/* Middle Section - Customer Support */}
+        <div style={{
+          flex: '1',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+          textAlign: 'center',
+          gap: '12px'
+        }}>
+          <h3 style={{
+            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+            fontSize: '12px',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            letterSpacing: '0.03em',
+            margin: '0',
+            color: '#000'
+          }}>
+            ZÁKAZNICKÁ PODPORA
+          </h3>
+          <p style={{
+            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+            fontSize: '11px',
+            fontWeight: 400,
+            margin: '0 0 8px 0',
+            color: '#000',
+            lineHeight: '1.3'
+          }}>
+            Naše zákaznická podpora je vám k dispozici od Pondělí do Soboty 9:30 - 19:00
+          </p>
+          <div style={{
+            display: 'flex',
+            gap: '8px',
+            flexDirection: 'column',
+            width: '100%'
+          }}>
+            <a
+              href="https://wa.me/YOUR_WHATSAPP"
+              style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '11px',
+                fontWeight: 400,
+                padding: '6px 12px',
+                border: '1px solid #000',
+                borderRadius: '4px',
+                textDecoration: 'none',
+                color: '#000',
+                textTransform: 'uppercase',
+                backgroundColor: '#fff',
+                cursor: 'pointer',
+                display: 'block'
+              }}
+            >
+              WHATSAPP
+            </a>
+            <a
+              href="tel:+YOUR_PHONE"
+              style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '11px',
+                fontWeight: 400,
+                padding: '6px 12px',
+                border: '1px solid #000',
+                borderRadius: '4px',
+                textDecoration: 'none',
+                color: '#000',
+                textTransform: 'uppercase',
+                backgroundColor: '#fff',
+                cursor: 'pointer',
+                display: 'block'
+              }}
+            >
+              ZAVOLEJTE NÁM
+            </a>
+          </div>
+        </div>
+
+        {/* Right Section - Shipping Info */}
+        <div style={{
+          flex: '1',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+          textAlign: 'center',
+          gap: '16px'
+        }}>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px'
+          }}>
+            <p style={{
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '13px',
+              fontWeight: 700,
+              margin: '0',
+              color: '#000',
+              textTransform: 'uppercase'
+            }}>
+              Bezpečná platba
+            </p>
+            <p style={{
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '13px',
+              fontWeight: 700,
+              margin: '0',
+              color: '#000',
+              textTransform: 'uppercase'
+            }}>
+              Rychlé doručení
+            </p>
+          </div>
+        </div>
       </div>
+
+      {/* Padding for footer spacing */}
+      <div style={{ height: '328px' }} />
 
       <DeleteConfirmModal
         isOpen={isDeleteModalOpen}
