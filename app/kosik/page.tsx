@@ -141,7 +141,7 @@ export default function CartPage() {
   if (items.length === 0) {
     return (
       <div className="min-h-screen bg-white flex flex-col relative">
-        {/* Vertical lines at product edges (995px wide, centered) - hidden on mobile */}
+        {/* Vertical lines at product edges (995px wide, centered) - hidden on mobile AND empty cart */}
         <div className="hidden md:block" style={{
           position: 'fixed',
           left: '50%',
@@ -150,7 +150,8 @@ export default function CartPage() {
           bottom: 0,
           width: '1px',
           backgroundColor: '#000',
-          zIndex: 5
+          zIndex: 5,
+          display: items.length === 0 ? 'none' : 'block'
         }} />
         <div className="hidden md:block" style={{
           position: 'fixed',
@@ -160,7 +161,8 @@ export default function CartPage() {
           bottom: 0,
           width: '1px',
           backgroundColor: '#000',
-          zIndex: 5
+          zIndex: 5,
+          display: items.length === 0 ? 'none' : 'block'
         }} />
 
         {/* Header - same as when products exist */}
