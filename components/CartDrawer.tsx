@@ -330,8 +330,26 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 </div>
 
                 {/* VYBRÁNO PRO VÁS Section */}
-                <div style={{ display: 'flex', flexDirection: 'column', borderBottom: '1px solid #000', minHeight: '0', flex: 1 }}>
-                  <div style={{ paddingTop: '4px', paddingBottom: '0px', paddingLeft: '16px', paddingRight: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px', position: 'relative' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', borderBottom: '1px solid #000', minHeight: '0', flex: 1, position: 'relative' }}>
+                  {/* Title row with line below */}
+                  <div style={{ paddingTop: '2px', paddingBottom: '2px', paddingLeft: '16px', paddingRight: '16px', textAlign: 'center', borderBottom: '1px solid #000' }}>
+                    <h3 style={{
+                      fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontSize: '13px',
+                      fontWeight: 700,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.03em',
+                      fontStretch: 'condensed',
+                      margin: '0',
+                      textAlign: 'center'
+                    }}>
+                      VYBRÁNO PRO VÁS
+                    </h3>
+                  </div>
+                  
+                  {/* Products container with centered arrows */}
+                  <div style={{ display: 'flex', position: 'relative', flex: 1, minHeight: '0' }}>
+                    {/* Left arrow - positioned in the middle */}
                     <button
                       onClick={() => {
                         if (vybrranoRef.current) {
@@ -353,7 +371,11 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         cursor: 'pointer',
                         padding: '0',
                         flex: '0 0 auto',
-                        marginTop: 'calc(50% - 12px)'
+                        position: 'absolute',
+                        left: '8px',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        zIndex: 10
                       }}
                       onMouseEnter={(e) => {
                         (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5';
@@ -366,21 +388,8 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
                       </svg>
                     </button>
-                    <h3 
-                      style={{
-                        fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                        fontSize: '13px',
-                        fontWeight: 700,
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.03em',
-                        fontStretch: 'condensed',
-                        margin: '0',
-                        textAlign: 'center',
-                        flex: 1
-                      }}
-                    >
-                      VYBRÁNO PRO VÁS
-                    </h3>
+                    
+                    {/* Right arrow - positioned in the middle */}
                     <button
                       onClick={() => {
                         if (vybrranoRef.current) {
@@ -402,7 +411,11 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         cursor: 'pointer',
                         padding: '0',
                         flex: '0 0 auto',
-                        marginTop: 'calc(50% - 12px)'
+                        position: 'absolute',
+                        right: '8px',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        zIndex: 10
                       }}
                       onMouseEnter={(e) => {
                         (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5';
@@ -415,8 +428,8 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                       </svg>
                     </button>
-                  </div>
-                  {/* Horizontal scroll container - 1.5 products show */}
+                    
+                    {/* Products scroll container */}
                   <div 
                     ref={vybrranoRef}
                     style={{ 
@@ -505,8 +518,26 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
                 {/* PROHLÍŽELI JSTE Section - only show when cart is empty */}
                 {recentlyViewed.length > 0 && items.length === 0 && (
-                  <div style={{ display: 'flex', flexDirection: 'column', borderBottom: '1px solid #000', minHeight: '0', flex: 1 }}>
-                    <div style={{ paddingTop: '8px', paddingBottom: '0px', paddingLeft: '16px', paddingRight: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px', position: 'relative' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', borderBottom: '1px solid #000', minHeight: '0', flex: 1, position: 'relative' }}>
+                    {/* Title row with line below */}
+                    <div style={{ paddingTop: '2px', paddingBottom: '2px', paddingLeft: '16px', paddingRight: '16px', textAlign: 'center', borderBottom: '1px solid #000' }}>
+                      <h3 style={{
+                        fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                        fontSize: '13px',
+                        fontWeight: 700,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.03em',
+                        fontStretch: 'condensed',
+                        margin: '0',
+                        textAlign: 'center'
+                      }}>
+                        PROHLÍŽELI JSTE
+                      </h3>
+                    </div>
+                    
+                    {/* Products container with centered arrows */}
+                    <div style={{ display: 'flex', position: 'relative', flex: 1, minHeight: '0' }}>
+                      {/* Left arrow - positioned in the middle */}
                       <button
                         onClick={() => {
                           if (prohlizeniRef.current) {
@@ -528,7 +559,11 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                           cursor: 'pointer',
                           padding: '0',
                           flex: '0 0 auto',
-                          marginTop: 'calc(50% - 12px)'
+                          position: 'absolute',
+                          left: '8px',
+                          top: '50%',
+                          transform: 'translateY(-50%)',
+                          zIndex: 10
                         }}
                         onMouseEnter={(e) => {
                           (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5';
@@ -541,21 +576,8 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                           <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
                         </svg>
                       </button>
-                      <h3 
-                        style={{
-                          fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                          fontSize: '13px',
-                          fontWeight: 700,
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.03em',
-                          fontStretch: 'condensed',
-                          margin: '0',
-                          textAlign: 'center',
-                          flex: 1
-                        }}
-                      >
-                        PROHLÍŽELI JSTE
-                      </h3>
+                      
+                      {/* Right arrow - positioned in the middle */}
                       <button
                         onClick={() => {
                           if (prohlizeniRef.current) {
@@ -577,7 +599,11 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                           cursor: 'pointer',
                           padding: '0',
                           flex: '0 0 auto',
-                          marginTop: 'calc(50% - 12px)'
+                          position: 'absolute',
+                          right: '8px',
+                          top: '50%',
+                          transform: 'translateY(-50%)',
+                          zIndex: 10
                         }}
                         onMouseEnter={(e) => {
                           (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5';
@@ -590,8 +616,8 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                           <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                         </svg>
                       </button>
-                    </div>
-                    {/* Horizontal scroll container - 1.5 products show */}
+                      
+                      {/* Products scroll container */}
                     <div 
                       ref={prohlizeniRef}
                       style={{ 
@@ -748,7 +774,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         cursor: 'pointer',
                         padding: '0',
                         flex: '0 0 auto',
-                        marginTop: 'calc(50% - 12px)'
+                        
                       }}
                       onMouseEnter={(e) => {
                         (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5';
@@ -797,7 +823,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         cursor: 'pointer',
                         padding: '0',
                         flex: '0 0 auto',
-                        marginTop: 'calc(50% - 12px)'
+                        
                       }}
                       onMouseEnter={(e) => {
                         (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5';
@@ -922,7 +948,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         cursor: 'pointer',
                         padding: '0',
                         flex: '0 0 auto',
-                        marginTop: 'calc(50% - 12px)'
+                        
                       }}
                       onMouseEnter={(e) => {
                         (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5';
@@ -971,7 +997,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         cursor: 'pointer',
                         padding: '0',
                         flex: '0 0 auto',
-                        marginTop: 'calc(50% - 12px)'
+                        
                       }}
                       onMouseEnter={(e) => {
                         (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5';
