@@ -18,6 +18,7 @@ export default function RootLayout({
 }) {
   const pathname = usePathname();
   const isPokladna = pathname === '/pokladna';
+  const isKosik = pathname === '/kosik';
   const isAdmin = pathname.startsWith('/admin');
   const [hasOffer, setHasOffer] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -82,7 +83,7 @@ export default function RootLayout({
           <Header1 />
           {!isAdmin && <LiveOfferBar onVisibilityChange={setHasOffer} />}
           <main className="flex-1">{children}</main>
-          {!isPokladna && !isAdmin && <Footer />}
+          {!isPokladna && !isKosik && !isAdmin && <Footer />}
           <CookieBanner />
         </SessionProvider>
       </body>

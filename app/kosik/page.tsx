@@ -866,7 +866,7 @@ export default function CartPage() {
             }}
           >
             {selectedProducts.map((product, index) => (
-              <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(66.666% - 0.67px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
+              <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(30% - 0.3px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
                 {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
                 <Link
                   href={`/produkty/${product.slug}`}
