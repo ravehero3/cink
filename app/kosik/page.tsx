@@ -630,7 +630,7 @@ export default function CartPage() {
       </div>
 
       <div className="flex-1 flex justify-center" style={{ marginBottom: '40px' }}>
-        <div className="w-full md:w-[995px]" style={{ position: 'relative' }}>
+        <div className="w-full" style={{ position: 'relative' }}>
           {items.map((item, index) => (
             <CartLineItem
               key={`${item.productId}-${item.size}`}
@@ -654,8 +654,8 @@ export default function CartPage() {
         </div>
       </div>
 
-      {/* VYBRÁNO PRO VÁS Section - compact height */}
-      <div style={{
+      {/* VYBRÁNO PRO VÁS Section - compact height, desktop only */}
+      <div className="hidden md:block" style={{
         maxWidth: '995px',
         marginLeft: 'auto',
         marginRight: 'auto',
@@ -664,7 +664,10 @@ export default function CartPage() {
         marginBottom: '0px',
         borderTop: '1px solid #000',
         borderBottom: '1px solid #000',
-        width: '100%'
+        width: '100%',
+        height: '684px',
+        display: 'flex',
+        flexDirection: 'column'
       }}>
         <div style={{
           paddingTop: '2px',
@@ -702,11 +705,12 @@ export default function CartPage() {
             cursor: 'grab',
             userSelect: 'none',
             WebkitUserSelect: 'none',
+            flex: '1',
             minHeight: '0'
           }}
         >
           {selectedProducts.map((product, index) => (
-            <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(30% - 0.3px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
+            <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(66.666% - 0.67px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
               {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
               <Link
                 href={`/produkty/${product.slug}`}
