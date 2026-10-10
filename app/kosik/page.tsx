@@ -407,7 +407,7 @@ export default function CartPage() {
                     className="select-none"
                   >
                     {selectedProducts.map((product, index) => (
-                      <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(40% - 0.4px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
+                      <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(66.666% - 0.67px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
                         {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
                         <div
                           style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '8px', paddingBottom: '8px', paddingLeft: '8px', paddingRight: '8px' }}
