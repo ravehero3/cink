@@ -512,9 +512,10 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                             </div>
                         </Link>
                       </div>
-                    ))}
+                    ))}  
                   </div>
                 </div>
+              </div>
 
                 {/* PROHLÍŽELI JSTE Section - only show when cart is empty */}
                 {recentlyViewed.length > 0 && items.length === 0 && (
