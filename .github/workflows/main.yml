@@ -17,20 +17,14 @@ jobs:
           script: |
             set -e
             cd ~/apps/cink
-            git stash
-            git pull origin main
+            git fetch origin main
+            git reset --hard origin/main
             cd ~/apps
-            # Stop running cink container
-            docker compose stop cink || true
-            # Remove the stopped container
-            docker compose rm -f cink || true
-            # Clean up any orphaned containers
-            docker ps -a | grep apps-cink || true
+            # Stop and remove cink container
+            docker compose down || true
             # Build and start fresh
-            docker compose build --no-cache cink
-            docker compose up -d cink
-            # Wait for container to be healthy
-            sleep 5
+            docker compose build cink
+            docker compose up -d
             # Clean up unused images
             docker image prune -f
             echo "Deploy complete"
