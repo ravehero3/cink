@@ -630,7 +630,7 @@ export default function CartPage() {
       </div>
 
       <div className="flex-1 flex justify-center" style={{ marginBottom: '40px' }}>
-        <div className="w-full" style={{ position: 'relative' }}>
+        <div className="w-full md:w-[995px]" style={{ position: 'relative' }}>
           {items.map((item, index) => (
             <CartLineItem
               key={`${item.productId}-${item.size}`}
@@ -693,7 +693,38 @@ export default function CartPage() {
         </button>
       </div>
 
-      {/* VYBRÁNO PRO VÁS Section - compact height, desktop only */}
+      {/* Info Section - Bullet Points */}
+      <div style={{
+        maxWidth: '995px',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        paddingLeft: '16px',
+        paddingRight: '16px',
+        marginBottom: '0px',
+        borderBottom: '1px solid #000',
+        width: '100%',
+        paddingTop: '16px',
+        paddingBottom: '16px'
+      }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+            <span style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', color: '#000', flexShrink: 0 }}>•</span>
+            <p style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '13px', fontWeight: 400, margin: '0', color: '#000', lineHeight: '1.4' }}>Odesíláme ASAP</p>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+            <span style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', color: '#000', flexShrink: 0 }}>•</span>
+            <p style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '13px', fontWeight: 400, margin: '0', color: '#000', lineHeight: '1.4' }}>Možnost vrácení do 14ti dnů</p>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+            <span style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', color: '#000', flexShrink: 0 }}>•</span>
+            <p style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '13px', fontWeight: 400, margin: '0', color: '#000', lineHeight: '1.4' }}>VOODOO808 natiskne vaše triko</p>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+            <span style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', color: '#000', flexShrink: 0 }}>•</span>
+            <p style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '13px', fontWeight: 400, margin: '0', color: '#000', lineHeight: '1.4' }}>AKA47 odešle vaší objednávku</p>
+          </div>
+        </div>
+      </div>
       <div className="hidden md:flex" style={{
         width: '100%',
         borderTop: '1px solid #000',
@@ -944,7 +975,7 @@ export default function CartPage() {
             justifyContent: 'center',
             flexWrap: 'wrap'
           }}>
-            <img src="/payment-methods.jpg" alt="Payment Methods" style={{ height: '48px', width: 'auto' }} />
+            <img src="/payment-methods.jpg" alt="Payment Methods" style={{ height: '96px', width: 'auto' }} />
           </div>
         </div>
 
