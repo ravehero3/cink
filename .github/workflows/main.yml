@@ -20,11 +20,10 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
             cd ~/apps
-            # Stop and remove cink container
-            docker compose down || true
-            # Build and start fresh
+            # Only rebuild and restart cink container
             docker compose build cink
-            docker compose up -d
-            # Clean up unused images
-            docker image prune -f
-            echo "Deploy complete"
+            docker compose up -d cink
+            # Verify deployment
+            sleep 5
+            docker compose ps cink
+            echo "Deploy complete - cink updated"
