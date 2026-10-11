@@ -657,79 +657,7 @@ export default function CartPage() {
         </div>
       </div>
 
-      {/* Checkout Button Section */}
-      <div style={{
-        width: '100%',
-        maxWidth: '1426px',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        paddingLeft: '16px',
-        paddingRight: '16px',
-        marginBottom: '0px',
-        borderTop: '1px solid #000',
-        borderBottom: '1px solid #000',
-        paddingTop: '16px',
-        paddingBottom: '16px',
-        boxSizing: 'border-box'
-      }}>
-        <button
-          onClick={() => router.push('/pokladna')}
-          style={{
-            width: '100%',
-            height: '40px',
-            borderRadius: '4px',
-            border: '1px solid #000',
-            fontSize: '13px',
-            textTransform: 'uppercase',
-            letterSpacing: '.06em',
-            textDecoration: 'none',
-            background: '#000',
-            color: '#fff',
-            cursor: 'pointer',
-            fontWeight: 300,
-            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
-          POKRAČOVAT V OBJEDNÁVCE
-        </button>
-      </div>
 
-      {/* Info Section - Bullet Points */}
-      <div style={{
-        width: '100%',
-        maxWidth: '1426px',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        paddingLeft: '16px',
-        paddingRight: '16px',
-        marginBottom: '0px',
-        borderBottom: '1px solid #000',
-        paddingTop: '16px',
-        paddingBottom: '16px',
-        boxSizing: 'border-box'
-      }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-            <span style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', color: '#000', flexShrink: 0 }}>•</span>
-            <p style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '13px', fontWeight: 400, margin: '0', color: '#000', lineHeight: '1.4' }}>Odesíláme ASAP</p>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-            <span style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', color: '#000', flexShrink: 0 }}>•</span>
-            <p style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '13px', fontWeight: 400, margin: '0', color: '#000', lineHeight: '1.4' }}>Možnost vrácení do 14ti dnů</p>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-            <span style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', color: '#000', flexShrink: 0 }}>•</span>
-            <p style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '13px', fontWeight: 400, margin: '0', color: '#000', lineHeight: '1.4' }}>VOODOO808 natiskne vaše triko</p>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-            <span style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '14px', color: '#000', flexShrink: 0 }}>•</span>
-            <p style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '13px', fontWeight: 400, margin: '0', color: '#000', lineHeight: '1.4' }}>AKA47 odešle vaší objednávku</p>
-          </div>
-        </div>
-      </div>
       <div className="hidden md:flex" style={{
         width: '100%',
         maxWidth: '1426px',
@@ -937,9 +865,46 @@ export default function CartPage() {
         </div>
       </div>
 
-      {/* PROHLÍŽELI JSTE Section - empty cart only, full width */}
+      {/* PROHLÍŽELI JSTE Section - Mobile view with larger images (1.5 products visible) */}
       {selectedProducts.length > 0 && (
-        <div style={{ display: 'flex', flexDirection: 'column', borderTop: '1px solid #000', borderBottom: '1px solid #000', minHeight: '0', position: 'relative', width: '100%', maxWidth: '1426px', marginLeft: 'auto', marginRight: 'auto' }}>
+        <div className="md:hidden" style={{ display: 'flex', flexDirection: 'column', borderTop: '1px solid #000', borderBottom: '1px solid #000', minHeight: '0', position: 'relative', width: '100%' }}>
+          {/* Title row with line below */}
+          <div style={{ paddingTop: '8px', paddingBottom: '12px', paddingLeft: '16px', paddingRight: '16px', textAlign: 'center', borderBottom: '1px solid #000', width: '100%' }}>
+            <h3 style={{ fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '13px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.03em', fontStretch: 'condensed', margin: '0', textAlign: 'center' }}>PROHLÍŽELI JSTE</h3>
+          </div>
+          
+          {/* Products container with arrows - shows 1.5 products on mobile */}
+          <div style={{ display: 'flex', position: 'relative', flex: 1, minHeight: '200px', width: '100%' }}>
+            {/* Left arrow */}
+            <button onClick={() => { if (vybrranoRef.current) { vybrranoRef.current.scrollBy({ left: -(vybrranoRef.current.clientWidth * 0.4), behavior: 'smooth' }); } }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '24px', height: '24px', border: '1px solid #000', borderRadius: '4px', backgroundColor: '#fff', cursor: 'pointer', padding: '0', flex: '0 0 auto', position: 'absolute', left: '8px', top: '50%', transform: 'translateY(-50%)', zIndex: 10 }} onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5'; }} onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#fff'; }}>
+              <svg style={{ width: '14px', height: '14px', stroke: '#000', fill: 'none' }} viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+            </button>
+            
+            {/* Right arrow */}
+            <button onClick={() => { if (vybrranoRef.current) { vybrranoRef.current.scrollBy({ left: vybrranoRef.current.clientWidth * 0.4, behavior: 'smooth' }); } }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '24px', height: '24px', border: '1px solid #000', borderRadius: '4px', backgroundColor: '#fff', cursor: 'pointer', padding: '0', flex: '0 0 auto', position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', zIndex: 10 }} onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5'; }} onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#fff'; }}>
+              <svg style={{ width: '14px', height: '14px', stroke: '#000', fill: 'none' }} viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+            </button>
+            
+            {/* Products scroll container - shows 1.5 products */}
+            <div ref={vybrranoRef} style={{ display: 'flex', overflowX: 'auto', overflowY: 'hidden', gap: '0', paddingLeft: '0', paddingRight: '0', paddingTop: '8px', paddingBottom: '8px', scrollBehavior: 'smooth', WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', scrollSnapType: 'x mandatory', flex: 1, cursor: 'grab', minHeight: '0', userSelect: 'none', WebkitUserSelect: 'none', width: '100%' }} className="select-none">
+              {selectedProducts.map((product, index) => (
+                <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(66.666% - 0.67px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
+                  {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
+                  <a href={`/produkty/${product.slug}`} style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '0px', paddingBottom: '0px', paddingLeft: '12px', paddingRight: '12px', flex: 1 }}>
+                    <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{product.image && <img src={product.image} alt={product.name} style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} loading="lazy" onError={(e) => { const img = e.target as HTMLImageElement; img.style.display = 'none'; }} />}</div>
+                    <h4 style={{ fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.03em', fontStretch: 'condensed', margin: '0 0 2px 0', textAlign: 'center', color: '#000', lineHeight: '1.2' }}>{product.name}</h4>
+                    <p style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '10px', fontWeight: 400, margin: '0', textAlign: 'center', color: '#000', lineHeight: '1.2' }}>{product.price} Kč</p>
+                  </a>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* PROHLÍŽELI JSTE Section - Desktop only */}
+      {selectedProducts.length > 0 && (
+        <div className="hidden md:flex" style={{ display: 'flex', flexDirection: 'column', borderTop: '1px solid #000', borderBottom: '1px solid #000', minHeight: '0', position: 'relative', width: '100%', maxWidth: '1426px', marginLeft: 'auto', marginRight: 'auto' }}>
           {/* Title row with line below */}
           <div style={{ paddingTop: '2px', paddingBottom: '2px', paddingLeft: '16px', paddingRight: '16px', textAlign: 'center', borderBottom: '1px solid #000', width: '100%' }}>
             <h3 style={{ fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '13px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.03em', fontStretch: 'condensed', margin: '0', textAlign: 'center' }}>PROHLÍŽELI JSTE</h3>
@@ -976,69 +941,26 @@ export default function CartPage() {
 
       
       
-      {/* Mobile Checkout Buttons Section - visible on mobile only */}
+      {/* Mobile Checkout Buttons Section - sticky, visible on mobile only */}
       {items.length > 0 && (
         <div className="md:hidden" style={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
           width: '100%',
-          padding: '16px',
-          borderTop: '1px solid #000',
+          padding: '12px 16px',
           display: 'flex',
           flexDirection: 'column',
-          gap: '12px',
+          gap: '8px',
           boxSizing: 'border-box',
-          marginBottom: '328px'
+          backgroundColor: '#fff',
+          borderTop: '1px solid #000',
+          zIndex: 40
         }}>
-          {/* Pricing info */}
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '8px',
-            paddingBottom: '12px',
-            borderBottom: '1px solid #000'
-          }}>
-            <div style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              fontSize: '12px',
-              color: '#999'
-            }}>
-              <span>CENA ZA DOPRAVU</span>
-              <span>79 Kč</span>
-            </div>
-            <div style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              fontSize: '14px',
-              fontWeight: 700,
-              textTransform: 'uppercase'
-            }}>
-              <span>PŘEDPOKLÁDANÁ CENA</span>
-              <span>{(Number(getTotal()) + 79).toFixed(2)} Kč</span>
-            </div>
-          </div>
-
-          {/* Buttons */}
+          {/* Black button - Přejít k pokladně */}
           <button
             onClick={() => router.push('/pokladna')}
-            style={{
-              width: '100%',
-              padding: '12px',
-              backgroundColor: '#fff',
-              border: '1px solid #000',
-              borderRadius: '4px',
-              fontSize: '12px',
-              fontWeight: 400,
-              textTransform: 'uppercase',
-              cursor: 'pointer',
-              color: '#000',
-              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif'
-            }}
-          >
-            PŘEJÍT K POKLADNĚ ({items.length})
-          </button>
-
-          <button
-            onClick={() => router.push('/kosik')}
             style={{
               width: '100%',
               padding: '12px',
@@ -1053,13 +975,38 @@ export default function CartPage() {
               fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif'
             }}
           >
-            ZOBRAZIT KOŠÍK
+            PŘEJÍT K POKLADNĚ ({items.length})
+          </button>
+
+          {/* White button - GoPay */}
+          <button
+            onClick={() => router.push('/pokladna?payment=gopay')}
+            style={{
+              width: '100%',
+              padding: '12px',
+              backgroundColor: '#fff',
+              border: '1px solid #000',
+              borderRadius: '4px',
+              fontSize: '12px',
+              fontWeight: 400,
+              textTransform: 'uppercase',
+              cursor: 'pointer',
+              color: '#000',
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px'
+            }}
+          >
+            <img src="/gopay-logo.svg" alt="GoPay" style={{ height: '20px', width: 'auto' }} />
+            KOUPIT PŘES GOPAY
           </button>
         </div>
       )}
 
 {/* Custom White Footer - Full Width */}
-      <div className="footer-container" style={{
+      <div className="footer-container hidden md:flex" style={{
         position: 'fixed',
         bottom: 0,
         left: 0,
@@ -1070,6 +1017,7 @@ export default function CartPage() {
         zIndex: 10,
         height: '328px',
         display: 'flex',
+        flexDirection: 'row',
         padding: '24px 0',
         boxSizing: 'border-box'
       }}>
@@ -1231,7 +1179,10 @@ export default function CartPage() {
       </div>
 
       {/* Padding for footer spacing */}
-      <div style={{ height: '328px' }} />
+      <div className="hidden md:block" style={{ height: '328px' }} />
+
+      {/* Mobile bottom padding for sticky buttons */}
+      <div className="md:hidden" style={{ height: '92px' }} />
 
       <DeleteConfirmModal
         isOpen={isDeleteModalOpen}
