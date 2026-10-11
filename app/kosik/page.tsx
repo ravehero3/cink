@@ -264,21 +264,6 @@ export default function CartPage() {
             }}>• AKA47 odešle vaší objednávkou</p>
           </div>
 
-              </p>
-              <p style={{
-                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '13px',
-                fontWeight: 700,
-                margin: '0',
-                color: '#000',
-                textTransform: 'uppercase',
-                textAlign: 'center'
-              }}>
-                Rychlé doručení
-              </p>
-            </div>
-          </div>
-
       {/* Mobile bottom padding for sticky buttons */}
       <div className="md:hidden" style={{ height: '92px' }} />
 
