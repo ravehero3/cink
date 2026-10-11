@@ -75,6 +75,24 @@ export default function RootLayout({
 
   return (
     <html lang="cs">
+      <head>
+        <style dangerouslySetInnerHTML={{ __html: `
+          #ppl-parcelshop-map {
+            width: 100% !important;
+            height: 100% !important;
+            min-height: 100% !important;
+          }
+          #ppl-parcelshop-map iframe {
+            width: 100% !important;
+            height: 100% !important;
+            border: none !important;
+          }
+          .ppl-map-container {
+            width: 100% !important;
+            height: 100% !important;
+          }
+        ` }} />
+      </head>
       <body 
         className="min-h-screen flex flex-col transition-[padding-top] duration-500" 
         style={{paddingTop: isAdmin ? '0' : `${44 + (isSearchOpen ? 44 : 0) + (hasOffer ? 44 : 0)}px`}}

@@ -1298,7 +1298,9 @@ export default function CheckoutPage() {
           backgroundColor: isPplModalOpen ? 'rgba(0,0,0,0.5)' : 'transparent',
           pointerEvents: isPplModalOpen ? 'auto' : 'none',
           opacity: isPplModalOpen ? 1 : 0,
-          transition: 'opacity 0.3s'
+          transition: 'opacity 0.3s',
+          display: 'flex',
+          alignItems: 'flex-end'
         }}
       >
         <div 
@@ -1316,7 +1318,9 @@ export default function CheckoutPage() {
             pointerEvents: isPplModalOpen ? 'auto' : 'none',
             transition: 'opacity 0.3s',
             maxHeight: '100vh',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            width: '100%',
+            height: '100%'
           }}
         >
           <div style={{
@@ -1326,14 +1330,17 @@ export default function CheckoutPage() {
             padding: '16px',
             borderBottom: '1px solid #000',
             backgroundColor: '#000',
-            flexShrink: 0
+            flexShrink: 0,
+            minHeight: '56px',
+            zIndex: 102
           }}>
             <h2 style={{
               margin: 0,
               fontSize: '14px',
               fontWeight: 700,
               textTransform: 'uppercase',
-              color: '#fff'
+              color: '#fff',
+              flex: 1
             }}>
               Vyberte výdejní místo PPL
             </h2>
@@ -1349,7 +1356,12 @@ export default function CheckoutPage() {
                 textTransform: 'uppercase',
                 cursor: 'pointer',
                 borderRadius: '4px',
-                flexShrink: 0
+                flexShrink: 0,
+                marginLeft: '12px',
+                minHeight: '44px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
               }}
             >
               Zavřít
@@ -1359,7 +1371,14 @@ export default function CheckoutPage() {
             id="ppl-parcelshop-map" 
             data-language="cs" 
             data-mode="default"
-            style={{ flex: 1, minHeight: 'calc(100vh - 70px)', width: '100%', overflow: 'auto' }}
+            style={{ 
+              flex: 1, 
+              width: '100%', 
+              height: '100%',
+              overflow: 'auto',
+              backgroundColor: '#f5f5f5',
+              WebkitOverflowScrolling: 'touch'
+            }}
           ></div>
         </div>
       </div>
