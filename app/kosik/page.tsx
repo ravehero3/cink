@@ -197,8 +197,8 @@ export default function CartPage() {
           <div style={{
             position: 'absolute',
             top: 0,
-            left: 'calc(50% - 497.5px)',
-            width: '995px',
+            left: 'calc(50% - 713px)',
+        width: '1426px',
             height: '1px',
             backgroundColor: '#000',
             zIndex: 1
@@ -208,8 +208,8 @@ export default function CartPage() {
           <div style={{
             position: 'absolute',
             bottom: 0,
-            left: 'calc(50% - 497.5px)',
-            width: '995px',
+            left: 'calc(50% - 713px)',
+        width: '1426px',
             height: '1px',
             backgroundColor: '#000',
             zIndex: 1
@@ -287,7 +287,7 @@ export default function CartPage() {
             {selectedProducts.length > 0 && (
               <div style={{ display: 'flex', flexDirection: 'column', borderTop: '1px solid #000', borderBottom: '1px solid #000', minHeight: '0', position: 'relative' }}>
                 {/* Title row with line below */}
-                <div style={{ paddingTop: '2px', paddingBottom: '2px', paddingLeft: '16px', paddingRight: '16px', textAlign: 'center', borderBottom: '1px solid #000' }}>
+                <div style={{ paddingTop: '8px', paddingBottom: '12px', paddingLeft: '16px', paddingRight: '16px', textAlign: 'center', borderBottom: '1px solid #000' }}>
                   <h3 style={{
                     fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '13px',
@@ -510,9 +510,9 @@ export default function CartPage() {
       <div className="hidden md:block" style={{
         position: 'fixed',
         left: '50%',
-        marginLeft: '-497.5px',
+        marginLeft: '-713px',
         top: 0,
-        height: 'calc(100vh - 80px)',
+        height: 'calc(100vh - 328px)',
         width: '1px',
         backgroundColor: '#000',
         zIndex: 5
@@ -520,9 +520,9 @@ export default function CartPage() {
       <div className="hidden md:block" style={{
         position: 'fixed',
         left: '50%',
-        marginLeft: '497.5px',
+        marginLeft: '713px',
         top: 0,
-        height: 'calc(100vh - 80px)',
+        height: 'calc(100vh - 328px)',
         width: '1px',
         backgroundColor: '#000',
         zIndex: 5
@@ -561,8 +561,8 @@ export default function CartPage() {
         <div style={{
           position: 'absolute',
           top: 0,
-          left: 'calc(50% - 497.5px)',
-          width: '995px',
+          left: 'calc(50% - 713px)',
+        width: '1426px',
           height: '1px',
           backgroundColor: '#000',
           zIndex: 1
@@ -572,8 +572,8 @@ export default function CartPage() {
         <div style={{
           position: 'absolute',
           bottom: 0,
-          left: 'calc(50% - 497.5px)',
-          width: '995px',
+          left: 'calc(50% - 713px)',
+        width: '1426px',
           height: '1px',
           backgroundColor: '#000',
           zIndex: 1
