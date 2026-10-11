@@ -67,11 +67,11 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-white relative">
-      {/* Left vertical line - starts at top (header padding handled by body) */}
-      <div className="absolute left-1/4 w-px bg-black z-0" style={{ top: 0, bottom: 0 }} />
+      {/* Left vertical line - hidden on mobile */}
+      <div className="hidden md:block absolute left-1/4 w-px bg-black z-0" style={{ top: 0, bottom: 0 }} />
       
-      {/* Right vertical line - starts at top (header padding handled by body) */}
-      <div className="absolute right-1/4 w-px bg-black z-0" style={{ top: 0, bottom: 0 }} />
+      {/* Right vertical line - hidden on mobile */}
+      <div className="hidden md:block absolute right-1/4 w-px bg-black z-0" style={{ top: 0, bottom: 0 }} />
 
       {/* Main content above the line */}
       <div className="relative z-10 flex flex-col items-center pt-12 pb-16">
@@ -90,44 +90,13 @@ export default function RegisterPage() {
 
         <div className="w-full flex flex-col items-center">
           {error && (
-            <div className="mb-6 p-3 bg-red-50 text-red-800 text-sm border border-red-200 text-center" style={{ width: '33.33%' }}>
+            <div className="mb-6 p-3 bg-red-50 text-red-800 text-sm border border-red-200 text-center w-full md:w-1/3" style={{ boxSizing: 'border-box', padding: '0 16px', marginLeft: 'auto', marginRight: 'auto' }}>
               {error}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="flex flex-col items-center" style={{ width: '33.33%' }}>
-            <div className="w-full relative" style={{ marginBottom: '8px' }}>
-              <label 
-                className="block text-xs mb-[2px]"
-                style={{
-                  fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                  color: '#000000'
-                }}
-              >
-                Oslovení
-              </label>
-              <div className="flex gap-4">
-                {['Mr', 'Miss', 'Mrs', 'Ms', 'Mx'].map((option) => (
-                  <label 
-                    key={option} 
-                    className="flex items-center text-xs"
-                    style={{
-                      fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif'
-                    }}
-                  >
-                    <input
-                      type="radio"
-                      name="civility"
-                      value={option}
-                      checked={formData.civility === option}
-                      onChange={(e) => setFormData({ ...formData, civility: e.target.value })}
-                      className="mr-1"
-                    />
-                    {option}
-                  </label>
-                ))}
-              </div>
-            </div>
+          <form onSubmit={handleSubmit} className="flex flex-col items-center w-full md:w-1/3" style={{ padding: '0 16px', boxSizing: 'border-box' }}>
+            // Civility field removed - not needed for registration
 
             <div className="w-full relative" style={{ marginBottom: '8px' }}>
               <label 
