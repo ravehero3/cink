@@ -135,6 +135,7 @@ export interface EmailTemplateCustomization {
   hiddenSections?: string[];
   heroProduct?: LinkedProduct | null;
   gridProducts?: LinkedProduct[];
+  storyImage?: string;
 }
 
 export interface EmailTemplateParams {
@@ -275,6 +276,21 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
             ${renderDeleteBtn('header2')}
             <div style="font-size:15px;line-height:20px;font-weight:700;text-transform:uppercase;margin:0 0 12px;">${header2Title}</div>
             <div style="font-size:15px;line-height:20px;font-weight:400;margin:0 auto;max-width:460px;">${header2Subtitle}</div>
+          </td>
+        </tr>
+      `,
+    });
+  }
+
+  // Section 2.5 - Story image (narrative image, full width 600px)
+  if (!hiddenSections.has('storyImage') && customization?.storyImage) {
+    sections.push({
+      id: 'storyImage',
+      html: `
+        <tr>
+          <td style="padding:0;font-size:0;line-height:0;position:relative;">
+            ${renderDeleteBtn('storyImage', 'Odstranit příběhový obrázek')}
+            <img src="${toAbsoluteUrl(customization.storyImage)}" width="600" height="auto" alt="Příběhový obrázek" style="display:block;width:600px;height:auto;border:0;">
           </td>
         </tr>
       `,

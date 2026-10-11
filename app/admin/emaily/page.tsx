@@ -72,6 +72,7 @@ const TRIGGER_LABELS: Record<string, string> = {
 const EMAIL_SECTIONS: { id: string; label: string; desc: string; isPhoto?: boolean }[] = [
   { id: 'header1', label: '1. Horní logo', desc: 'UFO SPORT (výška 72 px)' },
   { id: 'header2', label: '2. Nadpis a text', desc: 'Hlavní sdělení e-mailu (136 px)' },
+  { id: 'storyImage', label: '2.5. Příběhový obrázek', desc: 'Obrázek vyprávějící příběh (600 px)', isPhoto: true },
   { id: 'heroImage', label: '3. Hlavní fotka (Hero)', desc: 'Velký obrázek / produkt (600 px)', isPhoto: true },
   { id: 'info', label: '4. Informační blok', desc: 'Položky objednávky, slevový kód, text' },
   { id: 'photoGrid', label: '5. Mřížka produktů 2x2', desc: '4 fotky produktů vedle sebe', isPhoto: true },
@@ -144,7 +145,7 @@ export default function EmailAdminPage() {
 
   // Image Upload Modal State
   const [imageUploadOpen, setImageUploadOpen] = useState(false);
-  const [imageUploadTarget, setImageUploadTarget] = useState<'photoGrid' | 'hero'>('photoGrid');
+  const [imageUploadTarget, setImageUploadTarget] = useState<'photoGrid' | 'hero' | 'story'>('photoGrid');
 
   // Section manager panel state & feedback toast
   const [showSectionManager, setShowSectionManager] = useState(false);
@@ -698,6 +699,17 @@ export default function EmailAdminPage() {
                     + Nahrát fotky
                   </button>
                   <button
+                    onClick={() => {
+                      setImageUploadTarget('story');
+                      setImageUploadOpen(true);
+                    }}
+                    className="text-xs font-bold uppercase tracking-wider text-white px-3 py-1 border border-black transition-colors"
+                    style={{ backgroundColor: '#22c55e', borderColor: '#22c55e' }}
+                    title="Přidat příběhový obrázek"
+                  >
+                    + Přidat fotku příběhu
+                  </button>
+                  <button
                     onClick={() => setShowSectionManager(!showSectionManager)}
                     className={`admin-btn admin-btn-secondary text-xs ${showSectionManager ? 'bg-black text-white' : ''}`}
                   >
@@ -1035,13 +1047,30 @@ export default function EmailAdminPage() {
         isOpen={imageUploadOpen}
         onClose={() => setImageUploadOpen(false)}
         onImagesSelected={(urls) => {
-          // Handle uploaded images - can be extended for custom functionality
-          console.log('Uploaded images:', urls, 'for target:', imageUploadTarget);
-          // Future: integrate with email builder to add images to sections
+          if (imageUploadTarget === 'story' && urls.length > 0) {
+            // Save story image to customization
+            const updated = { ...currentCustomization, storyImage: urls[0] };
+            saveTemplateCustomization(updated);
+            setToastMessage(`Příběhový obrázek přidán`);
+            setPreviewNonce((n) => n + 1);
+          } else if (imageUploadTarget === 'photoGrid') {
+            // Handle photo grid images
+            const updated = { ...currentCustomization, gridProducts: [] };
+            saveTemplateCustomization(updated);
+            setToastMessage(`Fotografie do mřížky přidány`);
+            setPreviewNonce((n) => n + 1);
+          } else if (imageUploadTarget === 'hero') {
+            // Handle hero images  
+            const updated = { ...currentCustomization };
+            saveTemplateCustomization(updated);
+            setToastMessage(`Hlavní fotografie přidána`);
+            setPreviewNonce((n) => n + 1);
+          }
+          setImageUploadOpen(false);
         }}
         maxImages={imageUploadTarget === 'photoGrid' ? 4 : 1}
-        title={imageUploadTarget === 'photoGrid' ? 'Nahrání fotografií do mřížky' : 'Nahrání hlavní fotografie'}
-        description={imageUploadTarget === 'photoGrid' ? 'Přetáhněte až 4 fotografie do pole' : 'Přetáhněte fotku do pole'}
+        title={imageUploadTarget === 'story' ? 'Nahrání příběhového obrázku' : imageUploadTarget === 'photoGrid' ? 'Nahrání fotografií do mřížky' : 'Nahrání hlavní fotografie'}
+        description={imageUploadTarget === 'story' ? 'Přetáhněte obrázek, který vypráví příběh' : imageUploadTarget === 'photoGrid' ? 'Přetáhněte až 4 fotografie do pole' : 'Přetáhněte fotku do pole'}
       />
     </div>
   );
