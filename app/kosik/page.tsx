@@ -680,6 +680,11 @@ export default function CartPage() {
             display: none !important;
           }
         }
+        @media (min-width: 768px) {
+          .md\:hidden {
+            display: none !important;
+          }
+        }
       `}</style>
       <div className="min-h-screen bg-white flex flex-col relative" style={{ paddingBottom: '328px' }}>
       {/* Vertical lines at product edges (995px wide, centered) - stop at footer top */}
