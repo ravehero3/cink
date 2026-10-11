@@ -975,8 +975,91 @@ export default function CartPage() {
       )}
 
       
-      {/* Custom White Footer - Full Width */}
-      <div style={{
+      
+      {/* Mobile Checkout Buttons Section - visible on mobile only */}
+      {items.length > 0 && (
+        <div className="md:hidden" style={{
+          width: '100%',
+          padding: '16px',
+          borderTop: '1px solid #000',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px',
+          boxSizing: 'border-box',
+          marginBottom: '328px'
+        }}>
+          {/* Pricing info */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+            paddingBottom: '12px',
+            borderBottom: '1px solid #000'
+          }}>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              fontSize: '12px',
+              color: '#999'
+            }}>
+              <span>CENA ZA DOPRAVU</span>
+              <span>79 Kč</span>
+            </div>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              fontSize: '14px',
+              fontWeight: 700,
+              textTransform: 'uppercase'
+            }}>
+              <span>PŘEDPOKLÁDANÁ CENA</span>
+              <span>{(Number(getTotal()) + 79).toFixed(2)} Kč</span>
+            </div>
+          </div>
+
+          {/* Buttons */}
+          <button
+            onClick={() => router.push('/pokladna')}
+            style={{
+              width: '100%',
+              padding: '12px',
+              backgroundColor: '#fff',
+              border: '1px solid #000',
+              borderRadius: '4px',
+              fontSize: '12px',
+              fontWeight: 400,
+              textTransform: 'uppercase',
+              cursor: 'pointer',
+              color: '#000',
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif'
+            }}
+          >
+            PŘEJÍT K POKLADNĚ ({items.length})
+          </button>
+
+          <button
+            onClick={() => router.push('/kosik')}
+            style={{
+              width: '100%',
+              padding: '12px',
+              backgroundColor: '#000',
+              border: '1px solid #000',
+              borderRadius: '4px',
+              fontSize: '12px',
+              fontWeight: 400,
+              textTransform: 'uppercase',
+              cursor: 'pointer',
+              color: '#fff',
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif'
+            }}
+          >
+            ZOBRAZIT KOŠÍK
+          </button>
+        </div>
+      )}
+
+{/* Custom White Footer - Full Width */}
+      <div className="footer-container" style={{
         position: 'fixed',
         bottom: 0,
         left: 0,
@@ -991,7 +1074,7 @@ export default function CartPage() {
         boxSizing: 'border-box'
       }}>
         {/* Left Section - Payment Methods */}
-        <div style={{
+        <div className="footer-section" style={{
           flex: '1',
           display: 'flex',
           flexDirection: 'column',
@@ -1026,7 +1109,7 @@ export default function CartPage() {
         </div>
 
         {/* Middle Section - Customer Support */}
-        <div style={{
+        <div className="footer-section" style={{
           flex: '1',
           display: 'flex',
           flexDirection: 'column',
