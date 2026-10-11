@@ -164,14 +164,23 @@ export interface OrderEmailData {
   shippingCity?: string;
   shippingZip?: string;
   customerPhone?: string;
+  createdAt?: Date | string;
 }
 
 function toVars(data: OrderEmailData): EmailVars {
+  const createdDate = data.createdAt ? new Date(data.createdAt) : new Date();
+  const czechTime = new Date(createdDate.toLocaleString('en-US', { timeZone: 'Europe/Prague' }));
+  const day = czechTime.getDate().toString().padStart(2, '0');
+  const month = (czechTime.getMonth() + 1).toString().padStart(2, '0');
+  const year = czechTime.getFullYear();
+  const formattedDate = `${day}.${month}.${year}`;
+  
   return {
     customerName: data.customerName,
     customerEmail: data.customerEmail,
     customerPhone: data.customerPhone,
     orderNumber: data.orderNumber,
+    orderDate: formattedDate,
     items: data.items,
     productImages: data.items.map((i) => i.image).filter(Boolean) as string[],
     totalPrice: data.totalPrice,

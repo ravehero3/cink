@@ -199,6 +199,7 @@ export interface EmailVars {
   customerEmail?: string;
   customerPhone?: string;
   orderNumber?: string;
+  orderDate?: string;
   items?: CatalogItem[];
   totalPrice?: number;
   shippingMethod?: string;
@@ -332,6 +333,7 @@ function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplatePar
         infoHtml: `
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
             <tr><td valign="top" style="padding:0 12px 10px 0;font-size:15px;line-height:20px;">Číslo objednávky</td><td align="right" valign="top" style="padding:0 0 10px;font-size:15px;line-height:20px;font-weight:600;">${order}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 10px 0;font-size:15px;line-height:20px;">Datum objednávky</td><td align="right" valign="top" style="padding:0 0 10px;font-size:15px;line-height:20px;font-weight:600;">${orderDate || new Date().toLocaleDateString('cs-CZ')}</td></tr>
             ${items
               .map(
                 (item) => {
@@ -515,7 +517,7 @@ function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplatePar
             <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Stav platby</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">Čeká na platbu</td></tr>
             <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Doprava</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${carrierName}</td></tr>
             <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Celkem</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${total} Kč</td></tr>
-            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Vytvořeno</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${vars.paymentDate || '5. 10. 2026, 18:04'}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Vytvořeno</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${vars.orderDate || new Date().toLocaleDateString('cs-CZ')}</td></tr>
           </table>
         `,
         photoGrid: boughtGridPhotos,

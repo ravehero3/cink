@@ -387,6 +387,7 @@ export async function POST(request: NextRequest) {
       shippingStreet: shippingStreet || undefined,
       shippingCity: shippingCity || undefined,
       shippingZip: shippingZip || undefined,
+      createdAt: order.createdAt,
     };
 
     try {
