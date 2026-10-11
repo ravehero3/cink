@@ -166,7 +166,7 @@ export default function CartPage() {
         }} />
 
         {/* Header - same as when products exist */}
-        <div className="w-full" style={{ position: 'relative', margin: '0 auto', height: '226px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
+        <div className="w-full md:w-[1426px]" style={{ position: 'relative', margin: '0 auto', height: '226px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
           <h1 className="text-center uppercase" style={{
             fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
             fontSize: '22px',
@@ -529,7 +529,7 @@ export default function CartPage() {
       }} />
 
       {/* Header - border handled by navigation panel */}
-      <div className="w-full" style={{ position: 'relative', margin: '0 auto', height: '226px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
+      <div className="w-full md:w-[1426px]" style={{ position: 'relative', margin: '0 auto', height: '226px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
         <h1 className="text-center uppercase" style={{
           fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
           fontSize: '22px',
@@ -544,7 +544,7 @@ export default function CartPage() {
       </div>
 
       {/* Navigation Panel - with 995px wide top and bottom borders */}
-      <div className="w-full" style={{
+      <div className="w-full md:w-[1426px]" style={{
         position: 'relative',
         margin: '0 auto',
         height: '44px',
@@ -633,7 +633,7 @@ export default function CartPage() {
       </div>
 
       <div className="flex-1 flex justify-center" style={{ marginBottom: '40px' }}>
-        <div className="w-full" style={{ position: 'relative', padding: '0 16px', boxSizing: 'border-box' }}>
+        <div className="w-full md:w-[1426px]" style={{ position: 'relative', margin: '0 auto', padding: '0 16px', boxSizing: 'border-box' }}>
           {items.map((item, index) => (
             <CartLineItem
               key={`${item.productId}-${item.size}`}
@@ -660,6 +660,9 @@ export default function CartPage() {
       {/* Checkout Button Section */}
       <div style={{
         width: '100%',
+        maxWidth: '1426px',
+        marginLeft: 'auto',
+        marginRight: 'auto',
         paddingLeft: '16px',
         paddingRight: '16px',
         marginBottom: '0px',
@@ -697,6 +700,9 @@ export default function CartPage() {
       {/* Info Section - Bullet Points */}
       <div style={{
         width: '100%',
+        maxWidth: '1426px',
+        marginLeft: 'auto',
+        marginRight: 'auto',
         paddingLeft: '16px',
         paddingRight: '16px',
         marginBottom: '0px',
@@ -726,6 +732,9 @@ export default function CartPage() {
       </div>
       <div className="hidden md:flex" style={{
         width: '100%',
+        maxWidth: '1426px',
+        marginLeft: 'auto',
+        marginRight: 'auto',
         borderTop: '1px solid #000',
         borderBottom: '1px solid #000',
         flexDirection: 'column',
@@ -930,7 +939,7 @@ export default function CartPage() {
 
       {/* PROHLÍŽELI JSTE Section - empty cart only, full width */}
       {selectedProducts.length > 0 && (
-        <div style={{ display: 'flex', flexDirection: 'column', borderTop: '1px solid #000', borderBottom: '1px solid #000', minHeight: '0', position: 'relative', width: '100%' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', borderTop: '1px solid #000', borderBottom: '1px solid #000', minHeight: '0', position: 'relative', width: '100%', maxWidth: '1426px', marginLeft: 'auto', marginRight: 'auto' }}>
           {/* Title row with line below */}
           <div style={{ paddingTop: '2px', paddingBottom: '2px', paddingLeft: '16px', paddingRight: '16px', textAlign: 'center', borderBottom: '1px solid #000', width: '100%' }}>
             <h3 style={{ fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '13px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.03em', fontStretch: 'condensed', margin: '0', textAlign: 'center' }}>PROHLÍŽELI JSTE</h3>
