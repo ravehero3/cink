@@ -664,7 +664,125 @@ export default function SavedProductsPage() {
             </div>
           )}
 
-          {products.map((product, index) => (
+          {/* Mobile Grid Layout */}
+          <div className="md:hidden" style={{
+            borderTop: '1px solid #000',
+            borderBottom: '1px solid #000',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: '0'
+          }}>
+            {products.map((product, index) => (
+              <div
+                key={product.id}
+                style={{
+                  borderRight: index % 2 === 0 ? '1px solid #000' : 'none',
+                  borderBottom: Math.ceil(products.length / 2) === Math.ceil((index + 1) / 2) ? 'none' : '1px solid #000',
+                  padding: '12px',
+                  display: 'flex',
+                  flexDirection: 'column'
+                }}
+              >
+                <Link href={`/produkty/${product.slug}`} style={{ textDecoration: 'none', color: '#000', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                  <div style={{
+                    position: 'relative',
+                    width: '100%',
+                    paddingBottom: '100%',
+                    backgroundColor: '#f5f5f5',
+                    border: '1px solid #000',
+                    overflow: 'hidden',
+                    marginBottom: '8px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <img
+                      src={product.images[0] || '/placeholder.png'}
+                      alt={product.name}
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover'
+                      }}
+                    />
+                  </div>
+                  <h3 style={{
+                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    marginBottom: '4px',
+                    lineHeight: '1.2',
+                    letterSpacing: '0.03em',
+                    fontStretch: 'condensed',
+                    color: '#000',
+                    margin: '0 0 4px 0'
+                  }}>
+                    {product.name}
+                  </h3>
+                  <p style={{
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '10px',
+                    fontWeight: 400,
+                    lineHeight: '1.2',
+                    color: '#000',
+                    margin: '0'
+                  }}>
+                    {product.price} Kč
+                  </p>
+                </Link>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginTop: '8px' }}>
+                  <button
+                    onClick={() => handleMoveToCart(product)}
+                    disabled={addingToCart === product.id}
+                    style={{
+                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontSize: '9px',
+                      fontWeight: 400,
+                      lineHeight: '1.2',
+                      color: '#000',
+                      textDecoration: 'underline',
+                      border: 'none',
+                      background: 'none',
+                      cursor: addingToCart === product.id ? 'not-allowed' : 'pointer',
+                      padding: 0,
+                      textAlign: 'center',
+                      opacity: addingToCart === product.id ? 0.6 : 1
+                    }}
+                    className="hover:opacity-60 transition-opacity"
+                  >
+                    {addingToCart === product.id ? 'Přidávám...' : 'Do košíku'}
+                  </button>
+                  <button
+                    onClick={() => handleRemove(product.id)}
+                    style={{
+                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontSize: '9px',
+                      fontWeight: 400,
+                      lineHeight: '1.2',
+                      color: '#000',
+                      textDecoration: 'underline',
+                      border: 'none',
+                      background: 'none',
+                      cursor: 'pointer',
+                      padding: 0,
+                      textAlign: 'center'
+                    }}
+                    className="hover:opacity-60 transition-opacity"
+                  >
+                    Smazat
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop List Layout */}
+          <div className="hidden md:block">
+            {products.map((product, index) => (
             <div
               key={product.id}
               style={{
@@ -787,6 +905,7 @@ export default function SavedProductsPage() {
               </div>
             </div>
           ))}
+          </div>
         </div>
       </div>
 
