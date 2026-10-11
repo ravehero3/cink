@@ -444,7 +444,28 @@ export default function CartPage() {
         </div>
 
         <div className="flex-1 flex justify-center" style={{ width: '100%' }}>
-          <div style={{ width: '100%', position: 'relative', padding: '0 16px', boxSizing: 'border-box' }}>
+          <div style={{ width: '100%', position: 'relative', padding: '0 16px', boxSizing: 'border-box', borderTop: '1px solid #000', borderBottom: '1px solid #000' }}>
+            {/* Top border - Full width */}
+            <div className="hidden md:block" style={{
+              position: 'absolute',
+              top: 0,
+              left: '0',
+              width: '100%',
+              height: '1px',
+              backgroundColor: '#000',
+              zIndex: 1
+            }} />
+            
+            {/* Bottom border - Full width */}
+            <div className="hidden md:block" style={{
+              position: 'absolute',
+              bottom: 0,
+              left: '0',
+              width: '100%',
+              height: '1px',
+              backgroundColor: '#000',
+              zIndex: 1
+            }} />
             <div className="flex flex-col items-center justify-center px-8 text-center" style={{ minHeight: '300px' }}>
               <p style={{
                 fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
