@@ -1084,3 +1084,7 @@ export default function SavedProductsPage() {
 
       {/* Padding for footer spacing */}
       <div className="hidden md:block" style={{ height: '328px' }} />
+
+    </div>
+  );
+}
