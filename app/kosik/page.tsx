@@ -166,7 +166,7 @@ export default function CartPage() {
         }} />
 
         {/* Header - same as when products exist */}
-        <div className="w-full md:w-[995px]" style={{ position: 'relative', margin: '0 auto', height: '226px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
+        <div className="w-full" style={{ position: 'relative', margin: '0 auto', height: '226px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
           <h1 className="text-center uppercase" style={{
             fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
             fontSize: '22px',
@@ -269,8 +269,8 @@ export default function CartPage() {
           </div>
         </div>
 
-        <div className="flex-1 flex justify-center">
-          <div style={{ width: '995px', position: 'relative' }}>
+        <div className="flex-1 flex justify-center" style={{ width: '100%' }}>
+          <div style={{ width: '100%', position: 'relative', padding: '0 16px', boxSizing: 'border-box' }}>
             <div className="flex flex-col items-center justify-center px-8 text-center" style={{ minHeight: '300px' }}>
               <p style={{
                 fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -529,7 +529,7 @@ export default function CartPage() {
       }} />
 
       {/* Header - border handled by navigation panel */}
-      <div className="w-full md:w-[995px]" style={{ position: 'relative', margin: '0 auto', height: '226px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
+      <div className="w-full" style={{ position: 'relative', margin: '0 auto', height: '226px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
         <h1 className="text-center uppercase" style={{
           fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
           fontSize: '22px',
@@ -544,17 +544,18 @@ export default function CartPage() {
       </div>
 
       {/* Navigation Panel - with 995px wide top and bottom borders */}
-      <div className="w-full md:w-[995px]" style={{
+      <div className="w-full" style={{
         position: 'relative',
         margin: '0 auto',
         height: '44px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: '24px',
+        gap: '12px',
         padding: '0 16px',
         overflow: 'visible',
-        zIndex: 10
+        zIndex: 10,
+        width: '100%'
       }}>
         {/* Top border - 995px wide to extend to vertical lines */}
         <div style={{
@@ -632,7 +633,7 @@ export default function CartPage() {
       </div>
 
       <div className="flex-1 flex justify-center" style={{ marginBottom: '40px' }}>
-        <div className="w-full md:w-[995px]" style={{ position: 'relative' }}>
+        <div className="w-full" style={{ position: 'relative', padding: '0 16px', boxSizing: 'border-box' }}>
           {items.map((item, index) => (
             <CartLineItem
               key={`${item.productId}-${item.size}`}
@@ -658,17 +659,15 @@ export default function CartPage() {
 
       {/* Checkout Button Section */}
       <div style={{
-        maxWidth: '995px',
-        marginLeft: 'auto',
-        marginRight: 'auto',
+        width: '100%',
         paddingLeft: '16px',
         paddingRight: '16px',
         marginBottom: '0px',
         borderTop: '1px solid #000',
         borderBottom: '1px solid #000',
-        width: '100%',
         paddingTop: '16px',
-        paddingBottom: '16px'
+        paddingBottom: '16px',
+        boxSizing: 'border-box'
       }}>
         <button
           onClick={() => router.push('/pokladna')}
@@ -697,16 +696,14 @@ export default function CartPage() {
 
       {/* Info Section - Bullet Points */}
       <div style={{
-        maxWidth: '995px',
-        marginLeft: 'auto',
-        marginRight: 'auto',
+        width: '100%',
         paddingLeft: '16px',
         paddingRight: '16px',
         marginBottom: '0px',
         borderBottom: '1px solid #000',
-        width: '100%',
         paddingTop: '16px',
-        paddingBottom: '16px'
+        paddingBottom: '16px',
+        boxSizing: 'border-box'
       }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
