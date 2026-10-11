@@ -909,6 +909,178 @@ export default function SavedProductsPage() {
         </div>
       </div>
 
-    </div>
-  );
-}
+      {/* White Footer - Full Width */}
+      <div className="footer-container hidden md:flex" style={{
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        width: '100%',
+        backgroundColor: '#fff',
+        borderTop: '1px solid #000',
+        zIndex: 10,
+        height: '328px',
+        display: 'flex',
+        flexDirection: 'row',
+        padding: '24px 0',
+        boxSizing: 'border-box'
+      }}>
+        {/* Left Section - Payment Methods */}
+        <div className="footer-section" style={{
+          flex: '1',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+          textAlign: 'center',
+          gap: '12px',
+          borderRight: '1px solid #000',
+          paddingLeft: '24px',
+          paddingRight: '24px'
+        }}>
+          <h3 style={{
+            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+            fontSize: '12px',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            letterSpacing: '0.03em',
+            margin: '0',
+            color: '#000'
+          }}>
+            BEZPEČNĚ PŘIJÍMÁME
+          </h3>
+          <div style={{
+            display: 'flex',
+            gap: '8px',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexWrap: 'wrap'
+          }}>
+            <img src="/payment-methods.jpg" alt="Payment Methods" style={{ height: '96px', width: 'auto' }} />
+          </div>
+        </div>
+
+        {/* Middle Section - Customer Support */}
+        <div className="footer-section" style={{
+          flex: '1',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+          textAlign: 'center',
+          gap: '12px',
+          borderRight: '1px solid #000',
+          paddingLeft: '24px',
+          paddingRight: '24px'
+        }}>
+          <h3 style={{
+            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+            fontSize: '12px',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            letterSpacing: '0.03em',
+            margin: '0',
+            color: '#000'
+          }}>
+            ZÁKAZNICKÁ PODPORA
+          </h3>
+          <p style={{
+            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+            fontSize: '11px',
+            fontWeight: 400,
+            margin: '0 0 8px 0',
+            color: '#000',
+            lineHeight: '1.3'
+          }}>
+            Naše zákaznická podpora je vám k dispozici od Pondělí do Soboty 9:30 - 19:00
+          </p>
+          <div style={{
+            display: 'flex',
+            gap: '8px',
+            flexDirection: 'column',
+            width: '100%'
+          }}>
+            <a
+              href="https://wa.me/YOUR_WHATSAPP"
+              style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '11px',
+                fontWeight: 400,
+                padding: '6px 12px',
+                border: '1px solid #000',
+                borderRadius: '4px',
+                textDecoration: 'none',
+                color: '#000',
+                textTransform: 'uppercase',
+                backgroundColor: '#fff',
+                cursor: 'pointer',
+                display: 'block'
+              }}
+            >
+              WHATSAPP
+            </a>
+            <a
+              href="tel:+YOUR_PHONE"
+              style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '11px',
+                fontWeight: 400,
+                padding: '6px 12px',
+                border: '1px solid #000',
+                borderRadius: '4px',
+                textDecoration: 'none',
+                color: '#000',
+                textTransform: 'uppercase',
+                backgroundColor: '#fff',
+                cursor: 'pointer',
+                display: 'block'
+              }}
+            >
+              ZAVOLEJTE NÁM
+            </a>
+          </div>
+        </div>
+
+        {/* Right Section - Shipping Info */}
+        <div style={{
+          flex: '1',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+          textAlign: 'center',
+          gap: '16px',
+          paddingLeft: '24px',
+          paddingRight: '24px'
+        }}>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px'
+          }}>
+            <p style={{
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '13px',
+              fontWeight: 700,
+              margin: '0',
+              color: '#000',
+              textTransform: 'uppercase'
+            }}>
+              Bezpečná platba
+            </p>
+            <p style={{
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '13px',
+              fontWeight: 700,
+              margin: '0',
+              color: '#000',
+              textTransform: 'uppercase'
+            }}>
+              Rychlé doručení
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Padding for footer spacing */}
+      <div className="hidden md:block" style={{ height: '328px' }} />
