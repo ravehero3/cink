@@ -741,7 +741,7 @@ export default function CartPage() {
         height: '684px'
       }}>
         <div style={{
-          maxWidth: '995px',
+          maxWidth: '1426px',
           marginLeft: 'auto',
           marginRight: 'auto',
           paddingLeft: '16px',
@@ -867,7 +867,7 @@ export default function CartPage() {
               WebkitUserSelect: 'none',
               flex: '1',
               minHeight: '0',
-              maxWidth: '995px',
+              maxWidth: '1426px',
               marginLeft: 'auto',
               marginRight: 'auto',
               width: '100%'
@@ -974,12 +974,7 @@ export default function CartPage() {
         </div>
       )}
 
-      {/* Payment Methods & CTA Section - 156px */}
-      <div style={{ borderTop: '1px solid #000', borderBottom: '1px solid #000', width: '100%', height: '156px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '12px', paddingTop: '16px', paddingBottom: '16px' }}>
-        <p style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px', fontWeight: 400, margin: '0', color: '#999', textAlign: 'center', paddingLeft: '24px', paddingRight: '24px' }}>Můžete platit bezpečně (Visa, Mastercard, Gopay, Paypal, Apple Pay, Česká Spořitelna a mnoho dalších variant)</p>
-        <button onClick={() => router.push('/')} style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '12px', fontWeight: 300, padding: '8px 24px', border: '1px solid #000', borderRadius: '2px', textDecoration: 'none', background: '#fff', color: '#000', cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '0.03em' }}>POKRAČOVAT V NÁKUPU</button>
-      </div>
-
+      
       {/* Custom White Footer - Full Width */}
       <div style={{
         position: 'fixed',
