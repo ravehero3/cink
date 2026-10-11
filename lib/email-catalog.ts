@@ -1,91 +1,4 @@
-    case 'PAYMENT_REMINDER':
-      return {
-        subject: `Připomínka: Dokončete platbu objednávky ${order}`,
-        preheader: 'Vaše objednávka čeká na platbu.',
-        header2Title: 'Připomínka platby',
-        header2Subtitle: `Objednávka ${order} čeká na vaši platbu. Jakmile ji přijmeme, vyexpedujeme vaši zásilku.`,
-        infoHtml: `
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
-            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Číslo objednávky</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${order}</td></tr>
-            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">K úhradě</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${total} Kč</td></tr>
-          </table>
-        `,
-        actionText: 'Klikněte pro dokončení platby.',
-        actionButton: {
-          label: 'Zaplatit nyní',
-          href: `${WEBSITE_URL}/objednavka/${order}`,
-        },
-        marketing: false,
-      };    case 'ACCOUNT_WELCOME':
-      return {
-        subject: 'Vítejte v UFO SPORT',
-        preheader: 'Váš účet byl vytvořen.',
-        header2Title: 'Vítejte v UFO SPORT',
-        header2Subtitle: 'Váš zákaznický účet byl úspěšně vytvořen. Nyní si můžete sledovat objednávky a ukládat své oblíbené kousky.',
-        infoHtml: `
-          <p style="margin:0 0 0px;">Přejděte do svého účtu pro přístup k historii objednávek a rychlejšímu nákupu.</p>
-        `,
-        actionText: 'Přejděte do svého účtu.',
-        actionButton: {
-          label: 'Otevřít účet',
-          href: `${WEBSITE_URL}/muj-ucet`,
-        },
-        marketing: false,
-      };    case 'PASSWORD_RESET':
-      return {
-        subject: 'Obnovení hesla',
-        preheader: 'Nastavte si nové heslo.',
-        header2Title: 'Obnovení hesla',
-        header2Subtitle: 'Klikněte na tlačítko níže pro nastavení nového hesla. Odkaz je platný 1 hodinu.',
-        infoHtml: `
-          <p style="margin:0 0 0px;">Pokud jste o obnovení hesla nežádali, ignorujte tento e-mail.</p>
-        `,
-        actionText: 'Nastavte si nové heslo.',
-        actionButton: {
-          label: 'Nastavit heslo',
-          href: vars.resetLink || `${WEBSITE_URL}/obnovit-heslo`,
-        },
-        marketing: false,
-      };    case 'SHIPPING_NOTIFICATION':
-      return {
-        subject: `Vaše objednávka ${order} je na cestě`,
-        preheader: 'Objednávka byla odeslána dopravci.',
-        header2Title: 'Objednávka je na cestě',
-        header2Subtitle: `Vaše objednávka ${order} byla odeslána. Klikněte níže pro sledování.`,
-        infoHtml: `
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
-            <tr><td valign="top" style="padding:0 12px 10px 0;font-size:15px;line-height:20px;">Číslo objednávky</td><td align="right" valign="top" style="padding:0 0 10px;font-size:15px;line-height:20px;font-weight:600;">${order}</td></tr>
-            <tr><td valign="top" style="padding:0 12px 10px 0;font-size:15px;line-height:20px;">Číslo zásilky</td><td align="right" valign="top" style="padding:0 0 10px;font-size:15px;line-height:20px;font-weight:600;">${vars.trackingNumber || 'Z 123 456 7890'}</td></tr>
-            <tr><td valign="top" style="padding:0 12px 10px 0;font-size:15px;line-height:20px;">Dopravce</td><td align="right" valign="top" style="padding:0 0 10px;font-size:15px;line-height:20px;font-weight:600;">${carrierName}</td></tr>
-          </table>
-        `,
-        actionText: 'Sledujte doručení své zásilky.',
-        actionButton: {
-          label: 'Sledovat zásilku',
-          href: vars.trackingNumber
-            ? `https://tracking.packeta.com/cs/?id=${vars.trackingNumber}`
-            : `${WEBSITE_URL}/sledovani-objednavky`,
-        },
-        marketing: false,
-      };    case 'PAYMENT_SUCCESS':
-      return {
-        subject: `Platba za objednávku ${order} byla potvrzena`,
-        preheader: 'Vaši platbu jsme úspěšně přijali.',
-        header2Title: 'Platba potvrzena',
-        header2Subtitle: 'Děkujeme, vaši platbu jsme úspěšně přijali. Nyní připravujeme vaši zásilku k odeslání.',
-        infoHtml: `
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
-            <tr><td valign="top" style="padding:0 12px 10px 0;font-size:15px;line-height:20px;">Číslo objednávky</td><td align="right" valign="top" style="padding:0 0 10px;font-size:15px;line-height:20px;font-weight:600;">${order}</td></tr>
-            <tr><td valign="top" style="padding:0 12px 10px 0;font-size:15px;line-height:20px;">Zaplaceno</td><td align="right" valign="top" style="padding:0 0 10px;font-size:15px;line-height:20px;font-weight:600;">${total} Kč</td></tr>
-          </table>
-        `,
-        actionText: 'Přejděte do svého účtu a sledujte stav objednávky.',
-        actionButton: {
-          label: 'Sledovat objednávku',
-          href: `${WEBSITE_URL}/objednavka/${order}`,
-        },
-        marketing: false,
-      };import {
+import {
   buildEmailHtml,
   emailButton,
   heading,
@@ -406,13 +319,21 @@ function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplatePar
   switch (type) {
     case 'ORDER_CONFIRMATION':
       return {
-        subject: `Potvrzení objednávky ${order}`,
-        preheader: 'Obdrželi jsme vaši objednávku. Prosím dokončete platbu.',
-        header2Title: 'Potvrzení objednávky',
-        header2Subtitle: 'Obdrželi jsme vaši objednávku. Prosím dokončete platbu, abychom mohli zásilku expedovat.',
+        subject: `Děkujeme za objednávku ${order}`,
+        preheader: 'Obdrželi jsme vaši objednávku. Nyní dokončete platbu.',
+        header2Title: 'Děkujeme za objednávku',
+        header2Subtitle:
+          'Obdrželi jsme vaši objednávku a brzy ji zpracujeme. Nyní prosím dokončete platbu, abychom mohli zásilku expedovat.',
+        heroImage: {
+          src: primaryBoughtPhoto,
+          height: 600,
+          alt: items[0]?.name || 'Zakoupený produkt',
+          productSlug: items[0]?.slug,
+        },
         infoHtml: `
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
             <tr><td valign="top" style="padding:0 12px 10px 0;font-size:15px;line-height:20px;">Číslo objednávky</td><td align="right" valign="top" style="padding:0 0 10px;font-size:15px;line-height:20px;font-weight:600;">${order}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 10px 0;font-size:15px;line-height:20px;">Datum objednávky</td><td align="right" valign="top" style="padding:0 0 10px;font-size:15px;line-height:20px;font-weight:600;">${vars.orderDate || new Date().toLocaleDateString('cs-CZ')}</td></tr>
             ${items
               .map(
                 (item) => {
@@ -448,12 +369,19 @@ function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplatePar
                 }
               )
               .join('')}
-            <tr><td valign="top" style="padding:0 12px 10px 0;font-size:15px;line-height:20px;">Celkem k úhradě</td><td align="right" valign="top" style="padding:0 0 10px;font-size:15px;line-height:20px;font-weight:600;">${total} Kč</td></tr>
+            <tr><td valign="top" style="padding:0 12px 10px 0;font-size:15px;line-height:20px;">Místo vyzvednutí</td><td align="right" valign="top" style="padding:0 0 10px;font-size:15px;line-height:20px;font-weight:600;">${shippingLocation}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 10px 0;font-size:15px;line-height:20px;">Celkem</td><td align="right" valign="top" style="padding:0 0 10px;font-size:15px;line-height:20px;font-weight:600;">${total} Kč</td></tr>
           </table>
         `,
+        photoGrid: boughtGridPhotos,
+        photoGridItems: boughtGridPhotos.map((photo, i) => ({
+          src: photo,
+          productSlug: items[i]?.slug,
+          alt: items[i]?.name || `Produkt ${i + 1}`,
+        })),
         actionText: 'Platbu dokončíte v detailu objednávky.',
         actionButton: {
-          label: 'Zaplatit objednávku',
+          label: 'Sledovat objednávku',
           href: `${WEBSITE_URL}/objednavka/${order}`,
         },
         marketing: false,
@@ -574,17 +502,26 @@ function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplatePar
     case 'ADMIN_ORDER_NOTIFICATION':
       return {
         subject: `[UFO SPORT] Nová objednávka ${order}`,
-        preheader: 'Nová objednávka k zpracování.',
+        preheader: 'Zákazník vytvořil novou objednávku.',
         header2Title: 'Nová objednávka',
-        header2Subtitle: `Nová objednávka ${order} od ${name}.`,
+        header2Subtitle: `Zákazník právě vytvořil objednávku ${order}.`,
+        heroImage: {
+          src: primaryBoughtPhoto,
+          height: 600,
+          alt: items[0]?.name || 'Zakoupený produkt',
+        },
         infoHtml: `
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
             <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Zákazník</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${name}</td></tr>
             <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">E-mail</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${vars.customerEmail || 'jan.novak@example.cz'}</td></tr>
-            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Částka</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${total} Kč</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Stav platby</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">Čeká na platbu</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Doprava</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${carrierName}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Celkem</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${total} Kč</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Vytvořeno</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${vars.orderDate || new Date().toLocaleDateString('cs-CZ')}</td></tr>
           </table>
         `,
-        actionText: 'Zpracujte objednávku v administraci.',
+        photoGrid: boughtGridPhotos,
+        actionText: 'Objednávku zpracujte v administraci.',
         actionButton: {
           label: 'Otevřít v administraci',
           href: `${WEBSITE_URL}/admin/objednavky/${order}`,
