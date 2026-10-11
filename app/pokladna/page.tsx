@@ -336,11 +336,12 @@ export default function CheckoutPage() {
       <div className="checkout-grid" style={{
         display: 'grid',
         gridTemplateColumns: '1fr',
-        minHeight: 'calc(100vh - 42px)'
+        minHeight: 'calc(100vh - 42px)',
+        maxWidth: '100%'
       }}>
         {/* Left Column - Form */}
         <main className="checkout-main" style={{
-          padding: '32px 16px 80px',
+          padding: '24px 16px 80px',
           display: 'flex',
           justifyContent: 'center',
           borderRight: 'none'
@@ -978,6 +979,7 @@ export default function CheckoutPage() {
 
         {/* Right Column - Order Summary */}
         <aside className="checkout-aside" style={{
+        width: '100%',
           borderLeft: 'none',
           display: 'flex',
           flexDirection: 'column',
