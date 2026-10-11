@@ -1170,6 +1170,74 @@ export default function CartPage() {
         </div>
       )}
 
+      {/* Desktop Checkout Buttons - 552px wide */}
+      {items.length > 0 && (
+        <div className="hidden md:flex" style={{
+          width: '100%',
+          justifyContent: 'center',
+          padding: '24px 16px',
+          boxSizing: 'border-box',
+          backgroundColor: '#fff',
+          borderBottom: '1px solid #000'
+        }}>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px',
+            width: '552px'
+          }}>
+            <button
+              onClick={() => router.push('/pokladna')}
+              style={{
+                width: '100%',
+                padding: '12px',
+                backgroundColor: '#000',
+                border: '1px solid #000',
+                borderRadius: '4px',
+                fontSize: '12px',
+                fontWeight: 400,
+                textTransform: 'uppercase',
+                cursor: 'pointer',
+                color: '#fff',
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                transition: 'all 0.2s ease'
+              }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#333'; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#000'; }}
+            >
+              PŘEJÍT K POKLADNĚ ({items.length})
+            </button>
+
+            <button
+              onClick={() => router.push('/pokladna?payment=gopay')}
+              style={{
+                width: '100%',
+                padding: '12px',
+                backgroundColor: '#fff',
+                border: '1px solid #000',
+                borderRadius: '4px',
+                fontSize: '12px',
+                fontWeight: 400,
+                textTransform: 'uppercase',
+                cursor: 'pointer',
+                color: '#000',
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                transition: 'all 0.2s ease'
+              }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5'; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#fff'; }}
+            >
+              <img src="https://cdnweb.fakturoid.cz/images/articles/2015/10/gopay-logo.png" alt="GoPay" style={{ height: '20px', width: 'auto', objectFit: 'contain', flexShrink: 0 }} />
+              GOPAY
+            </button>
+          </div>
+        </div>
+      )}
+
 {/* Custom White Footer - Static at bottom of page */}
       <div className="footer-container hidden md:flex" style={{
         position: 'relative',
