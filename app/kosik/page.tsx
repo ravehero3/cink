@@ -191,7 +191,6 @@ export default function CartPage() {
             borderBottom: '1px solid #000',
             boxSizing: 'border-box',
             display: 'flex',
-            display: 'flex',
             gap: '12px'
           }}>
             <h3 style={{
