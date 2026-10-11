@@ -271,8 +271,11 @@ export default function CartPage() {
                   backgroundColor: '#fff',
                   cursor: 'pointer',
                   display: 'block',
-                  textAlign: 'center'
+                  textAlign: 'center',
+                  transition: 'all 0.2s ease'
                 }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#000'; (e.currentTarget as HTMLElement).style.color = '#fff'; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#fff'; (e.currentTarget as HTMLElement).style.color = '#000'; }}
               >
                 WHATSAPP
               </a>
@@ -291,8 +294,11 @@ export default function CartPage() {
                   backgroundColor: '#fff',
                   cursor: 'pointer',
                   display: 'block',
-                  textAlign: 'center'
+                  textAlign: 'center',
+                  transition: 'all 0.2s ease'
                 }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#000'; (e.currentTarget as HTMLElement).style.color = '#fff'; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#fff'; (e.currentTarget as HTMLElement).style.color = '#000'; }}
               >
                 ZAVOLEJTE NÁM
               </a>
@@ -686,7 +692,7 @@ export default function CartPage() {
           }
         }
       `}</style>
-      <div className="min-h-screen bg-white flex flex-col relative" style={{ paddingBottom: '328px' }}>
+      <div className="min-h-screen bg-white flex flex-col relative">
       {/* Vertical lines at product edges (995px wide, centered) - stop at footer top */}
       <div className="hidden md:block" style={{
         position: 'fixed',
@@ -889,8 +895,9 @@ export default function CartPage() {
           <button
             onClick={() => {
               if (vybrranoRef.current) {
+                const productWidth = vybrranoRef.current.scrollWidth / selectedProducts.length;
                 vybrranoRef.current.scrollBy({
-                  left: -(vybrranoRef.current.clientWidth * 0.4),
+                  left: -productWidth,
                   behavior: 'smooth'
                 });
               }
@@ -929,8 +936,9 @@ export default function CartPage() {
           <button
             onClick={() => {
               if (vybrranoRef.current) {
+                const productWidth = vybrranoRef.current.scrollWidth / selectedProducts.length;
                 vybrranoRef.current.scrollBy({
-                  left: vybrranoRef.current.clientWidth * 0.4,
+                  left: productWidth,
                   behavior: 'smooth'
                 });
               }
@@ -1162,16 +1170,15 @@ export default function CartPage() {
         </div>
       )}
 
-{/* Custom White Footer - Full Width */}
+{/* Custom White Footer - Static at bottom of page */}
       <div className="footer-container hidden md:flex" style={{
-        position: 'fixed',
-        bottom: 0,
+        position: 'relative',
         left: 0,
         right: 0,
         width: '100%',
         backgroundColor: '#fff',
         borderTop: '1px solid #000',
-        zIndex: 10,
+        zIndex: 1,
         height: '328px',
         display: 'flex',
         flexDirection: 'row',
@@ -1504,8 +1511,7 @@ export default function CartPage() {
       {/* Mobile bottom padding for sticky buttons */}
       <div className="md:hidden" style={{ height: '92px' }} />
 
-      {/* Padding for footer spacing */}
-      <div className="hidden md:block" style={{ height: '328px' }} />
+      {/* Padding for footer spacing - removed since footer is now static */}
 
       <DeleteConfirmModal
         isOpen={isDeleteModalOpen}
