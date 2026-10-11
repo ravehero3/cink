@@ -191,7 +191,7 @@ export default function CartPage() {
             borderBottom: '1px solid #000',
             boxSizing: 'border-box',
             display: 'flex',
-            flexDirection: 'column',
+            display: 'flex',
             gap: '12px'
           }}>
             <h3 style={{
@@ -801,6 +801,14 @@ export default function CartPage() {
         </div>
       </div>
 
+      <style>{`
+        @media (min-width: 768px) {
+          .md\:hidden {
+            display: none !important;
+          }
+        }
+      `}</style>
+
       <div className="flex-1 flex justify-center w-full" style={{ marginBottom: '40px' }}>
         <div style={{ position: 'relative', margin: '0 auto', padding: '0', boxSizing: 'border-box', width: '100%', maxWidth: '1426px' }}>
           {items.map((item, index) => (
@@ -1083,7 +1091,6 @@ export default function CartPage() {
           right: 0,
           width: '100%',
           padding: '12px 16px',
-          display: 'flex',
           flexDirection: 'column',
           gap: '8px',
           boxSizing: 'border-box',
