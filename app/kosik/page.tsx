@@ -673,7 +673,15 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex flex-col relative" style={{ paddingBottom: '328px' }}>
+    <>
+      <style>{`
+        @media (max-width: 767px) {
+          .footer-container {
+            display: none !important;
+          }
+        }
+      `}</style>
+      <div className="min-h-screen bg-white flex flex-col relative" style={{ paddingBottom: '328px' }}>
       {/* Vertical lines at product edges (995px wide, centered) - stop at footer top */}
       <div className="hidden md:block" style={{
         position: 'fixed',
@@ -1089,9 +1097,10 @@ export default function CartPage() {
           left: 0,
           right: 0,
           width: '100%',
-          padding: '12px 16px',
+          padding: '8px 16px',
+          display: 'flex',
           flexDirection: 'column',
-          gap: '8px',
+          gap: '6px',
           boxSizing: 'border-box',
           backgroundColor: '#fff',
           borderTop: '1px solid #000',
@@ -1099,21 +1108,21 @@ export default function CartPage() {
           maxHeight: '92px',
           overflow: 'hidden'
         }}>
-          {/* Black button - Přejít k pokladně */}
           <button
             onClick={() => router.push('/pokladna')}
             style={{
               width: '100%',
-              padding: '12px',
+              padding: '10px',
               backgroundColor: '#000',
               border: '1px solid #000',
               borderRadius: '4px',
-              fontSize: '12px',
+              fontSize: '11px',
               fontWeight: 400,
               textTransform: 'uppercase',
               cursor: 'pointer',
               color: '#fff',
-              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif'
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              lineHeight: '1.2'
             }}
           >
             PŘEJÍT K POKLADNĚ ({items.length})
@@ -1124,11 +1133,11 @@ export default function CartPage() {
             onClick={() => router.push('/pokladna?payment=gopay')}
             style={{
               width: '100%',
-              padding: '12px',
+              padding: '10px',
               backgroundColor: '#fff',
               border: '1px solid #000',
               borderRadius: '4px',
-              fontSize: '12px',
+              fontSize: '11px',
               fontWeight: 400,
               textTransform: 'uppercase',
               cursor: 'pointer',
@@ -1137,11 +1146,13 @@ export default function CartPage() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '8px',
-              minHeight: '48px'
+              gap: '6px',
+              minHeight: '32px',
+              lineHeight: '1.2'
             }}
           >
-            <img src="https://cdnweb.fakturoid.cz/images/articles/2015/10/gopay-logo.png" alt="GoPay" style={{ height: '24px', width: 'auto', objectFit: 'contain' }} />
+            <img src="https://cdnweb.fakturoid.cz/images/articles/2015/10/gopay-logo.png" alt="GoPay" style={{ height: '18px', width: 'auto', objectFit: 'contain', flexShrink: 0 }} />
+            GOPAY
           </button>
         </div>
       )}
@@ -1498,6 +1509,7 @@ export default function CartPage() {
         productName={deleteItemData?.productName || ''}
         productSize={deleteItemData?.size || ''}
       />
-    </div>
+      </div>
+    </>
   );
 }
