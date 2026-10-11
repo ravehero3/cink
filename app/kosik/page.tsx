@@ -55,6 +55,7 @@ export default function CartPage() {
   const { data: session } = useSession();
   const { items, updateQuantity, removeItem, getTotal, getItemCount } = useCartStore();
   const { addProduct } = useSavedProductsStore();
+  const savedIds = useSavedProductsStore((state) => state.savedIds);
   const cartItemCount = getItemCount();
   const isKosik = pathname === '/kosik';
   const vybrranoRef = useRef<HTMLDivElement>(null);
@@ -383,7 +384,7 @@ export default function CartPage() {
                 display: 'block'
               }}
             >
-              ULOŽENÉ POLOŽKY
+              ULOŽENÉ POLOŽKY ({savedIds.length})
             </Link>
             <div
               className="absolute pointer-events-none"
@@ -461,7 +462,7 @@ export default function CartPage() {
             {selectedProducts.length > 0 && (
               <div style={{ display: 'flex', flexDirection: 'column', borderTop: '1px solid #000', borderBottom: '1px solid #000', minHeight: '0', position: 'relative' }}>
                 {/* Title row with line below */}
-                <div style={{ paddingTop: '8px', paddingBottom: '12px', paddingLeft: '16px', paddingRight: '16px', textAlign: 'center', borderBottom: '1px solid #000' }}>
+                <div style={{ paddingTop: '4px', paddingBottom: '4px', paddingLeft: '4px', paddingRight: '4px', textAlign: 'center', borderBottom: '1px solid #000' }}>
                   <h3 style={{
                     fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '13px',
@@ -780,7 +781,7 @@ export default function CartPage() {
               display: 'block'
             }}
           >
-            ULOŽENÉ POLOŽKY
+            ULOŽENÉ POLOŽKY ({savedIds.length})
           </Link>
           <div
             className="absolute pointer-events-none"

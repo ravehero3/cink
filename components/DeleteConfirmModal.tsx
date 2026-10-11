@@ -28,7 +28,7 @@ export default function DeleteConfirmModal({
       />
       
       <div className="fixed top-1/2 z-50 bg-white border border-black" style={{ width: '70%', maxWidth: '480px', left: '50%', transform: 'translate(-50%, -50%)' }}>
-        <div className="border-b border-black" style={{ height: '52px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#24e053', padding: '0 24px' }}>
+        <div className="border-b border-black" style={{ height: '52px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff', padding: '0 24px' }}>
           <h2 style={{
             fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
             fontSize: '16px',
