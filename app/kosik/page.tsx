@@ -362,23 +362,23 @@ export default function CartPage() {
           overflow: 'visible',
           zIndex: 10
         }}>
-          {/* Top border - 995px wide to extend to vertical lines */}
+                    {/* Top border - Full width */}
           <div style={{
             position: 'absolute',
             top: 0,
-            left: 'calc(50% - 713px)',
-        width: '1426px',
+            left: '0',
+            width: '100%',
             height: '1px',
             backgroundColor: '#000',
             zIndex: 1
           }} />
           
-          {/* Bottom border - 995px wide to extend to vertical lines */}
+          {/* Bottom border - Full width */}
           <div style={{
             position: 'absolute',
             bottom: 0,
-            left: 'calc(50% - 713px)',
-        width: '1426px',
+            left: '0',
+            width: '100%',
             height: '1px',
             backgroundColor: '#000',
             zIndex: 1
@@ -1125,7 +1125,9 @@ export default function CartPage() {
           boxSizing: 'border-box',
           backgroundColor: '#fff',
           borderTop: '1px solid #000',
-          zIndex: 40
+          zIndex: 45,
+          maxHeight: '92px',
+          overflow: 'hidden'
         }}>
           {/* Black button - Přejít k pokladně */}
           <button
