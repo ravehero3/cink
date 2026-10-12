@@ -873,10 +873,32 @@ export default function SavedProductsPage() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col relative">
+      {/* Vertical lines at product edges (1426px wide, centered) - stop at footer top */}
+      <div className="hidden md:block" style={{
+        position: 'fixed',
+        left: '50%',
+        marginLeft: '-713px',
+        top: 0,
+        height: 'calc(100vh - 328px)',
+        width: '1px',
+        backgroundColor: '#000',
+        zIndex: 5
+      }} />
+      <div className="hidden md:block" style={{
+        position: 'fixed',
+        left: '50%',
+        marginLeft: '713px',
+        top: 0,
+        height: 'calc(100vh - 328px)',
+        width: '1px',
+        backgroundColor: '#000',
+        zIndex: 5
+      }} />
+
       {/* Header - border handled by navigation panel */}
-      <div className="w-full md:w-[995px]" style={{ position: 'relative', margin: '0 auto', height: '226px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
+      <div className="w-full md:w-[1426px]" style={{ position: 'relative', margin: '0 auto', height: '226px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
         <h1 className="text-center uppercase" style={{
-          fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+          fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
           fontSize: '22px',
           fontWeight: 700,
           lineHeight: '22px',
@@ -888,8 +910,8 @@ export default function SavedProductsPage() {
         </h1>
       </div>
 
-      {/* Navigation Panel - with 995px wide top and bottom borders */}
-      <div className="w-full md:w-[995px]" style={{
+      {/* Navigation Panel - with 1426px wide top and bottom borders */}
+      <div className="w-full md:w-[1426px]" style={{
         position: 'relative',
         margin: '0 auto',
         height: '44px',
@@ -901,23 +923,23 @@ export default function SavedProductsPage() {
         overflow: 'visible',
         zIndex: 10
       }}>
-        {/* Top border - 995px wide to extend to vertical lines */}
+        {/* Top border - 1426px wide to extend to vertical lines */}
         <div style={{
           position: 'absolute',
           top: 0,
-          left: 'calc(50% - 497.5px)',
-          width: '995px',
+          left: 'calc(50% - 713px)',
+          width: '1426px',
           height: '1px',
           backgroundColor: '#000',
           zIndex: 1
         }} />
         
-        {/* Bottom border - 995px wide to extend to vertical lines */}
+        {/* Bottom border - 1426px wide to extend to vertical lines */}
         <div style={{
           position: 'absolute',
           bottom: 0,
-          left: 'calc(50% - 497.5px)',
-          width: '995px',
+          left: 'calc(50% - 713px)',
+          width: '1426px',
           height: '1px',
           backgroundColor: '#000',
           zIndex: 1
@@ -977,8 +999,8 @@ export default function SavedProductsPage() {
         </div>
       </div>
 
-      <div className="flex-1 flex justify-center">
-        <div className="w-full md:w-[995px]" style={{ position: 'relative', margin: '0 auto' }}>
+      <div className="flex-1 flex justify-center w-full" style={{ marginBottom: '40px' }}>
+        <div className="w-full md:w-[1426px]" style={{ position: 'relative', margin: '0 auto', padding: '0', boxSizing: 'border-box' }}>
           {/* Login Prompt - Only for unauthenticated users */}
           {status === 'unauthenticated' && (
             <div
