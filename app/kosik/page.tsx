@@ -61,8 +61,7 @@ export default function CartPage() {
   const isKosik = pathname === '/kosik';
   const vybrranoRef = useRef<HTMLDivElement>(null);
   const recentlyViewedRef = useRef<HTMLDivElement>(null);
-  const recentlyViewedProducts = useRecentlyViewedStore((state) => state.getRecentProducts(9));
-  const [recentlyViewed, setRecentlyViewed] = useState<typeof recentlyViewedProducts>([]);
+  const [recentlyViewed, setRecentlyViewed] = useState<any[]>([]);
 
   // Fetch products for VYBRÁNO PRO VÁS section
   useEffect(() => {
@@ -100,8 +99,21 @@ export default function CartPage() {
 
   // Populate recently viewed products
   useEffect(() => {
-    setRecentlyViewed(recentlyViewedProducts);
-  }, [recentlyViewedProducts]);
+    const recent = useRecentlyViewedStore.getState().getRecentProducts(9);
+    setRecentlyViewed(recent);
+  }, []);
+
+  // Update recently viewed when store changes
+  useEffect(() => {
+    const unsubscribe = useRecentlyViewedStore.subscribe(
+      (state) => state.products,
+      () => {
+        const recent = useRecentlyViewedStore.getState().getRecentProducts(9);
+        setRecentlyViewed(recent);
+      }
+    );
+    return () => unsubscribe();
+  }, []);
 
   const handleOpenDeleteModal = (productId: string, productName: string, size: string) => {
     setDeleteItemData({ productId, productName, size });
