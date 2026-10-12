@@ -20,19 +20,26 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
             cd ~/apps
-            # Stop watchdog during deploy to prevent restart races
+            # Pause watchdog during deploy to prevent restart races
+            sudo systemctl stop ufosport-watchdog 2>/dev/null || true
             docker stop ufosport-watchdog 2>/dev/null || true
-            # Clean up any stale or conflicting cink containers
-            docker ps -a --format '{{.ID}} {{.Names}}' | grep -E 'cink|apps-cink' | awk '{print $1}' | xargs -r docker rm -f 2>/dev/null || true
-            # Rebuild cink image
+            # Rebuild cink image while current container continues running
             docker compose build cink
-            # Ensure container is fully removed before starting new one
-            docker compose stop cink 2>/dev/null || true
-            docker compose rm -f -v cink 2>/dev/null || true
-            docker ps -a --format '{{.ID}} {{.Names}}' | grep -E 'cink|apps-cink' | awk '{print $1}' | xargs -r docker rm -f 2>/dev/null || true
-            # Start cink cleanly, then ensure all services are running
+            # Gracefully stop and remove old cink container
+            docker stop apps-cink-1 -t 5 2>/dev/null || true
+            docker rm -f apps-cink-1 2>/dev/null || true
+            docker ps -a --format '{{.ID}} {{.Names}}' | grep -E 'apps-cink' | awk '{print $1}' | xargs -r docker rm -f 2>/dev/null || true
+            # Wait for Docker daemon to finish removal before starting new container
+            for i in $(seq 1 10); do
+              docker ps -a --format '{{.Names}}' | grep -q 'apps-cink' || break
+              sleep 1
+            done
+            # Start cink with new image cleanly
             docker compose up -d cink
+            # Ensure all other services are running
             docker compose up -d
+            # Resume watchdog
+            sudo systemctl start ufosport-watchdog 2>/dev/null || true
             # Verify deployment
             sleep 10
             docker compose ps
