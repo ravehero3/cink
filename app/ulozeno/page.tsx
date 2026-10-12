@@ -82,7 +82,7 @@ function UlozenoWhiteFooter() {
           width: '100%',
           backgroundColor: '#fff',
           borderTop: '1px solid #000',
-          zIndex: 10,
+          zIndex: 30,
           height: '328px',
           flexDirection: 'row',
           padding: '24px 0',
@@ -873,27 +873,30 @@ export default function SavedProductsPage() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col relative">
-      {/* Vertical lines at product edges (1426px wide, centered) - stop at footer top */}
-      <div className="hidden md:block" style={{
-        position: 'fixed',
-        left: '50%',
-        marginLeft: '-713px',
-        top: 0,
-        height: 'calc(100vh - 328px)',
-        width: '1px',
-        backgroundColor: '#000',
-        zIndex: 5
-      }} />
-      <div className="hidden md:block" style={{
-        position: 'fixed',
-        left: '50%',
-        marginLeft: '713px',
-        top: 0,
-        height: 'calc(100vh - 328px)',
-        width: '1px',
-        backgroundColor: '#000',
-        zIndex: 5
-      }} />
+      <div className="flex-1 flex flex-col relative w-full">
+        {/* Vertical lines at product edges (1426px wide, centered) - touch footer top */}
+        <div className="hidden md:block" style={{
+          position: 'absolute',
+          left: '50%',
+          marginLeft: '-713px',
+          top: 0,
+          bottom: 0,
+          width: '1px',
+          backgroundColor: '#000',
+          zIndex: 5,
+          pointerEvents: 'none'
+        }} />
+        <div className="hidden md:block" style={{
+          position: 'absolute',
+          left: '50%',
+          marginLeft: '713px',
+          top: 0,
+          bottom: 0,
+          width: '1px',
+          backgroundColor: '#000',
+          zIndex: 5,
+          pointerEvents: 'none'
+        }} />
 
       {/* Header - border handled by navigation panel */}
       <div className="w-full md:w-[1426px]" style={{ position: 'relative', margin: '0 auto', height: '226px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
@@ -1196,6 +1199,7 @@ export default function SavedProductsPage() {
             ))}
           </div>
         </div>
+      </div>
       </div>
 
       {/* White Footer */}

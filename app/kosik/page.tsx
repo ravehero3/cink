@@ -772,27 +772,30 @@ export default function CartPage() {
         }
       `}</style>
       <div className="min-h-screen bg-white flex flex-col relative">
-      {/* Vertical lines at product edges (995px wide, centered) - stop at footer top */}
-      <div className="hidden md:block" style={{
-        position: 'fixed',
-        left: '50%',
-        marginLeft: '-713px',
-        top: 0,
-        height: 'calc(100vh - 328px)',
-        width: '1px',
-        backgroundColor: '#000',
-        zIndex: 5
-      }} />
-      <div className="hidden md:block" style={{
-        position: 'fixed',
-        left: '50%',
-        marginLeft: '713px',
-        top: 0,
-        height: 'calc(100vh - 328px)',
-        width: '1px',
-        backgroundColor: '#000',
-        zIndex: 5
-      }} />
+        <div className="flex-1 flex flex-col relative w-full">
+          {/* Vertical lines at product edges (1426px wide, centered) - touch footer top */}
+          <div className="hidden md:block" style={{
+            position: 'absolute',
+            left: '50%',
+            marginLeft: '-713px',
+            top: 0,
+            bottom: 0,
+            width: '1px',
+            backgroundColor: '#000',
+            zIndex: 25,
+            pointerEvents: 'none'
+          }} />
+          <div className="hidden md:block" style={{
+            position: 'absolute',
+            left: '50%',
+            marginLeft: '713px',
+            top: 0,
+            bottom: 0,
+            width: '1px',
+            backgroundColor: '#000',
+            zIndex: 25,
+            pointerEvents: 'none'
+          }} />
 
       {/* Header - border handled by navigation panel */}
       <div className="w-full md:w-[1426px]" style={{ position: 'relative', margin: '0 auto', height: '226px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
@@ -1478,116 +1481,118 @@ export default function CartPage() {
         </div>
       )}
 
-      {/* Desktop Checkout Buttons - 552px wide with Price Section */}
-      {items.length > 0 && (
-        <div className="hidden md:flex" style={{
-          width: '100%',
-          justifyContent: 'center',
-          padding: '24px 16px',
-          boxSizing: 'border-box',
-          backgroundColor: '#fff',
-          borderBottom: '1px solid #000'
-        }}>
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '16px',
-            width: '552px'
-          }}>
-            {/* Desktop Price Section */}
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '8px',
-              paddingBottom: '16px',
-              borderBottom: '1px solid #000'
+          {/* Desktop Checkout Buttons - Sticky at bottom of viewport, sticks above footer */}
+          {items.length > 0 && (
+            <div className="hidden md:flex sticky bottom-0 z-20" style={{
+              width: '100%',
+              justifyContent: 'center',
+              padding: '16px',
+              boxSizing: 'border-box',
+              backgroundColor: '#fff',
+              borderTop: '1px solid #000',
+              boxShadow: '0 -4px 12px rgba(0, 0, 0, 0.05)'
             }}>
               <div style={{
                 display: 'flex',
-                justifyContent: 'space-between',
-                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '12px',
-                color: '#999'
+                flexDirection: 'column',
+                gap: '12px',
+                width: '552px'
               }}>
-                <span>CENA ZA DOPRAVU</span>
-                <span>79 Kč</span>
-              </div>
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '16px',
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                letterSpacing: '0.03em',
-                color: '#000'
-              }}>
-                <span>PŘEDPOKLÁDANÁ CENA</span>
-                <span>{(total + 79).toLocaleString('cs-CZ', { maximumFractionDigits: 0 })} Kč</span>
+                {/* Desktop Price Section */}
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '6px',
+                  paddingBottom: '12px',
+                  borderBottom: '1px solid #000'
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '12px',
+                    color: '#999'
+                  }}>
+                    <span>CENA ZA DOPRAVU</span>
+                    <span>79 Kč</span>
+                  </div>
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '16px',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.03em',
+                    color: '#000'
+                  }}>
+                    <span>PŘEDPOKLÁDANÁ CENA</span>
+                    <span>{(total + 79).toLocaleString('cs-CZ', { maximumFractionDigits: 0 })} Kč</span>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => router.push('/pokladna')}
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    backgroundColor: '#000',
+                    border: '1px solid #000',
+                    borderRadius: '4px',
+                    fontSize: '12px',
+                    fontWeight: 400,
+                    textTransform: 'uppercase',
+                    cursor: 'pointer',
+                    color: '#fff',
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#333'; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#000'; }}
+                >
+                  PŘEJÍT K POKLADNĚ ({items.length})
+                </button>
+
+                <button
+                  onClick={() => router.push('/pokladna?payment=gopay')}
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    backgroundColor: '#fff',
+                    border: '1px solid #000',
+                    borderRadius: '4px',
+                    fontSize: '12px',
+                    fontWeight: 400,
+                    textTransform: 'uppercase',
+                    cursor: 'pointer',
+                    color: '#000',
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5'; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#fff'; }}
+                >
+                  <img src="https://cdnweb.fakturoid.cz/images/articles/2015/10/gopay-logo.png" alt="GoPay" style={{ height: '20px', width: 'auto', objectFit: 'contain', flexShrink: 0 }} />
+                  GOPAY
+                </button>
               </div>
             </div>
-
-            <button
-              onClick={() => router.push('/pokladna')}
-              style={{
-                width: '100%',
-                padding: '12px',
-                backgroundColor: '#000',
-                border: '1px solid #000',
-                borderRadius: '4px',
-                fontSize: '12px',
-                fontWeight: 400,
-                textTransform: 'uppercase',
-                cursor: 'pointer',
-                color: '#fff',
-                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                transition: 'all 0.2s ease'
-              }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#333'; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#000'; }}
-            >
-              PŘEJÍT K POKLADNĚ ({items.length})
-            </button>
-
-            <button
-              onClick={() => router.push('/pokladna?payment=gopay')}
-              style={{
-                width: '100%',
-                padding: '12px',
-                backgroundColor: '#fff',
-                border: '1px solid #000',
-                borderRadius: '4px',
-                fontSize: '12px',
-                fontWeight: 400,
-                textTransform: 'uppercase',
-                cursor: 'pointer',
-                color: '#000',
-                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px',
-                transition: 'all 0.2s ease'
-              }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5'; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#fff'; }}
-            >
-              <img src="https://cdnweb.fakturoid.cz/images/articles/2015/10/gopay-logo.png" alt="GoPay" style={{ height: '20px', width: 'auto', objectFit: 'contain', flexShrink: 0 }} />
-              GOPAY
-            </button>
-          </div>
+          )}
         </div>
-      )}
 
-{/* Custom White Footer - Static at bottom of page */}
-      <div className="footer-container hidden md:flex" style={{
-        position: 'relative',
-        left: 0,
-        right: 0,
-        width: '100%',
-        backgroundColor: '#fff',
-        borderTop: '1px solid #000',
-        zIndex: 1,
+        {/* Custom White Footer - Static at bottom of page */}
+        <div className="footer-container hidden md:flex" style={{
+          position: 'relative',
+          left: 0,
+          right: 0,
+          width: '100%',
+          backgroundColor: '#fff',
+          borderTop: '1px solid #000',
+          zIndex: 30,
         height: '328px',
         display: 'flex',
         flexDirection: 'row',
