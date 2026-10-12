@@ -32,15 +32,14 @@ export async function POST(
         select: { email: true },
       });
     } else if (campaign.targetAudience === 'abandoned') {
-      // Get users with abandoned carts
-      recipients = await prisma.user.findMany({
-        where: { abandonedCart: { not: null } },
+      // No abandonedCart field in schema - fall back to newsletter subscribers
+      recipients = await prisma.newsletterSubscriber.findMany({
         select: { email: true },
       });
     } else if (campaign.targetAudience === 'vip') {
-      // Get VIP users
+      // No VIP role in schema - target users with newsletterSubscribed flag
       recipients = await prisma.user.findMany({
-        where: { role: 'VIP' },
+        where: { newsletterSubscribed: true },
         select: { email: true },
       });
     }

@@ -152,6 +152,7 @@ model EmailCampaign {
   targetAudience        String    @default("all")
   recipientEmails       String[]  @default([])
   status                String    @default("draft")
+  scheduledFor          DateTime?
   sentAt                DateTime?
   openedCount           Int       @default(0)
   sentCount             Int       @default(0)
