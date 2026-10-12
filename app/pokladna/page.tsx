@@ -329,6 +329,55 @@ export default function CheckoutPage() {
             border-right: 1px solid #000 !important;
           }
         }
+        .pill {
+          font-family: var(--font-reg, "BB-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif);
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          background: #000;
+          color: #fff;
+          border: 1px solid rgba(255, 255, 255, 0.85);
+          border-radius: 2px;
+          padding: 12px 22px;
+          font-size: 14px;
+          font-weight: 500;
+          line-height: 1;
+          white-space: nowrap;
+          cursor: pointer;
+          box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+          transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+                      background 0.25s ease,
+                      color 0.25s ease,
+                      border-color 0.25s ease,
+                      box-shadow 0.25s ease;
+        }
+        .pill:hover {
+          background: #fff;
+          color: #000;
+          border-color: #000;
+          transform: scale(1.15);
+          box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+        }
+        .pill:active {
+          transform: scale(1.03);
+        }
+        .pill:focus-visible {
+          outline: 2px solid #000;
+          outline-offset: 3px;
+        }
+        @media (max-width: 440px) {
+          .pill {
+            font-size: 12px;
+            padding: 10px 14px;
+            white-space: normal;
+            text-align: center;
+          }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .pill {
+            transition: none;
+          }
+        }
       `}</style>
       
 
@@ -1150,13 +1199,18 @@ export default function CheckoutPage() {
               </div>
               {amountToFreeShipping > 0 && (
                 <div style={{
-                  color: '#2ecc40',
-                  fontSize: '11px',
-                  padding: '5px 0',
-                  textTransform: 'none',
-                  letterSpacing: 0
+                  padding: '14px 0 16px',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center'
                 }}>
-                  Přidejte zboží za {amountToFreeShipping.toLocaleString('cs-CZ')} Kč pro dopravu zdarma!
+                  <button
+                    type="button"
+                    onClick={() => router.push('/')}
+                    className="pill"
+                  >
+                    Přidejte zboží za {amountToFreeShipping.toLocaleString('cs-CZ')} Kč pro dopravu zdarma!
+                  </button>
                 </div>
               )}
               {discount > 0 && (
