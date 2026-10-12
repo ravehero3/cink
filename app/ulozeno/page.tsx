@@ -56,9 +56,27 @@ function AnimatedLink({ href, text }: { href: string; text: string }) {
 function UlozenoWhiteFooter() {
   return (
     <>
+      <style>{`
+        @media (max-width: 767px) {
+          .ulozeno-desktop-footer {
+            display: none !important;
+          }
+          .ulozeno-mobile-footer {
+            display: block !important;
+          }
+        }
+        @media (min-width: 768px) {
+          .ulozeno-desktop-footer {
+            display: flex !important;
+          }
+          .ulozeno-mobile-footer {
+            display: none !important;
+          }
+        }
+      `}</style>
       {/* Desktop White Footer - Static at bottom of page */}
       <div
-        className="footer-container hidden md:flex"
+        className="ulozeno-desktop-footer"
         style={{
           position: 'relative',
           width: '100%',
@@ -66,7 +84,6 @@ function UlozenoWhiteFooter() {
           borderTop: '1px solid #000',
           zIndex: 1,
           height: '328px',
-          display: 'flex',
           flexDirection: 'row',
           padding: '24px 0',
           boxSizing: 'border-box',
@@ -259,7 +276,7 @@ function UlozenoWhiteFooter() {
       </div>
 
       {/* Mobile White Footer Sections - same as mobile kosik page */}
-      <div className="md:hidden" style={{ width: '100%', marginTop: 'auto' }}>
+      <div className="ulozeno-mobile-footer" style={{ width: '100%', marginTop: 'auto' }}>
         {/* BEZPEČNĚ PŘIJÍMÁME Section */}
         <div
           style={{
