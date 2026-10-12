@@ -220,8 +220,28 @@ export default function ImageUploadModal({
                     className="relative group border border-black rounded-lg overflow-hidden bg-gray-100 aspect-square"
                   >
                     {item.loading && (
-                      <div className="absolute inset-0 bg-white/80 flex items-center justify-center">
-                        <div className="admin-spinner" />
+                      <div className="absolute inset-0 bg-white/90 flex flex-col items-center justify-center gap-2">
+                        {/* Professional Spinner */}
+                        <div className="relative w-10 h-10">
+                          <svg
+                            className="animate-spin"
+                            width="40"
+                            height="40"
+                            viewBox="0 0 40 40"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <circle cx="20" cy="20" r="18" stroke="#e5e7eb" strokeWidth="2" />
+                            <path
+                              d="M20 2 A 18 18 0 0 1 38 20"
+                              stroke="#000000"
+                              strokeWidth="2"
+                              fill="none"
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                        </div>
+                        <p className="text-xs font-bold uppercase tracking-wider text-black">Nahrávám...</p>
                       </div>
                     )}
 

@@ -1,17 +1,8 @@
 import { getServerSession } from 'next-auth/next';
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
-import crypto from 'crypto';
 
-const UPLOAD_DIR = path.join(process.cwd(), 'public', 'email-media');
 const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'image/gif', 'image/avif'];
 const MAX_SIZE = 10 * 1024 * 1024; // 10MB
-
-// Ensure upload directory exists
-if (!fs.existsSync(UPLOAD_DIR)) {
-  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
-}
 
 export async function POST(request: NextRequest) {
   try {
@@ -43,17 +34,38 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate random filename
-    const ext = file.type.replace('image/', '');
-    const filename = crypto.randomBytes(12).toString('hex') + '.' + ext;
-    const filepath = path.join(UPLOAD_DIR, filename);
+    // Upload to Cloudinary for persistence
+    const cloudFormData = new FormData();
+    cloudFormData.append('file', file);
+    cloudFormData.append('upload_preset', process.env.CLOUDINARY_UPLOAD_PRESET || 'ufosport_emails');
+    cloudFormData.append('folder', 'ufosport/emails');
 
-    // Convert to buffer and save
-    const bytes = await file.arrayBuffer();
-    fs.writeFileSync(filepath, Buffer.from(bytes));
+    const cloudinaryResponse = await fetch(
+      `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload`,
+      {
+        method: 'POST',
+        body: cloudFormData,
+      }
+    );
 
-    const url = `/email-media/${filename}`;
-    return NextResponse.json({ url }, { status: 200 });
+    if (!cloudinaryResponse.ok) {
+      const errorData = await cloudinaryResponse.json().catch(() => ({}));
+      console.error('Cloudinary error:', errorData);
+      return NextResponse.json(
+        { error: errorData.error?.message || 'Nahrávání do Cloudinary selhalo' },
+        { status: 500 }
+      );
+    }
+
+    const data = await cloudinaryResponse.json();
+    
+    return NextResponse.json(
+      { 
+        url: data.secure_url,
+        cloudinaryId: data.public_id,
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.error('Error uploading image:', error);
     return NextResponse.json({ error: 'Nahrávání selhalo' }, { status: 500 });
