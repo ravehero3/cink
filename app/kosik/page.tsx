@@ -282,7 +282,7 @@ export default function CartPage() {
             </div>
             
             {/* Products container with arrows */}
-            <div style={{ display: 'flex', position: 'relative', flex: 1, height: '200px', width: '100%', alignItems: 'flex-start', padding: '0', boxSizing: 'border-box', gap: '0', paddingTop: '0' }}>
+            <div style={{ display: 'flex', position: 'relative', flex: 1, height: '200px', width: '100%', alignItems: 'center', justifyContent: 'center', padding: '0', boxSizing: 'border-box', gap: '0' }}>
               {/* Left arrow */}
               <button onClick={() => { if (vybrranoRef.current) vybrranoRef.current.scrollBy({ left: -(vybrranoRef.current.clientWidth * 0.4), behavior: 'smooth' }); }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', border: '1px solid #000', borderRadius: '4px', backgroundColor: '#fff', cursor: 'pointer', padding: '0', flex: '0 0 auto', position: 'absolute', left: '6px', top: '50%', transform: 'translateY(-50%)', zIndex: 10 }} onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5'; }} onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#fff'; }}><svg style={{ width: '14px', height: '14px', stroke: '#000', fill: 'none' }} viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg></button>
               
@@ -308,7 +308,7 @@ export default function CartPage() {
             </div>
             
             {/* Products container with arrows */}
-            <div style={{ display: 'flex', position: 'relative', flex: 1, height: '200px', width: '100%', alignItems: 'flex-start', padding: '0', boxSizing: 'border-box', gap: '0', paddingTop: '0' }}>
+            <div style={{ display: 'flex', position: 'relative', flex: 1, height: '200px', width: '100%', alignItems: 'center', justifyContent: 'center', padding: '0', boxSizing: 'border-box', gap: '0' }}>
               
               {/* Products scroll container */}
               <div ref={recentlyViewedRef} style={{ display: 'flex', overflowX: 'auto', overflowY: 'hidden', gap: '0', paddingLeft: '0', paddingRight: '0', paddingTop: '0', paddingBottom: '0', scrollBehavior: 'smooth', WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', scrollSnapType: 'x mandatory', flex: 1, cursor: 'grab', minHeight: '0', userSelect: 'none', WebkitUserSelect: 'none', width: '100%' }} className="select-none">
