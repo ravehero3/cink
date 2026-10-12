@@ -406,7 +406,7 @@ export default function NewEmailCampaignPage() {
             <div className="admin-card p-[24px] space-y-[16px]">
               <p className="admin-label">Odeslat ihned</p>
               <p className="text-xs text-[#666666] uppercase tracking-wider">
-                Kampaň bude odesílána všem {@formData.targetAudience === 'all' ? 'přihlášeným na newsletter' : formData.targetAudience === 'abandoned' ? 'zákazníkům s opuštěným košíkem' : 'VIP zákazníkům'}
+                Kampaň bude odesílána všem {formData.targetAudience === 'all' ? 'přihlášeným na newsletter' : formData.targetAudience === 'abandoned' ? 'zákazníkům s opuštěným košíkem' : 'VIP zákazníkům'}
               </p>
               <button
                 onClick={() => handleSendCampaign(false)}
