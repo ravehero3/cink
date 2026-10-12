@@ -20,12 +20,18 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
             cd ~/apps
-            # Force-remove any stale cink containers by name pattern to avoid conflicts
-            docker ps -a --filter "name=cink" --format "{{.ID}}" | xargs -r docker rm -f
+            # Stop watchdog during deploy to prevent restart races
+            docker stop ufosport-watchdog 2>/dev/null || true
+            # Clean up any stale or conflicting cink containers
+            docker ps -a --format '{{.ID}} {{.Names}}' | grep -E 'cink|apps-cink' | awk '{print $1}' | xargs -r docker rm -f 2>/dev/null || true
             # Rebuild cink image
             docker compose build cink
-            # Bring up cink only, then ensure ALL services are running
-            docker compose up -d --force-recreate cink
+            # Ensure container is fully removed before starting new one
+            docker compose stop cink 2>/dev/null || true
+            docker compose rm -f -v cink 2>/dev/null || true
+            docker ps -a --format '{{.ID}} {{.Names}}' | grep -E 'cink|apps-cink' | awk '{print $1}' | xargs -r docker rm -f 2>/dev/null || true
+            # Start cink cleanly, then ensure all services are running
+            docker compose up -d cink
             docker compose up -d
             # Verify deployment
             sleep 10
