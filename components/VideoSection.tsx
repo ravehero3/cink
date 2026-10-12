@@ -291,6 +291,7 @@ export default function VideoSection({ videoUrl, mobileVideoUrl, headerText, but
                           alt={product.name}
                           fill
                           sizes="300px"
+                          unoptimized
                           className="object-cover group-hover:scale-105 transition-transform duration-300"
                         />
                       ) : (

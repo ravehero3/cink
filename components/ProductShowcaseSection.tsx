@@ -70,6 +70,7 @@ export default function ProductShowcaseSection({
             className="object-cover"
             sizes="100vw"
             priority
+            unoptimized
             style={{
               WebkitTransform: 'translateZ(0)',
               transform: 'translateZ(0)',

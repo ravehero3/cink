@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { Pencil } from 'lucide-react';
 import { EMAIL_CATALOG, type EmailType } from '@/lib/email-catalog';
 import type { EmailTemplateCustomization, LinkedProduct } from '@/lib/email-layout';
 import JourneySequencePanel from '@/components/admin/JourneySequencePanel';
@@ -113,6 +114,7 @@ export default function EmailAdminPage() {
   const [viewMode, setViewMode] = useState<ViewMode>('desktop');
   const [previewLoading, setPreviewLoading] = useState(true);
   const [previewNonce, setPreviewNonce] = useState(0);
+  const [editMode, setEditMode] = useState(false);
 
   const [testEmail, setTestEmail] = useState('');
   const [sendingTest, setSendingTest] = useState(false);
@@ -212,30 +214,34 @@ export default function EmailAdminPage() {
       .finally(() => setJourneysLoading(false));
   }, [tab]);
 
-  // Handle postMessages from iframe (Hover "+" and "X" buttons)
+  // Handle postMessages from iframe (Hover "+", "X", and arrow buttons)
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
       if (!e.data || typeof e.data !== 'object') return;
 
       if (e.data.type === 'DELETE_SECTION') {
         const sectionId = e.data.sectionId;
-        if (sectionId) {
-          handleDeleteSection(sectionId);
-        }
+        if (sectionId) handleDeleteSection(sectionId);
       } else if (e.data.type === 'OPEN_PRODUCT_PICKER') {
         const { target, slotIndex } = e.data;
         handleOpenProductPicker(target || 'hero', slotIndex);
+      } else if (e.data.type === 'MOVE_SECTION') {
+        const { sectionId, direction } = e.data;
+        if (sectionId && (direction === 'up' || direction === 'down')) {
+          handleMoveSection(sectionId, direction);
+        }
       }
     };
 
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
-  }, [selectedId, selectedTemplate]);
+  }, [selectedId, selectedTemplate, currentCustomization]);
 
   const previewSrc = useMemo(() => {
     if (tab === 'odeslane' && selectedLogId) return `/api/admin/email-preview?logId=${selectedLogId}`;
-    return `/api/admin/email-preview?type=${selectedId}&adminInteractive=1&_t=${previewNonce}`;
-  }, [tab, selectedLogId, selectedId, previewNonce]);
+    const interactive = editMode ? '&adminInteractive=1' : '';
+    return `/api/admin/email-preview?type=${selectedId}${interactive}&_t=${previewNonce}`;
+  }, [tab, selectedLogId, selectedId, previewNonce, editMode]);
 
   const handleSelectTemplate = (id: EmailType) => {
     if (id === selectedId) return;
@@ -246,6 +252,7 @@ export default function EmailAdminPage() {
     setShowSectionManager(false);
     setToastMessage(null);
     setUndoSection(null);
+    // Keep editMode as-is when switching templates so UX is consistent
   };
 
   const saveTemplateCustomization = async (customization: EmailTemplateCustomization) => {
@@ -289,6 +296,38 @@ export default function EmailAdminPage() {
     setUndoSection(sectionId);
     const secObj = EMAIL_SECTIONS.find((s) => s.id === sectionId);
     setToastMessage(`Sekce „${secObj?.label || sectionId}“ byla odstraněna.`);
+  };
+
+  const handleMoveSection = async (sectionId: string, direction: 'up' | 'down') => {
+    // Build current ordered list (visible sections in their current order)
+    const allSectionIds = EMAIL_SECTIONS.map((s) => s.id);
+    const existingOrder: string[] = currentCustomization.sectionOrder && currentCustomization.sectionOrder.length > 0
+      ? currentCustomization.sectionOrder
+      : allSectionIds;
+
+    // Work only with sections that are not hidden
+    const visibleOrder = existingOrder.filter((id) => !hiddenSections.includes(id));
+
+    const idx = visibleOrder.indexOf(sectionId);
+    if (idx === -1) return;
+
+    const newOrder = [...visibleOrder];
+    if (direction === 'up' && idx > 0) {
+      [newOrder[idx - 1], newOrder[idx]] = [newOrder[idx], newOrder[idx - 1]];
+    } else if (direction === 'down' && idx < newOrder.length - 1) {
+      [newOrder[idx], newOrder[idx + 1]] = [newOrder[idx + 1], newOrder[idx]];
+    } else {
+      return; // Already at the boundary
+    }
+
+    const updated: EmailTemplateCustomization = {
+      ...currentCustomization,
+      sectionOrder: newOrder,
+    };
+
+    await saveTemplateCustomization(updated);
+    const secObj = EMAIL_SECTIONS.find((s) => s.id === sectionId);
+    setToastMessage(`Sekce „${secObj?.label || sectionId}“ přesunuta ${direction === 'up' ? 'nahoru' : 'dolů'}.`);
   };
 
   const handleRestoreSection = async (sectionId: string) => {
@@ -358,6 +397,14 @@ export default function EmailAdminPage() {
   const handleProductsPicked = async (products: PickedProduct[]) => {
     if (products.length === 0) return;
 
+    // Ensure image URLs are absolute before persisting
+    const ensureAbsoluteImg = (url: string) => {
+      if (!url) return url;
+      if (url.startsWith('http://') || url.startsWith('https://')) return url;
+      const base = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
+      return url.startsWith('/') ? `${base}${url}` : `${base}/${url}`;
+    };
+
     if (pickerTarget === 'hero') {
       const p = products[0];
       const updated: EmailTemplateCustomization = {
@@ -366,7 +413,7 @@ export default function EmailAdminPage() {
           id: p.id,
           name: p.name,
           slug: p.slug,
-          image: p.image,
+          image: ensureAbsoluteImg(p.image),
           price: p.price,
         },
       };
@@ -382,7 +429,7 @@ export default function EmailAdminPage() {
           id: p.id,
           name: p.name,
           slug: p.slug,
-          image: p.image,
+          image: ensureAbsoluteImg(p.image),
           price: p.price,
         };
         const updated: EmailTemplateCustomization = {
@@ -397,7 +444,7 @@ export default function EmailAdminPage() {
           id: p.id,
           name: p.name,
           slug: p.slug,
-          image: p.image,
+          image: ensureAbsoluteImg(p.image),
           price: p.price,
         }));
         const updated: EmailTemplateCustomization = {
@@ -880,6 +927,8 @@ export default function EmailAdminPage() {
               previewLoading={previewLoading}
               setPreviewLoading={setPreviewLoading}
               frameKey={`${selectedId}-${previewNonce}`}
+              editMode={editMode}
+              onToggleEditMode={() => setEditMode((v) => !v)}
             />
           </div>
         </div>
@@ -1084,6 +1133,8 @@ function PreviewFrame({
   previewLoading,
   setPreviewLoading,
   frameKey,
+  editMode = false,
+  onToggleEditMode,
 }: {
   src: string;
   title: string;
@@ -1092,16 +1143,58 @@ function PreviewFrame({
   previewLoading: boolean;
   setPreviewLoading: (v: boolean) => void;
   frameKey: string;
+  editMode?: boolean;
+  onToggleEditMode?: () => void;
 }) {
   return (
     <div className="admin-card overflow-hidden flex flex-col">
+      {/* Preview header bar */}
       <div className="px-[20px] py-[12px] border-b border-black flex items-center justify-between gap-3 flex-wrap">
-        <p className="text-xs uppercase tracking-wider truncate max-w-[360px]">{title}</p>
+        <div className="flex items-center gap-3 min-w-0">
+          <p className="text-xs uppercase tracking-wider truncate max-w-[260px]">{title}</p>
+          {/* Edit-mode toggle — pencil icon */}
+          {onToggleEditMode && (
+            <button
+              onClick={onToggleEditMode}
+              title={editMode ? 'Vypnout režim úprav (Upravit)' : 'Zapnout režim úprav — najetím myší odhalit tlačítka ✕ a + na sekcích'}
+              className={`relative flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider border transition-all duration-200 select-none ${
+                editMode
+                  ? 'bg-black text-white border-black shadow-md'
+                  : 'bg-white text-black border-black hover:bg-black/5'
+              }`}
+            >
+              <Pencil size={12} strokeWidth={2.5} />
+              <span>{editMode ? 'Upravit · ZAP' : 'Upravit'}</span>
+              {editMode && (
+                <span className="absolute -top-1.5 -right-1.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-white" />
+              )}
+            </button>
+          )}
+        </div>
         <div className="flex gap-2">
           <button onClick={() => setViewMode('desktop')} className={`admin-tab ${viewMode === 'desktop' ? 'is-active' : ''}`}>Desktop</button>
           <button onClick={() => setViewMode('mobile')} className={`admin-tab ${viewMode === 'mobile' ? 'is-active' : ''}`}>Mobil</button>
         </div>
       </div>
+
+      {/* Edit-mode active banner */}
+      {editMode && (
+        <div className="px-4 py-2 bg-black text-white flex items-center gap-3 text-[11px] uppercase tracking-wider">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0 animate-pulse" />
+          <span>
+            <strong>Režim úprav</strong> · Najeďte myší na sekci — tlačítkem
+            {' '}<strong>✕</strong> sekci smažete, tlačítkem
+            {' '}<strong>+</strong> na fotkách vyberete a propojíte produkt
+          </span>
+          <button
+            onClick={onToggleEditMode}
+            className="ml-auto shrink-0 underline hover:no-underline opacity-80 hover:opacity-100"
+          >
+            Vypnout
+          </button>
+        </div>
+      )}
+
       <div className="overflow-y-auto bg-white" style={{ minHeight: 680 }}>
         <div
           className="mx-auto"
@@ -1121,8 +1214,14 @@ function PreviewFrame({
             key={frameKey}
             src={src}
             onLoad={() => setPreviewLoading(false)}
-            className={`w-full border-0 ${previewLoading ? 'opacity-0' : 'opacity-100'}`}
-            style={{ height: 680, display: 'block', border: viewMode === 'mobile' ? '1px solid #000' : 'none' }}
+            className={`w-full border-0 transition-opacity duration-200 ${previewLoading ? 'opacity-0' : 'opacity-100'}`}
+            style={{
+              height: 680,
+              display: 'block',
+              border: viewMode === 'mobile' ? '1px solid #000' : 'none',
+              outline: editMode ? '2px solid #000' : 'none',
+              outlineOffset: '-2px',
+            }}
             title={`Náhled: ${title}`}
           />
         </div>

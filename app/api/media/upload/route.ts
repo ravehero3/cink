@@ -51,16 +51,15 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const mediaType = isVideo ? 'VIDEO' : 'IMAGE'
     const filename = generateFilename(file.name)
+    const mediaType = isVideo ? 'VIDEO' : 'IMAGE'
     const ext = filename.split('.').pop() || null
     const buffer = Buffer.from(await file.arrayBuffer())
 
-    let url: string
+    let url: string = `/uploads/${isImage ? 'images' : 'videos'}/${filename}`
     let vpsPath: string | null = null
     let storageType = 'LOCAL'
 
-    // For videos, prefer Oracle VPS; for images, use local storage
     if (isVideo && storage === 'ORACLE_VPS') {
       try {
         const vpsResult = await uploadToOracleVPS(buffer, filename)
@@ -69,7 +68,6 @@ export async function POST(request: NextRequest) {
         storageType = 'ORACLE_VPS'
       } catch (vpsError) {
         console.warn('VPS upload failed, falling back to local:', vpsError)
-        // Fall back to local storage with warning
         const uploadsDir = join(process.cwd(), 'public', 'uploads', 'videos')
         await mkdir(uploadsDir, { recursive: true })
         const filepath = join(uploadsDir, filename)
@@ -78,12 +76,41 @@ export async function POST(request: NextRequest) {
         storageType = 'LOCAL'
       }
     } else {
-      // Local storage (default for images and if VPS not available)
-      const uploadsDir = join(process.cwd(), 'public', 'uploads', isImage ? 'images' : 'videos')
-      await mkdir(uploadsDir, { recursive: true })
-      const filepath = join(uploadsDir, filename)
-      await writeFile(filepath, buffer)
-      url = `/uploads/${isImage ? 'images' : 'videos'}/${filename}`
+      // Local mirror
+      try {
+        const uploadsDir = join(process.cwd(), 'public', 'uploads', isImage ? 'images' : 'videos')
+        await mkdir(uploadsDir, { recursive: true })
+        const filepath = join(uploadsDir, filename)
+        await writeFile(filepath, buffer)
+      } catch (fsErr) {
+        console.warn('Local filesystem mirror warning:', fsErr)
+      }
+
+      // If image and Vercel Blob token is configured, also upload to Blob CDN
+      const blobToken = process.env.BLOB_READ_WRITE_TOKEN
+      if (isImage && blobToken) {
+        try {
+          const blobRes = await fetch(`https://blob.vercel-storage.com/${encodeURIComponent(filename)}`, {
+            method: 'PUT',
+            headers: {
+              'authorization': `Bearer ${blobToken}`,
+              'x-api-version': '7',
+              'content-type': file.type || 'application/octet-stream',
+            },
+            body: buffer,
+          })
+          if (blobRes.ok) {
+            const blobData = await blobRes.json()
+            if (blobData?.url) {
+              url = blobData.url
+            }
+          } else {
+            console.error('Vercel Blob REST error status:', blobRes.status, await blobRes.text())
+          }
+        } catch (blobErr) {
+          console.error('Vercel Blob upload failed, fallback to local URL:', blobErr)
+        }
+      }
     }
 
     const media = await prisma.media.create({

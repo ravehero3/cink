@@ -7,10 +7,13 @@ export const FONT_STACK = "'Inter', Arial, Helvetica, sans-serif";
 export const HEADING_STACK = "'Inter', Arial, Helvetica, sans-serif";
 
 export function toAbsoluteUrl(url?: string): string {
-  if (!url) return '';
-  if (url.startsWith('http://') || url.startsWith('https://')) return url;
-  if (url.startsWith('/')) return `${WEBSITE_URL}${url}`;
-  return `${WEBSITE_URL}/${url}`;
+  if (!url || typeof url !== 'string' || !url.trim()) {
+    return DEFAULT_PRODUCT_PHOTOS[0];
+  }
+  const clean = url.trim();
+  if (clean.startsWith('http://') || clean.startsWith('https://')) return clean;
+  if (clean.startsWith('/')) return `${WEBSITE_URL}${clean}`;
+  return `${WEBSITE_URL}/${clean}`;
 }
 
 export const buttonStyle = `
@@ -131,11 +134,19 @@ export interface LinkedProduct {
   price?: number | string;
 }
 
+export type PhotoLayoutType = 'square' | 'grid2x2' | 'bigAndTwo' | 'twoSideBySide';
+
 export interface EmailTemplateCustomization {
   hiddenSections?: string[];
   heroProduct?: LinkedProduct | null;
   gridProducts?: LinkedProduct[];
   storyImage?: string;
+  /** Optional explicit ordering of section IDs. Unlisted sections append at end. */
+  sectionOrder?: string[];
+  /** Per-section photo layout: 'square' | 'grid2x2' | 'bigAndTwo' | 'twoSideBySide' */
+  photoSectionLayouts?: Record<string, PhotoLayoutType>;
+  /** Per-section photo products list */
+  photoSectionProducts?: Record<string, LinkedProduct[]>;
 }
 
 export interface EmailTemplateParams {
@@ -241,6 +252,127 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
     return `<button class="section-delete-btn" type="button" title="${label}" onclick="window.parent.postMessage({type:'DELETE_SECTION',sectionId:'${sectionId}'},'*')">✕</button>`;
   };
 
+  const renderMoveBtn = (sectionId: string, direction: 'up' | 'down') => {
+    if (!adminMode) return '';
+    const icon = direction === 'up' ? '↑' : '↓';
+    const label = direction === 'up' ? 'Posunout sekci nahoru' : 'Posunout sekci dolů';
+    const cls = direction === 'up' ? 'section-move-up-btn' : 'section-move-down-btn';
+    return `<button class="section-move-btn ${cls}" type="button" title="${label}" onclick="window.parent.postMessage({type:'MOVE_SECTION',sectionId:'${sectionId}',direction:'${direction}'},'*')">${icon}</button>`;
+  };
+
+  const renderDotsBtn = (sectionId: string) => {
+    if (!adminMode) return '';
+    return `<button class="section-move-btn section-dots-btn" type="button" title="Změnit rozložení fotek sekce (4 možnosti)" onclick="window.parent.postMessage({type:'OPEN_LAYOUT_PICKER',sectionId:'${sectionId}'},'*')">⋯</button>`;
+  };
+
+  const renderSectionControls = (sectionId: string, deleteLabel?: string, isPhoto = false) => {
+    if (!adminMode) return '';
+    return (
+      renderDeleteBtn(sectionId, deleteLabel) +
+      renderMoveBtn(sectionId, 'up') +
+      renderMoveBtn(sectionId, 'down') +
+      (isPhoto ? renderDotsBtn(sectionId) : '')
+    );
+  };
+
+  // Generic Photo Section Renderer supporting all 4 layouts:
+  // 1) square (1 photo 600x600)
+  // 2) grid2x2 (4 photos 300x300)
+  // 3) bigAndTwo (1 big 600x600 + 2 small 300x300 below)
+  // 4) twoSideBySide (2 photos 300x300 next to each other)
+  const renderPhotoLayout = (
+    sectionId: string,
+    layout: PhotoLayoutType,
+    products: Array<{ image?: string; src?: string; slug?: string; href?: string; name?: string; alt?: string }>
+  ) => {
+    const renderCell = (idx: number, width: number, height: number) => {
+      const p = products[idx] || {
+        image: DEFAULT_PRODUCT_PHOTOS[idx % DEFAULT_PRODUCT_PHOTOS.length],
+        slug: 'produkty',
+        name: `Produkt ${idx + 1}`,
+      };
+      const imgSrc = toAbsoluteUrl(p.image || p.src);
+      const altText = p.name || p.alt || `Produkt ${idx + 1}`;
+      const img = `<img class="fluid" src="${imgSrc}" width="${width}" height="${height}" alt="${altText}" style="display:block;width:${width}px;height:${height}px;object-fit:cover;border:0;">`;
+
+      if (adminMode) {
+        const displayName = p.name || p.alt;
+        const badgeText = displayName ? displayName.toUpperCase().slice(0, 15) : `#${idx + 1}`;
+        return `
+          <div class="photo-container" style="position:relative;display:block;width:${width}px;height:${height}px;overflow:hidden;line-height:0;font-size:0;background:#f5f5f5;">
+            <button class="photo-overlay-btn ${width <= 300 ? 'photo-cell-btn' : ''}" type="button" title="Vybrat produkt pro pozici #${idx + 1}" onclick="window.parent.postMessage({type:'OPEN_PRODUCT_PICKER',target:'photoSection',sectionId:'${sectionId}',slotIndex:${idx}},'*')">+</button>
+            <span class="${width <= 300 ? 'photo-cell-badge' : 'photo-overlay-badge'}">+ ${badgeText}</span>
+            ${img}
+          </div>
+        `;
+      }
+
+      const href = p.href || (p.slug ? `${WEBSITE_URL}/produkt/${p.slug}` : `${WEBSITE_URL}/produkty`);
+      return `<a href="${href}" target="_blank" style="display:block;text-decoration:none;border:0;line-height:0;">${img}</a>`;
+    };
+
+    let innerHtml = '';
+
+    if (layout === 'square') {
+      // Option 1: 1 photo 600x600px square
+      innerHtml = renderCell(0, 600, 600);
+    } else if (layout === 'grid2x2') {
+      // Option 2: 2x2 grid (each 300x300px square)
+      innerHtml = `
+        <table class="grid" role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;border-collapse:collapse;">
+          <tr>
+            <td class="gcell" width="299" style="width:299px;padding:0;font-size:0;line-height:0;">${renderCell(0, 299, 300)}</td>
+            <td width="1" bgcolor="#000000" style="width:1px;background:#000000;font-size:0;line-height:0;">&nbsp;</td>
+            <td class="gcell" width="300" style="width:300px;padding:0;font-size:0;line-height:0;">${renderCell(1, 300, 300)}</td>
+          </tr>
+          <tr><td colspan="3" height="1" bgcolor="#000000" style="height:1px;background:#000000;font-size:1px;line-height:1px;padding:0;">&nbsp;</td></tr>
+          <tr>
+            <td class="gcell" width="299" style="width:299px;padding:0;font-size:0;line-height:0;">${renderCell(2, 299, 300)}</td>
+            <td width="1" bgcolor="#000000" style="width:1px;background:#000000;font-size:0;line-height:0;">&nbsp;</td>
+            <td class="gcell" width="300" style="width:300px;padding:0;font-size:0;line-height:0;">${renderCell(3, 300, 300)}</td>
+          </tr>
+        </table>
+      `;
+    } else if (layout === 'bigAndTwo') {
+      // Option 3: 3 photos (1 big 600x600 + 2 small 300x300 below)
+      innerHtml = `
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;border-collapse:collapse;">
+          <tr>
+            <td colspan="3" width="600" style="width:600px;padding:0;font-size:0;line-height:0;">
+              ${renderCell(0, 600, 600)}
+            </td>
+          </tr>
+          <tr><td colspan="3" height="1" bgcolor="#000000" style="height:1px;background:#000000;font-size:1px;line-height:1px;padding:0;">&nbsp;</td></tr>
+          <tr>
+            <td class="gcell" width="299" style="width:299px;padding:0;font-size:0;line-height:0;">${renderCell(1, 299, 300)}</td>
+            <td width="1" bgcolor="#000000" style="width:1px;background:#000000;font-size:0;line-height:0;">&nbsp;</td>
+            <td class="gcell" width="300" style="width:300px;padding:0;font-size:0;line-height:0;">${renderCell(2, 300, 300)}</td>
+          </tr>
+        </table>
+      `;
+    } else if (layout === 'twoSideBySide') {
+      // Option 4: 2 square images next to each other, each 300x300px
+      innerHtml = `
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;border-collapse:collapse;">
+          <tr>
+            <td class="gcell" width="299" style="width:299px;padding:0;font-size:0;line-height:0;">${renderCell(0, 299, 300)}</td>
+            <td width="1" bgcolor="#000000" style="width:1px;background:#000000;font-size:0;line-height:0;">&nbsp;</td>
+            <td class="gcell" width="300" style="width:300px;padding:0;font-size:0;line-height:0;">${renderCell(1, 300, 300)}</td>
+          </tr>
+        </table>
+      `;
+    }
+
+    return `
+      <tr>
+        <td style="padding:0;font-size:0;line-height:0;position:relative;">
+          ${renderSectionControls(sectionId, `Odstranit sekci fotek (${sectionId})`, true)}
+          ${innerHtml}
+        </td>
+      </tr>
+    `;
+  };
+
   // Build modular sections list
   interface SectionDef {
     id: string;
@@ -256,9 +388,9 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
       html: `
         <tr>
           <td height="72" align="center" valign="middle" style="height:72px;padding:0 20px;font-size:15px;line-height:20px;position:relative;">
-            ${renderDeleteBtn('header1')}
+            ${renderSectionControls('header1')}
             <a href="${WEBSITE_URL}" style="text-decoration:none;color:#000000;display:block;">
-              <span style="font-family:'Inter',Arial,Helvetica,sans-serif;font-size:24px;line-height:72px;font-weight:700;letter-spacing:3px;color:#000000;">UFO SPORT</span>
+              <span style="font-family:'Helvetica Neue Condensed Bold','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:22px;line-height:72px;font-weight:700;letter-spacing:0.03em;font-stretch:condensed;text-transform:uppercase;color:#000000;">UFO SPORT</span>
             </a>
           </td>
         </tr>
@@ -273,7 +405,7 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
       html: `
         <tr>
           <td class="pad-h2" height="136" align="center" valign="middle" style="height:136px;padding:0 40px;font-size:15px;line-height:20px;position:relative;">
-            ${renderDeleteBtn('header2')}
+            ${renderSectionControls('header2')}
             <div style="font-size:15px;line-height:20px;font-weight:700;text-transform:uppercase;margin:0 0 12px;">${header2Title}</div>
             <div style="font-size:15px;line-height:20px;font-weight:400;margin:0 auto;max-width:460px;">${header2Subtitle}</div>
           </td>
@@ -297,31 +429,25 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
     });
   }
 
-  // Section 3 - Hero image (600x600 or 600x750)
+  // Section 3 - Hero image (Photo section 1)
   if (!hiddenSections.has('heroImage')) {
-    let heroContent = `<img class="fluid" src="${heroImageSrc}" width="600" height="${heroImageHeight}" alt="${heroImageAlt}" style="display:block;width:600px;height:${heroImageHeight}px;border:0;">`;
-    if (heroImageHref && !adminMode) {
-      heroContent = `<a href="${heroImageHref}" target="_blank" style="display:block;text-decoration:none;border:0;line-height:0;">${heroContent}</a>`;
+    const layout = customization?.photoSectionLayouts?.['heroImage'] || 'square';
+    let products = customization?.photoSectionProducts?.['heroImage'] || [];
+    if (products.length === 0) {
+      if (customization?.heroProduct) {
+        products = [customization.heroProduct];
+      } else {
+        products = [{
+          slug: params.heroImage?.productSlug || 'produkty',
+          image: heroImageSrc,
+          name: heroImageAlt,
+        }];
+      }
     }
 
     sections.push({
       id: 'heroImage',
-      html: `
-        <tr>
-          <td style="padding:0;font-size:0;line-height:0;position:relative;">
-            ${
-              adminMode
-                ? `<div class="photo-container" style="position:relative;display:block;width:600px;height:${heroImageHeight}px;overflow:hidden;line-height:0;font-size:0;">
-                    ${renderDeleteBtn('heroImage')}
-                    <button class="photo-overlay-btn" type="button" title="Vybrat produkt pro hlavní fotku" onclick="window.parent.postMessage({type:'OPEN_PRODUCT_PICKER',target:'hero',slotIndex:0},'*')">+</button>
-                    <span class="photo-overlay-badge">+ ZMĚNIT PRODUKT</span>
-                    ${heroContent}
-                  </div>`
-                : heroContent
-            }
-          </td>
-        </tr>
-      `,
+      html: renderPhotoLayout('heroImage', layout, products),
     });
   }
 
@@ -332,7 +458,7 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
       html: `
         <tr>
           <td class="pad-info" height="234" align="left" valign="middle" style="height:234px;padding:0 80px;font-size:15px;line-height:20px;position:relative;">
-            ${renderDeleteBtn('info')}
+            ${renderSectionControls('info')}
             ${infoHtml}
           </td>
         </tr>
@@ -340,47 +466,21 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
     });
   }
 
-  // Section 5 - Photo grid 2x2 (4 squares, 300x300)
+  // Section 5 - Photo grid (Photo section 2)
   if (!hiddenSections.has('photoGrid')) {
-    const renderCell = (idx: number, width: number) => {
-      const cell = gridCells[idx];
-      const img = `<img class="fluid" src="${cell.src}" width="${width}" height="${width}" alt="${cell.alt}" style="display:block;width:${width}px;height:${width}px;object-fit:cover;border:0;">`;
-      if (adminMode) {
-        return `
-          <div class="photo-container" style="position:relative;display:block;width:${width}px;height:${width}px;overflow:hidden;line-height:0;font-size:0;">
-            <button class="photo-overlay-btn photo-cell-btn" type="button" title="Vybrat produkt pro pozici #${idx + 1}" onclick="window.parent.postMessage({type:'OPEN_PRODUCT_PICKER',target:'grid',slotIndex:${idx}},'*')">+</button>
-            <span class="photo-cell-badge">+ #${idx + 1}</span>
-            ${img}
-          </div>
-        `;
-      }
-      return `<a href="${cell.href}" target="_blank" style="display:block;text-decoration:none;border:0;line-height:0;">${img}</a>`;
-    };
+    const layout = customization?.photoSectionLayouts?.['photoGrid'] || 'grid2x2';
+    let products: Array<{ image?: string; src?: string; slug?: string; href?: string; name?: string; alt?: string }> =
+      customization?.photoSectionProducts?.['photoGrid'] || [];
+    if (products.length === 0) {
+      products = gridCells;
+    }
 
     sections.push({
       id: 'photoGrid',
-      html: `
-        <tr>
-          <td style="padding:0;font-size:0;line-height:0;position:relative;">
-            ${adminMode ? renderDeleteBtn('photoGrid', 'Odstranit celou 2x2 mřížku produktů') : ''}
-            <table class="grid" role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;">
-              <tr>
-                <td class="gcell" width="299" style="width:299px;padding:0;font-size:0;line-height:0;">${renderCell(0, 299)}</td>
-                <td width="1" bgcolor="#000000" style="width:1px;background:#000000;font-size:0;line-height:0;">&nbsp;</td>
-                <td class="gcell" width="300" style="width:300px;padding:0;font-size:0;line-height:0;">${renderCell(1, 300)}</td>
-              </tr>
-              <tr><td colspan="3" height="1" bgcolor="#000000" style="height:1px;background:#000000;font-size:1px;line-height:1px;">&nbsp;</td></tr>
-              <tr>
-                <td class="gcell" width="299" style="width:299px;padding:0;font-size:0;line-height:0;">${renderCell(2, 299)}</td>
-                <td width="1" bgcolor="#000000" style="width:1px;background:#000000;font-size:0;line-height:0;">&nbsp;</td>
-                <td class="gcell" width="300" style="width:300px;padding:0;font-size:0;line-height:0;">${renderCell(3, 300)}</td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-      `,
+      html: renderPhotoLayout('photoGrid', layout, products),
     });
   }
+
 
   // Section 6 - Action text + button (234px)
   if (!hiddenSections.has('actionButton')) {
@@ -389,7 +489,7 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
       html: `
         <tr>
           <td class="pad-info" height="234" align="center" valign="middle" style="height:234px;padding:0 40px;font-size:15px;line-height:20px;position:relative;">
-            ${renderDeleteBtn('actionButton')}
+            ${renderSectionControls('actionButton')}
             <p style="margin:0 0 0px;">${actionText}</p>
             <div style="height:24px;line-height:24px;font-size:0;">&nbsp;</div>
             <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;border-collapse:separate;">
@@ -412,7 +512,7 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
       html: `
         <tr>
           <td class="" height="136" align="center" valign="middle" style="height:136px;padding:0 20px;font-size:15px;line-height:20px;position:relative;">
-            ${renderDeleteBtn('browseAll')}
+            ${renderSectionControls('browseAll')}
             <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;border-collapse:separate;">
               <tr>
                 <td align="center" width="240" bgcolor="#000000" style="width:240px;background:#000000;border-radius:2px;">
@@ -433,7 +533,7 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
       html: `
         <tr>
           <td height="188" style="height:188px;padding:0;position:relative;">
-            ${renderDeleteBtn('footerLinks')}
+            ${renderSectionControls('footerLinks')}
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;height:188px;">
               <tr>
                 <td class="fcol" width="299" valign="top" style="width:299px;padding:36px 0 0 40px;font-family:'Inter',Arial,Helvetica,sans-serif;">
@@ -466,7 +566,7 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
       html: `
         <tr>
           <td class="pad-foot" height="270" align="center" valign="middle" style="height:270px;padding:0 40px;font-family:'Inter',Arial,Helvetica,sans-serif;position:relative;">
-            ${renderDeleteBtn('footerSocial')}
+            ${renderSectionControls('footerSocial')}
             <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 36px;">
               <tr>
                 <td align="center" style="padding:0 18px;"><a href="https://www.instagram.com/ufosport"><img src="https://cdn.simpleicons.org/instagram/000000" width="24" height="24" alt="Instagram" style="display:block;width:24px;height:24px;border:0;"></a></td>
@@ -476,21 +576,27 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
                 <td align="center" style="padding:0 18px;"><a href="https://www.facebook.com/ufosport"><img src="https://cdn.simpleicons.org/facebook/000000" width="24" height="24" alt="Facebook" style="display:block;width:24px;height:24px;border:0;"></a></td>
               </tr>
             </table>
-            <div style="font-size:15px;line-height:20px;font-weight:400;text-align:center;">
-              <div style="margin:0;">UFO SPORT</div>
-              <div style="margin:0;font-size:13px;line-height:18px;">
-                <div style="margin:0;">Vojtěch Vojkovský, Bachelor of Arts,</div>
-                <div style="margin:0;">Bědovická 193e, Třebechovice pod Orebem, 503 46</div>
-                <div style="margin:0;">Česká Republika</div>
-                <div style="margin:4px 0 0;"><a href="${WEBSITE_URL}/kontakt" style="color:#000000;text-decoration:underline;">IČO: 08701032</a></div>
-              </div>
-              ${marketing ? `<div style="margin:16px 0 0;">Pokud již nechcete dostávat náš newsletter, můžete se odhlásit <a href="${unsubscribeUrl || `${WEBSITE_URL}/odhlasit-odber`}" style="color:#000000;text-decoration:underline;">zde</a>.</div>` : ''}
-              <div style="${marketing ? 'margin:8px 0 0;' : 'margin:16px 0 0;'}">Více o <a href="${WEBSITE_URL}/ochrana-osobnich-udaju" style="color:#000000;text-decoration:underline;">zásadách ochrany osobních údajů</a>.</div>
-              <div style="margin:0;">Zobrazit e-mail ve webovém prohlížeči: <a href="${webVersionUrl || `${WEBSITE_URL}/email/web`}" style="color:#000000;text-decoration:underline;">zde</a>.</div>
+            <div style="font-size:15px;line-height:22px;font-weight:400;text-align:center;color:#000000;">
+              <div style="margin:0;font-weight:700;letter-spacing:0.03em;text-transform:uppercase;">UFO SPORT</div>
+              <div style="margin:4px 0 0;font-weight:500;">Vojtěch Vojkovský, Bachelor of Arts</div>
+              <div style="margin:2px 0 0;"><a href="${WEBSITE_URL}/kontakt" style="color:#000000;text-decoration:none;">Bědovická 193E, Třebechovice pod Orebem, 503 46, Česká Republika</a> · IČO 08701032</div>
+              <div style="margin:16px 0 0;">Z odběru e-mailů se můžete kdykoli <a href="${unsubscribeUrl || `${WEBSITE_URL}/odhlasit-odber`}" style="color:#000000;text-decoration:underline;">odhlásit zde</a>.</div>
+              <div style="margin:4px 0 0;">Více o <a href="${WEBSITE_URL}/ochrana-osobnich-udaju" style="color:#000000;text-decoration:underline;">zásadách ochrany osobních údajů</a>.</div>
+              <div style="margin:4px 0 0;">Zobrazit e-mail ve webovém prohlížeči: <a href="${webVersionUrl || `${WEBSITE_URL}/email/web`}" style="color:#000000;text-decoration:underline;">zde</a>.</div>
             </div>
           </td>
         </tr>
       `,
+    });
+  }
+
+  // Apply custom section order if present
+  if (customization?.sectionOrder && customization.sectionOrder.length > 0) {
+    const orderMap = new Map(customization.sectionOrder.map((id, i) => [id, i]));
+    sections.sort((a, b) => {
+      const ai = orderMap.has(a.id) ? orderMap.get(a.id)! : 9999;
+      const bi = orderMap.has(b.id) ? orderMap.get(b.id)! : 9999;
+      return ai - bi;
     });
   }
 
@@ -615,6 +721,51 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
       }
       .photo-container:hover .photo-cell-badge {
         opacity: 0.9;
+      }
+      /* Move up/down buttons */
+      .section-move-btn {
+        position: absolute;
+        top: 8px;
+        width: 24px;
+        height: 24px;
+        background: #000000;
+        color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        border-radius: 3px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-family: 'Inter', Arial, sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1;
+        opacity: 0;
+        transition: opacity 0.15s ease, background 0.15s ease, transform 0.15s ease;
+        z-index: 100;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      }
+      .section-move-up-btn { left: 40px; }
+      .section-move-down-btn { left: 70px; }
+      .section-dots-btn {
+        left: 100px;
+        font-size: 16px;
+        font-weight: 900;
+        letter-spacing: -1px;
+      }
+      tr:hover .section-move-btn,
+      td:hover .section-move-btn {
+        opacity: 0.85;
+      }
+      .section-move-btn:hover {
+        opacity: 1 !important;
+        background: #2563eb !important;
+        border-color: #2563eb !important;
+        transform: scale(1.1);
+      }
+      .section-dots-btn:hover {
+        background: #000000 !important;
+        border-color: #000000 !important;
       }
     `
     : '';

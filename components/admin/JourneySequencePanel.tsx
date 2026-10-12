@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { EMAIL_CATALOG, type EmailType } from '@/lib/email-catalog';
 import ConfirmModal from '@/components/admin/ConfirmModal';
 import {
@@ -16,6 +16,7 @@ import {
   X,
   Tag,
   Zap,
+  ChevronDown,
 } from 'lucide-react';
 
 export interface JourneyStep {
