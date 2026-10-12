@@ -24,9 +24,10 @@ jobs:
             docker ps -a --filter "name=cink" --format "{{.ID}}" | xargs -r docker rm -f
             # Rebuild cink image
             docker compose build cink
-            # Bring up only cink (leaves other services untouched)
+            # Bring up cink only, then ensure ALL services are running
             docker compose up -d --force-recreate cink
+            docker compose up -d
             # Verify deployment
             sleep 10
             docker compose ps
-            echo "Deploy complete - cink service updated"
+            echo "Deploy complete - all services running"
