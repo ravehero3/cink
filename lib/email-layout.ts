@@ -1,3 +1,5 @@
+import { buildUnsubscribeUrl } from '@/lib/newsletter';
+
 const WEBSITE_URL = process.env.NEXTAUTH_URL || 'https://www.ufosport.cz';
 const LOGO_URL = `${WEBSITE_URL}/logo.png`;
 
@@ -204,8 +206,7 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
   // Generate unsubscribe URL if email is provided and unsubscribeUrl is not
   let unsubscribeUrl = providedUnsubscribeUrl;
   if (email && !unsubscribeUrl) {
-    const { buildUnsubscribeUrl: buildUrl } = await import('@/lib/newsletter');
-    unsubscribeUrl = buildUrl(email);
+    unsubscribeUrl = buildUnsubscribeUrl(email);
   }
 
   const hiddenSections = new Set(customization?.hiddenSections || []);
