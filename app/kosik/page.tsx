@@ -106,7 +106,6 @@ export default function CartPage() {
   // Update recently viewed when store changes
   useEffect(() => {
     const unsubscribe = useRecentlyViewedStore.subscribe(
-      (state) => state.products,
       () => {
         const recent = useRecentlyViewedStore.getState().getRecentProducts(9);
         setRecentlyViewed(recent);
