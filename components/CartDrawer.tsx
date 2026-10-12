@@ -78,6 +78,10 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   const [vybranoCanScrollLeft, setVybranoCanScrollLeft] = useState(false);
   const [vybranoCanScrollRight, setVybranoCanScrollRight] = useState(false);
   
+  // Arrow visibility state for PROHLÍŽELI JSTE
+  const [prohlizeniCanScrollLeft, setProhlizeniCanScrollLeft] = useState(false);
+  const [prohlizeniCanScrollRight, setProhlizeniCanScrollRight] = useState(false);
+  
   // Refs for drag scrolling
   const vybrranoRef = useRef<HTMLDivElement>(null);
   const prohlizeniRef = useRef<HTMLDivElement>(null);
@@ -87,6 +91,13 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
     if (!el) return;
     setVybranoCanScrollLeft(el.scrollLeft > 0);
     setVybranoCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 1);
+  };
+
+  const updateProhlizeniArrows = () => {
+    const el = prohlizeniRef.current;
+    if (!el) return;
+    setProhlizeniCanScrollLeft(el.scrollLeft > 0);
+    setProhlizeniCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 1);
   };
 
   useEffect(() => {
@@ -220,16 +231,32 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
       const vybranoEl = vybrranoRef.current;
       const handleVybranoScroll = () => updateVybranoArrows();
       vybranoEl.addEventListener('scroll', handleVybranoScroll);
+
+      const prohlizeniEl = prohlizeniRef.current;
+      const handleProhlizeniScroll = () => updateProhlizeniArrows();
+      prohlizeniEl.addEventListener('scroll', handleProhlizeniScroll);
+
       // Initial check after products load (slight delay for layout)
-      setTimeout(updateVybranoArrows, 100);
+      setTimeout(() => {
+        updateVybranoArrows();
+        updateProhlizeniArrows();
+      }, 100);
       
       return () => {
         cleanup1?.();
         cleanup2?.();
         vybranoEl.removeEventListener('scroll', handleVybranoScroll);
+        prohlizeniEl.removeEventListener('scroll', handleProhlizeniScroll);
       };
     }
   }, [isOpen]);
+
+  // Re-check prohlizeni arrow visibility when recentlyViewed changes
+  useEffect(() => {
+    if (recentlyViewed.length > 0) {
+      setTimeout(updateProhlizeniArrows, 200);
+    }
+  }, [recentlyViewed]);
 
   const handleSaveForLater = (productId: string, size: string) => {
     saveProduct(productId);
@@ -506,28 +533,70 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         PROHLÍŽELI JSTE
                       </h3>
                     </div>
-                    {/* Horizontal scroll container - 1.5 products show */}
-                    <div 
-                      ref={prohlizeniRef}
-                      style={{ 
-                        display: 'flex', 
-                        overflowX: 'auto', 
-                        overflowY: 'hidden', 
-                        gap: '0', 
-                        paddingLeft: '0', 
-                        paddingRight: '0', 
-                        paddingTop: '0',
-                        paddingBottom: '0',
-                        scrollBehavior: 'smooth', 
-                        WebkitOverflowScrolling: 'touch',
-                        scrollbarWidth: 'none',
-                        scrollSnapType: 'x mandatory',
-                        cursor: 'grab',
-                        userSelect: 'none',
-                        WebkitUserSelect: 'none'
-                      }}
-                      className="select-none"
-                    >
+                    {/* Horizontal scroll container with nav arrows */}
+                    <div style={{ position: 'relative' }}>
+                      {/* Left arrow - only when can scroll left */}
+                      {prohlizeniCanScrollLeft && (
+                        <button
+                          onClick={() => {
+                            if (prohlizeniRef.current) {
+                              prohlizeniRef.current.scrollBy({ left: -prohlizeniRef.current.clientWidth * 0.67, behavior: 'smooth' });
+                            }
+                          }}
+                          style={{
+                            position: 'absolute', left: '6px', top: '50%', transform: 'translateY(-50%)',
+                            zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            width: '28px', height: '28px', border: '1px solid #000', borderRadius: '4px',
+                            backgroundColor: '#fff', cursor: 'pointer', padding: '0'
+                          }}
+                        >
+                          <svg style={{ width: '14px', height: '14px', stroke: '#000', fill: 'none' }} viewBox="0 0 24 24" strokeWidth="2">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                          </svg>
+                        </button>
+                      )}
+                      {/* Right arrow - only when can scroll right */}
+                      {prohlizeniCanScrollRight && (
+                        <button
+                          onClick={() => {
+                            if (prohlizeniRef.current) {
+                              prohlizeniRef.current.scrollBy({ left: prohlizeniRef.current.clientWidth * 0.67, behavior: 'smooth' });
+                            }
+                          }}
+                          style={{
+                            position: 'absolute', right: '6px', top: '50%', transform: 'translateY(-50%)',
+                            zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            width: '28px', height: '28px', border: '1px solid #000', borderRadius: '4px',
+                            backgroundColor: '#fff', cursor: 'pointer', padding: '0'
+                          }}
+                        >
+                          <svg style={{ width: '14px', height: '14px', stroke: '#000', fill: 'none' }} viewBox="0 0 24 24" strokeWidth="2">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                          </svg>
+                        </button>
+                      )}
+                      <div 
+                        ref={prohlizeniRef}
+                        onScroll={updateProhlizeniArrows}
+                        style={{ 
+                          display: 'flex', 
+                          overflowX: 'auto', 
+                          overflowY: 'hidden', 
+                          gap: '0', 
+                          paddingLeft: '0', 
+                          paddingRight: '0', 
+                          paddingTop: '0',
+                          paddingBottom: '0',
+                          scrollBehavior: 'smooth', 
+                          WebkitOverflowScrolling: 'touch',
+                          scrollbarWidth: 'none',
+                          scrollSnapType: 'x mandatory',
+                          cursor: 'grab',
+                          userSelect: 'none',
+                          WebkitUserSelect: 'none'
+                        }}
+                        className="select-none"
+                      >
                       {recentlyViewed.map((product, index) => (
                         <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(66.666% - 0.67px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
                           {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
@@ -589,6 +658,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                           </Link>
                         </div>
                       ))}
+                    </div>
                     </div>
                   </div>
                 )}
