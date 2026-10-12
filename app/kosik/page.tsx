@@ -759,10 +759,7 @@ export default function CartPage() {
       
       {/* Mobile VYBRÁNO PRO VÁS Section - only visible on mobile */}
       {items.length > 0 && selectedProducts.length > 0 && (
-        <div className="md:hidden" style={{
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
+        <div className="md:hidden flex flex-col" style={{
           borderTop: '1px solid #000',
           borderBottom: '1px solid #000',
           minHeight: '0',
