@@ -269,7 +269,7 @@ function UlozenoWhiteFooter() {
                 lineHeight: '1.3'
               }}
             >
-              Nakupujte bezpečně a my vám pošleme váš balíček ASAP
+              Využijte bezpečnou platbu přes GoPay nebo Apple Pay
             </p>
           </div>
         </div>
@@ -434,7 +434,7 @@ function UlozenoWhiteFooter() {
               textAlign: 'center'
             }}
           >
-            Nakupujte bezpečně a my vám pošleme váš balíček ASAP
+            Využijte bezpečnou platbu přes GoPay nebo Apple Pay
           </p>
         </div>
       </div>
