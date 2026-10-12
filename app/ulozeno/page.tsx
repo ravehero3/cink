@@ -53,6 +53,378 @@ function AnimatedLink({ href, text }: { href: string; text: string }) {
   );
 }
 
+function UlozenoWhiteFooter() {
+  return (
+    <>
+      {/* Desktop White Footer - Static at bottom of page */}
+      <div
+        className="footer-container hidden md:flex"
+        style={{
+          position: 'relative',
+          width: '100%',
+          backgroundColor: '#fff',
+          borderTop: '1px solid #000',
+          zIndex: 1,
+          height: '328px',
+          display: 'flex',
+          flexDirection: 'row',
+          padding: '24px 0',
+          boxSizing: 'border-box',
+          marginTop: 'auto'
+        }}
+      >
+        {/* Left Section - Payment Methods */}
+        <div
+          className="footer-section"
+          style={{
+            flex: '1',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            textAlign: 'center',
+            gap: '12px',
+            borderRight: '1px solid #000',
+            paddingLeft: '24px',
+            paddingRight: '24px'
+          }}
+        >
+          <h3
+            style={{
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '12px',
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              letterSpacing: '0.03em',
+              margin: '0',
+              color: '#000'
+            }}
+          >
+            BEZPEČNĚ PŘIJÍMÁME
+          </h3>
+          <div
+            style={{
+              display: 'flex',
+              gap: '8px',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexWrap: 'wrap'
+            }}
+          >
+            <img src="/payment-methods.jpg" alt="Payment Methods" style={{ height: '96px', width: 'auto' }} />
+          </div>
+        </div>
+
+        {/* Middle Section - Customer Support */}
+        <div
+          className="footer-section"
+          style={{
+            flex: '1',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            textAlign: 'center',
+            gap: '12px',
+            borderRight: '1px solid #000',
+            paddingLeft: '24px',
+            paddingRight: '24px'
+          }}
+        >
+          <h3
+            style={{
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '12px',
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              letterSpacing: '0.03em',
+              margin: '0',
+              color: '#000'
+            }}
+          >
+            ZÁKAZNICKÁ PODPORA
+          </h3>
+          <p
+            style={{
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '11px',
+              fontWeight: 400,
+              margin: '0 0 8px 0',
+              color: '#000',
+              lineHeight: '1.3'
+            }}
+          >
+            Naše zákaznická podpora je vám k dispozici od Pondělí do Soboty 9:30 - 19:00
+          </p>
+          <div
+            style={{
+              display: 'flex',
+              gap: '8px',
+              flexDirection: 'column',
+              width: '100%'
+            }}
+          >
+            <a
+              href="https://wa.me/420775181107"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '11px',
+                fontWeight: 400,
+                padding: '6px 12px',
+                border: '1px solid #000',
+                borderRadius: '4px',
+                textDecoration: 'none',
+                color: '#000',
+                textTransform: 'uppercase',
+                backgroundColor: '#fff',
+                cursor: 'pointer',
+                display: 'block'
+              }}
+            >
+              WHATSAPP
+            </a>
+            <a
+              href="tel:+420775181107"
+              style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '11px',
+                fontWeight: 400,
+                padding: '6px 12px',
+                border: '1px solid #000',
+                borderRadius: '4px',
+                textDecoration: 'none',
+                color: '#000',
+                textTransform: 'uppercase',
+                backgroundColor: '#fff',
+                cursor: 'pointer',
+                display: 'block'
+              }}
+            >
+              ZAVOLEJTE NÁM
+            </a>
+          </div>
+        </div>
+
+        {/* Right Section - Shipping Info */}
+        <div
+          style={{
+            flex: '1',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            textAlign: 'center',
+            gap: '12px',
+            paddingLeft: '24px',
+            paddingRight: '24px'
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '6px',
+              alignItems: 'center'
+            }}
+          >
+            <h3
+              style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '12px',
+                fontWeight: 700,
+                margin: '0',
+                color: '#000',
+                textTransform: 'uppercase',
+                letterSpacing: '0.03em'
+              }}
+            >
+              BEZPEČNÁ PLATBA A RYCHLÉ DORUČENÍ
+            </h3>
+            <p
+              style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '11px',
+                fontWeight: 400,
+                margin: '0',
+                color: '#000',
+                lineHeight: '1.3'
+              }}
+            >
+              Nakupujte bezpečně a my vám pošleme váš balíček ASAP
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile White Footer Sections - same as mobile kosik page */}
+      <div className="md:hidden" style={{ width: '100%', marginTop: 'auto' }}>
+        {/* BEZPEČNĚ PŘIJÍMÁME Section */}
+        <div
+          style={{
+            width: '100%',
+            padding: '16px',
+            borderTop: '1px solid #000',
+            borderBottom: '1px solid #000',
+            boxSizing: 'border-box',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px',
+            alignItems: 'center'
+          }}
+        >
+          <h3
+            style={{
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '12px',
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              letterSpacing: '0.03em',
+              margin: '0',
+              color: '#000',
+              textAlign: 'center'
+            }}
+          >
+            BEZPEČNĚ PŘIJÍMÁME
+          </h3>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <img src="/payment-methods.jpg" alt="Payment Methods" style={{ height: '80px', width: 'auto', maxWidth: '100%' }} />
+          </div>
+        </div>
+
+        {/* ZÁKAZNICKÁ PODPORA Section */}
+        <div
+          style={{
+            width: '100%',
+            padding: '16px',
+            borderBottom: '1px solid #000',
+            boxSizing: 'border-box',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px'
+          }}
+        >
+          <h3
+            style={{
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '12px',
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              letterSpacing: '0.03em',
+              margin: '0',
+              color: '#000',
+              textAlign: 'center'
+            }}
+          >
+            ZÁKAZNICKÁ PODPORA
+          </h3>
+          <p
+            style={{
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '11px',
+              fontWeight: 400,
+              margin: '0 0 8px 0',
+              color: '#000',
+              lineHeight: '1.3',
+              textAlign: 'center'
+            }}
+          >
+            Naše zákaznická podpora je vám k dispozici od Pondělí do Soboty 9:30 - 19:00
+          </p>
+          <div style={{ display: 'flex', gap: '8px', flexDirection: 'column', width: '100%' }}>
+            <a
+              href="https://wa.me/420775181107"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '11px',
+                fontWeight: 400,
+                padding: '8px 12px',
+                border: '1px solid #000',
+                borderRadius: '4px',
+                textDecoration: 'none',
+                color: '#000',
+                textTransform: 'uppercase',
+                backgroundColor: '#fff',
+                cursor: 'pointer',
+                display: 'block',
+                textAlign: 'center'
+              }}
+            >
+              WHATSAPP
+            </a>
+            <a
+              href="tel:+420775181107"
+              style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '11px',
+                fontWeight: 400,
+                padding: '8px 12px',
+                border: '1px solid #000',
+                borderRadius: '4px',
+                textDecoration: 'none',
+                color: '#000',
+                textTransform: 'uppercase',
+                backgroundColor: '#fff',
+                cursor: 'pointer',
+                display: 'block',
+                textAlign: 'center'
+              }}
+            >
+              ZAVOLEJTE NÁM
+            </a>
+          </div>
+        </div>
+
+        {/* BEZPEČNÁ PLATBA & RYCHLÉ DORUČENÍ Section */}
+        <div
+          style={{
+            width: '100%',
+            padding: '16px',
+            borderBottom: '1px solid #000',
+            boxSizing: 'border-box',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <h3
+            style={{
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '12px',
+              fontWeight: 700,
+              margin: '0',
+              color: '#000',
+              textTransform: 'uppercase',
+              textAlign: 'center',
+              letterSpacing: '0.03em'
+            }}
+          >
+            BEZPEČNÁ PLATBA A RYCHLÉ DORUČENÍ
+          </h3>
+          <p
+            style={{
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '11px',
+              fontWeight: 400,
+              margin: '0',
+              color: '#000',
+              lineHeight: '1.3',
+              textAlign: 'center'
+            }}
+          >
+            Nakupujte bezpečně a my vám pošleme váš balíček ASAP
+          </p>
+        </div>
+      </div>
+    </>
+  );
+}
+
 export default function SavedProductsPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -479,6 +851,7 @@ export default function SavedProductsPage() {
             </div>
           </div>
         </div>
+        <UlozenoWhiteFooter />
       </div>
     );
   }
@@ -664,310 +1037,160 @@ export default function SavedProductsPage() {
             </div>
           )}
 
-          {/* List Layout - for both mobile and desktop */}
-          <div>
+          {/* List Layout - for both mobile and desktop matching kosik modal */}
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
             {products.map((product, index) => (
-            <div
-              key={product.id}
-              style={{
-                borderTop: 'none',
-                borderBottom: '1px solid #000',
-                padding: '16px',
-                paddingBottom: '16px'
-              }}
-            >
-              <div className="flex flex-col md:flex-row gap-4 mb-4">
-                <Link href={`/produkty/${product.slug}`} style={{ flexShrink: 0 }}>
-                  <div className="w-full md:w-[160px] h-[200px] md:h-[192px]" style={{
-                    border: '1px solid #000',
-                    backgroundColor: '#fff',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    overflow: 'hidden'
-                  }}>
+              <div
+                key={product.id}
+                style={{
+                  borderTop: index === 0 ? '1px solid #000' : 'none',
+                  borderBottom: '1px solid #000',
+                  borderLeft: '1px solid #000',
+                  borderRight: '1px solid #000',
+                  backgroundColor: '#fff',
+                  display: 'grid',
+                  gridTemplateColumns: '143px 1fr',
+                  gridTemplateRows: 'auto auto',
+                  width: '100%',
+                  boxSizing: 'border-box'
+                }}
+              >
+                {/* Product Image */}
+                <div style={{
+                  backgroundColor: '#fff',
+                  width: '143px',
+                  height: '143px',
+                  aspectRatio: '1 / 1',
+                  margin: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  overflow: 'hidden',
+                  borderRight: '1px solid #000'
+                }}>
+                  <Link href={`/produkty/${product.slug}`} style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <img
-                      src={product.images[0] || '/placeholder.png'}
+                      src={product.images[0] || (product as any).productImage || '/placeholder.png'}
                       alt={product.name}
-                      style={{ objectFit: 'contain', width: '100%', height: '100%' }}
+                      loading="lazy"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'contain',
+                        display: 'block'
+                      }}
                     />
-                  </div>
-                </Link>
+                  </Link>
+                </div>
 
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                {/* Product Info */}
+                <div style={{
+                  padding: '20px 15px 0 16px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 0
+                }}>
                   <Link
                     href={`/produkty/${product.slug}`}
-                    style={{ textDecoration: 'none', color: '#000' }}
+                    style={{
+                      margin: '0 0 5px 0',
+                      fontSize: '15.3px',
+                      lineHeight: '17px',
+                      fontWeight: 700,
+                      letterSpacing: '0.03em',
+                      textTransform: 'uppercase',
+                      fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                      color: '#000',
+                      textDecoration: 'none'
+                    }}
                     className="hover:opacity-60 transition-opacity"
                   >
-                    <h3 style={{
-                      fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '14px',
-                      fontWeight: 700,
-                      textTransform: 'uppercase',
-                      marginBottom: '4px',
-                      lineHeight: '19.6px',
-                      letterSpacing: '0.03em',
-                      fontStretch: 'condensed',
-                      color: '#000'
-                    }}>
-                      {product.name}
-                    </h3>
+                    {product.name}
                   </Link>
-                  
-                  <p style={{
+
+                  <div style={{
+                    fontSize: '16.5px',
+                    lineHeight: '19px',
+                    margin: '0 0 10px 0',
                     fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
-                    fontWeight: 400,
-                    lineHeight: '19.6px',
-                    color: '#000',
-                    marginBottom: '8px'
+                    color: '#000'
                   }}>
                     {product.price} Kč
-                  </p>
+                  </div>
 
-                  <p style={{
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                  <div style={{
                     fontSize: '14px',
-                    fontWeight: 400,
-                    lineHeight: '17.6px',
-                    color: '#000',
-                    marginBottom: '4px'
+                    lineHeight: '20px',
+                    margin: 0,
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    color: '#000'
                   }}>
                     Barva: {product.color || 'Černá'}
-                  </p>
+                  </div>
+                </div>
+
+                {/* Actions Row */}
+                <div style={{
+                  gridColumn: '1 / -1',
+                  alignSelf: 'end',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  padding: '16px 17px 15px 17px',
+                  borderTop: '1px solid #000',
+                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '14px',
+                  lineHeight: '19px',
+                  color: '#000'
+                }}>
+                  <button
+                    onClick={() => handleMoveToCart(product)}
+                    disabled={addingToCart === product.id}
+                    style={{
+                      background: 'none',
+                      border: 0,
+                      padding: 0,
+                      color: '#000',
+                      textDecoration: 'underline',
+                      textUnderlineOffset: '2px',
+                      cursor: addingToCart === product.id ? 'not-allowed' : 'pointer',
+                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontSize: '14px',
+                      lineHeight: '19px',
+                      opacity: addingToCart === product.id ? 0.6 : 1
+                    }}
+                    className="hover:opacity-60 transition-opacity"
+                  >
+                    {addingToCart === product.id ? 'Přidávám...' : 'Přesunout do košíku'}
+                  </button>
+
+                  <button
+                    onClick={() => handleRemove(product.id)}
+                    style={{
+                      background: 'none',
+                      border: 0,
+                      padding: 0,
+                      color: '#000',
+                      textDecoration: 'underline',
+                      textUnderlineOffset: '2px',
+                      cursor: 'pointer',
+                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontSize: '14px',
+                      lineHeight: '19px'
+                    }}
+                    className="hover:opacity-60 transition-opacity"
+                  >
+                    Smazat
+                  </button>
                 </div>
               </div>
-
-              {/* Buttons section */}
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-end',
-                paddingTop: '8px'
-              }}>
-                <button
-                  onClick={() => handleMoveToCart(product)}
-                  disabled={addingToCart === product.id}
-                  style={{
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
-                    fontWeight: 400,
-                    lineHeight: '19.6px',
-                    color: '#000',
-                    textDecoration: 'underline',
-                    border: 'none',
-                    background: 'none',
-                    cursor: addingToCart === product.id ? 'not-allowed' : 'pointer',
-                    padding: 0,
-                    textAlign: 'left',
-                    opacity: addingToCart === product.id ? 0.6 : 1
-                  }}
-                  className="hover:opacity-60 transition-opacity"
-                >
-                  {addingToCart === product.id ? 'Přidávám...' : 'Přesunout do košíku'}
-                </button>
-                <button
-                  onClick={() => handleRemove(product.id)}
-                  style={{
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '14px',
-                    fontWeight: 400,
-                    lineHeight: '19.6px',
-                    color: '#000',
-                    textDecoration: 'underline',
-                    border: 'none',
-                    background: 'none',
-                    cursor: 'pointer',
-                    padding: 0,
-                    textAlign: 'right'
-                  }}
-                  className="hover:opacity-60 transition-opacity"
-                >
-                  Smazat
-                </button>
-              </div>
-            </div>
-          ))}
+            ))}
           </div>
         </div>
       </div>
 
-      {/* White Footer - Full Width */}
-      <div className="footer-container hidden md:flex" style={{
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        width: '100%',
-        backgroundColor: '#fff',
-        borderTop: '1px solid #000',
-        zIndex: 10,
-        height: '328px',
-        display: 'flex',
-        flexDirection: 'row',
-        padding: '24px 0',
-        boxSizing: 'border-box'
-      }}>
-        {/* Left Section - Payment Methods */}
-        <div className="footer-section" style={{
-          flex: '1',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'flex-start',
-          textAlign: 'center',
-          gap: '12px',
-          borderRight: '1px solid #000',
-          paddingLeft: '24px',
-          paddingRight: '24px'
-        }}>
-          <h3 style={{
-            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-            fontSize: '12px',
-            fontWeight: 700,
-            textTransform: 'uppercase',
-            letterSpacing: '0.03em',
-            margin: '0',
-            color: '#000'
-          }}>
-            BEZPEČNĚ PŘIJÍMÁME
-          </h3>
-          <div style={{
-            display: 'flex',
-            gap: '8px',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexWrap: 'wrap'
-          }}>
-            <img src="/payment-methods.jpg" alt="Payment Methods" style={{ height: '96px', width: 'auto' }} />
-          </div>
-        </div>
-
-        {/* Middle Section - Customer Support */}
-        <div className="footer-section" style={{
-          flex: '1',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'flex-start',
-          textAlign: 'center',
-          gap: '12px',
-          borderRight: '1px solid #000',
-          paddingLeft: '24px',
-          paddingRight: '24px'
-        }}>
-          <h3 style={{
-            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-            fontSize: '12px',
-            fontWeight: 700,
-            textTransform: 'uppercase',
-            letterSpacing: '0.03em',
-            margin: '0',
-            color: '#000'
-          }}>
-            ZÁKAZNICKÁ PODPORA
-          </h3>
-          <p style={{
-            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-            fontSize: '11px',
-            fontWeight: 400,
-            margin: '0 0 8px 0',
-            color: '#000',
-            lineHeight: '1.3'
-          }}>
-            Naše zákaznická podpora je vám k dispozici od Pondělí do Soboty 9:30 - 19:00
-          </p>
-          <div style={{
-            display: 'flex',
-            gap: '8px',
-            flexDirection: 'column',
-            width: '100%'
-          }}>
-            <a
-              href="https://wa.me/YOUR_WHATSAPP"
-              style={{
-                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '11px',
-                fontWeight: 400,
-                padding: '6px 12px',
-                border: '1px solid #000',
-                borderRadius: '4px',
-                textDecoration: 'none',
-                color: '#000',
-                textTransform: 'uppercase',
-                backgroundColor: '#fff',
-                cursor: 'pointer',
-                display: 'block'
-              }}
-            >
-              WHATSAPP
-            </a>
-            <a
-              href="tel:+YOUR_PHONE"
-              style={{
-                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '11px',
-                fontWeight: 400,
-                padding: '6px 12px',
-                border: '1px solid #000',
-                borderRadius: '4px',
-                textDecoration: 'none',
-                color: '#000',
-                textTransform: 'uppercase',
-                backgroundColor: '#fff',
-                cursor: 'pointer',
-                display: 'block'
-              }}
-            >
-              ZAVOLEJTE NÁM
-            </a>
-          </div>
-        </div>
-
-        {/* Right Section - Shipping Info */}
-        <div style={{
-          flex: '1',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'flex-start',
-          textAlign: 'center',
-          gap: '16px',
-          paddingLeft: '24px',
-          paddingRight: '24px'
-        }}>
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '8px'
-          }}>
-            <p style={{
-              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-              fontSize: '13px',
-              fontWeight: 700,
-              margin: '0',
-              color: '#000',
-              textTransform: 'uppercase'
-            }}>
-              Bezpečná platba
-            </p>
-            <p style={{
-              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-              fontSize: '13px',
-              fontWeight: 700,
-              margin: '0',
-              color: '#000',
-              textTransform: 'uppercase'
-            }}>
-              Rychlé doručení
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Padding for footer spacing */}
-      <div className="hidden md:block" style={{ height: '328px' }} />
+      {/* White Footer */}
+      <UlozenoWhiteFooter />
 
     </div>
   );

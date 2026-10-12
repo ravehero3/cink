@@ -1038,31 +1038,59 @@ export default function CartPage() {
       
       {items.length > 0 && (
         <div className="md:hidden" style={{
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          right: 0,
           width: '100%',
-          padding: '8px 16px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '6px',
+          padding: '16px',
           boxSizing: 'border-box',
           backgroundColor: '#fff',
           borderTop: '1px solid #000',
-          zIndex: 45,
-          maxHeight: '92px',
-          overflow: 'hidden'
+          borderBottom: '1px solid #000',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px'
         }}>
+          {/* Mobile Price Section */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+            paddingBottom: '12px',
+            borderBottom: '1px solid #000'
+          }}>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '12px',
+              color: '#999'
+            }}>
+              <span>CENA ZA DOPRAVU</span>
+              <span>79 Kč</span>
+            </div>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '15px',
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              letterSpacing: '0.03em',
+              color: '#000'
+            }}>
+              <span>PŘEDPOKLÁDANÁ CENA</span>
+              <span>{(total + 79).toLocaleString('cs-CZ', { maximumFractionDigits: 0 })} Kč</span>
+            </div>
+          </div>
+
+          {/* Mobile Checkout Buttons */}
           <button
             onClick={() => router.push('/pokladna')}
             style={{
               width: '100%',
-              padding: '10px',
+              padding: '12px',
               backgroundColor: '#000',
               border: '1px solid #000',
               borderRadius: '4px',
-              fontSize: '11px',
+              fontSize: '12px',
               fontWeight: 400,
               textTransform: 'uppercase',
               cursor: 'pointer',
@@ -1079,20 +1107,21 @@ export default function CartPage() {
             onClick={() => router.push('/pokladna?payment=gopay')}
             style={{
               width: '100%',
-              padding: '10px',
+              padding: '12px',
               backgroundColor: '#fff',
               border: '1px solid #000',
               borderRadius: '4px',
-              fontSize: '11px',
+              fontSize: '12px',
               fontWeight: 400,
               textTransform: 'uppercase',
               cursor: 'pointer',
               color: '#000',
               fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '6px',
-              minHeight: '32px',
+              gap: '8px',
+              minHeight: '38px',
               lineHeight: '1.2'
             }}
           >
@@ -1102,7 +1131,7 @@ export default function CartPage() {
         </div>
       )}
 
-      {/* Desktop Checkout Buttons - 552px wide */}
+      {/* Desktop Checkout Buttons - 552px wide with Price Section */}
       {items.length > 0 && (
         <div className="hidden md:flex" style={{
           width: '100%',
@@ -1115,9 +1144,42 @@ export default function CartPage() {
           <div style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: '12px',
+            gap: '16px',
             width: '552px'
           }}>
+            {/* Desktop Price Section */}
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px',
+              paddingBottom: '16px',
+              borderBottom: '1px solid #000'
+            }}>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '12px',
+                color: '#999'
+              }}>
+                <span>CENA ZA DOPRAVU</span>
+                <span>79 Kč</span>
+              </div>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '16px',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.03em',
+                color: '#000'
+              }}>
+                <span>PŘEDPOKLÁDANÁ CENA</span>
+                <span>{(total + 79).toLocaleString('cs-CZ', { maximumFractionDigits: 0 })} Kč</span>
+              </div>
+            </div>
+
             <button
               onClick={() => router.push('/pokladna')}
               style={{
@@ -1261,7 +1323,9 @@ export default function CartPage() {
             width: '100%'
           }}>
             <a
-              href="https://wa.me/YOUR_WHATSAPP"
+              href="https://wa.me/420775181107"
+              target="_blank"
+              rel="noopener noreferrer"
               style={{
                 fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                 fontSize: '11px',
@@ -1280,7 +1344,7 @@ export default function CartPage() {
               WHATSAPP
             </a>
             <a
-              href="tel:+YOUR_PHONE"
+              href="tel:+420775181107"
               style={{
                 fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                 fontSize: '11px',
@@ -1309,34 +1373,36 @@ export default function CartPage() {
           alignItems: 'center',
           justifyContent: 'flex-start',
           textAlign: 'center',
-          gap: '16px',
+          gap: '12px',
           paddingLeft: '24px',
           paddingRight: '24px'
         }}>
           <div style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: '8px'
+            gap: '6px',
+            alignItems: 'center'
           }}>
-            <p style={{
+            <h3 style={{
               fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-              fontSize: '13px',
+              fontSize: '12px',
               fontWeight: 700,
               margin: '0',
               color: '#000',
-              textTransform: 'uppercase'
+              textTransform: 'uppercase',
+              letterSpacing: '0.03em'
             }}>
-              Bezpečná platba
-            </p>
+              BEZPEČNÁ PLATBA A RYCHLÉ DORUČENÍ
+            </h3>
             <p style={{
               fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-              fontSize: '13px',
-              fontWeight: 700,
+              fontSize: '11px',
+              fontWeight: 400,
               margin: '0',
               color: '#000',
-              textTransform: 'uppercase'
+              lineHeight: '1.3'
             }}>
-              Rychlé doručení
+              Nakupujte bezpečně a my vám pošleme váš balíček ASAP
             </p>
           </div>
         </div>
@@ -1347,14 +1413,15 @@ export default function CartPage() {
         <>
           {/* BEZPEČNĚ PŘIJÍMÁME Section */}
           <div className="md:hidden" style={{
-            
             width: '100%',
             padding: '16px',
             borderTop: '1px solid #000',
             borderBottom: '1px solid #000',
             boxSizing: 'border-box',
+            display: 'flex',
             flexDirection: 'column',
-            gap: '12px'
+            gap: '12px',
+            alignItems: 'center'
           }}>
             <h3 style={{
               fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -1381,12 +1448,11 @@ export default function CartPage() {
 
           {/* ZÁKAZNICKÁ PODPORA Section */}
           <div className="md:hidden" style={{
-            
             width: '100%',
             padding: '16px',
-            borderTop: '1px solid #000',
             borderBottom: '1px solid #000',
             boxSizing: 'border-box',
+            display: 'flex',
             flexDirection: 'column',
             gap: '12px'
           }}>
@@ -1420,7 +1486,9 @@ export default function CartPage() {
               width: '100%'
             }}>
               <a
-                href="https://wa.me/YOUR_WHATSAPP"
+                href="https://wa.me/420775181107"
+                target="_blank"
+                rel="noopener noreferrer"
                 style={{
                   fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontSize: '11px',
@@ -1440,7 +1508,7 @@ export default function CartPage() {
                 WHATSAPP
               </a>
               <a
-                href="tel:+YOUR_PHONE"
+                href="tel:+420775181107"
                 style={{
                   fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontSize: '11px',
@@ -1464,52 +1532,42 @@ export default function CartPage() {
 
           {/* BEZPEČNÁ PLATBA & RYCHLÉ DORUČENÍ Section */}
           <div className="md:hidden" style={{
-            
             width: '100%',
             padding: '16px',
-            borderTop: '1px solid #000',
             borderBottom: '1px solid #000',
             boxSizing: 'border-box',
+            display: 'flex',
             flexDirection: 'column',
-            gap: '12px',
+            gap: '8px',
             alignItems: 'center',
             justifyContent: 'center'
           }}>
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '8px',
-              alignItems: 'center'
+            <h3 style={{
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '12px',
+              fontWeight: 700,
+              margin: '0',
+              color: '#000',
+              textTransform: 'uppercase',
+              textAlign: 'center',
+              letterSpacing: '0.03em'
             }}>
-              <p style={{
-                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '13px',
-                fontWeight: 700,
-                margin: '0',
-                color: '#000',
-                textTransform: 'uppercase',
-                textAlign: 'center'
-              }}>
-                Bezpečná platba
-              </p>
-              <p style={{
-                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '13px',
-                fontWeight: 700,
-                margin: '0',
-                color: '#000',
-                textTransform: 'uppercase',
-                textAlign: 'center'
-              }}>
-                Rychlé doručení
-              </p>
-            </div>
+              BEZPEČNÁ PLATBA A RYCHLÉ DORUČENÍ
+            </h3>
+            <p style={{
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '11px',
+              fontWeight: 400,
+              margin: '0',
+              color: '#000',
+              lineHeight: '1.3',
+              textAlign: 'center'
+            }}>
+              Nakupujte bezpečně a my vám pošleme váš balíček ASAP
+            </p>
           </div>
         </>
       )}
-
-      {/* Mobile bottom padding for sticky buttons */}
-      <div className="md:hidden" style={{ height: '92px' }} />
 
       {/* Padding for footer spacing - removed since footer is now static */}
 
