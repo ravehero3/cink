@@ -761,9 +761,12 @@ export default function CartPage() {
           .footer-container {
             display: none !important;
           }
+          .hidden.md\\:flex, .hidden.md\\:block {
+            display: none !important;
+          }
         }
         @media (min-width: 768px) {
-          .md\:hidden {
+          .md\\:hidden, [class*="md:hidden"] {
             display: none !important;
           }
         }
@@ -895,13 +898,6 @@ export default function CartPage() {
         </div>
       </div>
 
-      <style>{`
-        @media (min-width: 768px) {
-          .md\:hidden {
-            display: none !important;
-          }
-        }
-      `}</style>
 
       <div className="flex-1 flex justify-center w-full" style={{ marginBottom: '40px' }}>
         <div style={{ position: 'relative', margin: '0 auto', padding: '0', boxSizing: 'border-box', width: '100%', maxWidth: '1426px' }}>
@@ -1390,15 +1386,13 @@ export default function CartPage() {
       
       
       {items.length > 0 && (
-        <div className="md:hidden" style={{
+        <div className="flex flex-col md:hidden" style={{
           width: '100%',
           padding: '16px',
           boxSizing: 'border-box',
           backgroundColor: '#fff',
           borderTop: '1px solid #000',
           borderBottom: '1px solid #000',
-          display: 'flex',
-          flexDirection: 'column',
           gap: '12px'
         }}>
           {/* Mobile Price Section */}
@@ -1763,9 +1757,9 @@ export default function CartPage() {
 
       {/* Mobile Footer Sections - Full width on mobile */}
       {items.length > 0 && (
-        <>
+        <div className="flex flex-col md:hidden w-full">
           {/* BEZPEČNĚ PŘIJÍMÁME Section */}
-          <div className="md:hidden" style={{
+          <div style={{
             width: '100%',
             padding: '16px',
             borderTop: '1px solid #000',
@@ -1800,7 +1794,7 @@ export default function CartPage() {
           </div>
 
           {/* ZÁKAZNICKÁ PODPORA Section */}
-          <div className="md:hidden" style={{
+          <div style={{
             width: '100%',
             padding: '16px',
             borderBottom: '1px solid #000',
@@ -1884,7 +1878,7 @@ export default function CartPage() {
           </div>
 
           {/* BEZPEČNÁ PLATBA & RYCHLÉ DORUČENÍ Section */}
-          <div className="md:hidden" style={{
+          <div style={{
             width: '100%',
             padding: '16px',
             borderBottom: '1px solid #000',
@@ -1919,7 +1913,7 @@ export default function CartPage() {
               Nakupujte bezpečně a my vám pošleme váš balíček ASAP
             </p>
           </div>
-        </>
+        </div>
       )}
 
       {/* Padding for footer spacing - removed since footer is now static */}
