@@ -176,6 +176,7 @@ export interface EmailTemplateParams {
   };
   showBrowseAll?: boolean;
   marketing?: boolean;
+  email?: string; // Email address for unsubscribe link
   unsubscribeUrl?: string;
   webVersionUrl?: string;
   customization?: EmailTemplateCustomization;
@@ -193,11 +194,19 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
     actionButton,
     showBrowseAll = true,
     marketing = false,
-    unsubscribeUrl,
+    email,
+    unsubscribeUrl: providedUnsubscribeUrl,
     webVersionUrl,
     customization,
     adminMode = false,
   } = params;
+
+  // Generate unsubscribe URL if email is provided and unsubscribeUrl is not
+  let unsubscribeUrl = providedUnsubscribeUrl;
+  if (email && !unsubscribeUrl) {
+    const { buildUnsubscribeUrl: buildUrl } = await import('@/lib/newsletter');
+    unsubscribeUrl = buildUrl(email);
+  }
 
   const hiddenSections = new Set(customization?.hiddenSections || []);
 
@@ -580,9 +589,9 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
               <div style="margin:0;font-weight:700;letter-spacing:0.03em;text-transform:uppercase;">UFO SPORT</div>
               <div style="margin:4px 0 0;font-weight:500;">Vojtěch Vojkovský, Bachelor of Arts</div>
               <div style="margin:2px 0 0;"><a href="${WEBSITE_URL}/kontakt" style="color:#000000;text-decoration:none;">Bědovická 193E, Třebechovice pod Orebem, 503 46, Česká Republika</a> · IČO 08701032</div>
-              <div style="margin:16px 0 0;">Z odběru e-mailů se můžete kdykoli <a href="${unsubscribeUrl || `${WEBSITE_URL}/odhlasit-odber`}" style="color:#000000;text-decoration:underline;">odhlásit zde</a>.</div>
-              <div style="margin:4px 0 0;">Více o <a href="${WEBSITE_URL}/ochrana-osobnich-udaju" style="color:#000000;text-decoration:underline;">zásadách ochrany osobních údajů</a>.</div>
-              <div style="margin:4px 0 0;">Zobrazit e-mail ve webovém prohlížeči: <a href="${webVersionUrl || `${WEBSITE_URL}/email/web`}" style="color:#000000;text-decoration:underline;">zde</a>.</div>
+              <div style="margin:16px 0 0;"><a href="${WEBSITE_URL}" style="color:#000000;text-decoration:underline;">Zobrazit nejnovější produkty na našem rodinném eshopu</a>.</div>
+              <div style="margin:4px 0 0;">Více o <a href="${WEBSITE_URL}/obchodni-podminky" style="color:#000000;text-decoration:underline;">všeobecných obchodních podmínkách</a>.</div>
+              <div style="margin:4px 0 0;">Z odběru e-mailů se můžete kdykoli <a href="${unsubscribeUrl || `${WEBSITE_URL}/odhlasit`}" style="color:#000000;text-decoration:underline;">odhlásit zde</a>.</div>
             </div>
           </td>
         </tr>
