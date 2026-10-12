@@ -321,12 +321,12 @@ export default function CartPage() {
         {/* Mobile Footer Sections */}
         {/* BEZPEČNĚ PŘIJÍMÁME Section */}
         <div className="md:hidden" style={{
+            
           width: '100%',
           padding: '12px 16px',
           borderTop: '1px solid #000',
           borderBottom: '1px solid #000',
           boxSizing: 'border-box',
-          display: 'flex',
           flexDirection: 'column',
           gap: '12px',
           alignItems: 'center'
@@ -350,12 +350,12 @@ export default function CartPage() {
 
         {/* Process Info Section */}
         <div className="md:hidden" style={{
+            
           width: '100%',
           padding: '12px 16px',
           borderTop: '1px solid #000',
           borderBottom: '1px solid #000',
           boxSizing: 'border-box',
-          display: 'flex',
           flexDirection: 'column',
           gap: '8px'
         }}>
@@ -1007,13 +1007,13 @@ export default function CartPage() {
       
       {items.length > 0 && (
         <div className="md:hidden" style={{
+            
           position: 'fixed',
           bottom: 0,
           left: 0,
           right: 0,
           width: '100%',
           padding: '8px 16px',
-          display: 'flex',
           flexDirection: 'column',
           gap: '6px',
           boxSizing: 'border-box',
@@ -1058,7 +1058,6 @@ export default function CartPage() {
               cursor: 'pointer',
               color: '#000',
               fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-              display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               gap: '6px',
@@ -1317,12 +1316,12 @@ export default function CartPage() {
         <>
           {/* BEZPEČNĚ PŘIJÍMÁME Section */}
           <div className="md:hidden" style={{
+            
             width: '100%',
             padding: '16px',
             borderTop: '1px solid #000',
             borderBottom: '1px solid #000',
             boxSizing: 'border-box',
-            display: 'flex',
             flexDirection: 'column',
             gap: '12px'
           }}>
@@ -1351,12 +1350,12 @@ export default function CartPage() {
 
           {/* ZÁKAZNICKÁ PODPORA Section */}
           <div className="md:hidden" style={{
+            
             width: '100%',
             padding: '16px',
             borderTop: '1px solid #000',
             borderBottom: '1px solid #000',
             boxSizing: 'border-box',
-            display: 'flex',
             flexDirection: 'column',
             gap: '12px'
           }}>
@@ -1434,12 +1433,12 @@ export default function CartPage() {
 
           {/* BEZPEČNÁ PLATBA & RYCHLÉ DORUČENÍ Section */}
           <div className="md:hidden" style={{
+            
             width: '100%',
             padding: '16px',
             borderTop: '1px solid #000',
             borderBottom: '1px solid #000',
             boxSizing: 'border-box',
-            display: 'flex',
             flexDirection: 'column',
             gap: '12px',
             alignItems: 'center',
