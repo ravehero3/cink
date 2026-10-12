@@ -82,7 +82,7 @@ function UlozenoWhiteFooter() {
           width: '100%',
           backgroundColor: '#fff',
           borderTop: '1px solid #000',
-          zIndex: 1,
+          zIndex: 10,
           height: '328px',
           flexDirection: 'row',
           padding: '24px 0',
@@ -101,7 +101,6 @@ function UlozenoWhiteFooter() {
             justifyContent: 'flex-start',
             textAlign: 'center',
             gap: '12px',
-            borderRight: '1px solid #000',
             paddingLeft: '24px',
             paddingRight: '24px'
           }}
@@ -143,7 +142,6 @@ function UlozenoWhiteFooter() {
             justifyContent: 'flex-start',
             textAlign: 'center',
             gap: '12px',
-            borderRight: '1px solid #000',
             paddingLeft: '24px',
             paddingRight: '24px'
           }}
@@ -875,28 +873,6 @@ export default function SavedProductsPage() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col relative">
-      {/* Vertical lines at product edges (995px wide, centered) - hidden on mobile */}
-      <div className="hidden md:block" style={{
-        position: 'fixed',
-        left: '50%',
-        marginLeft: '-497.5px',
-        top: 0,
-        bottom: 0,
-        width: '1px',
-        backgroundColor: '#000',
-        zIndex: 5
-      }} />
-      <div className="hidden md:block" style={{
-        position: 'fixed',
-        left: '50%',
-        marginLeft: '497.5px',
-        top: 0,
-        bottom: 0,
-        width: '1px',
-        backgroundColor: '#000',
-        zIndex: 5
-      }} />
-
       {/* Header - border handled by navigation panel */}
       <div className="w-full md:w-[995px]" style={{ position: 'relative', margin: '0 auto', height: '226px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
         <h1 className="text-center uppercase" style={{
