@@ -9,7 +9,7 @@
   grid-template-columns: 143px 1fr;
   grid-template-rows: auto auto;
   width: 100%;
-  max-width: 670px;
+  max-width: 100%;
   height: auto;
   box-sizing: border-box;
 }

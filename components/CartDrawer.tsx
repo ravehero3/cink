@@ -74,9 +74,20 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);
   
+  // Arrow visibility state for VYBRÁNO PRO VÁS
+  const [vybranoCanScrollLeft, setVybranoCanScrollLeft] = useState(false);
+  const [vybranoCanScrollRight, setVybranoCanScrollRight] = useState(false);
+  
   // Refs for drag scrolling
   const vybrranoRef = useRef<HTMLDivElement>(null);
   const prohlizeniRef = useRef<HTMLDivElement>(null);
+
+  const updateVybranoArrows = () => {
+    const el = vybrranoRef.current;
+    if (!el) return;
+    setVybranoCanScrollLeft(el.scrollLeft > 0);
+    setVybranoCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 1);
+  };
 
   useEffect(() => {
     const fetchAllProducts = async () => {
@@ -112,6 +123,13 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
       setSelectedProducts(shuffled.slice(0, 9));
     }
   }, [allProducts, selectedProducts.length]);
+
+  // Re-check arrow visibility after products load (DOM needs to render first)
+  useEffect(() => {
+    if (selectedProducts.length > 0) {
+      setTimeout(updateVybranoArrows, 200);
+    }
+  }, [selectedProducts]);
 
   // Enable drag scrolling
   const enableDragScroll = (ref: React.RefObject<HTMLDivElement>) => {
@@ -197,10 +215,18 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
       // Enable drag scroll
       const cleanup1 = enableDragScroll(vybrranoRef);
       const cleanup2 = enableDragScroll(prohlizeniRef);
+
+      // Set up scroll listener for arrow visibility
+      const vybranoEl = vybrranoRef.current;
+      const handleVybranoScroll = () => updateVybranoArrows();
+      vybranoEl.addEventListener('scroll', handleVybranoScroll);
+      // Initial check after products load (slight delay for layout)
+      setTimeout(updateVybranoArrows, 100);
       
       return () => {
         cleanup1?.();
         cleanup2?.();
+        vybranoEl.removeEventListener('scroll', handleVybranoScroll);
       };
     }
   }, [isOpen]);
@@ -260,7 +286,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
       />
       
       <div
-        className={`fixed top-0 right-0 h-full w-full md:w-[480px] bg-white z-50 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 right-0 h-full w-full md:w-[956px] bg-white z-50 transform transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
@@ -347,89 +373,117 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       VYBRÁNO PRO VÁS
                     </h3>
                   </div>
-                  {/* Horizontal scroll container - 1.5 products show */}
-                  <div 
-                    ref={vybrranoRef}
-                    style={{ 
-                      display: 'flex', 
-                      overflowX: 'auto', 
-                      overflowY: 'hidden', 
-                      gap: '0', 
-                      paddingLeft: '0', 
-                      paddingRight: '0', 
-                      paddingTop: '0',
-                      paddingBottom: '0',
-                      scrollBehavior: 'smooth', 
-                      WebkitOverflowScrolling: 'touch',
-                      scrollbarWidth: 'none',
-                      scrollSnapType: 'x mandatory',
-                      cursor: 'grab',
-                      userSelect: 'none',
-                      WebkitUserSelect: 'none'
-                    }}
-                    className="select-none"
-                  >
-                    {selectedProducts.map((product, index) => (
-                      <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(66.666% - 0.67px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
-                        {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
-                        <Link
-                          href={`/produkty/${product.slug}`}
-                          onClick={onClose}
-                          style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '16px', paddingBottom: '16px', paddingLeft: '14px', paddingRight: '14px', textDecoration: 'none' }}
-                          className="hover:opacity-80 transition-opacity"
-                        >
-                          <div style={{ position: 'relative', width: '100%', aspectRatio: '1 / 1', backgroundColor: '#ffffff', overflow: 'hidden', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            {product.image && (
-                              <img
-                                src={product.image}
-                                alt={product.name}
-                                style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
-                                loading="lazy"
-                                onError={(e) => {
-                                  const img = e.target as HTMLImageElement;
-                                  img.style.display = 'none';
-                                }}
-                              />
-                            )}
-                          </div>
-                          <h4 style={{
-                            fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                            fontSize: '13px',
-                            fontWeight: 700,
-                            textTransform: 'uppercase',
-                            marginTop: 0,
-                            marginBottom: '4px',
-                            letterSpacing: '0.03em',
-                            fontStretch: 'condensed',
-                            color: '#000000',
-                            lineHeight: '1.2',
-                            textAlign: 'center'
-                          }}>
-                            {product.name}
-                          </h4>
-                          <p style={{
-                            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                            fontSize: '11px',
-                            fontWeight: 400,
-                            lineHeight: '1.2',
-                            color: '#000000',
-                            margin: '0 0 6px 0',
-                            textAlign: 'center'
-                          }}>{product.price} Kč</p>
-                          <div style={{
-                            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                            fontSize: '11px',
-                            fontWeight: 400,
-                            lineHeight: '1.2',
-                            color: '#000000',
-                            textDecoration: 'underline',
-                            textAlign: 'center'
-                          }}>
-                            Přidat do košíku
-                          </div>
-                        </Link>
-                      </div>
-                    ))}
+                  {/* Horizontal scroll container with nav arrows */}
+                  <div style={{ position: 'relative' }}>
+                    {/* Left arrow - only when can scroll left */}
+                    {vybranoCanScrollLeft && (
+                      <button
+                        onClick={() => {
+                          if (vybrranoRef.current) {
+                            vybrranoRef.current.scrollBy({ left: -vybrranoRef.current.clientWidth * 0.67, behavior: 'smooth' });
+                          }
+                        }}
+                        style={{
+                          position: 'absolute', left: '6px', top: '50%', transform: 'translateY(-50%)',
+                          zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          width: '28px', height: '28px', border: '1px solid #000', borderRadius: '4px',
+                          backgroundColor: '#fff', cursor: 'pointer', padding: '0'
+                        }}
+                      >
+                        <svg style={{ width: '14px', height: '14px', stroke: '#000', fill: 'none' }} viewBox="0 0 24 24" strokeWidth="2">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                        </svg>
+                      </button>
+                    )}
+                    {/* Right arrow - only when can scroll right */}
+                    {vybranoCanScrollRight && (
+                      <button
+                        onClick={() => {
+                          if (vybrranoRef.current) {
+                            vybrranoRef.current.scrollBy({ left: vybrranoRef.current.clientWidth * 0.67, behavior: 'smooth' });
+                          }
+                        }}
+                        style={{
+                          position: 'absolute', right: '6px', top: '50%', transform: 'translateY(-50%)',
+                          zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          width: '28px', height: '28px', border: '1px solid #000', borderRadius: '4px',
+                          backgroundColor: '#fff', cursor: 'pointer', padding: '0'
+                        }}
+                      >
+                        <svg style={{ width: '14px', height: '14px', stroke: '#000', fill: 'none' }} viewBox="0 0 24 24" strokeWidth="2">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                        </svg>
+                      </button>
+                    )}
+                    <div 
+                      ref={vybrranoRef}
+                      onScroll={updateVybranoArrows}
+                      style={{ 
+                        display: 'flex', 
+                        overflowX: 'auto', 
+                        overflowY: 'hidden', 
+                        gap: '0', 
+                        paddingLeft: '0', 
+                        paddingRight: '0', 
+                        paddingTop: '0',
+                        paddingBottom: '0',
+                        scrollBehavior: 'smooth', 
+                        WebkitOverflowScrolling: 'touch',
+                        scrollbarWidth: 'none',
+                        scrollSnapType: 'x mandatory',
+                        cursor: 'grab',
+                        userSelect: 'none',
+                        WebkitUserSelect: 'none'
+                      }}
+                      className="select-none"
+                    >
+                      {selectedProducts.map((product, index) => (
+                        <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(66.666% - 0.67px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
+                          {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
+                          <Link
+                            href={`/produkty/${product.slug}`}
+                            onClick={onClose}
+                            style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '16px', paddingBottom: '16px', paddingLeft: '14px', paddingRight: '14px', textDecoration: 'none' }}
+                            className="hover:opacity-80 transition-opacity"
+                          >
+                            <div style={{ position: 'relative', width: '100%', aspectRatio: '1 / 1', backgroundColor: '#ffffff', overflow: 'hidden', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              {product.image && (
+                                <img
+                                  src={product.image}
+                                  alt={product.name}
+                                  style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
+                                  loading="lazy"
+                                  onError={(e) => {
+                                    const img = e.target as HTMLImageElement;
+                                    img.style.display = 'none';
+                                  }}
+                                />
+                              )}
+                            </div>
+                            <h4 style={{
+                              fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                              fontSize: '13px', fontWeight: 700, textTransform: 'uppercase',
+                              marginTop: 0, marginBottom: '4px', letterSpacing: '0.03em',
+                              fontStretch: 'condensed', color: '#000000', lineHeight: '1.2', textAlign: 'center'
+                            }}>
+                              {product.name}
+                            </h4>
+                            <p style={{
+                              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                              fontSize: '11px', fontWeight: 400, lineHeight: '1.2',
+                              color: '#000000', margin: '0 0 6px 0', textAlign: 'center'
+                            }}>{product.price} Kč</p>
+                            <div style={{
+                              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                              fontSize: '11px', fontWeight: 400, lineHeight: '1.2',
+                              color: '#000000', textDecoration: 'underline', textAlign: 'center'
+                            }}>
+                              Přidat do košíku
+                            </div>
+                          </Link>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
@@ -602,90 +656,118 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       VYBRÁNO PRO VÁS
                     </h3>
                   </div>
-                  {/* Horizontal scroll container - 1.5 products show */}
-                  <div 
-                    ref={vybrranoRef}
-                    style={{ 
-                      display: 'flex', 
-                      overflowX: 'auto', 
-                      overflowY: 'hidden', 
-                      gap: '0', 
-                      paddingLeft: '0', 
-                      paddingRight: '0', 
-                      paddingTop: '0', 
-                      paddingBottom: '0', 
-                      scrollBehavior: 'smooth', 
-                      WebkitOverflowScrolling: 'touch', 
-                      scrollbarWidth: 'none', 
-                      scrollSnapType: 'x mandatory', 
-                      flex: 1, 
-                      cursor: 'grab', 
-                      userSelect: 'none', 
-                      WebkitUserSelect: 'none' 
-                    }}
-                    className="select-none"
-                  >
-                    {selectedProducts.map((product, index) => (
-                      <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(66.666% - 0.67px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
-                        {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
-                        <Link
-                          href={`/produkty/${product.slug}`}
-                          onClick={onClose}
-                          style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '16px', paddingBottom: '16px', paddingLeft: '14px', paddingRight: '14px', textDecoration: 'none' }}
-                          className="hover:opacity-80 transition-opacity"
-                        >
-                          <div style={{ position: 'relative', width: '100%', aspectRatio: '1 / 1', backgroundColor: '#ffffff', overflow: 'hidden', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            {product.image && (
-                              <img
-                                src={product.image}
-                                alt={product.name}
-                                style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
-                                loading="lazy"
-                                onError={(e) => {
-                                  const img = e.target as HTMLImageElement;
-                                  img.style.display = 'none';
-                                }}
-                              />
-                            )}
-                          </div>
-                          <h4 style={{
-                            fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                            fontSize: '13px',
-                            fontWeight: 700,
-                            textTransform: 'uppercase',
-                            marginTop: 0,
-                            marginBottom: '4px',
-                            letterSpacing: '0.03em',
-                            fontStretch: 'condensed',
-                            color: '#000000',
-                            lineHeight: '1.2',
-                            textAlign: 'center'
-                          }}>
-                            {product.name}
-                          </h4>
-                          <p style={{
-                            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                            fontSize: '11px',
-                            fontWeight: 400,
-                            lineHeight: '1.2',
-                            color: '#000000',
-                            margin: '0 0 6px 0',
-                            textAlign: 'center'
-                          }}>{product.price} Kč</p>
-                          <div style={{
-                            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                            fontSize: '11px',
-                            fontWeight: 400,
-                            lineHeight: '1.2',
-                            color: '#000000',
-                            textDecoration: 'underline',
-                            textAlign: 'center'
-                          }}>
-                            Přidat do košíku
-                          </div>
-                        </Link>
-                      </div>
-                    ))}
+                  {/* Horizontal scroll container with nav arrows */}
+                  <div style={{ position: 'relative' }}>
+                    {/* Left arrow - only when can scroll left */}
+                    {vybranoCanScrollLeft && (
+                      <button
+                        onClick={() => {
+                          if (vybrranoRef.current) {
+                            vybrranoRef.current.scrollBy({ left: -vybrranoRef.current.clientWidth * 0.67, behavior: 'smooth' });
+                          }
+                        }}
+                        style={{
+                          position: 'absolute', left: '6px', top: '50%', transform: 'translateY(-50%)',
+                          zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          width: '28px', height: '28px', border: '1px solid #000', borderRadius: '4px',
+                          backgroundColor: '#fff', cursor: 'pointer', padding: '0'
+                        }}
+                      >
+                        <svg style={{ width: '14px', height: '14px', stroke: '#000', fill: 'none' }} viewBox="0 0 24 24" strokeWidth="2">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                        </svg>
+                      </button>
+                    )}
+                    {/* Right arrow - only when can scroll right */}
+                    {vybranoCanScrollRight && (
+                      <button
+                        onClick={() => {
+                          if (vybrranoRef.current) {
+                            vybrranoRef.current.scrollBy({ left: vybrranoRef.current.clientWidth * 0.67, behavior: 'smooth' });
+                          }
+                        }}
+                        style={{
+                          position: 'absolute', right: '6px', top: '50%', transform: 'translateY(-50%)',
+                          zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          width: '28px', height: '28px', border: '1px solid #000', borderRadius: '4px',
+                          backgroundColor: '#fff', cursor: 'pointer', padding: '0'
+                        }}
+                      >
+                        <svg style={{ width: '14px', height: '14px', stroke: '#000', fill: 'none' }} viewBox="0 0 24 24" strokeWidth="2">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                        </svg>
+                      </button>
+                    )}
+                    <div 
+                      ref={vybrranoRef}
+                      onScroll={updateVybranoArrows}
+                      style={{ 
+                        display: 'flex', 
+                        overflowX: 'auto', 
+                        overflowY: 'hidden', 
+                        gap: '0', 
+                        paddingLeft: '0', 
+                        paddingRight: '0', 
+                        paddingTop: '0', 
+                        paddingBottom: '0', 
+                        scrollBehavior: 'smooth', 
+                        WebkitOverflowScrolling: 'touch', 
+                        scrollbarWidth: 'none', 
+                        scrollSnapType: 'x mandatory', 
+                        flex: 1, 
+                        cursor: 'grab', 
+                        userSelect: 'none', 
+                        WebkitUserSelect: 'none' 
+                      }}
+                      className="select-none"
+                    >
+                      {selectedProducts.map((product, index) => (
+                        <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(66.666% - 0.67px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
+                          {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
+                          <Link
+                            href={`/produkty/${product.slug}`}
+                            onClick={onClose}
+                            style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '16px', paddingBottom: '16px', paddingLeft: '14px', paddingRight: '14px', textDecoration: 'none' }}
+                            className="hover:opacity-80 transition-opacity"
+                          >
+                            <div style={{ position: 'relative', width: '100%', aspectRatio: '1 / 1', backgroundColor: '#ffffff', overflow: 'hidden', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              {product.image && (
+                                <img
+                                  src={product.image}
+                                  alt={product.name}
+                                  style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
+                                  loading="lazy"
+                                  onError={(e) => {
+                                    const img = e.target as HTMLImageElement;
+                                    img.style.display = 'none';
+                                  }}
+                                />
+                              )}
+                            </div>
+                            <h4 style={{
+                              fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                              fontSize: '13px', fontWeight: 700, textTransform: 'uppercase',
+                              marginTop: 0, marginBottom: '4px', letterSpacing: '0.03em',
+                              fontStretch: 'condensed', color: '#000000', lineHeight: '1.2', textAlign: 'center'
+                            }}>
+                              {product.name}
+                            </h4>
+                            <p style={{
+                              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                              fontSize: '11px', fontWeight: 400, lineHeight: '1.2',
+                              color: '#000000', margin: '0 0 6px 0', textAlign: 'center'
+                            }}>{product.price} Kč</p>
+                            <div style={{
+                              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                              fontSize: '11px', fontWeight: 400, lineHeight: '1.2',
+                              color: '#000000', textDecoration: 'underline', textAlign: 'center'
+                            }}>
+                              Přidat do košíku
+                            </div>
+                          </Link>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>

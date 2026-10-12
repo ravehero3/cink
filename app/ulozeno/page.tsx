@@ -1054,47 +1054,43 @@ export default function SavedProductsPage() {
             </div>
           )}
 
-          {/* List Layout - for both mobile and desktop matching kosik modal */}
+          {/* List Layout - matches CartLineItem page layout exactly */}
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             {products.map((product, index) => (
               <div
                 key={product.id}
                 style={{
-                  borderTop: index === 0 ? '1px solid #000' : 'none',
-                  borderBottom: '1px solid #000',
-                  borderLeft: '1px solid #000',
-                  borderRight: '1px solid #000',
-                  backgroundColor: '#fff',
                   display: 'grid',
                   gridTemplateColumns: '143px 1fr',
                   gridTemplateRows: 'auto auto',
+                  border: '1px solid #000',
+                  borderTop: index === 0 ? '1px solid #000' : 'none',
+                  backgroundColor: '#fff',
                   width: '100%',
-                  boxSizing: 'border-box'
+                  boxSizing: 'border-box',
                 }}
               >
                 {/* Product Image */}
                 <div style={{
-                  backgroundColor: '#fff',
+                  backgroundColor: '#d9d9d9',
                   width: '143px',
                   height: '143px',
-                  aspectRatio: '1 / 1',
-                  margin: 0,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   overflow: 'hidden',
-                  borderRight: '1px solid #000'
+                  margin: 0,
                 }}>
                   <Link href={`/produkty/${product.slug}`} style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <img
-                      src={product.images[0] || (product as any).productImage || '/placeholder.png'}
+                      src={product.productImage || product.images[0] || '/placeholder.png'}
                       alt={product.name}
                       loading="lazy"
                       style={{
                         width: '100%',
                         height: '100%',
-                        objectFit: 'contain',
-                        display: 'block'
+                        objectFit: 'cover',
+                        display: 'block',
                       }}
                     />
                   </Link>
@@ -1102,10 +1098,10 @@ export default function SavedProductsPage() {
 
                 {/* Product Info */}
                 <div style={{
-                  padding: '20px 15px 0 16px',
+                  padding: '23px 15px 0 16px',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: 0
+                  gap: 0,
                 }}>
                   <Link
                     href={`/produkty/${product.slug}`}
@@ -1116,11 +1112,10 @@ export default function SavedProductsPage() {
                       fontWeight: 700,
                       letterSpacing: '0.03em',
                       textTransform: 'uppercase',
-                      fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                       color: '#000',
-                      textDecoration: 'none'
+                      textDecoration: 'none',
                     }}
-                    className="hover:opacity-60 transition-opacity"
                   >
                     {product.name}
                   </Link>
@@ -1136,11 +1131,11 @@ export default function SavedProductsPage() {
                   </div>
 
                   <div style={{
-                    fontSize: '14px',
-                    lineHeight: '20px',
+                    fontSize: '16.5px',
+                    lineHeight: '23px',
                     margin: 0,
                     fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    color: '#000'
+                    color: '#000',
                   }}>
                     Barva: {product.color || 'Černá'}
                   </div>
@@ -1153,12 +1148,11 @@ export default function SavedProductsPage() {
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                  padding: '16px 17px 15px 17px',
-                  borderTop: '1px solid #000',
-                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '14px',
+                  padding: '23px 17px 15px 17px',
+                  fontSize: '16.5px',
                   lineHeight: '19px',
-                  color: '#000'
+                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                  color: '#000',
                 }}>
                   <button
                     onClick={() => handleMoveToCart(product)}
@@ -1167,16 +1161,16 @@ export default function SavedProductsPage() {
                       background: 'none',
                       border: 0,
                       padding: 0,
+                      font: 'inherit',
                       color: '#000',
                       textDecoration: 'underline',
                       textUnderlineOffset: '2px',
                       cursor: addingToCart === product.id ? 'not-allowed' : 'pointer',
                       fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '14px',
+                      fontSize: '16.5px',
                       lineHeight: '19px',
-                      opacity: addingToCart === product.id ? 0.6 : 1
+                      opacity: addingToCart === product.id ? 0.6 : 1,
                     }}
-                    className="hover:opacity-60 transition-opacity"
                   >
                     {addingToCart === product.id ? 'Přidávám...' : 'Přesunout do košíku'}
                   </button>
@@ -1187,15 +1181,15 @@ export default function SavedProductsPage() {
                       background: 'none',
                       border: 0,
                       padding: 0,
+                      font: 'inherit',
                       color: '#000',
                       textDecoration: 'underline',
                       textUnderlineOffset: '2px',
                       cursor: 'pointer',
                       fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '14px',
-                      lineHeight: '19px'
+                      fontSize: '16.5px',
+                      lineHeight: '19px',
                     }}
-                    className="hover:opacity-60 transition-opacity"
                   >
                     Smazat
                   </button>
