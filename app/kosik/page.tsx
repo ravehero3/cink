@@ -956,7 +956,8 @@ export default function CartPage() {
           width: '1px',
           backgroundColor: '#000',
           zIndex: 5,
-          pointerEvents: 'none'
+          pointerEvents: 'none',
+          height: '100vh'
         }} />
         <div className="hidden md:block" style={{
           position: 'fixed',
@@ -967,7 +968,8 @@ export default function CartPage() {
           width: '1px',
           backgroundColor: '#000',
           zIndex: 5,
-          pointerEvents: 'none'
+          pointerEvents: 'none',
+          height: '100vh'
         }} />
         
         <div className="flex-1 flex flex-col relative w-full">
@@ -1177,8 +1179,20 @@ export default function CartPage() {
               backgroundColor: '#fff',
               borderTop: '1px solid #000',
               display: 'flex',
-              flexDirection: 'column'
+              flexDirection: 'column',
+              position: 'relative'
             }}>
+              {/* Top border line 1426px wide */}
+              <div style={{
+                position: 'absolute',
+                top: '-1px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                width: '1426px',
+                height: '1px',
+                backgroundColor: '#000',
+                zIndex: 10
+              }} />
               {/* Price Section */}
               <div style={{
                 display: 'flex',
