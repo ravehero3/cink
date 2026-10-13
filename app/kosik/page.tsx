@@ -304,7 +304,7 @@ export default function CartPage() {
         {selectedProducts.length > 0 && (
           <>
             {/* Desktop */}
-            <div className="hidden md:flex" style={{ flexDirection: 'column', borderTop: '1px solid #000', borderBottom: '1px solid #000', position: 'relative', width: '100%', minHeight: '0' }}>
+            <div className="hidden md:flex" style={{ flexDirection: 'column', borderTop: '1px solid #000', borderBottom: '1px solid #000', position: 'relative', width: '100%', minHeight: '0', group: 'group' }}>
               <div style={{ height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderBottom: '1px solid #000', flexShrink: 0 }}>
                 <h3 style={{
                   fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -320,7 +320,7 @@ export default function CartPage() {
                 </h3>
               </div>
               
-              <div style={{ position: 'relative', width: '100%', height: '1000px' }}>
+              <div style={{ position: 'relative', width: '100%', height: '1000px' }} className="group">
                 {emptyVybranoCanScrollLeft && (
                   <button
                     onClick={() => {
@@ -333,8 +333,11 @@ export default function CartPage() {
                       position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)',
                       zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center',
                       width: '28px', height: '28px', border: '1px solid #000', borderRadius: '4px',
-                      backgroundColor: '#fff', cursor: 'pointer', padding: '0'
+                      backgroundColor: '#fff', cursor: 'pointer', padding: '0',
+                      opacity: 0,
+                      transition: 'opacity 0.2s ease'
                     }}
+                    className="group-hover:opacity-100"
                   >
                     <svg style={{ width: '14px', height: '14px', stroke: '#000', fill: 'none' }} viewBox="0 0 24 24" strokeWidth="2">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -353,8 +356,11 @@ export default function CartPage() {
                       position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)',
                       zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center',
                       width: '28px', height: '28px', border: '1px solid #000', borderRadius: '4px',
-                      backgroundColor: '#fff', cursor: 'pointer', padding: '0'
+                      backgroundColor: '#fff', cursor: 'pointer', padding: '0',
+                      opacity: 0,
+                      transition: 'opacity 0.2s ease'
                     }}
+                    className="group-hover:opacity-100"
                   >
                     <svg style={{ width: '14px', height: '14px', stroke: '#000', fill: 'none' }} viewBox="0 0 24 24" strokeWidth="2">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
@@ -497,7 +503,7 @@ export default function CartPage() {
         {recentlyViewed.length > 0 && (
           <>
             {/* Desktop */}
-            <div className="hidden md:flex" style={{ flexDirection: 'column', borderTop: '1px solid #000', borderBottom: '1px solid #000', position: 'relative', width: '100%', minHeight: '0' }}>
+            <div className="hidden md:flex" style={{ flexDirection: 'column', borderTop: '1px solid #000', borderBottom: '1px solid #000', position: 'relative', width: '100%', minHeight: '0', group: 'group' }}>
               <div style={{ height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderBottom: '1px solid #000', flexShrink: 0 }}>
                 <h3 style={{
                   fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -513,7 +519,7 @@ export default function CartPage() {
                 </h3>
               </div>
               
-              <div style={{ position: 'relative', width: '100%', height: '1000px' }}>
+              <div style={{ position: 'relative', width: '100%', height: '1000px' }} className="group">
                 {recentlyViewedCanScrollLeft && (
                   <button
                     onClick={() => {
@@ -526,8 +532,11 @@ export default function CartPage() {
                       position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)',
                       zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center',
                       width: '28px', height: '28px', border: '1px solid #000', borderRadius: '4px',
-                      backgroundColor: '#fff', cursor: 'pointer', padding: '0'
+                      backgroundColor: '#fff', cursor: 'pointer', padding: '0',
+                      opacity: 0,
+                      transition: 'opacity 0.2s ease'
                     }}
+                    className="group-hover:opacity-100"
                   >
                     <svg style={{ width: '14px', height: '14px', stroke: '#000', fill: 'none' }} viewBox="0 0 24 24" strokeWidth="2">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -546,8 +555,11 @@ export default function CartPage() {
                       position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)',
                       zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center',
                       width: '28px', height: '28px', border: '1px solid #000', borderRadius: '4px',
-                      backgroundColor: '#fff', cursor: 'pointer', padding: '0'
+                      backgroundColor: '#fff', cursor: 'pointer', padding: '0',
+                      opacity: 0,
+                      transition: 'opacity 0.2s ease'
                     }}
+                    className="group-hover:opacity-100"
                   >
                     <svg style={{ width: '14px', height: '14px', stroke: '#000', fill: 'none' }} viewBox="0 0 24 24" strokeWidth="2">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />

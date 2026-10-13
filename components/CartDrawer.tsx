@@ -306,14 +306,14 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   return (
     <>
       <div
-        className={`fixed inset-0 bg-black z-40 transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-black z-[998] transition-opacity duration-300 ${
           isOpen ? 'opacity-50' : 'opacity-0 pointer-events-none'
         }`}
         onClick={handleOverlayClick}
       />
       
       <div
-        className={`fixed top-0 right-0 h-full w-full md:w-[956px] bg-white z-50 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 right-0 h-full w-full md:w-[956px] bg-white z-[999] transform transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
