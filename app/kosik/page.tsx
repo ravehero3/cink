@@ -1240,7 +1240,7 @@ export default function CartPage() {
                 fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                 fontSize: '11px',
                 fontWeight: 400,
-                padding: '6px 12px',
+                padding: '8px 12px',
                 border: '1px solid #000',
                 borderRadius: '4px',
                 textDecoration: 'none',
@@ -1248,10 +1248,15 @@ export default function CartPage() {
                 textTransform: 'uppercase',
                 backgroundColor: '#fff',
                 cursor: 'pointer',
-                display: 'block'
+                display: 'block',
+                minWidth: '212px',
+                height: '40px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
               }}
             >
-              WHATSAPP
+              WHATSAPP +420 775 181 107
             </a>
             <a
               href="tel:+420775181107"
@@ -1259,7 +1264,7 @@ export default function CartPage() {
                 fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                 fontSize: '11px',
                 fontWeight: 400,
-                padding: '6px 12px',
+                padding: '8px 12px',
                 border: '1px solid #000',
                 borderRadius: '4px',
                 textDecoration: 'none',
@@ -1267,10 +1272,14 @@ export default function CartPage() {
                 textTransform: 'uppercase',
                 backgroundColor: '#fff',
                 cursor: 'pointer',
-                display: 'block'
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minWidth: '212px',
+                height: '40px'
               }}
             >
-              ZAVOLEJTE NÁM
+              ZAVOLEJTE NÁM +420 775 181 107
             </a>
           </div>
         </div>

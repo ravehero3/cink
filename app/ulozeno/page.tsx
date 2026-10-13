@@ -187,7 +187,7 @@ function UlozenoWhiteFooter() {
                 fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                 fontSize: '11px',
                 fontWeight: 400,
-                padding: '6px 12px',
+                padding: '8px 12px',
                 border: '1px solid #000',
                 borderRadius: '4px',
                 textDecoration: 'none',
@@ -195,10 +195,14 @@ function UlozenoWhiteFooter() {
                 textTransform: 'uppercase',
                 backgroundColor: '#fff',
                 cursor: 'pointer',
-                display: 'block'
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minWidth: '212px',
+                height: '40px'
               }}
             >
-              WHATSAPP
+              WHATSAPP +420 775 181 107
             </a>
             <a
               href="tel:+420775181107"
@@ -206,7 +210,7 @@ function UlozenoWhiteFooter() {
                 fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                 fontSize: '11px',
                 fontWeight: 400,
-                padding: '6px 12px',
+                padding: '8px 12px',
                 border: '1px solid #000',
                 borderRadius: '4px',
                 textDecoration: 'none',
@@ -214,10 +218,14 @@ function UlozenoWhiteFooter() {
                 textTransform: 'uppercase',
                 backgroundColor: '#fff',
                 cursor: 'pointer',
-                display: 'block'
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minWidth: '212px',
+                height: '40px'
               }}
             >
-              ZAVOLEJTE NÁM
+              ZAVOLEJTE NÁM +420 775 181 107
             </a>
           </div>
         </div>
@@ -364,11 +372,15 @@ function UlozenoWhiteFooter() {
                 textTransform: 'uppercase',
                 backgroundColor: '#fff',
                 cursor: 'pointer',
-                display: 'block',
-                textAlign: 'center'
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                textAlign: 'center',
+                minWidth: '212px',
+                height: '40px'
               }}
             >
-              WHATSAPP
+              WHATSAPP +420 775 181 107
             </a>
             <a
               href="tel:+420775181107"
@@ -384,11 +396,15 @@ function UlozenoWhiteFooter() {
                 textTransform: 'uppercase',
                 backgroundColor: '#fff',
                 cursor: 'pointer',
-                display: 'block',
-                textAlign: 'center'
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                textAlign: 'center',
+                minWidth: '212px',
+                height: '40px'
               }}
             >
-              ZAVOLEJTE NÁM
+              ZAVOLEJTE NÁM +420 775 181 107
             </a>
           </div>
         </div>
