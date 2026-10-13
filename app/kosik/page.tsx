@@ -1259,62 +1259,72 @@ export default function CartPage() {
                 padding: '24px',
                 width: '1426px',
                 boxSizing: 'border-box',
-                alignItems: 'stretch',
+                alignItems: 'center',
                 margin: '0 auto'
               }}>
-                <button
-                  onClick={() => router.push('/pokladna')}
-                  style={{
-                    width: '748px',
-                    height: '40px',
-                    backgroundColor: '#000',
-                    border: '1px solid #000',
-                    borderRadius: '4px',
-                    fontSize: '12px',
-                    fontWeight: 400,
-                    textTransform: 'uppercase',
-                    cursor: 'pointer',
-                    color: '#fff',
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    transition: 'all 0.2s ease',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: '0'
-                  }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#333'; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#000'; }}
-                >
-                  PŘEJÍT K POKLADNĚ ({items.length})
-                </button>
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '8px',
+                  alignItems: 'center',
+                  width: '100%'
+                }}>
+                  <button
+                    onClick={() => router.push('/pokladna')}
+                    style={{
+                      width: '100%',
+                      maxWidth: '748px',
+                      height: '40px',
+                      backgroundColor: '#000',
+                      border: '1px solid #000',
+                      borderRadius: '4px',
+                      fontSize: '12px',
+                      fontWeight: 400,
+                      textTransform: 'uppercase',
+                      cursor: 'pointer',
+                      color: '#fff',
+                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                      transition: 'all 0.2s ease',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      padding: '0'
+                    }}
+                    onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#333'; }}
+                    onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#000'; }}
+                  >
+                    PŘEJÍT K POKLADNĚ ({items.length})
+                  </button>
 
-                <button
-                  onClick={() => router.push('/pokladna?payment=gopay')}
-                  style={{
-                    width: '748px',
-                    height: '40px',
-                    backgroundColor: '#fff',
-                    border: '1px solid #000',
-                    borderRadius: '4px',
-                    fontSize: '12px',
-                    fontWeight: 400,
-                    textTransform: 'uppercase',
-                    cursor: 'pointer',
-                    color: '#000',
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '8px',
-                    transition: 'all 0.2s ease',
-                    padding: '0'
-                  }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5'; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#fff'; }}
-                >
-                  <img src="https://cdnweb.fakturoid.cz/images/articles/2015/10/gopay-logo.png" alt="GoPay" style={{ height: '20px', width: 'auto', objectFit: 'contain', flexShrink: 0 }} />
-                  GOPAY
-                </button>
+                  <button
+                    onClick={() => router.push('/pokladna?payment=gopay')}
+                    style={{
+                      width: '100%',
+                      maxWidth: '748px',
+                      height: '40px',
+                      backgroundColor: '#fff',
+                      border: '1px solid #000',
+                      borderRadius: '4px',
+                      fontSize: '12px',
+                      fontWeight: 400,
+                      textTransform: 'uppercase',
+                      cursor: 'pointer',
+                      color: '#000',
+                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                      transition: 'all 0.2s ease',
+                      padding: '0'
+                    }}
+                    onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5'; }}
+                    onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#fff'; }}
+                  >
+                    <img src="https://cdnweb.fakturoid.cz/images/articles/2015/10/gopay-logo.png" alt="GoPay" style={{ height: '20px', width: 'auto', objectFit: 'contain', flexShrink: 0 }} />
+                    GOPAY
+                  </button>
+                </div>
 
                 <p style={{
                   fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -1324,7 +1334,7 @@ export default function CartPage() {
                   lineHeight: '1.3',
                   margin: '8px 0 0 0',
                   textAlign: 'center',
-                  width: '748px'
+                  maxWidth: '748px'
                 }}>
                   Odesláním této objednávky souhlasíte s našimi{' '}
                   <a href="https://www.ufosport.cz/faq" target="_blank" rel="noopener noreferrer" style={{ color: '#000', textDecoration: 'underline' }}>
