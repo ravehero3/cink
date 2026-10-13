@@ -320,7 +320,7 @@ export default function CartPage() {
                 </h3>
               </div>
               
-              <div style={{ position: 'relative', width: '100%', height: '280px' }}>
+              <div style={{ position: 'relative', width: '100%', height: '1000px' }}>
                 {emptyVybranoCanScrollLeft && (
                   <button
                     onClick={() => {
@@ -513,7 +513,7 @@ export default function CartPage() {
                 </h3>
               </div>
               
-              <div style={{ position: 'relative', width: '100%', height: '280px' }}>
+              <div style={{ position: 'relative', width: '100%', height: '1000px' }}>
                 {recentlyViewedCanScrollLeft && (
                   <button
                     onClick={() => {
@@ -750,28 +750,6 @@ export default function CartPage() {
       `}</style>
       <div className="min-h-screen bg-white flex flex-col relative">
         <div className="flex-1 flex flex-col relative w-full">
-          <div className="hidden md:block" style={{
-            position: 'absolute',
-            left: '50%',
-            marginLeft: '-713px',
-            top: 0,
-            bottom: 0,
-            width: '1px',
-            backgroundColor: '#000',
-            zIndex: 25,
-            pointerEvents: 'none'
-          }} />
-          <div className="hidden md:block" style={{
-            position: 'absolute',
-            left: '50%',
-            marginLeft: '713px',
-            top: 0,
-            bottom: 0,
-            width: '1px',
-            backgroundColor: '#000',
-            zIndex: 25,
-            pointerEvents: 'none'
-          }} />
 
           <div className="w-full md:w-[1426px]" style={{ position: 'relative', margin: '0 auto', height: '226px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
             <h1 className="text-center uppercase" style={{
