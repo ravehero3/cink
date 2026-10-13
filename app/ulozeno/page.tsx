@@ -244,10 +244,11 @@ function UlozenoWhiteFooter() {
                 textTransform: 'uppercase',
                 backgroundColor: '#fff',
                 cursor: 'pointer',
-                display: 'inline-flex',
+                display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                height: '40px'
+                height: '40px',
+                whiteSpace: 'nowrap'
               }}
             >
               WHATSAPP +420 775 181 107
@@ -266,7 +267,7 @@ function UlozenoWhiteFooter() {
                 textTransform: 'uppercase',
                 backgroundColor: '#fff',
                 cursor: 'pointer',
-                display: 'inline-flex',
+                display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 height: '40px',
