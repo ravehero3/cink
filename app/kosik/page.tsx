@@ -771,7 +771,6 @@ export default function CartPage() {
             justifyContent: 'flex-start',
             textAlign: 'center',
             gap: '12px',
-            borderRight: '1px solid #000',
             paddingLeft: '24px',
             paddingRight: '24px'
           }}>
@@ -805,7 +804,6 @@ export default function CartPage() {
             justifyContent: 'flex-start',
             textAlign: 'center',
             gap: '12px',
-            borderRight: '1px solid #000',
             paddingLeft: '24px',
             paddingRight: '24px'
           }}>
@@ -1286,7 +1284,6 @@ export default function CartPage() {
             justifyContent: 'flex-start',
             textAlign: 'center',
             gap: '12px',
-            borderRight: '1px solid #000',
             paddingLeft: '24px',
             paddingRight: '24px'
           }}>
@@ -1320,7 +1317,6 @@ export default function CartPage() {
             justifyContent: 'flex-start',
             textAlign: 'center',
             gap: '12px',
-            borderRight: '1px solid #000',
             paddingLeft: '24px',
             paddingRight: '24px'
           }}>
