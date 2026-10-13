@@ -201,6 +201,11 @@ export default function CartPage() {
   if (items.length === 0) {
     return (
       <div className="min-h-screen bg-white flex flex-col relative">
+        <style>{`
+          .carousel-container:hover .carousel-arrow {
+            opacity: 1 !important;
+          }
+        `}</style>
         {/* Header */}
         <div className="w-full md:w-[1426px]" style={{ position: 'relative', margin: '0 auto', height: '226px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
           <h1 className="text-center uppercase" style={{
@@ -304,7 +309,7 @@ export default function CartPage() {
         {selectedProducts.length > 0 && (
           <>
             {/* Desktop */}
-            <div className="hidden md:flex" style={{ flexDirection: 'column', borderTop: '1px solid #000', borderBottom: '1px solid #000', position: 'relative', width: '100%', minHeight: '0', group: 'group' }}>
+            <div className="hidden md:flex" style={{ flexDirection: 'column', borderTop: '1px solid #000', borderBottom: '1px solid #000', position: 'relative', width: '100%', minHeight: '0' }}>
               <div style={{ height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderBottom: '1px solid #000', flexShrink: 0 }}>
                 <h3 style={{
                   fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -320,7 +325,7 @@ export default function CartPage() {
                 </h3>
               </div>
               
-              <div style={{ position: 'relative', width: '100%', height: '1000px' }} className="group">
+              <div style={{ position: 'relative', width: '100%', height: '1000px' }} className="carousel-container">
                 {emptyVybranoCanScrollLeft && (
                   <button
                     onClick={() => {
@@ -337,7 +342,7 @@ export default function CartPage() {
                       opacity: 0,
                       transition: 'opacity 0.2s ease'
                     }}
-                    className="group-hover:opacity-100"
+                  className="carousel-arrow"
                   >
                     <svg style={{ width: '14px', height: '14px', stroke: '#000', fill: 'none' }} viewBox="0 0 24 24" strokeWidth="2">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -360,7 +365,7 @@ export default function CartPage() {
                       opacity: 0,
                       transition: 'opacity 0.2s ease'
                     }}
-                    className="group-hover:opacity-100"
+                  className="carousel-arrow"
                   >
                     <svg style={{ width: '14px', height: '14px', stroke: '#000', fill: 'none' }} viewBox="0 0 24 24" strokeWidth="2">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
@@ -503,7 +508,7 @@ export default function CartPage() {
         {recentlyViewed.length > 0 && (
           <>
             {/* Desktop */}
-            <div className="hidden md:flex" style={{ flexDirection: 'column', borderTop: '1px solid #000', borderBottom: '1px solid #000', position: 'relative', width: '100%', minHeight: '0', group: 'group' }}>
+            <div className="hidden md:flex" style={{ flexDirection: 'column', borderTop: '1px solid #000', borderBottom: '1px solid #000', position: 'relative', width: '100%', minHeight: '0' }}>
               <div style={{ height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderBottom: '1px solid #000', flexShrink: 0 }}>
                 <h3 style={{
                   fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -519,7 +524,7 @@ export default function CartPage() {
                 </h3>
               </div>
               
-              <div style={{ position: 'relative', width: '100%', height: '1000px' }} className="group">
+              <div style={{ position: 'relative', width: '100%', height: '1000px' }} className="carousel-container">
                 {recentlyViewedCanScrollLeft && (
                   <button
                     onClick={() => {
