@@ -308,9 +308,9 @@ export default function CartPage() {
         {selectedProducts.length > 0 && (
           <>
             {/* Desktop VYBRÁNO PRO VÁS Section - 4.5 products visible across whole width */}
-            <div className="hidden md:flex" style={{ flexDirection: 'column', borderTop: '1px solid #000', borderBottom: '1px solid #000', position: 'relative', width: '100%' }}>
+            <div className="hidden md:flex" style={{ flexDirection: 'column', borderTop: '1px solid #000', borderBottom: '1px solid #000', position: 'relative', width: '100%', minHeight: 'auto', maxHeight: '340px' }}>
               {/* Title row with line below */}
-              <div style={{ height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderBottom: '1px solid #000' }}>
+              <div style={{ height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderBottom: '1px solid #000', flexShrink: 0 }}>
                 <h3 style={{
                   fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontSize: '13px',
@@ -326,7 +326,7 @@ export default function CartPage() {
               </div>
               
               {/* Products carousel container with arrows */}
-              <div style={{ position: 'relative', width: '100%' }}>
+              <div style={{ position: 'relative', width: '100%', flex: 1, minHeight: 0 }}>
                 {/* Left arrow */}
                 {emptyVybranoCanScrollLeft && (
                   <button
@@ -387,19 +387,20 @@ export default function CartPage() {
                     cursor: 'grab', 
                     userSelect: 'none', 
                     WebkitUserSelect: 'none', 
-                    width: '100%' 
+                    width: '100%',
+                    height: '100%'
                   }} 
                   className="select-none"
                 >
                   {selectedProducts.map((product, index) => (
-                    <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(100% / 4.5)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
+                    <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(100% / 4.5)', scrollSnapAlign: 'start', scrollSnapStop: 'always', minHeight: 0 }}>
                       {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
                       <Link
                         href={`/produkty/${product.slug}`}
-                        style={{ display: 'flex', flexDirection: 'column', width: '100%', padding: '20px 16px', textDecoration: 'none' }}
+                        style={{ display: 'flex', flexDirection: 'column', width: '100%', padding: '16px 12px', textDecoration: 'none' }}
                         className="hover:opacity-80 transition-opacity"
                       >
-                        <div style={{ position: 'relative', width: '100%', aspectRatio: '1 / 1', backgroundColor: '#ffffff', overflow: 'hidden', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <div style={{ position: 'relative', width: '100%', aspectRatio: '1 / 1', backgroundColor: '#ffffff', overflow: 'hidden', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 0 }}>
                           {product.image && (
                             <img
                               src={product.image}
@@ -415,11 +416,11 @@ export default function CartPage() {
                         </div>
                         <h4 style={{
                           fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                          fontSize: '13px',
+                          fontSize: '11px',
                           fontWeight: 700,
                           textTransform: 'uppercase',
                           marginTop: 0,
-                          marginBottom: '4px',
+                          marginBottom: '2px',
                           letterSpacing: '0.03em',
                           fontStretch: 'condensed',
                           color: '#000000',
@@ -430,23 +431,23 @@ export default function CartPage() {
                         </h4>
                         <p style={{
                           fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                          fontSize: '11px',
+                          fontSize: '10px',
                           fontWeight: 400,
                           lineHeight: '1.2',
                           color: '#000000',
-                          margin: '0 0 6px 0',
+                          margin: '0 0 4px 0',
                           textAlign: 'center'
                         }}>{product.price} Kč</p>
                         <div style={{
                           fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                          fontSize: '11px',
+                          fontSize: '10px',
                           fontWeight: 400,
                           lineHeight: '1.2',
                           color: '#000000',
                           textDecoration: 'underline',
                           textAlign: 'center'
                         }}>
-                          Přidat do košíku
+                          Přidat
                         </div>
                       </Link>
                     </div>
@@ -507,9 +508,9 @@ export default function CartPage() {
         {recentlyViewed.length > 0 && (
           <>
             {/* Desktop PROHLÍŽELI JSTE Section - 4.5 products visible across whole width */}
-            <div className="hidden md:flex" style={{ flexDirection: 'column', borderTop: '1px solid #000', borderBottom: '1px solid #000', marginTop: selectedProducts.length > 0 ? '-1px' : '0', position: 'relative', width: '100%' }}>
+            <div className="hidden md:flex" style={{ flexDirection: 'column', borderTop: '1px solid #000', borderBottom: '1px solid #000', marginTop: selectedProducts.length > 0 ? '-1px' : '0', position: 'relative', width: '100%', minHeight: 'auto', maxHeight: '340px' }}>
               {/* Title row with line below */}
-              <div style={{ height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderBottom: '1px solid #000' }}>
+              <div style={{ height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderBottom: '1px solid #000', flexShrink: 0 }}>
                 <h3 style={{
                   fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontSize: '13px',
@@ -525,7 +526,7 @@ export default function CartPage() {
               </div>
               
               {/* Products carousel container with arrows */}
-              <div style={{ position: 'relative', width: '100%' }}>
+              <div style={{ position: 'relative', width: '100%', flex: 1, minHeight: 0 }}>
                 {/* Left arrow */}
                 {recentlyViewedCanScrollLeft && (
                   <button
@@ -586,19 +587,20 @@ export default function CartPage() {
                     cursor: 'grab', 
                     userSelect: 'none', 
                     WebkitUserSelect: 'none', 
-                    width: '100%' 
+                    width: '100%',
+                    height: '100%'
                   }} 
                   className="select-none"
                 >
                   {recentlyViewed.map((product, index) => (
-                    <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(100% / 4.5)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
+                    <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(100% / 4.5)', scrollSnapAlign: 'start', scrollSnapStop: 'always', minHeight: 0 }}>
                       {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
                       <Link
                         href={`/produkty/${product.slug}`}
-                        style={{ display: 'flex', flexDirection: 'column', width: '100%', padding: '20px 16px', textDecoration: 'none' }}
+                        style={{ display: 'flex', flexDirection: 'column', width: '100%', padding: '16px 12px', textDecoration: 'none' }}
                         className="hover:opacity-80 transition-opacity"
                       >
-                        <div style={{ position: 'relative', width: '100%', aspectRatio: '1 / 1', backgroundColor: '#ffffff', overflow: 'hidden', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <div style={{ position: 'relative', width: '100%', aspectRatio: '1 / 1', backgroundColor: '#ffffff', overflow: 'hidden', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 0 }}>
                           {product.image && (
                             <img
                               src={product.image}
@@ -614,11 +616,11 @@ export default function CartPage() {
                         </div>
                         <h4 style={{
                           fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                          fontSize: '13px',
+                          fontSize: '11px',
                           fontWeight: 700,
                           textTransform: 'uppercase',
                           marginTop: 0,
-                          marginBottom: '4px',
+                          marginBottom: '2px',
                           letterSpacing: '0.03em',
                           fontStretch: 'condensed',
                           color: '#000000',
@@ -629,23 +631,23 @@ export default function CartPage() {
                         </h4>
                         <p style={{
                           fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                          fontSize: '11px',
+                          fontSize: '10px',
                           fontWeight: 400,
                           lineHeight: '1.2',
                           color: '#000000',
-                          margin: '0 0 6px 0',
+                          margin: '0 0 4px 0',
                           textAlign: 'center'
                         }}>{product.price} Kč</p>
                         <div style={{
                           fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                          fontSize: '11px',
+                          fontSize: '10px',
                           fontWeight: 400,
                           lineHeight: '1.2',
                           color: '#000000',
                           textDecoration: 'underline',
                           textAlign: 'center'
                         }}>
-                          Přidat do košíku
+                          Přidat
                         </div>
                       </Link>
                     </div>
@@ -927,467 +929,6 @@ export default function CartPage() {
         </div>
       </div>
 
-
-      <div className="hidden md:flex" style={{
-        width: '100%',
-        maxWidth: '1426px',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        borderTop: '1px solid #000',
-        borderBottom: '1px solid #000',
-        flexDirection: 'column',
-        height: '684px'
-      }}>
-        <div style={{
-          maxWidth: '1426px',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          paddingLeft: '16px',
-          paddingRight: '16px',
-          width: '100%',
-          paddingTop: '2px',
-          paddingBottom: '2px',
-          textAlign: 'center',
-          borderBottom: '1px solid #000'
-        }}>
-          <h2 style={{
-            fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-            fontSize: '13px',
-            fontWeight: 700,
-            textTransform: 'uppercase',
-            letterSpacing: '0.03em',
-            fontStretch: 'condensed',
-            margin: '0',
-            color: '#000'
-          }}>
-            VYBRÁNO PRO VÁS
-          </h2>
-        </div>
-        
-        {/* Products container with arrows */}
-        <div style={{ display: 'flex', position: 'relative', flex: 1, minHeight: '0', width: '100%' }}>
-          {/* Left arrow */}
-          <button
-            onClick={() => {
-              if (vybrranoRef.current) {
-                const productWidth = vybrranoRef.current.scrollWidth / selectedProducts.length;
-                vybrranoRef.current.scrollBy({
-                  left: -productWidth,
-                  behavior: 'smooth'
-                });
-              }
-            }}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '24px',
-              height: '24px',
-              border: '1px solid #000',
-              borderRadius: '4px',
-              backgroundColor: '#fff',
-              cursor: 'pointer',
-              padding: '0',
-              flex: '0 0 auto',
-              position: 'absolute',
-              left: '24px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              zIndex: 10
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5';
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.backgroundColor = '#fff';
-            }}
-          >
-            <svg style={{ width: '14px', height: '14px', stroke: '#000', fill: 'none' }} viewBox="0 0 24 24" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          
-          {/* Right arrow */}
-          <button
-            onClick={() => {
-              if (vybrranoRef.current) {
-                const productWidth = vybrranoRef.current.scrollWidth / selectedProducts.length;
-                vybrranoRef.current.scrollBy({
-                  left: productWidth,
-                  behavior: 'smooth'
-                });
-              }
-            }}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '24px',
-              height: '24px',
-              border: '1px solid #000',
-              borderRadius: '4px',
-              backgroundColor: '#fff',
-              cursor: 'pointer',
-              padding: '0',
-              flex: '0 0 auto',
-              position: 'absolute',
-              right: '24px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              zIndex: 10
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5';
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.backgroundColor = '#fff';
-            }}
-          >
-            <svg style={{ width: '14px', height: '14px', stroke: '#000', fill: 'none' }} viewBox="0 0 24 24" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-          
-          {/* Horizontal scroll container */}
-          <div 
-            ref={vybrranoRef}
-            style={{
-              display: 'flex',
-              overflowX: 'auto',
-              overflowY: 'hidden',
-              gap: '0',
-              paddingLeft: '0',
-              paddingRight: '0',
-              scrollBehavior: 'smooth',
-              WebkitOverflowScrolling: 'touch',
-              scrollbarWidth: 'none',
-              scrollSnapType: 'x mandatory',
-              cursor: 'grab',
-              userSelect: 'none',
-              WebkitUserSelect: 'none',
-              flex: '1',
-              minHeight: '0',
-              maxWidth: '1426px',
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              width: '100%'
-            }}
-          >
-            {selectedProducts.map((product, index) => (
-              <div key={product.id} style={{ display: 'flex', flex: '0 0 calc(30% - 0.3px)', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
-                {index > 0 && <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />}
-                <Link
-                  href={`/produkty/${product.slug}`}
-                  style={{ display: 'flex', flexDirection: 'column', width: '100%', paddingTop: '4px', paddingBottom: '4px', paddingLeft: '12px', paddingRight: '12px', textDecoration: 'none' }}
-                  className="hover:opacity-80 transition-opacity"
-                >
-                  <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', backgroundColor: '#f5f5f5', overflow: 'hidden', marginBottom: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    {product.image && (
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                        loading="lazy"
-                        onError={(e) => {
-                          const img = e.target as HTMLImageElement;
-                          img.style.display = 'none';
-                        }}
-                      />
-                    )}
-                  </div>
-                  <h4 style={{
-                    fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '10px',
-                    fontWeight: 700,
-                    textTransform: 'uppercase',
-                    marginTop: 0,
-                    marginBottom: '2px',
-                    letterSpacing: '0.03em',
-                    fontStretch: 'condensed',
-                    color: '#000000',
-                    lineHeight: '1.1',
-                    textAlign: 'center'
-                  }}>
-                    {product.name}
-                  </h4>
-                  <p style={{
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '9px',
-                    fontWeight: 400,
-                    lineHeight: '1.1',
-                    color: '#000000',
-                    margin: '0 0 2px 0',
-                    textAlign: 'center'
-                  }}>{product.price} Kč</p>
-                  <div style={{
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '10px',
-                    fontWeight: 400,
-                    lineHeight: '1.1',
-                    color: '#000000',
-                    textDecoration: 'underline',
-                    textAlign: 'center'
-                  }}>
-                    Přidat
-                  </div>
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-
-      
-      
-      {/* Mobile VYBRÁNO PRO VÁS Section - only visible on mobile */}
-      {items.length > 0 && selectedProducts.length > 0 && (
-        <div className="md:hidden flex flex-col" style={{
-          borderTop: '1px solid #000',
-          borderBottom: '1px solid #000',
-          minHeight: '0',
-          position: 'relative'
-        }}>
-          {/* Title row with line below */}
-          <div style={{
-            paddingTop: '4px',
-            paddingBottom: '4px',
-            paddingLeft: '4px',
-            paddingRight: '4px',
-            textAlign: 'center',
-            borderBottom: '1px solid #000'
-          }}>
-            <h3 style={{
-              fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-              fontSize: '12px',
-              fontWeight: 700,
-              textTransform: 'uppercase',
-              letterSpacing: '0.03em',
-              fontStretch: 'condensed',
-              margin: '0',
-              textAlign: 'center'
-            }}>
-              VYBRÁNO PRO VÁS
-            </h3>
-          </div>
-          
-          {/* Products container with arrows */}
-          <div style={{
-            display: 'flex',
-            position: 'relative',
-            flex: 1,
-            minHeight: '200px',
-            width: '100%',
-            alignItems: 'center',
-            padding: '0',
-            boxSizing: 'border-box',
-            gap: '0'
-          }}>
-            {/* Left arrow */}
-            <button
-              onClick={() => {
-                if (vybrranoRef.current) {
-                  vybrranoRef.current.scrollBy({
-                    left: -(vybrranoRef.current.clientWidth * 0.5),
-                    behavior: 'smooth'
-                  });
-                }
-              }}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '28px',
-                height: '28px',
-                border: '1px solid #000',
-                borderRadius: '4px',
-                backgroundColor: '#fff',
-                cursor: 'pointer',
-                padding: '0',
-                flex: '0 0 auto',
-                position: 'absolute',
-                left: '6px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                zIndex: 10
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5';
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.backgroundColor = '#fff';
-              }}
-            >
-              <svg style={{ width: '14px', height: '14px', stroke: '#000', fill: 'none' }} viewBox="0 0 24 24" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-            
-            {/* Right arrow */}
-            <button
-              onClick={() => {
-                if (vybrranoRef.current) {
-                  vybrranoRef.current.scrollBy({
-                    left: vybrranoRef.current.clientWidth * 0.5,
-                    behavior: 'smooth'
-                  });
-                }
-              }}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '28px',
-                height: '28px',
-                border: '1px solid #000',
-                borderRadius: '4px',
-                backgroundColor: '#fff',
-                cursor: 'pointer',
-                padding: '0',
-                flex: '0 0 auto',
-                position: 'absolute',
-                right: '6px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                zIndex: 10
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5';
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.backgroundColor = '#fff';
-              }}
-            >
-              <svg style={{ width: '14px', height: '14px', stroke: '#000', fill: 'none' }} viewBox="0 0 24 24" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-            
-            {/* Products scroll container - shows ~1.5 products */}
-            <div
-              ref={vybrranoRef}
-              style={{
-                display: 'flex',
-                overflowX: 'auto',
-                overflowY: 'hidden',
-                gap: '0',
-                paddingLeft: '0',
-                paddingRight: '0',
-                paddingTop: '6px',
-                paddingBottom: '6px',
-                scrollBehavior: 'smooth',
-                WebkitOverflowScrolling: 'touch',
-                scrollbarWidth: 'none',
-                scrollSnapType: 'x mandatory',
-                flex: 1,
-                cursor: 'grab',
-                minHeight: '0',
-                userSelect: 'none',
-                WebkitUserSelect: 'none',
-                width: '100%',
-                minWidth: '0'
-              }}
-              className="select-none"
-            >
-              {selectedProducts.map((product, index) => (
-                <div
-                  key={product.id}
-                  style={{
-                    display: 'flex',
-                    flex: '0 0 calc(50% - 14px)',
-                    scrollSnapAlign: 'start',
-                    scrollSnapStop: 'always'
-                  }}
-                >
-                  {index > 0 && (
-                    <div style={{ width: '1px', backgroundColor: '#000', flex: '0 0 1px' }} />
-                  )}
-                  <a
-                    href={`/produkty/${product.slug}`}
-                    style={{
-                      textDecoration: 'none',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      width: '100%',
-                      paddingTop: '0',
-                      paddingBottom: '0',
-                      paddingLeft: '6px',
-                      paddingRight: '6px',
-                      flex: 1
-                    }}
-                  >
-                    <div
-                      style={{
-                        position: 'relative',
-                        width: '100%',
-                        paddingBottom: '100%',
-                        backgroundColor: '#f5f5f5',
-                        overflow: 'hidden',
-                        marginBottom: '6px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                      }}
-                    >
-                      {product.image && (
-                        <img
-                          src={product.image}
-                          alt={product.name}
-                          style={{
-                            position: 'absolute',
-                            top: '0',
-                            left: '0',
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'cover',
-                            display: 'block'
-                          }}
-                          loading="lazy"
-                          onError={(e) => {
-                            const img = e.target as HTMLImageElement;
-                            img.style.display = 'none';
-                          }}
-                        />
-                      )}
-                    </div>
-                    <h4
-                      style={{
-                        fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                        fontSize: '11px',
-                        fontWeight: 700,
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.03em',
-                        fontStretch: 'condensed',
-                        margin: '0 0 2px 0',
-                        textAlign: 'center',
-                        color: '#000',
-                        lineHeight: '1.2'
-                      }}
-                    >
-                      {product.name}
-                    </h4>
-                    <p
-                      style={{
-                        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                        fontSize: '10px',
-                        fontWeight: 400,
-                        margin: '0',
-                        textAlign: 'center',
-                        color: '#000',
-                        lineHeight: '1.2'
-                      }}
-                    >
-                      {product.price} Kč
-                    </p>
-                  </a>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-      
-      
       {items.length > 0 && (
         <div className="flex flex-col md:hidden" style={{
           width: '100%',
@@ -1483,27 +1024,31 @@ export default function CartPage() {
 
           {/* Desktop Checkout Buttons - Sticky at bottom of viewport, sticks above footer */}
           {items.length > 0 && (
-            <div className="hidden md:flex sticky bottom-0 z-20" style={{
+            <div className="hidden md:flex sticky bottom-0 z-50" style={{
               width: '100%',
               justifyContent: 'center',
-              padding: '16px',
+              padding: '0 16px',
               boxSizing: 'border-box',
               backgroundColor: '#fff',
               borderTop: '1px solid #000',
-              boxShadow: '0 -4px 12px rgba(0, 0, 0, 0.05)'
+              height: '230px',
+              display: 'flex',
+              alignItems: 'center'
             }}>
               <div style={{
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '0',
-                width: '552px'
+                width: '748px',
+                height: '100%',
+                justifyContent: 'center'
               }}>
                 {/* Desktop Price Section */}
                 <div style={{
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '8px',
-                  padding: '24px 0',
+                  paddingBottom: '24px',
                   borderBottom: '1px solid #000'
                 }}>
                   <div style={{
@@ -1538,13 +1083,13 @@ export default function CartPage() {
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '6px',
-                  padding: '24px 0'
+                  paddingTop: '24px'
                 }}>
                   <button
                     onClick={() => router.push('/pokladna')}
                     style={{
                       width: '100%',
-                      height: '42px',
+                      height: '40px',
                       backgroundColor: '#000',
                       border: '1px solid #000',
                       borderRadius: '4px',
@@ -1569,7 +1114,7 @@ export default function CartPage() {
                     onClick={() => router.push('/pokladna?payment=gopay')}
                     style={{
                       width: '100%',
-                      height: '42px',
+                      height: '40px',
                       backgroundColor: '#fff',
                       border: '1px solid #000',
                       borderRadius: '4px',
@@ -1942,6 +1487,7 @@ export default function CartPage() {
         onConfirm={handleConfirmDelete}
         productName={deleteItemData?.productName || ''}
         productSize={deleteItemData?.size || ''}
+        style={{ zIndex: 100 }}
       />
       </div>
     </>
