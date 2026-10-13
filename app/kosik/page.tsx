@@ -1186,44 +1186,37 @@ export default function CartPage() {
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                padding: '24px 16px',
+                padding: '24px',
                 borderBottom: '1px solid #000',
-                width: '100%',
-                boxSizing: 'border-box'
+                width: '748px',
+                boxSizing: 'border-box',
+                margin: '0 auto'
               }}>
                 <div style={{
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '8px',
-                  flex: '1'
+                  gap: '8px'
                 }}>
                   <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '4px'
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '11px',
+                    color: '#999'
                   }}>
-                    <div style={{
-                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '11px',
-                      color: '#999'
-                    }}>
-                      CENA ZA DOPRAVU
-                    </div>
-                    <div style={{
-                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontSize: '12px',
-                      fontWeight: 400,
-                      color: '#000'
-                    }}>
-                      79 Kč
-                    </div>
+                    CENA ZA DOPRAVU
+                  </div>
+                  <div style={{
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '12px',
+                    fontWeight: 400,
+                    color: '#000'
+                  }}>
+                    79 Kč
                   </div>
                 </div>
                 <div style={{
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '4px',
-                  flex: '1',
+                  gap: '8px',
                   alignItems: 'flex-end'
                 }}>
                   <div style={{
@@ -1251,15 +1244,16 @@ export default function CartPage() {
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '8px',
-                padding: '24px 16px',
-                width: '100%',
+                padding: '24px',
+                width: '748px',
                 boxSizing: 'border-box',
+                margin: '0 auto',
                 alignItems: 'center'
               }}>
                 <button
                   onClick={() => router.push('/pokladna')}
                   style={{
-                    width: '100%',
+                    width: '748px',
                     height: '40px',
                     backgroundColor: '#000',
                     border: '1px solid #000',
@@ -1273,7 +1267,8 @@ export default function CartPage() {
                     transition: 'all 0.2s ease',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center'
+                    justifyContent: 'center',
+                    padding: '0'
                   }}
                   onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#333'; }}
                   onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#000'; }}
@@ -1284,7 +1279,7 @@ export default function CartPage() {
                 <button
                   onClick={() => router.push('/pokladna?payment=gopay')}
                   style={{
-                    width: '100%',
+                    width: '748px',
                     height: '40px',
                     backgroundColor: '#fff',
                     border: '1px solid #000',
@@ -1299,7 +1294,8 @@ export default function CartPage() {
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: '8px',
-                    transition: 'all 0.2s ease'
+                    transition: 'all 0.2s ease',
+                    padding: '0'
                   }}
                   onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5'; }}
                   onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#fff'; }}
@@ -1316,7 +1312,7 @@ export default function CartPage() {
                   lineHeight: '1.3',
                   margin: '8px 0 0 0',
                   textAlign: 'center',
-                  maxWidth: '100%'
+                  width: '748px'
                 }}>
                   Odesláním této objednávky souhlasíte s našimi{' '}
                   <a href="https://www.ufosport.cz/faq" target="_blank" rel="noopener noreferrer" style={{ color: '#000', textDecoration: 'underline' }}>
