@@ -1248,7 +1248,6 @@ export default function CartPage() {
                 textTransform: 'uppercase',
                 backgroundColor: '#fff',
                 cursor: 'pointer',
-                display: 'block',
                 minWidth: '212px',
                 height: '40px',
                 display: 'flex',
