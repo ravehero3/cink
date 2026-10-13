@@ -1,52 +1,4 @@
-          <div style={{ display: 'flex', gap: '8px', flexDirection: 'column', width: '100%' }}
-          >
-            <a
-              href="https://wa.me/420775181107"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '11px',
-                fontWeight: 400,
-                padding: '8px 12px',
-                border: '1px solid #000',
-                borderRadius: '4px',
-                textDecoration: 'none',
-                color: '#000',
-                textTransform: 'uppercase',
-                backgroundColor: '#fff',
-                cursor: 'pointer',
-                display: 'block',
-                textAlign: 'center',
-                height: '40px',
-                lineHeight: '24px'
-              }}
-            >
-              WHATSAPP
-            </a>
-            <a
-              href="tel:+420775181107"
-              style={{
-                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '11px',
-                fontWeight: 400,
-                padding: '8px 12px',
-                border: '1px solid #000',
-                borderRadius: '4px',
-                textDecoration: 'none',
-                color: '#000',
-                textTransform: 'uppercase',
-                backgroundColor: '#fff',
-                cursor: 'pointer',
-                display: 'block',
-                textAlign: 'center',
-                height: '40px',
-                lineHeight: '24px'
-              }}
-            >
-              ZAVOLEJTE NÁM
-            </a>
-          </div>'use client';
+'use client';
 
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useSession, signIn } from 'next-auth/react';
@@ -224,8 +176,7 @@ function UlozenoWhiteFooter() {
               display: 'flex',
               gap: '8px',
               flexDirection: 'column',
-              width: 'auto',
-              alignItems: 'center'
+              width: '100%'
             }}
           >
             <a
@@ -259,7 +210,7 @@ function UlozenoWhiteFooter() {
                 fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                 fontSize: '11px',
                 fontWeight: 400,
-                padding: '8px 16px',
+                padding: '8px 12px',
                 border: '1px solid #000',
                 borderRadius: '4px',
                 textDecoration: 'none',
@@ -270,8 +221,8 @@ function UlozenoWhiteFooter() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                height: '40px',
-                whiteSpace: 'nowrap'
+                minWidth: '212px',
+                height: '40px'
               }}
             >
               ZAVOLEJTE NÁM +420 775 181 107
