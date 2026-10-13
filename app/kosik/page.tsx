@@ -946,7 +946,6 @@ export default function CartPage() {
         }
       `}</style>
       <div className="min-h-screen bg-white flex flex-col relative">
-        {/* Vertical lines at 1426px width center */}
         <div className="hidden md:block" style={{
           position: 'fixed',
           left: '50%',
@@ -956,8 +955,7 @@ export default function CartPage() {
           width: '1px',
           backgroundColor: '#000',
           zIndex: 5,
-          pointerEvents: 'none',
-          height: '100vh'
+          pointerEvents: 'none'
         }} />
         <div className="hidden md:block" style={{
           position: 'fixed',
@@ -968,8 +966,7 @@ export default function CartPage() {
           width: '1px',
           backgroundColor: '#000',
           zIndex: 5,
-          pointerEvents: 'none',
-          height: '100vh'
+          pointerEvents: 'none'
         }} />
         
         <div className="flex-1 flex flex-col relative w-full">
@@ -1177,7 +1174,6 @@ export default function CartPage() {
               padding: '0',
               boxSizing: 'border-box',
               backgroundColor: '#fff',
-              borderTop: '1px solid #000',
               display: 'flex',
               flexDirection: 'column',
               position: 'relative'
@@ -1185,7 +1181,7 @@ export default function CartPage() {
               {/* Top border line 1426px wide */}
               <div style={{
                 position: 'absolute',
-                top: '-1px',
+                top: '0',
                 left: '50%',
                 transform: 'translateX(-50%)',
                 width: '1426px',
@@ -1193,6 +1189,31 @@ export default function CartPage() {
                 backgroundColor: '#000',
                 zIndex: 10
               }} />
+              
+              {/* Left vertical line */}
+              <div style={{
+                position: 'absolute',
+                left: '50%',
+                marginLeft: '-713px',
+                top: 0,
+                bottom: 0,
+                width: '1px',
+                backgroundColor: '#000',
+                zIndex: 8
+              }} />
+              
+              {/* Right vertical line */}
+              <div style={{
+                position: 'absolute',
+                left: '50%',
+                marginLeft: '713px',
+                top: 0,
+                bottom: 0,
+                width: '1px',
+                backgroundColor: '#000',
+                zIndex: 8
+              }} />
+              
               {/* Price Section */}
               <div style={{
                 display: 'flex',
@@ -1202,7 +1223,9 @@ export default function CartPage() {
                 borderBottom: '1px solid #000',
                 width: '1426px',
                 boxSizing: 'border-box',
-                margin: '0 auto'
+                margin: '0 auto',
+                position: 'relative',
+                zIndex: 9
               }}>
                 <div style={{
                   display: 'flex',
@@ -1260,7 +1283,9 @@ export default function CartPage() {
                 width: '1426px',
                 boxSizing: 'border-box',
                 alignItems: 'center',
-                margin: '0 auto'
+                margin: '0 auto',
+                position: 'relative',
+                zIndex: 9
               }}>
                 <div style={{
                   display: 'flex',
