@@ -1487,7 +1487,6 @@ export default function CartPage() {
         onConfirm={handleConfirmDelete}
         productName={deleteItemData?.productName || ''}
         productSize={deleteItemData?.size || ''}
-        style={{ zIndex: 100 }}
       />
       </div>
     </>
