@@ -927,6 +927,7 @@ export default function CartPage() {
             </div>
           </div>
         </div>
+        </div>
       </div>
     );
   }
@@ -946,6 +947,30 @@ export default function CartPage() {
         }
       `}</style>
       <div className="min-h-screen bg-white flex flex-col relative">
+        {/* Vertical lines at 1426px width center */}
+        <div className="hidden md:block" style={{
+          position: 'fixed',
+          left: '50%',
+          marginLeft: '-713px',
+          top: 0,
+          bottom: 0,
+          width: '1px',
+          backgroundColor: '#000',
+          zIndex: 5,
+          pointerEvents: 'none'
+        }} />
+        <div className="hidden md:block" style={{
+          position: 'fixed',
+          left: '50%',
+          marginLeft: '713px',
+          top: 0,
+          bottom: 0,
+          width: '1px',
+          backgroundColor: '#000',
+          zIndex: 5,
+          pointerEvents: 'none'
+        }} />
+        
         <div className="flex-1 flex flex-col relative w-full">
 
           <div className="w-full md:w-[1426px]" style={{ position: 'relative', margin: '0 auto', height: '226px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
@@ -1029,7 +1054,7 @@ export default function CartPage() {
             </div>
           </div>
 
-          <div className="flex-1 flex justify-center w-full" style={{ marginBottom: '40px', borderLeft: '1px solid #000', borderRight: '1px solid #000' }}>
+          <div className="flex-1 flex justify-center w-full" style={{ marginBottom: '40px' }}>
             <div style={{ position: 'relative', margin: '0 auto', padding: '0', boxSizing: 'border-box', width: '100%', maxWidth: '1426px' }}>
               {items.map((item, index) => (
                 <CartLineItem
