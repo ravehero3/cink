@@ -187,7 +187,7 @@ function UlozenoWhiteFooter() {
                 fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                 fontSize: '11px',
                 fontWeight: 400,
-                padding: '8px 12px',
+                padding: '8px 16px',
                 border: '1px solid #000',
                 borderRadius: '4px',
                 textDecoration: 'none',
@@ -198,8 +198,8 @@ function UlozenoWhiteFooter() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                minWidth: '212px',
-                height: '40px'
+                height: '40px',
+                whiteSpace: 'nowrap'
               }}
             >
               WHATSAPP +420 775 181 107

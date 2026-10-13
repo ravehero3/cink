@@ -1151,180 +1151,181 @@ export default function CartPage() {
           backgroundColor: '#fff',
           borderTop: '1px solid #000',
           zIndex: 30,
-        height: '328px',
-        display: 'flex',
-        flexDirection: 'row',
-        padding: '24px 0',
-        boxSizing: 'border-box'
-      }}>
-        {/* Left Section - Payment Methods */}
-        <div className="footer-section" style={{
-          flex: '1',
+          height: '328px',
           display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'flex-start',
-          textAlign: 'center',
-          gap: '12px',
-          borderRight: '1px solid #000',
-          paddingLeft: '24px',
-          paddingRight: '24px'
+          flexDirection: 'row',
+          padding: '24px 0',
+          boxSizing: 'border-box'
         }}>
-          <h3 style={{
-            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-            fontSize: '12px',
-            fontWeight: 700,
-            textTransform: 'uppercase',
-            letterSpacing: '0.03em',
-            margin: '0',
-            color: '#000'
-          }}>
-            BEZPEČNĚ PŘIJÍMÁME
-          </h3>
-          <div style={{
+          {/* Left Section - Payment Methods */}
+          <div className="footer-section" style={{
+            flex: '1',
             display: 'flex',
-            gap: '8px',
+            flexDirection: 'column',
             alignItems: 'center',
-            justifyContent: 'center',
-            flexWrap: 'wrap'
-          }}>
-            <img src="/payment-methods.jpg" alt="Payment Methods" style={{ height: '96px', width: 'auto' }} />
-          </div>
-        </div>
-
-        {/* Middle Section - Customer Support */}
-        <div className="footer-section" style={{
-          flex: '1',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'flex-start',
-          textAlign: 'center',
-          gap: '12px',
-          borderRight: '1px solid #000',
-          paddingLeft: '24px',
-          paddingRight: '24px'
-        }}>
-          <h3 style={{
-            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-            fontSize: '12px',
-            fontWeight: 700,
-            textTransform: 'uppercase',
-            letterSpacing: '0.03em',
-            margin: '0',
-            color: '#000'
-          }}>
-            ZÁKAZNICKÁ PODPORA
-          </h3>
-          <p style={{
-            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-            fontSize: '11px',
-            fontWeight: 400,
-            margin: '0 0 8px 0',
-            color: '#000',
-            lineHeight: '1.3'
-          }}>
-            Naše zákaznická podpora je vám k dispozici od Pondělí do Soboty 9:30 - 19:00
-          </p>
-          <div style={{
-            display: 'flex',
-            gap: '8px',
-            flexDirection: 'column',
-            width: '100%'
-          }}>
-            <a
-              href="https://wa.me/420775181107"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '11px',
-                fontWeight: 400,
-                padding: '8px 12px',
-                border: '1px solid #000',
-                borderRadius: '4px',
-                textDecoration: 'none',
-                color: '#000',
-                textTransform: 'uppercase',
-                backgroundColor: '#fff',
-                cursor: 'pointer',
-                minWidth: '212px',
-                height: '40px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
-            >
-              WHATSAPP +420 775 181 107
-            </a>
-            <a
-              href="tel:+420775181107"
-              style={{
-                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                fontSize: '11px',
-                fontWeight: 400,
-                padding: '8px 12px',
-                border: '1px solid #000',
-                borderRadius: '4px',
-                textDecoration: 'none',
-                color: '#000',
-                textTransform: 'uppercase',
-                backgroundColor: '#fff',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                minWidth: '212px',
-                height: '40px'
-              }}
-            >
-              ZAVOLEJTE NÁM +420 775 181 107
-            </a>
-          </div>
-        </div>
-
-        {/* Right Section - Shipping Info */}
-        <div style={{
-          flex: '1',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'flex-start',
-          textAlign: 'center',
-          gap: '12px',
-          paddingLeft: '24px',
-          paddingRight: '24px'
-        }}>
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '6px',
-            alignItems: 'center'
+            justifyContent: 'flex-start',
+            textAlign: 'center',
+            gap: '12px',
+            borderRight: '1px solid #000',
+            paddingLeft: '24px',
+            paddingRight: '24px'
           }}>
             <h3 style={{
               fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
               fontSize: '12px',
               fontWeight: 700,
-              margin: '0',
-              color: '#000',
               textTransform: 'uppercase',
-              letterSpacing: '0.03em'
+              letterSpacing: '0.03em',
+              margin: '0',
+              color: '#000'
             }}>
-              BEZPEČNÁ PLATBA A RYCHLÉ DORUČENÍ
+              BEZPEČNĚ PŘIJÍMÁME
+            </h3>
+            <div style={{
+              display: 'flex',
+              gap: '8px',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexWrap: 'wrap'
+            }}>
+              <img src="/payment-methods.jpg" alt="Payment Methods" style={{ height: '96px', width: 'auto' }} />
+            </div>
+          </div>
+
+          {/* Middle Section - Customer Support */}
+          <div className="footer-section" style={{
+            flex: '1',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            textAlign: 'center',
+            gap: '12px',
+            borderRight: '1px solid #000',
+            paddingLeft: '24px',
+            paddingRight: '24px'
+          }}>
+            <h3 style={{
+              fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+              fontSize: '12px',
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              letterSpacing: '0.03em',
+              margin: '0',
+              color: '#000'
+            }}>
+              ZÁKAZNICKÁ PODPORA
             </h3>
             <p style={{
               fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
               fontSize: '11px',
               fontWeight: 400,
-              margin: '0',
+              margin: '0 0 8px 0',
               color: '#000',
               lineHeight: '1.3'
             }}>
-              Využijte bezpečnou platbu přes GoPay nebo Apple Pay
+              Naše zákaznická podpora je vám k dispozici od Pondělí do Soboty 9:30 - 19:00
             </p>
+            <div style={{
+              display: 'flex',
+              gap: '8px',
+              flexDirection: 'column',
+              width: 'auto',
+              alignItems: 'center'
+            }}>
+              <a
+                href="https://wa.me/420775181107"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '11px',
+                  fontWeight: 400,
+                  padding: '8px 16px',
+                  border: '1px solid #000',
+                  borderRadius: '4px',
+                  textDecoration: 'none',
+                  color: '#000',
+                  textTransform: 'uppercase',
+                  backgroundColor: '#fff',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  height: '40px',
+                  whiteSpace: 'nowrap'
+                }}
+              >
+                WHATSAPP +420 775 181 107
+              </a>
+              <a
+                href="tel:+420775181107"
+                style={{
+                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                  fontSize: '11px',
+                  fontWeight: 400,
+                  padding: '8px 16px',
+                  border: '1px solid #000',
+                  borderRadius: '4px',
+                  textDecoration: 'none',
+                  color: '#000',
+                  textTransform: 'uppercase',
+                  backgroundColor: '#fff',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  height: '40px',
+                  whiteSpace: 'nowrap'
+                }}
+              >
+                ZAVOLEJTE NÁM +420 775 181 107
+              </a>
+            </div>
+          </div>
+
+          {/* Right Section - Shipping Info */}
+          <div style={{
+            flex: '1',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            textAlign: 'center',
+            gap: '12px',
+            paddingLeft: '24px',
+            paddingRight: '24px'
+          }}>
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '6px',
+              alignItems: 'center'
+            }}>
+              <h3 style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '12px',
+                fontWeight: 700,
+                margin: '0',
+                color: '#000',
+                textTransform: 'uppercase',
+                letterSpacing: '0.03em'
+              }}>
+                BEZPEČNÁ PLATBA A RYCHLÉ DORUČENÍ
+              </h3>
+              <p style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                fontSize: '11px',
+                fontWeight: 400,
+                margin: '0',
+                color: '#000',
+                lineHeight: '1.3'
+              }}>
+                Využijte bezpečnou platbu přes GoPay nebo Apple Pay
+              </p>
+            </div>
           </div>
         </div>
-      </div>
 
       {/* Mobile Footer Sections - Full width on mobile */}
       {items.length > 0 && (
