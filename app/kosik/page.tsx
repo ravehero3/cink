@@ -1188,9 +1188,8 @@ export default function CartPage() {
                 alignItems: 'center',
                 padding: '24px',
                 borderBottom: '1px solid #000',
-                width: '748px',
-                boxSizing: 'border-box',
-                margin: '0 auto'
+                width: '1426px',
+                boxSizing: 'border-box'
               }}>
                 <div style={{
                   display: 'flex',
@@ -1245,10 +1244,9 @@ export default function CartPage() {
                 flexDirection: 'column',
                 gap: '8px',
                 padding: '24px',
-                width: '748px',
+                width: '1426px',
                 boxSizing: 'border-box',
-                margin: '0 auto',
-                alignItems: 'center'
+                alignItems: 'stretch'
               }}>
                 <button
                   onClick={() => router.push('/pokladna')}
