@@ -977,25 +977,6 @@ export default function CartPage() {
             zIndex: 10,
             width: '100%'
           }}>
-            <div style={{
-              position: 'absolute',
-              top: 0,
-              left: 'calc(50% - 713px)',
-              width: '1426px',
-              height: '1px',
-              backgroundColor: '#000',
-              zIndex: 1
-            }} />
-            
-            <div style={{
-              position: 'absolute',
-              bottom: 0,
-              left: 'calc(50% - 713px)',
-              width: '1426px',
-              height: '1px',
-              backgroundColor: '#000',
-              zIndex: 1
-            }} />
             <div className="group" style={{ position: 'relative', zIndex: 2 }}>
               <Link
                 href="/ulozeno"
