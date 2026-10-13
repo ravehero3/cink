@@ -449,7 +449,7 @@ export default function CartPage() {
                           textDecoration: 'underline',
                           textAlign: 'center'
                         }}>
-                          Přidat
+                          Přidat do košíku
                         </div>
                       </Link>
                     </div>
@@ -648,7 +648,7 @@ export default function CartPage() {
                           textDecoration: 'underline',
                           textAlign: 'center'
                         }}>
-                          Přidat
+                          Přidat do košíku
                         </div>
                       </Link>
                     </div>
@@ -1029,7 +1029,7 @@ export default function CartPage() {
             </div>
           </div>
 
-          <div className="flex-1 flex justify-center w-full" style={{ marginBottom: '40px' }}>
+          <div className="flex-1 flex justify-center w-full" style={{ marginBottom: '40px', borderLeft: '1px solid #000', borderRight: '1px solid #000' }}>
             <div style={{ position: 'relative', margin: '0 auto', padding: '0', boxSizing: 'border-box', width: '100%', maxWidth: '1426px' }}>
               {items.map((item, index) => (
                 <CartLineItem
@@ -1152,6 +1152,8 @@ export default function CartPage() {
               boxSizing: 'border-box',
               backgroundColor: '#fff',
               borderTop: '1px solid #000',
+              borderLeft: '1px solid #000',
+              borderRight: '1px solid #000',
               height: '230px',
               display: 'flex',
               alignItems: 'center'
