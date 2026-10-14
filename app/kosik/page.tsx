@@ -958,30 +958,30 @@ export default function CartPage() {
         }
       `}</style>
       <div className="min-h-screen bg-white flex flex-col relative">
-        <div className="hidden md:block" style={{
-          position: 'fixed',
-          left: '50%',
-          marginLeft: '-713px',
-          top: 0,
-          bottom: 0,
-          width: '1px',
-          backgroundColor: '#000',
-          zIndex: 5,
-          pointerEvents: 'none'
-        }} />
-        <div className="hidden md:block" style={{
-          position: 'fixed',
-          left: '50%',
-          marginLeft: '713px',
-          top: 0,
-          bottom: 0,
-          width: '1px',
-          backgroundColor: '#000',
-          zIndex: 5,
-          pointerEvents: 'none'
-        }} />
-        
         <div className="flex-1 flex flex-col relative w-full">
+          {/* Vertical lines at product edges (1426px wide, centered) - touch footer top */}
+          <div className="hidden md:block" style={{
+            position: 'absolute',
+            left: '50%',
+            marginLeft: '-713px',
+            top: 0,
+            bottom: 0,
+            width: '1px',
+            backgroundColor: '#000',
+            zIndex: 5,
+            pointerEvents: 'none'
+          }} />
+          <div className="hidden md:block" style={{
+            position: 'absolute',
+            left: '50%',
+            marginLeft: '713px',
+            top: 0,
+            bottom: 0,
+            width: '1px',
+            backgroundColor: '#000',
+            zIndex: 5,
+            pointerEvents: 'none'
+          }} />
 
           <div className="w-full md:w-[1426px]" style={{ position: 'relative', margin: '0 auto', height: '226px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
             <h1 className="text-center uppercase" style={{
@@ -1316,7 +1316,6 @@ export default function CartPage() {
               padding: '0',
               boxSizing: 'border-box',
               backgroundColor: '#fff',
-              display: 'flex',
               flexDirection: 'column',
               position: 'relative'
             }}>

@@ -245,8 +245,8 @@ export default function ProductCard({
                       textDecorationThickness: '1px',
                       textUnderlineOffset: '2px',
                       position: 'relative',
-                      background: isAvailable && isHoveredSize ? 'white' : 'transparent',
-                      border: isAvailable && isHoveredSize ? '1px solid black' : '1px solid transparent',
+                      background: isHoveredSize ? 'white' : 'transparent',
+                      border: isHoveredSize ? '1px solid black' : '1px solid transparent',
                       cursor: 'pointer',
                       WebkitTextStroke: '0.5px white',
                       paintOrder: 'stroke fill'

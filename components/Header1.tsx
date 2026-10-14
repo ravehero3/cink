@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useCartStore } from '@/lib/cart-store';
 import { useSavedProductsStore } from '@/lib/saved-products-store';
@@ -26,6 +26,7 @@ const fallbackCategories: Category[] = [
 ];
 
 export default function Header1() {
+  const router = useRouter();
   const [isHydrated, setIsHydrated] = useState(false);
   const [categories, setCategories] = useState<Category[]>(fallbackCategories);
   const { data: session } = useSession();
@@ -99,6 +100,28 @@ export default function Header1() {
               >
                 <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </button>
+            </div>
+          )}
+
+          {/* Desktop Pokladna: Left Back Arrow */}
+          {isPokladna && (
+            <div className="hidden md:flex items-center" style={{ paddingLeft: '12px' }}>
+              <button 
+                onClick={() => {
+                  if (typeof window !== 'undefined' && window.history.length > 1) {
+                    router.back();
+                  } else {
+                    router.push('/kosik');
+                  }
+                }}
+                className="hover:opacity-70 transition-opacity"
+                aria-label="Zpět"
+                style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0', background: 'none', border: 'none', cursor: 'pointer', color: '#000000' }}
+              >
+                <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M19 12H5m7 7-7-7 7-7" />
                 </svg>
               </button>
             </div>
