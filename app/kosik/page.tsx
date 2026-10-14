@@ -1241,8 +1241,8 @@ export default function CartPage() {
               }}>
                 <div style={{
                   display: 'flex',
-                  flexDirection: 'column',
-                  gap: '8px'
+                  alignItems: 'center',
+                  gap: '16px'
                 }}>
                   <div style={{
                     fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -1262,9 +1262,8 @@ export default function CartPage() {
                 </div>
                 <div style={{
                   display: 'flex',
-                  flexDirection: 'column',
-                  gap: '8px',
-                  alignItems: 'flex-end'
+                  alignItems: 'center',
+                  gap: '16px'
                 }}>
                   <div style={{
                     fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
