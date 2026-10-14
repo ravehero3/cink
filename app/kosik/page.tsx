@@ -1097,8 +1097,9 @@ export default function CartPage() {
               backgroundColor: '#fff',
               borderTop: '1px solid #000',
               borderBottom: '1px solid #000',
-              gap: '12px',
-              display: 'flex'
+              gap: '16px',
+              display: 'flex',
+              flexDirection: 'column'
             }}>
               <h2 style={{
                 margin: '0',
@@ -1133,7 +1134,7 @@ export default function CartPage() {
                     whiteSpace: 'normal'
                   }}
                 >
-                  Máte slevo vý kód?
+                  Máte slevový kód?
                 </button>
               </h2>
 
@@ -1142,7 +1143,9 @@ export default function CartPage() {
                 <div style={{
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '4px'
+                  gap: '8px',
+                  paddingBottom: '12px',
+                  borderBottom: '1px solid #000'
                 }}>
                   <label style={{
                     fontSize: '11px',
@@ -1150,10 +1153,10 @@ export default function CartPage() {
                     color: '#757575',
                     fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontWeight: 400,
-                    marginBottom: '4px',
+                    marginBottom: '0',
                     whiteSpace: 'nowrap'
                   }}>
-                    Slevo vý kód*
+                    Slevový kód*
                   </label>
                   <div style={{
                     display: 'flex',
@@ -1220,36 +1223,88 @@ export default function CartPage() {
               <div style={{
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '8px',
-                paddingTop: '12px',
-                borderTop: '1px solid #000'
+                gap: '12px'
               }}>
                 <div style={{
                   display: 'flex',
-                  justifyContent: 'space-between',
-                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '11.5px',
-                  color: '#000',
-                  letterSpacing: '0.04em',
-                  textTransform: 'uppercase',
-                  fontWeight: 400
+                  flexDirection: 'column',
+                  gap: '8px'
                 }}>
-                  <span>Cena za dopravu</span>
-                  <span>79 Kč</span>
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '11.5px',
+                    color: '#000',
+                    letterSpacing: '0.04em',
+                    textTransform: 'uppercase',
+                    fontWeight: 400
+                  }}>
+                    <span>Cena za dopravu</span>
+                    <span>79 Kč</span>
+                  </div>
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '13px',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.03em',
+                    color: '#000'
+                  }}>
+                    <span>Předpokládaná cena</span>
+                    <span>{discountAmount > 0 ? (total + 79 - discountAmount).toLocaleString('cs-CZ', { maximumFractionDigits: 0 }) : (total + 79).toLocaleString('cs-CZ', { maximumFractionDigits: 0 })} Kč</span>
+                  </div>
                 </div>
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '13px',
-                  fontWeight: 700,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.03em',
-                  color: '#000'
-                }}>
-                  <span>Předpokládaná cena</span>
-                  <span>{discountAmount > 0 ? (total + 79 - discountAmount).toLocaleString('cs-CZ', { maximumFractionDigits: 0 }) : (total + 79).toLocaleString('cs-CZ', { maximumFractionDigits: 0 })} Kč</span>
-                </div>
+
+                <button
+                  onClick={() => router.push('/pokladna')}
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    backgroundColor: '#000',
+                    border: '1px solid #000',
+                    borderRadius: '4px',
+                    fontSize: '12px',
+                    fontWeight: 400,
+                    textTransform: 'uppercase',
+                    cursor: 'pointer',
+                    color: '#fff',
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    lineHeight: '1.2',
+                    boxSizing: 'border-box'
+                  }}
+                >
+                  PŘEJÍT K POKLADNĚ ({items.length})
+                </button>
+
+                <button
+                  onClick={() => router.push('/pokladna?payment=gopay')}
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    backgroundColor: '#fff',
+                    border: '1px solid #000',
+                    borderRadius: '4px',
+                    fontSize: '12px',
+                    fontWeight: 400,
+                    textTransform: 'uppercase',
+                    cursor: 'pointer',
+                    color: '#000',
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    minHeight: '40px',
+                    lineHeight: '1.2',
+                    boxSizing: 'border-box'
+                  }}
+                >
+                  <img src="https://cdnweb.fakturoid.cz/images/articles/2015/10/gopay-logo.png" alt="GoPay" style={{ height: '18px', width: 'auto', objectFit: 'contain', flexShrink: 0 }} />
+                  GOPAY
+                </button>
               </div>
             </div>
           )}
