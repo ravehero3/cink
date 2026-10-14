@@ -1097,85 +1097,160 @@ export default function CartPage() {
               backgroundColor: '#fff',
               borderTop: '1px solid #000',
               borderBottom: '1px solid #000',
-              gap: '12px'
+              gap: '12px',
+              display: 'flex'
             }}>
+              <h2 style={{
+                margin: '0',
+                fontSize: '13.5px',
+                lineHeight: '16px',
+                fontWeight: 400,
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                color: '#000'
+              }}>
+                <button
+                  onClick={() => {
+                    setShowPromoCode(!showPromoCode);
+                    if (!showPromoCode) {
+                      setTimeout(() => {
+                        const input = document.getElementById('promo-code-input-mobile') as HTMLInputElement;
+                        if (input) input.focus();
+                      }, 0);
+                    }
+                  }}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    padding: '0',
+                    fontSize: '13.5px',
+                    lineHeight: '16px',
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    color: '#000',
+                    cursor: 'pointer',
+                    fontWeight: 400,
+                    textDecoration: 'underline',
+                    textAlign: 'left',
+                    whiteSpace: 'normal'
+                  }}
+                >
+                  Máte slevo vý kód?
+                </button>
+              </h2>
+
+              {/* Promo Code Form - Collapsible Mobile */}
+              {showPromoCode && (
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '4px'
+                }}>
+                  <label style={{
+                    fontSize: '11px',
+                    lineHeight: '14px',
+                    color: '#757575',
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontWeight: 400,
+                    marginBottom: '4px',
+                    whiteSpace: 'nowrap'
+                  }}>
+                    Slevo vý kód*
+                  </label>
+                  <div style={{
+                    display: 'flex',
+                    gap: '8px',
+                    flexDirection: 'column'
+                  }}>
+                    <input
+                      id="promo-code-input-mobile"
+                      type="text"
+                      value={promoCode}
+                      onChange={(e) => setPromoCode(e.target.value)}
+                      placeholder="Zadějte kód"
+                      style={{
+                        width: '100%',
+                        height: '36px',
+                        padding: '0 12px',
+                        border: '1px solid #000',
+                        borderRadius: '3px',
+                        outline: 'none',
+                        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                        fontSize: '12px',
+                        fontWeight: 400,
+                        color: '#000',
+                        backgroundColor: '#fff',
+                        boxSizing: 'border-box'
+                      }}
+                    />
+                    <button
+                      onClick={handleApplyPromoCode}
+                      disabled={!promoCode.trim()}
+                      style={{
+                        width: '100%',
+                        height: '36px',
+                        border: 'none',
+                        borderRadius: '3px',
+                        backgroundColor: promoCode.trim() ? '#000' : '#e6e6e6',
+                        color: promoCode.trim() ? '#fff' : '#999',
+                        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                        fontSize: '10.5px',
+                        fontWeight: 400,
+                        letterSpacing: '0.06em',
+                        textTransform: 'uppercase',
+                        cursor: promoCode.trim() ? 'pointer' : 'not-allowed',
+                        transition: 'all 0.2s ease',
+                        padding: '0'
+                      }}
+                      onMouseEnter={(e) => {
+                        if (promoCode.trim()) {
+                          (e.currentTarget as HTMLElement).style.backgroundColor = '#333';
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (promoCode.trim()) {
+                          (e.currentTarget as HTMLElement).style.backgroundColor = '#000';
+                        }
+                      }}
+                    >
+                      Uplatnit
+                    </button>
+                  </div>
+                </div>
+              )}
+
               <div style={{
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '8px',
-                paddingBottom: '12px',
-                borderBottom: '1px solid #000'
+                paddingTop: '12px',
+                borderTop: '1px solid #000'
               }}>
                 <div style={{
                   display: 'flex',
                   justifyContent: 'space-between',
                   fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '12px',
-                  color: '#999'
+                  fontSize: '11.5px',
+                  color: '#000',
+                  letterSpacing: '0.04em',
+                  textTransform: 'uppercase',
+                  fontWeight: 400
                 }}>
-                  <span>CENA ZA DOPRAVU</span>
+                  <span>Cena za dopravu</span>
                   <span>79 Kč</span>
                 </div>
                 <div style={{
                   display: 'flex',
                   justifyContent: 'space-between',
                   fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSize: '15px',
+                  fontSize: '13px',
                   fontWeight: 700,
                   textTransform: 'uppercase',
                   letterSpacing: '0.03em',
                   color: '#000'
                 }}>
-                  <span>PŘEDPOKLÁDANÁ CENA</span>
-                  <span>{(total + 79).toLocaleString('cs-CZ', { maximumFractionDigits: 0 })} Kč</span>
+                  <span>Předpokládaná cena</span>
+                  <span>{discountAmount > 0 ? (total + 79 - discountAmount).toLocaleString('cs-CZ', { maximumFractionDigits: 0 }) : (total + 79).toLocaleString('cs-CZ', { maximumFractionDigits: 0 })} Kč</span>
                 </div>
               </div>
-
-              <button
-                onClick={() => router.push('/pokladna')}
-                style={{
-                  width: '100%',
-                  padding: '12px',
-                  backgroundColor: '#000',
-                  border: '1px solid #000',
-                  borderRadius: '4px',
-                  fontSize: '12px',
-                  fontWeight: 400,
-                  textTransform: 'uppercase',
-                  cursor: 'pointer',
-                  color: '#fff',
-                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  lineHeight: '1.2'
-                }}
-              >
-                PŘEJÍT K POKLADNĚ ({items.length})
-              </button>
-
-              <button
-                onClick={() => router.push('/pokladna?payment=gopay')}
-                style={{
-                  width: '100%',
-                  padding: '12px',
-                  backgroundColor: '#fff',
-                  border: '1px solid #000',
-                  borderRadius: '4px',
-                  fontSize: '12px',
-                  fontWeight: 400,
-                  textTransform: 'uppercase',
-                  cursor: 'pointer',
-                  color: '#000',
-                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px',
-                  minHeight: '38px',
-                  lineHeight: '1.2'
-                }}
-              >
-                <img src="https://cdnweb.fakturoid.cz/images/articles/2015/10/gopay-logo.png" alt="GoPay" style={{ height: '18px', width: 'auto', objectFit: 'contain', flexShrink: 0 }} />
-                GOPAY
-              </button>
             </div>
           )}
 
