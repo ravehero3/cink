@@ -1269,7 +1269,7 @@ export default function CartPage() {
                       whiteSpace: 'nowrap'
                     }}
                   >
-                    Máte slevo vý kód?
+                    Máte slevový kód?
                   </button>
                 </h2>
 
