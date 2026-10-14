@@ -357,7 +357,7 @@ export default function NewEmailCampaignPage() {
               <p className="text-xs uppercase tracking-wider font-bold">Náhled e-mailu</p>
               {previewLoading && <div className="admin-spinner" style={{ width: 14, height: 14 }} />}
             </div>
-            <div className="overflow-y-auto bg-white flex-1 relative" style={{ minHeight: 600 }}>
+            <div className="overflow-y-auto bg-[#0a0a0a] flex-1 relative" style={{ minHeight: 600 }}>
               {previewHtml ? (
                 <iframe
                   srcDoc={previewHtml}
@@ -366,7 +366,7 @@ export default function NewEmailCampaignPage() {
                 />
               ) : (
                 <div className="flex items-center justify-center h-full">
-                  <span className="admin-sub" style={{ margin: 0 }}>Začněte psát obsah pro zobrazení náhledu</span>
+                  <span className="admin-sub" style={{ margin: 0, color: '#888' }}>Začněte psát obsah pro zobrazení náhledu</span>
                 </div>
               )}
             </div>

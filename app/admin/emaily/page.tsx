@@ -1195,7 +1195,7 @@ function PreviewFrame({
         </div>
       )}
 
-      <div className="overflow-y-auto bg-white" style={{ minHeight: 680 }}>
+      <div className="overflow-y-auto bg-[#0a0a0a]" style={{ minHeight: 680 }}>
         <div
           className="mx-auto"
           style={{
@@ -1207,7 +1207,7 @@ function PreviewFrame({
           {previewLoading && (
             <div className="flex items-center justify-center gap-3" style={{ height: 680 }}>
               <div className="admin-spinner" />
-              <span className="admin-sub" style={{ margin: 0 }}>Načítám náhled…</span>
+              <span className="admin-sub" style={{ margin: 0, color: '#aaa' }}>Načítám náhled…</span>
             </div>
           )}
           <iframe
@@ -1218,8 +1218,8 @@ function PreviewFrame({
             style={{
               height: 680,
               display: 'block',
-              border: viewMode === 'mobile' ? '1px solid #000' : 'none',
-              outline: editMode ? '2px solid #000' : 'none',
+              border: viewMode === 'mobile' ? '1px solid #333' : 'none',
+              outline: editMode ? '2px solid #555' : 'none',
               outlineOffset: '-2px',
             }}
             title={`Náhled: ${title}`}

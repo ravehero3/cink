@@ -341,13 +341,13 @@ function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplatePar
                   const imgTag = item.image
                     ? `<td valign="middle" style="padding-right:12px;">
                         ${itemHref ? `<a href="${itemHref}" target="_blank" style="display:block;border:0;line-height:0;">` : ''}
-                        <img src="${toAbsoluteUrl(item.image)}" width="48" height="48" alt="${item.name}" style="display:block;width:48px;height:48px;object-fit:cover;border:1px solid #000000;" />
+                        <img src="${toAbsoluteUrl(item.image)}" width="48" height="48" alt="${item.name}" style="display:block;width:48px;height:48px;object-fit:cover;border:1px solid #333333;" />
                         ${itemHref ? `</a>` : ''}
                       </td>`
                     : '';
                   const nameTag = itemHref
-                    ? `<a href="${itemHref}" target="_blank" style="color:#000000;text-decoration:underline;"><span style="font-weight:600;">${item.name}</span></a>`
-                    : `<span style="font-weight:600;">${item.name}</span>`;
+                    ? `<a href="${itemHref}" target="_blank" style="color:#ffffff;text-decoration:underline;"><span style="font-weight:600;">${item.name}</span></a>`
+                    : `<span style="font-weight:600;color:#ffffff;">${item.name}</span>`;
 
                   return `
                     <tr>
@@ -552,7 +552,7 @@ function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplatePar
                           ${
                             item.image
                               ? `<td valign="middle" style="padding-right:12px;">
-                                  <img src="${item.image}" width="48" height="48" alt="${item.name}" style="display:block;width:48px;height:48px;object-fit:cover;border:1px solid #000000;" />
+                                  <img src="${item.image}" width="48" height="48" alt="${item.name}" style="display:block;width:48px;height:48px;object-fit:cover;border:1px solid #333333;" />
                                 </td>`
                               : ''
                           }

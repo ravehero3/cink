@@ -74,13 +74,32 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    if (body.infoHtml !== undefined || body.header2Title !== undefined) {
+      const { buildEmailHtml, WEBSITE_URL } = await import('@/lib/email-layout');
+      const html = buildEmailHtml({
+        subject: body.subject || 'UFO SPORT',
+        preheader: body.preheader || '',
+        header2Title: body.header2Title || '',
+        header2Subtitle: body.header2Subtitle || '',
+        infoHtml: body.infoHtml || '',
+        actionText: body.actionText || '',
+        actionButton: body.actionButton || { label: 'PŘEJÍT DO OBCHODU', href: WEBSITE_URL },
+        showBrowseAll: body.showBrowseAll !== false,
+        marketing: Boolean(body.marketing),
+        customization: body.customization,
+      });
+      return new NextResponse(html, {
+        headers: { 'Content-Type': 'text/html; charset=utf-8' },
+      });
+    }
+
     const { bodyText } = await import('@/lib/email-layout');
     const inner = bodyText(content || 'Zde bude obsah e-mailu...');
     const { html } = renderEmail('NEWSLETTER_WELCOME', { ...SAMPLE_VARS, isTest: true }, undefined);
 
     const customHtml = html.replace(
       /<td class="pad-info"[\s\S]*?<\/td>/,
-      `<td class="pad-info" height="234" align="left" valign="middle" style="height:234px;padding:0 80px;font-size:15px;line-height:20px;">${inner}</td>`
+      `<td class="pad-info" height="234" align="left" valign="middle" style="height:234px;padding:0 80px;font-size:15px;line-height:20px;background:#000000;color:#ffffff;">${inner}</td>`
     );
 
     return new NextResponse(customHtml, {
