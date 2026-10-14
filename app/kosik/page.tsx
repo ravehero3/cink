@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { useEffect, useState, useRef } from 'react';
 import CartLineItem from '@/components/CartLineItem';
 import DeleteConfirmModal from '@/components/DeleteConfirmModal';
+import AnimatedButton from '@/components/AnimatedButton';
 
 interface Product {
   id: string;
@@ -1168,7 +1169,7 @@ export default function CartPage() {
                       type="text"
                       value={promoCode}
                       onChange={(e) => setPromoCode(e.target.value)}
-                      placeholder="Zadějte kód"
+                      placeholder="zadejte kód"
                       style={{
                         width: '100%',
                         height: '36px',
@@ -1258,11 +1259,13 @@ export default function CartPage() {
                   </div>
                 </div>
 
-                <button
+                <AnimatedButton
+                  text={`PŘEJÍT K POKLADNĚ (${items.length})`}
                   onClick={() => router.push('/pokladna')}
+                  type="button"
                   style={{
                     width: '100%',
-                    padding: '12px',
+                    height: '40px',
                     backgroundColor: '#000',
                     border: '1px solid #000',
                     borderRadius: '4px',
@@ -1271,13 +1274,9 @@ export default function CartPage() {
                     textTransform: 'uppercase',
                     cursor: 'pointer',
                     color: '#fff',
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    lineHeight: '1.2',
-                    boxSizing: 'border-box'
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif'
                   }}
-                >
-                  PŘEJÍT K POKLADNĚ ({items.length})
-                </button>
+                />
 
                 <button
                   onClick={() => router.push('/pokladna?payment=gopay')}
@@ -1421,7 +1420,7 @@ export default function CartPage() {
                       marginBottom: '4px',
                       whiteSpace: 'nowrap'
                     }}>
-                      Slevo vý kód*
+                      Slevový kód*
                     </label>
                     <div style={{
                       display: 'flex',
@@ -1432,7 +1431,7 @@ export default function CartPage() {
                         type="text"
                         value={promoCode}
                         onChange={(e) => setPromoCode(e.target.value)}
-                        placeholder="Zadějte kód"
+                        placeholder="zadejte kód"
                         style={{
                           flex: '1',
                           minWidth: '0',
@@ -1557,32 +1556,25 @@ export default function CartPage() {
                   alignItems: 'center',
                   width: '100%'
                 }}>
-                  <button
+                  <AnimatedButton
+                    text={`PŘEJÍT K POKLADNĚ (${items.length})`}
                     onClick={() => router.push('/pokladna')}
-                  style={{
-                    width: '100%',
-                    maxWidth: '748px',
-                    height: '40px',
-                    backgroundColor: '#000',
-                    border: '1px solid #000',
-                    borderRadius: '4px',
-                    fontSize: '12px',
-                    fontWeight: 400,
-                    textTransform: 'uppercase',
-                    cursor: 'pointer',
-                    color: '#fff',
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    transition: 'all 0.2s ease',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: '0'
-                  }}
-                    onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#333'; }}
-                    onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#000'; }}
-                  >
-                    PŘEJÍT K POKLADNĚ ({items.length})
-                  </button>
+                    type="button"
+                    style={{
+                      width: '100%',
+                      maxWidth: '748px',
+                      height: '40px',
+                      backgroundColor: '#000',
+                      border: '1px solid #000',
+                      borderRadius: '4px',
+                      fontSize: '12px',
+                      fontWeight: 400,
+                      textTransform: 'uppercase',
+                      cursor: 'pointer',
+                      color: '#fff',
+                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif'
+                    }}
+                  />
 
                   <button
                     onClick={() => router.push('/pokladna?payment=gopay')}

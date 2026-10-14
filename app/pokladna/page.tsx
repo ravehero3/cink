@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useSession, signIn } from 'next-auth/react';
 import { useCartStore, useCartHydration } from '@/lib/cart-store';
 import { calculateShippingCost, getAmountToFreeShipping } from '@/lib/shipping';
+import AnimatedButton from '@/components/AnimatedButton';
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -998,29 +999,20 @@ export default function CheckoutPage() {
                   </div>
                 </div>
 
-                <button
+                <AnimatedButton
                   type="submit"
                   disabled={loading}
+                  loading={loading}
+                  text="PŘEJÍT K PLATBĚ"
                   style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
                     width: '100%',
                     height: '40px',
                     borderRadius: '4px',
-                    border: '1px solid #000',
                     fontSize: '13px',
-                    textTransform: 'uppercase',
                     letterSpacing: '.06em',
-                    textDecoration: 'none',
-                    background: loading ? '#808080' : '#000',
-                    color: '#fff',
-                    cursor: loading ? 'not-allowed' : 'pointer',
-                    fontWeight: 400
+                    backgroundColor: loading ? '#808080' : '#000'
                   }}
-                >
-                  {loading ? 'Zpracovávám...' : 'Přejít k platbě'}
-                </button>
+                />
               </section>
             )}
           </form>
