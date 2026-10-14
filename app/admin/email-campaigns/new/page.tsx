@@ -119,13 +119,38 @@ export default function NewEmailCampaignPage() {
     
     setSendLoading(true);
     try {
+      let finalHtml = previewHtml;
+      try {
+        const previewRes = await fetch('/api/admin/email-preview', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            subject: formData.subject,
+            preheader: formData.header2Subtitle,
+            header2Title: formData.header2Title,
+            header2Subtitle: formData.header2Subtitle,
+            infoHtml: formData.content,
+            actionText: '',
+            actionButton: { label: 'PŘEJÍT DO OBCHODU', href: process.env.NEXT_PUBLIC_SITE_URL || 'https://ufosport.cz' },
+            showBrowseAll: formData.showBrowseAll,
+            marketing: true,
+            customization: formData.storyImage ? { storyImage: formData.storyImage } : undefined,
+          }),
+        });
+        if (previewRes.ok) {
+          finalHtml = await previewRes.text();
+        }
+      } catch (err) {
+        console.warn('Failed to refresh preview html before send:', err);
+      }
+
       const res = await fetch('/api/admin/email-campaigns/send-test', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           campaignId: campaigns?.id,
           testEmail,
-          html: previewHtml,
+          html: finalHtml,
         }),
       });
       if (res.ok) {
@@ -145,13 +170,38 @@ export default function NewEmailCampaignPage() {
   const handleSendCampaign = async (scheduled = false) => {
     setSendLoading(true);
     try {
+      let finalHtml = previewHtml;
+      try {
+        const previewRes = await fetch('/api/admin/email-preview', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            subject: formData.subject,
+            preheader: formData.header2Subtitle,
+            header2Title: formData.header2Title,
+            header2Subtitle: formData.header2Subtitle,
+            infoHtml: formData.content,
+            actionText: '',
+            actionButton: { label: 'PŘEJÍT DO OBCHODU', href: process.env.NEXT_PUBLIC_SITE_URL || 'https://ufosport.cz' },
+            showBrowseAll: formData.showBrowseAll,
+            marketing: true,
+            customization: formData.storyImage ? { storyImage: formData.storyImage } : undefined,
+          }),
+        });
+        if (previewRes.ok) {
+          finalHtml = await previewRes.text();
+        }
+      } catch (err) {
+        console.warn('Failed to refresh preview html before campaign send:', err);
+      }
+
       const res = await fetch(`/api/admin/email-campaigns/${campaigns.id}/send`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           scheduled,
           scheduledFor: scheduled ? `${scheduleDate}T${scheduleTime}` : null,
-          html: previewHtml,
+          html: finalHtml,
         }),
       });
       if (res.ok) {

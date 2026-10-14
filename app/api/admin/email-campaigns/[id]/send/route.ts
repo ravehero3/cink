@@ -58,6 +58,11 @@ export async function POST(
         },
       });
     } else {
+      const finalHtml = (html || '')
+        .replace(/background:#ffffff/g, 'background:#000000')
+        .replace(/background-color:#ffffff/g, 'background-color:#000000')
+        .replace(/bgcolor="#ffffff"/g, 'bgcolor="#000000"');
+
       // Send immediately
       await Promise.all(
         recipients.map((r) =>
@@ -71,7 +76,7 @@ export async function POST(
               from: 'kampane@ufosport.cz',
               to: r.email,
               subject: campaign.subject,
-              html,
+              html: finalHtml,
             }),
           })
         )

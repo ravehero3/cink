@@ -329,45 +329,45 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
     } else if (layout === 'grid2x2') {
       // Option 2: 2x2 grid (each 300x300px square)
       innerHtml = `
-        <table class="grid" role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;border-collapse:collapse;">
+        <table class="grid" role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" bgcolor="#000000" style="width:600px;background:#000000;background-color:#000000;border-collapse:collapse;">
           <tr>
-            <td class="gcell" width="299" style="width:299px;padding:0;font-size:0;line-height:0;">${renderCell(0, 299, 300)}</td>
+            <td class="gcell" width="299" bgcolor="#000000" style="width:299px;padding:0;font-size:0;line-height:0;background:#000000;background-color:#000000;">${renderCell(0, 299, 300)}</td>
             <td width="1" bgcolor="#000000" style="width:1px;background:#000000;font-size:0;line-height:0;">&nbsp;</td>
-            <td class="gcell" width="300" style="width:300px;padding:0;font-size:0;line-height:0;">${renderCell(1, 300, 300)}</td>
+            <td class="gcell" width="300" bgcolor="#000000" style="width:300px;padding:0;font-size:0;line-height:0;background:#000000;background-color:#000000;">${renderCell(1, 300, 300)}</td>
           </tr>
           <tr><td colspan="3" height="1" bgcolor="#000000" style="height:1px;background:#000000;font-size:1px;line-height:1px;padding:0;">&nbsp;</td></tr>
           <tr>
-            <td class="gcell" width="299" style="width:299px;padding:0;font-size:0;line-height:0;">${renderCell(2, 299, 300)}</td>
+            <td class="gcell" width="299" bgcolor="#000000" style="width:299px;padding:0;font-size:0;line-height:0;background:#000000;background-color:#000000;">${renderCell(2, 299, 300)}</td>
             <td width="1" bgcolor="#000000" style="width:1px;background:#000000;font-size:0;line-height:0;">&nbsp;</td>
-            <td class="gcell" width="300" style="width:300px;padding:0;font-size:0;line-height:0;">${renderCell(3, 300, 300)}</td>
+            <td class="gcell" width="300" bgcolor="#000000" style="width:300px;padding:0;font-size:0;line-height:0;background:#000000;background-color:#000000;">${renderCell(3, 300, 300)}</td>
           </tr>
         </table>
       `;
     } else if (layout === 'bigAndTwo') {
       // Option 3: 3 photos (1 big 600x600 + 2 small 300x300 below)
       innerHtml = `
-        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;border-collapse:collapse;">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" bgcolor="#000000" style="width:600px;background:#000000;background-color:#000000;border-collapse:collapse;">
           <tr>
-            <td colspan="3" width="600" style="width:600px;padding:0;font-size:0;line-height:0;">
+            <td colspan="3" width="600" bgcolor="#000000" style="width:600px;padding:0;font-size:0;line-height:0;background:#000000;background-color:#000000;">
               ${renderCell(0, 600, 600)}
             </td>
           </tr>
           <tr><td colspan="3" height="1" bgcolor="#000000" style="height:1px;background:#000000;font-size:1px;line-height:1px;padding:0;">&nbsp;</td></tr>
           <tr>
-            <td class="gcell" width="299" style="width:299px;padding:0;font-size:0;line-height:0;">${renderCell(1, 299, 300)}</td>
+            <td class="gcell" width="299" bgcolor="#000000" style="width:299px;padding:0;font-size:0;line-height:0;background:#000000;background-color:#000000;">${renderCell(1, 299, 300)}</td>
             <td width="1" bgcolor="#000000" style="width:1px;background:#000000;font-size:0;line-height:0;">&nbsp;</td>
-            <td class="gcell" width="300" style="width:300px;padding:0;font-size:0;line-height:0;">${renderCell(2, 300, 300)}</td>
+            <td class="gcell" width="300" bgcolor="#000000" style="width:300px;padding:0;font-size:0;line-height:0;background:#000000;background-color:#000000;">${renderCell(2, 300, 300)}</td>
           </tr>
         </table>
       `;
     } else if (layout === 'twoSideBySide') {
       // Option 4: 2 square images next to each other, each 300x300px
       innerHtml = `
-        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;border-collapse:collapse;">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" bgcolor="#000000" style="width:600px;background:#000000;background-color:#000000;border-collapse:collapse;">
           <tr>
-            <td class="gcell" width="299" style="width:299px;padding:0;font-size:0;line-height:0;">${renderCell(0, 299, 300)}</td>
+            <td class="gcell" width="299" bgcolor="#000000" style="width:299px;padding:0;font-size:0;line-height:0;background:#000000;background-color:#000000;">${renderCell(0, 299, 300)}</td>
             <td width="1" bgcolor="#000000" style="width:1px;background:#000000;font-size:0;line-height:0;">&nbsp;</td>
-            <td class="gcell" width="300" style="width:300px;padding:0;font-size:0;line-height:0;">${renderCell(1, 300, 300)}</td>
+            <td class="gcell" width="300" bgcolor="#000000" style="width:300px;padding:0;font-size:0;line-height:0;background:#000000;background-color:#000000;">${renderCell(1, 300, 300)}</td>
           </tr>
         </table>
       `;
@@ -375,7 +375,7 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
 
     return `
       <tr>
-        <td style="padding:0;font-size:0;line-height:0;position:relative;">
+        <td bgcolor="#000000" style="padding:0;font-size:0;line-height:0;position:relative;background:#000000;background-color:#000000;">
           ${renderSectionControls(sectionId, `Odstranit sekci fotek (${sectionId})`, true)}
           ${innerHtml}
         </td>
@@ -542,11 +542,11 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
       id: 'footerLinks',
       html: `
         <tr>
-          <td height="188" style="height:188px;padding:0;position:relative;background:#000000;">
+          <td height="188" bgcolor="#000000" style="height:188px;padding:0;position:relative;background:#000000;background-color:#000000;">
             ${renderSectionControls('footerLinks')}
-            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;height:188px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#000000" style="width:100%;height:188px;background:#000000;background-color:#000000;">
               <tr>
-                <td class="fcol" width="299" valign="top" style="width:299px;padding:36px 0 0 40px;font-family:'Inter',Arial,Helvetica,sans-serif;">
+                <td class="fcol" width="299" valign="top" bgcolor="#000000" style="width:299px;padding:36px 0 0 40px;font-family:'Inter',Arial,Helvetica,sans-serif;background:#000000;background-color:#000000;">
                   <div style="margin:0 0 20px;font-size:15px;line-height:20px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#ffffff;">Prozkoumat více</div>
                   <div style="margin:0;font-size:15px;line-height:22px;text-transform:uppercase;"><a href="${WEBSITE_URL}/magazin" style="color:#ffffff;text-decoration:none;">Magazín</a></div>
                   <div style="margin:0;font-size:15px;line-height:22px;text-transform:uppercase;"><a href="${WEBSITE_URL}/novinky" style="color:#ffffff;text-decoration:none;">Novinky</a></div>
@@ -554,7 +554,7 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
                   <div style="margin:0;font-size:15px;line-height:22px;text-transform:uppercase;"><a href="${WEBSITE_URL}/darkove-poukazy" style="color:#ffffff;text-decoration:none;">Dárkové poukazy</a></div>
                 </td>
                 <td width="1" bgcolor="#262626" style="width:1px;background:#262626;font-size:0;line-height:0;">&nbsp;</td>
-                <td class="fcol" width="300" valign="top" style="width:300px;padding:36px 0 0 40px;font-family:'Inter',Arial,Helvetica,sans-serif;">
+                <td class="fcol" width="300" valign="top" bgcolor="#000000" style="width:300px;padding:36px 0 0 40px;font-family:'Inter',Arial,Helvetica,sans-serif;background:#000000;background-color:#000000;">
                   <div style="margin:0 0 20px;font-size:15px;line-height:20px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#ffffff;">Naše služby</div>
                   <div style="margin:0;font-size:15px;line-height:22px;text-transform:uppercase;"><a href="${WEBSITE_URL}/kontakt" style="color:#ffffff;text-decoration:none;">Kontakt</a></div>
                   <div style="margin:0;font-size:15px;line-height:22px;text-transform:uppercase;"><a href="${WEBSITE_URL}/doprava-a-platba" style="color:#ffffff;text-decoration:none;">Doprava a platba</a></div>
@@ -575,15 +575,15 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
       id: 'footerSocial',
       html: `
         <tr>
-          <td class="pad-foot" height="270" align="center" valign="middle" style="height:270px;padding:0 40px;font-family:'Inter',Arial,Helvetica,sans-serif;position:relative;background:#000000;color:#ffffff;">
+          <td class="pad-foot" height="270" align="center" valign="middle" bgcolor="#000000" style="height:270px;padding:0 40px;font-family:'Inter',Arial,Helvetica,sans-serif;position:relative;background:#000000;background-color:#000000;color:#ffffff;">
             ${renderSectionControls('footerSocial')}
-            <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 36px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" bgcolor="#000000" style="margin:0 auto 36px;background:#000000;background-color:#000000;">
               <tr>
-                <td align="center" style="padding:0 18px;"><a href="https://www.instagram.com/ufosport"><img src="https://cdn.simpleicons.org/instagram/ffffff" width="24" height="24" alt="Instagram" style="display:block;width:24px;height:24px;border:0;"></a></td>
-                <td align="center" style="padding:0 18px;"><a href="https://www.tiktok.com/@ufosport"><img src="https://cdn.simpleicons.org/tiktok/ffffff" width="24" height="24" alt="TikTok" style="display:block;width:24px;height:24px;border:0;"></a></td>
-                <td align="center" style="padding:0 18px;"><a href="https://www.ufosport.cz"><img src="${WEBSITE_URL}/ufosport-globe-icon-white.png" width="24" height="24" alt="UFO SPORT" style="display:block;width:24px;height:24px;border:0;"></a></td>
-                <td align="center" style="padding:0 18px;"><a href="https://www.youtube.com/@ufosport"><img src="https://cdn.simpleicons.org/youtube/ffffff" width="24" height="24" alt="YouTube" style="display:block;width:24px;height:24px;border:0;"></a></td>
-                <td align="center" style="padding:0 18px;"><a href="https://www.facebook.com/ufosport"><img src="https://cdn.simpleicons.org/facebook/ffffff" width="24" height="24" alt="Facebook" style="display:block;width:24px;height:24px;border:0;"></a></td>
+                <td align="center" bgcolor="#000000" style="padding:0 18px;background:#000000;background-color:#000000;"><a href="https://www.instagram.com/ufosport"><img src="https://cdn.simpleicons.org/instagram/ffffff" width="24" height="24" alt="Instagram" style="display:block;width:24px;height:24px;border:0;"></a></td>
+                <td align="center" bgcolor="#000000" style="padding:0 18px;background:#000000;background-color:#000000;"><a href="https://www.tiktok.com/@ufosport"><img src="https://cdn.simpleicons.org/tiktok/ffffff" width="24" height="24" alt="TikTok" style="display:block;width:24px;height:24px;border:0;"></a></td>
+                <td align="center" bgcolor="#000000" style="padding:0 18px;background:#000000;background-color:#000000;"><a href="https://www.ufosport.cz"><img src="${WEBSITE_URL}/ufosport-globe-icon-white.png" width="24" height="24" alt="UFO SPORT" style="display:block;width:24px;height:24px;border:0;"></a></td>
+                <td align="center" bgcolor="#000000" style="padding:0 18px;background:#000000;background-color:#000000;"><a href="https://www.youtube.com/@ufosport"><img src="https://cdn.simpleicons.org/youtube/ffffff" width="24" height="24" alt="YouTube" style="display:block;width:24px;height:24px;border:0;"></a></td>
+                <td align="center" bgcolor="#000000" style="padding:0 18px;background:#000000;background-color:#000000;"><a href="https://www.facebook.com/ufosport"><img src="https://cdn.simpleicons.org/facebook/ffffff" width="24" height="24" alt="Facebook" style="display:block;width:24px;height:24px;border:0;"></a></td>
               </tr>
             </table>
             <div style="font-size:15px;line-height:22px;font-weight:400;text-align:center;color:#ffffff;">
@@ -817,7 +817,8 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
 <body bgcolor="#000000" style="margin:0;padding:0;background:#000000;background-color:#000000;color:#ffffff;-webkit-font-smoothing:antialiased;">
 <!-- Subject: ${subject} -->
 <div style="display:none;max-height:0;overflow:hidden;opacity:0;font-size:1px;line-height:1px;color:#000000;">${preheader}</div>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#000000" style="background:#000000;background-color:#000000;width:100%;">
+<center style="width:100%;background:#000000;background-color:#000000;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#000000" style="margin:0;padding:0;background:#000000;background-color:#000000;width:100% !important;min-width:100%;">
 <tr><td align="center" bgcolor="#000000" style="padding:0;background:#000000;background-color:#000000;">
 
   <!-- Frame: 602px = 600px content + 1px frame border each side -->
@@ -828,6 +829,7 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
 
 </td></tr>
 </table>
+</center>
 </body>
 </html>`;
 }

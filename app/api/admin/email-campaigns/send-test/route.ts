@@ -14,6 +14,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing email or html' }, { status: 400 });
     }
 
+    // Ensure outbound test email has black background even if sent from a stale client cache
+    const finalHtml = html
+      .replace(/background:#ffffff/g, 'background:#000000')
+      .replace(/background-color:#ffffff/g, 'background-color:#000000')
+      .replace(/bgcolor="#ffffff"/g, 'bgcolor="#000000"');
+
     // Send test email via Resend
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -25,7 +31,7 @@ export async function POST(req: NextRequest) {
         from: 'kampane@ufosport.cz',
         to: testEmail,
         subject: 'Testovací e-mail UFO SPORT',
-        html,
+        html: finalHtml,
       }),
     });
 
