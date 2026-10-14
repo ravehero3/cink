@@ -462,9 +462,8 @@ export default function CheckoutPage() {
 
                 <label style={{
                   display: 'flex',
-                  gap: '12px',
-                  alignItems: 'flex-start',
-                  fontSize: '12px',
+                  gap: '10px',
+                  alignItems: 'center',
                   cursor: 'pointer',
                   margin: '6px 0 28px'
                 }}>
@@ -473,27 +472,33 @@ export default function CheckoutPage() {
                       type="checkbox"
                       checked={formData.newsletterSubscribed}
                       onChange={(e) => setFormData({ ...formData, newsletterSubscribed: e.target.checked })}
-                      style={{ position: 'absolute', opacity: 0 }}
+                      style={{ position: 'absolute', opacity: 0, width: '100%', height: '100%', margin: 0, cursor: 'pointer', zIndex: 1 }}
                     />
                     <div style={{
-                      flex: '0 0 16px',
-                      height: '16px',
+                      width: '14px',
+                      height: '14px',
                       border: '1px solid #000',
-                      borderRadius: '2px',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      marginTop: '1px',
-                      background: formData.newsletterSubscribed ? '#000' : '#fff'
+                      background: formData.newsletterSubscribed ? '#000' : '#fff',
+                      transition: 'background 0.15s ease'
                     }}>
                       {formData.newsletterSubscribed && (
-                        <svg width="8" height="4" viewBox="0 0 8 4" fill="none" stroke="#fff" strokeWidth="1.5">
-                          <path d="M1 2.5L3 0.5L7 3.5"/>
+                        <svg width="9" height="7" viewBox="0 0 9 7" fill="none" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M1 3.5L3.5 6L8 1"/>
                         </svg>
                       )}
                     </div>
                   </div>
-                  <span>Chci dostávat informace o novinkách, slevách a akcích e-mailem.</span>
+                  <span style={{
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '11px',
+                    fontWeight: 400,
+                    color: '#000',
+                    letterSpacing: '0.02em',
+                    lineHeight: '1.4'
+                  }}>Chci dostávat informace o novinkách, slevách a akcích e-mailem.</span>
                 </label>
 
                 {/* Continue Button */}

@@ -121,7 +121,7 @@ export default function Header1() {
                 style={{ width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0', background: 'none', border: 'none', cursor: 'pointer', color: '#000000' }}
               >
                 <svg style={{ width: '22px', height: '22px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M19 12H5m7 7-7-7 7-7" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
             </div>

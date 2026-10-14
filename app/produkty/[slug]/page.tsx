@@ -96,7 +96,7 @@ export default function ProductDetailPage() {
 
   // Pre-select size from URL parameter (including out-of-stock sizes)
   useEffect(() => {
-    if (product && sizeFromUrl && product.sizes[sizeFromUrl]) {
+    if (product && sizeFromUrl && product.sizes[sizeFromUrl] !== undefined) {
       setSelectedSize(sizeFromUrl);
     }
   }, [product, sizeFromUrl]);
