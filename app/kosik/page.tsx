@@ -1404,7 +1404,7 @@ export default function CartPage() {
                   fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontWeight: 400
                 }}>
-                  Bezpečně zaplacené kreditní kartou (Visa, Mastercard, American Express), Apple Pay nebo PayPal.
+                  Bezpečně zaplatíte kartou (Visa, Mastercard, Amex), Apple Pay, Google Pay nebo PayPal.
                 </p>
               </div>
 
