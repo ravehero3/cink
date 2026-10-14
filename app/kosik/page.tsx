@@ -1244,88 +1244,116 @@ export default function CartPage() {
                   fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                   color: '#000'
                 }}>
-                  Máte slevo vý kód?
+                  <button
+                    onClick={() => {
+                      setShowPromoCode(!showPromoCode);
+                      if (!showPromoCode) {
+                        setTimeout(() => {
+                          const input = document.getElementById('promo-code-input') as HTMLInputElement;
+                          if (input) input.focus();
+                        }, 0);
+                      }
+                    }}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      padding: '0',
+                      fontSize: '13.5px',
+                      lineHeight: '16px',
+                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                      color: '#000',
+                      cursor: 'pointer',
+                      fontWeight: 400,
+                      textDecoration: 'none',
+                      textAlign: 'left'
+                    }}
+                  >
+                    Máte slevo vý kód?
+                  </button>
                 </h2>
 
-                {/* Promo Code Form */}
-                <div style={{
-                  width: '66.6%',
-                  maxWidth: '858px',
-                  margin: '19px auto 0',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '4px'
-                }}>
-                  <label style={{
-                    fontSize: '11px',
-                    lineHeight: '14px',
-                    color: '#757575',
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontWeight: 400,
-                    marginBottom: '4px',
-                    whiteSpace: 'nowrap'
-                  }}>
-                    Slevo vý kód*
-                  </label>
+                {/* Promo Code Form - Collapsible */}
+                {showPromoCode && (
                   <div style={{
+                    width: '66.6%',
+                    maxWidth: '858px',
+                    margin: '19px auto 0',
                     display: 'flex',
-                    gap: '8px'
+                    flexDirection: 'column',
+                    gap: '4px'
                   }}>
-                    <input
-                      type="text"
-                      value={promoCode}
-                      onChange={(e) => setPromoCode(e.target.value)}
-                      placeholder="Zadějte kód"
-                      style={{
-                        flex: '1',
-                        minWidth: '0',
-                        height: '36px',
-                        padding: '0 12px',
-                        border: '1px solid #000',
-                        borderRadius: '3px',
-                        outline: 'none',
-                        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                        fontSize: '12px',
-                        fontWeight: 400,
-                        color: '#000',
-                        backgroundColor: '#fff'
-                      }}
-                    />
-                    <button
-                      onClick={handleApplyPromoCode}
-                      disabled={!promoCode.trim()}
-                      style={{
-                        width: '65px',
-                        height: '36px',
-                        border: 'none',
-                        borderRadius: '3px',
-                        backgroundColor: promoCode.trim() ? '#000' : '#e6e6e6',
-                        color: promoCode.trim() ? '#fff' : '#999',
-                        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                        fontSize: '10.5px',
-                        fontWeight: 400,
-                        letterSpacing: '0.06em',
-                        textTransform: 'uppercase',
-                        cursor: promoCode.trim() ? 'pointer' : 'not-allowed',
-                        transition: 'all 0.2s ease',
-                        padding: '0',
-                        whiteSpace: 'nowrap'
-                      }}
-                      onMouseEnter={(e) => {
-                        if (promoCode.trim()) {
-                          (e.currentTarget as HTMLElement).style.backgroundColor = '#333';
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        if (promoCode.trim()) {
-                          (e.currentTarget as HTMLElement).style.backgroundColor = '#000';
-                        }
-                      }}
-                    >
-                      Uplat nit
-                    </button>
+                    <label style={{
+                      fontSize: '11px',
+                      lineHeight: '14px',
+                      color: '#757575',
+                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontWeight: 400,
+                      marginBottom: '4px',
+                      whiteSpace: 'nowrap'
+                    }}>
+                      Slevo vý kód*
+                    </label>
+                    <div style={{
+                      display: 'flex',
+                      gap: '8px'
+                    }}>
+                      <input
+                        id="promo-code-input"
+                        type="text"
+                        value={promoCode}
+                        onChange={(e) => setPromoCode(e.target.value)}
+                        placeholder="Zadějte kód"
+                        style={{
+                          flex: '1',
+                          minWidth: '0',
+                          height: '36px',
+                          padding: '0 12px',
+                          border: '1px solid #000',
+                          borderRadius: '3px',
+                          outline: 'none',
+                          fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                          fontSize: '12px',
+                          fontWeight: 400,
+                          color: '#000',
+                          backgroundColor: '#fff'
+                        }}
+                      />
+                      <button
+                        onClick={handleApplyPromoCode}
+                        disabled={!promoCode.trim()}
+                        style={{
+                          width: '65px',
+                          height: '36px',
+                          border: 'none',
+                          borderRadius: '3px',
+                          backgroundColor: promoCode.trim() ? '#000' : '#e6e6e6',
+                          color: promoCode.trim() ? '#fff' : '#999',
+                          fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                          fontSize: '10.5px',
+                          fontWeight: 400,
+                          letterSpacing: '0.06em',
+                          textTransform: 'uppercase',
+                          cursor: promoCode.trim() ? 'pointer' : 'not-allowed',
+                          transition: 'all 0.2s ease',
+                          padding: '0',
+                          whiteSpace: 'nowrap'
+                        }}
+                        onMouseEnter={(e) => {
+                          if (promoCode.trim()) {
+                            (e.currentTarget as HTMLElement).style.backgroundColor = '#333';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (promoCode.trim()) {
+                            (e.currentTarget as HTMLElement).style.backgroundColor = '#000';
+                          }
+                        }}
+                      >
+                        Uplatnit
+                      </button>
+                    </div>
                   </div>
-                </div>
+                )}
 
                 {/* Shipping Price Line */}
                 <div style={{
