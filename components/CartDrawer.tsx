@@ -709,7 +709,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 ))}
 
                 {/* VYBRÁNO PRO VÁS Section */}
-                <div style={{ borderTop: '1px solid #000', display: 'flex', flexDirection: 'column', flex: '0 0 auto' }}>
+                <div style={{ borderTop: '1px solid #000', borderBottom: '1px solid #000', display: 'flex', flexDirection: 'column', flex: '0 0 auto' }}>
                   <div style={{ borderBottom: '1px solid #000', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <h3 
                       style={{

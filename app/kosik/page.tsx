@@ -1651,7 +1651,7 @@ export default function CartPage() {
           width: '100%',
           backgroundColor: '#fff',
           borderTop: '1px solid #000',
-          zIndex: 30,
+          zIndex: 1,
           height: '328px',
           display: 'flex',
           flexDirection: 'row',

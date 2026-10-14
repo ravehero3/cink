@@ -350,18 +350,18 @@ export default function Header1() {
             </button>
           )}
         </div>
-        
-        <CartDrawer 
-          isOpen={showCartDrawer}
-          onClose={() => setShowCartDrawer(false)}
-        />
-        
-        <MobileMenu
-          isOpen={showMobileMenu}
-          onClose={() => setShowMobileMenu(false)}
-          categories={categories}
-        />
       </header>
+
+      <CartDrawer 
+        isOpen={showCartDrawer}
+        onClose={() => setShowCartDrawer(false)}
+      />
+      
+      <MobileMenu
+        isOpen={showMobileMenu}
+        onClose={() => setShowMobileMenu(false)}
+        categories={categories}
+      />
 
       <Header2 isOpen={showSearch} onClose={() => setShowSearch(false)} />
       

@@ -35,14 +35,14 @@ export default function MobileMenu({ isOpen, onClose, categories }: MobileMenuPr
   return (
     <>
       <div
-        className={`fixed inset-0 bg-black z-40 transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-black z-[998] transition-opacity duration-300 ${
           isOpen ? 'opacity-50' : 'opacity-0 pointer-events-none'
         }`}
         onClick={onClose}
       />
       
       <div
-        className={`fixed top-0 left-0 h-full w-full bg-white z-50 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 h-full w-full bg-white z-[999] transform transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
