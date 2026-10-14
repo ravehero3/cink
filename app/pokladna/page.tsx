@@ -1345,6 +1345,29 @@ export default function CheckoutPage() {
         </aside>
       </div>
 
+      {/* Thin Footer */}
+      <footer style={{
+        height: '46px',
+        backgroundColor: '#fff',
+        borderTop: '1px solid #000',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexShrink: 0
+      }}>
+        <p style={{
+          margin: 0,
+          fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+          fontSize: '11px',
+          fontWeight: 400,
+          color: '#666',
+          letterSpacing: '0.03em',
+          textAlign: 'center'
+        }}>
+          ufosport.cz {new Date().getFullYear()}
+        </p>
+      </footer>
+
       {/* PPL Modal */}
       <div 
         style={{

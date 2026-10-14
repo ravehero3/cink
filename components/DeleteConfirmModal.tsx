@@ -23,11 +23,11 @@ export default function DeleteConfirmModal({
   return (
     <>
       <div
-        className="fixed inset-0 bg-black z-[80] opacity-50"
+        className="fixed inset-0 bg-black z-[9999] opacity-50"
         onClick={onClose}
       />
       
-      <div className="fixed top-1/2 z-[90] bg-white border border-black" style={{ width: '70%', maxWidth: '480px', left: '50%', transform: 'translate(-50%, -50%)' }}>
+      <div className="fixed top-1/2 z-[10000] bg-white border border-black" style={{ width: '70%', maxWidth: '480px', left: '50%', transform: 'translate(-50%, -50%)' }}>
         <div className="border-b border-black" style={{ height: '52px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff', padding: '0 24px' }}>
           <h2 style={{
             fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
