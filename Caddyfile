@@ -1,3 +1,7 @@
+{
+    auto_https disable
+}
+
 voodoo808.com, www.voodoo808.com {
     handle /apps-monitor/* {
         uri strip_prefix /apps-monitor
