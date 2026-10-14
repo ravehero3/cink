@@ -1264,8 +1264,9 @@ export default function CartPage() {
                       color: '#000',
                       cursor: 'pointer',
                       fontWeight: 400,
-                      textDecoration: 'none',
-                      textAlign: 'left'
+                      textDecoration: 'underline',
+                      textAlign: 'left',
+                      whiteSpace: 'nowrap'
                     }}
                   >
                     Máte slevo vý kód?
