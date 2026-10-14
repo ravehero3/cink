@@ -1262,7 +1262,8 @@ export default function CartPage() {
                     color: '#757575',
                     fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontWeight: 400,
-                    marginBottom: '4px'
+                    marginBottom: '4px',
+                    whiteSpace: 'nowrap'
                   }}>
                     Slevo vý kód*
                   </label>
@@ -1307,7 +1308,8 @@ export default function CartPage() {
                         textTransform: 'uppercase',
                         cursor: promoCode.trim() ? 'pointer' : 'not-allowed',
                         transition: 'all 0.2s ease',
-                        padding: '0'
+                        padding: '0',
+                        whiteSpace: 'nowrap'
                       }}
                       onMouseEnter={(e) => {
                         if (promoCode.trim()) {
@@ -1320,7 +1322,7 @@ export default function CartPage() {
                         }
                       }}
                     >
-                      Uplat nit kód
+                      Uplat nit
                     </button>
                   </div>
                 </div>
