@@ -1229,59 +1229,173 @@ export default function CartPage() {
               {/* Price Section */}
               <div style={{
                 display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
+                flexDirection: 'column',
                 padding: '24px',
                 borderBottom: '1px solid #000',
                 width: '1426px',
                 boxSizing: 'border-box',
                 margin: '0 auto',
                 position: 'relative',
-                zIndex: 9
+                zIndex: 9,
+                gap: '16px'
               }}>
+                {/* Promo Code Toggle */}
                 <div style={{
                   display: 'flex',
-                  flexDirection: 'column',
-                  gap: '8px'
+                  justifyContent: 'flex-start'
                 }}>
-                  <div style={{
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '11px',
-                    color: '#999'
-                  }}>
-                    CENA ZA DOPRAVU
-                  </div>
-                  <div style={{
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '11px',
-                    color: '#999'
-                  }}>
-                    PŘEDPOKLÁDANÁ CENA
-                  </div>
+                  <button
+                    onClick={() => setShowPromoCode(!showPromoCode)}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      padding: '0',
+                      fontSize: '10px',
+                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                      color: '#000',
+                      textDecoration: 'underline',
+                      cursor: 'pointer',
+                      fontWeight: 400
+                    }}
+                  >
+                    Máte slevo vý kód?
+                  </button>
                 </div>
+
+                {/* Promo Code Input */}
+                {showPromoCode && (
+                  <div style={{
+                    display: 'flex',
+                    gap: '8px',
+                    alignItems: 'flex-start',
+                    flexDirection: 'column'
+                  }}>
+                    <label style={{
+                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontSize: '10px',
+                      fontWeight: 400,
+                      color: '#000'
+                    }}>
+                      Slevo vý kód*
+                    </label>
+                    <div style={{
+                      display: 'flex',
+                      gap: '8px',
+                      alignItems: 'center'
+                    }}>
+                      <input
+                        type="text"
+                        value={promoCode}
+                        onChange={(e) => setPromoCode(e.target.value)}
+                        placeholder="Zadéjte slevo vý kód"
+                        style={{
+                          width: '860px',
+                          height: '40px',
+                          border: '1px solid #000',
+                          borderRadius: '4px',
+                          padding: '8px 12px',
+                          fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                          fontSize: '12px',
+                          boxSizing: 'border-box'
+                        }}
+                      />
+                      <button
+                        onClick={handleApplyPromoCode}
+                        style={{
+                          width: '70px',
+                          height: '40px',
+                          backgroundColor: '#000',
+                          border: '1px solid #000',
+                          borderRadius: '4px',
+                          fontSize: '11px',
+                          fontWeight: 400,
+                          textTransform: 'uppercase',
+                          cursor: 'pointer',
+                          color: '#fff',
+                          fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                          transition: 'all 0.2s ease',
+                          padding: '0'
+                        }}
+                        onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#333'; }}
+                        onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#000'; }}
+                      >
+                        Uplat nit kód
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Price Information */}
                 <div style={{
                   display: 'flex',
-                  flexDirection: 'column',
-                  gap: '8px',
-                  alignItems: 'flex-end'
+                  justifyContent: 'space-between',
+                  alignItems: 'flex-start'
                 }}>
                   <div style={{
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '12px',
-                    fontWeight: 400,
-                    color: '#000'
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '8px'
                   }}>
-                    79 Kč
+                    <div style={{
+                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontSize: '11px',
+                      color: '#999'
+                    }}>
+                      CENA ZA DOPRAVU
+                    </div>
+                    <div style={{
+                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontSize: '11px',
+                      color: '#999'
+                    }}>
+                      PŘEDPOKLÁDANÁ CENA
+                    </div>
+                    {discountAmount > 0 && (
+                      <div style={{
+                        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                        fontSize: '11px',
+                        color: '#999'
+                      }}>
+                        CENA SE SLEVOU
+                      </div>
+                    )}
                   </div>
                   <div style={{
-                    fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '16px',
-                    fontWeight: 700,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.03em',
-                    color: '#000'
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '8px',
+                    alignItems: 'flex-end'
                   }}>
-                    {(total + 79).toLocaleString('cs-CZ', { maximumFractionDigits: 0 })} Kč
+                    <div style={{
+                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontSize: '12px',
+                      fontWeight: 400,
+                      color: '#000'
+                    }}>
+                      79 Kč
+                    </div>
+                    <div style={{
+                      fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontSize: '16px',
+                      fontWeight: 700,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.03em',
+                      color: '#000'
+                    }}>
+                      {(total + 79).toLocaleString('cs-CZ', { maximumFractionDigits: 0 })} Kč
+                    </div>
+                    {discountAmount > 0 && (
+                      <div style={{
+                        fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                        fontSize: '16px',
+                        fontWeight: 700,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.03em',
+                        color: '#000'
+                      }}>
+                        {(total + 79 - discountAmount).toLocaleString('cs-CZ', { maximumFractionDigits: 0 })} Kč
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
