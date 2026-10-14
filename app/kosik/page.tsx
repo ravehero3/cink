@@ -203,7 +203,10 @@ export default function CartPage() {
     }
   };
 
+  const total = getTotal();
   const finalPrice = total + 79 - discountAmount;
+
+  if (!hasHydrated) {
     return <div className="min-h-screen bg-white" />;
   }
 
