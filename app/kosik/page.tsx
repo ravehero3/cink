@@ -84,6 +84,9 @@ export default function CartPage() {
   };
 
   const [recentlyViewed, setRecentlyViewed] = useState<any[]>([]);
+  const [showPromoCode, setShowPromoCode] = useState(false);
+  const [promoCode, setPromoCode] = useState('');
+  const [discountAmount, setDiscountAmount] = useState(0);
 
   useEffect(() => {
     const fetchAllProducts = async () => {
@@ -192,9 +195,15 @@ export default function CartPage() {
     }
   };
 
-  const total = getTotal();
+  const handleApplyPromoCode = () => {
+    if (promoCode.toLowerCase() === 'ufo10') {
+      setDiscountAmount(Math.round(total * 0.1));
+    } else {
+      setDiscountAmount(0);
+    }
+  };
 
-  if (!hasHydrated) {
+  const finalPrice = total + 79 - discountAmount;
     return <div className="min-h-screen bg-white" />;
   }
 
