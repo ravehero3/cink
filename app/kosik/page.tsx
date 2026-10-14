@@ -1241,8 +1241,8 @@ export default function CartPage() {
               }}>
                 <div style={{
                   display: 'flex',
-                  alignItems: 'center',
-                  gap: '16px'
+                  flexDirection: 'column',
+                  gap: '8px'
                 }}>
                   <div style={{
                     fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -1253,24 +1253,25 @@ export default function CartPage() {
                   </div>
                   <div style={{
                     fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontSize: '11px',
+                    color: '#999'
+                  }}>
+                    PŘEDPOKLÁDANÁ CENA
+                  </div>
+                </div>
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '8px',
+                  alignItems: 'flex-end'
+                }}>
+                  <div style={{
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                     fontSize: '12px',
                     fontWeight: 400,
                     color: '#000'
                   }}>
                     79 Kč
-                  </div>
-                </div>
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '16px'
-                }}>
-                  <div style={{
-                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '11px',
-                    color: '#999'
-                  }}>
-                    PŘEDPOKLÁDANÁ CENA
                   </div>
                   <div style={{
                     fontFamily: 'BB-Condensed-Bold, "Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -1307,25 +1308,25 @@ export default function CartPage() {
                 }}>
                   <button
                     onClick={() => router.push('/pokladna')}
-                    style={{
-                      width: '100%',
-                      maxWidth: '748px',
-                      height: '40px',
-                      backgroundColor: '#000',
-                      border: '1px solid #000',
-                      borderRadius: '4px',
-                      fontSize: '12px',
-                      fontWeight: 400,
-                      textTransform: 'uppercase',
-                      cursor: 'pointer',
-                      color: '#fff',
-                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                      transition: 'all 0.2s ease',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      padding: '0'
-                    }}
+                  style={{
+                    width: '100%',
+                    maxWidth: '748px',
+                    height: '40px',
+                    backgroundColor: '#000',
+                    border: '1px solid #000',
+                    borderRadius: '4px',
+                    fontSize: '12px',
+                    fontWeight: 400,
+                    textTransform: 'uppercase',
+                    cursor: 'pointer',
+                    color: '#fff',
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    transition: 'all 0.2s ease',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '0'
+                  }}
                     onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#333'; }}
                     onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '#000'; }}
                   >
