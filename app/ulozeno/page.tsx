@@ -984,7 +984,7 @@ export default function SavedProductsPage() {
               display: 'block'
             }}
           >
-            ULOŽENÉ POLOŽKY
+            ULOŽENÉ POLOŽKY ({products.length})
           </div>
           <div
             className="absolute pointer-events-none"
