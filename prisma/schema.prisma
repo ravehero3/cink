@@ -141,6 +141,8 @@ model PromoCode {
 model NewsletterSubscriber {
   id        String   @id @default(cuid())
   email     String   @unique
+  group     String   @default("customers")
+  firstName String?
   createdAt DateTime @default(now())
 }
 
@@ -150,6 +152,9 @@ model EmailCampaign {
   subject               String
   content               String    @db.Text
   targetAudience        String    @default("all")
+  position              Int       @default(0)
+  delayHours            Int       @default(0)
+  customization         Json?
   recipientEmails       String[]  @default([])
   status                String    @default("draft")
   scheduledFor          DateTime?

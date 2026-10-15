@@ -9,8 +9,14 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const { searchParams } = new URL(req.url);
+    const group = searchParams.get('group') || searchParams.get('targetAudience');
+
+    const where = group ? { targetAudience: group } : {};
+
     const campaigns = await prisma.emailCampaign.findMany({
-      orderBy: { createdAt: 'desc' },
+      where,
+      orderBy: [{ position: 'asc' }, { createdAt: 'asc' }],
     });
 
     return NextResponse.json(campaigns);
@@ -28,15 +34,29 @@ export async function POST(req: NextRequest) {
     }
 
     const data = await req.json();
-    
+
+    // Auto-calculate next position for this audience if not provided
+    let position = data.position;
+    if (position === undefined || position === null) {
+      const highest = await prisma.emailCampaign.findFirst({
+        where: { targetAudience: data.targetAudience || 'all' },
+        orderBy: { position: 'desc' },
+        select: { position: true },
+      });
+      position = highest ? highest.position + 1 : 0;
+    }
+
     const campaign = await prisma.emailCampaign.create({
       data: {
-        name: data.name,
-        subject: data.subject,
-        content: data.content,
-        targetAudience: data.targetAudience,
+        name: data.name || 'Nový e-mail v sekvenci',
+        subject: data.subject || 'Novinka od UFO SPORT',
+        content: data.content || '',
+        targetAudience: data.targetAudience || 'all',
+        position: Number(position) || 0,
+        delayHours: Number(data.delayHours) || 0,
+        customization: data.customization ?? null,
         recipientEmails: data.recipientEmails || [],
-        status: 'draft',
+        status: data.status || 'draft',
       },
     });
 

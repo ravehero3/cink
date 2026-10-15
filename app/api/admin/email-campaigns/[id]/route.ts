@@ -22,6 +22,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
+
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   try {
     const session = await getServerSession();
@@ -33,10 +34,14 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     const campaign = await prisma.emailCampaign.update({
       where: { id: params.id },
       data: {
-        ...(data.name && { name: data.name }),
-        ...(data.subject && { subject: data.subject }),
-        ...(data.content && { content: data.content }),
-        ...(data.status && { status: data.status }),
+        ...(data.name !== undefined && { name: data.name }),
+        ...(data.subject !== undefined && { subject: data.subject }),
+        ...(data.content !== undefined && { content: data.content }),
+        ...(data.status !== undefined && { status: data.status }),
+        ...(data.targetAudience !== undefined && { targetAudience: data.targetAudience }),
+        ...(data.position !== undefined && { position: Number(data.position) }),
+        ...(data.delayHours !== undefined && { delayHours: Number(data.delayHours) }),
+        ...(data.customization !== undefined && { customization: data.customization }),
       },
     });
 
