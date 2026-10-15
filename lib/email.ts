@@ -12,6 +12,19 @@ if (!RESEND_API_KEY) {
 
 const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
 
+/**
+ * Ensures every outgoing email has a black background regardless of how it was rendered.
+ * Replaces any stray white backgrounds introduced by email clients or template quirks.
+ */
+function enforceBlackBackground(html: string): string {
+  return html
+    .replace(/background:\s*#ffffff/gi, 'background:#000000')
+    .replace(/background-color:\s*#ffffff/gi, 'background-color:#000000')
+    .replace(/bgcolor="#ffffff"/gi, 'bgcolor="#000000"')
+    .replace(/background:\s*white/gi, 'background:#000000')
+    .replace(/background-color:\s*white/gi, 'background-color:#000000');
+}
+
 const FROM_EMAIL = 'UFO Sport <noreply@ufosport.cz>';
 export { WEBSITE_URL };
 
@@ -82,11 +95,12 @@ export async function sendCatalogEmail(options: {
   }
 
   try {
+    const finalHtml = enforceBlackBackground(rendered.html);
     const result = await resend.emails.send({
       from: FROM_EMAIL,
       to,
       subject: rendered.subject,
-      html: rendered.html,
+      html: finalHtml,
     });
 
     if ((result as { error?: { message?: string } }).error) {
