@@ -17,9 +17,13 @@ jobs:
           key: ${{ secrets.ORACLE_SSH_KEY }}
           script: |
             set -e
+            # Ensure proper ownership & permissions on repo before git operations
+            sudo chown -R "$(id -u):$(id -g)" ~/apps/cink 2>/dev/null || sudo chown -R $USER:$USER ~/apps/cink 2>/dev/null || true
+            sudo chmod -R u+rwX ~/apps/cink/.git 2>/dev/null || true
             cd ~/apps/cink
             git fetch origin main
             git reset --hard origin/main
+            sudo chown -R "$(id -u):$(id -g)" ~/apps/cink 2>/dev/null || true
             cd ~/apps
             # Pause watchdog during deploy to prevent restart races
             sudo systemctl stop ufosport-watchdog 2>/dev/null || true
@@ -42,6 +46,15 @@ jobs:
             # Resume watchdog
             sudo systemctl start ufosport-watchdog 2>/dev/null || true
             # Verify deployment
-            sleep 10
+            sleep 8
             docker compose ps
+            echo "Verifying application health..."
+            for i in $(seq 1 15); do
+              if curl -s -f http://localhost:3000 >/dev/null 2>&1 || curl -s -f https://ufosport.cz >/dev/null 2>&1; then
+                echo "App is healthy and responding!"
+                break
+              fi
+              echo "Waiting for app to respond... ($i/15)"
+              sleep 2
+            done
             echo "Deploy complete - all services running"
