@@ -46,6 +46,21 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: error.message || 'Failed to send email' }, { status: 500 });
     }
 
+    try {
+      const { prisma } = await import('@/lib/prisma');
+      await prisma.emailLog.create({
+        data: {
+          toEmail: testEmail,
+          type: 'CAMPAIGN_TEST',
+          subject: subject || 'Testovací e-mail UFO SPORT',
+          html: finalHtml,
+          status: 'sent',
+        },
+      });
+    } catch (logErr) {
+      console.error('Failed to log test campaign email:', logErr);
+    }
+
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('send-test error:', error);

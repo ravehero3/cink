@@ -116,6 +116,20 @@ export async function POST(
         )
       );
       sentCount += chunk.length;
+      try {
+        await prisma.emailLog.createMany({
+          data: chunk.map((r) => ({
+            toEmail: r.email,
+            type: 'CAMPAIGN',
+            subject: campaign.subject,
+            html: finalHtml,
+            status: 'sent',
+            journeyId: campaign.id,
+          })),
+        });
+      } catch (logErr) {
+        console.error('Failed to write campaign email logs:', logErr);
+      }
     }
 
     await prisma.emailCampaign.update({

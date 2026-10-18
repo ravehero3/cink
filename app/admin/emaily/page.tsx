@@ -7,6 +7,7 @@ import type { EmailTemplateCustomization, LinkedProduct } from '@/lib/email-layo
 import JourneySequencePanel from '@/components/admin/JourneySequencePanel';
 import ProductPickerModal, { type PickedProduct } from '@/components/admin/ProductPickerModal';
 import ImageUploadModal from '@/components/admin/ImageUploadModal';
+import SentEmailsViewer from '@/components/admin/SentEmailsViewer';
 
 type Tab = 'sablony' | 'odeslane' | 'cesty';
 type ViewMode = 'desktop' | 'mobile';
@@ -169,6 +170,13 @@ export default function EmailAdminPage() {
   const gridProducts = currentCustomization.gridProducts || [];
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const pTab = new URLSearchParams(window.location.search).get('tab');
+      if (pTab === 'odeslane' || pTab === 'cesty' || pTab === 'sablony') {
+        setTab(pTab as Tab);
+      }
+    }
+
     fetch('/api/admin/email-status')
       .then((r) => r.json())
       .then((d) => setServiceStatus(d))
@@ -592,7 +600,15 @@ export default function EmailAdminPage() {
         ] as const).map((item) => (
           <button
             key={item.id}
-            onClick={() => { setTab(item.id); setPreviewLoading(true); }}
+            onClick={() => {
+              setTab(item.id);
+              setPreviewLoading(true);
+              if (typeof window !== 'undefined') {
+                const url = new URL(window.location.href);
+                url.searchParams.set('tab', item.id);
+                window.history.replaceState(null, '', url.toString());
+              }
+            }}
             className={`admin-tab ${tab === item.id ? 'is-active' : ''}`}
           >
             {item.label}
@@ -935,75 +951,7 @@ export default function EmailAdminPage() {
       )}
 
       {tab === 'odeslane' && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-[16px]">
-          <div className="lg:col-span-4 flex flex-col gap-[16px]">
-            <div className="flex gap-2">
-              <input
-                value={logQuery}
-                onChange={(e) => setLogQuery(e.target.value)}
-                placeholder="Hledat e-mail nebo předmět"
-                className="admin-input"
-                style={{ textTransform: 'none' }}
-              />
-              <select value={logType} onChange={(e) => setLogType(e.target.value)} className="admin-select" style={{ width: 180 }}>
-                <option value="">Všechny typy</option>
-                {EMAIL_CATALOG.map((item) => (
-                  <option key={item.id} value={item.id}>{item.label}</option>
-                ))}
-              </select>
-            </div>
-            <div className="admin-card overflow-hidden">
-              {logsLoading ? (
-                <div className="admin-empty">Načítám odeslané e-maily…</div>
-              ) : logs.length === 0 ? (
-                <div className="admin-empty">Zatím žádné odeslané e-maily.</div>
-              ) : (
-                logs.map((log, idx) => (
-                  <button
-                    key={log.id}
-                    onClick={() => { setSelectedLogId(log.id); setPreviewLoading(true); }}
-                    className={`w-full text-left px-[16px] py-[12px] ${idx !== logs.length - 1 ? 'border-b border-black' : ''} ${
-                      selectedLogId === log.id ? 'bg-black text-white' : 'bg-white hover:bg-black hover:text-white'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <p className="text-xs font-bold uppercase tracking-wider truncate">{catalogLabel(log.type)}</p>
-                      <span className="text-[10px] uppercase tracking-wider shrink-0">
-                        {log.status === 'sent' ? 'Odesláno' : 'Chyba'}
-                      </span>
-                    </div>
-                    <p className="text-[11px] mt-1 truncate normal-case tracking-normal opacity-80">{log.toEmail}</p>
-                    <p className="text-[10px] uppercase tracking-wider mt-1 opacity-70">{formatDateTime(log.sentAt)}</p>
-                  </button>
-                ))
-              )}
-            </div>
-          </div>
-          <div className="lg:col-span-8 flex flex-col gap-[16px]">
-            {selectedLog ? (
-              <>
-                <div className="admin-card p-[20px]">
-                  <h2 className="admin-title" style={{ fontSize: 14 }}>{selectedLog.subject}</h2>
-                  <p className="admin-sub">{selectedLog.toEmail} · {catalogLabel(selectedLog.type)}</p>
-                  {selectedLog.error && (
-                    <p className="mt-3 text-xs border border-black p-3">{selectedLog.error}</p>
-                  )}
-                </div>
-                <PreviewFrame
-                  src={previewSrc}
-                  title={selectedLog.subject}
-                  viewMode={viewMode}
-                  setViewMode={setViewMode}
-                  previewLoading={previewLoading}
-                  setPreviewLoading={setPreviewLoading}
-                  frameKey={selectedLog.id}
-                />
-              </>
-            ) : (
-              <div className="admin-card admin-empty">Vyberte e-mail vlevo pro náhled.</div>
-            )}
-          </div>
-        </div>
+        <SentEmailsViewer />
       )}
 
       {tab === 'cesty' && (

@@ -12,6 +12,7 @@ const SECTION_LABELS: Record<string, string> = {
   customers: 'Zákazníci',
   'promo-kody': 'Promo kódy',
   newsletter: 'Newsletter',
+  'odeslane-emaily': 'Odeslané e-maily',
   emaily: 'E-maily a cesty',
   'email-campaigns': 'E-mail kampaně',
   media: 'Média',
@@ -91,6 +92,7 @@ const NAV_SECTIONS = [
   {
     label: 'Marketing',
     items: [
+      { href: '/admin/odeslane-emaily', label: 'Odeslané e-maily' },
       { href: '/admin/newsletter', label: 'Newsletter' },
       { href: '/admin/emaily', label: 'E-maily a cesty' },
       { href: '/admin/email-campaigns', label: 'E-mail kampaně' },

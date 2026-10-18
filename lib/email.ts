@@ -105,15 +105,16 @@ export async function sendCatalogEmail(options: {
 
     if ((result as { error?: { message?: string } }).error) {
       const message = (result as { error: { message?: string } }).error.message || 'Resend error';
-      await logEmail({ toEmail: to, type, subject: rendered.subject, html: rendered.html, status: 'failed', error: message, journeyId });
+      await logEmail({ toEmail: to, type, subject: rendered.subject, html: finalHtml, status: 'failed', error: message, journeyId });
       return { success: false, error: message };
     }
 
-    await logEmail({ toEmail: to, type, subject: rendered.subject, html: rendered.html, status: 'sent', journeyId });
+    await logEmail({ toEmail: to, type, subject: rendered.subject, html: finalHtml, status: 'sent', journeyId });
     return { success: true, result };
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    await logEmail({ toEmail: to, type, subject: rendered.subject, html: rendered.html, status: 'failed', error: message, journeyId });
+    const finalHtml = enforceBlackBackground(rendered.html);
+    await logEmail({ toEmail: to, type, subject: rendered.subject, html: finalHtml, status: 'failed', error: message, journeyId });
     return { success: false, error };
   }
 }

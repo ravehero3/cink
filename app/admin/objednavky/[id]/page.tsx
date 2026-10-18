@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useToast } from '@/store/toastStore';
 import ConfirmModal from '@/components/admin/ConfirmModal';
+import EmailPreviewModal, { type EmailLogMeta } from '@/components/admin/EmailPreviewModal';
+import { Mail, Eye, ExternalLink } from 'lucide-react';
 
 interface OrderItem {
   productId: string;
@@ -56,11 +58,30 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
   const toast = useToast();
   const [statusModal, setStatusModal] = useState<{ newStatus: string } | null>(null);
   const [retryModal, setRetryModal] = useState(false);
+  const [orderEmails, setOrderEmails] = useState<EmailLogMeta[]>([]);
+  const [loadingEmails, setLoadingEmails] = useState(false);
+  const [previewEmail, setPreviewEmail] = useState<EmailLogMeta | null>(null);
 
   useEffect(() => {
     fetchOrder();
     fetchAllOrders();
   }, [params.id]);
+
+  const fetchOrderEmails = async (orderNum: string, email: string) => {
+    setLoadingEmails(true);
+    try {
+      const res = await fetch(`/api/admin/email-logs?orderNumber=${encodeURIComponent(orderNum)}`);
+      if (res.ok) {
+        const data = await res.json();
+        const list = Array.isArray(data) ? data : data.logs || [];
+        setOrderEmails(list);
+      }
+    } catch (err) {
+      console.error('Failed to fetch order emails:', err);
+    } finally {
+      setLoadingEmails(false);
+    }
+  };
 
   const fetchAllOrders = async () => {
     try {
@@ -88,6 +109,7 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
         const data = await response.json();
         setOrder(data);
         setTrackingNumber(data.trackingNumber || '');
+        fetchOrderEmails(data.orderNumber, data.customerEmail);
       } else {
         toast.error('Objednávka nenalezena');
         router.push('/admin/objednavky');
@@ -461,6 +483,72 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
             </div>
           </div>
 
+          {/* Sent Emails for this Order */}
+          <div className="bg-white border border-black p-5">
+            <div className="flex items-center justify-between pb-2 mb-3 border-b border-black">
+              <p className="text-[10px] font-bold text-[#666666] uppercase tracking-widest flex items-center gap-1.5">
+                <Mail size={12} />
+                <span>Odeslané e-maily k objednávce ({orderEmails.length})</span>
+              </p>
+              <Link
+                href={`/admin/odeslane-emaily?q=${encodeURIComponent(order.orderNumber)}`}
+                className="text-[10px] uppercase font-bold text-black hover:underline flex items-center gap-1"
+              >
+                <span>Všechny v archivu</span>
+                <ExternalLink size={10} />
+              </Link>
+            </div>
+
+            {loadingEmails ? (
+              <p className="text-xs text-[#888888] uppercase tracking-wider py-4 text-center">Načítám e-maily…</p>
+            ) : orderEmails.length === 0 ? (
+              <p className="text-xs text-[#888888] uppercase tracking-wider py-3 text-center">
+                Žádné e-maily nebyly k této objednávce nalezeny.
+              </p>
+            ) : (
+              <div className="space-y-2.5">
+                {orderEmails.map((email) => (
+                  <div
+                    key={email.id}
+                    className="p-3 border border-black/10 bg-neutral-50 flex items-center justify-between gap-3"
+                  >
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2 mb-1 flex-wrap">
+                        <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 bg-black text-white">
+                          {email.type}
+                        </span>
+                        <span
+                          className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 ${
+                            email.status === 'sent'
+                              ? 'bg-emerald-100 text-emerald-800'
+                              : 'bg-red-100 text-red-800'
+                          }`}
+                        >
+                          {email.status === 'sent' ? 'Doručeno' : 'Chyba'}
+                        </span>
+                        <span className="text-[10px] text-[#888888] font-mono">
+                          {email.sentAt ? new Date(email.sentAt).toLocaleString('cs-CZ') : '—'}
+                        </span>
+                      </div>
+                      <p className="text-xs font-bold uppercase tracking-wider text-black truncate max-w-[280px]">
+                        {email.subject}
+                      </p>
+                      <p className="text-[11px] font-mono text-[#666666] truncate">{email.toEmail}</p>
+                    </div>
+
+                    <button
+                      onClick={() => setPreviewEmail(email)}
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-black text-white hover:bg-neutral-800 text-xs font-bold uppercase tracking-wider transition-colors shrink-0"
+                    >
+                      <Eye size={12} />
+                      <span>Náhled</span>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
           {/* Timestamps */}
           <div className="bg-white border border-black p-5">
             <p className="text-[10px] font-bold text-[#666666] uppercase tracking-widest mb-3 pb-2 border-b border-black">
@@ -498,6 +586,12 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
         isDestructive={false}
         onConfirm={confirmRetry}
         onCancel={() => setRetryModal(false)}
+      />
+      <EmailPreviewModal
+        isOpen={!!previewEmail}
+        onClose={() => setPreviewEmail(null)}
+        log={previewEmail}
+        onResent={() => order && fetchOrderEmails(order.orderNumber, order.customerEmail)}
       />
     </div>
   );

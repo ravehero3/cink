@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import EmailPreviewModal, { type EmailLogMeta } from '@/components/admin/EmailPreviewModal';
+import { Mail, Eye, ExternalLink } from 'lucide-react';
 
 interface CustomerDetail {
   id: string;
@@ -25,12 +27,37 @@ const ORDER_STATUS: Record<string, string> = {
 export default function CustomerDetailPage({ params }: { params: { id: string } }) {
   const [customer, setCustomer] = useState<CustomerDetail | null>(null);
   const [loading, setLoading] = useState(true);
+  const [customerEmails, setCustomerEmails] = useState<EmailLogMeta[]>([]);
+  const [loadingEmails, setLoadingEmails] = useState(false);
+  const [previewEmail, setPreviewEmail] = useState<EmailLogMeta | null>(null);
+
+  const fetchCustomerEmails = async (email: string) => {
+    setLoadingEmails(true);
+    try {
+      const res = await fetch(`/api/admin/email-logs?toEmail=${encodeURIComponent(email)}`);
+      if (res.ok) {
+        const data = await res.json();
+        const list = Array.isArray(data) ? data : data.logs || [];
+        setCustomerEmails(list);
+      }
+    } catch (e) {
+      console.error('Failed to load customer emails:', e);
+    } finally {
+      setLoadingEmails(false);
+    }
+  };
 
   useEffect(() => {
     (async () => {
       try {
         const res = await fetch(`/api/admin/customers/${params.id}`);
-        if (res.ok) setCustomer(await res.json());
+        if (res.ok) {
+          const data = await res.json();
+          setCustomer(data);
+          if (data.email) {
+            fetchCustomerEmails(data.email);
+          }
+        }
       } catch (e) {
         console.error(e);
       } finally {
@@ -171,6 +198,82 @@ export default function CustomerDetailPage({ params }: { params: { id: string } 
         </div>
 
       </div>
+
+      {/* Customer Email History */}
+      <div className="bg-white border border-black p-6">
+        <div className="flex items-center justify-between pb-3 mb-4 border-b border-black">
+          <p className="text-[10px] font-bold text-[#666666] uppercase tracking-widest flex items-center gap-1.5">
+            <Mail size={12} />
+            <span>Historie odeslaných e-mailů ({customerEmails.length})</span>
+          </p>
+          {customer.email && (
+            <Link
+              href={`/admin/odeslane-emaily?q=${encodeURIComponent(customer.email)}`}
+              className="text-[10px] uppercase font-bold text-black hover:underline flex items-center gap-1"
+            >
+              <span>Všechny v archivu</span>
+              <ExternalLink size={10} />
+            </Link>
+          )}
+        </div>
+
+        {loadingEmails ? (
+          <p className="text-xs text-[#888888] uppercase tracking-wider py-6 text-center">
+            Načítám odeslané e-maily…
+          </p>
+        ) : customerEmails.length === 0 ? (
+          <p className="text-xs text-[#888888] uppercase tracking-wider py-6 text-center">
+            Tomuto zákazníkovi zatím nebyly odeslány žádné zaznamenané e-maily.
+          </p>
+        ) : (
+          <div className="divide-y divide-black/10">
+            {customerEmails.map((email) => (
+              <div
+                key={email.id}
+                className="py-3 flex items-center justify-between gap-4 flex-wrap"
+              >
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 mb-1 flex-wrap">
+                    <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 bg-black text-white">
+                      {email.type}
+                    </span>
+                    <span
+                      className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 ${
+                        email.status === 'sent'
+                          ? 'bg-emerald-100 text-emerald-800'
+                          : 'bg-red-100 text-red-800'
+                      }`}
+                    >
+                      {email.status === 'sent' ? 'Doručeno' : 'Chyba'}
+                    </span>
+                    <span className="text-[10px] text-[#888888] font-mono">
+                      {email.sentAt ? new Date(email.sentAt).toLocaleString('cs-CZ') : '—'}
+                    </span>
+                  </div>
+                  <p className="text-xs font-bold uppercase tracking-wider text-black truncate max-w-[420px]">
+                    {email.subject}
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => setPreviewEmail(email)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-black text-white hover:bg-neutral-800 text-xs font-bold uppercase tracking-wider transition-colors shrink-0"
+                >
+                  <Eye size={12} />
+                  <span>Náhled e-mailu</span>
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <EmailPreviewModal
+        isOpen={!!previewEmail}
+        onClose={() => setPreviewEmail(null)}
+        log={previewEmail}
+        onResent={() => customer?.email && fetchCustomerEmails(customer.email)}
+      />
     </div>
   );
 }
