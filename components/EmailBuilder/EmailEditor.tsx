@@ -55,18 +55,18 @@ export default function EmailEditor({ campaign, onSave }: { campaign?: any; onSa
 
   const handleUpdateBlock = (blockId: string, updatedContent: any) => {
     setBlocks(
-      blocks.map((block) =>
+      blocks.map((block: any) =>
         block.id === blockId ? { ...block, content: updatedContent } : block
       )
     );
   };
 
   const handleDeleteBlock = (blockId: string) => {
-    setBlocks(blocks.filter((block) => block.id !== blockId));
+    setBlocks(blocks.filter((block: any) => block.id !== blockId));
   };
 
   const handleMoveBlock = (blockId: string, direction: string) => {
-    const index = blocks.findIndex((b) => b.id === blockId);
+    const index = blocks.findIndex((b: any) => b.id === blockId);
     if (direction === 'up' && index > 0) {
       const newBlocks = [...blocks];
       [newBlocks[index], newBlocks[index - 1]] = [newBlocks[index - 1], newBlocks[index]];
