@@ -36,7 +36,7 @@ export default function EmailEditor({ campaign, onSave }: { campaign?: any; onSa
     setDraggedBlock(null);
   };
 
-  const getDefaultContent = (type) => {
+  const getDefaultContent = (type: string) => {
     switch (type) {
       case 'text':
         return { text: 'Napište váš text zde...' };
@@ -53,7 +53,7 @@ export default function EmailEditor({ campaign, onSave }: { campaign?: any; onSa
     }
   };
 
-  const handleUpdateBlock = (blockId, updatedContent) => {
+  const handleUpdateBlock = (blockId: string, updatedContent: any) => {
     setBlocks(
       blocks.map((block) =>
         block.id === blockId ? { ...block, content: updatedContent } : block
@@ -61,11 +61,11 @@ export default function EmailEditor({ campaign, onSave }: { campaign?: any; onSa
     );
   };
 
-  const handleDeleteBlock = (blockId) => {
+  const handleDeleteBlock = (blockId: string) => {
     setBlocks(blocks.filter((block) => block.id !== blockId));
   };
 
-  const handleMoveBlock = (blockId, direction) => {
+  const handleMoveBlock = (blockId: string, direction: string) => {
     const index = blocks.findIndex((b) => b.id === blockId);
     if (direction === 'up' && index > 0) {
       const newBlocks = [...blocks];
