@@ -12,17 +12,17 @@ export default function EmailEditor({ campaign, onSave }: { campaign?: any; onSa
   const [draggedBlock, setDraggedBlock] = useState(null);
   const [saving, setSaving] = useState(false);
 
-  const handleDragStart = (e, blockType) => {
+  const handleDragStart = (e: React.DragEvent, blockType: string) => {
     setDraggedBlock(blockType);
-    e.dataTransfer.effectAllowed = 'copy';
+    e.dataTransfer!.effectAllowed = 'copy';
   };
 
-  const handleDragOver = (e) => {
+  const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
-    e.dataTransfer.dropEffect = 'copy';
+    e.dataTransfer!.dropEffect = 'copy';
   };
 
-  const handleDrop = (e) => {
+  const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     if (!draggedBlock) return;
 
