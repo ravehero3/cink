@@ -1,6 +1,6 @@
 'use client';
 
-export default function BlockPalette({ onDragStart }) {
+export default function BlockPalette({ onDragStart }: { onDragStart: any }) {
   const blocks = [
     { type: 'header', label: 'Nadpis', icon: '📝', color: '#e8f4f8' },
     { type: 'text', label: 'Text', icon: '📄', color: '#f0f0f0' },

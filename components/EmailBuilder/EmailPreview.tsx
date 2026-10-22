@@ -1,6 +1,6 @@
 'use client';
 
-export default function EmailPreview({ blocks, subject }) {
+export default function EmailPreview({ blocks, subject }: { blocks: any[]; subject: string }) {
   const renderBlock = (block) => {
     switch (block.type) {
       case 'header':

@@ -7,8 +7,8 @@ import EmailCampaignModal from '@/components/EmailBuilder/EmailCampaignModal';
 
 export default function EmailBuilderPage() {
   const router = useRouter();
-  const [campaigns, setCampaigns] = useState([]);
-  const [selectedCampaign, setSelectedCampaign] = useState(null);
+  const [campaigns, setCampaigns] = useState<any[]>([]);
+  const [selectedCampaign, setSelectedCampaign] = useState<any>(null);
   const [showCampaignModal, setShowCampaignModal] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -35,11 +35,11 @@ export default function EmailBuilderPage() {
     setSelectedCampaign(null);
   };
 
-  const handleSelectCampaign = (campaign) => {
+  const handleSelectCampaign = (campaign: any) => {
     setSelectedCampaign(campaign);
   };
 
-  const handleDeleteCampaign = async (campaignId) => {
+  const handleDeleteCampaign = async (campaignId: string) => {
     if (!confirm('Opravdu chcete smazat tuto kampaň?')) return;
     try {
       const res = await fetch(`/api/email-campaigns/${campaignId}`, {

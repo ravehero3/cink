@@ -10,6 +10,14 @@ export default function DraggableBlock({
   onMoveDown,
   canMoveUp,
   canMoveDown,
+}: {
+  block: any;
+  onUpdate: any;
+  onDelete: any;
+  onMoveUp: any;
+  onMoveDown: any;
+  canMoveUp: boolean;
+  canMoveDown: boolean;
 }) {
   const [isEditing, setIsEditing] = useState(false);
 

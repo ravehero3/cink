@@ -2,7 +2,15 @@
 
 import { useState, useEffect } from 'react';
 
-export default function EmailCampaignModal({ campaign, onClose, onSend }) {
+export default function EmailCampaignModal({
+  campaign,
+  onClose,
+  onSend,
+}: {
+  campaign: any;
+  onClose: any;
+  onSend: any;
+}) {
   const [subscribers, setSubscribers] = useState([]);
   const [selectedEmails, setSelectedEmails] = useState('all');
   const [customEmails, setCustomEmails] = useState('');

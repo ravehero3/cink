@@ -5,7 +5,7 @@ import DraggableBlock from './DraggableBlock';
 import EmailPreview from './EmailPreview';
 import BlockPalette from './BlockPalette';
 
-export default function EmailEditor({ campaign, onSave }) {
+export default function EmailEditor({ campaign, onSave }: { campaign?: any; onSave: any }) {
   const [blocks, setBlocks] = useState(campaign?.blocks || []);
   const [name, setName] = useState(campaign?.name || '');
   const [subject, setSubject] = useState(campaign?.subject || '');
