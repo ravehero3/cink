@@ -116,7 +116,7 @@ export default function EmailPreview({ blocks, subject }: { blocks: any[]; subje
             Náhled bude zobrazen po přidání bloků
           </div>
         ) : (
-          blocks.map((block) => renderBlock(block))
+          blocks.map((block: any) => renderBlock(block))
         )}
       </div>
 
