@@ -99,7 +99,7 @@ export default function DraggableBlock({
             <input
               type="text"
               value={block.content.text}
-              onChange={(e) => onUpdate(block.id, { ...block.content, text: e.target.value })}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdate(block.id, { ...block.content, text: e.target.value })}
               style={{ width: '100%', padding: '6px', border: '1px solid #ddd', borderRadius: '3px' }}
             />
           </div>
@@ -112,7 +112,7 @@ export default function DraggableBlock({
             </label>
             <textarea
               value={block.content.text}
-              onChange={(e) => onUpdate(block.id, { ...block.content, text: e.target.value })}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onUpdate(block.id, { ...block.content, text: e.target.value })}
               style={{
                 width: '100%',
                 padding: '6px',
@@ -133,7 +133,7 @@ export default function DraggableBlock({
             <input
               type="url"
               value={block.content.url}
-              onChange={(e) => onUpdate(block.id, { ...block.content, url: e.target.value })}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdate(block.id, { ...block.content, url: e.target.value })}
               placeholder="https://..."
               style={{ width: '100%', padding: '6px', border: '1px solid #ddd', borderRadius: '3px', marginBottom: '8px' }}
             />
@@ -143,7 +143,7 @@ export default function DraggableBlock({
             <input
               type="text"
               value={block.content.alt}
-              onChange={(e) => onUpdate(block.id, { ...block.content, alt: e.target.value })}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdate(block.id, { ...block.content, alt: e.target.value })}
               style={{ width: '100%', padding: '6px', border: '1px solid #ddd', borderRadius: '3px' }}
             />
           </div>
@@ -158,7 +158,7 @@ export default function DraggableBlock({
               <input
                 type="text"
                 value={block.content.text}
-                onChange={(e) => onUpdate(block.id, { ...block.content, text: e.target.value })}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdate(block.id, { ...block.content, text: e.target.value })}
                 style={{ width: '100%', padding: '6px', border: '1px solid #ddd', borderRadius: '3px' }}
               />
             </div>
@@ -169,7 +169,7 @@ export default function DraggableBlock({
               <input
                 type="text"
                 value={block.content.subtitle}
-                onChange={(e) => onUpdate(block.id, { ...block.content, subtitle: e.target.value })}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdate(block.id, { ...block.content, subtitle: e.target.value })}
                 style={{ width: '100%', padding: '6px', border: '1px solid #ddd', borderRadius: '3px' }}
               />
             </div>
@@ -180,7 +180,7 @@ export default function DraggableBlock({
               <input
                 type="text"
                 value={block.content.code}
-                onChange={(e) => onUpdate(block.id, { ...block.content, code: e.target.value })}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdate(block.id, { ...block.content, code: e.target.value })}
                 style={{ width: '100%', padding: '6px', border: '1px solid #ddd', borderRadius: '3px' }}
               />
             </div>
@@ -191,7 +191,7 @@ export default function DraggableBlock({
               <input
                 type="text"
                 value={block.content.discount}
-                onChange={(e) => onUpdate(block.id, { ...block.content, discount: e.target.value })}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdate(block.id, { ...block.content, discount: e.target.value })}
                 style={{ width: '100%', padding: '6px', border: '1px solid #ddd', borderRadius: '3px' }}
               />
             </div>
@@ -206,7 +206,7 @@ export default function DraggableBlock({
             <input
               type="text"
               value={block.content.code}
-              onChange={(e) => onUpdate(block.id, { ...block.content, code: e.target.value })}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdate(block.id, { ...block.content, code: e.target.value })}
               style={{ width: '100%', padding: '6px', border: '1px solid #ddd', borderRadius: '3px' }}
             />
           </div>
