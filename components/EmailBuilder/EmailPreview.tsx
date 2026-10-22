@@ -1,7 +1,7 @@
 'use client';
 
 export default function EmailPreview({ blocks, subject }: { blocks: any[]; subject: string }) {
-  const renderBlock = (block) => {
+  const renderBlock = (block: any) => {
     switch (block.type) {
       case 'header':
         return (
