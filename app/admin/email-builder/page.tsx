@@ -157,7 +157,7 @@ export default function EmailBuilderPage() {
           <div style={{ padding: '40px' }}>
             <h1 style={{ marginBottom: '20px' }}>Vytvořit novou kampaň</h1>
             <EmailEditor
-              onSave={(campaign) => {
+              onSave={(campaign: any) => {
                 fetchCampaigns();
                 setSelectedCampaign(campaign);
               }}
@@ -168,7 +168,7 @@ export default function EmailBuilderPage() {
             <h1 style={{ marginBottom: '20px' }}>Upravit kampaň</h1>
             <EmailEditor
               campaign={selectedCampaign}
-              onSave={(campaign) => {
+              onSave={(campaign: any) => {
                 fetchCampaigns();
                 setSelectedCampaign(campaign);
               }}
