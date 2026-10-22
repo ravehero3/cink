@@ -9,7 +9,7 @@ export default function EmailEditor({ campaign, onSave }: { campaign?: any; onSa
   const [blocks, setBlocks] = useState(campaign?.blocks || []);
   const [name, setName] = useState(campaign?.name || '');
   const [subject, setSubject] = useState(campaign?.subject || '');
-  const [draggedBlock, setDraggedBlock] = useState(null);
+  const [draggedBlock, setDraggedBlock] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
   const handleDragStart = (e: React.DragEvent, blockType: string) => {
