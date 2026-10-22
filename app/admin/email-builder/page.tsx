@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import EmailEditor from '@/components/EmailBuilder/EmailEditor';
 import EmailCampaignModal from '@/components/EmailBuilder/EmailCampaignModal';
@@ -13,7 +13,7 @@ export default function EmailBuilderPage() {
   const [loading, setLoading] = useState(false);
 
   // Fetch campaigns on mount
-  useState(() => {
+  useEffect(() => {
     fetchCampaigns();
   }, []);
 
