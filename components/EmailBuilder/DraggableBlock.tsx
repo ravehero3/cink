@@ -21,7 +21,7 @@ export default function DraggableBlock({
 }) {
   const [isEditing, setIsEditing] = useState(false);
 
-  const renderBlockPreview = () => {
+  const renderBlockPreview = (block: any) => {
     switch (block.type) {
       case 'header':
         return (
@@ -88,7 +88,7 @@ export default function DraggableBlock({
     }
   };
 
-  const renderEditor = () => {
+  const renderEditor = (block: any) => {
     switch (block.type) {
       case 'header':
         return (
@@ -303,7 +303,7 @@ export default function DraggableBlock({
 
       {/* Block Preview or Editor */}
       <div style={{ padding: '12px' }}>
-        {isEditing ? renderEditor() : renderBlockPreview()}
+        {isEditing ? renderEditor(block) : renderBlockPreview(block)}
       </div>
     </div>
   );
