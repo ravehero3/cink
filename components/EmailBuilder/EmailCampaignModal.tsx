@@ -11,7 +11,7 @@ export default function EmailCampaignModal({
   onClose: any;
   onSend: any;
 }) {
-  const [subscribers, setSubscribers] = useState([]);
+  const [subscribers, setSubscribers] = useState<any[]>([]);
   const [selectedEmails, setSelectedEmails] = useState('all');
   const [customEmails, setCustomEmails] = useState('');
   const [loading, setLoading] = useState(false);
@@ -41,7 +41,7 @@ export default function EmailCampaignModal({
       return;
     }
 
-    let recipientEmails = [];
+    let recipientEmails: string[] = [];
     if (selectedEmails === 'all') {
       recipientEmails = subscribers.map((s) => s.email);
     } else if (selectedEmails === 'custom') {
