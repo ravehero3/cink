@@ -1,11 +1,12 @@
 import { getServerSession } from 'next-auth/next';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { authOptions } from '@/lib/auth';
 
 export async function GET(request: NextRequest) {
   try {
     const allParam = request.nextUrl.searchParams.get('all');
-    const session = await getServerSession();
+    const session = await getServerSession(authOptions);
     const isAdmin = session?.user?.role === 'ADMIN';
 
     // Admins see all, public sees only published
@@ -23,7 +24,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession();
+    const session = await getServerSession(authOptions);
     if (!session || session.user?.role !== 'ADMIN') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
