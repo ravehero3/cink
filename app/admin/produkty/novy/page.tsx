@@ -7,7 +7,8 @@ import ImageUploader from '@/components/admin/ImageUploader';
 import StatusMessage from '@/components/admin/StatusMessage';
 
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
-const PRODUCT_TYPES = ['TRIKO', 'MIKINA', 'KRAŤASY', 'KALHOTY', 'CD'] as const;
+const PRODUCT_TYPES = ['TRIKO', 'MIKINA', 'KRAŤASY', 'KALHOTY', 'CD', 'TAŠKA', 'PLAKÁT'] as const;
+const POSTER_SIZES = ['A3+ (Na fotografickém papíře)'] as const;
 
 const inputCls = "admin-input";
 const labelCls = "admin-label";
@@ -34,8 +35,11 @@ export default function NewProductPage() {
     sizeFit: '',
     shippingInfo: '',
     careInfo: '',
+    dimensionsAndMaintenance: '', // For TAŠKA
     sizeChartImage: '',
     productType: '',
+    posterSize: '', // For PLAKÁT
+    tubeInfo: 'Baleno v tubusu', // For PLAKÁT
   });
 
   useEffect(() => {
@@ -67,13 +71,16 @@ export default function NewProductPage() {
           ...formData,
           price: parseFloat(formData.price),
           images: images.filter((img) => img.trim() !== ''),
-          sizes,
+          sizes: formData.productType === 'TAŠKA' ? { ONE_SIZE: 0 } : formData.productType === 'PLAKÁT' ? { [formData.posterSize]: 0 } : sizes,
           productInfo: formData.productInfo || null,
           sizeFit: formData.sizeFit || null,
           shippingInfo: formData.shippingInfo || null,
           careInfo: formData.careInfo || null,
+          dimensionsAndMaintenance: formData.dimensionsAndMaintenance || null,
           sizeChartImage: formData.sizeChartImage || null,
           productType: formData.productType || null,
+          posterSize: formData.posterSize || null,
+          tubeInfo: formData.tubeInfo || null,
         }),
       });
       if (response.ok) {
@@ -92,7 +99,11 @@ export default function NewProductPage() {
     }
   };
 
+  const isBag = formData.productType === 'TAŠKA';
+  const isPoster = formData.productType === 'PLAKÁT';
   const isCD = formData.productType === 'CD';
+  const showSizeSelection = !isBag && !isPoster && !isCD;
+  
   const updateSize = (size: string, value: string) => setSizes({ ...sizes, [size]: parseInt(value) || 0 });
   const updateCDStock = (value: string) => setSizes({ ONE_SIZE: parseInt(value) || 0 });
   const totalStock = Object.values(sizes).reduce((sum, val) => sum + val, 0);
@@ -197,20 +208,25 @@ export default function NewProductPage() {
 
               {/* Product type */}
               <div>
-                <label className={labelCls}>Typ produktu</label>
+                <label className={labelCls}>Typ produktu *</label>
                 <div className="flex flex-wrap gap-2">
-                  {['', ...PRODUCT_TYPES].map((type) => (
+                  {PRODUCT_TYPES.map((type) => (
                     <button
                       key={type}
                       type="button"
-                      onClick={() => setFormData({ ...formData, productType: type })}
+                      onClick={() => {
+                        setFormData({ ...formData, productType: type, posterSize: type === 'PLAKÁT' ? 'A3+ (Na fotografickém papíře)' : '' });
+                        if (type !== 'TAŠKA' && type !== 'PLAKÁT') {
+                          setSizes(SIZES.reduce((acc, size) => ({ ...acc, [size]: 0 }), {}));
+                        }
+                      }}
                       className={`px-3 py-1.5 text-xs uppercase font-medium tracking-wider border border-black transition-colors ${
                         formData.productType === type
                           ? 'bg-black text-white'
                           : 'bg-white text-black hover:bg-black hover:text-white'
                       }`}
                     >
-                      {type === '' ? 'Neurčeno' : type}
+                      {type}
                     </button>
                   ))}
                 </div>
@@ -254,15 +270,44 @@ export default function NewProductPage() {
                 />
               </div>
 
-              {!isCD && (
+              {/* TAŠKA specific fields */}
+              {isBag && (
                 <div>
-                  <label className={labelCls}>Střih a velikost</label>
+                  <label className={labelCls}>Rozměr a způsob údržby *</label>
+                  <textarea
+                    rows={4}
+                    required
+                    value={formData.dimensionsAndMaintenance}
+                    onChange={(e) => setFormData({ ...formData, dimensionsAndMaintenance: e.target.value })}
+                    className={textareaCls}
+                    placeholder="Uvedte rozměry tašky (šířka, výška, hloubka) a pokyny pro údržbu…"
+                  />
+                </div>
+              )}
+
+              {/* PLAKÁT specific info */}
+              {isPoster && (
+                <div>
+                  <label className={labelCls}>Informace o fotografickém papíru a tubusu</label>
+                  <textarea
+                    rows={3}
+                    value={formData.tubeInfo}
+                    onChange={(e) => setFormData({ ...formData, tubeInfo: e.target.value })}
+                    className={textareaCls}
+                    placeholder="Typ papíru, rozlišení, informace o tubusu…"
+                  />
+                </div>
+              )}
+
+              {!isBag && (
+                <div>
+                  <label className={labelCls}>{isBag ? 'Údržba' : 'Střih a velikost'}</label>
                   <textarea
                     rows={3}
                     value={formData.sizeFit}
                     onChange={(e) => setFormData({ ...formData, sizeFit: e.target.value })}
                     className={textareaCls}
-                    placeholder="Informace o velikostech a střihu…"
+                    placeholder={isBag ? 'Pokyny pro péči o produkt…' : 'Informace o velikostech a střihu…'}
                   />
                 </div>
               )}
@@ -278,7 +323,7 @@ export default function NewProductPage() {
                 />
               </div>
 
-              {!isCD && (
+              {!isBag && !isPoster && (
                 <div>
                   <label className={labelCls}>Péče o produkt</label>
                   <textarea
@@ -299,10 +344,47 @@ export default function NewProductPage() {
             {/* Stock */}
             <div className="bg-white border border-black p-6">
               <p className="text-[10px] font-bold text-[#666666] uppercase tracking-widest mb-4 pb-2 border-b border-black">
-                {isCD ? 'Sklad' : 'Velikosti a sklad'}
+                {isBag ? 'Sklad' : isPoster ? 'Velikost a sklad' : isCD ? 'Sklad' : 'Velikosti a sklad'}
               </p>
 
-              {isCD ? (
+              {isBag ? (
+                <div>
+                  <p className="text-xs uppercase tracking-wider text-[#666666] mb-3">Taška nemá výběr velikostí. Zadejte pouze informace výše.</p>
+                  <input
+                    type="number"
+                    min="0"
+                    value={sizes['ONE_SIZE'] || 0}
+                    onChange={(e) => setSizes({ ONE_SIZE: parseInt(e.target.value) || 0 })}
+                    className={inputCls + " text-center"}
+                    placeholder="Množství na skladě"
+                  />
+                </div>
+              ) : isPoster ? (
+                <div>
+                  <label className="text-[10px] font-bold text-black mb-2 block uppercase">Velikost *</label>
+                  <select
+                    value={formData.posterSize}
+                    onChange={(e) => setFormData({ ...formData, posterSize: e.target.value })}
+                    className={inputCls + " mb-3"}
+                    required
+                  >
+                    {POSTER_SIZES.map((size) => (
+                      <option key={size} value={size}>{size}</option>
+                    ))}
+                  </select>
+                  <div className="bg-[#f5f5f5] border border-[#ddd] p-2 text-[11px] text-[#666] mb-3 rounded">
+                    ℹ️ Rozměr: {formData.posterSize} | Baleno v tubusu
+                  </div>
+                  <label className="text-[10px] font-bold text-black mb-2 block uppercase">Množství na skladě</label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={sizes[formData.posterSize] || 0}
+                    onChange={(e) => setSizes({ [formData.posterSize]: parseInt(e.target.value) || 0 })}
+                    className={inputCls + " text-center"}
+                  />
+                </div>
+              ) : isCD ? (
                 <div>
                   <label className={labelCls}>Množství na skladě</label>
                   <input

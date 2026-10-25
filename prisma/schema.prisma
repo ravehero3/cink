@@ -59,6 +59,10 @@ model Product {
   seoKeywords        String?
   ogImage            String?
   novinkysProduct    NovinkysProduct?
+  // New fields for TAŠKA and PLAKÁT
+  dimensions         String?         @db.Text  // For TAŠKA: dimensions, for PLAKÁT: A3+ info
+  careMaintenance    String?         @db.Text  // For TAŠKA: care and maintenance
+  tubeInfo           String?         @db.Text  // For PLAKÁT: tube/packaging info
   createdAt          DateTime        @default(now())
   updatedAt          DateTime        @updatedAt
 }
