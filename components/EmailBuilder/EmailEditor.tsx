@@ -182,7 +182,7 @@ export default function EmailEditor({ campaign, onSave }: { campaign?: any; onSa
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {blocks.map((block, index) => (
+              {blocks.map((block: any, index) => (
                 <DraggableBlock
                   key={block.id}
                   block={block}
