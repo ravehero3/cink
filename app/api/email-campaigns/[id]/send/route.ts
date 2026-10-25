@@ -2,7 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const getResendClient = () => {
+  if (!process.env.RESEND_API_KEY) {
+    console.warn('RESEND_API_KEY not set');
+    return null;
+  }
+  return new Resend(process.env.RESEND_API_KEY);
+};
 
 async function renderEmailFromBlocks(blocks: any[]) {
   let html = `
@@ -90,6 +96,11 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
 
     const blocks = JSON.parse(campaign.content);
     const html = await renderEmailFromBlocks(blocks);
+
+    const resend = getResendClient();
+    if (!resend) {
+      return NextResponse.json({ error: 'Email service not configured' }, { status: 500 });
+    }
 
     let sentCount = 0;
     let failedCount = 0;
