@@ -93,19 +93,11 @@ export async function restoreArticleVersion(
       author: version.author,
       category: version.category,
       tags: version.tags,
-      blocks: version.blocks,
+      blocks: version.blocks as any,
       published: version.published,
       publishedAt: version.publishedAt,
     },
   });
-
-  // Create new version entry for restoration
-  await createArticleVersion(
-    articleId,
-    updated,
-    editor,
-    `Restored from version created on ${version.createdAt.toLocaleString()}`
-  );
 
   return updated;
 }
