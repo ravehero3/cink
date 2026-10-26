@@ -4,11 +4,15 @@ import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
 import crypto from 'crypto';
 import { authOptions } from '@/lib/auth';
-import { uploadToOracleVPS } from '@/lib/oracle-vps';
 
 const MAX_SIZE = 50 * 1024 * 1024; // 50MB
 const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'image/gif', 'image/avif', 'image/jpg'];
 
+/**
+ * Magazine image upload endpoint
+ * Uploads images to local public/magazine-uploads directory
+ * Images are accessible at /magazine-uploads/{filename}
+ */
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
@@ -39,55 +43,51 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate filename
-    const ext = file.type.replace('image/', '');
-    const filename = crypto.randomBytes(12).toString('hex') + '.' + ext;
-    const buffer = Buffer.from(await file.arrayBuffer());
-
-    let url: string = '';
-    let vpsPath: string | null = null;
-    let storageType = 'LOCAL';
-
-    // Try Oracle VPS first
+    // Generate filename with timestamp and random hash
+    const ext = file.type.replace('image/', '').replace('image/jpg', 'jpg').replace('image/jpeg', 'jpg');
+    const timestamp = Date.now();
+    const randomHash = crypto.randomBytes(8).toString('hex');
+    const filename = `magazine-${timestamp}-${randomHash}.${ext}`;
+    
     try {
-      const vpsResult = await uploadToOracleVPS(buffer, filename);
-      url = vpsResult.url;
-      vpsPath = vpsResult.vpsPath;
-      storageType = 'ORACLE_VPS';
-      console.log(`[Magazine] Image uploaded to Oracle VPS: ${filename}`);
-    } catch (vpsError) {
-      console.warn(`[Magazine] Oracle VPS upload failed, falling back to local:`, vpsError);
-      // Fallback to local storage
-      try {
-        const uploadsDir = join(process.cwd(), 'public', 'magazine-uploads');
-        await mkdir(uploadsDir, { recursive: true });
-        const filepath = join(uploadsDir, filename);
-        await writeFile(filepath, buffer);
-        url = `/magazine-uploads/${filename}`;
-        storageType = 'LOCAL';
-        console.log(`[Magazine] Image saved locally: ${filename}`);
-      } catch (localError) {
-        console.error('Local filesystem write failed:', localError);
-        return NextResponse.json(
-          { error: 'Nahrávání obrázku selhalo. Zkuste to znovu.' },
-          { status: 500 }
-        );
-      }
-    }
+      const buffer = Buffer.from(await file.arrayBuffer());
 
-    return NextResponse.json({
-      url,
-      filename,
-      storageType,
-      vpsPath,
-      message: storageType === 'ORACLE_VPS' 
-        ? '✓ Obrázek je bezpečně uložen na Oracle VPS'
-        : '⚠️ Obrázek je uložen lokálně',
-    });
+      // Ensure uploads directory exists
+      const uploadsDir = join(process.cwd(), 'public', 'magazine-uploads');
+      
+      try {
+        await mkdir(uploadsDir, { recursive: true });
+      } catch (mkdirError) {
+        console.error('Error creating magazine-uploads directory:', mkdirError);
+        // Continue anyway, directory might already exist
+      }
+
+      // Write file to disk
+      const filepath = join(uploadsDir, filename);
+      await writeFile(filepath, buffer);
+
+      // Construct the public URL
+      const url = `/magazine-uploads/${filename}`;
+
+      console.log(`✓ Magazine image uploaded: ${filename}`);
+
+      return NextResponse.json({
+        url,
+        filename,
+        size: file.size,
+        type: file.type,
+      });
+    } catch (writeError) {
+      console.error('Error writing file to disk:', writeError);
+      return NextResponse.json(
+        { error: 'Nahrávání obrázku selhalo - chyba při zápisu na disk.' },
+        { status: 500 }
+      );
+    }
   } catch (error) {
-    console.error('Error uploading image:', error);
+    console.error('Error uploading magazine image:', error);
     return NextResponse.json(
-      { error: 'Nahrávání souboru selhalo.' },
+      { error: 'Nahrávání souboru selhalo. ' + (error instanceof Error ? error.message : '') },
       { status: 500 }
     );
   }
