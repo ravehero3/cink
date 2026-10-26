@@ -140,9 +140,9 @@ export default function ArticlePage() {
           <div className="magazin-body max-w-2xl mx-auto px-4 md:px-8 py-12">
             {/* Render blocks */}
             {article.blocks.text1 && (
-              <p className="magazin-text mb-8 text-lg leading-relaxed">
+              <div className="magazin-text mb-8 text-lg leading-relaxed whitespace-pre-wrap">
                 {article.blocks.text1}
-              </p>
+              </div>
             )}
 
             {article.blocks.image1 && (
@@ -164,9 +164,9 @@ export default function ArticlePage() {
             )}
 
             {article.blocks.text2 && (
-              <p className="magazin-text mb-8 text-lg leading-relaxed">
+              <div className="magazin-text mb-8 text-lg leading-relaxed whitespace-pre-wrap">
                 {article.blocks.text2}
-              </p>
+              </div>
             )}
 
             {article.blocks.instagram && (
@@ -193,9 +193,9 @@ export default function ArticlePage() {
             )}
 
             {article.blocks.text3 && (
-              <p className="magazin-text mb-8 text-lg leading-relaxed">
+              <div className="magazin-text mb-8 text-lg leading-relaxed whitespace-pre-wrap">
                 {article.blocks.text3}
-              </p>
+              </div>
             )}
           </div>
 
