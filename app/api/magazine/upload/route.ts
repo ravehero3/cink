@@ -1,21 +1,16 @@
 import { getServerSession } from 'next-auth/next';
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import { writeFile, mkdir } from 'fs/promises';
+import { join } from 'path';
 import crypto from 'crypto';
+import { authOptions } from '@/lib/auth';
 
-const UPLOAD_DIR = path.join(process.cwd(), 'public', 'magazine-uploads');
-const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'image/gif', 'image/avif'];
-const MAX_SIZE = 10 * 1024 * 1024; // 10MB
-
-// Ensure upload directory exists
-if (!fs.existsSync(UPLOAD_DIR)) {
-  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
-}
+const MAX_SIZE = 50 * 1024 * 1024; // 50MB
+const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'image/gif', 'image/avif', 'image/jpg'];
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession();
+    const session = await getServerSession(authOptions);
     if (!session || session.user?.role !== 'ADMIN') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -40,11 +35,13 @@ export async function POST(request: NextRequest) {
     // Generate random filename
     const ext = file.type.replace('image/', '');
     const filename = crypto.randomBytes(12).toString('hex') + '.' + ext;
-    const filepath = path.join(UPLOAD_DIR, filename);
-
-    // Convert to buffer and save
-    const bytes = await file.arrayBuffer();
-    fs.writeFileSync(filepath, Buffer.from(bytes));
+    
+    // Save to local storage
+    const uploadsDir = join(process.cwd(), 'public', 'magazine-uploads');
+    await mkdir(uploadsDir, { recursive: true });
+    const filepath = join(uploadsDir, filename);
+    const buffer = Buffer.from(await file.arrayBuffer());
+    await writeFile(filepath, buffer);
 
     const url = `/magazine-uploads/${filename}`;
     return NextResponse.json({ url });
