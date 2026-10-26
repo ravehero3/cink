@@ -10,6 +10,7 @@ import {
   validateInstagramUrl,
   validateSlug,
 } from '@/lib/magazine-sanitize';
+import { createArticleVersion } from '@/lib/magazine-versions';
 
 export async function GET(request: NextRequest) {
   try {
@@ -17,9 +18,9 @@ export async function GET(request: NextRequest) {
     const session = await getServerSession(authOptions);
     const isAdmin = session?.user?.role === 'ADMIN';
 
-    // Admins see all, public sees only published
+    // Admins see all active articles, public sees only published
     const articles = await prisma.magazineArticle.findMany({
-      where: allParam === '1' && isAdmin ? {} : { published: true },
+      where: allParam === '1' && isAdmin ? { archived: false } : { published: true, archived: false },
       orderBy: { publishedAt: 'desc' },
     });
 
@@ -59,9 +60,9 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Check slug uniqueness
+    // Check slug uniqueness (active articles only)
     const existing = await prisma.magazineArticle.findUnique({ where: { slug: validatedSlug } });
-    if (existing) {
+    if (existing && !existing.archived) {
       return NextResponse.json(
         { error: 'Tento slug již existuje. Zvolte jiný.' },
         { status: 409 }
@@ -81,6 +82,23 @@ export async function POST(request: NextRequest) {
         publishedAt: published ? new Date() : null,
       },
     });
+
+    // Create initial version history entry
+    await createArticleVersion(
+      article.id,
+      {
+        title: article.title,
+        subtitle: article.subtitle,
+        author: article.author,
+        category: article.category,
+        tags: article.tags,
+        blocks: article.blocks,
+        published: article.published,
+        publishedAt: article.publishedAt,
+      },
+      session.user?.email || 'unknown',
+      `Article created${published ? ' and published' : ''}`
+    );
 
     return NextResponse.json(article, { status: 201 });
   } catch (error) {

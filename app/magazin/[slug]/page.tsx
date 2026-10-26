@@ -6,6 +6,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Header1 from '@/components/Header1';
 import Footer from '@/components/Footer';
+import { getArticleMetadata } from '@/lib/magazine-analytics';
+import { generateArticleSchema } from '@/lib/magazine-seo';
 
 interface Article {
   id: string;
@@ -17,6 +19,7 @@ interface Article {
   tags?: string;
   blocks: any;
   publishedAt: string;
+  viewCount?: number;
 }
 
 export default function ArticlePage() {
@@ -49,6 +52,9 @@ export default function ArticlePage() {
       }
       
       setArticle(data);
+
+      // Record view (fire and forget)
+      fetch(`/api/magazine/articles/${slug}/view`, { method: 'POST' }).catch(() => {});
 
       // Fetch related articles
       const allRes = await fetch('/api/magazine/articles');
@@ -95,6 +101,9 @@ export default function ArticlePage() {
     ? new Date(article.publishedAt).toLocaleDateString('cs-CZ')
     : '';
 
+  // Generate JSON-LD schema
+  const schema = generateArticleSchema(article);
+
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <Header1 />
@@ -119,10 +128,18 @@ export default function ArticlePage() {
               </h2>
             )}
 
-            <div className="magazin-byline flex items-center gap-4 text-sm text-gray-600 pb-8 border-b border-gray-200">
+            <div className="magazin-byline flex items-center gap-4 text-sm text-gray-600 pb-8 border-b border-gray-200 flex-wrap">
               <span>Od {article.author || 'Redakce'}</span>
               <span>•</span>
               <span>{publishedDate}</span>
+              <span>•</span>
+              <span>{getArticleMetadata(article.blocks).readingTimeFormatted}</span>
+              {article.viewCount !== undefined && (
+                <>
+                  <span>•</span>
+                  <span>{article.viewCount.toLocaleString('cs-CZ')} zobrazení</span>
+                </>
+              )}
             </div>
           </div>
 
@@ -260,6 +277,14 @@ export default function ArticlePage() {
       </main>
 
       <Footer />
+
+      {/* JSON-LD Schema for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(schema),
+        }}
+      />
 
       {/* Load Instagram embed script */}
       {article.blocks.instagram && (

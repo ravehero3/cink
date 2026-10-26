@@ -5,6 +5,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Header1 from '@/components/Header1';
 import Footer from '@/components/Footer';
+import { getArticleMetadata } from '@/lib/magazine-analytics';
+import { generateMagazineCollectionSchema } from '@/lib/magazine-seo';
 
 interface Article {
   id: string;
@@ -24,6 +26,9 @@ export default function MagazinePage() {
   useEffect(() => {
     fetchArticles();
   }, []);
+
+  // Generate JSON-LD schema for collection
+  const collectionSchema = generateMagazineCollectionSchema();
 
   const fetchArticles = async () => {
     try {
@@ -87,10 +92,12 @@ export default function MagazinePage() {
                     {/* Card content */}
                     <div className="magazin-card-content">
                       {/* Meta */}
-                      <div className="magazin-card-meta flex items-center gap-2 text-xs uppercase text-gray-500 mb-2">
+                      <div className="magazin-card-meta flex items-center gap-2 text-xs uppercase text-gray-500 mb-2 flex-wrap">
                         {article.category && <span>{article.category}</span>}
                         {article.category && article.author && <span>•</span>}
                         {article.author && <span>{article.author}</span>}
+                        {(article.category || article.author) && <span>•</span>}
+                        <span>{getArticleMetadata(article.blocks).readingTimeFormatted}</span>
                       </div>
 
                       {/* Title */}
@@ -114,6 +121,14 @@ export default function MagazinePage() {
       </main>
 
       <Footer />
+
+      {/* JSON-LD Schema for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(collectionSchema),
+        }}
+      />
     </div>
   );
 }

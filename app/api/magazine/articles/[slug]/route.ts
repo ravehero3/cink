@@ -1,4 +1,4 @@
-import { getServerSession } from 'next-auth/next';
+import { archiveArticle } from '@/lib/magazine-softdelete';import { getServerSession } from 'next-auth/next';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authOptions } from '@/lib/auth';
@@ -10,6 +10,7 @@ import {
   validateInstagramUrl,
   validateSlug,
 } from '@/lib/magazine-sanitize';
+import { createArticleVersion } from '@/lib/magazine-versions';
 
 export async function GET(
   request: NextRequest,
@@ -23,7 +24,7 @@ export async function GET(
       where: { slug: params.slug },
     });
 
-    if (!article) {
+    if (!article || article.archived) {
       return NextResponse.json({ error: 'Not found' }, { status: 404 });
     }
 
@@ -91,6 +92,8 @@ export async function PUT(
           { error: 'Tento slug již existuje. Zvolte jiný.' },
           { status: 409 }
         );
+
+    return NextResponse.json(article);
       }
     }
 
@@ -118,7 +121,22 @@ export async function PUT(
       },
     });
 
-    return NextResponse.json(article);
+    // Create version history entry
+    await createArticleVersion(
+      article.id,
+      {
+        title: article.title,
+        subtitle: article.subtitle,
+        author: article.author,
+        category: article.category,
+        tags: article.tags,
+        blocks: article.blocks,
+        published: article.published,
+        publishedAt: article.publishedAt,
+      },
+      session.user?.email || 'unknown',
+      `Updated article: ${validatedNewSlug !== currentSlug ? 'Slug changed, ' : ''}${published && !existing.published ? 'Published, ' : ''}content updated`
+    );
   } catch (error: any) {
     if (error.code === 'P2025') {
       return NextResponse.json({ error: 'Článek nenalezen' }, { status: 404 });
@@ -138,16 +156,15 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    await prisma.magazineArticle.delete({
-      where: { slug: params.slug },
-    });
+    // Use soft-delete instead of hard delete
+    await archiveArticle(params.slug, session.user?.email || 'unknown');
 
     return NextResponse.json({ ok: true });
   } catch (error: any) {
-    if (error.code === 'P2025') {
-      return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    if (error.code === 'P2025' || error.message.includes('not found')) {
+      return NextResponse.json({ error: 'Article not found' }, { status: 404 });
     }
-    console.error('Error deleting article:', error);
-    return NextResponse.json({ error: 'Failed to delete article' }, { status: 500 });
+    console.error('Error archiving article:', error);
+    return NextResponse.json({ error: 'Failed to archive article' }, { status: 500 });
   }
 }
