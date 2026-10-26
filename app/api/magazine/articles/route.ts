@@ -2,6 +2,14 @@ import { getServerSession } from 'next-auth/next';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authOptions } from '@/lib/auth';
+import {
+  sanitizeTitle,
+  sanitizeAuthor,
+  sanitizeCategory,
+  sanitizeTags,
+  validateInstagramUrl,
+  validateSlug,
+} from '@/lib/magazine-sanitize';
 
 export async function GET(request: NextRequest) {
   try {
@@ -31,25 +39,43 @@ export async function POST(request: NextRequest) {
 
     const { slug, title, subtitle, author, category, tags, blocks, published } = await request.json();
 
-    // Validate slug
-    if (!slug || !/^[a-z0-9]+(-[a-z0-9]+)*$/.test(slug)) {
-      return NextResponse.json({ error: 'Invalid slug' }, { status: 400 });
+    // Validate and sanitize inputs
+    try {
+      var validatedSlug = validateSlug(slug);
+      var validatedTitle = sanitizeTitle(title);
+      var validatedAuthor = sanitizeAuthor(author);
+      var validatedCategory = sanitizeCategory(category);
+      var validatedTags = sanitizeTags(tags);
+    } catch (validationError: any) {
+      return NextResponse.json({ error: validationError.message }, { status: 400 });
     }
 
-    // Check uniqueness
-    const existing = await prisma.magazineArticle.findUnique({ where: { slug } });
+    // Validate blocks (Instagram URL if present)
+    if (blocks?.instagram) {
+      try {
+        blocks.instagram = validateInstagramUrl(blocks.instagram);
+      } catch (instagramError: any) {
+        return NextResponse.json({ error: instagramError.message }, { status: 400 });
+      }
+    }
+
+    // Check slug uniqueness
+    const existing = await prisma.magazineArticle.findUnique({ where: { slug: validatedSlug } });
     if (existing) {
-      return NextResponse.json({ error: 'Slug already exists' }, { status: 409 });
+      return NextResponse.json(
+        { error: 'Tento slug již existuje. Zvolte jiný.' },
+        { status: 409 }
+      );
     }
 
     const article = await prisma.magazineArticle.create({
       data: {
-        slug,
-        title,
-        subtitle,
-        author,
-        category,
-        tags,
+        slug: validatedSlug,
+        title: validatedTitle,
+        subtitle: subtitle ? String(subtitle).trim().substring(0, 1000) : null,
+        author: validatedAuthor || null,
+        category: validatedCategory || null,
+        tags: validatedTags || null,
         blocks: blocks || {},
         published,
         publishedAt: published ? new Date() : null,

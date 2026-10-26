@@ -40,6 +40,14 @@ export default function ArticlePage() {
         return;
       }
       const data = await res.json();
+      
+      // Ensure article is published (security check - public shouldn't see drafts)
+      if (!data.published) {
+        setNotFound(true);
+        setLoading(false);
+        return;
+      }
+      
       setArticle(data);
 
       // Fetch related articles
