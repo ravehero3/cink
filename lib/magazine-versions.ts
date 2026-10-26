@@ -5,13 +5,13 @@ import { prisma } from '@/lib/prisma';
 
 export interface ArticleSnapshot {
   title: string;
-  subtitle?: string;
-  author?: string;
-  category?: string;
-  tags?: string;
+  subtitle?: string | null;
+  author?: string | null;
+  category?: string | null;
+  tags?: string | null;
   blocks: any;
   published: boolean;
-  publishedAt?: Date;
+  publishedAt?: Date | null;
 }
 
 /**
