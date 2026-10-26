@@ -67,7 +67,7 @@ export async function getArticleAnalytics(slug: string): Promise<ArticleAnalytic
     },
   });
 
-  return article || null;
+  return article as ArticleAnalytics | null;
 }
 
 /**
