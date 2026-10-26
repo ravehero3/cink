@@ -5,13 +5,11 @@ import { prisma } from '@/lib/prisma';
 import { renderEmail, EMAIL_CATALOG, SAMPLE_VARS, type EmailType } from '@/lib/email-catalog';
 import type { EmailTemplateCustomization } from '@/lib/email-layout';
 
-function enforceBlackBackground(html: string): string {
-  return html
-    .replace(/background:\s*#ffffff/gi, 'background:#000000')
-    .replace(/background-color:\s*#ffffff/gi, 'background-color:#000000')
-    .replace(/bgcolor="#ffffff"/gi, 'bgcolor="#000000"')
-    .replace(/background:\s*white/gi, 'background:#000000')
-    .replace(/background-color:\s*white/gi, 'background-color:#000000');
+// Removed: enforceWhiteBackground function - emails now display with their proper white backgrounds
+// Previously this function was forcing all white backgrounds to black in preview
+function enforceWhiteBackground(html: string): string {
+  // Keep HTML as-is - trust the email-layout.ts template which now uses white backgrounds
+  return html;
 }
 
 export async function GET(request: NextRequest) {
@@ -29,7 +27,7 @@ export async function GET(request: NextRequest) {
     const log = await prisma.emailLog.findUnique({ where: { id: logId } });
     if (!log) return new NextResponse('Not found', { status: 404 });
     const rawHtml = log.html || renderEmail((log.type as EmailType) || 'ORDER_CONFIRMATION', SAMPLE_VARS).html;
-    return new NextResponse(enforceBlackBackground(rawHtml), {
+    return new NextResponse(enforceWhiteBackground(rawHtml), {
       headers: { 'Content-Type': 'text/html; charset=utf-8' },
     });
   }
@@ -51,7 +49,7 @@ export async function GET(request: NextRequest) {
       customization: (campaign.customization as any) || undefined,
       adminMode: adminInteractive,
     });
-    return new NextResponse(enforceBlackBackground(rawHtml), {
+    return new NextResponse(enforceWhiteBackground(rawHtml), {
       headers: { 'Content-Type': 'text/html; charset=utf-8' },
     });
   }
@@ -78,7 +76,7 @@ export async function GET(request: NextRequest) {
     adminMode: adminInteractive,
   }).html;
 
-  return new NextResponse(enforceBlackBackground(rawHtml), {
+  return new NextResponse(enforceWhiteBackground(rawHtml), {
     headers: { 'Content-Type': 'text/html; charset=utf-8' },
   });
 }
@@ -108,7 +106,7 @@ export async function POST(request: NextRequest) {
         customization,
         adminMode: adminMode !== false,
       });
-      return new NextResponse(enforceBlackBackground(rawHtml), {
+      return new NextResponse(enforceWhiteBackground(rawHtml), {
         headers: { 'Content-Type': 'text/html; charset=utf-8' },
       });
     }
@@ -121,7 +119,7 @@ export async function POST(request: NextRequest) {
         adminMode: adminMode !== false,
       }).html;
 
-      return new NextResponse(enforceBlackBackground(rawHtml), {
+      return new NextResponse(enforceWhiteBackground(rawHtml), {
         headers: { 'Content-Type': 'text/html; charset=utf-8' },
       });
     }
@@ -140,7 +138,7 @@ export async function POST(request: NextRequest) {
         marketing: Boolean(body.marketing),
         customization: body.customization,
       });
-      return new NextResponse(enforceBlackBackground(rawHtml), {
+      return new NextResponse(enforceWhiteBackground(rawHtml), {
         headers: { 'Content-Type': 'text/html; charset=utf-8' },
       });
     }
@@ -154,7 +152,7 @@ export async function POST(request: NextRequest) {
       `<td class="pad-info" height="234" align="left" valign="middle" style="height:234px;padding:0 80px;font-size:15px;line-height:20px;background:#000000;color:#ffffff;">${inner}</td>`
     );
 
-    return new NextResponse(enforceBlackBackground(customHtml), {
+    return new NextResponse(enforceWhiteBackground(customHtml), {
       headers: { 'Content-Type': 'text/html; charset=utf-8' },
     });
   } catch (error) {
