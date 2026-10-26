@@ -1,4 +1,4 @@
-import { archiveArticle } from '@/lib/magazine-softdelete';import { getServerSession } from 'next-auth/next';
+import { getServerSession } from 'next-auth/next';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authOptions } from '@/lib/auth';
@@ -11,6 +11,7 @@ import {
   validateSlug,
 } from '@/lib/magazine-sanitize';
 import { createArticleVersion } from '@/lib/magazine-versions';
+import { archiveArticle } from '@/lib/magazine-softdelete';
 
 export async function GET(
   request: NextRequest,
@@ -24,7 +25,7 @@ export async function GET(
       where: { slug: params.slug },
     });
 
-    if (!article || article.archived) {
+    if (!article || (article.archived as boolean)) {
       return NextResponse.json({ error: 'Not found' }, { status: 404 });
     }
 
@@ -92,8 +93,6 @@ export async function PUT(
           { error: 'Tento slug již existuje. Zvolte jiný.' },
           { status: 409 }
         );
-
-    return NextResponse.json(article);
       }
     }
 
@@ -126,17 +125,19 @@ export async function PUT(
       article.id,
       {
         title: article.title,
-        subtitle: article.subtitle,
-        author: article.author,
-        category: article.category,
-        tags: article.tags,
+        subtitle: article.subtitle ?? undefined,
+        author: article.author ?? undefined,
+        category: article.category ?? undefined,
+        tags: article.tags ?? undefined,
         blocks: article.blocks,
         published: article.published,
-        publishedAt: article.publishedAt,
+        publishedAt: article.publishedAt ?? undefined,
       },
       session.user?.email || 'unknown',
       `Updated article: ${validatedNewSlug !== currentSlug ? 'Slug changed, ' : ''}${published && !existing.published ? 'Published, ' : ''}content updated`
     );
+
+    return NextResponse.json(article);
   } catch (error: any) {
     if (error.code === 'P2025') {
       return NextResponse.json({ error: 'Článek nenalezen' }, { status: 404 });

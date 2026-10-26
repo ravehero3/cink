@@ -19,8 +19,13 @@ export async function GET(request: NextRequest) {
     const isAdmin = session?.user?.role === 'ADMIN';
 
     // Admins see all active articles, public sees only published
+    const whereClause: any = { archived: false };
+    if (!(allParam === '1' && isAdmin)) {
+      whereClause.published = true;
+    }
+
     const articles = await prisma.magazineArticle.findMany({
-      where: allParam === '1' && isAdmin ? { archived: false } : { published: true, archived: false },
+      where: whereClause,
       orderBy: { publishedAt: 'desc' },
     });
 
@@ -62,7 +67,7 @@ export async function POST(request: NextRequest) {
 
     // Check slug uniqueness (active articles only)
     const existing = await prisma.magazineArticle.findUnique({ where: { slug: validatedSlug } });
-    if (existing && !existing.archived) {
+    if (existing && !(existing.archived as boolean)) {
       return NextResponse.json(
         { error: 'Tento slug již existuje. Zvolte jiný.' },
         { status: 409 }
