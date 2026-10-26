@@ -20,7 +20,7 @@ export function toAbsoluteUrl(url?: string): string {
 
 export const buttonStyle = `
   display: inline-block;
-  background-color: #ffffff;
+  background-color: #000000;
   color: #000000;
   padding: 12px 24px;
   text-decoration: none;
@@ -48,11 +48,11 @@ export function kicker(text: string) {
 }
 
 export function heading(text: string) {
-  return `<h1 style="margin:0 0 12px 0;font-size:15px;line-height:20px;font-weight:700;text-transform:uppercase;color:#ffffff;font-family:${FONT_STACK};">${text}</h1>`;
+  return `<h1 style="margin:0 0 12px 0;font-size:15px;line-height:20px;font-weight:700;text-transform:uppercase;color:#000000;font-family:${FONT_STACK};">${text}</h1>`;
 }
 
 export function bodyText(text: string, extra = '') {
-  return `<p style="margin:0 0 16px 0;font-size:15px;line-height:20px;color:#ffffff;font-family:${FONT_STACK};${extra}">${text}</p>`;
+  return `<p style="margin:0 0 16px 0;font-size:15px;line-height:20px;color:#000000;font-family:${FONT_STACK};${extra}">${text}</p>`;
 }
 
 export function mutedText(text: string) {
@@ -60,16 +60,16 @@ export function mutedText(text: string) {
 }
 
 export function infoBox(inner: string) {
-  return `<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:0 0 20px 0;border:1px solid #333333;background:#0a0a0a;color:#ffffff;">
-    <tr><td style="padding:16px;color:#ffffff;">${inner}</td></tr>
+  return `<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:0 0 20px 0;border:1px solid #333333;background:#0a0a0a;color:#000000;">
+    <tr><td style="padding:16px;color:#000000;">${inner}</td></tr>
   </table>`;
 }
 
 export function promoBlock(code: string, label: string, until?: string) {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;color:#ffffff;">
-    <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;color:#ffffff;">Slevový kód</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;color:#ffffff;">${code}</td></tr>
-    <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;color:#ffffff;">Nabídka</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;color:#ffffff;">${label}</td></tr>
-    ${until ? `<tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;color:#ffffff;">Platnost</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;color:#ffffff;">${until}</td></tr>` : ''}
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;color:#000000;">
+    <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;color:#000000;">Slevový kód</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;color:#000000;">${code}</td></tr>
+    <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;color:#000000;">Nabídka</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;color:#000000;">${label}</td></tr>
+    ${until ? `<tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;color:#000000;">Platnost</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;color:#000000;">${until}</td></tr>` : ''}
   </table>`;
 }
 
@@ -93,8 +93,8 @@ export function itemsTable(items: CatalogItem[]) {
   const rows = items.map((item) => {
     const itemHref = item.slug ? `${WEBSITE_URL}/produkt/${item.slug}` : undefined;
     const nameContent = itemHref
-      ? `<a href="${itemHref}" target="_blank" style="color:#ffffff;text-decoration:underline;"><span style="font-weight:600;">${item.name}</span></a>`
-      : `<span style="font-weight:600;color:#ffffff;">${item.name}</span>`;
+      ? `<a href="${itemHref}" target="_blank" style="color:#000000;text-decoration:underline;"><span style="font-weight:600;">${item.name}</span></a>`
+      : `<span style="font-weight:600;color:#000000;">${item.name}</span>`;
 
     const imgTag = item.image
       ? itemHref
@@ -104,24 +104,24 @@ export function itemsTable(items: CatalogItem[]) {
 
     return `
       <tr>
-        <td valign="top" style="padding:0 12px 12px 0;font-size:15px;line-height:20px;color:#ffffff;">
+        <td valign="top" style="padding:0 12px 12px 0;font-size:15px;line-height:20px;color:#000000;">
           <table role="presentation" cellpadding="0" cellspacing="0" border="0">
             <tr>
               ${imgTag ? `<td valign="middle" style="padding-right:12px;">${imgTag}</td>` : ''}
-              <td valign="middle" style="font-size:15px;line-height:20px;color:#ffffff;">
+              <td valign="middle" style="font-size:15px;line-height:20px;color:#000000;">
                 ${nameContent}${item.size ? ` · ${item.size}` : ''} · ${item.quantity}×
               </td>
             </tr>
           </table>
         </td>
-        <td align="right" valign="middle" style="padding:0 0 12px;font-size:15px;line-height:20px;font-weight:600;white-space:nowrap;color:#ffffff;">
+        <td align="right" valign="middle" style="padding:0 0 12px;font-size:15px;line-height:20px;font-weight:600;white-space:nowrap;color:#000000;">
           ${item.price.toLocaleString('cs-CZ')} Kč
         </td>
       </tr>
     `;
   }).join('');
 
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;color:#ffffff;">${rows}</table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;color:#000000;">${rows}</table>`;
 }
 
 export function sectionDivider() {
@@ -329,45 +329,45 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
     } else if (layout === 'grid2x2') {
       // Option 2: 2x2 grid (each 300x300px square)
       innerHtml = `
-        <table class="grid" role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" bgcolor="#000000" style="width:600px;background:#000000;background-color:#000000;border-collapse:collapse;">
+        <table class="grid" role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="width:600px;background:#ffffff;background-color:#000000;border-collapse:collapse;">
           <tr>
-            <td class="gcell" width="299" bgcolor="#000000" style="width:299px;padding:0;font-size:0;line-height:0;background:#000000;background-color:#000000;">${renderCell(0, 299, 300)}</td>
-            <td width="1" bgcolor="#000000" style="width:1px;background:#000000;font-size:0;line-height:0;">&nbsp;</td>
-            <td class="gcell" width="300" bgcolor="#000000" style="width:300px;padding:0;font-size:0;line-height:0;background:#000000;background-color:#000000;">${renderCell(1, 300, 300)}</td>
+            <td class="gcell" width="299" bgcolor="#ffffff" style="width:299px;padding:0;font-size:0;line-height:0;background:#ffffff;background-color:#000000;">${renderCell(0, 299, 300)}</td>
+            <td width="1" bgcolor="#ffffff" style="width:1px;background:#ffffff;font-size:0;line-height:0;">&nbsp;</td>
+            <td class="gcell" width="300" bgcolor="#ffffff" style="width:300px;padding:0;font-size:0;line-height:0;background:#ffffff;background-color:#000000;">${renderCell(1, 300, 300)}</td>
           </tr>
-          <tr><td colspan="3" height="1" bgcolor="#000000" style="height:1px;background:#000000;font-size:1px;line-height:1px;padding:0;">&nbsp;</td></tr>
+          <tr><td colspan="3" height="1" bgcolor="#ffffff" style="height:1px;background:#ffffff;font-size:1px;line-height:1px;padding:0;">&nbsp;</td></tr>
           <tr>
-            <td class="gcell" width="299" bgcolor="#000000" style="width:299px;padding:0;font-size:0;line-height:0;background:#000000;background-color:#000000;">${renderCell(2, 299, 300)}</td>
-            <td width="1" bgcolor="#000000" style="width:1px;background:#000000;font-size:0;line-height:0;">&nbsp;</td>
-            <td class="gcell" width="300" bgcolor="#000000" style="width:300px;padding:0;font-size:0;line-height:0;background:#000000;background-color:#000000;">${renderCell(3, 300, 300)}</td>
+            <td class="gcell" width="299" bgcolor="#ffffff" style="width:299px;padding:0;font-size:0;line-height:0;background:#ffffff;background-color:#000000;">${renderCell(2, 299, 300)}</td>
+            <td width="1" bgcolor="#ffffff" style="width:1px;background:#ffffff;font-size:0;line-height:0;">&nbsp;</td>
+            <td class="gcell" width="300" bgcolor="#ffffff" style="width:300px;padding:0;font-size:0;line-height:0;background:#ffffff;background-color:#000000;">${renderCell(3, 300, 300)}</td>
           </tr>
         </table>
       `;
     } else if (layout === 'bigAndTwo') {
       // Option 3: 3 photos (1 big 600x600 + 2 small 300x300 below)
       innerHtml = `
-        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" bgcolor="#000000" style="width:600px;background:#000000;background-color:#000000;border-collapse:collapse;">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="width:600px;background:#ffffff;background-color:#000000;border-collapse:collapse;">
           <tr>
-            <td colspan="3" width="600" bgcolor="#000000" style="width:600px;padding:0;font-size:0;line-height:0;background:#000000;background-color:#000000;">
+            <td colspan="3" width="600" bgcolor="#ffffff" style="width:600px;padding:0;font-size:0;line-height:0;background:#ffffff;background-color:#000000;">
               ${renderCell(0, 600, 600)}
             </td>
           </tr>
-          <tr><td colspan="3" height="1" bgcolor="#000000" style="height:1px;background:#000000;font-size:1px;line-height:1px;padding:0;">&nbsp;</td></tr>
+          <tr><td colspan="3" height="1" bgcolor="#ffffff" style="height:1px;background:#ffffff;font-size:1px;line-height:1px;padding:0;">&nbsp;</td></tr>
           <tr>
-            <td class="gcell" width="299" bgcolor="#000000" style="width:299px;padding:0;font-size:0;line-height:0;background:#000000;background-color:#000000;">${renderCell(1, 299, 300)}</td>
-            <td width="1" bgcolor="#000000" style="width:1px;background:#000000;font-size:0;line-height:0;">&nbsp;</td>
-            <td class="gcell" width="300" bgcolor="#000000" style="width:300px;padding:0;font-size:0;line-height:0;background:#000000;background-color:#000000;">${renderCell(2, 300, 300)}</td>
+            <td class="gcell" width="299" bgcolor="#ffffff" style="width:299px;padding:0;font-size:0;line-height:0;background:#ffffff;background-color:#000000;">${renderCell(1, 299, 300)}</td>
+            <td width="1" bgcolor="#ffffff" style="width:1px;background:#ffffff;font-size:0;line-height:0;">&nbsp;</td>
+            <td class="gcell" width="300" bgcolor="#ffffff" style="width:300px;padding:0;font-size:0;line-height:0;background:#ffffff;background-color:#000000;">${renderCell(2, 300, 300)}</td>
           </tr>
         </table>
       `;
     } else if (layout === 'twoSideBySide') {
       // Option 4: 2 square images next to each other, each 300x300px
       innerHtml = `
-        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" bgcolor="#000000" style="width:600px;background:#000000;background-color:#000000;border-collapse:collapse;">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="width:600px;background:#ffffff;background-color:#000000;border-collapse:collapse;">
           <tr>
-            <td class="gcell" width="299" bgcolor="#000000" style="width:299px;padding:0;font-size:0;line-height:0;background:#000000;background-color:#000000;">${renderCell(0, 299, 300)}</td>
-            <td width="1" bgcolor="#000000" style="width:1px;background:#000000;font-size:0;line-height:0;">&nbsp;</td>
-            <td class="gcell" width="300" bgcolor="#000000" style="width:300px;padding:0;font-size:0;line-height:0;background:#000000;background-color:#000000;">${renderCell(1, 300, 300)}</td>
+            <td class="gcell" width="299" bgcolor="#ffffff" style="width:299px;padding:0;font-size:0;line-height:0;background:#ffffff;background-color:#000000;">${renderCell(0, 299, 300)}</td>
+            <td width="1" bgcolor="#ffffff" style="width:1px;background:#ffffff;font-size:0;line-height:0;">&nbsp;</td>
+            <td class="gcell" width="300" bgcolor="#ffffff" style="width:300px;padding:0;font-size:0;line-height:0;background:#ffffff;background-color:#000000;">${renderCell(1, 300, 300)}</td>
           </tr>
         </table>
       `;
@@ -375,7 +375,7 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
 
     return `
       <tr>
-        <td bgcolor="#000000" style="padding:0;font-size:0;line-height:0;position:relative;background:#000000;background-color:#000000;">
+        <td bgcolor="#ffffff" style="padding:0;font-size:0;line-height:0;position:relative;background:#ffffff;background-color:#000000;">
           ${renderSectionControls(sectionId, `Odstranit sekci fotek (${sectionId})`, true)}
           ${innerHtml}
         </td>
@@ -397,10 +397,10 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
       id: 'header1',
       html: `
         <tr>
-          <td height="72" align="center" valign="middle" style="height:72px;padding:0 20px;font-size:15px;line-height:20px;position:relative;background:#000000;">
+          <td height="72" align="center" valign="middle" style="height:72px;padding:0 20px;font-size:15px;line-height:20px;position:relative;background:#ffffff;">
             ${renderSectionControls('header1')}
-            <a href="${WEBSITE_URL}" style="text-decoration:none;color:#ffffff;display:block;">
-              <span style="font-family:'Helvetica Neue Condensed Bold','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:22px;line-height:72px;font-weight:700;letter-spacing:0.03em;font-stretch:condensed;text-transform:uppercase;color:#ffffff;">UFO SPORT</span>
+            <a href="${WEBSITE_URL}" style="text-decoration:none;color:#000000;display:block;">
+              <span style="font-family:'Helvetica Neue Condensed Bold','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:22px;line-height:72px;font-weight:700;letter-spacing:0.03em;font-stretch:condensed;text-transform:uppercase;color:#000000;">UFO SPORT</span>
             </a>
           </td>
         </tr>
@@ -414,9 +414,9 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
       id: 'header2',
       html: `
         <tr>
-          <td class="pad-h2" height="136" align="center" valign="middle" style="height:136px;padding:0 40px;font-size:15px;line-height:20px;position:relative;background:#000000;color:#ffffff;">
+          <td class="pad-h2" height="136" align="center" valign="middle" style="height:136px;padding:0 40px;font-size:15px;line-height:20px;position:relative;background:#ffffff;color:#000000;">
             ${renderSectionControls('header2')}
-            <div style="font-size:15px;line-height:20px;font-weight:700;text-transform:uppercase;margin:0 0 12px;color:#ffffff;">${header2Title}</div>
+            <div style="font-size:15px;line-height:20px;font-weight:700;text-transform:uppercase;margin:0 0 12px;color:#000000;">${header2Title}</div>
             <div style="font-size:15px;line-height:20px;font-weight:400;margin:0 auto;max-width:460px;color:#cccccc;">${header2Subtitle}</div>
           </td>
         </tr>
@@ -430,7 +430,7 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
       id: 'storyImage',
       html: `
         <tr>
-          <td style="padding:0;font-size:0;line-height:0;position:relative;background:#000000;">
+          <td style="padding:0;font-size:0;line-height:0;position:relative;background:#ffffff;">
             ${renderDeleteBtn('storyImage', 'Odstranit příběhový obrázek')}
             <img src="${toAbsoluteUrl(customization.storyImage)}" width="600" height="auto" alt="Příběhový obrázek" style="display:block;width:600px;height:auto;border:0;">
           </td>
@@ -467,7 +467,7 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
       id: 'info',
       html: `
         <tr>
-          <td class="pad-info" height="234" align="left" valign="middle" style="height:234px;padding:0 80px;font-size:15px;line-height:20px;position:relative;background:#000000;color:#ffffff;">
+          <td class="pad-info" height="234" align="left" valign="middle" style="height:234px;padding:0 80px;font-size:15px;line-height:20px;position:relative;background:#ffffff;color:#000000;">
             ${renderSectionControls('info')}
             ${infoHtml}
           </td>
@@ -498,9 +498,9 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
       id: 'actionButton',
       html: `
         <tr>
-          <td class="pad-info" height="234" align="center" valign="middle" style="height:234px;padding:0 40px;font-size:15px;line-height:20px;position:relative;background:#000000;color:#ffffff;">
+          <td class="pad-info" height="234" align="center" valign="middle" style="height:234px;padding:0 40px;font-size:15px;line-height:20px;position:relative;background:#ffffff;color:#000000;">
             ${renderSectionControls('actionButton')}
-            <p style="margin:0 0 0px;color:#ffffff;">${actionText}</p>
+            <p style="margin:0 0 0px;color:#000000;">${actionText}</p>
             <div style="height:24px;line-height:24px;font-size:0;">&nbsp;</div>
             <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;border-collapse:separate;">
               <tr>
@@ -521,7 +521,7 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
       id: 'browseAll',
       html: `
         <tr>
-          <td class="" height="136" align="center" valign="middle" style="height:136px;padding:0 20px;font-size:15px;line-height:20px;position:relative;background:#000000;">
+          <td class="" height="136" align="center" valign="middle" style="height:136px;padding:0 20px;font-size:15px;line-height:20px;position:relative;background:#ffffff;">
             ${renderSectionControls('browseAll')}
             <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;border-collapse:separate;">
               <tr>
@@ -542,24 +542,24 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
       id: 'footerLinks',
       html: `
         <tr>
-          <td height="188" bgcolor="#000000" style="height:188px;padding:0;position:relative;background:#000000;background-color:#000000;">
+          <td height="188" bgcolor="#ffffff" style="height:188px;padding:0;position:relative;background:#ffffff;background-color:#000000;">
             ${renderSectionControls('footerLinks')}
-            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#000000" style="width:100%;height:188px;background:#000000;background-color:#000000;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="width:100%;height:188px;background:#ffffff;background-color:#000000;">
               <tr>
-                <td class="fcol" width="299" valign="top" bgcolor="#000000" style="width:299px;padding:36px 0 0 40px;font-family:'Inter',Arial,Helvetica,sans-serif;background:#000000;background-color:#000000;">
-                  <div style="margin:0 0 20px;font-size:15px;line-height:20px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#ffffff;">Prozkoumat více</div>
-                  <div style="margin:0;font-size:15px;line-height:22px;text-transform:uppercase;"><a href="${WEBSITE_URL}/magazin" style="color:#ffffff;text-decoration:none;">Magazín</a></div>
-                  <div style="margin:0;font-size:15px;line-height:22px;text-transform:uppercase;"><a href="${WEBSITE_URL}/novinky" style="color:#ffffff;text-decoration:none;">Novinky</a></div>
-                  <div style="margin:0;font-size:15px;line-height:22px;text-transform:uppercase;"><a href="${WEBSITE_URL}/darky" style="color:#ffffff;text-decoration:none;">Najít dárek</a></div>
-                  <div style="margin:0;font-size:15px;line-height:22px;text-transform:uppercase;"><a href="${WEBSITE_URL}/darkove-poukazy" style="color:#ffffff;text-decoration:none;">Dárkové poukazy</a></div>
+                <td class="fcol" width="299" valign="top" bgcolor="#ffffff" style="width:299px;padding:36px 0 0 40px;font-family:'Inter',Arial,Helvetica,sans-serif;background:#ffffff;background-color:#000000;">
+                  <div style="margin:0 0 20px;font-size:15px;line-height:20px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#000000;">Prozkoumat více</div>
+                  <div style="margin:0;font-size:15px;line-height:22px;text-transform:uppercase;"><a href="${WEBSITE_URL}/magazin" style="color:#000000;text-decoration:none;">Magazín</a></div>
+                  <div style="margin:0;font-size:15px;line-height:22px;text-transform:uppercase;"><a href="${WEBSITE_URL}/novinky" style="color:#000000;text-decoration:none;">Novinky</a></div>
+                  <div style="margin:0;font-size:15px;line-height:22px;text-transform:uppercase;"><a href="${WEBSITE_URL}/darky" style="color:#000000;text-decoration:none;">Najít dárek</a></div>
+                  <div style="margin:0;font-size:15px;line-height:22px;text-transform:uppercase;"><a href="${WEBSITE_URL}/darkove-poukazy" style="color:#000000;text-decoration:none;">Dárkové poukazy</a></div>
                 </td>
                 <td width="1" bgcolor="#262626" style="width:1px;background:#262626;font-size:0;line-height:0;">&nbsp;</td>
-                <td class="fcol" width="300" valign="top" bgcolor="#000000" style="width:300px;padding:36px 0 0 40px;font-family:'Inter',Arial,Helvetica,sans-serif;background:#000000;background-color:#000000;">
-                  <div style="margin:0 0 20px;font-size:15px;line-height:20px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#ffffff;">Naše služby</div>
-                  <div style="margin:0;font-size:15px;line-height:22px;text-transform:uppercase;"><a href="${WEBSITE_URL}/kontakt" style="color:#ffffff;text-decoration:none;">Kontakt</a></div>
-                  <div style="margin:0;font-size:15px;line-height:22px;text-transform:uppercase;"><a href="${WEBSITE_URL}/doprava-a-platba" style="color:#ffffff;text-decoration:none;">Doprava a platba</a></div>
-                  <div style="margin:0;font-size:15px;line-height:22px;text-transform:uppercase;"><a href="${WEBSITE_URL}/vraceni-zbozi" style="color:#ffffff;text-decoration:none;">Vrácení zboží</a></div>
-                  <div style="margin:0;font-size:15px;line-height:22px;text-transform:uppercase;"><a href="${WEBSITE_URL}/preprodej" style="color:#ffffff;text-decoration:none;">Program přeprodeje</a></div>
+                <td class="fcol" width="300" valign="top" bgcolor="#ffffff" style="width:300px;padding:36px 0 0 40px;font-family:'Inter',Arial,Helvetica,sans-serif;background:#ffffff;background-color:#000000;">
+                  <div style="margin:0 0 20px;font-size:15px;line-height:20px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#000000;">Naše služby</div>
+                  <div style="margin:0;font-size:15px;line-height:22px;text-transform:uppercase;"><a href="${WEBSITE_URL}/kontakt" style="color:#000000;text-decoration:none;">Kontakt</a></div>
+                  <div style="margin:0;font-size:15px;line-height:22px;text-transform:uppercase;"><a href="${WEBSITE_URL}/doprava-a-platba" style="color:#000000;text-decoration:none;">Doprava a platba</a></div>
+                  <div style="margin:0;font-size:15px;line-height:22px;text-transform:uppercase;"><a href="${WEBSITE_URL}/vraceni-zbozi" style="color:#000000;text-decoration:none;">Vrácení zboží</a></div>
+                  <div style="margin:0;font-size:15px;line-height:22px;text-transform:uppercase;"><a href="${WEBSITE_URL}/preprodej" style="color:#000000;text-decoration:none;">Program přeprodeje</a></div>
                 </td>
               </tr>
             </table>
@@ -575,24 +575,24 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
       id: 'footerSocial',
       html: `
         <tr>
-          <td class="pad-foot" height="270" align="center" valign="middle" bgcolor="#000000" style="height:270px;padding:0 40px;font-family:'Inter',Arial,Helvetica,sans-serif;position:relative;background:#000000;background-color:#000000;color:#ffffff;">
+          <td class="pad-foot" height="270" align="center" valign="middle" bgcolor="#ffffff" style="height:270px;padding:0 40px;font-family:'Inter',Arial,Helvetica,sans-serif;position:relative;background:#ffffff;background-color:#000000;color:#000000;">
             ${renderSectionControls('footerSocial')}
-            <table role="presentation" cellpadding="0" cellspacing="0" border="0" bgcolor="#000000" style="margin:0 auto 36px;background:#000000;background-color:#000000;">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="margin:0 auto 36px;background:#ffffff;background-color:#000000;">
               <tr>
-                <td align="center" bgcolor="#000000" style="padding:0 18px;background:#000000;background-color:#000000;"><a href="https://www.instagram.com/ufosport"><img src="https://cdn.simpleicons.org/instagram/ffffff" width="24" height="24" alt="Instagram" style="display:block;width:24px;height:24px;border:0;"></a></td>
-                <td align="center" bgcolor="#000000" style="padding:0 18px;background:#000000;background-color:#000000;"><a href="https://www.tiktok.com/@ufosport"><img src="https://cdn.simpleicons.org/tiktok/ffffff" width="24" height="24" alt="TikTok" style="display:block;width:24px;height:24px;border:0;"></a></td>
-                <td align="center" bgcolor="#000000" style="padding:0 18px;background:#000000;background-color:#000000;"><a href="https://www.ufosport.cz"><img src="${WEBSITE_URL}/ufosport-globe-icon-white.png" width="24" height="24" alt="UFO SPORT" style="display:block;width:24px;height:24px;border:0;"></a></td>
-                <td align="center" bgcolor="#000000" style="padding:0 18px;background:#000000;background-color:#000000;"><a href="https://www.youtube.com/@ufosport"><img src="https://cdn.simpleicons.org/youtube/ffffff" width="24" height="24" alt="YouTube" style="display:block;width:24px;height:24px;border:0;"></a></td>
-                <td align="center" bgcolor="#000000" style="padding:0 18px;background:#000000;background-color:#000000;"><a href="https://www.facebook.com/ufosport"><img src="https://cdn.simpleicons.org/facebook/ffffff" width="24" height="24" alt="Facebook" style="display:block;width:24px;height:24px;border:0;"></a></td>
+                <td align="center" bgcolor="#ffffff" style="padding:0 18px;background:#ffffff;background-color:#000000;"><a href="https://www.instagram.com/ufosport"><img src="https://cdn.simpleicons.org/instagram/ffffff" width="24" height="24" alt="Instagram" style="display:block;width:24px;height:24px;border:0;"></a></td>
+                <td align="center" bgcolor="#ffffff" style="padding:0 18px;background:#ffffff;background-color:#000000;"><a href="https://www.tiktok.com/@ufosport"><img src="https://cdn.simpleicons.org/tiktok/ffffff" width="24" height="24" alt="TikTok" style="display:block;width:24px;height:24px;border:0;"></a></td>
+                <td align="center" bgcolor="#ffffff" style="padding:0 18px;background:#ffffff;background-color:#000000;"><a href="https://www.ufosport.cz"><img src="${WEBSITE_URL}/ufosport-globe-icon-white.png" width="24" height="24" alt="UFO SPORT" style="display:block;width:24px;height:24px;border:0;"></a></td>
+                <td align="center" bgcolor="#ffffff" style="padding:0 18px;background:#ffffff;background-color:#000000;"><a href="https://www.youtube.com/@ufosport"><img src="https://cdn.simpleicons.org/youtube/ffffff" width="24" height="24" alt="YouTube" style="display:block;width:24px;height:24px;border:0;"></a></td>
+                <td align="center" bgcolor="#ffffff" style="padding:0 18px;background:#ffffff;background-color:#000000;"><a href="https://www.facebook.com/ufosport"><img src="https://cdn.simpleicons.org/facebook/ffffff" width="24" height="24" alt="Facebook" style="display:block;width:24px;height:24px;border:0;"></a></td>
               </tr>
             </table>
-            <div style="font-size:15px;line-height:22px;font-weight:400;text-align:center;color:#ffffff;">
-              <div style="margin:0;font-weight:700;letter-spacing:0.03em;text-transform:uppercase;color:#ffffff;">UFO SPORT</div>
+            <div style="font-size:15px;line-height:22px;font-weight:400;text-align:center;color:#000000;">
+              <div style="margin:0;font-weight:700;letter-spacing:0.03em;text-transform:uppercase;color:#000000;">UFO SPORT</div>
               <div style="margin:4px 0 0;font-weight:500;color:#cccccc;">Vojtěch Vojkovský, Bachelor of Arts</div>
-              <div style="margin:2px 0 0;"><a href="${WEBSITE_URL}/kontakt" style="color:#ffffff;text-decoration:none;">Bědovická 193E, Třebechovice pod Orebem, 503 46, Česká Republika</a> · IČO 08701032</div>
-              <div style="margin:16px 0 0;"><a href="${WEBSITE_URL}" style="color:#ffffff;text-decoration:underline;">Zobrazit nejnovější produkty na našem rodinném eshopu</a>.</div>
-              <div style="margin:4px 0 0;">Více o <a href="${WEBSITE_URL}/obchodni-podminky" style="color:#ffffff;text-decoration:underline;">všeobecných obchodních podmínkách</a>.</div>
-              <div style="margin:4px 0 0;">Z odběru e-mailů se můžete kdykoli <a href="${unsubscribeUrl || `${WEBSITE_URL}/odhlasit`}" style="color:#ffffff;text-decoration:underline;">odhlásit zde</a>.</div>
+              <div style="margin:2px 0 0;"><a href="${WEBSITE_URL}/kontakt" style="color:#000000;text-decoration:none;">Bědovická 193E, Třebechovice pod Orebem, 503 46, Česká Republika</a> · IČO 08701032</div>
+              <div style="margin:16px 0 0;"><a href="${WEBSITE_URL}" style="color:#000000;text-decoration:underline;">Zobrazit nejnovější produkty na našem rodinném eshopu</a>.</div>
+              <div style="margin:4px 0 0;">Více o <a href="${WEBSITE_URL}/obchodni-podminky" style="color:#000000;text-decoration:underline;">všeobecných obchodních podmínkách</a>.</div>
+              <div style="margin:4px 0 0;">Z odběru e-mailů se můžete kdykoli <a href="${unsubscribeUrl || `${WEBSITE_URL}/odhlasit`}" style="color:#000000;text-decoration:underline;">odhlásit zde</a>.</div>
             </div>
           </td>
         </tr>
@@ -624,7 +624,7 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
         width: 24px;
         height: 24px;
         background: #000000;
-        color: #ffffff;
+        color: #000000;
         border: 1px solid rgba(255, 255, 255, 0.8);
         border-radius: 3px;
         display: flex;
@@ -662,7 +662,7 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
         width: 48px;
         height: 48px;
         background: rgba(0, 0, 0, 0.88);
-        color: #ffffff;
+        color: #000000;
         border: 2px solid #ffffff;
         border-radius: 50%;
         display: flex;
@@ -697,7 +697,7 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
         left: 50%;
         transform: translateX(-50%);
         background: #000000;
-        color: #ffffff;
+        color: #000000;
         font-family: 'Inter', Arial, sans-serif;
         font-size: 11px;
         font-weight: 700;
@@ -718,7 +718,7 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
         top: 8px;
         right: 8px;
         background: #000000;
-        color: #ffffff;
+        color: #000000;
         font-family: 'Inter', Arial, sans-serif;
         font-size: 10px;
         font-weight: 700;
@@ -739,7 +739,7 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
         width: 24px;
         height: 24px;
         background: #000000;
-        color: #ffffff;
+        color: #000000;
         border: 1px solid rgba(255, 255, 255, 0.8);
         border-radius: 3px;
         display: flex;
@@ -785,22 +785,22 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="dark only">
-<meta name="supported-color-schemes" content="dark only">
+<meta name="color-scheme: light">
+<meta name="supported-color-scheme: light">
 <meta name="x-apple-disable-message-reformatting">
 <title>${subject}</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    color-scheme: dark only;
-    supported-color-schemes: dark only;
+    color-scheme: light;
+    supported-color-scheme: light;
   }
   body, table, td, p, a, div {
     font-family: 'Inter', Arial, Helvetica, sans-serif;
   }
-  body { margin:0; padding:0; background:#000000; background-color:#000000; color:#ffffff; }
+  body { margin:0; padding:0; background:#ffffff; background-color:#000000; color:#000000; }
   table { border-collapse:collapse; }
-  a { color:#ffffff; }
+  a { color:#000000; }
   @media (max-width:620px) {
     .wrap { width:100% !important; max-width:100% !important; }
     .pad-info { padding-left:24px !important; padding-right:24px !important; }
@@ -814,16 +814,16 @@ export function buildEmailHtml(params: EmailTemplateParams): string {
   ${adminStyles}
 </style>
 </head>
-<body bgcolor="#000000" style="margin:0;padding:0;background:#000000;background-color:#000000;color:#ffffff;-webkit-font-smoothing:antialiased;">
+<body bgcolor="#ffffff" style="margin:0;padding:0;background:#ffffff;background-color:#000000;color:#000000;-webkit-font-smoothing:antialiased;">
 <!-- Subject: ${subject} -->
 <div style="display:none;max-height:0;overflow:hidden;opacity:0;font-size:1px;line-height:1px;color:#000000;">${preheader}</div>
-<center style="width:100%;background:#000000;background-color:#000000;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#000000" style="margin:0;padding:0;background:#000000;background-color:#000000;width:100% !important;min-width:100%;">
-<tr><td align="center" bgcolor="#000000" style="padding:0;background:#000000;background-color:#000000;">
+<center style="width:100%;background:#ffffff;background-color:#000000;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="margin:0;padding:0;background:#ffffff;background-color:#000000;width:100% !important;min-width:100%;">
+<tr><td align="center" bgcolor="#ffffff" style="padding:0;background:#ffffff;background-color:#000000;">
 
   <!-- Frame: 602px = 600px content + 1px frame border each side -->
-  <table role="presentation" class="wrap" width="602" cellpadding="0" cellspacing="0" border="0" bgcolor="#000000"
-         style="width:602px;max-width:602px;border:1px solid #262626;background:#000000;background-color:#000000;border-collapse:separate;border-spacing:0;font-family:'Inter',Arial,Helvetica,sans-serif;color:#ffffff;">
+  <table role="presentation" class="wrap" width="602" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff"
+         style="width:602px;max-width:602px;border:1px solid #262626;background:#ffffff;background-color:#000000;border-collapse:separate;border-spacing:0;font-family:'Inter',Arial,Helvetica,sans-serif;color:#000000;">
     ${bodyContent}
   </table>
 
