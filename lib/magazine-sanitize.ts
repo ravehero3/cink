@@ -74,7 +74,11 @@ export function sanitizeTags(tags: string | null | undefined): string {
 
 /**
  * Validate Instagram URL
- * Must be a valid Instagram post URL
+ * Supports:
+ * - Posts: https://www.instagram.com/p/[ID]/
+ * - Reels: https://www.instagram.com/reel/[ID]/
+ * - Query parameters: ?utm_source=ig_web_copy_link
+ * - With or without www
  */
 export function validateInstagramUrl(url: string | null | undefined): string {
   if (!url) return '';
@@ -82,11 +86,13 @@ export function validateInstagramUrl(url: string | null | undefined): string {
   const trimmed = String(url).trim();
   if (trimmed.length === 0) return '';
   
-  // Must be HTTPS Instagram URL
-  const instagramRegex = /^https:\/\/(www\.)?instagram\.com\/p\/[a-zA-Z0-9_-]+\/?(\?.*)?$/;
+  // Support multiple Instagram content types:
+  // /p/ for posts, /reel/ for reels, /tv/ for IGTV, /stories/ for stories
+  // Also support URLs with and without www, with query params
+  const instagramRegex = /^https:\/\/(www\.)?instagram\.com\/(p|reel|tv|stories)\/[a-zA-Z0-9_-]+\/?([?#].*)?$/i;
   
   if (!instagramRegex.test(trimmed)) {
-    throw new Error('Neplatná Instagram URL. Musí být formátu: https://www.instagram.com/p/[ID]/');
+    throw new Error('Neplatná Instagram URL. Musí být formátu: https://www.instagram.com/p/[ID]/ nebo https://www.instagram.com/reel/[ID]/');
   }
   
   return trimmed;

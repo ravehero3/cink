@@ -24,6 +24,11 @@ RUN ./build.sh && \
     rm -rf node_modules/.cache && \
     rm -rf /tmp/*
 
+# Ensure public folder exists in the final build
+# This is needed for Next.js to serve static files from /public
+RUN mkdir -p /app/public/magazine-uploads && \
+    touch /app/public/magazine-uploads/.gitkeep
+
 ENV NODE_OPTIONS="--max-old-space-size=2048"
 
 EXPOSE 5000

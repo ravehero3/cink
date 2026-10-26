@@ -66,8 +66,8 @@ export async function POST(request: NextRequest) {
       const filepath = join(uploadsDir, filename);
       await writeFile(filepath, buffer);
 
-      // Construct the public URL
-      const url = `/magazine-uploads/${filename}`;
+      // Construct the public URL via API route for reliable serving
+      const url = `/api/magazine/media/${filename}`;
 
       console.log(`✓ Magazine image uploaded: ${filename}`);
 
