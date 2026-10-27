@@ -153,8 +153,8 @@ export default function ArticlePage() {
             </div>
           </div>
 
-          {/* Hero image */}
-          {article.blocks.hero && (
+          {/* Hero image - only show if exists and not empty */}
+          {article.blocks.hero && article.blocks.hero.trim() !== '' && (
             <div className="magazin-hero-image max-w-4xl mx-auto px-4 md:px-8 my-12">
               <div className="relative w-full aspect-video bg-gray-100 overflow-hidden">
                 <Image
@@ -180,7 +180,7 @@ export default function ArticlePage() {
               </div>
             )}
 
-            {article.blocks.image1 && (
+            {article.blocks.image1 && article.blocks.image1.trim() !== '' && (
               <figure className="magazin-figure my-12">
                 <div className="relative w-full aspect-video bg-gray-100 overflow-hidden mb-2">
                   <Image

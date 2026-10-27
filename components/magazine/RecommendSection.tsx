@@ -45,7 +45,7 @@ export default function RecommendSection({ articles }: RecommendSectionProps) {
     if (diffMins < 60) {
       return `před ${diffMins} minutou${diffMins === 1 ? '' : 'mi'}`;
     } else if (diffHours < 24) {
-      return `před ${diffHours} hodinou${diffHours === 1 ? '' : 'mi'}`;
+      return `před ${diffHours} hodinou${diffHours === 1 ? '' : 'ami'}`;
     } else if (diffDays < 30) {
       return `před ${diffDays} dnem${diffDays === 1 ? '' : 'y'}`;
     } else if (diffMonths < 12) {
@@ -69,8 +69,8 @@ export default function RecommendSection({ articles }: RecommendSectionProps) {
                 href={`/magazin/${article.slug}`}
                 className="card__link flex flex-col flex-1 text-inherit no-underline group"
               >
-                {/* Media / Image */}
-                {article.blocks.hero && (
+                {/* Media / Image - only show if exists and not empty */}
+                {article.blocks.hero && article.blocks.hero.trim() !== '' && (
                   <div className="card__media relative w-full aspect-video bg-gray-100 overflow-hidden mb-3.5 md:mb-3.5">
                     <Image
                       src={ensureAbsoluteImageUrl(article.blocks.hero)}
