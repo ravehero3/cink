@@ -22,6 +22,15 @@ interface Article {
   viewCount?: number;
 }
 
+// Helper function to ensure absolute URLs for images
+function ensureAbsoluteImageUrl(url: string): string {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  // If relative path, prepend origin
+  const origin = typeof window !== 'undefined' ? window.location.origin : process.env.NEXTAUTH_URL || 'https://www.ufosport.cz';
+  return `${origin}${url.startsWith('/') ? url : `/${url}`}`;
+}
+
 export default function ArticlePage() {
   const params = useParams();
   const slug = params.slug as string;
@@ -148,7 +157,7 @@ export default function ArticlePage() {
             <div className="magazin-hero-image max-w-4xl mx-auto px-4 md:px-8 my-12">
               <div className="relative w-full aspect-video bg-gray-100 overflow-hidden">
                 <Image
-                  src={article.blocks.hero}
+                  src={ensureAbsoluteImageUrl(article.blocks.hero)}
                   alt={article.title}
                   fill
                   className="object-cover"
@@ -174,7 +183,7 @@ export default function ArticlePage() {
               <figure className="magazin-figure my-12">
                 <div className="relative w-full aspect-video bg-gray-100 overflow-hidden mb-2">
                   <Image
-                    src={article.blocks.image1}
+                    src={ensureAbsoluteImageUrl(article.blocks.image1)}
                     alt="Article image"
                     fill
                     className="object-cover"
@@ -186,7 +195,7 @@ export default function ArticlePage() {
                   </figcaption>
                 )}
               </figure>
-            )}
+            )}}
 
             {article.blocks.text2 && (
               <div className="magazin-text mb-8 text-lg leading-relaxed whitespace-pre-wrap">
@@ -257,7 +266,7 @@ export default function ArticlePage() {
                     {article.blocks.hero && (
                       <div className="relative w-full h-40 bg-gray-100 mb-4 overflow-hidden">
                         <Image
-                          src={article.blocks.hero}
+                          src={ensureAbsoluteImageUrl(article.blocks.hero)}
                           alt={article.title}
                           fill
                           className="object-cover"
@@ -269,14 +278,12 @@ export default function ArticlePage() {
                       {article.category}
                     </p>
                   </Link>
-                ))}
+                ))}}
               </div>
             </div>
           </section>
         )}
       </main>
-
-      <Footer />
 
       {/* JSON-LD Schema for SEO */}
       <script
