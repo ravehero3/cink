@@ -195,7 +195,7 @@ export default function ArticlePage() {
                   </figcaption>
                 )}
               </figure>
-            )}}
+            )}
 
             {article.blocks.text2 && (
               <div className="magazin-text mb-8 text-lg leading-relaxed whitespace-pre-wrap">
@@ -278,7 +278,7 @@ export default function ArticlePage() {
                       {article.category}
                     </p>
                   </Link>
-                ))}}
+                ))}
               </div>
             </div>
           </section>
