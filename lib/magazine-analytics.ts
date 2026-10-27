@@ -14,13 +14,18 @@ export function calculateReadingTime(text: string): number {
 }
 
 /**
- * Format reading time for display
- * Returns: "5 min read" or "< 1 min read"
+ * Format reading time for display in Czech
+ * Returns:
+ * • 1 minuta čtení (1 minute)
+ * • 2, 3, 4 minuty čtení (2-4 minutes)
+ * • 5+ minut čtení (5+ minutes)
  */
 export function formatReadingTime(minutes: number): string {
-  if (minutes < 1) return '< 1 min read';
-  if (minutes === 1) return '1 min read';
-  return `${minutes} min read`;
+  if (minutes < 1) minutes = 1;
+  
+  if (minutes === 1) return '1 minuta čtení';
+  if (minutes >= 2 && minutes <= 4) return `${minutes} minuty čtení`;
+  return `${minutes}+ minut čtení`;
 }
 
 /**

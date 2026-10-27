@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Header1 from '@/components/Header1';
 import Footer from '@/components/Footer';
+import RecommendSection from '@/components/magazine/RecommendSection';
 import { getArticleMetadata } from '@/lib/magazine-analytics';
 import { generateArticleSchema } from '@/lib/magazine-seo';
 
@@ -205,7 +206,7 @@ export default function ArticlePage() {
 
             {article.blocks.instagram && (
               <div className="magazin-instagram my-12 flex justify-center">
-                <div style={{ maxWidth: '540px', width: '100%' }}>
+                <div style={{ maxWidth: '100%', width: '100%' }}>
                   <blockquote
                     className="instagram-media"
                     data-instgrm-permalink={article.blocks.instagram}
@@ -216,6 +217,7 @@ export default function ArticlePage() {
                       margin: '0 auto',
                       padding: 0,
                       width: '100%',
+                      maxWidth: '540px',
                     }}
                   >
                     <a href={article.blocks.instagram} target="_blank" rel="noopener">
@@ -249,40 +251,7 @@ export default function ArticlePage() {
         </article>
 
         {/* Related articles */}
-        {relatedArticles.length > 0 && (
-          <section className="magazin-related py-16 md:py-24 bg-gray-50 border-t border-gray-200">
-            <div className="max-w-7xl mx-auto px-4 md:px-8">
-              <h2 className="magazin-related-title text-2xl font-bold mb-12">
-                Doporučujeme
-              </h2>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {relatedArticles.map((article) => (
-                  <Link
-                    key={article.id}
-                    href={`/magazin/${article.slug}`}
-                    className="magazin-related-card hover:opacity-80 transition-opacity"
-                  >
-                    {article.blocks.hero && (
-                      <div className="relative w-full h-40 bg-gray-100 mb-4 overflow-hidden">
-                        <Image
-                          src={ensureAbsoluteImageUrl(article.blocks.hero)}
-                          alt={article.title}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                    )}
-                    <h3 className="font-bold text-lg line-clamp-2">{article.title}</h3>
-                    <p className="text-sm text-gray-600 mt-2">
-                      {article.category}
-                    </p>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
+        {relatedArticles.length > 0 && <RecommendSection articles={relatedArticles} />}
       </main>
 
       {/* JSON-LD Schema for SEO */}
