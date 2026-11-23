@@ -7,7 +7,7 @@ import ImageUploader from '@/components/admin/ImageUploader';
 import StatusMessage from '@/components/admin/StatusMessage';
 
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
-const PRODUCT_TYPES = ['TRIKO', 'MIKINA', 'KRAŤASY', 'KALHOTY', 'CD', 'TAŠKA', 'PLAKÁT'] as const;
+const PRODUCT_TYPES = ['TRIKO', 'MIKINA', 'KRAŤASY', 'KALHOTY', 'KŠILTOVKA SNAPBACK', 'CD', 'TAŠKA', 'PLAKÁT'] as const;
 const POSTER_SIZES = ['A3+ (Na fotografickém papíře)'] as const;
 
 const inputCls = "admin-input";
@@ -73,7 +73,11 @@ export default function NewProductPage() {
           ...formData,
           price: parseFloat(formData.price),
           images: images.filter((img) => img.trim() !== ''),
-          sizes: formData.productType === 'TAŠKA' ? { ONE_SIZE: 0 } : formData.productType === 'PLAKÁT' ? { [formData.posterSize]: 0 } : sizes,
+          sizes: (isBag || isCD || isCap)
+            ? { ONE_SIZE: sizes['ONE_SIZE'] || 0 }
+            : isPoster
+            ? { [formData.posterSize]: sizes[formData.posterSize] || 0 }
+            : sizes,
           productInfo: formData.productInfo || null,
           sizeFit: formData.sizeFit || null,
           shippingInfo: formData.shippingInfo || null,
@@ -106,7 +110,8 @@ export default function NewProductPage() {
   const isBag = formData.productType === 'TAŠKA';
   const isPoster = formData.productType === 'PLAKÁT';
   const isCD = formData.productType === 'CD';
-  const showSizeSelection = !isBag && !isPoster && !isCD;
+  const isCap = formData.productType === 'KŠILTOVKA SNAPBACK';
+  const showSizeSelection = !isBag && !isPoster && !isCD && !isCap;
   
   const updateSize = (size: string, value: string) => setSizes({ ...sizes, [size]: parseInt(value) || 0 });
   const updateCDStock = (value: string) => setSizes({ ONE_SIZE: parseInt(value) || 0 });
@@ -348,10 +353,26 @@ export default function NewProductPage() {
             {/* Stock */}
             <div className="bg-white border border-black p-6">
               <p className="text-[10px] font-bold text-[#666666] uppercase tracking-widest mb-4 pb-2 border-b border-black">
-                {isBag ? 'Sklad' : isPoster ? 'Velikost a sklad' : isCD ? 'Sklad' : 'Velikosti a sklad'}
+                {isBag ? 'Sklad' : isPoster ? 'Velikost a sklad' : (isCD || isCap) ? 'Sklad' : 'Velikosti a sklad'}
               </p>
 
-              {isBag ? (
+              {isCap ? (
+                <div>
+                  <p className="text-xs uppercase tracking-wider text-[#666666] mb-3">Kšiltovka snapback má univerzální velikost.</p>
+                  <label className={labelCls}>Množství na skladě</label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={sizes['ONE_SIZE'] || 0}
+                    onChange={(e) => setSizes({ ONE_SIZE: parseInt(e.target.value) || 0 })}
+                    className={inputCls + " text-center"}
+                    placeholder="Množství na skladě"
+                  />
+                  <p className={`text-xs uppercase tracking-wider font-medium mt-2 ${(sizes['ONE_SIZE'] || 0) === 0 ? 'text-black font-bold' : 'text-[#666666]'}`}>
+                    {(sizes['ONE_SIZE'] || 0) === 0 ? '[!] Produkt bude bez skladu' : `${sizes['ONE_SIZE'] || 0} ks celkem`}
+                  </p>
+                </div>
+              ) : isBag ? (
                 <div>
                   <p className="text-xs uppercase tracking-wider text-[#666666] mb-3">Taška nemá výběr velikostí. Zadejte pouze informace výše.</p>
                   <input

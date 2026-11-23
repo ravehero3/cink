@@ -69,29 +69,38 @@ export default function ProductDetailPage() {
   const { addProduct: addRecentlyViewed } = useRecentlyViewedStore();
 
   const isAdmin = session?.user?.role === 'ADMIN';
-  // Extremely robust check for CD category/type/name
-  const isCD = 
+  const isCap = product?.productType === 'KŠILTOVKA SNAPBACK' || /kšiltovka/i.test(product?.name || '');
+  const isSingleSize = 
+    isCap ||
     /\bcd\b/i.test(product?.category || '') || 
     /\bcd\b/i.test(product?.productType || '') ||
     /\bcd\b/i.test(product?.name || '') ||
     /\bcd\b/i.test(product?.slug || '') ||
-    (Object.keys(product?.sizes || {}).length === 1 && Object.keys(product?.sizes || {})[0].toUpperCase() === 'ONE SIZE');
+    product?.productType === 'TAŠKA' ||
+    product?.productType === 'PLAKÁT' ||
+    (Object.keys(product?.sizes || {}).length === 1 && (
+      Object.keys(product?.sizes || {})[0].toUpperCase() === 'ONE SIZE' ||
+      Object.keys(product?.sizes || {})[0].toUpperCase() === 'ONE_SIZE' ||
+      Object.keys(product?.sizes || {})[0].toUpperCase() === 'UNIVERZÁLNÍ VELIKOST'
+    ));
   
   // Debug log for production verification
   useEffect(() => {
     if (product) {
-      console.log(`Product: ${product.name}, Category: ${product.category}, Type: ${product.productType}, isCD: ${isCD}`);
+      console.log(`Product: ${product.name}, Category: ${product.category}, Type: ${product.productType}, isSingleSize: ${isSingleSize}`);
     }
-  }, [product, isCD]);
+  }, [product, isSingleSize]);
 
   useEffect(() => {
-    if (product && isCD) {
+    if (product && isSingleSize) {
       const sizes = Object.entries(product.sizes);
       if (sizes.length > 0) {
         setSelectedSize(sizes[0][0]);
+      } else {
+        setSelectedSize('ONE_SIZE');
       }
     }
-  }, [product, isCD]);
+  }, [product, isSingleSize]);
 
   useEffect(() => {
     fetchProduct();
@@ -636,7 +645,7 @@ export default function ProductDetailPage() {
               </p>
             );
           })()}
-          {!isCD && (
+          {!isSingleSize && (
             <div className="relative w-full md:w-[36vw] pt-3 -mb-1">
               <button
                 onClick={() => setIsSizeDropdownOpen(!isSizeDropdownOpen)}
@@ -818,11 +827,14 @@ export default function ProductDetailPage() {
                 }}
               >
                 <div className="pb-4">
-                  <p className="mb-2">Oversize fit</p>
-                  {!isCD && (
+                  {product.sizeFit && <p className="mb-2">{product.sizeFit}</p>}
+                  {isCap && (
+                    <p className="mb-2">Univerzální velikost (nastavitelný snapback pásek).</p>
+                  )}
+                  {!isSingleSize && (
                     <p className="mb-4">Nenašli jste svou velikost skladem? Napište nám – můžeme ji pro vás vyrobit.</p>
                   )}
-                  {product.sizeChartType && (
+                  {!isSingleSize && product.sizeChartType && (
                     <button
                       onClick={() => setShowSizeChart(true)}
                       className="px-4 py-2 border border-black bg-white text-black uppercase text-xs font-medium hover:bg-black hover:text-white transition-colors"

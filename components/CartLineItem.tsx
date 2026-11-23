@@ -52,10 +52,15 @@ export default function CartLineItem({
     }).replace('Kč', '').trim() + ' Kč';
   };
 
-  // Robust check for CD category (matches product page logic)
+  // Check for CD or single-size items (snapback caps, etc.)
   const isCDCategory = 
     /\bcd\b/i.test(category || '') || 
-    /\bone\s*size\b/i.test(size || '');
+    /\bcd\b/i.test(name || '');
+
+  const isSingleSize = 
+    isCDCategory ||
+    /one[_\s-]*size/i.test(size || '') ||
+    /univerzální/i.test(size || '');
 
   // Modal layout: 143px grid
   if (layout === 'modal') {
@@ -92,8 +97,8 @@ export default function CartLineItem({
           {/* Attributes - only show for non-CD products */}
           {!isCDCategory && (
             <>
-              <div className={styles.attr}>Barva: {color}</div>
-              <div className={styles.attr}>Velikost: {size}</div>
+              {color && <div className={styles.attr}>Barva: {color}</div>}
+              <div className={styles.attr}>Velikost: {isSingleSize ? 'Univerzální' : size}</div>
             </>
           )}
 
@@ -238,6 +243,19 @@ export default function CartLineItem({
         {/* Attributes */}
         {!isCDCategory && (
           <>
+            {color && (
+              <div
+                style={{
+                  fontSize: '16.5px',
+                  lineHeight: '23px',
+                  margin: 0,
+                  fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                  color: '#000',
+                }}
+              >
+                Barva: {color}
+              </div>
+            )}
             <div
               style={{
                 fontSize: '16.5px',
@@ -247,18 +265,7 @@ export default function CartLineItem({
                 color: '#000',
               }}
             >
-              Barva: {color}
-            </div>
-            <div
-              style={{
-                fontSize: '16.5px',
-                lineHeight: '23px',
-                margin: 0,
-                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                color: '#000',
-              }}
-            >
-              Velikost: {size}
+              Velikost: {isSingleSize ? 'Univerzální' : size}
             </div>
           </>
         )}

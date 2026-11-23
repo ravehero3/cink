@@ -9,7 +9,7 @@ import StatusMessage from '@/components/admin/StatusMessage';
 import { SizeChartType, SizeChartData } from '@/components/SizeChart';
 
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
-const PRODUCT_TYPES = ['TRIKO', 'MIKINA', 'KRAŤASY', 'KALHOTY', 'CD'] as const;
+const PRODUCT_TYPES = ['TRIKO', 'MIKINA', 'KRAŤASY', 'KALHOTY', 'KŠILTOVKA SNAPBACK', 'CD', 'TAŠKA', 'PLAKÁT'] as const;
 
 const inputCls = "admin-input";
 const labelCls = "admin-label";
@@ -123,7 +123,9 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
           ...formData,
           price: parseFloat(formData.price),
           images: images.filter((img) => img.trim() !== ''),
-          sizes,
+          sizes: (formData.productType === 'CD' || formData.productType === 'KŠILTOVKA SNAPBACK')
+            ? { ONE_SIZE: sizes['ONE_SIZE'] || 0 }
+            : sizes,
           productInfo: formData.productInfo || null,
           sizeFit: formData.sizeFit || null,
           shippingInfo: formData.shippingInfo || null,
@@ -154,7 +156,9 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
     }
   };
 
+  const isCap = formData.productType === 'KŠILTOVKA SNAPBACK';
   const isCD = formData.productType === 'CD';
+  const isSingleSize = isCD || isCap;
   const updateSize = (size: string, value: string) => setSizes({ ...sizes, [size]: parseInt(value) || 0 });
   const updateCDStock = (value: string) => setSizes({ ONE_SIZE: parseInt(value) || 0 });
   const totalStock = Object.values(sizes).reduce((sum, val) => sum + val, 0);
@@ -378,7 +382,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
             </div>
 
             {/* Size Chart Editor */}
-            {!isCD && (
+            {!isCD && !isCap && (
               <div className="bg-white border border-black p-6">
                 <p className="text-[10px] font-bold text-[#666666] uppercase tracking-widest mb-4 pb-2 border-b border-black">
                   Tabulka velikostí
@@ -401,11 +405,14 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
             {/* Stock */}
             <div className="bg-white border border-black p-6">
               <p className="text-[10px] font-bold text-[#666666] uppercase tracking-widest mb-4 pb-2 border-b border-black">
-                {isCD ? 'Sklad' : 'Velikosti a sklad'}
+                {isSingleSize ? 'Sklad' : 'Velikosti a sklad'}
               </p>
 
-              {isCD ? (
+              {isSingleSize ? (
                 <div>
+                  {isCap && (
+                    <p className="text-xs uppercase tracking-wider text-[#666666] mb-3">Kšiltovka snapback má univerzální velikost.</p>
+                  )}
                   <label className={labelCls}>Množství na skladě</label>
                   <input
                     type="number"
