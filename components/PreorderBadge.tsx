@@ -175,6 +175,13 @@ export function PreorderCardBadge({ deadline, deliveryEstimate }: PreorderBadgeP
   );
 }
 
+// ─── Czech plural helper ───────────────────────────────────────────────────────
+function plural(n: number, one: string, few: string, many: string) {
+  if (n === 1) return one;
+  if (n >= 2 && n <= 4) return few;
+  return many;
+}
+
 // ─── Full countdown block for Product Detail Page ─────────────────────────────
 export function PreorderCountdownBlock({
   deadline,
@@ -183,136 +190,207 @@ export function PreorderCountdownBlock({
   const timeLeft = useCountdown(deadline);
   const isClosed = !timeLeft;
 
+  // Format deadline as "pátek 1. ledna v 00:59"
+  function formatDeadlineLong(dl: Date | string) {
+    const d = new Date(dl);
+    const day = d.toLocaleDateString('cs-CZ', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'Europe/Prague' });
+    const time = d.toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Europe/Prague' });
+    return `${day} v ${time}`;
+  }
+
+  const cells = isClosed
+    ? [
+        { val: 0, label: 'dnů' },
+        { val: 0, label: 'hodin' },
+        { val: 0, label: 'minut' },
+        { val: 0, label: 'sekund' },
+      ]
+    : [
+        { val: timeLeft!.days,    label: plural(timeLeft!.days,    'den',     'dny',    'dnů')     },
+        { val: timeLeft!.hours,   label: plural(timeLeft!.hours,   'hodina',  'hodiny', 'hodin')   },
+        { val: timeLeft!.minutes, label: plural(timeLeft!.minutes, 'minuta',  'minuty', 'minut')   },
+        { val: timeLeft!.seconds, label: plural(timeLeft!.seconds, 'sekunda', 'sekundy','sekund')  },
+      ];
+
   return (
     <div
       style={{
         width: '100%',
         border: '1px solid #000',
-        padding: '16px',
-        marginBottom: '12px',
+        background: '#fff',
+        color: '#000',
         fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+        fontSize: '14px',
+        lineHeight: '21px',
+        fontWeight: 400,
+        WebkitFontSmoothing: 'antialiased',
+        boxSizing: 'border-box',
+        marginBottom: '0',
       }}
     >
-      {/* Header row */}
+      {/* ── Header: title + status ── */}
       <div
         style={{
           display: 'flex',
-          alignItems: 'center',
           justifyContent: 'space-between',
-          marginBottom: '10px',
+          alignItems: 'center',
+          gap: '16px',
+          padding: '12px 16px',
+          borderBottom: '1px solid #000',
         }}
       >
         <span
           style={{
-            fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-            fontSize: '11px',
+            fontFamily: 'BB-CondBold, "Helvetica Neue", Arial, sans-serif',
             fontWeight: 700,
-            letterSpacing: '0.1em',
+            fontSize: '14px',
+            lineHeight: '21px',
             textTransform: 'uppercase',
-            fontStretch: 'condensed',
+            letterSpacing: 0,
           }}
         >
           Předobjednávka
         </span>
         <span
-          className={`preorder-badge${isClosed ? ' is-closed' : ''}`}
           style={{
-            fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-            fontSize: '10px',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            fontFamily: 'BB-CondBold, "Helvetica Neue", Arial, sans-serif',
             fontWeight: 700,
-            letterSpacing: '0.08em',
+            fontSize: '14px',
+            lineHeight: '21px',
             textTransform: 'uppercase',
-            fontStretch: 'condensed',
-            padding: '2px 7px',
-            borderRadius: '2px',
+            letterSpacing: 0,
           }}
         >
-          {isClosed ? 'Ukončeno' : 'Probíhá'}
+          {!isClosed && (
+            <span
+              style={{
+                width: '6px',
+                height: '6px',
+                background: 'currentColor',
+                display: 'inline-block',
+                animation: 'po-blink 1.4s steps(1,end) infinite',
+              }}
+            />
+          )}
+          {isClosed ? 'Ukončena' : 'Probíhá'}
         </span>
       </div>
 
-      {isClosed ? (
+      {/* ── Deadline row ── */}
+      {!isClosed && (
         <p
-          className="preorder-closed-text"
-          style={{ fontSize: '13px', color: '#666', margin: '0 0 4px' }}
+          style={{
+            margin: 0,
+            padding: '12px 16px',
+            borderBottom: '1px solid #000',
+            fontSize: '14px',
+            lineHeight: '21px',
+          }}
+        >
+          Objednávky otevřeny do:{' '}
+          <span style={{ fontFamily: 'BB-CondBold, "Helvetica Neue", Arial, sans-serif', fontWeight: 700 }}>
+            {formatDeadlineLong(deadline)}
+          </span>
+        </p>
+      )}
+
+      {/* ── 4-column countdown grid ── */}
+      <div
+        role="timer"
+        aria-live="off"
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(4, 1fr)',
+          borderBottom: '1px solid #000',
+        }}
+      >
+        {cells.map(({ val, label }, i) => (
+          <div
+            key={label}
+            style={{
+              padding: '12px 16px 10px',
+              borderRight: i < 3 ? '1px solid #000' : 'none',
+            }}
+          >
+            <span
+              style={{
+                display: 'block',
+                fontFamily: 'BB-CondBold, "Helvetica Neue", Arial, sans-serif',
+                fontWeight: 700,
+                fontSize: '21px',
+                lineHeight: '21px',
+                fontVariantNumeric: 'tabular-nums',
+              }}
+            >
+              {pad(val)}
+            </span>
+            <span
+              style={{
+                display: 'block',
+                marginTop: '6px',
+                fontFamily: 'BB-CondBold, "Helvetica Neue", Arial, sans-serif',
+                fontWeight: 700,
+                fontSize: '12px',
+                lineHeight: '16px',
+                textTransform: 'uppercase',
+              }}
+            >
+              {label}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {/* ── Delivery row ── */}
+      {deliveryEstimate && (
+        <p
+          style={{
+            margin: 0,
+            padding: '12px 16px',
+            borderBottom: '1px solid #000',
+            fontSize: '14px',
+            lineHeight: '21px',
+          }}
+        >
+          📦 Odhadovaná doručení: {deliveryEstimate}
+        </p>
+      )}
+
+      {/* ── Note row ── */}
+      {!isClosed && (
+        <p
+          style={{
+            margin: 0,
+            padding: '12px 16px',
+            fontSize: '12px',
+            lineHeight: '18px',
+            color: '#444',
+          }}
+        >
+          Toto je předobjednávka. Zboží bude vyrobeno a odesláno po uzavření objednávek.
+        </p>
+      )}
+
+      {isClosed && (
+        <p
+          style={{
+            margin: 0,
+            padding: '12px 16px',
+            fontSize: '12px',
+            lineHeight: '18px',
+            color: '#444',
+          }}
         >
           Předobjednávky byly ukončeny. Tento produkt již není dostupný.
         </p>
-      ) : (
-        <>
-          <p
-            className="preorder-deadline"
-            style={{ fontSize: '12px', color: '#666', margin: '0 0 10px' }}
-          >
-            Objednávky otevřeny do: <strong style={{ color: '#000' }}>{formatDeadline(deadline)}</strong>
-          </p>
-
-          {/* Countdown boxes */}
-          <div className="preorder-timer" style={{ marginBottom: '10px' }}>
-            {[
-              { val: timeLeft!.days, label: 'DNŮ' },
-              { val: timeLeft!.hours, label: 'HODIN' },
-              { val: timeLeft!.minutes, label: 'MINUT' },
-              { val: timeLeft!.seconds, label: 'SEKUND' },
-            ].map(({ val, label }) => (
-              <div
-                key={label}
-                className="preorder-timer__cell"
-                style={{
-                  borderRadius: '2px',
-                  background: '#f6f6f6',
-                  border: '1px solid rgba(0,0,0,0.12)',
-                  padding: '10px 0',
-                }}
-              >
-                <span
-                  className="preorder-timer__num"
-                  style={{
-                    fontFamily: '"Helvetica Neue Condensed Bold", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontStretch: 'condensed',
-                    fontSize: '24px',
-                    fontWeight: 700,
-                    lineHeight: 1,
-                  }}
-                >
-                  {pad(val)}
-                </span>
-                <span
-                  className="preorder-timer__unit"
-                  style={{
-                    fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    fontSize: '9px',
-                    letterSpacing: '0.1em',
-                    color: '#666',
-                    textTransform: 'uppercase',
-                    marginTop: '4px',
-                  }}
-                >
-                  {label}
-                </span>
-              </div>
-            ))}
-          </div>
-
-          {deliveryEstimate && (
-            <p style={{ fontSize: '12px', color: '#666', margin: 0 }}>
-              📦 Odhadovaná doručení:{' '}
-              <strong style={{ color: '#000' }}>{deliveryEstimate}</strong>
-            </p>
-          )}
-
-          <p
-            style={{
-              fontSize: '11px',
-              color: '#888',
-              margin: '8px 0 0',
-              lineHeight: 1.5,
-            }}
-          >
-            Toto je předobjednávka. Zboží bude vyrobeno a odesláno po uzavření objednávek.
-          </p>
-        </>
       )}
+
+      <style>{`
+        @keyframes po-blink { 50% { opacity: 0; } }
+      `}</style>
     </div>
   );
 }
