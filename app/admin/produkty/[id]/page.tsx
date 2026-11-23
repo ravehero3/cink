@@ -11,6 +11,30 @@ import { SizeChartType, SizeChartData } from '@/components/SizeChart';
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 const PRODUCT_TYPES = ['TRIKO', 'MIKINA', 'KRAŤASY', 'KALHOTY', 'KŠILTOVKA SNAPBACK', 'CD', 'TAŠKA', 'PLAKÁT'] as const;
 
+/** Returns Prague UTC offset in minutes (positive = ahead of UTC) */
+function getPragueOffsetMinutes(localValue: string): number {
+  const utcDate = new Date(localValue + 'Z');
+  const pragueStr = utcDate.toLocaleString('sv-SE', { timeZone: 'Europe/Prague' });
+  const pragueDate = new Date(pragueStr + 'Z');
+  return Math.round((pragueDate.getTime() - utcDate.getTime()) / 60000);
+}
+
+function pragueLocalToISO(localValue: string): string {
+  if (!localValue) return localValue;
+  const pragueOffset = getPragueOffsetMinutes(localValue);
+  const offsetHours = Math.abs(pragueOffset / 60);
+  const sign = pragueOffset >= 0 ? '+' : '-';
+  const hh = String(Math.floor(offsetHours)).padStart(2, '0');
+  const mm = String(Math.abs(pragueOffset) % 60).padStart(2, '0');
+  return `${localValue}:00${sign}${hh}:${mm}`;
+}
+
+function isoToPragueLocal(isoString: string): string {
+  const d = new Date(isoString);
+  const pragueStr = d.toLocaleString('sv-SE', { timeZone: 'Europe/Prague' });
+  return pragueStr.slice(0, 16).replace(' ', 'T');
+}
+
 const inputCls = "admin-input";
 const labelCls = "admin-label";
 const textareaCls = "admin-textarea";
@@ -92,10 +116,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
           setProductImage(product.productImage || null);
           setIsPreorder(product.isPreorder || false);
           if (product.preorderDeadline) {
-            const d = new Date(product.preorderDeadline);
-            const offset = d.getTimezoneOffset();
-            const local = new Date(d.getTime() - offset * 60 * 1000);
-            setPreorderDeadline(local.toISOString().slice(0, 16));
+            setPreorderDeadline(isoToPragueLocal(product.preorderDeadline));
           }
         } else {
           setStatus({ type: 'error', message: 'Produkt nenalezen' });
@@ -135,7 +156,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
           productType: formData.productType || null,
           productImage,
           isPreorder,
-          preorderDeadline: isPreorder && preorderDeadline ? preorderDeadline : null,
+          preorderDeadline: isPreorder && preorderDeadline ? pragueLocalToISO(preorderDeadline) : null,
         }),
       });
 

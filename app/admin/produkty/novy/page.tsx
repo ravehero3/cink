@@ -10,6 +10,49 @@ const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 const PRODUCT_TYPES = ['TRIKO', 'MIKINA', 'KRAŤASY', 'KALHOTY', 'KŠILTOVKA SNAPBACK', 'CD', 'TAŠKA', 'PLAKÁT'] as const;
 const POSTER_SIZES = ['A3+ (Na fotografickém papíře)'] as const;
 
+/**
+ * Convert a "datetime-local" value (e.g. "2026-11-30T23:59") entered by the
+ * admin (assumed Prague time / CET = UTC+1 / CEST = UTC+2) into a proper ISO
+ * string with the correct Prague offset so the database stores it correctly.
+ *
+ * We always use the correct civil offset for the given date:
+ *   CEST (UTC+2) last Sunday March → last Sunday October
+ *   CET  (UTC+1) otherwise
+ */
+function pragueLocalToISO(localValue: string): string {
+  if (!localValue) return localValue;
+  // Parse as a Prague-local date to determine the correct offset
+  const naive = new Date(localValue + ':00'); // treat as UTC momentarily
+  // Check if the date falls in CEST (last Sun Mar → last Sun Oct)
+  // Simple rule: get offset from Intl for that instant in Prague
+  const pragueOffset = getPragueOffsetMinutes(localValue);
+  const offsetHours = Math.abs(pragueOffset / 60);
+  const sign = pragueOffset >= 0 ? '+' : '-';
+  const hh = String(Math.floor(offsetHours)).padStart(2, '0');
+  const mm = String(Math.abs(pragueOffset) % 60).padStart(2, '0');
+  return `${localValue}:00${sign}${hh}:${mm}`;
+}
+
+/** Returns Prague UTC offset in minutes (positive = ahead of UTC) */
+function getPragueOffsetMinutes(localValue: string): number {
+  // Create a date using the naive value and check what Prague says
+  const utcDate = new Date(localValue + 'Z');
+  const pragueStr = utcDate.toLocaleString('sv-SE', { timeZone: 'Europe/Prague' });
+  const pragueDate = new Date(pragueStr + 'Z');
+  return Math.round((pragueDate.getTime() - utcDate.getTime()) / 60000);
+}
+
+/**
+ * Convert a UTC ISO string from the DB back to "YYYY-MM-DDTHH:mm" in Prague
+ * local time for display in a datetime-local input.
+ */
+function isoToPragueLocal(isoString: string): string {
+  const d = new Date(isoString);
+  const pragueStr = d.toLocaleString('sv-SE', { timeZone: 'Europe/Prague' });
+  // sv-SE gives "2026-11-30 23:59:00" – just replace space with T and trim seconds
+  return pragueStr.slice(0, 16).replace(' ', 'T');
+}
+
 const inputCls = "admin-input";
 const labelCls = "admin-label";
 const textareaCls = "admin-textarea";
@@ -88,7 +131,7 @@ export default function NewProductPage() {
           posterSize: formData.posterSize || null,
           tubeInfo: formData.tubeInfo || null,
           isPreorder,
-          preorderDeadline: isPreorder && preorderDeadline ? preorderDeadline : null,
+          preorderDeadline: isPreorder && preorderDeadline ? pragueLocalToISO(preorderDeadline) : null,
         }),
       });
       if (response.ok) {
