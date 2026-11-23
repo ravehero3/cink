@@ -121,6 +121,34 @@ export default function CheckoutPage() {
     return () => document.removeEventListener('ppl-parcelshop-map', handlePplSelect);
   }, []);
 
+  useEffect(() => {
+    if (typeof window === 'undefined' || !hasHydrated) return;
+    const params = new URLSearchParams(window.location.search);
+    const promoParam = params.get('promo');
+    if (promoParam) {
+      const code = promoParam.trim().toUpperCase();
+      setFormData(prev => ({ ...prev, promoCode: code }));
+      const orderSubtotal = getTotal();
+      if (orderSubtotal > 0) {
+        fetch('/api/promo-codes/validate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            code,
+            orderAmount: orderSubtotal,
+          }),
+        })
+          .then(res => res.json())
+          .then(data => {
+            if (data.valid && data.discountAmount) {
+              setDiscount(data.discountAmount);
+            }
+          })
+          .catch(() => {});
+      }
+    }
+  }, [hasHydrated]);
+
   const rawSubtotal = getTotal();
   const subtotal = typeof rawSubtotal === 'number' && !isNaN(rawSubtotal) ? rawSubtotal : 0;
   const shippingCost = calculateShippingCost(subtotal, formData.shippingMethod);

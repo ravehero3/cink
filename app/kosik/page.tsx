@@ -88,6 +88,8 @@ export default function CartPage() {
   const [showPromoCode, setShowPromoCode] = useState(false);
   const [promoCode, setPromoCode] = useState('');
   const [discountAmount, setDiscountAmount] = useState(0);
+  const [promoError, setPromoError] = useState('');
+  const [promoSuccess, setPromoSuccess] = useState('');
 
   useEffect(() => {
     const fetchAllProducts = async () => {
@@ -196,11 +198,39 @@ export default function CartPage() {
     }
   };
 
-  const handleApplyPromoCode = () => {
-    if (promoCode.toLowerCase() === 'ufo10') {
-      setDiscountAmount(Math.round(total * 0.1));
-    } else {
+  const handleApplyPromoCode = async () => {
+    if (!promoCode.trim()) return;
+    setPromoError('');
+    setPromoSuccess('');
+    try {
+      const response = await fetch('/api/promo-codes/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          code: promoCode.trim(),
+          orderAmount: total,
+        }),
+      });
+      const data = await response.json();
+      if (response.ok && data.valid) {
+        setDiscountAmount(data.discountAmount);
+        setPromoSuccess(data.message || `Sleva ${data.discountAmount} Kč byla použita`);
+      } else {
+        setDiscountAmount(0);
+        setPromoError(data.error || 'Neplatný promo kód');
+      }
+    } catch {
       setDiscountAmount(0);
+      setPromoError('Chyba při ověřování promo kódu');
+    }
+  };
+
+  const goToCheckout = (url: string = '/pokladna') => {
+    if (discountAmount > 0 && promoCode.trim()) {
+      const sep = url.includes('?') ? '&' : '?';
+      router.push(`${url}${sep}promo=${encodeURIComponent(promoCode.trim().toUpperCase())}`);
+    } else {
+      router.push(url);
     }
   };
 
@@ -1168,7 +1198,11 @@ export default function CartPage() {
                       id="promo-code-input-mobile"
                       type="text"
                       value={promoCode}
-                      onChange={(e) => setPromoCode(e.target.value)}
+                      onChange={(e) => {
+                        setPromoCode(e.target.value);
+                        setPromoError('');
+                        setPromoSuccess('');
+                      }}
                       placeholder="zadejte kód"
                       style={{
                         width: '100%',
@@ -1217,6 +1251,16 @@ export default function CartPage() {
                     >
                       Uplatnit
                     </button>
+                    {promoError && (
+                      <p style={{ color: '#d00', fontSize: '11px', margin: '4px 0 0', fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
+                        {promoError}
+                      </p>
+                    )}
+                    {promoSuccess && (
+                      <p style={{ color: '#16a34a', fontSize: '11px', margin: '4px 0 0', fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
+                        {promoSuccess}
+                      </p>
+                    )}
                   </div>
                 </div>
               )}
@@ -1231,6 +1275,21 @@ export default function CartPage() {
                   flexDirection: 'column',
                   gap: '8px'
                 }}>
+                  {discountAmount > 0 && (
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontSize: '11.5px',
+                      color: '#16a34a',
+                      letterSpacing: '0.04em',
+                      textTransform: 'uppercase',
+                      fontWeight: 500
+                    }}>
+                      <span>Sleva</span>
+                      <span>-{discountAmount.toLocaleString('cs-CZ', { maximumFractionDigits: 0 })} Kč</span>
+                    </div>
+                  )}
                   <div style={{
                     display: 'flex',
                     justifyContent: 'space-between',
@@ -1261,7 +1320,7 @@ export default function CartPage() {
 
                 <AnimatedButton
                   text={`PŘEJÍT K POKLADNĚ (${items.length})`}
-                  onClick={() => router.push('/pokladna')}
+                  onClick={() => goToCheckout('/pokladna')}
                   type="button"
                   style={{
                     width: '100%',
@@ -1279,7 +1338,7 @@ export default function CartPage() {
                 />
 
                 <button
-                  onClick={() => router.push('/pokladna?payment=gopay')}
+                  onClick={() => goToCheckout('/pokladna?payment=gopay')}
                   style={{
                     width: '100%',
                     padding: '12px',
@@ -1430,7 +1489,11 @@ export default function CartPage() {
                         id="promo-code-input"
                         type="text"
                         value={promoCode}
-                        onChange={(e) => setPromoCode(e.target.value)}
+                        onChange={(e) => {
+                          setPromoCode(e.target.value);
+                          setPromoError('');
+                          setPromoSuccess('');
+                        }}
                         placeholder="zadejte kód"
                         style={{
                           flex: '1',
@@ -1481,6 +1544,36 @@ export default function CartPage() {
                         Uplatnit
                       </button>
                     </div>
+                    {promoError && (
+                      <p style={{ color: '#d00', fontSize: '11px', margin: '4px 0 0', fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
+                        {promoError}
+                      </p>
+                    )}
+                    {promoSuccess && (
+                      <p style={{ color: '#16a34a', fontSize: '11px', margin: '4px 0 0', fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
+                        {promoSuccess}
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {discountAmount > 0 && (
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    fontSize: '11.5px',
+                    lineHeight: '16px',
+                    letterSpacing: '0.04em',
+                    textTransform: 'uppercase',
+                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                    fontWeight: 500,
+                    marginTop: '20px',
+                    paddingRight: '12px',
+                    color: '#16a34a'
+                  }}>
+                    <span>Sleva</span>
+                    <span>-{discountAmount.toLocaleString('cs-CZ', { maximumFractionDigits: 0 })}&nbsp;Kč</span>
                   </div>
                 )}
 
@@ -1495,7 +1588,7 @@ export default function CartPage() {
                   textTransform: 'uppercase',
                   fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                   fontWeight: 400,
-                  marginTop: '38px',
+                  marginTop: discountAmount > 0 ? '10px' : '38px',
                   paddingRight: '12px',
                   color: '#000'
                 }}>
@@ -1558,7 +1651,7 @@ export default function CartPage() {
                 }}>
                   <AnimatedButton
                     text={`PŘEJÍT K POKLADNĚ (${items.length})`}
-                    onClick={() => router.push('/pokladna')}
+                    onClick={() => goToCheckout('/pokladna')}
                     type="button"
                     style={{
                       width: '100%',
@@ -1577,7 +1670,7 @@ export default function CartPage() {
                   />
 
                   <button
-                    onClick={() => router.push('/pokladna?payment=gopay')}
+                    onClick={() => goToCheckout('/pokladna?payment=gopay')}
                     style={{
                       width: '100%',
                       maxWidth: '748px',
