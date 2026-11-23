@@ -58,6 +58,8 @@ model Product {
   seoDescription     String?
   seoKeywords        String?
   ogImage            String?
+  isPreorder         Boolean         @default(false)
+  preorderDeadline   DateTime?
   novinkysProduct    NovinkysProduct?
   createdAt          DateTime        @default(now())
   updatedAt          DateTime        @updatedAt

@@ -67,6 +67,8 @@ export async function POST(request: NextRequest) {
         sizeChartType: data.sizeChartType || null,
         sizeChartData: data.sizeChartData || null,
         productType: data.productType || null,
+        isPreorder: data.isPreorder ?? false,
+        preorderDeadline: data.preorderDeadline ? new Date(data.preorderDeadline) : null,
       },
     });
 

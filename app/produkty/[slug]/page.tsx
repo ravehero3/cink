@@ -10,6 +10,7 @@ import { ChevronDown, ChevronLeft, ChevronRight, Edit2, Save, X } from 'lucide-r
 import { getDeliveryDateRange } from '@/lib/delivery-date';
 import SizeChart from '@/components/SizeChart';
 import type { SizeChartType } from '@/components/SizeChart';
+import { PreorderCountdownBlock } from '@/components/PreorderBadge';
 
 interface Product {
   id: string;
@@ -31,6 +32,8 @@ interface Product {
   sizeChartData?: any;
   productType?: string;
   productImage?: string;
+  isPreorder?: boolean;
+  preorderDeadline?: string | null;
 }
 
 export default function ProductDetailPage() {
@@ -598,6 +601,15 @@ export default function ProductDetailPage() {
 
           {!isEditMode && (
             <>
+          {/* Preorder countdown block */}
+          {product.isPreorder && product.preorderDeadline && (
+            <div className="w-full md:w-[36vw] mt-5">
+              <PreorderCountdownBlock
+                deadline={product.preorderDeadline}
+                deliveryEstimate="18.–23. 12."
+              />
+            </div>
+          )}
           {(() => {
             let isOnOrder = false;
             if (selectedSize && product?.sizes[selectedSize]) {
@@ -606,7 +618,10 @@ export default function ProductDetailPage() {
               isOnOrder = !stock || Number(stock) === 0;
               console.log(`Selected size: ${selectedSize}, Stock value: ${stock}, Stock type: ${typeof stock}, isOnOrder: ${isOnOrder}`);
             }
-            const delivery = getDeliveryDateRange(isOnOrder);
+            // For preorder: always show Christmas delivery
+            const delivery = product.isPreorder
+              ? { minDate: '18. 12.', maxDate: '23. 12.' }
+              : getDeliveryDateRange(isOnOrder);
             return (
               <p
                 className="w-full md:w-[36vw] text-center mt-5 mb-2"

@@ -72,6 +72,8 @@ export async function PATCH(
     if (data.sizeChartData !== undefined) updateData.sizeChartData = data.sizeChartData;
     if (data.productType !== undefined) updateData.productType = data.productType || null;
     if (data.productImage !== undefined) updateData.productImage = data.productImage || null;
+    if (data.isPreorder !== undefined) updateData.isPreorder = data.isPreorder ?? false;
+    if (data.preorderDeadline !== undefined) updateData.preorderDeadline = data.preorderDeadline ? new Date(data.preorderDeadline) : null;
     
     if (data.sizes !== undefined) {
       updateData.sizes = data.sizes;

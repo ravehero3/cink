@@ -11,6 +11,8 @@ interface Product {
   sizes?: Record<string, number>;
   color?: string;
   colorCount?: number;
+  isPreorder?: boolean;
+  preorderDeadline?: string | null;
 }
 
 interface ProductsGridProps {
@@ -49,6 +51,8 @@ export default function ProductsGrid({ products, savedProducts = [], onToggleSav
               color={product.color || ''}
               isSaved={savedProducts.includes(product.id)}
               onToggleSave={onToggleSave}
+              isPreorder={product.isPreorder}
+              preorderDeadline={product.preorderDeadline ? String(product.preorderDeadline) : null}
             />
           );
         })}

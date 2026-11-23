@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { getCzechColorPlural } from '@/lib/czech-pluralization';
+import { PreorderCardBadge } from './PreorderBadge';
 
 interface ProductCardProps {
   id: string;
@@ -16,6 +17,8 @@ interface ProductCardProps {
   color?: string;
   isSaved?: boolean;
   onToggleSave?: (id: string) => void;
+  isPreorder?: boolean;
+  preorderDeadline?: string | null;
 }
 
 const getColorHex = (colorName: string): string => {
@@ -50,6 +53,8 @@ export default function ProductCard({
   color = '',
   isSaved = false,
   onToggleSave,
+  isPreorder = false,
+  preorderDeadline,
 }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -108,6 +113,14 @@ export default function ProductCard({
             className="object-contain w-full h-full"
             style={{ transform: 'scale(1)' }}
           />
+
+          {/* Preorder badge - top-left */}
+          {isPreorder && preorderDeadline && (
+            <PreorderCardBadge
+              deadline={preorderDeadline}
+              deliveryEstimate="18.–23. 12."
+            />
+          )}
           
           {onToggleSave && (
             <button

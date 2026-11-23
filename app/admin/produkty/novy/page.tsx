@@ -22,6 +22,8 @@ export default function NewProductPage() {
   const [sizes, setSizes] = useState<Record<string, number>>(
     SIZES.reduce((acc, size) => ({ ...acc, [size]: 0 }), {})
   );
+  const [isPreorder, setIsPreorder] = useState(false);
+  const [preorderDeadline, setPreorderDeadline] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -74,6 +76,8 @@ export default function NewProductPage() {
           careInfo: formData.careInfo || null,
           sizeChartImage: formData.sizeChartImage || null,
           productType: formData.productType || null,
+          isPreorder,
+          preorderDeadline: isPreorder && preorderDeadline ? preorderDeadline : null,
         }),
       });
       if (response.ok) {
@@ -337,6 +341,41 @@ export default function NewProductPage() {
                   }`}>
                     {totalStock === 0 ? '[!] Produkt bude bez skladu' : `Celkem: ${totalStock} ks`}
                   </div>
+                </div>
+              )}
+            </div>
+
+            {/* Preorder */}
+            <div className="bg-white border border-black p-5 space-y-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wider text-black">Předobjednávka</p>
+                  <p className="text-[10px] uppercase text-[#666666] mt-0.5">Produkt se prodává jako předobjednávka</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsPreorder(!isPreorder)}
+                  className={`px-3 py-1.5 text-xs uppercase font-bold tracking-wider border border-black transition-colors ${
+                    isPreorder ? 'bg-black text-white' : 'bg-white text-black'
+                  }`}
+                >
+                  {isPreorder ? 'ANO' : 'NE'}
+                </button>
+              </div>
+              {isPreorder && (
+                <div>
+                  <label className="block text-[10px] font-bold text-[#666666] uppercase tracking-widest mb-1">
+                    Deadline předobjednávky
+                  </label>
+                  <input
+                    type="datetime-local"
+                    value={preorderDeadline}
+                    onChange={(e) => setPreorderDeadline(e.target.value)}
+                    className="admin-input w-full"
+                  />
+                  <p className="text-[10px] text-[#666666] uppercase tracking-wider mt-1">
+                    Nastavte datum a čas konce předobjednávek (středoevropský čas).
+                  </p>
                 </div>
               )}
             </div>

@@ -323,7 +323,7 @@ function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplatePar
         preheader: 'Obdrželi jsme vaši objednávku. Nyní dokončete platbu.',
         header2Title: 'Děkujeme za objednávku',
         header2Subtitle:
-          'Obdrželi jsme vaši objednávku a brzy ji zpracujeme. Nyní prosím dokončete platbu, abychom mohli zásilku expedovat.',
+          'Obdrželi jsme vaši objednávku a brzy ji zpracujeme. Nyní prosím dokončete platbu, abychom mohli zásilku expedovat. Pokud vaše objednávka obsahuje předobjednávkové zboží, bude expedováno ihned po uzavření předobjednávek a naskladnění.',
         heroImage: {
           src: primaryBoughtPhoto,
           height: 600,

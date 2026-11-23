@@ -27,6 +27,8 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
   );
   const [sizeChartType, setSizeChartType] = useState<SizeChartType>(null);
   const [sizeChartData, setSizeChartData] = useState<SizeChartData | null>(null);
+  const [isPreorder, setIsPreorder] = useState(false);
+  const [preorderDeadline, setPreorderDeadline] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -88,6 +90,13 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
           setSizeChartType(product.sizeChartType || null);
           setSizeChartData(product.sizeChartData || null);
           setProductImage(product.productImage || null);
+          setIsPreorder(product.isPreorder || false);
+          if (product.preorderDeadline) {
+            const d = new Date(product.preorderDeadline);
+            const offset = d.getTimezoneOffset();
+            const local = new Date(d.getTime() - offset * 60 * 1000);
+            setPreorderDeadline(local.toISOString().slice(0, 16));
+          }
         } else {
           setStatus({ type: 'error', message: 'Produkt nenalezen' });
           router.push('/admin/produkty');
@@ -123,6 +132,8 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
           sizeChartData,
           productType: formData.productType || null,
           productImage,
+          isPreorder,
+          preorderDeadline: isPreorder && preorderDeadline ? preorderDeadline : null,
         }),
       });
 
@@ -428,6 +439,41 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
                   }`}>
                     {totalStock === 0 ? '[!] Produkt bude bez skladu' : `Celkem: ${totalStock} ks`}
                   </div>
+                </div>
+              )}
+            </div>
+
+            {/* Preorder */}
+            <div className="bg-white border border-black p-5 space-y-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wider text-black">Předobjednávka</p>
+                  <p className="text-[10px] uppercase text-[#666666] mt-0.5">Produkt se prodává jako předobjednávka</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsPreorder(!isPreorder)}
+                  className={`px-3 py-1.5 text-xs uppercase font-bold tracking-wider border border-black transition-colors ${
+                    isPreorder ? 'bg-black text-white' : 'bg-white text-black'
+                  }`}
+                >
+                  {isPreorder ? 'ANO' : 'NE'}
+                </button>
+              </div>
+              {isPreorder && (
+                <div>
+                  <label className="block text-[10px] font-bold text-[#666666] uppercase tracking-widest mb-1">
+                    Deadline předobjednávky
+                  </label>
+                  <input
+                    type="datetime-local"
+                    value={preorderDeadline}
+                    onChange={(e) => setPreorderDeadline(e.target.value)}
+                    className="admin-input w-full"
+                  />
+                  <p className="text-[10px] text-[#666666] uppercase tracking-wider mt-1">
+                    Nastavte datum a čas konce předobjednávek (středoevropský čas).
+                  </p>
                 </div>
               )}
             </div>

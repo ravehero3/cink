@@ -32,6 +32,8 @@ export async function GET(
         sizeChartType: true,
         sizeChartData: true,
         productImage: true,
+        isPreorder: true,
+        preorderDeadline: true,
       },
     });
 
