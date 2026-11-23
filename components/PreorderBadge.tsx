@@ -164,7 +164,7 @@ export function PreorderCardBadge({ deadline, deliveryEstimate }: PreorderBadgeP
 
               {deliveryEstimate && (
                 <p className="preorder-popup__text" style={{ marginTop: '6px', fontSize: '12px' }}>
-                  Odhadovaná doručení: <strong>{deliveryEstimate}</strong>
+                  Odhadované doručení: <strong>{deliveryEstimate}</strong>
                 </p>
               )}
             </>
@@ -355,7 +355,7 @@ export function PreorderCountdownBlock({
             lineHeight: '21px',
           }}
         >
-          📦 Odhadovaná doručení: {deliveryEstimate}
+          Odhadované doručení: {deliveryEstimate}
         </p>
       )}
 

@@ -69,13 +69,20 @@ export default function ProductDetailPage() {
   const { addProduct: addRecentlyViewed } = useRecentlyViewedStore();
 
   const isAdmin = session?.user?.role === 'ADMIN';
-  const isCap = product?.productType === 'KŠILTOVKA SNAPBACK' || /kšiltovka/i.test(product?.name || '');
+  const isCap = 
+    product?.productType === 'KŠILTOVKA SNAPBACK' || 
+    product?.category === 'KŠILTOVKA SNAPBACK' ||
+    /kšiltovka/i.test(product?.name || '') ||
+    /snapback/i.test(product?.name || '');
+
+  const isCD = 
+    product?.productType === 'CD' ||
+    product?.category?.toUpperCase() === 'CD' ||
+    (/^\s*cd\b/i.test(product?.name || '') && product?.productType !== 'TRIKO' && product?.productType !== 'MIKINA');
+
   const isSingleSize = 
     isCap ||
-    /\bcd\b/i.test(product?.category || '') || 
-    /\bcd\b/i.test(product?.productType || '') ||
-    /\bcd\b/i.test(product?.name || '') ||
-    /\bcd\b/i.test(product?.slug || '') ||
+    isCD ||
     product?.productType === 'TAŠKA' ||
     product?.productType === 'PLAKÁT' ||
     (Object.keys(product?.sizes || {}).length === 1 && (
@@ -929,13 +936,39 @@ export default function ProductDetailPage() {
                 }}
               >
                 <div className="pb-4">
-                  <p className="mb-1">Prát max. při 30°C - šetrný proces</p>
-                  <p className="mb-1">Prát naruby</p>
-                  <p className="mb-1">Nebělit</p>
-                  <p className="mb-1">Nesušit v sušičce</p>
-                  <p className="mb-1">Sušit na vzduchu ve stínu</p>
-                  <p className="mb-1">Nežehlit</p>
-                  <p>Nečistit chemicky</p>
+                  {isCap ? (
+                    product.careInfo ? (
+                      <div className="whitespace-pre-line">{product.careInfo}</div>
+                    ) : (
+                      <>
+                        <p className="mb-1">Čistit pouze lokálně vlhkým hadříkem.</p>
+                        <p className="mb-1">Neprat v pračce.</p>
+                        <p className="mb-1">Nebělit.</p>
+                        <p className="mb-1">Nesušit v sušičce.</p>
+                        <p className="mb-1">Sušit volně na vzduchu ve stínu (udržovat tvar).</p>
+                        <p className="mb-1">Nežehlit.</p>
+                        <p>Nečistit chemicky.</p>
+                      </>
+                    )
+                  ) : isCD ? (
+                    product.careInfo ? (
+                      <div className="whitespace-pre-line">{product.careInfo}</div>
+                    ) : (
+                      <p>Uchovávejte v obalu mimo přímé sluneční záření a zdroje tepla. Chraňte před vlhkostí a prachem. Držte pouze za okraje a středový otvor, nedotýkejte se datové vrstvy. Čistěte jemným, suchým hadříkem z mikrovlákna směrem od středu k okraji.</p>
+                    )
+                  ) : product.careInfo ? (
+                    <div className="whitespace-pre-line">{product.careInfo}</div>
+                  ) : (
+                    <>
+                      <p className="mb-1">Prát max. při 30°C - šetrný proces</p>
+                      <p className="mb-1">Prát naruby</p>
+                      <p className="mb-1">Nebělit</p>
+                      <p className="mb-1">Nesušit v sušičce</p>
+                      <p className="mb-1">Sušit na vzduchu ve stínu</p>
+                      <p className="mb-1">Nežehlit</p>
+                      <p>Nečistit chemicky</p>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
