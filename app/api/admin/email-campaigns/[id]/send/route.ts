@@ -2,15 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { prisma } from '@/lib/prisma';
 
-function enforceBlackBackground(html: string): string {
-  return html
-    .replace(/background:\s*#ffffff/gi, 'background:#000000')
-    .replace(/background-color:\s*#ffffff/gi, 'background-color:#000000')
-    .replace(/bgcolor="#ffffff"/gi, 'bgcolor="#000000"')
-    .replace(/background:\s*white/gi, 'background:#000000')
-    .replace(/background-color:\s*white/gi, 'background-color:#000000');
-}
-
 export async function POST(
   req: NextRequest,
   { params }: { params: { id: string } }
@@ -90,7 +81,6 @@ export async function POST(
         marketing: true,
       });
     }
-    finalHtml = enforceBlackBackground(finalHtml);
 
     // Send in batches of 20 to avoid rate limits
     const BATCH_SIZE = 20;

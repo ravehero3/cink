@@ -7,15 +7,6 @@ import { renderEmail, SAMPLE_VARS, type EmailType } from '@/lib/email-catalog';
 
 export const dynamic = 'force-dynamic';
 
-function enforceBlackBackground(html: string): string {
-  return html
-    .replace(/background:\s*#ffffff/gi, 'background:#000000')
-    .replace(/background-color:\s*#ffffff/gi, 'background-color:#000000')
-    .replace(/bgcolor="#ffffff"/gi, 'bgcolor="#000000"')
-    .replace(/background:\s*white/gi, 'background:#000000')
-    .replace(/background-color:\s*white/gi, 'background-color:#000000');
-}
-
 export async function POST(request: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session || session.user?.role !== 'ADMIN') {
@@ -44,7 +35,7 @@ export async function POST(request: NextRequest) {
     }
 
     const rawHtml = log.html || renderEmail((log.type as EmailType) || 'ORDER_CONFIRMATION', SAMPLE_VARS).html;
-    const finalHtml = enforceBlackBackground(rawHtml);
+    const finalHtml = rawHtml;
 
     const resend = new Resend(apiKey);
     const subject = log.subject;

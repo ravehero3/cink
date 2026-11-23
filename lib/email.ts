@@ -12,17 +12,9 @@ if (!RESEND_API_KEY) {
 
 const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
 
-/**
- * Ensures every outgoing email has a black background regardless of how it was rendered.
- * Replaces any stray white backgrounds introduced by email clients or template quirks.
- */
-function enforceBlackBackground(html: string): string {
-  return html
-    .replace(/background:\s*#ffffff/gi, 'background:#000000')
-    .replace(/background-color:\s*#ffffff/gi, 'background-color:#000000')
-    .replace(/bgcolor="#ffffff"/gi, 'bgcolor="#000000"')
-    .replace(/background:\s*white/gi, 'background:#000000')
-    .replace(/background-color:\s*white/gi, 'background-color:#000000');
+// Removed: enforceBlackBackground - outgoing emails now preserve their clean, professional white styling
+function sanitizeOutgoingEmailHtml(html: string): string {
+  return html;
 }
 
 const FROM_EMAIL = 'UFO Sport <noreply@ufosport.cz>';
@@ -95,7 +87,7 @@ export async function sendCatalogEmail(options: {
   }
 
   try {
-    const finalHtml = enforceBlackBackground(rendered.html);
+    const finalHtml = sanitizeOutgoingEmailHtml(rendered.html);
     const result = await resend.emails.send({
       from: FROM_EMAIL,
       to,
@@ -113,7 +105,7 @@ export async function sendCatalogEmail(options: {
     return { success: true, result };
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    const finalHtml = enforceBlackBackground(rendered.html);
+    const finalHtml = sanitizeOutgoingEmailHtml(rendered.html);
     await logEmail({ toEmail: to, type, subject: rendered.subject, html: finalHtml, status: 'failed', error: message, journeyId });
     return { success: false, error };
   }

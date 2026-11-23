@@ -16,7 +16,7 @@ export default function FAQPage() {
     },
     {
       title: 'Mohu zboží vrátit?',
-      content: 'Ano, zboží můžete vrátit do 14 dnů od převzetí. Více informací najdete na stránce vrácení zboží.'
+      content: 'Ano, zboží můžete vrátit bez udání důvodu do 14 dnů od jeho převzetí. Náklady na vrácení nese kupující. Podrobný postup a formulář najdete na stránce vrácení zboží.'
     }
   ];
 

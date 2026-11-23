@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, FormEvent } from 'react';
+import Link from 'next/link';
 
 export default function ReturnsPage() {
   const [email, setEmail] = useState('');
@@ -43,14 +44,14 @@ export default function ReturnsPage() {
 
   return (
     <div className="min-h-screen bg-white relative">
-      {/* Left vertical line - starts at top (header padding handled by body) */}
+      {/* Left vertical line - starts at top */}
       <div className="hidden md:block absolute left-1/4 w-px bg-black z-0" style={{ top: 0, bottom: 0 }} />
       
-      {/* Right vertical line - starts at top (header padding handled by body) */}
+      {/* Right vertical line - starts at top */}
       <div className="hidden md:block absolute right-1/4 w-px bg-black z-0" style={{ top: 0, bottom: 0 }} />
 
-      {/* Main content above the line */}
-      <div className="relative z-10 flex flex-col items-center" style={{ paddingTop: '64px' }}>
+      {/* Main content */}
+      <div className="relative z-10 flex flex-col items-center" style={{ paddingTop: '64px', paddingBottom: '80px' }}>
         <h1 
           className="uppercase text-center" 
           style={{ 
@@ -61,7 +62,7 @@ export default function ReturnsPage() {
             marginBottom: '8px'
           }}
         >
-          VRÁCENÍ OBJEDNÁVKY
+          VRÁCENÍ ZBOŽÍ DO 14 DNŮ
         </h1>
 
         <p 
@@ -70,10 +71,11 @@ export default function ReturnsPage() {
             fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
             fontSize: '14px',
             fontWeight: 400,
-            lineHeight: '1.6'
+            lineHeight: '1.6',
+            color: '#000000'
           }}
         >
-          Bezplatné vrácení do 30 dnů. Vyplňte formulář níže pro registraci vrácení zboží.
+          Podle zákona č. 89/2012 Sb. (občanský zákoník) máte právo odstoupit od kupní smlouvy bez udání důvodu do 14 dnů od převzetí zboží. Vyplňte formulář níže pro registraci vrácení.
         </p>
 
         <div className="w-full flex flex-col items-center">
@@ -87,7 +89,7 @@ export default function ReturnsPage() {
                 borderColor: '#24e053'
               }}
             >
-              Žádost o vrácení byla úspěšně odeslána. Brzy vás budeme kontaktovat.
+              Žádost o vrácení byla úspěšně odeslána. Brzy vás budeme kontaktovat s podrobnými instrukcemi.
             </div>
           )}
 
@@ -182,7 +184,37 @@ export default function ReturnsPage() {
             </button>
           </form>
 
-          {/* Horizontal line 64px below registration button */}
+          {/* Detailed Instructions & Legal compliance */}
+          <div className="w-full px-4 md:w-1/3 md:px-0 mt-10 space-y-6" style={{ fontFamily: 'BB-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif', fontSize: '13px', lineHeight: '1.7', color: '#000000' }}>
+            <div className="border border-black p-5 bg-[#fafafa]">
+              <h2 className="text-xs uppercase font-bold tracking-wider mb-3">Podmínky a pravidla pro vrácení zboží</h2>
+              <ul className="space-y-2 list-disc list-inside text-gray-800">
+                <li><strong>Lhůta 14 dnů:</strong> Jako spotřebitel máte právo odstoupit od smlouvy bez udání důvodu do <strong>14 dnů</strong> ode dne převzetí zboží.</li>
+                <li><strong>Náklady na vrácení:</strong> Náklady spojené s vrácením zboží zpět prodávajícímu <strong>nese v plné výši kupující</strong> (§ 1820 odst. 1 písm. g) občanského zákoníku).</li>
+                <li><strong>Zásilky na dobírku:</strong> Zboží nikdy nezasílejte na dobírku. Zásilky zaslané na dobírku nebudou převzaty a vrátí se vám zpět na vaše náklady.</li>
+                <li><strong>Stav zboží:</strong> Zboží musí být vráceno čisté, nenošené, neprané, nepoškozené a ideálně v původním obalu včetně všech visaček a štítků. Kupující odpovídá za snížení hodnoty zboží v případě, že s ním bylo nakládáno jinak, než je nutné k seznámení se s jeho povahou a vlastnostmi.</li>
+                <li><strong>Vrácení peněz:</strong> Finanční prostředky vám vrátíme nejpozději do 14 dnů od doručení odstoupení od smlouvy, ne však dříve, než nám vrácené zboží doručíte zpět (nebo prokážete jeho odeslání), a to stejnou platební metodou, jakou byla objednávka uhrazena.</li>
+              </ul>
+            </div>
+
+            <div className="border border-black p-5">
+              <h2 className="text-xs uppercase font-bold tracking-wider mb-2">Kam zboží odeslat?</h2>
+              <p className="mb-2">Po vyplnění formuláře výše zboží pečlivě zabalte a odešlete na naši adresu:</p>
+              <div className="bg-[#f0f0f0] p-3 text-xs font-mono space-y-0.5">
+                <p><strong>UFO SPORT – Vojtěch Vojkovský</strong></p>
+                <p>Bědovická 193E</p>
+                <p>503 46 Třebechovice pod Orebem</p>
+                <p>Česká republika</p>
+                <p>E-mail: miluju@ufosport.cz</p>
+              </div>
+              <p className="mt-3 text-xs text-gray-600">
+                Podrobné podmínky a vzorový formulář pro odstoupení od smlouvy naleznete také v našich{' '}
+                <Link href="/obchodni-podminky" className="underline font-medium text-black">Obchodních podmínkách</Link>.
+              </p>
+            </div>
+          </div>
+
+          {/* Horizontal line */}
           <div className="w-full h-px bg-black" style={{ marginTop: '64px' }} />
         </div>
       </div>

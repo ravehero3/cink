@@ -112,6 +112,8 @@ export default function Footer() {
           <div style={{ paddingTop: '16px', paddingLeft: '12px', paddingRight: '16px', paddingBottom: '48px' }}>
             <h3 className="uppercase mb-3 text-gray-500" style={{ fontSize: '12px', lineHeight: '23.6px', letterSpacing: '0.12px', margin: '0px 0px 12px 0px', padding: '0px' }}>O SPOLEČNOSTI</h3>
             <ul className="space-y-0" style={{ margin: '0px', padding: '0px' }}>
+              <li style={{ margin: '0px', padding: '0px' }}><Link href="/obchodni-podminky" className="text-gray-500 hover:text-black hover:underline transition-colors" style={{ fontSize: '12px', lineHeight: '23.6px', letterSpacing: '0.12px' }}>Obchodní podmínky</Link></li>
+              <li style={{ margin: '0px', padding: '0px' }}><Link href="/reklamacni-rad" className="text-gray-500 hover:text-black hover:underline transition-colors" style={{ fontSize: '12px', lineHeight: '23.6px', letterSpacing: '0.12px' }}>Reklamační řád</Link></li>
               <li style={{ margin: '0px', padding: '0px' }}><Link href="/pravni-informace" className="text-gray-500 hover:text-black hover:underline transition-colors" style={{ fontSize: '12px', lineHeight: '23.6px', letterSpacing: '0.12px' }}>Právní informace</Link></li>
               <li style={{ margin: '0px', padding: '0px' }}><Link href="/ochrana-osobnich-udaju" className="text-gray-500 hover:text-black hover:underline transition-colors" style={{ fontSize: '12px', lineHeight: '23.6px', letterSpacing: '0.12px' }}>Zásady ochrany osobních údajů</Link></li>
               <li style={{ margin: '0px', padding: '0px' }}><Link href="/cookies" className="text-gray-500 hover:text-black hover:underline transition-colors" style={{ fontSize: '12px', lineHeight: '23.6px', letterSpacing: '0.12px' }}>Zásady používání souborů cookie</Link></li>
@@ -195,6 +197,8 @@ export default function Footer() {
             onToggle={() => toggleSection('company')}
           >
             <ul className="space-y-2" style={{ margin: '0px', padding: '0px' }}>
+              <li><Link href="/obchodni-podminky" className="text-gray-500 hover:text-black hover:underline transition-colors" style={{ fontSize: '12px', lineHeight: '20px' }}>Obchodní podmínky</Link></li>
+              <li><Link href="/reklamacni-rad" className="text-gray-500 hover:text-black hover:underline transition-colors" style={{ fontSize: '12px', lineHeight: '20px' }}>Reklamační řád</Link></li>
               <li><Link href="/pravni-informace" className="text-gray-500 hover:text-black hover:underline transition-colors" style={{ fontSize: '12px', lineHeight: '20px' }}>Právní informace</Link></li>
               <li><Link href="/ochrana-osobnich-udaju" className="text-gray-500 hover:text-black hover:underline transition-colors" style={{ fontSize: '12px', lineHeight: '20px' }}>Zásady ochrany osobních údajů</Link></li>
               <li><Link href="/cookies" className="text-gray-500 hover:text-black hover:underline transition-colors" style={{ fontSize: '12px', lineHeight: '20px' }}>Zásady používání souborů cookie</Link></li>

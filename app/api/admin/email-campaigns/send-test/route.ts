@@ -1,15 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 
-function enforceBlackBackground(html: string): string {
-  return html
-    .replace(/background:\s*#ffffff/gi, 'background:#000000')
-    .replace(/background-color:\s*#ffffff/gi, 'background-color:#000000')
-    .replace(/bgcolor="#ffffff"/gi, 'bgcolor="#000000"')
-    .replace(/background:\s*white/gi, 'background:#000000')
-    .replace(/background-color:\s*white/gi, 'background-color:#000000');
-}
-
 export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession();
@@ -23,7 +14,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing email or html' }, { status: 400 });
     }
 
-    const finalHtml = enforceBlackBackground(html);
+    const finalHtml = html;
 
     // Send test email via Resend
     const res = await fetch('https://api.resend.com/emails', {

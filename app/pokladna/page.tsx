@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useSession, signIn } from 'next-auth/react';
 import { useCartStore, useCartHydration } from '@/lib/cart-store';
 import { calculateShippingCost, getAmountToFreeShipping } from '@/lib/shipping';
@@ -47,10 +48,12 @@ export default function CheckoutPage() {
     shippingZip: '',
     promoCode: '',
     newsletterSubscribed: true,
+    termsAccepted: false,
   });
 
   const [discount, setDiscount] = useState(0);
   const [promoError, setPromoError] = useState('');
+  const [termsError, setTermsError] = useState('');
   const [isPplModalOpen, setIsPplModalOpen] = useState(false);
 
   useEffect(() => {
@@ -211,6 +214,12 @@ export default function CheckoutPage() {
 
     if (formData.shippingMethod === 'ppl_parcelshop' && !formData.pplId) {
       alert('Vyberte výdejní místo PPL');
+      return;
+    }
+
+    if (!formData.termsAccepted) {
+      setTermsError('Pro odeslání objednávky musíte souhlasit s Obchodními podmínkami.');
+      alert('Pro odeslání objednávky musíte vyjádřit souhlas s Obchodními podmínkami.');
       return;
     }
 
@@ -1002,6 +1011,72 @@ export default function CheckoutPage() {
                       </button>
                     </span>
                   </div>
+                </div>
+
+                {/* Terms & GDPR Consent Checkbox */}
+                <div style={{ margin: '20px 0 24px' }}>
+                  <label style={{
+                    display: 'flex',
+                    gap: '12px',
+                    alignItems: 'flex-start',
+                    cursor: 'pointer'
+                  }}>
+                    <div style={{ position: 'relative', flexShrink: 0, marginTop: '2px' }}>
+                      <input
+                        type="checkbox"
+                        checked={formData.termsAccepted}
+                        onChange={(e) => {
+                          setFormData({ ...formData, termsAccepted: e.target.checked });
+                          if (e.target.checked) setTermsError('');
+                        }}
+                        style={{ position: 'absolute', opacity: 0, width: '100%', height: '100%', margin: 0, cursor: 'pointer', zIndex: 1 }}
+                      />
+                      <div style={{
+                        width: '16px',
+                        height: '16px',
+                        border: termsError ? '1px solid #dc2626' : '1px solid #000',
+                        borderRadius: '2px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        background: formData.termsAccepted ? '#000' : '#fff',
+                        transition: 'all 0.15s ease'
+                      }}>
+                        {formData.termsAccepted && (
+                          <svg width="10" height="8" viewBox="0 0 9 7" fill="none" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M1 3.5L3.5 6L8 1"/>
+                          </svg>
+                        )}
+                      </div>
+                    </div>
+                    <span style={{
+                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                      fontSize: '12px',
+                      fontWeight: 400,
+                      color: '#000',
+                      lineHeight: '1.5'
+                    }}>
+                      Souhlasím s{' '}
+                      <Link href="/obchodni-podminky" target="_blank" style={{ textDecoration: 'underline', fontWeight: 600, color: '#000' }}>
+                        Obchodními podmínkami
+                      </Link>
+                      {' '}a beru na vědomí{' '}
+                      <Link href="/ochrana-osobnich-udaju" target="_blank" style={{ textDecoration: 'underline', fontWeight: 600, color: '#000' }}>
+                        Zásady ochrany osobních údajů
+                      </Link>
+                      . *
+                    </span>
+                  </label>
+                  {termsError && (
+                    <p style={{
+                      margin: '6px 0 0 28px',
+                      color: '#dc2626',
+                      fontSize: '11px',
+                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif'
+                    }}>
+                      {termsError}
+                    </p>
+                  )}
                 </div>
 
                 <AnimatedButton

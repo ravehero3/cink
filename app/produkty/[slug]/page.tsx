@@ -850,7 +850,7 @@ export default function ProductDetailPage() {
                     height: '100%'
                   }}
                 >
-                  Doprava zdarma, vrácení zdarma
+                  Doprava a vrácení zboží
                 </span>
                 <ChevronDown 
                   className={`accordion-arrow ${expandedSection === 'shipping' ? 'accordion-arrow-active' : ''}`}
@@ -872,9 +872,9 @@ export default function ProductDetailPage() {
                 }}
               >
                 <div className="pb-4">
-                  <p className="mb-2">Nabízíme bezplatné doručení při objednávce nad 2000 Kč.</p>
-                  <p className="mb-2">Bezplatné vrácení a výměna do 14 dnů od data doručení.</p>
-                  <p>Pro více informací navštivte naše <a href="/faq" className="underline">FAQ</a>.</p>
+                  <p className="mb-2">Nabízíme doručení zdarma při objednávce nad 2000 Kč.</p>
+                  <p className="mb-2">Vrácení zboží je možné do 14 dnů od data doručení (náklady na vrácení nese kupující).</p>
+                  <p>Podrobné informace najdete na stránce <a href="/vraceni-zbozi" className="underline">Vrácení zboží</a> nebo v <a href="/faq" className="underline">FAQ</a>.</p>
                 </div>
               </div>
             </div>

@@ -346,8 +346,8 @@ function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplatePar
                       </td>`
                     : '';
                   const nameTag = itemHref
-                    ? `<a href="${itemHref}" target="_blank" style="color:#ffffff;text-decoration:underline;"><span style="font-weight:600;">${item.name}</span></a>`
-                    : `<span style="font-weight:600;color:#ffffff;">${item.name}</span>`;
+                    ? `<a href="${itemHref}" target="_blank" style="color:#000000;text-decoration:underline;"><span style="font-weight:600;">${item.name}</span></a>`
+                    : `<span style="font-weight:600;color:#000000;">${item.name}</span>`;
 
                   return `
                     <tr>
@@ -502,28 +502,68 @@ function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplatePar
     case 'ADMIN_ORDER_NOTIFICATION':
       return {
         subject: `[UFO SPORT] Nová objednávka ${order}`,
-        preheader: 'Zákazník vytvořil novou objednávku.',
+        preheader: `Nová objednávka ${order} od ${name} (${total} Kč)`,
         header2Title: 'Nová objednávka',
-        header2Subtitle: `Zákazník právě vytvořil objednávku ${order}.`,
+        header2Subtitle: `Zákazník ${name} právě vytvořil novou objednávku ${order}.`,
         heroImage: {
           src: primaryBoughtPhoto,
           height: 600,
           alt: items[0]?.name || 'Zakoupený produkt',
+          productSlug: items[0]?.slug,
         },
         infoHtml: `
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;color:#000000;">
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Číslo objednávky</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${order}</td></tr>
             <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Zákazník</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${name}</td></tr>
-            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">E-mail</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${vars.customerEmail || 'jan.novak@example.cz'}</td></tr>
-            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Stav platby</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">Čeká na platbu</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">E-mail</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;"><a href="mailto:${vars.customerEmail}" style="color:#000000;text-decoration:underline;">${vars.customerEmail || 'Nezadáno'}</a></td></tr>
+            ${vars.customerPhone ? `<tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Telefon</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;"><a href="tel:${vars.customerPhone}" style="color:#000000;text-decoration:underline;">${vars.customerPhone}</a></td></tr>` : ''}
             <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Doprava</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${carrierName}</td></tr>
-            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Celkem</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${total} Kč</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Místo / Adresa</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${shippingLocation}</td></tr>
             <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Vytvořeno</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${vars.orderDate || new Date().toLocaleDateString('cs-CZ')}</td></tr>
+            <tr><td colspan="2" style="padding:12px 0 8px;"><div style="height:1px;background:#e5e5e5;font-size:0;line-height:0;">&nbsp;</div></td></tr>
+            ${items
+              .map(
+                (item) => {
+                  const itemHref = item.slug ? `${WEBSITE_URL}/produkt/${item.slug}` : undefined;
+                  const imgTag = item.image
+                    ? `<td valign="middle" style="padding-right:12px;">
+                        ${itemHref ? `<a href="${itemHref}" target="_blank" style="display:block;border:0;line-height:0;">` : ''}
+                        <img src="${toAbsoluteUrl(item.image)}" width="48" height="48" alt="${item.name}" style="display:block;width:48px;height:48px;object-fit:cover;border:1px solid #e5e5e5;" />
+                        ${itemHref ? `</a>` : ''}
+                      </td>`
+                    : '';
+                  const nameTag = itemHref
+                    ? `<a href="${itemHref}" target="_blank" style="color:#000000;text-decoration:underline;"><span style="font-weight:600;">${item.name}</span></a>`
+                    : `<span style="font-weight:600;color:#000000;">${item.name}</span>`;
+
+                  return `
+                    <tr>
+                      <td valign="top" style="padding:0 12px 10px 0;font-size:15px;line-height:20px;">
+                        <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                          <tr>
+                            ${imgTag}
+                            <td valign="middle" style="font-size:15px;line-height:20px;color:#000000;">
+                              ${nameTag}${item.size ? ` · ${item.size}` : ''} · ${item.quantity}×
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                      <td align="right" valign="middle" style="padding:0 0 10px;font-size:15px;line-height:20px;font-weight:600;white-space:nowrap;color:#000000;">
+                        ${item.price.toLocaleString('cs-CZ')} Kč
+                      </td>
+                    </tr>
+                  `;
+                }
+              )
+              .join('')}
+            <tr><td colspan="2" style="padding:8px 0;"><div style="height:1px;background:#000000;font-size:0;line-height:0;">&nbsp;</div></td></tr>
+            <tr><td valign="top" style="padding:4px 12px 8px 0;font-size:16px;line-height:22px;font-weight:700;">Celkem k úhradě</td><td align="right" valign="top" style="padding:4px 0 8px;font-size:16px;line-height:22px;font-weight:700;">${total} Kč</td></tr>
           </table>
         `,
         photoGrid: boughtGridPhotos,
-        actionText: 'Objednávku zpracujte v administraci.',
+        actionText: 'Kompletní přehled a správu objednávky najdete v administraci.',
         actionButton: {
-          label: 'Otevřít v administraci',
+          label: 'Otevřít objednávku v administraci',
           href: `${WEBSITE_URL}/admin/objednavky/${order}`,
         },
         marketing: false,
