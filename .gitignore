@@ -33,10 +33,12 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# prisma
+# Prisma
 /prisma/migrations
 public/uploads/images/*
 !public/uploads/images/.gitkeep
+public/magazine-uploads/*
+!public/magazine-uploads/.gitkeep
 
 # CSV exports with subscriber data
 *.csv

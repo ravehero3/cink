@@ -6,6 +6,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Header1 from '@/components/Header1';
 import Footer from '@/components/Footer';
+import RecommendSection from '@/components/magazine/RecommendSection';
+import { getArticleMetadata } from '@/lib/magazine-analytics';
+import { generateArticleSchema } from '@/lib/magazine-seo';
 
 interface Article {
   id: string;
@@ -17,6 +20,16 @@ interface Article {
   tags?: string;
   blocks: any;
   publishedAt: string;
+  viewCount?: number;
+}
+
+// Helper function to ensure absolute URLs for images
+function ensureAbsoluteImageUrl(url: string): string {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  // If relative path, prepend origin
+  const origin = typeof window !== 'undefined' ? window.location.origin : process.env.NEXTAUTH_URL || 'https://www.ufosport.cz';
+  return `${origin}${url.startsWith('/') ? url : `/${url}`}`;
 }
 
 export default function ArticlePage() {
@@ -40,7 +53,18 @@ export default function ArticlePage() {
         return;
       }
       const data = await res.json();
+      
+      // Ensure article is published (security check - public shouldn't see drafts)
+      if (!data.published) {
+        setNotFound(true);
+        setLoading(false);
+        return;
+      }
+      
       setArticle(data);
+
+      // Record view (fire and forget)
+      fetch(`/api/magazine/articles/${slug}/view`, { method: 'POST' }).catch(() => {});
 
       // Fetch related articles
       const allRes = await fetch('/api/magazine/articles');
@@ -87,6 +111,9 @@ export default function ArticlePage() {
     ? new Date(article.publishedAt).toLocaleDateString('cs-CZ')
     : '';
 
+  // Generate JSON-LD schema
+  const schema = generateArticleSchema(article);
+
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <Header1 />
@@ -111,19 +138,27 @@ export default function ArticlePage() {
               </h2>
             )}
 
-            <div className="magazin-byline flex items-center gap-4 text-sm text-gray-600 pb-8 border-b border-gray-200">
+            <div className="magazin-byline flex items-center gap-4 text-sm text-gray-600 pb-8 border-b border-gray-200 flex-wrap">
               <span>Od {article.author || 'Redakce'}</span>
               <span>•</span>
               <span>{publishedDate}</span>
+              <span>•</span>
+              <span>{getArticleMetadata(article.blocks).readingTimeFormatted}</span>
+              {article.viewCount !== undefined && (
+                <>
+                  <span>•</span>
+                  <span>{article.viewCount.toLocaleString('cs-CZ')} zobrazení</span>
+                </>
+              )}
             </div>
           </div>
 
-          {/* Hero image */}
-          {article.blocks.hero && (
+          {/* Hero image - only show if exists and not empty */}
+          {article.blocks.hero && article.blocks.hero.trim() !== '' && (
             <div className="magazin-hero-image max-w-4xl mx-auto px-4 md:px-8 my-12">
               <div className="relative w-full aspect-video bg-gray-100 overflow-hidden">
                 <Image
-                  src={article.blocks.hero}
+                  src={ensureAbsoluteImageUrl(article.blocks.hero)}
                   alt={article.title}
                   fill
                   className="object-cover"
@@ -140,16 +175,16 @@ export default function ArticlePage() {
           <div className="magazin-body max-w-2xl mx-auto px-4 md:px-8 py-12">
             {/* Render blocks */}
             {article.blocks.text1 && (
-              <p className="magazin-text mb-8 text-lg leading-relaxed">
+              <div className="magazin-text mb-8 text-lg leading-relaxed whitespace-pre-wrap">
                 {article.blocks.text1}
-              </p>
+              </div>
             )}
 
-            {article.blocks.image1 && (
+            {article.blocks.image1 && article.blocks.image1.trim() !== '' && (
               <figure className="magazin-figure my-12">
                 <div className="relative w-full aspect-video bg-gray-100 overflow-hidden mb-2">
                   <Image
-                    src={article.blocks.image1}
+                    src={ensureAbsoluteImageUrl(article.blocks.image1)}
                     alt="Article image"
                     fill
                     className="object-cover"
@@ -164,14 +199,14 @@ export default function ArticlePage() {
             )}
 
             {article.blocks.text2 && (
-              <p className="magazin-text mb-8 text-lg leading-relaxed">
+              <div className="magazin-text mb-8 text-lg leading-relaxed whitespace-pre-wrap">
                 {article.blocks.text2}
-              </p>
+              </div>
             )}
 
             {article.blocks.instagram && (
               <div className="magazin-instagram my-12 flex justify-center">
-                <div style={{ maxWidth: '540px', width: '100%' }}>
+                <div style={{ maxWidth: '100%', width: '100%' }}>
                   <blockquote
                     className="instagram-media"
                     data-instgrm-permalink={article.blocks.instagram}
@@ -182,6 +217,7 @@ export default function ArticlePage() {
                       margin: '0 auto',
                       padding: 0,
                       width: '100%',
+                      maxWidth: '540px',
                     }}
                   >
                     <a href={article.blocks.instagram} target="_blank" rel="noopener">
@@ -193,9 +229,9 @@ export default function ArticlePage() {
             )}
 
             {article.blocks.text3 && (
-              <p className="magazin-text mb-8 text-lg leading-relaxed">
+              <div className="magazin-text mb-8 text-lg leading-relaxed whitespace-pre-wrap">
                 {article.blocks.text3}
-              </p>
+              </div>
             )}
           </div>
 
@@ -215,43 +251,16 @@ export default function ArticlePage() {
         </article>
 
         {/* Related articles */}
-        {relatedArticles.length > 0 && (
-          <section className="magazin-related py-16 md:py-24 bg-gray-50 border-t border-gray-200">
-            <div className="max-w-7xl mx-auto px-4 md:px-8">
-              <h2 className="magazin-related-title text-2xl font-bold mb-12">
-                Doporučujeme
-              </h2>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {relatedArticles.map((article) => (
-                  <Link
-                    key={article.id}
-                    href={`/magazin/${article.slug}`}
-                    className="magazin-related-card hover:opacity-80 transition-opacity"
-                  >
-                    {article.blocks.hero && (
-                      <div className="relative w-full h-40 bg-gray-100 mb-4 overflow-hidden">
-                        <Image
-                          src={article.blocks.hero}
-                          alt={article.title}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                    )}
-                    <h3 className="font-bold text-lg line-clamp-2">{article.title}</h3>
-                    <p className="text-sm text-gray-600 mt-2">
-                      {article.category}
-                    </p>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
+        {relatedArticles.length > 0 && <RecommendSection articles={relatedArticles} />}
       </main>
 
-      <Footer />
+      {/* JSON-LD Schema for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(schema),
+        }}
+      />
 
       {/* Load Instagram embed script */}
       {article.blocks.instagram && (

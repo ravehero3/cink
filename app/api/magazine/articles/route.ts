@@ -1,16 +1,31 @@
 import { getServerSession } from 'next-auth/next';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { authOptions } from '@/lib/auth';
+import {
+  sanitizeTitle,
+  sanitizeAuthor,
+  sanitizeCategory,
+  sanitizeTags,
+  validateInstagramUrl,
+  validateSlug,
+} from '@/lib/magazine-sanitize';
+import { createArticleVersion } from '@/lib/magazine-versions';
 
 export async function GET(request: NextRequest) {
   try {
     const allParam = request.nextUrl.searchParams.get('all');
-    const session = await getServerSession();
+    const session = await getServerSession(authOptions);
     const isAdmin = session?.user?.role === 'ADMIN';
 
-    // Admins see all, public sees only published
+    // Admins see all active articles, public sees only published
+    const whereClause: any = { archived: false };
+    if (!(allParam === '1' && isAdmin)) {
+      whereClause.published = true;
+    }
+
     const articles = await prisma.magazineArticle.findMany({
-      where: allParam === '1' && isAdmin ? {} : { published: true },
+      where: whereClause,
       orderBy: { publishedAt: 'desc' },
     });
 
@@ -23,37 +38,72 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession();
+    const session = await getServerSession(authOptions);
     if (!session || session.user?.role !== 'ADMIN') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { slug, title, subtitle, author, category, tags, blocks, published } = await request.json();
 
-    // Validate slug
-    if (!slug || !/^[a-z0-9]+(-[a-z0-9]+)*$/.test(slug)) {
-      return NextResponse.json({ error: 'Invalid slug' }, { status: 400 });
+    // Validate and sanitize inputs
+    try {
+      var validatedSlug = validateSlug(slug);
+      var validatedTitle = sanitizeTitle(title);
+      var validatedAuthor = sanitizeAuthor(author);
+      var validatedCategory = sanitizeCategory(category);
+      var validatedTags = sanitizeTags(tags);
+    } catch (validationError: any) {
+      return NextResponse.json({ error: validationError.message }, { status: 400 });
     }
 
-    // Check uniqueness
-    const existing = await prisma.magazineArticle.findUnique({ where: { slug } });
-    if (existing) {
-      return NextResponse.json({ error: 'Slug already exists' }, { status: 409 });
+    // Validate blocks (Instagram URL if present)
+    if (blocks?.instagram) {
+      try {
+        blocks.instagram = validateInstagramUrl(blocks.instagram);
+      } catch (instagramError: any) {
+        return NextResponse.json({ error: instagramError.message }, { status: 400 });
+      }
+    }
+
+    // Check slug uniqueness (active articles only)
+    const existing = await prisma.magazineArticle.findUnique({ where: { slug: validatedSlug } });
+    if (existing && !(existing.archived as boolean)) {
+      return NextResponse.json(
+        { error: 'Tento slug již existuje. Zvolte jiný.' },
+        { status: 409 }
+      );
     }
 
     const article = await prisma.magazineArticle.create({
       data: {
-        slug,
-        title,
-        subtitle,
-        author,
-        category,
-        tags,
+        slug: validatedSlug,
+        title: validatedTitle,
+        subtitle: subtitle ? String(subtitle).trim().substring(0, 1000) : null,
+        author: validatedAuthor || null,
+        category: validatedCategory || null,
+        tags: validatedTags || null,
         blocks: blocks || {},
         published,
         publishedAt: published ? new Date() : null,
       },
     });
+
+    // Create initial version history entry
+    await createArticleVersion(
+      article.id,
+      {
+        title: article.title,
+        subtitle: article.subtitle,
+        author: article.author,
+        category: article.category,
+        tags: article.tags,
+        blocks: article.blocks,
+        published: article.published,
+        publishedAt: article.publishedAt,
+      },
+      session.user?.email || 'unknown',
+      `Article created${published ? ' and published' : ''}`
+    );
 
     return NextResponse.json(article, { status: 201 });
   } catch (error) {

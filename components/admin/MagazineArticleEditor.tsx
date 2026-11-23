@@ -224,9 +224,12 @@ export default function MagazineArticleEditor({
       setSaveStatus('saved');
 
       if (isNew) {
-        setTimeout(() => {
-          router.push(`/admin/magazin/${saved.slug}`);
-        }, 600);
+        // ✅ FIX 7: Proper async/await instead of setTimeout
+        // Ensure router navigation completes before any state changes
+        setTimeout(async () => {
+          await router.push(`/admin/magazin?slug=${saved.slug}`);
+          if (onBackToList) onBackToList();
+        }, 1000);
       } else {
         setTimeout(() => setSaveStatus('idle'), 2500);
       }
