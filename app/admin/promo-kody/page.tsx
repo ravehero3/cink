@@ -73,7 +73,7 @@ export default function AdminPromoCodesPage() {
   const handleEdit = (promoCode: PromoCode) => {
     setFormData({
       code: promoCode.code,
-      discountType: promoCode.discountType,
+      discountType: promoCode.discountType?.toLowerCase() === 'fixed' ? 'fixed' : 'percentage',
       discountValue: promoCode.discountValue.toString(),
       minOrderAmount: promoCode.minOrderAmount?.toString() || '',
       maxUses: promoCode.maxUses?.toString() || '',
@@ -297,7 +297,7 @@ export default function AdminPromoCodesPage() {
                   <td className="admin-td font-bold tracking-widest">{pc.code}</td>
                   <td className="admin-td">
                     <span className="font-bold">
-                      {pc.discountType === 'percentage' ? `${pc.discountValue}%` : `${pc.discountValue} Kč`}
+                      {pc.discountType?.toLowerCase() === 'percentage' ? `${pc.discountValue}%` : `${pc.discountValue} Kč`}
                     </span>
                     {pc.minOrderAmount && (
                       <p className="text-[10px] uppercase text-[#666666] mt-[4px]">min. {pc.minOrderAmount} Kč</p>
@@ -309,7 +309,7 @@ export default function AdminPromoCodesPage() {
                   </td>
                   <td className="admin-td">
                     <span className="text-[10px] font-bold uppercase tracking-wider">
-                      {pc.source === 'journey' ? 'Cesta' : 'Manuální'}
+                      {pc.source === 'journey' ? 'Cesta' : pc.source === 'live-offer' ? 'Live lišta' : 'Manuální'}
                     </span>
                     {pc.assignedEmail && (
                       <p className="text-[10px] text-[#666666] mt-[4px] normal-case tracking-normal">{pc.assignedEmail}</p>

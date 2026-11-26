@@ -1,6 +1,7 @@
 'use client';
 
 import { useCartStore, useCartHydration } from '@/lib/cart-store';
+import { calculateShippingCost } from '@/lib/shipping';
 import { useSavedProductsStore } from '@/lib/saved-products-store';
 import { useRecentlyViewedStore } from '@/lib/recently-viewed-store';
 import { useSession } from 'next-auth/react';
@@ -87,6 +88,7 @@ export default function CartPage() {
   const [recentlyViewed, setRecentlyViewed] = useState<any[]>([]);
   const [showPromoCode, setShowPromoCode] = useState(false);
   const [promoCode, setPromoCode] = useState('');
+  const [appliedPromoCode, setAppliedPromoCode] = useState('');
   const [discountAmount, setDiscountAmount] = useState(0);
   const [promoError, setPromoError] = useState('');
   const [promoSuccess, setPromoSuccess] = useState('');
@@ -198,44 +200,100 @@ export default function CartPage() {
     }
   };
 
-  const handleApplyPromoCode = async () => {
-    if (!promoCode.trim()) return;
+  const total = getTotal();
+  const shippingCost = calculateShippingCost(total, 'zasilkovna');
+  const finalPrice = Math.max(0, total + shippingCost - discountAmount);
+
+  const validateAndApplyPromo = async (rawCode: string, orderTotal: number) => {
+    const clean = rawCode.trim().toUpperCase();
+    if (!clean || orderTotal <= 0) return;
+
     setPromoError('');
     setPromoSuccess('');
     try {
+      const userEmail = session?.user?.email || undefined;
       const response = await fetch('/api/promo-codes/validate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          code: promoCode.trim(),
-          orderAmount: total,
+          code: clean,
+          orderAmount: orderTotal,
+          email: userEmail,
+          preview: !userEmail,
         }),
       });
       const data = await response.json();
       if (response.ok && data.valid) {
+        const confirmedCode = data.code || clean;
+        setPromoCode(confirmedCode);
+        setAppliedPromoCode(confirmedCode);
         setDiscountAmount(data.discountAmount);
         setPromoSuccess(data.message || `Sleva ${data.discountAmount} Kč byla použita`);
+        try {
+          sessionStorage.setItem('ufo_promo_code', confirmedCode);
+        } catch {
+          // ignore storage errors
+        }
       } else {
         setDiscountAmount(0);
+        setAppliedPromoCode('');
         setPromoError(data.error || 'Neplatný promo kód');
       }
     } catch {
       setDiscountAmount(0);
+      setAppliedPromoCode('');
       setPromoError('Chyba při ověřování promo kódu');
     }
   };
 
+  const handleApplyPromoCode = () => {
+    validateAndApplyPromo(promoCode, total);
+  };
+
+  const handlePromoInputChange = (val: string) => {
+    setPromoCode(val);
+    setPromoError('');
+    setPromoSuccess('');
+    if (appliedPromoCode && val.trim().toUpperCase() !== appliedPromoCode) {
+      setAppliedPromoCode('');
+      setDiscountAmount(0);
+      try {
+        sessionStorage.removeItem('ufo_promo_code');
+      } catch {
+        // ignore storage errors
+      }
+    }
+  };
+
+  // Auto-apply ?kod= / ?promo= or stored promo code once cart hydrates
+  useEffect(() => {
+    if (!hasHydrated || items.length === 0 || typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    const urlCode = params.get('kod') || params.get('promo');
+    const savedCode = sessionStorage.getItem('ufo_promo_code');
+    const initialCode = (urlCode || savedCode || '').trim().toUpperCase();
+    if (initialCode && !appliedPromoCode) {
+      setShowPromoCode(true);
+      setPromoCode(initialCode);
+      validateAndApplyPromo(initialCode, total);
+    }
+  }, [hasHydrated, items.length]);
+
+  // Keep discount synced when item quantities or items change in cart
+  useEffect(() => {
+    if (!hasHydrated || !appliedPromoCode || total <= 0) return;
+    validateAndApplyPromo(appliedPromoCode, total);
+  }, [total]);
+
   const goToCheckout = (url: string = '/pokladna') => {
-    if (discountAmount > 0 && promoCode.trim()) {
+    const codeToForward = appliedPromoCode || (discountAmount > 0 ? promoCode.trim().toUpperCase() : '');
+    if (codeToForward) {
       const sep = url.includes('?') ? '&' : '?';
-      router.push(`${url}${sep}promo=${encodeURIComponent(promoCode.trim().toUpperCase())}`);
+      router.push(`${url}${sep}promo=${encodeURIComponent(codeToForward)}`);
     } else {
       router.push(url);
     }
   };
-
-  const total = getTotal();
-  const finalPrice = total + 79 - discountAmount;
 
   if (!hasHydrated) {
     return <div className="min-h-screen bg-white" />;
@@ -1198,11 +1256,7 @@ export default function CartPage() {
                       id="promo-code-input-mobile"
                       type="text"
                       value={promoCode}
-                      onChange={(e) => {
-                        setPromoCode(e.target.value);
-                        setPromoError('');
-                        setPromoSuccess('');
-                      }}
+                      onChange={(e) => handlePromoInputChange(e.target.value)}
                       placeholder="zadejte kód"
                       style={{
                         width: '100%',
@@ -1301,7 +1355,7 @@ export default function CartPage() {
                     fontWeight: 400
                   }}>
                     <span>Cena za dopravu</span>
-                    <span>79 Kč</span>
+                    <span>{shippingCost === 0 ? 'Zdarma' : `${shippingCost} Kč`}</span>
                   </div>
                   <div style={{
                     display: 'flex',
@@ -1314,7 +1368,7 @@ export default function CartPage() {
                     color: '#000'
                   }}>
                     <span>Předpokládaná cena</span>
-                    <span>{discountAmount > 0 ? (total + 79 - discountAmount).toLocaleString('cs-CZ', { maximumFractionDigits: 0 }) : (total + 79).toLocaleString('cs-CZ', { maximumFractionDigits: 0 })} Kč</span>
+                    <span>{finalPrice.toLocaleString('cs-CZ', { maximumFractionDigits: 0 })} Kč</span>
                   </div>
                 </div>
 
@@ -1489,11 +1543,7 @@ export default function CartPage() {
                         id="promo-code-input"
                         type="text"
                         value={promoCode}
-                        onChange={(e) => {
-                          setPromoCode(e.target.value);
-                          setPromoError('');
-                          setPromoSuccess('');
-                        }}
+                        onChange={(e) => handlePromoInputChange(e.target.value)}
                         placeholder="zadejte kód"
                         style={{
                           flex: '1',
@@ -1593,7 +1643,7 @@ export default function CartPage() {
                   color: '#000'
                 }}>
                   <span>Cena za dopravu</span>
-                  <span>79&nbsp;Kč</span>
+                  <span>{shippingCost === 0 ? 'Zdarma' : `${shippingCost}\u00A0Kč`}</span>
                 </div>
 
                 {/* Total Price Line */}
@@ -1612,7 +1662,7 @@ export default function CartPage() {
                   color: '#000'
                 }}>
                   <span>Předpokládaná cena</span>
-                  <span>{discountAmount > 0 ? (total + 79 - discountAmount).toLocaleString('cs-CZ', { maximumFractionDigits: 0 }) : (total + 79).toLocaleString('cs-CZ', { maximumFractionDigits: 0 })}&nbsp;Kč</span>
+                  <span>{finalPrice.toLocaleString('cs-CZ', { maximumFractionDigits: 0 })}&nbsp;Kč</span>
                 </div>
 
                 {/* Note */}

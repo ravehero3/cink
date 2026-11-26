@@ -81,6 +81,11 @@ const nextConfig = {
         destination: '/:slug',
         permanent: true,
       },
+      {
+        source: '/produkty',
+        destination: '/produkty/zobrazit-vse',
+        permanent: false,
+      },
     ];
   },
 };

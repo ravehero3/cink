@@ -1,9 +1,28 @@
-import { prisma } from './prisma';
+import { prisma, withRetry } from './prisma';
 
-export async function validatePromoCode(code: string, orderAmount: number, customerEmail?: string) {
-  const promoCode = await prisma.promoCode.findUnique({
-    where: { code: code.toUpperCase() },
-  });
+export interface ValidatePromoOptions {
+  /** Allow previewing discount when customer hasn't entered an email yet (e.g. cart page) */
+  allowDeferredEmailCheck?: boolean;
+}
+
+export async function validatePromoCode(
+  code: string,
+  orderAmount: number,
+  customerEmail?: string,
+  options?: ValidatePromoOptions
+) {
+  const cleanCode = code.trim().toUpperCase();
+  const cleanEmail = customerEmail?.trim().toLowerCase() || '';
+
+  if (!cleanCode) {
+    return { ok: false as const, error: 'Promo kód je povinný', status: 400 };
+  }
+
+  const promoCode = await withRetry(() =>
+    prisma.promoCode.findUnique({
+      where: { code: cleanCode },
+    })
+  );
 
   if (!promoCode) {
     return { ok: false as const, error: 'Promo kód nebyl nalezen', status: 404 };
@@ -34,12 +53,24 @@ export async function validatePromoCode(code: string, orderAmount: number, custo
     };
   }
 
+  let requiresEmailVerification = false;
   if (promoCode.assignedEmail) {
-    if (!customerEmail) {
-      return { ok: false as const, error: 'Tento kód je vázaný na konkrétní e-mail. Zadejte e-mail v pokladně.', status: 400 };
-    }
-    if (promoCode.assignedEmail.toLowerCase() !== customerEmail.toLowerCase()) {
-      return { ok: false as const, error: 'Tento slevový kód je určený jen pro váš e-mail z nabídky.', status: 400 };
+    if (!cleanEmail) {
+      if (options?.allowDeferredEmailCheck) {
+        requiresEmailVerification = true;
+      } else {
+        return {
+          ok: false as const,
+          error: 'Tento kód je vázaný na konkrétní e-mail. Zadejte prosím e-mail v pokladně.',
+          status: 400,
+        };
+      }
+    } else if (promoCode.assignedEmail.trim().toLowerCase() !== cleanEmail) {
+      return {
+        ok: false as const,
+        error: 'Tento slevový kód je určený jen pro váš e-mail z nabídky.',
+        status: 400,
+      };
     }
   }
 
@@ -47,8 +78,9 @@ export async function validatePromoCode(code: string, orderAmount: number, custo
   if (promoCode.discountType === 'PERCENTAGE' || promoCode.discountType === 'percentage') {
     discountAmount = Math.round(orderAmount * (Number(promoCode.discountValue) / 100));
   } else {
-    discountAmount = Number(promoCode.discountValue);
+    discountAmount = Math.round(Number(promoCode.discountValue));
   }
+  discountAmount = Math.min(Math.round(orderAmount), Math.max(0, discountAmount));
 
   return {
     ok: true as const,
@@ -56,5 +88,6 @@ export async function validatePromoCode(code: string, orderAmount: number, custo
     discountAmount,
     discountType: promoCode.discountType,
     discountValue: Number(promoCode.discountValue),
+    requiresEmailVerification,
   };
 }

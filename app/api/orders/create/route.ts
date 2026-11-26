@@ -5,6 +5,7 @@ import { prisma, withRetry } from '@/lib/prisma';
 import { createPacketaClient, PacketaAPIError } from '@/lib/packeta-api';
 import { sendOrderConfirmationEmail, sendAdminOrderNotificationEmail } from '@/lib/email';
 import { validatePromoCode } from '@/lib/promo';
+import { calculateShippingCost } from '@/lib/shipping';
 
 function generateErrorId(): string {
   return `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -187,27 +188,36 @@ export async function POST(request: NextRequest) {
     
     logInfo('Validation passed', { numericTotalPrice });
 
-    // Step 5: Process promo code (optional)
+    // Step 5: Process promo code (optional) and verify total price consistency
+    const subtotal = items.reduce((sum: number, item: any) => sum + (Number(item.price) * Number(item.quantity)), 0);
+    const expectedShipping = calculateShippingCost(subtotal, shippingMethod);
     let discountAmount = 0;
-    if (promoCode) {
-      logInfo('Processing promo code', { promoCode });
-      try {
-        const subtotal = items.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0);
-        const result = await validatePromoCode(promoCode, subtotal, customerEmail);
-        if (result.ok) {
-          discountAmount = result.discountAmount;
-          await withRetry(() => prisma.promoCode.update({
-            where: { code: result.promo.code },
-            data: { currentUses: result.promo.currentUses + 1 },
-          }));
-          logInfo('Promo code applied', { discountAmount });
-        } else {
-          logInfo('Promo code rejected', { error: result.error });
+    let appliedPromoCodeValue: string | null = null;
+
+    if (promoCode && typeof promoCode === 'string' && promoCode.trim()) {
+      const cleanPromo = promoCode.trim().toUpperCase();
+      logInfo('Processing promo code', { promoCode: cleanPromo });
+      const result = await validatePromoCode(cleanPromo, subtotal, customerEmail);
+      if (result.ok) {
+        discountAmount = result.discountAmount;
+        appliedPromoCodeValue = result.promo.code;
+        logInfo('Promo code validated', { code: appliedPromoCodeValue, discountAmount });
+      } else {
+        logInfo('Promo code rejected', { code: cleanPromo, error: result.error });
+        // Reject if client actually deducted discount or explicitly relied on an invalid/expired promo
+        if (numericTotalPrice < subtotal + expectedShipping - 1) {
+          return NextResponse.json(
+            { error: `Slevový kód nelze použít: ${result.error}`, errorId },
+            { status: 400 }
+          );
         }
-      } catch (promoError) {
-        logError(errorId, 'Failed to process promo code (non-critical)', promoError);
       }
     }
+
+    const expectedTotalPrice = Math.max(0, subtotal + expectedShipping - discountAmount);
+    const validatedTotalPrice = Math.abs(numericTotalPrice - expectedTotalPrice) > 1
+      ? expectedTotalPrice
+      : numericTotalPrice;
 
     // Step 6: Generate order number
     logInfo('Generating order number...');
@@ -223,7 +233,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Step 7: Create order in database
-    logInfo('Creating order in database', { orderNumber, numericTotalPrice });
+    logInfo('Creating order in database', { orderNumber, validatedTotalPrice });
     let order;
     try {
       order = await withRetry(() => prisma.order.create({
@@ -234,7 +244,7 @@ export async function POST(request: NextRequest) {
           customerName,
           customerPhone,
           items,
-          totalPrice: numericTotalPrice,
+          totalPrice: validatedTotalPrice,
           shippingMethod,
           zasilkovnaId: zasilkovnaId || null,
           zasilkovnaName: zasilkovnaName || null,
@@ -248,6 +258,19 @@ export async function POST(request: NextRequest) {
         },
       }));
       logInfo('Order created successfully', { orderId: order.id, orderNumber: order.orderNumber });
+
+      // Increment promo code usage only after order is safely stored
+      if (appliedPromoCodeValue) {
+        try {
+          await withRetry(() => prisma.promoCode.update({
+            where: { code: appliedPromoCodeValue! },
+            data: { currentUses: { increment: 1 } },
+          }));
+          logInfo('Promo code usage incremented', { code: appliedPromoCodeValue });
+        } catch (promoIncErr) {
+          logError(errorId, 'Failed to increment promo code usage (non-critical)', promoIncErr);
+        }
+      }
 
       // Handle Newsletter Subscription
       if (newsletterSubscribed) {
@@ -317,7 +340,7 @@ export async function POST(request: NextRequest) {
           email: customerEmail,
           phone: customerPhone,
           addressId: zasilkovnaId,
-          value: Number(totalPrice),
+          value: validatedTotalPrice,
           weight: Math.max(totalWeight, 0.5),
           eshop: 'UFOSport',
         });
@@ -380,7 +403,7 @@ export async function POST(request: NextRequest) {
         image: item.image,
         slug: item.slug,
       })),
-      totalPrice: Number(totalPrice),
+      totalPrice: validatedTotalPrice,
       shippingMethod,
       zasilkovnaName: zasilkovnaName || undefined,
       pplName: pplName || undefined,
@@ -412,7 +435,7 @@ export async function POST(request: NextRequest) {
       await enrollInTrigger('ORDER_CREATED', customerEmail, {
         orderNumber: order.orderNumber,
         items: orderEmailData.items,
-        totalPrice: Number(totalPrice),
+        totalPrice: validatedTotalPrice,
       }, customerName);
     } catch (journeyError) {
       logError(errorId, 'Failed to enroll payment-reminder journey (non-critical)', journeyError);

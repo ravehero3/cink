@@ -214,6 +214,8 @@ export interface EmailVars {
   promoCode?: string;
   promoLabel?: string;
   promoValidUntil?: string;
+  promoDiscountValue?: number;
+  promoValidDays?: number;
   productImages?: string[];
   isTest?: boolean;
 }
@@ -307,12 +309,14 @@ function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplatePar
   const totalRaw = vars.totalPrice ?? 1650;
   const total = totalRaw.toLocaleString('cs-CZ');
   const promo = vars.promoCode || 'UFO10';
+  const promoPct = vars.promoDiscountValue ?? 10;
   const shippingLocation = getShippingLocation(vars);
   const carrierName = getCarrierName(vars);
   const totalQuantity = items.reduce((acc, i) => acc + (i.quantity || 1), 0);
 
-  const discountAmount = Math.round(totalRaw * 0.1).toLocaleString('cs-CZ');
-  const finalTotal = Math.max(0, totalRaw - Math.round(totalRaw * 0.1)).toLocaleString('cs-CZ');
+  const discountRaw = Math.round(totalRaw * (promoPct / 100));
+  const discountAmount = discountRaw.toLocaleString('cs-CZ');
+  const finalTotal = Math.max(0, totalRaw - discountRaw).toLocaleString('cs-CZ');
 
   const { primary: primaryBoughtPhoto, grid: boughtGridPhotos } = getProductPhotos(items, vars);
 
@@ -622,10 +626,10 @@ function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplatePar
 
     case 'CART_REMINDER_DISCOUNT':
       return {
-        subject: 'Sleva 10 % na váš košík',
+        subject: `Sleva ${promoPct} % na váš košík`,
         preheader: 'Připravili jsme pro vás slevu na položky v košíku.',
         header2Title: 'Sleva na váš košík',
-        header2Subtitle: 'Připravili jsme pro vás 10 % slevu na položky ve vašem košíku.',
+        header2Subtitle: `Připravili jsme pro vás ${promoPct} % slevu na položky ve vašem košíku.`,
         heroImage: {
           src: primaryBoughtPhoto,
           height: 600,
@@ -635,16 +639,16 @@ function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplatePar
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
             <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Slevový kód</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${promo}</td></tr>
             <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Původní cena</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${total} Kč</td></tr>
-            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Sleva 10 %</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">−${discountAmount} Kč</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Sleva ${promoPct} %</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">−${discountAmount} Kč</td></tr>
             <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">K úhradě</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${finalTotal} Kč</td></tr>
-            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Platnost kódu</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${vars.promoValidUntil || '48 hodin'}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Platnost kódu</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${vars.promoValidUntil || `${vars.promoValidDays ?? 7} dní`}</td></tr>
           </table>
         `,
         photoGrid: boughtGridPhotos,
         actionText: 'Kód uplatníte v košíku před dokončením objednávky.',
         actionButton: {
           label: 'Uplatnit slevu',
-          href: `${WEBSITE_URL}/kosik?kod=${promo}`,
+          href: `${WEBSITE_URL}/kosik?kod=${encodeURIComponent(promo)}`,
         },
         marketing: true,
       };
@@ -652,7 +656,7 @@ function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplatePar
     case 'POST_PURCHASE_DISCOUNT':
       return {
         subject: 'Děkujeme za nákup – máme pro vás slevu',
-        preheader: 'Sleva 15 % na vaši další objednávku.',
+        preheader: `Sleva ${promoPct} % na vaši další objednávku.`,
         header2Title: 'Děkujeme za nákup',
         header2Subtitle: 'Jako poděkování pro vás máme slevu na další objednávku.',
         heroImage: {
@@ -663,15 +667,15 @@ function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplatePar
         infoHtml: `
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
             <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Slevový kód</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${promo}</td></tr>
-            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Sleva</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">15 % na další nákup</td></tr>
-            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Platnost</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">30 dní</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Sleva</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${promoPct} % na další nákup</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Platnost</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${vars.promoValidUntil || `${vars.promoValidDays ?? 14} dní`}</td></tr>
             <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Použití</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">Jednorázově</td></tr>
           </table>
         `,
         actionText: 'Kód uplatníte v košíku při příštím nákupu.',
         actionButton: {
           label: 'Nakupovat',
-          href: `${WEBSITE_URL}/produkty`,
+          href: `${WEBSITE_URL}/produkty/zobrazit-vse?kod=${encodeURIComponent(promo)}`,
         },
         marketing: true,
       };
@@ -706,10 +710,11 @@ function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplatePar
         marketing: true,
       };
 
-    case 'WINBACK':
+    case 'WINBACK': {
+      const winbackPct = vars.promoDiscountValue ?? 15;
       return {
         subject: 'Dlouho jsme se neviděli',
-        preheader: 'Podívejte se, co je nového ve světě UFO SPORT.',
+        preheader: `Máme pro vás slevu ${winbackPct} % na návrat.`,
         header2Title: 'Dlouho jsme se neviděli',
         header2Subtitle: 'Podívejte se, co je nového ve světě UFO SPORT.',
         heroImage: {
@@ -718,16 +723,21 @@ function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplatePar
           alt: 'Hlavní obrázek 600x750',
         },
         infoHtml: `
-          <p style="margin:0 0 14px;">Od vaší poslední návštěvy jsme přidali nové produkty a kolekce. Vyberte si své oblíbené kousky dřív, než se vyprodají.</p>
-          <p style="margin:0 0 0px;">Těšíme se na vás.</p>
+          <p style="margin:0 0 14px;">Od vaší poslední návštěvy jsme přidali nové produkty a kolekce. Připravili jsme pro vás osobní slevový kód:</p>
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Slevový kód</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${promo}</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Sleva</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${winbackPct} % na celý nákup</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Platnost</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${vars.promoValidUntil || `${vars.promoValidDays ?? 21} dní`}</td></tr>
+          </table>
         `,
-        actionText: 'Objevte nejnovější kolekci UFO SPORT.',
+        actionText: 'Objevte nejnovější kolekci UFO SPORT a uplatněte kód v košíku.',
         actionButton: {
-          label: 'Objevit novinky',
-          href: `${WEBSITE_URL}/novinky`,
+          label: 'Využít slevu',
+          href: `${WEBSITE_URL}/produkty/zobrazit-vse?kod=${encodeURIComponent(promo)}`,
         },
         marketing: true,
       };
+    }
 
     case 'ACCOUNT_WELCOME':
       return {
@@ -799,7 +809,7 @@ function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplatePar
         actionText: 'Prohlédněte si doporučené kousky.',
         actionButton: {
           label: 'Prohlédnout produkty',
-          href: `${WEBSITE_URL}/produkty`,
+          href: `${WEBSITE_URL}/produkty/zobrazit-vse`,
         },
         marketing: true,
       };
@@ -821,7 +831,7 @@ function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplatePar
         actionText: 'Objevte novou kolekci na e-shopu.',
         actionButton: {
           label: 'Prozkoumat kolekci',
-          href: `${WEBSITE_URL}/kolekce`,
+          href: `${WEBSITE_URL}/produkty/zobrazit-vse`,
         },
         marketing: true,
       };
@@ -840,14 +850,14 @@ function buildTemplateParams(type: EmailType, vars: EmailVars): EmailTemplatePar
         infoHtml: `
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
             <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Slevový kód</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${promo}</td></tr>
-            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Sleva</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">10 % na první nákup</td></tr>
-            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Platnost</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">14 dní</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Sleva</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${promoPct} % na první nákup</td></tr>
+            <tr><td valign="top" style="padding:0 12px 8px 0;font-size:15px;line-height:20px;">Platnost</td><td align="right" valign="top" style="padding:0 0 8px;font-size:15px;line-height:20px;font-weight:600;">${vars.promoValidUntil || `${vars.promoValidDays ?? 21} dní`}</td></tr>
           </table>
         `,
         actionText: 'Uplatněte svůj slevový kód v košíku.',
         actionButton: {
           label: 'Využít slevu',
-          href: `${WEBSITE_URL}/produkty?kod=${promo}`,
+          href: `${WEBSITE_URL}/produkty/zobrazit-vse?kod=${encodeURIComponent(promo)}`,
         },
         marketing: true,
       };

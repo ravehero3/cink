@@ -1,14 +1,16 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 
 export default function LiveOfferBar({ onVisibilityChange }: { onVisibilityChange: (visible: boolean) => void }) {
   const [offer, setOffer] = useState<any>(null);
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
+  const [endTimeMs, setEndTimeMs] = useState<number | null>(null);
   const [promoCode, setPromoCode] = useState<string | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isAllowedOnPage, setIsAllowedOnPage] = useState(true);
+  const initializingRef = useRef(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -21,16 +23,16 @@ export default function LiveOfferBar({ onVisibilityChange }: { onVisibilityChang
     const fetchOffer = async () => {
       try {
         const response = await fetch('/api/admin/live-offer');
+        if (!response.ok) return;
         const data = await response.json();
         if (data.isActive) {
-          // Check if it should appear on this page
-          const isTargetPage = data.targetPages.some((p: string) => 
+          const isTargetPage = data.targetPages.some((p: string) =>
             p === '*' || pathname === p || (p !== '/' && pathname.startsWith(p))
           );
 
           if (isTargetPage) {
             setOffer(data);
-            handleUserWindow(data);
+            await handleUserWindow(data);
           } else {
             setOffer(null);
           }
@@ -44,99 +46,173 @@ export default function LiveOfferBar({ onVisibilityChange }: { onVisibilityChang
     };
 
     fetchOffer();
-    
+
     const handleCheck = () => {
       fetchOffer();
     };
     window.addEventListener('check-live-offer', handleCheck);
     return () => window.removeEventListener('check-live-offer', handleCheck);
-  }, []); // Only fetch once to prevent flickering
+  }, []);
 
   useEffect(() => {
     if (!offer) return;
-    const allowed = offer.targetPages.some((p: string) => 
+    const allowed = offer.targetPages.some((p: string) =>
       p === '*' || pathname === p || (p !== '/' && pathname.startsWith(p))
     );
     setIsAllowedOnPage(allowed);
   }, [pathname, offer]);
 
-  const isVisible = !!offer && !!timeLeft && timeLeft > 0 && isAllowedOnPage;
+  const isVisible = !!offer && !!promoCode && !!timeLeft && timeLeft > 0 && isAllowedOnPage;
 
   useEffect(() => {
     onVisibilityChange(isVisible);
     window.dispatchEvent(new CustomEvent('live-offer-status', { detail: isVisible }));
   }, [isVisible, onVisibilityChange]);
 
+  const syncCodeWithServer = async (offerKey: string, durationMin: number, percentage: number, codeToSync?: string) => {
+    const res = await fetch('/api/promo-codes/create-temporary', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        ...(codeToSync ? { code: codeToSync } : {}),
+        discountValue: percentage,
+        durationMin,
+      }),
+    });
+
+    if (!res.ok) {
+      throw new Error('Failed to create temporary promo code');
+    }
+
+    const result = await res.json();
+    if (!result.code || !result.validUntil) {
+      throw new Error('Invalid temporary promo response');
+    }
+
+    const validUntilMs = new Date(result.validUntil).getTime();
+    const now = Date.now();
+    if (!codeToSync) {
+      localStorage.setItem(`${offerKey}_start`, now.toString());
+    }
+    localStorage.setItem(`${offerKey}_end`, validUntilMs.toString());
+    localStorage.setItem(`${offerKey}_code`, result.code);
+    localStorage.setItem(`${offerKey}_synced`, '1');
+
+    setPromoCode(result.code);
+    setEndTimeMs(validUntilMs);
+    setTimeLeft(Math.max(0, validUntilMs - now));
+  };
+
   const handleUserWindow = async (data: any) => {
-    const offerKey = `live_offer_${data.id}_${data.percentage}`;
-    let startTime = localStorage.getItem(`${offerKey}_start`);
-    let code = localStorage.getItem(`${offerKey}_code`);
+    if (initializingRef.current) return;
+    initializingRef.current = true;
 
-    if (!startTime) {
-      startTime = Date.now().toString();
-      localStorage.setItem(`${offerKey}_start`, startTime);
-      
-      // Generate unique code (UFO + 4 random digits)
-      const randomDigits = Math.floor(1000 + Math.random() * 9000).toString();
-      const uniqueCode = `UFO${randomDigits}`;
-      localStorage.setItem(`${offerKey}_code`, uniqueCode);
-      code = uniqueCode;
+    try {
+      const offerKey = `live_offer_${data.id}_${data.percentage}`;
+      const startTime = localStorage.getItem(`${offerKey}_start`);
+      const storedEnd = localStorage.getItem(`${offerKey}_end`);
+      const storedCode = localStorage.getItem(`${offerKey}_code`);
+      const isSynced = localStorage.getItem(`${offerKey}_synced`) === '1';
 
-      // Register code in DB
-      try {
-        await fetch('/api/promo-codes/create-temporary', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            code: uniqueCode,
-            discountValue: data.percentage,
-            durationMin: data.durationMin
-          })
-        });
-      } catch (error) {
-        console.error('Error creating temporary code:', error);
+      if (startTime && storedCode) {
+        const elapsed = Date.now() - parseInt(startTime, 10);
+
+        // Rule: If more than 7 days passed, reset the offer for the user
+        if (elapsed > 7 * 24 * 60 * 60 * 1000) {
+          localStorage.removeItem(`${offerKey}_start`);
+          localStorage.removeItem(`${offerKey}_end`);
+          localStorage.removeItem(`${offerKey}_code`);
+          localStorage.removeItem(`${offerKey}_synced`);
+          await syncCodeWithServer(offerKey, data.durationMin, data.percentage);
+          return;
+        }
+
+        const durationMs = data.durationMin * 60 * 1000;
+        const estimatedEnd = storedEnd ? parseInt(storedEnd, 10) : parseInt(startTime, 10) + durationMs;
+        const remaining = Math.max(0, estimatedEnd - Date.now());
+
+        if (remaining <= 0) {
+          setOffer(null);
+          setTimeLeft(0);
+          setEndTimeMs(null);
+          return;
+        }
+
+        if (isSynced) {
+          try {
+            const checkRes = await fetch(`/api/promo-codes/create-temporary?code=${encodeURIComponent(storedCode)}`);
+            if (checkRes.ok) {
+              const checkData = await checkRes.json();
+              if (checkData.used) {
+                setOffer(null);
+                setTimeLeft(0);
+                setEndTimeMs(null);
+                return;
+              }
+              if (checkData.valid && checkData.validUntil) {
+                const dbEnd = new Date(checkData.validUntil).getTime();
+                localStorage.setItem(`${offerKey}_end`, dbEnd.toString());
+                setPromoCode(storedCode);
+                setEndTimeMs(dbEnd);
+                setTimeLeft(Math.max(0, dbEnd - Date.now()));
+                return;
+              }
+              if (!checkData.exists) {
+                const remMin = Math.max(1, Math.ceil(remaining / 60000));
+                await syncCodeWithServer(offerKey, remMin, data.percentage, storedCode);
+                return;
+              }
+              setOffer(null);
+              setTimeLeft(0);
+              setEndTimeMs(null);
+              return;
+            }
+          } catch {
+            setPromoCode(storedCode);
+            setEndTimeMs(estimatedEnd);
+            setTimeLeft(remaining);
+            return;
+          }
+        } else {
+          const remMin = Math.max(1, Math.ceil(remaining / 60000));
+          await syncCodeWithServer(offerKey, remMin, data.percentage, storedCode);
+          return;
+        }
       }
-    }
 
-    setPromoCode(code);
-    
-    const durationMs = data.durationMin * 60 * 1000;
-    const elapsed = Date.now() - parseInt(startTime);
-    
-    // Rule: If more than 7 days passed, reset the offer for the user
-    if (elapsed > 7 * 24 * 60 * 60 * 1000) {
-      localStorage.removeItem(`${offerKey}_start`);
-      localStorage.removeItem(`${offerKey}_code`);
-      // Re-run handleUserWindow to generate fresh start time/code
-      handleUserWindow(data);
-      return;
-    }
-
-    const remaining = Math.max(0, durationMs - elapsed);
-
-    if (remaining > 0) {
-      setTimeLeft(remaining);
-    } else {
+      await syncCodeWithServer(offerKey, data.durationMin, data.percentage);
+    } catch (error) {
+      console.error('Error initializing live offer code:', error);
       setOffer(null);
       setTimeLeft(0);
+    } finally {
+      initializingRef.current = false;
     }
   };
 
   useEffect(() => {
-    if (timeLeft === null || timeLeft <= 0) return;
+    if (!endTimeMs) return;
 
-    const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev && prev > 1000) return prev - 1000;
-        clearInterval(timer);
+    const updateRemaining = () => {
+      const rem = Math.max(0, endTimeMs - Date.now());
+      if (rem <= 0) {
         setOffer(null);
         setTimeLeft(0);
-        return 0;
-      });
+        setEndTimeMs(null);
+        return false;
+      }
+      setTimeLeft(rem);
+      return true;
+    };
+
+    const timer = setInterval(() => {
+      if (!updateRemaining()) {
+        clearInterval(timer);
+      }
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [timeLeft]);
+  }, [endTimeMs]);
 
   if (!isVisible) return null;
 

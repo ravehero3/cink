@@ -206,7 +206,10 @@ async function hasRecentPaidOrder(email: string, since?: Date) {
   const order = await prisma.order.findFirst({
     where: {
       customerEmail: { equals: email, mode: 'insensitive' },
-      paymentStatus: 'PAID',
+      OR: [
+        { paymentStatus: 'PAID' },
+        { status: { in: ['PAID', 'SHIPPED', 'COMPLETED'] } },
+      ],
       ...(since ? { createdAt: { gt: since } } : {}),
     },
     orderBy: { createdAt: 'desc' },
@@ -294,7 +297,11 @@ export async function processDueJourneys() {
       const orderNumber = typeof context.orderNumber === 'string' ? context.orderNumber : null;
       if (orderNumber) {
         const order = await prisma.order.findUnique({ where: { orderNumber } });
-        if (!order || order.paymentStatus === 'PAID' || order.status === 'CANCELLED') {
+        if (
+          !order ||
+          order.paymentStatus === 'PAID' ||
+          ['PAID', 'SHIPPED', 'COMPLETED', 'CANCELLED'].includes(order.status)
+        ) {
           skipped++;
           await prisma.emailJourneyEnrollment.update({
             where: { id: enrollment.id },
@@ -308,6 +315,8 @@ export async function processDueJourneys() {
     let promoCode: string | undefined;
     let promoLabel: string | undefined;
     let promoValidUntil: string | undefined;
+    let promoDiscountValue: number | undefined;
+    let promoValidDays: number | undefined;
 
     if (step.generatePromo) {
       const promo = await createJourneyPromo({
@@ -319,6 +328,8 @@ export async function processDueJourneys() {
       });
       promoCode = promo.code;
       const value = Number(step.promoDiscountValue);
+      promoDiscountValue = value;
+      promoValidDays = step.promoValidDays;
       promoLabel =
         step.promoDiscountType.toUpperCase() === 'FIXED'
           ? `Sleva ${value.toLocaleString('cs-CZ')} Kč`
@@ -339,6 +350,8 @@ export async function processDueJourneys() {
         promoCode,
         promoLabel,
         promoValidUntil,
+        promoDiscountValue,
+        promoValidDays,
       },
     });
 

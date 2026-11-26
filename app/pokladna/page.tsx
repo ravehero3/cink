@@ -52,7 +52,9 @@ export default function CheckoutPage() {
   });
 
   const [discount, setDiscount] = useState(0);
+  const [appliedPromoCode, setAppliedPromoCode] = useState('');
   const [promoError, setPromoError] = useState('');
+  const [promoSuccess, setPromoSuccess] = useState('');
   const [termsError, setTermsError] = useState('');
   const [isPplModalOpen, setIsPplModalOpen] = useState(false);
 
@@ -121,40 +123,95 @@ export default function CheckoutPage() {
     return () => document.removeEventListener('ppl-parcelshop-map', handlePplSelect);
   }, []);
 
-  useEffect(() => {
-    if (typeof window === 'undefined' || !hasHydrated) return;
-    const params = new URLSearchParams(window.location.search);
-    const promoParam = params.get('promo');
-    if (promoParam) {
-      const code = promoParam.trim().toUpperCase();
-      setFormData(prev => ({ ...prev, promoCode: code }));
-      const orderSubtotal = getTotal();
-      if (orderSubtotal > 0) {
-        fetch('/api/promo-codes/validate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            code,
-            orderAmount: orderSubtotal,
-          }),
-        })
-          .then(res => res.json())
-          .then(data => {
-            if (data.valid && data.discountAmount) {
-              setDiscount(data.discountAmount);
-            }
-          })
-          .catch(() => {});
-      }
-    }
-  }, [hasHydrated]);
-
   const rawSubtotal = getTotal();
   const subtotal = typeof rawSubtotal === 'number' && !isNaN(rawSubtotal) ? rawSubtotal : 0;
   const shippingCost = calculateShippingCost(subtotal, formData.shippingMethod);
   const amountToFreeShipping = getAmountToFreeShipping(subtotal);
   const safeDiscount = typeof discount === 'number' && !isNaN(discount) ? discount : 0;
   const total = Math.max(0, subtotal + shippingCost - safeDiscount);
+
+  const validateCheckoutPromo = async (
+    rawCode: string,
+    orderSubtotal: number,
+    customerEmail: string,
+    options?: { showLoading?: boolean; previewIfNoEmail?: boolean }
+  ) => {
+    const clean = rawCode.trim().toUpperCase();
+    if (!clean || orderSubtotal <= 0) return false;
+
+    if (options?.showLoading) setLoading(true);
+    setPromoError('');
+    setPromoSuccess('');
+
+    try {
+      const response = await fetch('/api/promo-codes/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          code: clean,
+          orderAmount: orderSubtotal,
+          email: customerEmail.trim() || undefined,
+          preview: Boolean(options?.previewIfNoEmail && !customerEmail.trim()),
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.valid) {
+        const confirmed = data.code || clean;
+        setDiscount(data.discountAmount);
+        setAppliedPromoCode(confirmed);
+        setFormData(prev => ({ ...prev, promoCode: confirmed }));
+        setPromoSuccess(
+          data.requiresEmailVerification
+            ? `Sleva ${data.discountAmount} Kč připravena (ověří se podle e-mailu)`
+            : data.message || `Sleva ${data.discountAmount} Kč byla použita`
+        );
+        return true;
+      } else {
+        setDiscount(0);
+        setAppliedPromoCode('');
+        setPromoError(data.error || 'Neplatný promo kód');
+        return false;
+      }
+    } catch {
+      setDiscount(0);
+      setAppliedPromoCode('');
+      setPromoError('Chyba při ověřování promo kódu');
+      return false;
+    } finally {
+      if (options?.showLoading) setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !hasHydrated) return;
+    const params = new URLSearchParams(window.location.search);
+    const urlCode = params.get('promo') || params.get('kod');
+    const savedCode = sessionStorage.getItem('ufo_promo_code');
+    const initialCode = (urlCode || savedCode || '').trim().toUpperCase();
+    if (initialCode) {
+      const orderSubtotal = getTotal();
+      const initialEmail = formData.email || session?.user?.email || '';
+      setFormData(prev => ({ ...prev, promoCode: initialCode }));
+      if (orderSubtotal > 0) {
+        validateCheckoutPromo(initialCode, orderSubtotal, initialEmail, {
+          previewIfNoEmail: !initialEmail,
+        });
+      }
+    }
+  }, [hasHydrated]);
+
+  // Re-validate applied promo when subtotal or customer email changes
+  useEffect(() => {
+    if (!hasHydrated || !appliedPromoCode || subtotal <= 0) return;
+    const timer = setTimeout(() => {
+      validateCheckoutPromo(appliedPromoCode, subtotal, formData.email, {
+        previewIfNoEmail: !formData.email.trim(),
+      });
+    }, 350);
+    return () => clearTimeout(timer);
+  }, [subtotal, formData.email]);
 
   const goToStep = (newStep: number) => {
     if (newStep <= reached) {
@@ -197,34 +254,11 @@ export default function CheckoutPage() {
   };
 
   const handleApplyPromo = async () => {
-    if (!formData.promoCode) return;
-
-    setLoading(true);
-    setPromoError('');
-
-    try {
-      const response = await fetch('/api/promo-codes/validate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          code: formData.promoCode,
-          orderAmount: subtotal,
-          email: formData.email,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setDiscount(data.discountAmount);
-      } else {
-        setPromoError(data.error || 'Neplatný promo kód');
-      }
-    } catch (error) {
-      setPromoError('Chyba při ověřování promo kódu');
-    } finally {
-      setLoading(false);
-    }
+    if (!formData.promoCode.trim()) return;
+    await validateCheckoutPromo(formData.promoCode, subtotal, formData.email, {
+      showLoading: true,
+      previewIfNoEmail: !formData.email.trim(),
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -280,7 +314,7 @@ export default function CheckoutPage() {
           zasilkovnaName: formData.zasilkovnaName,
           pplId: formData.pplId,
           pplName: formData.pplName,
-          promoCode: formData.promoCode,
+          promoCode: appliedPromoCode,
           totalPrice: finalTotal,
           newsletterSubscribed: formData.newsletterSubscribed,
         }),
@@ -295,6 +329,12 @@ export default function CheckoutPage() {
       }
 
       isNavigatingToPayment.current = true;
+      try {
+        sessionStorage.removeItem('ufo_promo_code');
+        window.dispatchEvent(new Event('check-live-offer'));
+      } catch {
+        // ignore storage errors
+      }
       clearCart();
       window.location.href = `/platba?order=${orderData.orderNumber}&token=${orderData.securityToken}`;
     } catch (error) {
@@ -1220,8 +1260,14 @@ export default function CheckoutPage() {
                   type="text"
                   value={formData.promoCode}
                   onChange={(e) => {
-                    setFormData({ ...formData, promoCode: e.target.value });
+                    const nextVal = e.target.value;
+                    setFormData({ ...formData, promoCode: nextVal });
                     setPromoError('');
+                    setPromoSuccess('');
+                    if (appliedPromoCode && nextVal.trim().toUpperCase() !== appliedPromoCode) {
+                      setAppliedPromoCode('');
+                      setDiscount(0);
+                    }
                   }}
                   placeholder="KÓD"
                   style={{
@@ -1265,6 +1311,16 @@ export default function CheckoutPage() {
                 borderBottom: '1px solid #000'
               }}>
                 {promoError}
+              </div>
+            )}
+            {promoSuccess && !promoError && (
+              <div style={{
+                color: '#16a34a',
+                fontSize: '11px',
+                padding: '8px 12px',
+                borderBottom: '1px solid #000'
+              }}>
+                {promoSuccess}
               </div>
             )}
 

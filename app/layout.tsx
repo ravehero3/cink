@@ -30,12 +30,25 @@ export default function RootLayout({
     
     window.addEventListener('live-offer-status', handleOffer);
     window.addEventListener('search-bar-status', handleSearch);
+
+    // Capture ?kod= or ?promo= from email / campaign links across any page
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const urlCode = params.get('kod') || params.get('promo');
+      if (urlCode && urlCode.trim()) {
+        try {
+          sessionStorage.setItem('ufo_promo_code', urlCode.trim().toUpperCase());
+        } catch {
+          // ignore storage errors
+        }
+      }
+    }
     
     return () => {
       window.removeEventListener('live-offer-status', handleOffer);
       window.removeEventListener('search-bar-status', handleSearch);
     };
-  }, []);
+  }, [pathname]);
 
   useEffect(() => {
     // Load Zasilkovna widget script
